@@ -1,0 +1,20 @@
+version: '2.2'
+services:
+    vufind:
+        image: "localhost/${IMAGE_NAME:-knihovny-cz-local}"
+        extends:
+            file: docker-compose.yaml
+            service: knihovny-cz
+        env_file:
+           - local.env
+        volumes:
+            - "./..:/var/www/knihovny-cz:rw"
+            - "./builds/php-extensions/conf/php/php.ini:/usr/local/etc/php/php.ini:ro"
+            - "./builds/apache-shibboleth/conf/shib/attribute-map.xml:/etc/shibboleth/attribute-map.xml:ro"
+            - "./builds/apache-shibboleth/conf/shib/shibboleth2.xml:/etc/shibboleth/shibboleth2.xml.templ:ro"
+            - "./builds/apache-shibboleth/conf/apache/000-default.conf:/etc/apache2/sites-available/000-default.conf.templ:ro"
+            - "./builds/apache-shibboleth/conf/apache/001-default-ssl.conf:/etc/apache2/sites-available/001-default-ssl.conf.templ:ro"
+#            - "./home/bashrc:/root/.bashrc:ro"
+#            - "./home/bash_aliases:/root/.bash_aliases:ro"
+#            - "./home/vimrc:/root/.vimrc:ro"
+        network_mode: bridge

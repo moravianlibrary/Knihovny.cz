@@ -1,0 +1,77 @@
+version: '2.2'
+services:
+    devel:
+        image: "localhost/${IMAGE_NAME:-knihovny-cz-devel}"
+        extends:
+            file: docker-compose.yaml
+            service: knihovny-cz
+        env_file:
+           - devel.env
+        build:
+            context: "builds/knihovny-cz-source"
+            args:
+                PARAM_VUFIND_BRANCH: ""
+                PARAM_VUFIND_COMMIT_HASH: ""
+        volumes:
+            - "./data/devel/:/data/"
+        network_mode: bridge
+    devel-10000:
+        extends:
+            service: devel
+        container_name: "${CONTAINER_NAME:-vufind-devel-10000}"
+        environment:
+            PARAM_VUFIND_SSL_PORT: "10000"
+    devel-10001:
+        extends:
+            service: devel
+        container_name: "${CONTAINER_NAME:-vufind-devel-10001}"
+        environment:
+            PARAM_VUFIND_SSL_PORT: "10001"
+    devel-10002:
+        extends:
+            service: devel
+        container_name: "${CONTAINER_NAME:-vufind-devel-10002}"
+        environment:
+            PARAM_VUFIND_SSL_PORT: "10002"
+    devel-10003:
+        extends:
+            service: devel
+        container_name: "${CONTAINER_NAME:-vufind-devel-10003}"
+        environment:
+            PARAM_VUFIND_SSL_PORT: "10003"
+    devel-10004:
+        extends:
+            service: devel
+        container_name: "${CONTAINER_NAME:-vufind-devel-10004}"
+        environment:
+            PARAM_VUFIND_SSL_PORT: "10004"
+    devel-10005:
+        extends:
+            service: devel
+        container_name: "${CONTAINER_NAME:-vufind-devel-10005}"
+        environment:
+            PARAM_VUFIND_SSL_PORT: "10005"
+    devel-10006:
+        extends:
+            service: devel
+        container_name: "${CONTAINER_NAME:-vufind-devel-10006}"
+        environment:
+            PARAM_VUFIND_SSL_PORT: "10006"
+    devel-10007:
+        extends:
+            service: devel
+        container_name: "${CONTAINER_NAME:-vufind-devel-10007}"
+        environment:
+            PARAM_VUFIND_SSL_PORT: "10007"
+    devel-10008:
+        extends:
+            service: devel
+        container_name: "${CONTAINER_NAME:-vufind-devel-10008}"
+        environment:
+            PARAM_VUFIND_SSL_PORT: "10008"
+    devel-10009:
+        extends:
+            service: devel
+        container_name: "${CONTAINER_NAME:-vufind-devel-10009}"
+        environment:
+            PARAM_VUFIND_SSL_PORT: "10009"

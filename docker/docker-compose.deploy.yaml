@@ -1,0 +1,15 @@
+version: '2.2'
+services:
+    vufind:
+        image: "moravianlibrary/${IMAGE_NAME:-knihovny-cz-deploy}:${IMAGE_VERSION:-latest}"
+        extends:
+            file: docker-compose.yaml
+            service: knihovny-cz
+        env_file:
+           - deploy.env
+        build:
+            context: "builds/knihovny-cz-source"
+            args:
+                PARAM_VUFIND_BRANCH: ""
+                PARAM_VUFIND_COMMIT_HASH: ""
+        network_mode: bridge
