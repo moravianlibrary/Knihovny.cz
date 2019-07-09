@@ -10,7 +10,7 @@ This software is a source code for the Knihovny.cz portal - discovery portal of 
 
 ## How to run / install ?
  
-1. First you'll need to have [the docker](https://docs.docker.com/engine/installation/) installed (Click on the `Docker CE` on the left & pick your OS). 
+1. First you'll need to have [the docker](https://docs.docker.com/install/) installed (Click on the `Docker CE` on the left & pick your OS). 
 2. Second, your user has to be in the `docker` group, unless you plan to run all docker related commands in privileged mode.
  
 Once you've obtained docker, get docker-compose (using pip is probably the easiest method):
