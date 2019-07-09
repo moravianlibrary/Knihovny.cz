@@ -16,7 +16,9 @@ enable_site() {
     fi
 
     if test -z "$PARAM_VUFIND_LOCAL_MODULES"; then
-        PARAM_VUFIND_LOCAL_MODULES="VuFindConsole,CPK,Debug"
+        # TODO: Do we really need to include VuFindConsole here?
+        PARAM_VUFIND_LOCAL_MODULES="VuFindConsole,KnihovnyCz,Debug"
+        # TODO: Do we really need to include modules listed below explicitely?
         if test -d "$PARAM_VUFIND_SRC/module/Statistics" ; then
             PARAM_VUFIND_LOCAL_MODULES="$PARAM_VUFIND_LOCAL_MODULES,Statistics"
         fi

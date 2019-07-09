@@ -50,7 +50,7 @@ main() {
         "$SHIB_CONF_ABS_PATH" || return $?
 
     /usr/local/bin/generate_key.sh "$PARAM_SSL_DIR/$PARAM_SHIB_KEY_OUT" "$PARAM_SSL_DIR/$PARAM_SHIB_CRT_OUT" \
-        "$PARAM_VUFIND_HOST" "$SSL_VALIDITY_DAYS" || return $?
+        "$PARAM_VUFIND_HOST" "$PARAM_SSL_VALIDITY_DAYS" || return $?
 
     service shibd stop &>/dev/null
     
