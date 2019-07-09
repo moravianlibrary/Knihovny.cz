@@ -21,7 +21,8 @@ pip install docker-compose
 Then you'll need to get sources:
 ```bash
 git clone https://github.com/moravianlibrary/Knihovny.cz.git
- 
+```
+
 Make some setup:
 ```bash
 # Add the hostname beta.knihovny.cz to your /etc/hosts
