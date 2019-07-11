@@ -48,12 +48,14 @@ ln -s "/var/www/knihovny-cz-extension/module/KnihovnyCz" "/var/www/knihovny-cz/m
 
 # Themes
 for theme in /var/www/knihovny-cz-extension/themes/*/; do
-    ln -s "/var/www/knihovny-cz-extension/themes/$theme" "/var/www/knihovny-cz/themes/$theme"
+    name=$(basename "$theme")
+    ln -s "/var/www/knihovny-cz-extension/themes/$name" "/var/www/knihovny-cz/themes/$name"
 done
 
 # Local configs
 for config in /var/www/knihovny-cz-extension/local/*/; do
-    ln -s "/var/www/knihovny-cz-extension/local/$config" "/var/www/knihovny-cz/local/$config"
+    name=$(basename "$config")
+    ln -s "/var/www/knihovny-cz-extension/local/$name" "/var/www/knihovny-cz/local/$name"
 done
 
 # TODO: Is this needed?
