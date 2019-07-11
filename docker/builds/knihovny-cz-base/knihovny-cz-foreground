@@ -1,7 +1,30 @@
 #!/usr/bin/env bash
 
+## Install base VuFind
+# Set default vufind base to master
+if [ -z "$PARAM_VUFIND_COMMIT" ]; then
+    export PARAM_VUFIND_COMMIT="master"
+fi;
+
+echo "going to download vufind at commit ${PARAM_VUFIND_COMMIT}"
+# Take a vufind source at given state
+curl "https://github.com/vufind-org/vufind/archive/${PARAM_VUFIND_COMMIT}.zip" -L -o /tmp/vufind.zip
+
+# Unzip the files
+unzip -q /tmp/vufind.zip -d /tmp
+
+# Move them to target place
+mv /tmp/vufind-${PARAM_VUFIND_COMMIT}/* /var/www/knihovny-cz/
+mv /tmp/vufind-${PARAM_VUFIND_COMMIT}/.[!.]* /var/www/knihovny-cz/
+
+# Make some cleaning
+rmdir /tmp/vufind-${PARAM_VUFIND_COMMIT}
+rm /tmp/vufind.zip
+
+
+## Install and run Knihovny.cz application
 # Set default values to use in bootstrap scripts
-if [ -z "$PARAM_VUFIND_SRC" ]; then
+if [[ -z "$PARAM_VUFIND_SRC" ]]; then
     export PARAM_VUFIND_SRC="/var/www/knihovny-cz"
 fi;
 
@@ -15,16 +38,26 @@ fi;
 
 # Export common configuration
 PARAM_VUFIND_CONFIG_ABS_DIR="${PARAM_VUFIND_SRC}/local/${PARAM_VUFIND_CONFIG_DIR}"
-
-# Backward compability with previous configuration layout
-if [[ "$PARAM_VUFIND_CONFIG_DIR" == "knihovny.cz" && ! -d "$PARAM_VUFIND_CONFIG_ABS_DIR" ]] ; then
-    PARAM_VUFIND_CONFIG_ABS_DIR="${PARAM_VUFIND_SRC}/local/"
-fi;
 export PARAM_VUFIND_CONFIG_ABS_DIR
 
-# List all environment variables
-# WARNING: possible threat of exploiting the secrets here (by saving `env` output to the docker logs)
-env
+
+#TODO directories should be variables
+# Make links to our extensions
+# Module
+ln -s "/var/www/knihovny-cz-extension/module/KnihovnyCz" "/var/www/knihovny-cz/module/KnihovnyCz"
+
+# Themes
+for theme in /var/www/knihovny-cz-extension/themes/*/; do
+    ln -s "/var/www/knihovny-cz-extension/themes/$theme" "/var/www/knihovny-cz/themes/$theme"
+done
+
+# Local configs
+for config in /var/www/knihovny-cz-extension/local/*/; do
+    ln -s "/var/www/knihovny-cz-extension/local/$config" "/var/www/knihovny-cz/local/$config"
+done
+
+# TODO: Is this needed?
+#export VUFIND_APPLICATION_PATH=${PARAM_VUFIND_SRC}
 
 # Run all start files
 if test -d /onstart; then
@@ -36,6 +69,10 @@ if test -d /onstart; then
         fi
     done
 fi
+
+# List all environment variables
+# WARNING: possible threat of exploiting the secrets here (by saving `env` output to the docker logs)
+env
 
 # This has to be done so that the server can create caches & logs
 chgrp -R www-data "${PARAM_VUFIND_SRC:-/var/www/src}"

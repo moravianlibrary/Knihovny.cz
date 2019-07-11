@@ -16,19 +16,12 @@ enable_site() {
     fi
 
     if test -z "$PARAM_VUFIND_LOCAL_MODULES"; then
-        # TODO: Do we really need to include VuFindConsole here?
-        PARAM_VUFIND_LOCAL_MODULES="VuFindConsole,KnihovnyCz,Debug"
-        # TODO: Do we really need to include modules listed below explicitely?
-        if test -d "$PARAM_VUFIND_SRC/module/Statistics" ; then
-            PARAM_VUFIND_LOCAL_MODULES="$PARAM_VUFIND_LOCAL_MODULES,Statistics"
-        fi
-        if test -d "$PARAM_VUFIND_SRC/module/VuFindApi" ; then
-            PARAM_VUFIND_LOCAL_MODULES="$PARAM_VUFIND_LOCAL_MODULES,VuFindApi"
-        fi
-        if test -d "$PARAM_VUFIND_SRC/module/MZKApi" ; then
-            PARAM_VUFIND_LOCAL_MODULES="$PARAM_VUFIND_LOCAL_MODULES,MZKApi"
-        fi
+        PARAM_VUFIND_LOCAL_MODULES="KnihovnyCz,Debug"
     fi
+
+#    if [ -z "$PARAM_VUFIND_SSL_PORT" ]; then
+#        PARAM_VUFIND_SSL_PORT="443"
+#    fi;
 
     PARAM_VUFIND_SSL_URL="https://$PARAM_VUFIND_HOST:$PARAM_VUFIND_SSL_PORT"
 
