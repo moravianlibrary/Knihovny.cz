@@ -5,6 +5,8 @@ ARG PARAM_VUFIND_PORT=443
 
 COPY ./knihovny-cz-foreground /usr/local/bin/
 
+COPY ./composer.sh /onstart/020-composer.sh
+
 WORKDIR /var/www/knihovny-cz
 
 EXPOSE 80

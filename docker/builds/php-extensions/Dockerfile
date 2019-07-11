@@ -67,7 +67,8 @@ RUN docker-php-ext-configure \
         xsl \
         ldap \
         mcrypt \
-        opcache
+        opcache \
+        soap
 
 # Install php modules provided by PECL
 RUN pecl install \
