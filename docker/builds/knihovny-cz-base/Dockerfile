@@ -3,8 +3,6 @@ FROM localhost/apache-shibboleth
 ARG PARAM_VUFIND_SRC=/var/www/knihovny-cz
 ARG PARAM_VUFIND_PORT=443
 
-COPY ./knihovny-cz-foreground /usr/local/bin/
-
 WORKDIR /var/www/knihovny-cz
 
 EXPOSE 80
@@ -45,5 +43,7 @@ RUN composer install --no-interaction --no-scripts -q
 #RUN phing installswaggerui
 
 #TODO: sentry/sentry still missing
+
+COPY ./knihovny-cz-foreground /usr/local/bin/
 
 CMD ["knihovny-cz-foreground"]
