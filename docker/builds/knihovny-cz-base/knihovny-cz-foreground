@@ -50,6 +50,9 @@ if test -d /onstart; then
     done
 fi
 
+# Create place for logs
+mkdir "${PARAM_VUFIND_SRC:-/var/www/src}/log"
+
 # List all environment variables
 # WARNING: possible threat of exploiting the secrets here (by saving `env` output to the docker logs)
 env
