@@ -5,8 +5,6 @@ ARG PARAM_VUFIND_PORT=443
 
 COPY ./knihovny-cz-foreground /usr/local/bin/
 
-COPY ./composer.sh /onstart/020-composer.sh
-
 WORKDIR /var/www/knihovny-cz
 
 EXPOSE 80
@@ -23,6 +21,29 @@ ENV PARAM_VUFIND_GOOGLE_API_KEY=${PARAM_VUFIND_GOOGLE_API_KEY}
 ENV PARAM_VUFIND_CAPTCHA_SITE_KEY=${PARAM_VUFIND_CAPTCHA_SITE_KEY}
 ENV PARAM_VUFIND_CAPTCHA_SECRET_KEY=${PARAM_VUFIND_CAPTCHA_SECRET_KEY}
 ENV PARAM_VUFIND_MYSQL_URL=${PARAM_VUFIND_MYSQL_URL}
-ENV PARAM_VUFIND_COMMIT=${PARAM_VUFIND_COMMIT}
+ENV PARAM_VUFIND_COMMIT="80021520ac5e51a4039f42f67ddeb1564b5e62ce"
 
-ENTRYPOINT ["knihovny-cz-foreground"]
+## Install base VuFind
+
+RUN echo "${PARAM_VUFIND_COMMIT}"
+# Take a vufind source at given state
+RUN curl "https://github.com/vufind-org/vufind/archive/${PARAM_VUFIND_COMMIT}.zip" -L -o /tmp/vufind.zip
+
+# Unzip the files
+RUN unzip -q /tmp/vufind.zip -d /tmp
+
+# Move them to target place
+RUN mv /tmp/vufind-${PARAM_VUFIND_COMMIT}/* /var/www/knihovny-cz/ && \
+    mv /tmp/vufind-${PARAM_VUFIND_COMMIT}/.[!.]* /var/www/knihovny-cz/ && \
+    rmdir /tmp/vufind-${PARAM_VUFIND_COMMIT} && \
+    rm /tmp/vufind.zip
+
+# Install composer dependencies
+RUN composer install --no-interaction --no-scripts -q
+
+# TODO
+#RUN phing installswaggerui
+
+#TODO: sentry/sentry still missing
+
+CMD ["knihovny-cz-foreground"]

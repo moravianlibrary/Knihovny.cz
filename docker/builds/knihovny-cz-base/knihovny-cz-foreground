@@ -1,25 +1,6 @@
 #!/usr/bin/env bash
 
-## Install base VuFind
-# Set default vufind base to master
-if [ -z "$PARAM_VUFIND_COMMIT" ]; then
-    export PARAM_VUFIND_COMMIT="master"
-fi;
 
-echo "going to download vufind at commit ${PARAM_VUFIND_COMMIT}"
-# Take a vufind source at given state
-curl "https://github.com/vufind-org/vufind/archive/${PARAM_VUFIND_COMMIT}.zip" -L -o /tmp/vufind.zip
-
-# Unzip the files
-unzip -q /tmp/vufind.zip -d /tmp
-
-# Move them to target place
-mv /tmp/vufind-${PARAM_VUFIND_COMMIT}/* /var/www/knihovny-cz/
-mv /tmp/vufind-${PARAM_VUFIND_COMMIT}/.[!.]* /var/www/knihovny-cz/
-
-# Make some cleaning
-rmdir /tmp/vufind-${PARAM_VUFIND_COMMIT}
-rm /tmp/vufind.zip
 
 
 ## Install and run Knihovny.cz application

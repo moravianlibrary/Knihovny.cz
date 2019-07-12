@@ -100,5 +100,9 @@ COPY ./bootstrap-php.sh /onstart/001-php.sh
 RUN apt-get purge -y \
         ${TMP_DEV_PKGS}
 
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+
+#TODO: install phing
+
 # Update mlocate's files database
 RUN updatedb
