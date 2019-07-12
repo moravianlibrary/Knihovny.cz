@@ -25,22 +25,19 @@ export PARAM_VUFIND_CONFIG_ABS_DIR
 #TODO directories should be variables
 # Make links to our extensions
 # Module
-ln -s "/var/www/knihovny-cz-extension/module/KnihovnyCz" "/var/www/knihovny-cz/module/KnihovnyCz"
+ln -s "/var/www/knihovny-cz-extension/module/KnihovnyCz/" "/var/www/knihovny-cz/module/KnihovnyCz"
 
 # Themes
 for theme in /var/www/knihovny-cz-extension/themes/*/; do
     name=$(basename "$theme")
-    ln -s "/var/www/knihovny-cz-extension/themes/$name" "/var/www/knihovny-cz/themes/$name"
+    ln -s "/var/www/knihovny-cz-extension/themes/$name/" "/var/www/knihovny-cz/themes/$name"
 done
 
 # Local configs
 for config in /var/www/knihovny-cz-extension/local/*/; do
     name=$(basename "$config")
-    ln -s "/var/www/knihovny-cz-extension/local/$name" "/var/www/knihovny-cz/local/$name"
+    ln -s "/var/www/knihovny-cz-extension/local/$name/" "/var/www/knihovny-cz/local/$name"
 done
-
-# TODO: Is this needed?
-#export VUFIND_APPLICATION_PATH=${PARAM_VUFIND_SRC}
 
 # Run all start files
 if test -d /onstart; then
