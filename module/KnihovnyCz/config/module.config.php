@@ -50,7 +50,7 @@ $config = [
                 ],
                 'delegators' => [
                     'KnihovnyCz\RecordDriver\SolrMarc' => [
-                        'KnihovnyCz\RecordDriver\IlsAwareDelegatorFactory',
+                        'VuFind\RecordDriver\IlsAwareDelegatorFactory',
                     ],
                 ],
             ],

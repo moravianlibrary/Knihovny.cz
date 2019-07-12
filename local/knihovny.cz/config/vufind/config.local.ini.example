@@ -140,3 +140,6 @@ list_item[] = 'doctypes_widget_authorities;doctypes_widget_authorities_descripti
 
 ; List is rendered in given order, otherwise can be sorted randomly
 list_sorting = random
+
+[Parent_Config]
+relative_path = ../../../base/config/vufind/config.ini
