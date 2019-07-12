@@ -30,7 +30,7 @@ echo "127.0.0.1        beta.knihovny.cz" | sudo tee -a /etc/hosts
  
 cd Knihovny.cz 
 
-# Go and configure your CPK-docker-compose
+# Go and configure your environment for containers
 cp local.env{.example,}
 vim local.env
  
