@@ -1,0 +1,66 @@
+#!/usr/bin/env bash
+
+# Set default values to use in bootstrap scripts
+if [[ -z "$PARAM_VUFIND_SRC" ]]; then
+    export PARAM_VUFIND_SRC="/var/www/knihovny-cz"
+fi;
+
+if [ -z "$PARAM_VUFIND_CONFIG_DIR" ]; then
+    export PARAM_VUFIND_CONFIG_DIR="knihovny.cz"
+fi;
+
+if [[ -n "$PARAM_VUFIND_ROBOTS_TXT" && -e "${PARAM_VUFIND_SRC}/public/$PARAM_VUFIND_ROBOTS_TXT" ]]; then
+    cp "${PARAM_VUFIND_SRC}/public/$PARAM_VUFIND_ROBOTS_TXT" "${PARAM_VUFIND_SRC}/public/robots.txt"
+fi;
+
+# Export common configuration
+PARAM_VUFIND_CONFIG_ABS_DIR="${PARAM_VUFIND_SRC}/local/${PARAM_VUFIND_CONFIG_DIR}"
+export PARAM_VUFIND_CONFIG_ABS_DIR
+
+#TODO directories should be variables
+# Make links to our extensions
+# Module
+ln -s "/var/www/knihovny-cz-extension/module/KnihovnyCz/" "/var/www/knihovny-cz/module/KnihovnyCz"
+
+# Themes
+for theme in /var/www/knihovny-cz-extension/themes/*/; do
+    name=$(basename "$theme")
+    ln -s "/var/www/knihovny-cz-extension/themes/$name/" "/var/www/knihovny-cz/themes/$name"
+done
+
+# Local configs
+for config in /var/www/knihovny-cz-extension/local/*/; do
+    name=$(basename "$config")
+    ln -s "/var/www/knihovny-cz-extension/local/$name/" "/var/www/knihovny-cz/local/$name"
+done
+
+# Run all start files
+if test -d /onstart; then
+    for FILE in /onstart/*; do
+        if test -x "$FILE"; then
+            "$FILE" || test "${IGNORE_BOOTSTRAP_FAILURE:-false}" == "true" || exit $?
+        else
+            echo "Warning: found non-executable file at '$FILE'" >&2
+        fi
+    done
+fi
+
+# Create place for logs
+mkdir "${PARAM_VUFIND_SRC:-/var/www/src}/log"
+
+# List all environment variables
+# WARNING: possible threat of exploiting the secrets here (by saving `env` output to the docker logs)
+env
+
+# This has to be done so that the server can create caches & logs
+chgrp -R www-data "${PARAM_VUFIND_SRC:-/var/www/src}"
+chmod -R g+w "${PARAM_VUFIND_SRC:-/var/www/src}"
+
+echo
+echo " --- Bootstrapping done! "
+echo
+
+apache2-foreground || \
+    test "${IGNORE_BOOTSTRAP_FAILURE:-false}" == "true" && \
+    echo "ERROR: apache start failed !" >&2 && \
+    while true; do sleep 1; done

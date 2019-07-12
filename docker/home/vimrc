@@ -1,0 +1,12 @@
+syntax on
+
+" For editing config files, where indentaion matters
+set expandtab
+set tabstop=4
+set shiftwidth=4
+
+" Uncomment this for dark vim scheme
+" colorscheme delek
+
+" Uncomment this for light vim scheme
+" colorscheme evening
