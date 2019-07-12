@@ -1,9 +1,5 @@
 #!/usr/bin/env bash
 
-
-
-
-## Install and run Knihovny.cz application
 # Set default values to use in bootstrap scripts
 if [[ -z "$PARAM_VUFIND_SRC" ]]; then
     export PARAM_VUFIND_SRC="/var/www/knihovny-cz"
@@ -20,7 +16,6 @@ fi;
 # Export common configuration
 PARAM_VUFIND_CONFIG_ABS_DIR="${PARAM_VUFIND_SRC}/local/${PARAM_VUFIND_CONFIG_DIR}"
 export PARAM_VUFIND_CONFIG_ABS_DIR
-
 
 #TODO directories should be variables
 # Make links to our extensions
