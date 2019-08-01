@@ -40,9 +40,17 @@ RUN apt-get update && apt-get install -y \
         net-tools \
         ssh \
         vim \
+        locales \
         ${TMP_DEV_PKGS} \
     && apt-get clean \
     && apt-get autoremove -y
+
+# Set Czech locales
+RUN sed -i -e 's/# cs_CZ.UTF-8 UTF-8/cs_CZ.UTF-8 UTF-8/' /etc/locale.gen && \
+    locale-gen
+ENV LC_ALL=cs_CZ.UTF-8
+ENV LANG=cs_CZ.UTF-8
+ENV LANGUAGE=cs_CZ.UTF-8
 
 # Enable apache modules
 RUN a2enmod \
