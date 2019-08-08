@@ -33,12 +33,12 @@ $config = [
         'plugin_managers' => [
             'recorddriver' =>  [
                 'factories' => [
-                    'KnihovnyCz\RecordDriver\SolrAuthority' => 'VuFind\RecordDriver\SolrAuthorityFactory',
-                    'KnihovnyCz\RecordDriver\SolrDictionary' => 'VuFind\RecordDriver\SolrDictionaryFactory',
-                    'KnihovnyCz\RecordDriver\SolrDublinCore' => 'VuFind\RecordDriver\SolrDublinCoreFactory',
-                    'KnihovnyCz\RecordDriver\SolrLibrary' => 'VuFind\RecordDriver\SolrLibraryFactory',
-                    'KnihovnyCz\RecordDriver\SolrMarc' => 'VuFind\RecordDriver\SolrDefaultFactory',
-                    'KnihovnyCz\RecordDriver\SolrMarcLocal' => 'VuFind\RecordDriver\SolrMarcLocalFactory',
+                    'KnihovnyCz\RecordDriver\SolrAuthority' => 'KnihovnyCz\RecordDriver\SolrAuthorityFactory',
+                    'KnihovnyCz\RecordDriver\SolrDictionary' => 'KnihovnyCz\RecordDriver\SolrDictionaryFactory',
+                    'KnihovnyCz\RecordDriver\SolrDublinCore' => 'KnihovnyCz\RecordDriver\SolrDublinCoreFactory',
+                    'KnihovnyCz\RecordDriver\SolrLibrary' => 'KnihovnyCz\RecordDriver\SolrLibraryFactory',
+                    'KnihovnyCz\RecordDriver\SolrMarc' => 'KnihovnyCz\RecordDriver\SolrDefaultFactory',
+                    'KnihovnyCz\RecordDriver\SolrLocal' => 'KnihovnyCz\RecordDriver\SolrLocalFactory',
                 ],
                 'aliases' => [
                     'solrauthority' => 'KnihovnyCz\RecordDriver\SolrAuthority',
@@ -46,7 +46,7 @@ $config = [
                     'solrdublincore' => 'KnihovnyCz\RecordDriver\SolrDublinCore',
                     'solrlibrary' => 'KnihovnyCz\RecordDriver\SolrLibrary',
                     'VuFind\RecordDriver\SolrMarc' => 'KnihovnyCz\RecordDriver\SolrMarc',
-                    'solrmarclocal' => 'KnihovnyCz\RecordDriver\SolrMarcLocal',
+                    'solrlocal' => 'KnihovnyCz\RecordDriver\SolrLocal',
                 ],
                 'delegators' => [
                     'KnihovnyCz\RecordDriver\SolrMarc' => [

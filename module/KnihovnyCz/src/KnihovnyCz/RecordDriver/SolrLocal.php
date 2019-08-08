@@ -28,7 +28,7 @@
 
 namespace KnihovnyCz\RecordDriver;
 
-class SolrMarcLocal extends \KnihovnyCz\RecordDriver\SolrMarc
+class SolrLocal extends \KnihovnyCz\RecordDriver\SolrMarc
 {
 
 

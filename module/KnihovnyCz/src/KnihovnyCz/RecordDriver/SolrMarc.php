@@ -31,6 +31,16 @@ namespace KnihovnyCz\RecordDriver;
 class SolrMarc extends \VuFind\RecordDriver\SolrMarc
 {
 
+    /**
+     * Get the full title of the record.
+     *
+     * @return string
+     */
+    public function getTitle()
+    {
+        return isset($this->fields['title_display']) ?
+        $this->fields['title_display'] : '';
+    }
 
 }
 
