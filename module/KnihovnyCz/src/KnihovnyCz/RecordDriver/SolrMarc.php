@@ -190,6 +190,16 @@ class SolrMarc extends \VuFind\RecordDriver\SolrMarc
         return $this->fields['title_display'] ?? '';
     }
 
+    /**
+     * Get title of record. This is for compatibility with original VuFind
+     *
+     * @return string
+     */
+    public function getShortTitle()
+    {
+        return $this->getTitle();
+    }
+
     public function getSubtitle()
     {
         return $this->fields['title_sub_display'] ?? '';

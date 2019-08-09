@@ -30,6 +30,86 @@ namespace KnihovnyCz\RecordDriver;
 
 class SolrDictionary extends \KnihovnyCz\RecordDriver\SolrMarc
 {
+    /**
+     * Get explanation.
+     *
+     * @return array $field
+     */
+    public function getSummary()
+    {
+        return isset ($this->fields ['explanation_display'])
+            ? array($this->fields ['explanation_display']) : [];
+    }
+
+    /**
+     * Get name, shown as title of record.
+     *
+     * @return string
+     */
+    public function getTitle()
+    {
+        return $this->fields ['title'] ?? [];
+    }
+
+    /**
+     * Get english term.
+     *
+     * @return string
+     */
+    public function getEnglish()
+    {
+        return $this->fields ['english_display'] ?? [];
+    }
+
+    /**
+     * Get explanation.
+     *
+     * @return string
+     */
+    public function getExplanation()
+    {
+        return $this->fields ['explanation_display'] ?? [];
+    }
+
+    /**
+     * Get relative terms.
+     *
+     * @return array
+     */
+    public function getRelatives()
+    {
+        return $this->fields ['relative_display_mv'] ?? [];
+    }
+    /**
+     * Get alternative terms.
+     *
+     * @return array
+     */
+    public function getAlternatives()
+    {
+        return $this->fields ['alternative_display_mv'] ?? [];
+    }
+    /**
+     * Get source.
+     *
+     * @return string
+     */
+    public function getSource()
+    {
+        return $this->fields ['source_display'] ?? [];
+    }
+
+    /**
+     * Get handler for related
+     *
+     * @return array
+     */
+    public function getFilterParamsForRelated()
+    {
+        return ['handler' => 'morelikethisdictionary'];
+    }
+
+
 
 
 }
