@@ -143,7 +143,7 @@ class SolrMarc extends \VuFind\RecordDriver\SolrMarc
 
     public function getFormats()
     {
-        return $this->fields['cpk_detected_format_txtF_mv'] ?? [];
+        return $this->fields['format_display_mv'] ?? [];
     }
 
     /**
@@ -190,6 +190,11 @@ class SolrMarc extends \VuFind\RecordDriver\SolrMarc
         return $this->fields['title_display'] ?? '';
     }
 
+    public function getSubtitle()
+    {
+        return $this->fields['title_sub_display'] ?? '';
+    }
+
     public function getCitationRecordType()
     {
         return $this->fields['citation_record_type_str'] ?? '';
@@ -232,11 +237,48 @@ class SolrMarc extends \VuFind\RecordDriver\SolrMarc
     /**
      * Returns name of the Author to display
      *
+     * @deprecated Used in ajax controller, should be used getPrimaryAuthor at call
      * @return string|NULL
      */
     public function getDisplayAuthor()
     {
-        return $this->fields['author_display'] ?? null;
+        return $this->getPrimaryAuthors()[0];
+    }
+
+    /**
+     * Get the main author of the record.
+     *
+     * @return array
+     */
+    public function getPrimaryAuthors()
+    {
+        if (isset($this->fields['author_display'])) {
+            return [$this->fields['author_display']];
+        }
+        return [];
+    }
+
+    /**
+     * Get an array of all secondary authors (complementing getPrimaryAuthor()).
+     *
+     * @return array
+     */
+    public function getSecondaryAuthors()
+    {
+        return $this->fields['author2_display_mv'] ?? [];
+    }
+
+    /**
+     * Get the corporate author of the record.
+     *
+     * @return array
+     */
+    public function getCorporateAuthors()
+    {
+        if (isset($this->fields['corp_author_display'])) {
+            return [$this->fields['corp_author_display']];
+        }
+        return [];
     }
 
     /**
@@ -248,6 +290,30 @@ class SolrMarc extends \VuFind\RecordDriver\SolrMarc
     public function getSecondaryAuthoritiesRecordIds()
     {
         return $this->fields['author2_authority_id_display_mv'] ?? [];
+    }
+
+    /**
+     * Get the publication dates of the record.  See also getDateSpan().
+     *
+     * @return array
+     */
+    public function getPublicationDates()
+    {
+        return $this->fields['publishDate_display'] ?? [];
+    }
+
+    /**
+     * Get an array of all ISBNs associated with the record (may be empty).
+     *
+     * @return array
+     */
+    public function getISBNs()
+    {
+        // If ISBN is in the index, it should automatically be an array... but if
+        // it's not set at all, we should normalize the value to an empty array.
+        return (isset($this->fields['isbn_display_mv'])
+            && is_array($this->fields['isbn_display_mv']))
+            ? $this->fields['isbn_display_mv'] : [];
     }
 
     public function getISSNFromMarc()
