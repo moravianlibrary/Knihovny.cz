@@ -37,8 +37,8 @@ class SolrDictionary extends \KnihovnyCz\RecordDriver\SolrMarc
      */
     public function getSummary()
     {
-        return isset ($this->fields ['explanation_display'])
-            ? array($this->fields ['explanation_display']) : [];
+        return isset($this->fields['explanation_display'])
+            ? [$this->fields['explanation_display']] : [];
     }
 
     /**
@@ -48,7 +48,7 @@ class SolrDictionary extends \KnihovnyCz\RecordDriver\SolrMarc
      */
     public function getTitle()
     {
-        return $this->fields ['title'] ?? [];
+        return $this->fields ['title'] ?? '';
     }
 
     /**
@@ -58,7 +58,7 @@ class SolrDictionary extends \KnihovnyCz\RecordDriver\SolrMarc
      */
     public function getEnglish()
     {
-        return $this->fields ['english_display'] ?? [];
+        return $this->fields ['english_display'] ?? '';
     }
 
     /**
@@ -68,7 +68,7 @@ class SolrDictionary extends \KnihovnyCz\RecordDriver\SolrMarc
      */
     public function getExplanation()
     {
-        return $this->fields ['explanation_display'] ?? [];
+        return $this->fields ['explanation_display'] ?? '';
     }
 
     /**
@@ -96,7 +96,7 @@ class SolrDictionary extends \KnihovnyCz\RecordDriver\SolrMarc
      */
     public function getSource()
     {
-        return $this->fields ['source_display'] ?? [];
+        return $this->fields ['source_display'] ?? '';
     }
 
     /**

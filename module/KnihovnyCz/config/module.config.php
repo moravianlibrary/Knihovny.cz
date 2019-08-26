@@ -34,14 +34,16 @@ $config = [
             'recorddriver' =>  [
                 'factories' => [
                     'KnihovnyCz\RecordDriver\SolrAuthority' => 'KnihovnyCz\RecordDriver\SolrAuthorityFactory',
+                    'KnihovnyCz\RecordDriver\SolrDefault' => 'KnihovnyCz\RecordDriver\SolrDefaultFactory',
                     'KnihovnyCz\RecordDriver\SolrDictionary' => 'KnihovnyCz\RecordDriver\SolrDictionaryFactory',
                     'KnihovnyCz\RecordDriver\SolrDublinCore' => 'KnihovnyCz\RecordDriver\SolrDublinCoreFactory',
                     'KnihovnyCz\RecordDriver\SolrLibrary' => 'KnihovnyCz\RecordDriver\SolrLibraryFactory',
-                    'KnihovnyCz\RecordDriver\SolrMarc' => 'KnihovnyCz\RecordDriver\SolrDefaultFactory',
+                    'KnihovnyCz\RecordDriver\SolrMarc' => 'KnihovnyCz\RecordDriver\SolrMarcFactory',
                     'KnihovnyCz\RecordDriver\SolrLocal' => 'KnihovnyCz\RecordDriver\SolrLocalFactory',
                 ],
                 'aliases' => [
                     'solrauthority' => 'KnihovnyCz\RecordDriver\SolrAuthority',
+                    'solrdefault' => 'KnihovnyCz\RecordDriver\SolrDefault',
                     'solrdictionary' => 'KnihovnyCz\RecordDriver\SolrDictionary',
                     'solrdublincore' => 'KnihovnyCz\RecordDriver\SolrDublinCore',
                     'solrlibrary' => 'KnihovnyCz\RecordDriver\SolrLibrary',

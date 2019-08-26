@@ -28,7 +28,7 @@
 
 namespace KnihovnyCz\RecordDriver;
 
-class SolrDublinCore extends \KnihovnyCz\RecordDriver\SolrMarc
+class SolrDublinCore extends \KnihovnyCz\RecordDriver\SolrDefault
 {
 
 

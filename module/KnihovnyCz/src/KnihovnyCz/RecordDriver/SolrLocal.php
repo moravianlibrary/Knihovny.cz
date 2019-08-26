@@ -31,6 +31,5 @@ namespace KnihovnyCz\RecordDriver;
 class SolrLocal extends \KnihovnyCz\RecordDriver\SolrMarc
 {
 
-
 }
 
