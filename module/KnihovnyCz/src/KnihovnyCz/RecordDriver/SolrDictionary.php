@@ -42,6 +42,17 @@ class SolrDictionary extends \KnihovnyCz\RecordDriver\SolrMarc
     }
 
     /**
+     * Get term author list
+     *
+     * @return array Term author list or empty array
+     */
+    public function getTermAuthors()
+    {
+        return isset($this->fields['author_term_display_mv'])
+            ? $this->fields['author_term_display_mv'] : [];
+    }
+
+    /**
      * Get name, shown as title of record.
      *
      * @return string
