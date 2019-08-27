@@ -30,7 +30,323 @@ namespace KnihovnyCz\RecordDriver;
 
 class SolrLibrary extends \KnihovnyCz\RecordDriver\SolrMarc
 {
+    public function getParentRecordID()
+    {
+        return $this->fields['id'] ?? '';
+    }
 
+    /**
+     * Get an array of note about the libraryname
+     *
+     * @return string
+     */
+    public function getLibraryNames()
+    {
+        return $this->fields['name_display'] ?? '';
+    }
 
+    /**
+     * Get the full title of the record
+     *
+     * @return string
+     */
+    public function getTitle()
+    {
+        return $this->getLibraryNames();
+    }
+
+    /**
+     * Get an array of note about the libraryhours
+     *
+     * @return string
+     */
+    public function getLibraryHours()
+    {
+        return $this->fields['hours_display'] ?? '';
+    }
+
+    /**
+     * Get an array of note about the libraryhours
+     *
+     * @return array
+     */
+    public function getLibraryHoursArray()
+    {
+        $result = [];
+        $string = $this->getLibraryHours();
+        if (!empty($string)) {
+            $days = explode("|", $string);
+            foreach ($days as $day) {
+                $parts = explode(" ", trim($day), 2);
+                $result[$parts[0]] = $parts[1];
+            }
+        }
+        return $result;
+    }
+
+    /**
+     * Get date
+     *
+     * @return String
+     */
+    public function getLastUpdated()
+    {
+        return $this->fields['lastupdated_display'] ?? '';
+    }
+
+    /**
+     * Get an array of note about the libraryname
+     *
+     * @return array
+     */
+    public function getLibraryAddress()
+    {
+        return $this->fields['address_display_mv'] ?? [];
+    }
+
+    /**
+     * Get an array of library ico and dicn
+     *
+     * @return string
+     */
+    public function getIco()
+    {
+        return $this->fields['ico_display'] ?? '';
+    }
+
+    /**
+     * Get an array of library ico and dicn
+     *
+     * @return string
+     */
+    public function getLibNote()
+    {
+        return $this->fields['note_display'] ?? '';
+    }
+
+    /**
+     *
+     * @return string
+     */
+    public function getLibNote2()
+    {
+        return $this->fields['note2_display'] ?? '';
+    }
+
+    /**
+     *
+     * @return string
+     */
+    public function getSigla()
+    {
+        return $this->fields['sigla_display'] ?? '';
+    }
+
+    /**
+     *
+     * @return array
+     */
+    public function getLibUrl()
+    {
+        return $this->fields['url_display_mv'] ?? [];
+    }
+
+    /**
+     *
+     * @return array
+     */
+    public function getLibUrlArray()
+    {
+        if (isset($this->fields['url_display_mv'])
+            && is_array($this->fields['url_display_mv']))
+        {
+            $filter = function ($url) {
+                $parts = explode("|", trim($url),2);
+                $parts = array_map('trim', $parts);
+                return [
+                    'url' => $parts[0] ?? null,
+                    'name' => $parts[1] ?? $parts[0] ?? null,
+                ];
+            };
+            return array_map($filter, $this->fields['url_display_mv']);
+        }
+        return [];
+    }
+
+    /**
+     *
+     * @return array
+     */
+    public function getLibBranch()
+    {
+        return $this->fields['branch_display_mv'] ?? [];
+    }
+
+    /**
+     *
+     * @return array
+     */
+    public function getLibNameAlt()
+    {
+        return $this->fields['name_alt_display_mv'] ?? [];
+    }
+
+    /**
+     *
+     * @return array
+     */
+    public function getLibResponsibility()
+    {
+        return $this->fields['responsibility_display_mv'] ?? [];
+    }
+
+    /**
+     *
+     * @return array
+     */
+    public function getPhone()
+    {
+        return $this->fields['phone_display_mv'] ?? [];
+    }
+
+    /**
+     *
+     * @return array
+     */
+    public function getEmail()
+    {
+        return $this->fields['email_display_mv'] ?? [];
+    }
+
+    /**
+     *
+     * @return array
+     */
+    public function getService()
+    {
+        return $this->fields['services_display_mv'] ?? [];
+    }
+
+    /**
+     *
+     * @return array
+     */
+    public function getFunction()
+    {
+        return $this->fields['function_display_mv'] ?? [];
+    }
+
+    /**
+     *
+     * @return array
+     */
+    public function getProject()
+    {
+        return $this->fields['projects_display_mv'] ?? [];
+    }
+
+    /**
+     *
+     * @return array
+     */
+    public function getType()
+    {
+        return $this->fields['type_display_mv'] ?? [];
+    }
+
+    /**
+     *
+     * @return array
+     */
+    public function getMvs()
+    {
+        return $this->fields['mvs_display_mv'] ?? [];
+    }
+
+    /**
+     *
+     * @return array
+     */
+    public function getBranchUrl()
+    {
+        return $this->fields['branchurl_display_mv'] ?? [];
+    }
+
+    public function getBookSearchFilter(){
+        $institution = $this->fields['cpk_code_display'] ?? '';
+        $institutionsMappings = $this->facetsConfig->InstitutionsMappings->toArray();
+        return $institutionsMappings[$institution] ?? null;
+    }
+
+    /**
+     * get gps coordinates of library
+     *
+     * @return array
+     *
+     */
+    public function getGpsCoordinates()
+    {
+        $gps = $this->fields['gps_display'] ?? '';
+        $coords = [];
+        if ($gps != '' ) {
+            list($coords['lat'], $coords['lng']) = explode(" ", $gps,2);
+        }
+        return $coords;
+    }
+
+    public function getAddInfoItemsCount()
+    {
+        $result = 0;
+        if (!empty($this->getSigla())) $result++;
+        if (!empty($this->getLastUpdated())) $result++;
+        return $result;
+    }
+
+    public function getContactsItemsCount()
+    {
+        $result = 0;
+        if (!empty($this->getPhone())) $result++;
+        if (!empty($this->getEmail())) $result++;
+        if (!empty($this->getLibResponsibility())) $result++;
+        return $result;
+    }
+
+    public function getServicesItemsCount()
+    {
+        $result = 0;
+        if (!empty($this->getService())) $result++;
+        if (!empty($this->getFunction())) $result++;
+        if (!empty($this->getProject())) $result++;
+        return $result;
+    }
+
+    public function geBranchesItemsCount()
+    {
+        $result = 0;
+        if (!empty($this->getLibBranch())) $result++;
+        return $result;
+    }
+
+    /**
+     * Get handler for related
+     *
+     * @return array
+     */
+    public function getFilterParamsForRelated()
+    {
+        return ['handler' => 'morelikethislibrary'];
+    }
+
+    /**
+     * Get Regional Library
+     *
+     * @return array
+     */
+    public function getRegLibrary()
+    {
+        $library       = $this->fields['reg_lib_id_display_mv'] ?? [];
+        $parsedLibrary = empty($library) ? [] : explode('|', $library[0]);
+        return empty($parsedLibrary) ? [] : ['id' => $parsedLibrary[0], 'name' => $parsedLibrary[1]];
+    }
 }
 

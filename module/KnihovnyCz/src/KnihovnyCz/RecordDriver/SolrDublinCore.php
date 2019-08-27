@@ -67,7 +67,6 @@ class SolrDublinCore extends \KnihovnyCz\RecordDriver\SolrDefault
      */
     public function getTitle()
     {
-        var_dump($this->fields);
         return $this->fields['title'] ?? '';
     }
 
