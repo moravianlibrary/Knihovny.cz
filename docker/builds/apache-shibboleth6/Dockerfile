@@ -1,4 +1,4 @@
-FROM localhost/php-extensions
+FROM localhost/php-extensions6
 
 ARG PARAM_VUFIND_HOST="localhost"
 ARG PARAM_SSL_DIR="/etc/ssl/private"

@@ -1,4 +1,4 @@
-FROM localhost/apache-shibboleth
+FROM localhost/apache-shibboleth6
 
 ARG PARAM_VUFIND_SRC=/var/www/knihovny-cz
 ARG PARAM_VUFIND_PORT=443

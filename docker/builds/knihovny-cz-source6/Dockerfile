@@ -1,4 +1,4 @@
-FROM localhost/knihovny-cz-base
+FROM localhost/knihovny-cz-base6
 
 ARG PARAM_VUFIND_BRANCH=
 ARG PARAM_VUFIND_COMMIT_HASH=
