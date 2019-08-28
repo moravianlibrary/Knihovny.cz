@@ -1,6 +1,6 @@
 version: '2.2'
 services:
-    vufind:
+    vufind6:
         image: "moravianlibrary/${IMAGE_NAME:-knihovny-cz-deploy}:${IMAGE_VERSION:-latest}"
         extends:
             file: docker-compose.yaml
@@ -8,7 +8,7 @@ services:
         env_file:
            - deploy.env
         build:
-            context: "builds/knihovny-cz-source"
+            context: "builds/knihovny-cz-source6"
             args:
                 PARAM_VUFIND_BRANCH: ""
                 PARAM_VUFIND_COMMIT_HASH: ""

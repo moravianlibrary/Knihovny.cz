@@ -1,12 +1,12 @@
 version: '2.2'
 services:
-    php-extensions:
-        image: "localhost/php-extensions"
-        build: "builds/php-extensions"
-    apache-shibboleth:
-        image: "localhost/apache-shibboleth"
+    php-extensions6:
+        image: "localhost/php-extensions6"
+        build: "builds/php-extensions6"
+    apache-shibboleth6:
+        image: "localhost/apache-shibboleth6"
         build:
-            context: "builds/apache-shibboleth"
+            context: "builds/apache-shibboleth6"
             args:
                 PARAM_VUFIND_HOST: "beta.knihovny.cz"
                 PARAM_SSL_DIR: "/etc/ssl/private"
@@ -16,10 +16,10 @@ services:
                 PARAM_SHIB_CRT_OUT: "shibboleth2-sp-cert.pem"
                 SSL_VALIDITY_DAYS: 3650
     knihovny-cz:
-        image: "localhost/knihovny-cz-base"
+        image: "localhost/knihovny-cz-base6"
         hostname: "beta.knihovny.cz"
         build:
-            context: "builds/knihovny-cz-base"
+            context: "builds/knihovny-cz-base6"
             args:
                 PARAM_VUFIND_SRC: "/var/www/knihovny-cz"
         ports:

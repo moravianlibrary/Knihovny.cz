@@ -151,7 +151,7 @@ export CONTAINER_NAME="${container_name}"
 
 cd $(dirname "$0")"/../docker"
 
-for srv in php-extensions apache-shibboleth knihovny-cz; do
+for srv in php-extensions6 apache-shibboleth6 knihovny-cz; do
     docker-compose build "$srv"
     if [ $? -ne 0 ]; then
         echo "Can't build $srv, exiting"
