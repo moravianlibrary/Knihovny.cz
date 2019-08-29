@@ -21,7 +21,7 @@ email           = cpk-support@mzk.cz
 defaultCurrency	= CZK
 browserDetectLanguage = false
 defaultAccountPage = CheckedOut
-theme		= bootstrap3
+theme		= KnihovnyCz
 
 notificationsEnabled = true
 ;notificationsEnabled = false
