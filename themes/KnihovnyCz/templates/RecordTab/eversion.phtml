@@ -1,0 +1,47 @@
+<?php
+    // Set page title.
+    $this->headTitle($this->driver->getBreadcrumb());
+    ?>
+
+<div class='field856'>
+    <table class='table table-striped' id='e-version-table'>
+        <thead>
+        <tr>
+            <th class="col-md-2"><?=$this->translate('Destination');?></th>
+            <th class="col-md-2"><?=$this->translate('Accessibility');?></th>
+            <th class="col-md-3"><?=$this->translate('Link');?></th>
+            <th class="col-md-5"><?=$this->translate('Distributor');?></th>
+        </tr>
+        </thead>
+        <tbody>
+        <?php $links = $this->driver->getLinks(); if (!empty($links)): ?>
+            <?php foreach ($links as $link):
+                if ($link['status'] === 'online') {
+                    $statusClass = 'success';
+                } else if ($link['status'] === 'unknown') {
+                    $statusClass = 'warning';
+                } else {
+                    $statusClass = 'danger';
+                }
+                $description = $link['desc'] ?? 'Link';
+                ?>
+
+                <tr>
+                    <td><?=$this->transEsc($link['destination'])?></td>
+                    <?php if ($linkk['status'] === 'protected') : ?>
+                        <td>
+                            <a target='_blank' data-toggle="tooltip" data-placement="top" rel='nofollow' title="<?=$this->translate('What does it mean?')?>" href='https://cs.wikipedia.org/wiki/Voln%C3%A9_d%C3%ADlo'>
+                                <span class="label label-<?=$statusClass?>"><?=$this->transEsc('link_access_status_'.$link['status'])?></span>
+                            </a>
+                        </td>
+                    <?php else : ?>
+                        <td><span class="label label-<?=$statusClass?>"><?=$this->transEsc('link_access_status_'.$link['status'])?></span></td>
+                    <?php endif; ?>
+                    <td><a title='<?=$this->transEsc($description)?>' href='<?=$link['url']?>' target='_blank'><?=$this->transEsc($description)?></a></td>
+                    <td><?=$this->transEsc('source_'.$link['source'])?></td>
+                </tr>
+            <?php endforeach; ?>
+        <?php endif; ?>
+        </tbody>
+    </table>
+</div>

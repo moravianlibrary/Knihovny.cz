@@ -56,6 +56,18 @@ $config = [
                     ],
                 ],
             ],
+            'recordtab' => [
+                'invokables' => [
+                    'edsavailability' => 'KnihovnyCz\RecordTab\EdsAvailability',
+                    'eversion' => 'KnihovnyCz\RecordTab\EVersion',
+                    'librarybranches' => 'KnihovnyCz\RecordTab\LibraryBranches',
+                    'librarycontacts' => 'KnihovnyCz\RecordTab\LibraryContacts',
+                    'libraryinfo' => 'KnihovnyCz\RecordTab\LibraryInfo',
+                    'libraryservices' => 'KnihovnyCz\RecordTab\LibraryServices',
+                    'usercommentsobalkyknih' => 'KnihovnyCz\RecordTab\UserCommentsObalkyKnih',
+                    'ziskej' => 'KnihovnyCz\RecordTab\Ziskej',
+                ]
+            ],
         ],
     ],
 ];

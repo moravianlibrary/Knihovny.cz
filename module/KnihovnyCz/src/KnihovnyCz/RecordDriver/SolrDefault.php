@@ -299,6 +299,45 @@ class SolrDefault extends \VuFind\RecordDriver\SolrDefault {
     }
 
     /**
+     * Return an array of associative URL arrays with one or more of the following
+     * keys:
+     *
+     *      desc: URL description text to display (optional)
+     *      url: fully-formed URL (required if 'route' is absent)
+     *      destination: web or digital library
+     *      status: access status
+     *      source: source of data
+     *
+     * @return array
+     */
+    public function getLinks()
+    {
+        $links = [];
+        $parentRecord = $this->getParentRecord();
+        if ($parentRecord !== null ) {
+            $rawLinks = $parentRecord->get856Links();
+            foreach ($rawLinks as $rawLink) {
+                $parts = explode("|", $rawLink);
+                $link = [
+                    'destination' => (substr($parts[0], 0, 4) === 'kram')
+                        ? 'Digital library' : 'Web',
+                    'status' => $parts[1] != '' ? $parts[1] : null,
+                    'url' => $parts[2] != '' ? $parts[2] : null,
+                    'desc' => $parts[3] != '' ? $parts[3] : null,
+                    'source' => $parts[0] != '' ? $parts[0] : null
+                ];
+                $links[] = $link;
+            }
+        }
+        return $links;
+    }
+
+    protected function get856Links()
+    {
+        return isset($this->fields['url']) ? $this->fields['url'] : [];
+    }
+
+    /**
      * Get parent record
      *
      * @return \VuFind\RecordDriver\AbstractBase|\VuFind\RecordDriver\SolrDefault|null

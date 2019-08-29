@@ -89,21 +89,6 @@ class SolrMarc extends \KnihovnyCz\RecordDriver\SolrDefault
         return $source;
     }
 
-    public function get866()
-    {
-        $field866 = $this->getFieldArray('866', array('s', 'x'));
-        return $field866;
-    }
-    /**
-     * Returns data from SOLR representing links and metadata to access SFX
-     *
-     * @return  array
-     */
-    public function get866Data()
-    {
-        return $this->fields['sfx_links'] ?? [];
-    }
-
     public function getISSNFromMarc()
     {
         $issn = $this->getFieldArray('022', array('a'));

@@ -1,0 +1,32 @@
+<?php // FIXME: ziskej is under development, this will need update ?>
+<div class="row">
+    <h2><?=$this->translate('ziskej_desc_header') ?></h2>
+    <p><?=$this->translate('ziskej_desc') ?></p>
+</div>
+<div class="row">
+    <div class="col-md-6">
+        <h4><?=$this->translate('ziskej_available_header') ?></h4>
+        <ul>
+            <li><?=$this->translate('ziskej_national_lib') ?></li>
+            <li><?=$this->translate('ziskej_national_medical_lib') ?></li>
+            <li><?=$this->translate('ziskej_moravian_lib') ?></li>
+            <li><?=$this->translate('ziskej_ceska_trebova_lib') ?></li>
+        </ul>
+    </div>
+    <div class="col-md-6 text-center" id="ziskejMinimalButton">
+        <? if (isset($this->mvsUrl)): ?>
+            <form action="<?=$this->mvsUrl ?>" id="mvs" method="post">
+                <input type="hidden" name="source_id" value="<?=$this->escapeHtmlAttr($this->serverName) ?>">
+                <input type="hidden" name="user_id" value="<?=$this->escapeHtmlAttr(isset($this->eppn) ? $this->eppn : '') ?>">
+                <input type="hidden" name="doc_id" value="<?=$this->escapeHtmlAttr($this->driver->getUniqueID()) ?>">
+                <input type="hidden" name="entity_id"
+                       value="<?=$this->escapeHtmlAttr(isset($this->entityId) ? $this->entityId : '') ?>">
+                <? $records = $tabs['DedupedRecords']->getRecordsInGroup(); ?>
+                <? foreach ($records as $record): ?>
+                    <input type="hidden" name="doc_alt_ids[]" value="<?=$this->escapeHtmlAttr($record['id']) ?>">
+                <? endforeach; ?>
+                <input id="ziskejSubmitButton" type="image" src="<?=$this->imageLink('ziskejlogo.png')?>" alt="<?=$this->translate('ziskej')?>" >
+            </form>
+        <? endif; ?>
+    </div>
+</div>
