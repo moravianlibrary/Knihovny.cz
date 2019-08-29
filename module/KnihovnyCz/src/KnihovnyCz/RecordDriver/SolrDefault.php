@@ -59,6 +59,16 @@ class SolrDefault extends \VuFind\RecordDriver\SolrDefault {
     ];
 
     /**
+     * @var \VuFind\RecordDriver\SolrDefault|null
+     */
+    protected $parentRecord = null;
+
+    /**
+     * @var \VuFind\Record\Loader|null
+     */
+    protected $recordLoader = null;
+
+    /**
      * Get the publishers of the record.
      *
      * @return array
@@ -76,11 +86,11 @@ class SolrDefault extends \VuFind\RecordDriver\SolrDefault {
     /**
      * Returns parent record ID from SOLR
      *
-     * @return  array
+     * @return string
      */
     public function getParentRecordID()
     {
-        return $this->fields['parent_id_str'] ?? [];
+        return $this->fields['parent_id_str'] ?? '';
     }
 
     /**
@@ -277,6 +287,7 @@ class SolrDefault extends \VuFind\RecordDriver\SolrDefault {
         return '/Search/Results?lookfor0[]=' . urlencode($mainSerie)
             . '&amp;type0[]=adv_search_monographic_series&amp;join=AND&amp;searchTypeTemplate=advanced&amp;page=1&amp;bool0[]=AND';
     }
+
     public function getMonographicSeriesTitle(string $serie)
     {
         return implode(" | ", explode("|", $serie));
@@ -286,5 +297,32 @@ class SolrDefault extends \VuFind\RecordDriver\SolrDefault {
     {
         return $this->fields['ziskej_boolean'] ?? false;
     }
+
+    /**
+     * Get parent record
+     *
+     * @return \VuFind\RecordDriver\AbstractBase|\VuFind\RecordDriver\SolrDefault|null
+     */
+    public function getParentRecord()
+    {
+        if ($this->parentRecord === null && $this->recordLoader !== null) {
+            $parentRecordId = $this->getParentRecordID();
+            $this->parentRecord = $this->recordLoader->load($parentRecordId);
+        }
+        return $this->parentRecord;
+    }
+
+    /**
+     * Attach a Record Loader
+     *
+     * @param \VuFind\Record\Loader $recordLoader Record Loader
+     *
+     * @return void
+     */
+    public function attachRecordLoader(\VuFind\Record\Loader $recordLoader)
+    {
+        $this->recordLoader = $recordLoader;
+    }
+
 
 }
