@@ -13,7 +13,7 @@ Available params
   --branch|-b branchname   Use this git branch as source code, build type must be deploy, default "master"
   -p port_number           HTTP port to run apache on, default 80
   -s port_number           HTTPS port to run apache on, default 443
-  -service service_name    Service to run, available services: vufind (default), knihovny-cz, devel, devel-10000 - devel-10009, php-extensions, apache-shibboleth
+  -service service_name    Service to run, available services: vufind6 (default), knihovny-cz, devel6, devel6-10000 - devel6-10009, php-extensions6, apache-shibboleth6
   --container_name|-n name Container name to use, default ""
   -d                       Run docker compose in detached mode
   --image|-i               Image name to use when building container with vufind, default "knihovny_cz"
