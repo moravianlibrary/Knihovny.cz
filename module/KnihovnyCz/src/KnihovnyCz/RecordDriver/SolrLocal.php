@@ -30,6 +30,20 @@ namespace KnihovnyCz\RecordDriver;
 
 class SolrLocal extends \KnihovnyCz\RecordDriver\SolrMarc
 {
+    /**
+     * Get an array of information about record holdings, obtained in real-time
+     * from the ILS.
+     *
+     * @return array
+     */
+    public function getRealTimeHoldings()
+    {
+        $holdings = parent::getRealTimeHoldings();
+        if (empty($holdings)) {
+            $holdings = $this->parseHoldingsFrom996field();
+        }
+        return $holdings;
+    }
 
 }
 

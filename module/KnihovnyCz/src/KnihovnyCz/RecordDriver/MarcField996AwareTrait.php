@@ -28,10 +28,20 @@
 
 namespace KnihovnyCz\RecordDriver;
 
+//FIXME this really needs refactoring
 trait MarcField996AwareTrait
 {
     protected $reverse = false;
     protected $sortFields = array();
+    protected $ilsConfig = null;
+
+    protected function getILSconfig()
+    {
+        if ($this->ilsConfig === null) {
+            $this->ilsConfig = $this->ils->getDriverConfig();
+        }
+        return $this->ilsConfig;
+    }
 
     protected function getAll996Subfields()
     {
@@ -146,7 +156,8 @@ trait MarcField996AwareTrait
                 $holding['id'] = $id;
                 $holding['source'] = $source;
                 // If is Aleph ..
-                if (isset($this->getILSconfig()['Drivers'][$source]) && $this->getILSconfig()['Drivers'][$source] === 'Aleph') {
+                $ilsConfig = $this->getILSconfig();
+                if (isset($ilsConfig['Drivers'][$source]) && $ilsConfig['Drivers'][$source] === 'Aleph') {
                     // If we have all we need
                     if (isset($holding['sequence_no']) && isset($holding['item_id']) && isset($holding['agency_id'])) {
                         $holding['item_id'] = $holding['agency_id'] . $holding['item_id'] . $holding['sequence_no'];
@@ -156,8 +167,8 @@ trait MarcField996AwareTrait
                         unset($holding['item_id']);
                     }
                 }
-                $holding['w_id'] = array_key_exists('w', $currentField) ? $currentField['w'] : null;
-                $holding['sigla'] = array_key_exists('e', $currentField) ? $currentField['e'] : null;
+                $holding['w_id'] = $currentField['w'] ?? null;
+                $holding['sigla'] = $currentField['e'] ?? null;
                 $holdings[] = $holding;
             }
         }
