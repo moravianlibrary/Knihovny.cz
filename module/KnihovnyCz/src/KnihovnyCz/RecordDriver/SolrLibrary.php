@@ -294,37 +294,28 @@ class SolrLibrary extends \KnihovnyCz\RecordDriver\SolrMarc
         return $coords;
     }
 
-    public function getAddInfoItemsCount()
+    public function hasAdditionalInfo()
     {
-        $result = 0;
-        if (!empty($this->getSigla())) $result++;
-        if (!empty($this->getLastUpdated())) $result++;
-        return $result;
+        return (!empty($this->getSigla()) || !empty($this->getLastUpdated()) );
     }
 
-    public function getContactsItemsCount()
+    public function hasContacts()
     {
-        $result = 0;
-        if (!empty($this->getPhone())) $result++;
-        if (!empty($this->getEmail())) $result++;
-        if (!empty($this->getLibResponsibility())) $result++;
-        return $result;
+        return (!empty($this->getPhone())
+            || !empty($this->getEmail())
+            || !empty($this->getLibResponsibility()));
     }
 
-    public function getServicesItemsCount()
+    public function hasServices()
     {
-        $result = 0;
-        if (!empty($this->getService())) $result++;
-        if (!empty($this->getFunction())) $result++;
-        if (!empty($this->getProject())) $result++;
-        return $result;
+        return (!empty($this->getService())
+            || !empty($this->getFunction())
+            || !empty($this->getProject()));
     }
 
-    public function geBranchesItemsCount()
+    public function hasBranches()
     {
-        $result = 0;
-        if (!empty($this->getLibBranch())) $result++;
-        return $result;
+        return !empty($this->getLibBranch());
     }
 
     /**
