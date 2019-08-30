@@ -52,34 +52,53 @@ class RecordDataFormatterFactory extends \VuFind\View\Helper\Root\RecordDataForm
      */
     public function getDefaultLibraryCoreSpecs()
     {
+        $fields = $this->getDefaultLibraryCoreFields();
         $spec = new SpecBuilder();
-        $spec->setTemplateLine('Book search', 'getBookSearchFilter',
-            'search_in_library_link.phtml', ['context' => ['icon' => 'pr-interface-circlerighttrue']]);
-
-        $spec->setLine('Address', 'getLibraryAddress', null,
-            ['context' => ['icon' => 'pr-location-pinmap5']]);
-
-        $spec->setTemplateLine('Opening hours', 'getLibraryHoursArray',
-            'opening_hours.phtml', ['context' => ['icon' => 'pr-interface-clocktime']]);
-
-        $spec->setLine('Additional information', 'getLibNote', null,
-            ['context' => ['icon' => 'pr-interface-circlerighttrue']]);
-
-        $spec->setLine('Additional information2', 'getLibNote2', null,
-            ['context' => ['icon' => 'pr-interface-circlerighttrue']]);
-
-        $spec->setTemplateLine('Web sites', 'getLibUrlArray',
-            'library_links.phtml', ['context' => ['icon' => 'pr-web-browseinternetnetwork']]);
-
-        $spec->setLine('Library type', 'getType', null,
-            ['context' => ['icon' => 'pr-interface-circlerighttrue']]);
-
-        $spec->setTemplateLine('Regional library', 'getRegLibrary',
-            'regional_library.phtml', ['context' => ['icon' => 'pr-interface-circlerighttrue']]);
-
-        $spec->setLine('Interlibrary loan', 'getMvs', null,
-            ['context' => ['icon' => 'pr-interface-circlerighttrue']]);
+        foreach ($fields as $key => $data) {
+            $function = $data['method'];
+            $spec->$function(
+                $key,
+                $data['dataMethod'],
+                $data['template'],
+                ['context' => ['icon' => $data['icon']]]
+            );
+        }
 
         return $spec->getArray();
+    }
+
+    /**
+     * Utitity function for getting filds for library core metadata
+     *
+     * @return array
+     */
+    public function getDefaultLibraryCoreFields()
+    {
+        $fields = [];
+        $setLine = function ($key, $dataMethod, $template = null,
+            $icon = 'pr-interface-circlerighttrue') use (&$fields)
+            {
+                $fields[$key] = [
+                    'method' => ($template === null) ? 'setLine' : 'setTemplateLine',
+                    'dataMethod' => $dataMethod,
+                    'template' => $template,
+                    'icon' => $icon
+                ];
+            };
+
+        $setLine('Book search', 'getBookSearchFilter',
+            'search_in_library_link.phtml');
+        $setLine('Address', 'getLibraryAddress', null, 'pr-location-pinmap5');
+        $setLine('Opening hours', 'getLibraryHoursArray',
+            'opening_hours.phtml', 'pr-interface-clocktime');
+        $setLine('Additional information', 'getLibNote');
+        $setLine('Additional information2', 'getLibNote2');
+        $setLine('Web sites', 'getLibUrlArray', 'library_links.phtml',
+            'pr-web-browseinternetnetwork');
+        $setLine('Library type', 'getType');
+        $setLine('Regional library', 'getRegLibrary', 'regional_library.phtml');
+        $setLine('Interlibrary loan', 'getMvs');
+
+        return $fields;
     }
 }
