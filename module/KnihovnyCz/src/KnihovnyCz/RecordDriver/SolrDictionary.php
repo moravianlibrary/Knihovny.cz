@@ -73,16 +73,6 @@ class SolrDictionary extends \KnihovnyCz\RecordDriver\SolrMarc
     }
 
     /**
-     * Get explanation.
-     *
-     * @return string
-     */
-    public function getExplanation()
-    {
-        return $this->fields ['explanation_display'] ?? '';
-    }
-
-    /**
      * Get relative terms.
      *
      * @return array

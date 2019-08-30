@@ -44,6 +44,8 @@ class RecordDataFormatterFactory extends \VuFind\View\Helper\Root\RecordDataForm
     ) {
         $helper = parent::__invoke($container, $requestedName, $options);
         $helper->setDefaults('library', [$this, 'getDefaultLibraryCoreSpecs']);
+        $helper->setDefaults('dictionary', [$this, 'getDefaultDictionaryCoreSpecs']);
+
         return $helper;
     }
 
@@ -68,7 +70,7 @@ class RecordDataFormatterFactory extends \VuFind\View\Helper\Root\RecordDataForm
     }
 
     /**
-     * Utitity function for getting filds for library core metadata
+     * Utitity function for getting fields for library core metadata
      *
      * @return array
      */
@@ -100,5 +102,26 @@ class RecordDataFormatterFactory extends \VuFind\View\Helper\Root\RecordDataForm
         $setLine('Interlibrary loan', 'getMvs');
 
         return $fields;
+    }
+
+    /**
+     * @return array;
+     */
+    public function getDefaultDictionaryCoreSpecs()
+    {
+        $spec = new SpecBuilder();
+
+        $spec->setLine('alternative_term', 'getAlternatives');
+        $spec->setLine('english_term', 'getEnglish');
+        $spec->setLine('explanation_term', 'getSummary');
+        $spec->setLine('relative_term', 'getRelatives');
+        $spec->setLine('source_term', 'getSource');
+        $spec->setLine('term_author', 'getTermAuthors');
+        $spec->setLine(
+            'Format', 'getFormats', 'RecordHelper',
+            ['helperMethod' => 'getFormatList']
+        );
+
+        return $spec->getArray();
     }
 }
