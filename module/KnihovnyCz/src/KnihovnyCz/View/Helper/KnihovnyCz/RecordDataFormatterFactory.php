@@ -89,11 +89,11 @@ class RecordDataFormatterFactory extends \VuFind\View\Helper\Root\RecordDataForm
         $setLine('Book search', 'getBookSearchFilter',
             'search_in_library_link.phtml');
         $setLine('Address', 'getLibraryAddress', null, 'pr-location-pinmap5');
-        $setLine('Opening hours', 'getLibraryHoursArray',
+        $setLine('Opening hours', 'getLibraryHours',
             'opening_hours.phtml', 'pr-interface-clocktime');
         $setLine('Additional information', 'getLibNote');
         $setLine('Additional information2', 'getLibNote2');
-        $setLine('Web sites', 'getLibUrlArray', 'library_links.phtml',
+        $setLine('Web sites', 'getLibUrls', 'library_links.phtml',
             'pr-web-browseinternetnetwork');
         $setLine('Library type', 'getType');
         $setLine('Regional library', 'getRegLibrary', 'regional_library.phtml');

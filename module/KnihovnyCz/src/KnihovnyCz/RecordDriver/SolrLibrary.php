@@ -42,33 +42,13 @@ class SolrLibrary extends \KnihovnyCz\RecordDriver\SolrMarc
     }
 
     /**
-     * Get an array of note about the libraryname
-     *
-     * @return string
-     */
-    public function getLibraryNames()
-    {
-        return $this->fields['name_display'] ?? '';
-    }
-
-    /**
      * Get the full title of the record
      *
      * @return string
      */
     public function getTitle()
     {
-        return $this->getLibraryNames();
-    }
-
-    /**
-     * Get an array of note about the libraryhours
-     *
-     * @return string
-     */
-    public function getLibraryHours()
-    {
-        return $this->fields['hours_display'] ?? '';
+        return $this->fields['name_display'] ?? '';
     }
 
     /**
@@ -76,12 +56,12 @@ class SolrLibrary extends \KnihovnyCz\RecordDriver\SolrMarc
      *
      * @return array
      */
-    public function getLibraryHoursArray()
+    public function getLibraryHours()
     {
         $result = [];
-        $string = $this->getLibraryHours();
-        if (!empty($string)) {
-            $days = explode("|", $string);
+        $hours = $this->fields['hours_display'] ?? '';
+        if (!empty($hours)) {
+            $days = explode("|", $hours);
             foreach ($days as $day) {
                 $parts = explode(" ", trim($day), 2);
                 $result[$parts[0]] = $parts[1];
@@ -152,20 +132,11 @@ class SolrLibrary extends \KnihovnyCz\RecordDriver\SolrMarc
      *
      * @return array
      */
-    public function getLibUrl()
+    public function getLibUrls()
     {
-        return $this->fields['url_display_mv'] ?? [];
-    }
-
-    /**
-     *
-     * @return array
-     */
-    public function getLibUrlArray()
-    {
-        if (isset($this->fields['url_display_mv'])
-            && is_array($this->fields['url_display_mv']))
-        {
+        $result = [];
+        $urls = $this->fields['url_display_mv'] ?? null;
+        if (is_array($urls)) {
             $filter = function ($url) {
                 $parts = explode("|", trim($url),2);
                 $parts = array_map('trim', $parts);
@@ -174,9 +145,9 @@ class SolrLibrary extends \KnihovnyCz\RecordDriver\SolrMarc
                     'name' => $parts[1] ?? $parts[0] ?? null,
                 ];
             };
-            return array_map($filter, $this->fields['url_display_mv']);
+            $result = array_map($filter, $urls);
         }
-        return [];
+        return $result;
     }
 
     /**
@@ -186,15 +157,6 @@ class SolrLibrary extends \KnihovnyCz\RecordDriver\SolrMarc
     public function getLibBranch()
     {
         return $this->fields['branch_display_mv'] ?? [];
-    }
-
-    /**
-     *
-     * @return array
-     */
-    public function getLibNameAlt()
-    {
-        return $this->fields['name_alt_display_mv'] ?? [];
     }
 
     /**
