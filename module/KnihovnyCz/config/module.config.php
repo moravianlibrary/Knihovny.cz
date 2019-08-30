@@ -37,7 +37,7 @@ $config = [
                     'KnihovnyCz\RecordDriver\SolrDefault' => 'KnihovnyCz\RecordDriver\SolrDefaultFactory',
                     'KnihovnyCz\RecordDriver\SolrDictionary' => 'KnihovnyCz\RecordDriver\SolrDefaultFactory',
                     'KnihovnyCz\RecordDriver\SolrDublinCore' => 'KnihovnyCz\RecordDriver\SolrDefaultFactory',
-                    'KnihovnyCz\RecordDriver\SolrLibrary' => 'KnihovnyCz\RecordDriver\SolrDefaultFactory',
+                    'KnihovnyCz\RecordDriver\SolrLibrary' => 'KnihovnyCz\RecordDriver\SolrLibraryFactory',
                     'KnihovnyCz\RecordDriver\SolrMarc' => 'KnihovnyCz\RecordDriver\SolrDefaultFactory',
                     'KnihovnyCz\RecordDriver\SolrLocal' => 'KnihovnyCz\RecordDriver\SolrDefaultFactory',
                 ],

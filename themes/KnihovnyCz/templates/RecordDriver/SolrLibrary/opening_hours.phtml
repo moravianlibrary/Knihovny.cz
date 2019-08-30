@@ -1,0 +1,68 @@
+<?php if (!empty($data)): ?>
+    <table class="table">
+        <?php if (!empty($data['mo'])): ?>
+            <tr>
+                <td><?=$this->transEsc('Monday')?></td>
+                <td>
+                    <?=$this->escapeHtml($data['mo'])?>
+                </td>
+            </tr>
+        <?php endif; ?>
+        <?php if (!empty($data['tu'])): ?>
+            <tr>
+                <td><?=$this->transEsc('Tuesday')?></td>
+                <td>
+                    <?=$this->escapeHtml($data['tu'])?>
+                </td>
+            </tr>
+        <?php endif; ?>
+        <?php if (!empty($data['we'])): ?>
+            <tr>
+                <td><?=$this->transEsc('Wednesday')?></td>
+                <td>
+                    <?=$this->escapeHtml($data['we'])?>
+                </td>
+            </tr>
+        <?php endif; ?>
+        <?php if (!empty($data['th'])): ?>
+            <tr>
+                <td><?=$this->transEsc('Thursday')?></td>
+                <td>
+                    <?=$this->escapeHtml($data['th'])?>
+                </td>
+            </tr>
+        <?php endif; ?>
+        <?php if (!empty($data['fr'])): ?>
+            <tr>
+                <td><?=$this->transEsc('Friday')?></td>
+                <td>
+                    <?=$this->escapeHtml($data['fr'])?>
+                </td>
+            </tr>
+        <?php endif; ?>
+        <?php if (!empty($data['sa'])): ?>
+            <tr>
+                <td><?=$this->transEsc('Saturday')?></td>
+                <td>
+                    <?=$this->escapeHtml($data['sa'])?>
+                </td>
+            </tr>
+        <?php endif; ?>
+        <?php if (!empty($data['su'])): ?>
+            <tr>
+                <td><?=$this->transEsc('Sunday')?></td>
+                <td>
+                    <?=$this->escapeHtml($data['su'])?>
+                </td>
+            </tr>
+        <?php endif; ?>
+        <?php if (!empty($data['for'])): ?>
+            <tr>
+                <td><?=$this->transEsc('Next')?></td>
+                <td>
+                    <?=$this->escapeHtml($data['for'])?>
+                </td>
+            </tr>
+        <?php endif; ?>
+    </table>
+<?php endif;

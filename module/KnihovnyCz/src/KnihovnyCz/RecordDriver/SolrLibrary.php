@@ -30,6 +30,12 @@ namespace KnihovnyCz\RecordDriver;
 
 class SolrLibrary extends \KnihovnyCz\RecordDriver\SolrMarc
 {
+
+    /**
+     * @var \Zend\Config\Config
+     */
+    protected $facetsConfig = null;
+
     public function getParentRecordID()
     {
         return $this->fields['id'] ?? '';
@@ -338,6 +344,14 @@ class SolrLibrary extends \KnihovnyCz\RecordDriver\SolrMarc
         $library       = $this->fields['reg_lib_id_display_mv'] ?? [];
         $parsedLibrary = empty($library) ? [] : explode('|', $library[0]);
         return empty($parsedLibrary) ? [] : ['id' => $parsedLibrary[0], 'name' => $parsedLibrary[1]];
+    }
+
+    /**
+     * @param \Zend\Config\Config $facetsConfig
+     */
+    public function attachFacetsConfig($facetsConfig)
+    {
+        $this->facetsConfig = $facetsConfig;
     }
 }
 
