@@ -31,23 +31,15 @@ namespace KnihovnyCz\RecordDriver;
 class SolrAuthority extends \KnihovnyCz\RecordDriver\SolrMarc
 {
     /**
-     * Get the full name of authority.
-     *
-     * @return string
-     */
-    public function getPersonalName()
-    {
-        return $this->fields['personal_name_display'] ?? '';
-    }
-    /**
      * Get the full title of the record.
      *
      * @return string
      */
     public function getTitle()
     {
-        return $this->getPersonalName();
+        return $this->fields['personal_name_display'] ?? '';
     }
+
     /**
      * Get the alternatives of the full name.
      *
@@ -57,22 +49,22 @@ class SolrAuthority extends \KnihovnyCz\RecordDriver\SolrMarc
     {
         return $this->fields['alternative_name_display_mv'] ?? [];
     }
+
     /**
      * Get the authority's pseudonyms.
      *
      * @return array
      */
     public function getPseudonyms() {
-        if (!isset($this->fields['pseudonym_name_display_mv'])
-            || !isset($this->fields['pseudonym_record_ids_display_mv']))
-        {
-            return [];
+        $pseudonyms = [];
+        $names = $this->fields['pseudonym_name_display_mv'] ?? null;
+        $ids = $this->fields['pseudonym_record_ids_display_mv'] ?? null;
+        if ($names && $ids) {
+            $pseudonyms = array_combine($names, $ids);
         }
-        return array_combine(
-            $this->fields['pseudonym_name_display_mv'],
-            $this->fields['pseudonym_record_ids_display_mv']
-        );
+        return $pseudonyms;
     }
+
     /**
      * Get authority's source.
      *
@@ -89,7 +81,7 @@ class SolrAuthority extends \KnihovnyCz\RecordDriver\SolrMarc
      */
     public function getHighlightedTitle()
     {
-        return rtrim($this->getPersonalName(), ',');
+        return rtrim($this->getTitle(), ',');
     }
 
     public function getBibinfoForObalkyKnihV3()
@@ -132,7 +124,9 @@ class SolrAuthority extends \KnihovnyCz\RecordDriver\SolrMarc
      */
     public function hasPublications()
     {
-        $results = $this->searchController->getAuthorityPublicationsCount($this->getAuthorityId());
+        // TODO: not implemented yet (and should be refactored)
+        //$results = $this->searchController->getAuthorityPublicationsCount($this->getAuthorityId());
+        $results = 10; //placeholder value
         return ($results > 1);
     }
     /**
@@ -142,33 +136,68 @@ class SolrAuthority extends \KnihovnyCz\RecordDriver\SolrMarc
      */
     public function hasPublicationsAbout()
     {
-        $results = $this->searchController->getPublicationsAboutAvailableCount($this->getAuthorityId());
+        // TODO: not implemented yet (and should be refactored)
+        //$results = $this->searchController->getPublicationsAboutAvailableCount($this->getAuthorityId());
+        $results = 10; //placeholder value
         return ($results > 0);
     }
     /**
      * Get link to search publications of authority.
      *
-     * @return string
+     * @return string|null
      */
     public function getPublicationsUrl()
     {
-        return "/Search/Results?"
-            . "sort=relevance&join=AND&type0[]=adv_search_author_corporation"
-            . "&bool0[]=AND&searchTypeTemplate=advanced&lookfor0[]="
-            . $this->getAuthorityId();
+        $url = null;
+        if ($this->hasPublications()) {
+            $url = "/Search/Results?"
+                . "sort=relevance&join=AND&type0[]=adv_search_author_corporation"
+                . "&bool0[]=AND&searchTypeTemplate=advanced&lookfor0[]="
+                . $this->getAuthorityId();
+        }
+        return $url;
     }
     /**
      * Get link to search publications about authority.
      *
-     * @return string
+     * @return string|null
      */
     public function getPublicationsAboutUrl()
     {
-        return "/Search/Results?"
-            . "sort=relevance&join=AND&type0[]=adv_search_subject_keywords"
-            . "&bool0[]=AND&searchTypeTemplate=advanced&lookfor0[]="
-            . $this->getAuthorityId();
+        $url = null;
+        if ($this->hasPublicationsAbout()) {
+            $url = "/Search/Results?"
+                . "sort=relevance&join=AND&type0[]=adv_search_subject_keywords"
+                . "&bool0[]=AND&searchTypeTemplate=advanced&lookfor0[]="
+                . $this->getAuthorityId();
+        }
+        return $url;
     }
 
+    /**
+     * Get urls related to this record, publications of this authority
+     *  and publications about this authority
+     *
+     * @return array
+     */
+    public function getRelatedUrls()
+    {
+        $urls = [];
+        $publicationsUrl = $this->getPublicationsUrl();
+        $publicationsAboutUrl = $this->getPublicationsAboutUrl();
+        if ($publicationsUrl) {
+            $urls[] = [
+                'url' => $publicationsUrl,
+                'desc' => 'Show publications of this person',
+            ];
+        }
+        if ($publicationsAboutUrl) {
+            $urls[] = [
+                'url' => $publicationsAboutUrl,
+                'desc' =>  'Show publications about this person',
+            ];
+        }
+        return $urls;
+    }
 }
 

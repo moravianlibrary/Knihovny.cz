@@ -1,0 +1,4 @@
+<?php
+foreach ($data as $url):?>
+  <div><a href="<?=$url['url']?>"><?=$this->transEsc($url['desc'])?></a></div>
+<?php endforeach;
