@@ -47,7 +47,6 @@ class RecordDataFormatterFactory extends \VuFind\View\Helper\Root\RecordDataForm
         $helper->setDefaults('dictionary', [$this, 'getDefaultDictionaryCoreSpecs']);
         $helper->setDefaults('authority', [$this, 'getDefaultAuthorityCoreSpecs']);
 
-
         return $helper;
     }
 
@@ -142,6 +141,82 @@ class RecordDataFormatterFactory extends \VuFind\View\Helper\Root\RecordDataForm
             ['helperMethod' => 'getFormatList']
         );
         $spec->setTemplateLine('Publications', 'getRelatedUrls', 'publicationurls.phtml');
+
+        return $spec->getArray();
+    }
+
+    /**
+     * Get default specifications for displaying data in core metadata.
+     *
+     * @return array
+     */
+    public function getDefaultCoreSpecs()
+    {
+        $spec = new SpecBuilder();
+        $spec->setTemplateLine(
+            'Published in', 'getContainerTitle', 'data-containerTitle.phtml'
+        );
+        $spec->setLine(
+            'New Title', 'getNewerTitles', null, ['recordLink' => 'title']
+        );
+        $spec->setLine(
+            'Previous Title', 'getPreviousTitles', null, ['recordLink' => 'title']
+        );
+        $spec->setMultiLine(
+            'Authors', 'getDeduplicatedAuthors', $this->getAuthorFunction() //FIXME - need to render links for authors
+        );
+        $spec->setLine(
+            'Format', 'getFormats', 'RecordHelper',
+            ['helperMethod' => 'getFormatList']
+        );
+        $spec->setLine('Language', 'getLanguages');
+        $spec->setLine('Document range', 'getRange');
+        $spec->setTemplateLine('From monographic series', 'getMonographicSeries', 'data-monographic-series.phtml');
+        $spec->setTemplateLine(
+            'Published', 'getPublicationDetails', 'data-publicationDetails.phtml'
+        );
+        $spec->setTemplateLine('field773','getField773','data-7xx-field.phtml');
+        $spec->setTemplateLine('field770','getField770','data-7xx-field.phtml');
+        $spec->setTemplateLine('field772','getField772','data-7xx-field.phtml');
+        $spec->setTemplateLine('field777','getField777','data-7xx-field.phtml');
+        $spec->setTemplateLine('field780','getField780','data-7xx-field.phtml');
+        $spec->setTemplateLine('field785','getField785','data-7xx-field.phtml');
+        $spec->setLine(
+            'Edition', 'getEdition', null,
+            ['prefix' => '<span property="bookEdition">', 'suffix' => '</span>']
+        );
+        $spec->setTemplateLine('Series', 'getSeries', 'data-series.phtml');
+        $spec->setTemplateLine(
+            'Subjects', 'getAllSubjectHeadings', 'data-allSubjectHeadings.phtml'
+        );
+        $spec->setTemplateLine(
+            'child_records', 'getChildRecordCount', 'data-childRecords.phtml',
+            ['allowZero' => false]
+        );
+        $spec->setLine('Published', 'getDateSpan');
+        $spec->setLine('Item Description', 'getGeneralNotes');
+        $spec->setLine('Physical Description', 'getPhysicalDescriptions');
+        $spec->setLine('Publication Frequency', 'getPublicationFrequency');
+        $spec->setLine('Playing Time', 'getPlayingTimes');
+        $spec->setLine('Format', 'getSystemDetails');
+        $spec->setLine('Audience', 'getTargetAudienceNotes');
+        $spec->setLine('Awards', 'getAwards');
+        $spec->setLine('Production Credits', 'getProductionCredits');
+        $spec->setLine('Bibliography', 'getBibliographyNotes');
+        $spec->setLine('ISBN', 'getISBNs');
+        $spec->setLine('Scale', 'getScales');
+        $spec->setLine('MPT', 'getMpts');
+        $spec->setLine('Non-standarad ISBN', 'getNonStandardISBN');
+        $spec->setLine('ISSN', 'getISSNs');
+        $spec->setLine('DOI', 'getCleanDOI');
+        $spec->setLine('Related Items', 'getRelationshipNotes');
+        $spec->setLine('Access', 'getAccessRestrictions');
+        $spec->setLine('Finding Aid', 'getFindingAids');
+        $spec->setLine('Publication_Place', 'getHierarchicalPlaceNames');
+        $spec->setTemplateLine('Author Notes', true, 'data-authorNotes.phtml');
+        $spec->setTemplateLine(
+            'Related Items', 'getAllRecordLinks', 'data-allRecordLinks.phtml'
+        );
 
         return $spec->getArray();
     }

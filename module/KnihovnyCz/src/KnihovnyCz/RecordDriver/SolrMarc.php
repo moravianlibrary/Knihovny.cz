@@ -101,6 +101,31 @@ class SolrMarc extends \KnihovnyCz\RecordDriver\SolrDefault
         return $scales;
     }
 
+    /**
+     * Get the edition of the current record.
+     *
+     * @return string
+     */
+    public function getEdition()
+    {
+        return $this->getFirstFieldValue('250', ['a']);
+    }
+
+    /**
+     * Returns document range info from field 300
+     *
+     * @return  array
+     */
+    public function getRange()
+    {
+        return $this->getFieldArray('300');
+    }
+
+    public function getNonStandardISBN()
+    {
+        return $this->getFieldArray('902');
+    }
+
     public function getMpts()
     {
         $field024s = $this->getFieldArray('024', array('a', '2'), false); // Mezinárodní patentové třídění
@@ -116,6 +141,56 @@ class SolrMarc extends \KnihovnyCz\RecordDriver\SolrDefault
             }
         }
         return $mpts;
+    }
+
+    /*
+     * @return array
+     */
+    protected function getStructuredDataFieldArray($field)
+    {
+        $result = [];
+        $fieldsData = $this->getMarcRecord()->getFields($field);
+        foreach ($fieldsData as $fieldObj) {
+            $subfieldsData = $fieldObj->getSubfields();
+            if (!empty($subfieldsData)) {
+                $subfieldsArray = [];
+                foreach ($subfieldsData as $s) {
+                    $subfieldsArray[$s->getCode()] = $s->getData();
+                }
+                $result[] = $subfieldsArray;
+            }
+        }
+        return $result;
+    }
+
+    public function getField773()
+    {
+        return $this->getStructuredDataFieldArray("773");
+    }
+
+    public function getField770()
+    {
+        return $this->getStructuredDataFieldArray("770");
+    }
+
+    public function getField772()
+    {
+        return $this->getStructuredDataFieldArray("772");
+    }
+
+    public function getField777()
+    {
+        return $this->getStructuredDataFieldArray("777");
+    }
+
+    public function getField780()
+    {
+        return $this->getStructuredDataFieldArray("780");
+    }
+
+    public function getField785()
+    {
+        return $this->getStructuredDataFieldArray("785");
     }
 
     /**

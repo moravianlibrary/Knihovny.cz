@@ -272,25 +272,30 @@ class SolrDefault extends \VuFind\RecordDriver\SolrDefault {
         return $this->fields['summary_display_mv'] ?? [];
     }
 
-    public function getMonographicSeries($searchAlsoInParentRecord = true)
+    protected function getMonographicSeriesFieldData()
     {
-        $series = $this->fields['monographic_series_display_mv'] ?: false;
-        if (! $series && $searchAlsoInParentRecord) {
-            $series = $this->getParentRecordDriver()->getMonographicSeries(false);
+        return $this->fields['monographic_series_display_mv'] ?? [];
+    }
+
+    public function getMonographicSeries()
+    {
+        $result = [];
+        $seriesField = $this->getMonographicSeriesFieldData();
+        if (!$seriesField) {
+            $parentRecord = $this->getParentRecord();
+            if ($parentRecord !== null) {
+                $seriesField = $parentRecord->getMonographicSeriesFieldData();
+            }
         }
-        return $series;
-    }
-
-    public function getMonographicSeriesUrl(string $serie)
-    {
-        $mainSerie = explode("|", $serie)[0];
-        return '/Search/Results?lookfor0[]=' . urlencode($mainSerie)
-            . '&amp;type0[]=adv_search_monographic_series&amp;join=AND&amp;searchTypeTemplate=advanced&amp;page=1&amp;bool0[]=AND';
-    }
-
-    public function getMonographicSeriesTitle(string $serie)
-    {
-        return implode(" | ", explode("|", $serie));
+        foreach ($seriesField as $serie) {
+            $result[] = [
+                'url' => '/Search/Results?lookfor0[]='
+                    . urlencode(explode("|", $serie)[0])
+                    . '&amp;type0[]=adv_search_monographic_series&amp;join=AND&amp;searchTypeTemplate=advanced&amp;page=1&amp;bool0[]=AND',
+                'desc' => str_replace('|', ' | ', $serie),
+            ];
+        }
+        return $result;
     }
 
     public function getZiskejBoolean() : bool
