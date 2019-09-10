@@ -39,8 +39,8 @@ RUN mv /tmp/vufind-${PARAM_VUFIND_COMMIT}/* /var/www/knihovny-cz/ && \
 # Install composer dependencies
 RUN composer install --no-interaction --no-scripts -q
 
-# TODO
-#RUN phing installswaggerui
+# We were running composer with --no-script parameter, so we need to run installswaggerui separataly
+RUN composer exec phing installswaggerui
 
 #TODO: sentry/sentry still missing
 
