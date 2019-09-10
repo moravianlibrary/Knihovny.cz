@@ -1,2 +1,5 @@
 .idea
 docker/local.env
+docker/devel.env
+nohup.out
+local/knihovny.cz/config/vufind/config.local.ini
