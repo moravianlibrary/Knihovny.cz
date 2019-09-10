@@ -58,11 +58,11 @@ if [ ! -z "$config_dir" ]; then
     export PARAM_VUFIND_CONFIG_DIR="$config_dir"
 fi
 
-service="devel-${port}"
+service="devel6-${port}"
 http_port=$(($port+10000))
 https_port=$(($port+10443))
-container_name="knihovny-devel-$branch"
+container_name="knihovny-devel6-$branch"
 
-./run.sh -d -t devel -p $http_port -s $https_port -b $branch -service $service -n $container_name
+`dirname $0`/run.sh -d -t devel -p $http_port -s $https_port -b $branch -service $service -n $container_name
 
 echo "URL: https://cpk-front.mzk.cz:${port}/"
