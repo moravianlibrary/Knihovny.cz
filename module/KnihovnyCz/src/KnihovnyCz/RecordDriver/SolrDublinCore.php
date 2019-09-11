@@ -28,7 +28,9 @@
 
 namespace KnihovnyCz\RecordDriver;
 
-class SolrDublinCore extends \KnihovnyCz\RecordDriver\SolrDefault
+use VuFind\View\Helper\Root\RecordLink;
+
+class SolrDublinCore extends SolrDefault
 {
 
     protected $xmlCache = null;
