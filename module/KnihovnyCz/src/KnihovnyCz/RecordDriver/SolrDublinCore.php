@@ -52,12 +52,12 @@ class SolrDublinCore extends \KnihovnyCz\RecordDriver\SolrDefault
         $value = $dc->xpath('//dc:subject');
         $ret = [];
         foreach ($value as $part) {
-            if (!preg_match('/^([\W0-9]+|neuvedeno|n[ae]zadáno)$/', $part))
-            {
-                $ret[] = (string) $part;
+            if (preg_match('/^([\W0-9]+|neuvedeno|n[ae]zadáno)$/', $part)) {
+                continue;
             }
+            $ret[] = [(string) $part];
         }
-        return empty($value) ? [] : $ret;
+        return $ret;
     }
 
     /**
@@ -81,25 +81,13 @@ class SolrDublinCore extends \KnihovnyCz\RecordDriver\SolrDefault
     }
 
     /**
-     * Get the title of the item that contains this record (i.e. MARC 773s of a
-     * journal).
-     *
-     * @return string
-     */
-    public function getContainerTitle()
-    {
-        return isset($this->fields['container_title']) ? $this->fields['container_title'] : '';
-    }
-
-    /**
      * Get an array of all the languages associated with the record.
      *
      * @return array
      */
     public function getLanguages()
     {
-        return isset($this->fields['language_display_mv'])
-            ? $this->fields['language_display_mv'] : [];
+        return $this->fields['language_display_mv'] ?? [];
     }
 
     /**
@@ -112,71 +100,10 @@ class SolrDublinCore extends \KnihovnyCz\RecordDriver\SolrDefault
     {
         $dc = $this->parseXML();
         $value = $dc->xpath('//dc:date');
-        $ret = [];
-        foreach ($value as $part) {
-            $ret[] = (string) $part;
-        }
-        return empty($value) ? [] : $ret;
+        return ($value === false) ? [] : array_map('strval', $value);
     }
 
-    /**
-     * Get the edition of the current record.
-     *
-     * @return string
-     */
-    public function getEdition()
-    {
-        return $this->fields['edition'] ?? '';
-    }
-
-    /**
-     * Get all record links related to the current record. Each link is returned as
-     * array.
-     * Format:
-     * array(
-     *        array(
-     *               'title' => label_for_title
-     *               'value' => link_name
-     *               'link'  => link_URI
-     *        ),
-     *        ...
-     * )
-     *
-     * @return null|array
-     */
-    public function getAllRecordLinks()
-    {
-        // Load configurations:
-        $fieldsNames = isset($this->mainConfig->Record->marc_links)
-            ? explode(',', $this->mainConfig->Record->marc_links) : [];
-        $useVisibilityIndicator
-            = isset($this->mainConfig->Record->marc_links_use_visibility_indicator)
-            ? $this->mainConfig->Record->marc_links_use_visibility_indicator : true;
-        $retVal = [];
-        foreach ($fieldsNames as $value) {
-            $value = trim($value);
-            $fields = $this->getMarcRecord()->getFields($value);
-            if (!empty($fields)) {
-                foreach ($fields as $field) {
-                    // Check to see if we should display at all
-                    if ($useVisibilityIndicator) {
-                        $visibilityIndicator = $field->getIndicator('1');
-                        if ($visibilityIndicator == '1') {
-                            continue;
-                        }
-                    }
-                    // Get data for field
-                    $tmp = $this->getFieldData($field);
-                    if (is_array($tmp)) {
-                        $retVal[] = $tmp;
-                    }
-                }
-            }
-        }
-        return empty($retVal) ? null : $retVal;
-    }
-
-    public function getParentRecordID()
+     public function getParentRecordID()
     {
         return $this->fields['parent_id_str'] ?? '';
     }
@@ -190,23 +117,9 @@ class SolrDublinCore extends \KnihovnyCz\RecordDriver\SolrDefault
     {
         $dc = $this->parseXML();
         $value = $dc->xpath('//dc:description');
-        $ret = [];
-        foreach ($value as $part) {
-            $ret[] = (string) $part;
-        }
-        return empty($value) ? [] : $ret;
+        return ($value === false) ? [] : array_map('strval', $value);
     }
 
-    /**
-     * Get the first call number associated with the record (empty string if none).
-     *
-     * @return string
-     */
-    public function getCallNumber()
-    {
-        $all = $this->getCallNumbers();
-        return $all[0] ?? '';
-    }
     /**
      * Get all call numbers associated with the record (empty string if none).
      *
@@ -218,10 +131,32 @@ class SolrDublinCore extends \KnihovnyCz\RecordDriver\SolrDefault
         $value = $dc->xpath('//dc:identifier');
         $ret = [];
         foreach ($value as $part) {
-            if (! is_int(strpos((string) $part, "signature:"))) continue;
+            if (!is_int(strpos((string) $part, "signature:"))) {
+                continue;
+            }
             $ret[] = str_replace("signature:", "", (string) $part);
         }
-        return empty($value) ? [] : $ret;
+        return $ret;
+    }
+
+    /**
+     * Return an XML representation of the record using the specified format.
+     * Return false if the format is unsupported.
+     *
+     * @param string     $format     Name of format to use (corresponds with OAI-PMH
+     * metadataPrefix parameter).
+     * @param string     $baseUrl    Base URL of host containing VuFind (optional;
+     * may be used to inject record URLs into XML when appropriate).
+     * @param RecordLink $recordLink Record link helper (optional; may be used to
+     * inject record URLs into XML when appropriate).
+     *
+     * @return mixed         XML, or false if format unsupported.
+     */
+    public function getXML($format, $baseUrl = null, $recordLink = null)
+    {
+        // We have oai_dc xml saved in fullrecord field in solr, no need to create it
+        return ($format === 'oai_dc') ? $this->fields['fullrecord']
+            : parent::getXML($format, $baseUrl, $recordLink);
     }
 
     protected function parseXML()
@@ -233,4 +168,3 @@ class SolrDublinCore extends \KnihovnyCz\RecordDriver\SolrDefault
         return $this->xmlCache;
     }
 }
-
