@@ -32,7 +32,9 @@ use VuFind\View\Helper\Root\RecordLink;
 
 class SolrDublinCore extends SolrDefault
 {
-
+    /**
+     * @var \SimpleXMLElement
+     */
     protected $xmlCache = null;
 
     /**
@@ -50,16 +52,16 @@ class SolrDublinCore extends SolrDefault
      */
     public function getAllSubjectHeadings($extended = false)
     {
-        $dc = $this->parseXML();
-        $value = $dc->xpath('//dc:subject');
-        $ret = [];
-        foreach ($value as $part) {
-            if (preg_match('/^([\W0-9]+|neuvedeno|n[ae]zadáno)$/', $part)) {
-                continue;
-            }
-            $ret[] = [(string) $part];
-        }
-        return $ret;
+        $data = $this->getXmlFieldData("subject");
+        $data = array_filter($data, function($part) {
+            return !preg_match('/^([\W0-9]+|neuvedeno|n[ae]zadáno)$/', $part);
+        });
+        $callback = function ($part) use ($extended) {
+            return $extended
+                ? ['heading' => [$part], 'type' => '', 'source' => '']
+                : [$part];
+        };
+        return array_map($callback, $data);
     }
 
     /**
@@ -100,14 +102,7 @@ class SolrDublinCore extends SolrDefault
      */
     public function getHumanReadablePublicationDates()
     {
-        $dc = $this->parseXML();
-        $value = $dc->xpath('//dc:date');
-        return ($value === false) ? [] : array_map('strval', $value);
-    }
-
-     public function getParentRecordID()
-    {
-        return $this->fields['parent_id_str'] ?? '';
+        return $this->getXmlFieldData("date");
     }
 
     /**
@@ -117,28 +112,17 @@ class SolrDublinCore extends SolrDefault
      */
     public function getGeneralNotes()
     {
-        $dc = $this->parseXML();
-        $value = $dc->xpath('//dc:description');
-        return ($value === false) ? [] : array_map('strval', $value);
+        return $this->getXmlFieldData("description");
     }
 
     /**
-     * Get all call numbers associated with the record (empty string if none).
-     *
-     * @return array
+     * Get xml field data as array of strings
      */
-    public function getCallNumbers()
+    protected function getXmlFieldData(string $field): array
     {
         $dc = $this->parseXML();
-        $value = $dc->xpath('//dc:identifier');
-        $ret = [];
-        foreach ($value as $part) {
-            if (!is_int(strpos((string) $part, "signature:"))) {
-                continue;
-            }
-            $ret[] = str_replace("signature:", "", (string) $part);
-        }
-        return $ret;
+        $value = $dc->xpath('//dc:' . $field);
+        return ($value === false) ? [] : array_map('strval', $value);
     }
 
     /**
