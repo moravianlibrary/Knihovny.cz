@@ -34,46 +34,7 @@ class SolrMarc extends \KnihovnyCz\RecordDriver\SolrDefault
     use \VuFind\RecordDriver\MarcReaderTrait;
     use \VuFind\RecordDriver\MarcAdvancedTrait;
     use MarcField996AwareTrait;
-
-    /**
-     * Get patent info for export in txt
-     * TODO: Do we really need these two methods? If so, shouldn't it be rendered in template?
-     */
-    public function getPatentInfo() {
-        $patentInfo = [];
-        $patentInfo['country'] = $this->getFieldArray('013', array('b'))[0];
-        $patentInfo['type'] = $this->getFieldArray('013', array('c'))[0];
-        $patentInfo['id'] = $this->getFieldArray('013', array('a'))[0];
-        $patentInfo['publish_date'] = $this->getFieldArray('013', array('d'))[0];
-        if(empty($patentInfo)) {
-            return false;
-        }
-        $patentInfoText = $this->renderPatentInfo($patentInfo);
-        return $patentInfoText;
-    }
-
-    /**
-     * Render patent info to export file
-     *
-     * @param $patentInfo array with patent info
-     * @return string rendered string
-     */
-    public function renderPatentInfo($patentInfo) {
-        $patentInfoText = '';
-        $patentInfoText .= $this->translate('Patent') . ': ' . $patentInfo['country'] . ', ';
-        switch ($patentInfo['type']) {
-        case 'B6':
-            $patentInfoText .= $this->translate('patent_file'); break;
-        case 'A3':
-            $patentInfoText .= $this->translate('app_invention'); break;
-        case 'U1':
-            $patentInfoText .= $this->translate('utility_model'); break;
-        default:
-            $patentInfoText .= $this->translate('unknown_patent_type'); break;
-        }
-        $patentInfoText .= ', ' . $patentInfo['id'] . ', ' . $patentInfo['publish_date'] . "\r\n";
-        return $patentInfoText;
-    }
+    use PatentTrait;
 
     /**
      * Used in ajax to get sfx url
@@ -126,23 +87,6 @@ class SolrMarc extends \KnihovnyCz\RecordDriver\SolrDefault
         return $this->getFieldArray('902');
     }
 
-    public function getMpts()
-    {
-        $field024s = $this->getFieldArray('024', array('a', '2'), false); // Mezinárodní patentové třídění
-        $mpts = [];
-        $count = count($field024s);
-        if ($count) {
-            for ($i = 0; $i < $count; $i++) {
-                if (isset($field024s[$i+1])) {
-                    if ($field024s[$i+1] == 'MPT') {
-                        $mpts[] = $field024s[$i];
-                    }
-                }
-            }
-        }
-        return $mpts;
-    }
-
     /*
      * @return array
      */
@@ -152,13 +96,10 @@ class SolrMarc extends \KnihovnyCz\RecordDriver\SolrDefault
         $fieldsData = $this->getMarcRecord()->getFields($field);
         foreach ($fieldsData as $fieldObj) {
             $subfieldsData = $fieldObj->getSubfields();
-            if (!empty($subfieldsData)) {
-                $subfieldsArray = [];
-                foreach ($subfieldsData as $s) {
-                    $subfieldsArray[$s->getCode()] = $s->getData();
-                }
-                $result[] = $subfieldsArray;
-            }
+            $subfieldsArray = iterator_to_array($subfieldsData);
+            $result[] = array_map(function($part) {
+                return $part->getData();
+            }, $subfieldsArray);
         }
         return $result;
     }
