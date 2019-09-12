@@ -67,6 +67,7 @@ $config = [
                     'librarycontacts' => 'KnihovnyCz\RecordTab\LibraryContacts',
                     'libraryinfo' => 'KnihovnyCz\RecordTab\LibraryInfo',
                     'libraryservices' => 'KnihovnyCz\RecordTab\LibraryServices',
+                    'staffviewdublincore' => 'KnihovnyCz\RecordTab\StaffViewDublinCore',
                     'usercommentsobalkyknih' => 'KnihovnyCz\RecordTab\UserCommentsObalkyKnih',
                     'ziskej' => 'KnihovnyCz\RecordTab\Ziskej',
                 ]
