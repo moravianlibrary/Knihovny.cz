@@ -38,11 +38,20 @@ class SolrLocal extends \KnihovnyCz\RecordDriver\SolrMarc
      */
     public function getRealTimeHoldings()
     {
-        $holdings = parent::getRealTimeHoldings();
-        if (empty($holdings)) {
+        try {
+            $holdings = parent::getRealTimeHoldings();
+        } catch (\VuFind\Exception\ILS $exception) {
+            //TODO create full array structure for holdings
             $holdings = $this->parseHoldingsFrom996field();
         }
         return $holdings;
+    }
+
+    //FIXME: bypass this until ILS drivers are implemented
+    public function getRealTimeHistory()
+    {
+        // Get Acquisitions Data
+        return [];
     }
 
 }
