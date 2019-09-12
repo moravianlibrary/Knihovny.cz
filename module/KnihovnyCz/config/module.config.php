@@ -54,6 +54,9 @@ $config = [
                     'KnihovnyCz\RecordDriver\SolrMarc' => [
                         'VuFind\RecordDriver\IlsAwareDelegatorFactory',
                     ],
+                    'KnihovnyCz\RecordDriver\SolrLocal' => [
+                        'VuFind\RecordDriver\IlsAwareDelegatorFactory',
+                    ],
                 ],
             ],
             'recordtab' => [
