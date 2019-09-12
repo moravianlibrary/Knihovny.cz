@@ -28,176 +28,145 @@
 
 namespace KnihovnyCz\RecordDriver;
 
-//FIXME this really needs refactoring
 trait MarcField996AwareTrait
 {
-    protected $reverse = false;
-    protected $sortFields = array();
+    protected $sortFields =  ['y', 'v', 'i'];
     protected $ilsConfig = null;
 
-    protected function getILSconfig()
+    protected function getIlsConfig(): array
     {
-        if ($this->ilsConfig === null) {
-            $this->ilsConfig = $this->ils->getDriverConfig();
+        if ($this->ilsConfig === null && $this->hasILS()) {
+              $this->ilsConfig = $this->ils->getDriverConfig();
         }
         return $this->ilsConfig;
-    }
-
-    protected function getAll996Subfields()
-    {
-        $fields = [];
-        $fieldsParsed = $this->getMarcRecord()->getFields('996');
-        foreach ($fieldsParsed as $field) {
-            $subfieldsParsed = $field->getSubfields();
-            $subfields = [];
-            foreach ($subfieldsParsed as $subfield) {
-                $subfieldCode = trim($subfield->getCode());
-                // If is this subfield already set, ignore next value .. probably incorrect OAI data
-                if (! isset($subfields[$subfieldCode]))
-                    $subfields[$subfieldCode] = $subfield->getData();
-            }
-            $fields[] = $subfields;
-        }
-        return $fields;
     }
 
     /**
      * Returns array of holdings parsed via indexed 996 fields.
      *
-     * TODO: Implement filtering
-     *
-     * @param array $filters
-     *
      * @return array
      */
-    protected function parseHoldingsFrom996field($filters = [])
+    protected function parseHoldingsFrom996field(): array
     {
-        $id = $this->getUniqueID();
-        $fields = $this->getAll996Subfields();
-        $source = $this->getSourceId();
-        $mappingsFor996 = $this->getMappingsFor996($source);
-        // Remember to unset all arrays at that would log an error providing array as another's array key
-        if (isset($mappingsFor996['restricted'])) {
-            $restrictions = $mappingsFor996['restricted'];
-            unset($mappingsFor996['restricted']);
-        }
-        if (isset($mappingsFor996['ignoredVals'])) {
-            $ignoredKeyValsPairs = $mappingsFor996['ignoredVals'];
-            unset($mappingsFor996['ignoredVals']);
-            foreach ($ignoredKeyValsPairs as &$ignoredValue)
-                $ignoredValue = array_map('trim', explode(',', $ignoredValue));
-        }
-        if (isset($mappingsFor996['toUpper'])) {
-            $toUpper = $mappingsFor996['toUpper'];
-            // We will take care of the upperation process in the closest iteration
-            unset($mappingsFor996['toUpper']);
-        } else {
-            // We will iterate over this, so don't let it be null
-            $toUpper = [];
-        }
-        $toTranslate = [];
-        // Here particular fields translation configuration takes place (see comments in MultiBackend.ini)
-        if (isset($mappingsFor996['translate'])) {
-            $toTranslateArray = $mappingsFor996['translate'];
-            unset($mappingsFor996['translate']);
-            foreach ($toTranslateArray as $toTranslateElement) {
-                $toTranslateElements = explode(':', $toTranslateElement);
-                $fieldToTranslate = $toTranslateElements[0];
-                if (count($toTranslateElements) < 2)
-                    $prependString = '';
-                else
-                    $prependString = $toTranslateElements[1];
-                $toTranslate[$fieldToTranslate] = $prependString;
+        $fields = $this->getStructuredDataFieldArray("996");
+        $fields = $this->filterOutRestrictedItems($fields);
+        $fields = $this->sortFields($fields);
+
+        return array_map([$this, 'processField'], $fields);
+    }
+
+    protected function processField($field)
+    {
+        $mappings = $this->get996Mappings();
+        $holding = [];
+        foreach ($mappings['data'] as $variableName => $current996Mapping) {
+            // Here it omits unset values & values, which are desired to be ignored by their presence in ignoredVals MultiBackend.ini's array
+            if (!empty($field[$current996Mapping])
+                && !$this->isIgnored(
+                    $field[$current996Mapping], $current996Mapping,
+                    $mappings['ignoredVals']
+                )
+            ) {
+                $holding[$variableName] = $field[$current996Mapping];
             }
         }
-        $this->sortFields($fields, $source);
-        if ((isset($this->fields['format_display_mv'][0])) && ($this->fields['format_display_mv'][0] == '0/PERIODICALS/')) {
-            usort($fields, function($a, $b) {
-                $found = false;
-                $sortFields = array('y', 'v', 'i');
-                foreach ($sortFields as $sort) {
-                    if (! isset($a[$sort])) {
-                        $a[$sort] = '';
-                    }
-                    if (! isset($b[$sort])) {
-                        $b[$sort] = '';
-                    }
-                    if ($a[$sort] != $b[$sort]) {
-                        $pattern = '/(\d+)(.+)?/';
-                        $first = preg_replace($pattern, '$1', $a[$sort]);
-                        $second = preg_replace($pattern, '$1', $b[$sort]);
-                        $found = true;
-                        break;
-                    }
-                }
-                return $found ? ($first < $second) : false;
-            });
-        }
-        $holdings = [];
-        foreach ($fields as $currentField) {
-            if (! $this->shouldBeRestricted($currentField, $restrictions)) {
-                unset($holding);
-                $holding = array();
-                foreach ($mappingsFor996 as $variableName => $current996Mapping) {
-                    // Here it omits unset values & values, which are desired to be ignored by their presence in ignoredVals MultiBackend.ini's array
-                    if (! empty($currentField[$current996Mapping]) && ! $this->isIgnored($currentField[$current996Mapping], $current996Mapping, $ignoredKeyValsPairs)) {
-                        $holding[$variableName] = $currentField[$current996Mapping];
-                    }
-                }
-                // Translation takes place from translate
-                foreach ($toTranslate as $fieldToTranslate => $prependString) {
-                    if (! empty($holding[$fieldToTranslate]))
-                        $holding[$fieldToTranslate] = $this->translate($prependString . $holding[$fieldToTranslate], null, $holding[$fieldToTranslate]);
-                }
-                foreach ($toUpper as $fieldToBeUpperred) {
-                    if (! empty($holding[$fieldToBeUpperred]))
-                        $holding[$fieldToBeUpperred] = strtoupper($holding[$fieldToBeUpperred]);
-                }
-                $holding['id'] = $id;
-                $holding['source'] = $source;
-                // If is Aleph ..
-                $ilsConfig = $this->getILSconfig();
-                if (isset($ilsConfig['Drivers'][$source]) && $ilsConfig['Drivers'][$source] === 'Aleph') {
-                    // If we have all we need
-                    if (isset($holding['sequence_no']) && isset($holding['item_id']) && isset($holding['agency_id'])) {
-                        $holding['item_id'] = $holding['agency_id'] . $holding['item_id'] . $holding['sequence_no'];
-                        unset($holding['agency_id']);
-                    } else {
-                        // We actually cannot process Aleph holdings without complete item id ..
-                        unset($holding['item_id']);
-                    }
-                }
-                $holding['w_id'] = $currentField['w'] ?? null;
-                $holding['sigla'] = $currentField['e'] ?? null;
-                $holdings[] = $holding;
+
+        // Translation takes place from translate
+        foreach ($mappings['translate'] as $fieldToTranslate => $prependString) {
+            if (!empty($holding[$fieldToTranslate])) {
+                $holding[$fieldToTranslate] = $this->translate(
+                    $prependString . $holding[$fieldToTranslate], [],
+                    $holding[$fieldToTranslate]
+                );
             }
         }
-        return $holdings;
+
+        foreach ($mappings['toUpper'] as $fieldToBeUpperred) {
+            if (!empty($holding[$fieldToBeUpperred])) {
+                $holding[$fieldToBeUpperred] = strtoupper(
+                    $holding[$fieldToBeUpperred]
+                );
+            }
+        }
+        $holding['id'] = $this->getUniqueID();
+        $holding['source'] = $this->getSourceId();
+        // If is Aleph ..
+        $ilsConfig = $this->getIlsConfig();
+        if (isset($ilsConfig['Drivers'][$holding['source']])
+            && $ilsConfig['Drivers'][$holding['source']] === 'Aleph'
+        ) {
+            // If we have all we need
+            if (isset($holding['sequence_no']) && isset($holding['item_id'])
+                && isset($holding['agency_id'])
+            ) {
+                $holding['item_id'] = $holding['agency_id'] . $holding['item_id']
+                    . $holding['sequence_no'];
+                unset($holding['agency_id']);
+            }
+        }
+        $holding['w_id'] = $field['w'] ?? null;
+        $holding['sigla'] = $field['e'] ?? null;
+        return $holding;
     }
 
     /**
-     * Returns array of key->value pairs where the key is variableName &
-     * value is mapped subfield.
+     * Filter items which we do not wan't to show
+     * @param array $fields
      *
-     * This method basically fetches default996Mappings & overrides there
-     * these variableNames, which are present in overriden996mappings.
-     *
-     * For more info see method getOverriden996Mappings
-     *
-     * @param string $source
-     *
-     * @return mixed null | array
+     * @return array
      */
-    protected function getMappingsFor996($source)
+    protected function filterOutRestrictedItems(array $fields): array
     {
-        $default996Mappings = $this->getDefault996Mappings();
-        $overriden996Mappings = $this->getOverriden996Mappings($source);
-        if ($overriden996Mappings === null)
-            return $default996Mappings;
-        // This will override all identical entries
-        $merged = array_reverse(array_merge($default996Mappings, $overriden996Mappings));
-        // We shouldn't set value where is the subfield the same as in any other overriden default variableName
-        return $this->array_unique_with_nested_arrays($merged);
+        $mappings = $this->get996Mappings();
+        if (isset($mappings['restricted'])) {
+            $restrictions = $mappings['restricted'];
+            $fields = array_filter($fields, function($f) use ($restrictions) {
+                return !$this->isRestricted($f, $restrictions);
+            });
+        }
+        return $fields;
+    }
+
+    /**
+     * Returns mapping for 996 subfield according ta current source
+     *
+     * @return array with keys:
+     *               toUpper - field to be uppered
+     *               translate - fields to be translate (possibly with prefix)
+     *               restricted - hidden fields
+     *               ignoredVals - hidden field values
+     *               data - actual data mappings
+     */
+    protected function get996Mappings(): array
+    {
+        $defaultMappings = $this->getDefault996Mappings();
+        $overridenMappings = $this->getOverriden996Mappings();
+        $mergedMappings = array_merge($defaultMappings, $overridenMappings);
+
+        // special (translate, toUpper, restricted, ignoredVals) are arrays in config
+        $mappings = array_filter($mergedMappings, function($mapping) {
+            return is_array($mapping);
+        });
+
+        $data = array_filter($mergedMappings, function($mapping) {
+            return !is_array($mapping);
+        });
+        $mappings['data'] = $data;
+
+        $ignored = $mappings['ignoredVals'] ?? [];
+        $mappings['ignoredVals'] = array_map(function($item) {
+            return array_map('trim', explode(',', $item));
+        }, $ignored);
+
+        $translate = $mappings['translate'] ?? [];
+        $translateMapping = [];
+        foreach ($translate as $t) {
+            list($field, $prefix) = explode(':', $t, 2);
+            $translateMapping[$field] = $prefix ?? '';
+        }
+        $mappings['translate'] = $translateMapping;
+
+        return $mappings;
     }
 
     /**
@@ -205,12 +174,28 @@ trait MarcField996AwareTrait
      *
      * Returns null if not found.
      *
-     * @return mixed null | array
+     * @return array
      */
-    protected function getDefault996Mappings()
+    protected function getDefault996Mappings(): array
     {
-        $ilsConfig = $this->getILSconfig();
-        return isset($ilsConfig['Default996Mappings']) ? $ilsConfig['Default996Mappings'] : [];
+        $ilsConfig = $this->getIlsConfig();
+        return $ilsConfig['Default996Mappings'] ?? [];
+    }
+
+    /**
+     * Returns array of config with which it is desired to override the default one.
+     *
+     * @return array
+     */
+    protected function getOverriden996Mappings(): array
+    {
+        $source = $this->getSourceId();
+        $ilsConfig = $this->getIlsConfig();
+        $overriden996Mappings = $ilsConfig['Overriden996Mappings'];
+        if (isset($overriden996Mappings[$source])) {
+            return $ilsConfig[$overriden996Mappings[$source]] ?? [];
+        }
+        return [];
     }
 
     /**
@@ -221,41 +206,16 @@ trait MarcField996AwareTrait
      * @param array $restrictions
      * @return boolean
      */
-    protected function shouldBeRestricted($subfields, $restrictions)
+    protected function isRestricted($subfields, $restrictions): bool
     {
-        if ($restrictions === null)
-            return false;
+        $result = false;
+        $restrictions = $restrictions ?? [];
         foreach ($restrictions as $key => $restrictedValue) {
-            if (isset($subfields[$key]) && $subfields[$key] == $restrictedValue)
-                return true;
-        }
-        return false;
-    }
-
-    /**
-     * This function is similar to array_unique, but with support
-     * for nested arrays to make sure no error occurs.
-     *
-     * @param array $mergedOnes
-     * @return array
-     *
-     * FIXME: This is bad and should be removed - if we need something like this, we probably have bad design...
-     */
-    protected function array_unique_with_nested_arrays($mergedOnes)
-    {
-        $nestedArrays = [];
-        foreach ($mergedOnes as $key => $value) {
-            if ($value !== null && is_array($value)) {
-                $nestedArrays[$key] = $value;
-                unset($mergedOnes[$key]);
+            if (isset($subfields[$key]) && $subfields[$key] === $restrictedValue) {
+                $result = true;
             }
         }
-        $toReturn = array_unique($mergedOnes);
-        foreach ($nestedArrays as $key => $value) {
-            // We won't do callback here as e.g. array 'restricted' may have multiple key-value pair with duplicate values
-            $toReturn[$key] = $value;
-        }
-        return $toReturn;
+        return $result;
     }
 
     /**
@@ -270,59 +230,50 @@ trait MarcField996AwareTrait
      * @param array $ignoredKeyValsPairs
      * @return boolean
      */
-    protected function isIgnored($subfieldValue, $subfieldKey, $ignoredKeyValsPairs)
+    protected function isIgnored($subfieldValue, $subfieldKey, $ignoredKeyValsPairs): bool
     {
-        if ($ignoredKeyValsPairs === null)
-            return false;
-        if (isset($ignoredKeyValsPairs[$subfieldKey]))
-            return array_search($subfieldValue, $ignoredKeyValsPairs[$subfieldKey]) !== false;
-        return false;
+        $result = false;
+        if (isset($ignoredKeyValsPairs[$subfieldKey])) {
+            $result = array_search($subfieldValue, $ignoredKeyValsPairs[$subfieldKey])
+                !== false;
+        }
+        return $result;
     }
 
     /**
      * There are rules how to sort holdings in some special cases.
-     * Set $this->reverse and $this->sortFields.
+     * Set $this->sortFields.
      *
      * @param array $fields
-     * @param string $source
+     * @return array
      */
-    private function sortFields(&$fields, $source) {
-        if (($source == 'kfbz') &&
-            (isset($this->fields['format_display_mv'][0])) &&
-            ($this->fields['format_display_mv'][0] == '0/BOOKS/')) {
-            $this->reverse = false;
-            $this->sortFields = array('l',);
-            usort($fields, array($this, 'sortLogic'));
+    private function sortFields($fields): array
+    {
+        if ((isset($this->fields['format_display_mv'][0]))
+            && ($this->fields['format_display_mv'][0] === '0/PERIODICALS/')) {
+            usort($fields, [$this, 'sortLogic']);
         }
-        if ((isset($this->fields['format_display_mv'][0])) && ($this->fields['format_display_mv'][0] == '0/PERIODICALS/')) {
-            $this->reverse = true;
-            $this->sortFields = array('y', 'v', 'i');
-            usort($fields, array($this, 'sortLogic'));
-        }
+        return $fields;
     }
 
     /**
      * The comparison function for usort, must return an integer <, =, or > than 0 if the first
      * argument is <, =, or > than the second argument.
      *
-     * Uses array $this->sortFields Fields from 996, used to sorting.
-     * Uses boolean $this->reverse Reverse the result
+     * Uses array $this->sortFields Subfields from 996, used to sorting.
      *
-     * @param $a
-     * @param $b
+     * @param string $a
+     * @param string $b
      *
      * @return integer
      */
-    private function sortLogic($a, $b) {
+    private function sortLogic($a, $b)
+    {
         $found = false;
         $first = $second = '';
         foreach ($this->sortFields as $sort) {
-            if (! isset($a[$sort])) {
-                $a[$sort] = '';
-            }
-            if (! isset($b[$sort])) {
-                $b[$sort] = '';
-            }
+            $a[$sort] = $a[$sort] ?? '';
+            $b[$sort] = $b[$sort] ?? '';
             if ($a[$sort] != $b[$sort]) {
                 $pattern = '/(\d+)(.+)?/';
                 $first = preg_replace($pattern, '$1', $a[$sort]);
@@ -331,7 +282,7 @@ trait MarcField996AwareTrait
                 break;
             }
         }
-        $ret = $this->reverse ? ($first < $second) : ($first > $second);
+        $ret = $first < $second;
         return $found ? $ret : false;
     }
 }
