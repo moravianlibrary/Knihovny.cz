@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Class RecordDataFormatterFactory
  *
@@ -206,7 +206,7 @@ class RecordDataFormatterFactory extends \VuFind\View\Helper\Root\RecordDataForm
         $spec->setLine('ISBN', 'getISBNs');
         $spec->setLine('Scale', 'getScales');
         $spec->setLine('MPT', 'getMpts');
-        $spec->setLine('Non-standarad ISBN', 'getNonStandardISBN');
+        $spec->setLine('Non-standard ISBN', 'getNonStandardISBN');
         $spec->setLine('ISSN', 'getISSNs');
         $spec->setLine('DOI', 'getCleanDOI');
         $spec->setLine('Related Items', 'getRelationshipNotes');
