@@ -1,7 +1,7 @@
-FROM php:7.1-apache-stretch
+FROM php:7.4.0RC1-apache-buster
 LABEL maintainer="Moravian Library <cpk-dev@mzk.cz>"
 LABEL version="2.0"
-LABEL description="Based on the 'php:7.1-apache-stretch' build with appended modules to php & apache2 + productivity tools included (vim, mc, htop, ping, traceroute, dig, ssh, mysql-client, locate, git, curl, bash-completion)"
+LABEL description="Based on the 'php:7.1-apache-stretch' build with appended modules to php & apache2 + productivity tools included (vim, mc, htop, ping, traceroute, dig, ssh, default-mysql-client, locate, git, curl, bash-completion)"
 
 #
 # See the docs for the php docker image:
@@ -33,10 +33,10 @@ RUN apt-get update && apt-get install -y \
         iputils-ping \
         iputils-tracepath \
         libapache2-mod-rpaf \
-        libapache2-mod-shib2 \
+        libapache2-mod-shib \
         mc \
         mlocate \
-        mysql-client \
+        default-mysql-client \
         net-tools \
         ssh \
         vim \
@@ -47,7 +47,7 @@ RUN apt-get update && apt-get install -y \
 # Enable apache modules
 RUN a2enmod \
         rewrite \
-        shib2 \
+        shib \
         rpaf \
         remoteip \
         proxy \
@@ -66,7 +66,6 @@ RUN docker-php-ext-configure \
         gd \
         xsl \
         ldap \
-        mcrypt \
         opcache \
         soap
 
@@ -74,7 +73,8 @@ RUN docker-php-ext-configure \
 RUN pecl install \
         apcu \
         apcu_bc-beta \
-        xdebug
+        xdebug-2.8.0beta2 \
+        mcrypt-1.0.2
 
 # Enable all installed modules
 RUN docker-php-ext-enable \
