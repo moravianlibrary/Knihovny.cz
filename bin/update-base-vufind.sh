@@ -8,7 +8,6 @@ USAGE: $0 [params]
 Available params
   -b|--branch    Branch of original VuFind repository (https://github.com/vufind-org/vufind), default "master"
   -d|--dry-run   Only prints information about available update
-  -c|--commit    Create  git commit automatically
   -h|--help      Print usage
 
 EOF
@@ -22,7 +21,6 @@ FILENAME="${DIRNAME}/../docker/builds/knihovny-cz-base6/Dockerfile"
 repository="vufind-org/vufind"
 branch="master"
 dryrun=false
-commit=false
 
 while true ; do
     case "$1" in
@@ -34,10 +32,6 @@ while true ; do
             esac ;;
          --dry-run|-d)
             dryrun=true
-            shift
-            ;;
-         --commit|-c)
-            commit=true
             shift
             ;;
          --help|-h)
@@ -62,12 +56,10 @@ if [ "$dryrun" == "true" ]; then
 fi
 
 sed -i "s/ENV PARAM_VUFIND_COMMIT=\"\(.*\)\"/ENV PARAM_VUFIND_COMMIT=\"${REMOTE_VERSION}\"/g" "${FILENAME}"
-#TODO 3-way merge of themes
-echo "Version was updated."
 
-if [ "$commit" == "true" ]; then
-  git add "${FILENAME}"
-  git commit -m "Update base VuFind to ${REMOTE_VERSION}"
-fi
+merge_directory local/base/config/vufind config/vufind $OUR_VERSION $REMOTE_VERSION ${repository}
+merge_directory themes/KnihovnyCz/templates themes/bootstrap3/templates $OUR_VERSION $REMOTE_VERSION ${repository}
+
+echo "Version was updated."
 
 exit 0;
