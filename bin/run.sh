@@ -151,6 +151,8 @@ export CONTAINER_NAME="${container_name}"
 
 cd $(dirname "$0")"/../docker"
 
+cp "../composer.local.json" "./builds/knihovny-cz-base6/"
+
 for srv in php-extensions6 apache-shibboleth6 knihovny-cz; do
     docker-compose build "$srv"
     if [ $? -ne 0 ]; then
@@ -170,3 +172,5 @@ fi
 if [[ $run == "true" ]]; then
     docker-compose -f "$docker_compose_file" up $compose_args $service
 fi
+
+rm "./builds/knihovny-cz-base6/composer.local.json"

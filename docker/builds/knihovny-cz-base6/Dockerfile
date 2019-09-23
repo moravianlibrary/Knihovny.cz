@@ -36,11 +36,14 @@ RUN mv /tmp/vufind-${PARAM_VUFIND_COMMIT}/* /var/www/knihovny-cz/ && \
     rmdir /tmp/vufind-${PARAM_VUFIND_COMMIT} && \
     rm /tmp/vufind.zip
 
-# Install composer dependencies
-RUN composer install --no-interaction --no-scripts -q
+# Add local dependecies
+COPY ./composer.local.json /var/www/knihovny-cz/
 
-# TODO
-#RUN phing installswaggerui
+# We need to remove original VuFind composer.lock file to composer.local.json be taken into account
+RUN rm /var/www/knihovny-cz/composer.lock
+
+# Install composer dependencies
+RUN composer install --no-interaction -q
 
 #TODO: sentry/sentry still missing
 

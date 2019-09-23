@@ -1,0 +1,16 @@
+{
+    "repositories": [
+        {
+            "type": "git",
+            "url": "https://github.com/moravianlibrary/ziskej-api-php-client"
+        }
+    ],
+    "require": {
+        "php-http/guzzle6-adapter": "^2.0",
+        "monolog/monolog": "^1.24",
+        "moravianlibrary/ziskej-api-php-client": "^0.0.5"
+    },
+    "scripts": {
+         "phing-install-dependencies": "phing installswaggerui"
+    }
+}
