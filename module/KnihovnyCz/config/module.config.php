@@ -72,6 +72,14 @@ $config = [
                     'ziskej' => 'KnihovnyCz\RecordTab\Ziskej',
                 ]
             ],
+            'content_covers' => [
+                'factories' => [
+                    'KnihovnyCz\Content\Covers\ObalkyKnih' => 'KnihovnyCz\Content\Covers\ObalkyKnihCoversFactory'
+                ],
+                'aliases' => [
+                    'obalkyknih' => 'KnihovnyCz\Content\Covers\ObalkyKnih'
+                ]
+            ]
         ],
     ],
 ];
