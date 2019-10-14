@@ -117,13 +117,25 @@ class ObalkyKnih extends \VuFind\Content\AbstractCover
     /* TODO: refactor to service class */
     public function getData($ids): ?\stdClass
     {
+        $cachedData = $this->getCachedData($ids['recordid']);
+        if ($cachedData === null) {
+            $cachedData = $this->getFromService($ids);
+            $this->putCachedData($ids['recordid'], $cachedData);
+        }
+        return $cachedData;
+    }
+
+    /* TODO refactor to service class */
+    protected function getFromService($ids): ?\stdClass {
         $param = "multi";
         $query = [];
         $isbn = $ids['isbn'] ? $ids['isbn']->get13() : null;
         $isbn = $isbn ?? $ids['upc'] ?? $ids['issn'] ?? null;
         $oclc = $ids['oclc'] ?? null;
-        // TODO add ismn and cnb/nbn parameters
-        foreach(['isbn', 'oclc', /*'ismn', 'nbn' */] as $identifier) {
+        $ismn = $ids['ismn'] ?? null;
+        $nbn = $ids['nbn'] ?? null;
+
+        foreach(['isbn', 'oclc', 'ismn', 'nbn' ] as $identifier) {
             if (isset($$identifier)) {
                 $query[$identifier] = $$identifier;
             }
