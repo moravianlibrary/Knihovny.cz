@@ -17,7 +17,6 @@ ARG TMP_DEV_PKGS=" \
         libjpeg62-turbo-dev \
         libldap2-dev \
         libldb-dev \
-        libmcrypt-dev \
         libpng-dev \
         libxslt1-dev"
 
@@ -74,7 +73,6 @@ RUN docker-php-ext-configure \
         gd \
         xsl \
         ldap \
-        mcrypt \
         opcache \
         soap
 

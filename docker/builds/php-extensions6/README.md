@@ -12,7 +12,6 @@ There are bundled these `php` extensions:
  - gd
  - xsl
  - ldap
- - mcrypt
  - apcu
  - xdebug
 
