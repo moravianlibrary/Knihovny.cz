@@ -30,6 +30,8 @@
 namespace KnihovnyCz\RecordDriver;
 
 use Interop\Container\ContainerInterface;
+use Zend\ServiceManager\Exception\ServiceNotCreatedException;
+use Zend\ServiceManager\Exception\ServiceNotFoundException;
 
 class SolrLibraryFactory extends SolrDefaultFactory
 {
@@ -46,7 +48,7 @@ class SolrLibraryFactory extends SolrDefaultFactory
      * @throws ServiceNotFoundException if unable to resolve the service.
      * @throws ServiceNotCreatedException if an exception is raised when
      * creating a service.
-     * @throws ContainerException if any other error occurs
+     * @throws \Exception if any other error occurs
      */
     public function __invoke(ContainerInterface $container, $requestedName,
         array $options = null

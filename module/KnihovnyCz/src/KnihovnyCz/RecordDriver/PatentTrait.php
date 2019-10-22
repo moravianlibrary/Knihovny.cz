@@ -43,19 +43,19 @@ trait PatentTrait
         $patentInfo['id'] = $this->getFieldArray('013', array('a'))[0];
         $patentInfo['publish_date'] = $this->getFieldArray('013', array('d'))[0];
         if(empty($patentInfo)) {
-            return false;
+            return '';
         }
-        $patentInfoText = $this->renderPatentInfo($patentInfo);
-        return $patentInfoText;
+        return $this->renderPatentInfo($patentInfo);
     }
 
     /**
      * Render patent info to export file
      *
-     * @param $patentInfo array with patent info
+     * @param array $patentInfo array with patent info
+     *
      * @return string rendered string
      */
-    public function renderPatentInfo($patentInfo): string
+    public function renderPatentInfo(array $patentInfo): string
     {
         $patentInfoText = '';
         $patentInfoText .= $this->translate('Patent') . ': ' . $patentInfo['country'] . ', ';

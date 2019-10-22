@@ -59,7 +59,7 @@ class SolrDefault extends \VuFind\RecordDriver\SolrDefault {
     ];
 
     /**
-     * @var \KnihovnyCz\RecordDriver\SolrDefault|null
+     * @var \VuFind\RecordDriver\AbstractBase|\KnihovnyCz\RecordDriver\SolrDefault|null
      */
     protected $parentRecord = null;
 
@@ -284,7 +284,7 @@ class SolrDefault extends \VuFind\RecordDriver\SolrDefault {
         if (!$seriesField) {
             $parentRecord = $this->getParentRecord();
             if ($parentRecord !== null) {
-                $seriesField = $parentRecord->getMonographicSeriesFieldData();
+                $seriesField = (array)$parentRecord->tryMethod('getMonographicSeriesFieldData');
             }
         }
         foreach ($seriesField as $serie) {
@@ -320,7 +320,7 @@ class SolrDefault extends \VuFind\RecordDriver\SolrDefault {
         $links = [];
         $parentRecord = $this->getParentRecord();
         if ($parentRecord !== null ) {
-            $rawLinks = $parentRecord->get856Links();
+            $rawLinks = (array)$parentRecord->tryMethod('get856Links');
             foreach ($rawLinks as $rawLink) {
                 $parts = explode("|", $rawLink);
                 $link = [
@@ -345,7 +345,7 @@ class SolrDefault extends \VuFind\RecordDriver\SolrDefault {
     /**
      * Get parent record
      *
-     * @return \KnihovnyCz\RecordDriver\SolrDefault|null
+     * @return \VuFind\RecordDriver\AbstractBase|\KnihovnyCz\RecordDriver\SolrDefault|null
      */
     public function getParentRecord()
     {
@@ -373,7 +373,7 @@ class SolrDefault extends \VuFind\RecordDriver\SolrDefault {
      */
     public function hasDeduplicatedRecords()
     {
-        return !empty($this->getParentRecord()->getChildrenIds());
+        return !empty((array)$this->getParentRecord()->tryMethod('getChildrenIds'));
     }
 
     /**
@@ -385,10 +385,11 @@ class SolrDefault extends \VuFind\RecordDriver\SolrDefault {
     public function getDeduplicatedRecords() {
         return array_map(function ($localId) {
             return [
-                'source' => 'source_' .  substr($localId, 0, strpos($localId, '.')),
+                'source' => 'source_'
+                    . substr($localId, 0, (int)strpos($localId, '.')),
                 'id' => $localId,
             ];
-        }, $this->getParentRecord()->getChildrenIds());
+        }, (array)$this->getParentRecord()->tryMethod('getChildrenIds'));
     }
 
     /**

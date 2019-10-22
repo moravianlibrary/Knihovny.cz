@@ -282,7 +282,7 @@ trait MarcField996AwareTrait
                 break;
             }
         }
-        $ret = $first < $second;
-        return $found ? $ret : false;
+        $ret = $first - $second;
+        return $found ? $ret : 0;
     }
 }

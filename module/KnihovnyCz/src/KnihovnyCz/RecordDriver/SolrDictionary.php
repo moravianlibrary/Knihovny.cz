@@ -97,7 +97,7 @@ class SolrDictionary extends \KnihovnyCz\RecordDriver\SolrMarc
      */
     public function getSource()
     {
-        return $this->fields ['source_display'] ?? '';
+        return $this->fields['source_display'] ?? '';
     }
 
     /**

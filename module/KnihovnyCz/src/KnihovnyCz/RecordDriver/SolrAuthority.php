@@ -57,22 +57,22 @@ class SolrAuthority extends \KnihovnyCz\RecordDriver\SolrMarc
      */
     public function getPseudonyms() {
         $pseudonyms = [];
-        $names = $this->fields['pseudonym_name_display_mv'] ?? null;
-        $ids = $this->fields['pseudonym_record_ids_display_mv'] ?? null;
+        $names = $this->fields['pseudonym_name_display_mv'] ?? [];
+        $ids = $this->fields['pseudonym_record_ids_display_mv'] ?? [];
         if ($names && $ids) {
             $pseudonyms = array_combine($names, $ids);
         }
-        return $pseudonyms;
+        return $pseudonyms ? $pseudonyms : [];
     }
 
     /**
      * Get authority's source.
      *
-     * @return array
+     * @return string
      */
     public function getSource()
     {
-        return $this->fields['source_display_mv'] ?? [];
+        return $this->fields['source_display_mv'][0] ?? '';
     }
     /**
      * Get the authority's name, shown as title of record.
