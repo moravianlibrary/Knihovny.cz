@@ -59,7 +59,7 @@ class SolrDefault extends \VuFind\RecordDriver\SolrDefault {
     ];
 
     /**
-     * @var \VuFind\RecordDriver\SolrDefault|null
+     * @var \KnihovnyCz\RecordDriver\SolrDefault|null
      */
     protected $parentRecord = null;
 
@@ -345,7 +345,7 @@ class SolrDefault extends \VuFind\RecordDriver\SolrDefault {
     /**
      * Get parent record
      *
-     * @return \VuFind\RecordDriver\AbstractBase|\VuFind\RecordDriver\SolrDefault|null
+     * @return \KnihovnyCz\RecordDriver\SolrDefault|null
      */
     public function getParentRecord()
     {
@@ -354,6 +354,41 @@ class SolrDefault extends \VuFind\RecordDriver\SolrDefault {
             $this->parentRecord = $this->recordLoader->load($parentRecordId);
         }
         return $this->parentRecord;
+    }
+
+    /**
+     * Used in ajax to get sfx url
+     *
+     * @return array
+     */
+    public function getChildrenIds()
+    {
+        return $this->fields['local_ids_str_mv'] ?? [];
+    }
+
+    /**
+     * Return true if the record is one of the duplicate records in group
+     *
+     * @return bool
+     */
+    public function hasDeduplicatedRecords()
+    {
+        return !empty($this->getParentRecord()->getChildrenIds());
+    }
+
+    /**
+     * Return array of all record ids (with their source institution) deduplicated
+     * with this record
+     *
+     * @return array
+     */
+    public function getDeduplicatedRecords() {
+        return array_map(function ($localId) {
+            return [
+                'source' => 'source_' .  substr($localId, 0, strpos($localId, '.')),
+                'id' => $localId,
+            ];
+        }, $this->getParentRecord()->getChildrenIds());
     }
 
     /**
@@ -367,6 +402,4 @@ class SolrDefault extends \VuFind\RecordDriver\SolrDefault {
     {
         $this->recordLoader = $recordLoader;
     }
-
-
 }

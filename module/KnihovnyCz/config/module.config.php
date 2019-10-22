@@ -61,6 +61,7 @@ $config = [
             ],
             'recordtab' => [
                 'invokables' => [
+                    'dedupedrecords' => 'KnihovnyCz\RecordTab\DedupedRecords',
                     'edsavailability' => 'KnihovnyCz\RecordTab\EdsAvailability',
                     'eversion' => 'KnihovnyCz\RecordTab\EVersion',
                     'librarybranches' => 'KnihovnyCz\RecordTab\LibraryBranches',
@@ -70,7 +71,8 @@ $config = [
                     'staffviewdublincore' => 'KnihovnyCz\RecordTab\StaffViewDublinCore',
                     'usercommentsobalkyknih' => 'KnihovnyCz\RecordTab\UserCommentsObalkyKnih',
                     'ziskej' => 'KnihovnyCz\RecordTab\Ziskej',
-                ]
+                ],
+
             ],
         ],
     ],
