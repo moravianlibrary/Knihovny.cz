@@ -73,7 +73,6 @@ method		= Shibboleth
 login           = /Shibboleth.sso/DS
 logout          = /Shibboleth.sso/Logout
 target          = /MyResearch/Home
-getAssertion    = 1
 username        = eduPersonPrincipalName
 cat_username    = userLibraryId
 
