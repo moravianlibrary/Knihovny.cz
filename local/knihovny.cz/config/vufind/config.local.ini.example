@@ -67,15 +67,15 @@ default_core    = beta
 harvest_ebooks_limit = 500 000
 
 [Authentication]
-method		= ShibbolethIdentityManager
-;method		= ShibbolethWithWAYF
+method		= Shibboleth
 
 [Shibboleth]
-login           = https://cpk-front.mzk.cz/Shibboleth.sso/DS
-logout          = https://cpk-front.mzk.cz/Shibboleth.sso/Logout
-
-target		= https://cpk-front-devel.mzk.cz/MyResearch/Home
+login           = /Shibboleth.sso/DS
+logout          = /Shibboleth.sso/Logout
+target          = /MyResearch/Home
 getAssertion    = 1
+username        = eduPersonPrincipalName
+cat_username    = userLibraryId
 
 [Database]
 database        = mysql://user:pw@localhost/dbName
