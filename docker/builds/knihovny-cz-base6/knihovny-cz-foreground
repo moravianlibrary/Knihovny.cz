@@ -32,6 +32,9 @@ done
 for config in /var/www/knihovny-cz-extension/local/*/; do
     name=$(basename "$config")
     ln -s "/var/www/knihovny-cz-extension/local/$name/" "/var/www/knihovny-cz/local/$name"
+    # Make local data available to application
+    chgrp -R www-data "/var/www/knihovny-cz/local/$name/"
+    chmod -R g+w "/var/www/knihovny-cz/local/$name/"
 done
 
 # Run all start files

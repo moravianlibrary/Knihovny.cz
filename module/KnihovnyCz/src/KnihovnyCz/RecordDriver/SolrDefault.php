@@ -59,7 +59,7 @@ class SolrDefault extends \VuFind\RecordDriver\SolrDefault {
     ];
 
     /**
-     * @var \VuFind\RecordDriver\SolrDefault|null
+     * @var \VuFind\RecordDriver\AbstractBase|\KnihovnyCz\RecordDriver\SolrDefault|null
      */
     protected $parentRecord = null;
 
@@ -284,7 +284,7 @@ class SolrDefault extends \VuFind\RecordDriver\SolrDefault {
         if (!$seriesField) {
             $parentRecord = $this->getParentRecord();
             if ($parentRecord !== null) {
-                $seriesField = $parentRecord->getMonographicSeriesFieldData();
+                $seriesField = (array)$parentRecord->tryMethod('getMonographicSeriesFieldData');
             }
         }
         foreach ($seriesField as $serie) {
@@ -320,7 +320,7 @@ class SolrDefault extends \VuFind\RecordDriver\SolrDefault {
         $links = [];
         $parentRecord = $this->getParentRecord();
         if ($parentRecord !== null ) {
-            $rawLinks = $parentRecord->get856Links();
+            $rawLinks = (array)$parentRecord->tryMethod('get856Links');
             foreach ($rawLinks as $rawLink) {
                 $parts = explode("|", $rawLink);
                 $link = [
@@ -345,7 +345,7 @@ class SolrDefault extends \VuFind\RecordDriver\SolrDefault {
     /**
      * Get parent record
      *
-     * @return \VuFind\RecordDriver\AbstractBase|\VuFind\RecordDriver\SolrDefault|null
+     * @return \VuFind\RecordDriver\AbstractBase|\KnihovnyCz\RecordDriver\SolrDefault|null
      */
     public function getParentRecord()
     {
@@ -354,6 +354,42 @@ class SolrDefault extends \VuFind\RecordDriver\SolrDefault {
             $this->parentRecord = $this->recordLoader->load($parentRecordId);
         }
         return $this->parentRecord;
+    }
+
+    /**
+     * Used in ajax to get sfx url
+     *
+     * @return array
+     */
+    public function getChildrenIds()
+    {
+        return $this->fields['local_ids_str_mv'] ?? [];
+    }
+
+    /**
+     * Return true if the record is one of the duplicate records in group
+     *
+     * @return bool
+     */
+    public function hasDeduplicatedRecords()
+    {
+        return !empty((array)$this->getParentRecord()->tryMethod('getChildrenIds'));
+    }
+
+    /**
+     * Return array of all record ids (with their source institution) deduplicated
+     * with this record
+     *
+     * @return array
+     */
+    public function getDeduplicatedRecords() {
+        return array_map(function ($localId) {
+            return [
+                'source' => 'source_'
+                    . substr($localId, 0, (int)strpos($localId, '.')),
+                'id' => $localId,
+            ];
+        }, (array)$this->getParentRecord()->tryMethod('getChildrenIds'));
     }
 
     /**
@@ -367,6 +403,4 @@ class SolrDefault extends \VuFind\RecordDriver\SolrDefault {
     {
         $this->recordLoader = $recordLoader;
     }
-
-
 }

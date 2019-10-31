@@ -17,7 +17,6 @@ ARG TMP_DEV_PKGS=" \
         libjpeg62-turbo-dev \
         libldap2-dev \
         libldb-dev \
-        libmcrypt-dev \
         libpng-dev \
         libxslt1-dev"
 
@@ -74,7 +73,6 @@ RUN docker-php-ext-configure \
         gd \
         xsl \
         ldap \
-        mcrypt \
         opcache \
         soap
 
@@ -109,8 +107,6 @@ RUN apt-get purge -y \
         ${TMP_DEV_PKGS}
 
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
-
-#TODO: install phing
 
 # Update mlocate's files database
 RUN updatedb

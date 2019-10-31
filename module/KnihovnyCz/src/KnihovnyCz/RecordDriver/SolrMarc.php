@@ -36,14 +36,6 @@ class SolrMarc extends \KnihovnyCz\RecordDriver\SolrDefault
     use MarcField996AwareTrait;
     use PatentTrait;
 
-    /**
-     * Used in ajax to get sfx url
-     */
-    public function getChildrenIds()
-    {
-        return $this->fields['local_ids_str_mv'] ?? [];
-    }
-
     public function getSourceId()
     {
         list ($source, $localId) = explode('.', $this->getUniqueID());

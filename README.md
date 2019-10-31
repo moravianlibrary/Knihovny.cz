@@ -31,11 +31,11 @@ echo "127.0.0.1        beta.knihovny.cz" | sudo tee -a /etc/hosts
 cd Knihovny.cz 
 
 # Go and configure your environment for containers
-cp local.env{.example,}
-vim local.env
- 
+cp docker/local.env.example docker/local.env
+vim docker/local.env
+
 # Go and configure your application
-cp local/knihovny.cz/config/vufind/config.local.ini.example local/knihovny.cz/config/vufind
+cp local/knihovny.cz/config/vufind/config.local.ini.example local/knihovny.cz/config/vufind/config.local.ini
 vim local/knihovny.cz/config/vufin/config.local.ini
 ```
 

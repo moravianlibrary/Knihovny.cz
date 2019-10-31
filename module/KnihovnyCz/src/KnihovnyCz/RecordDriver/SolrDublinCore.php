@@ -33,7 +33,7 @@ use VuFind\View\Helper\Root\RecordLink;
 class SolrDublinCore extends SolrDefault
 {
     /**
-     * @var \SimpleXMLElement
+     * @var \SimpleXMLElement|null
      */
     protected $xmlCache = null;
 
@@ -149,7 +149,8 @@ class SolrDublinCore extends SolrDefault
     {
         if ( !isset($this->xmlCache)) {
             $fullrecord     = $this->getXML('oai_dc');
-            $this->xmlCache = simplexml_load_string($fullrecord);
+            $xml = simplexml_load_string($fullrecord);
+            $this->xmlCache =  $xml ? $xml : null;
         }
         return $this->xmlCache;
     }

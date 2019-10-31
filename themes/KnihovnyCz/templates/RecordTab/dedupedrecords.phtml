@@ -1,0 +1,14 @@
+<?php
+  // Set page title.
+  $this->headTitle($this->translate('Institutions') . ': ' . $this->driver->getBreadcrumb());
+  $records = $this->driver->getDeduplicatedRecords();
+?>
+<?php if(!empty($records)): ?>
+  <?php foreach ($records as $record): ?>
+    <li>
+      <a class="hover-overlay" href="<?=$this->recordLink()->getUrl($record['id'])?>">
+        <?=$this->transEsc($record['source'])?>
+      </a>
+    </li>
+  <?php endforeach; ?>
+<?php endif;
