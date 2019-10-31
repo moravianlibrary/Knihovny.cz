@@ -84,6 +84,11 @@ $config = [
             ]
         ],
     ],
+    'service_manager' => [
+        'factories' => [
+            'KnihovnyCz\Content\ObalkyKnihService' => 'KnihovnyCz\Content\ObalkyKnihServiceFactory',
+        ],
+    ],
 ];
 
 return $config;

@@ -27,14 +27,14 @@
  * @link     https://knihovny.cz Main Page
  */
 
-namespace KnihovnyCz\Content\Covers;
+namespace KnihovnyCz\Content;
 
 use Interop\Container\ContainerInterface;
 use Interop\Container\Exception\ContainerException;
 use Zend\ServiceManager\Exception\ServiceNotCreatedException;
 use Zend\ServiceManager\Exception\ServiceNotFoundException;
 
-class ObalkyKnihCoversFactory implements \Zend\ServiceManager\Factory\FactoryInterface
+class ObalkyKnihServiceFactory implements \Zend\ServiceManager\Factory\FactoryInterface
 {
     /**
      * Create an object
@@ -52,14 +52,25 @@ class ObalkyKnihCoversFactory implements \Zend\ServiceManager\Factory\FactoryInt
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __invoke(ContainerInterface $container, $requestedName,
-        array $options = null
+                             array $options = null
     ) {
         if (!empty($options)) {
             throw new ServiceNotCreatedException('Unexpected options passed to factory.');
         }
+        $config = $container->get(\VuFind\Config\PluginManager::class)
+            ->get('obalkyknih');
+        if (!isset($config->ObalkyKnih)) {
+            throw new ServiceNotCreatedException("ObalkyKnih service is not properly configured");
+        }
 
-        $service = $container->get(\KnihovnyCz\Content\ObalkyKnihService::class);
-        $covers = new $requestedName($service);
-        return $covers;
+        $service = new $requestedName($config->ObalkyKnih);
+
+        // Populate cache storage if a setCacheStorage method is present:
+        if (method_exists($service, 'setCacheStorage')) {
+            $service->setCacheStorage(
+                $container->get(\VuFind\Cache\Manager::class)->getCache('object')
+            );
+        }
+        return $service;
     }
 }

@@ -27,30 +27,21 @@
  * @link     https://knihovny.cz Main Page
  */
 
-
-//TODO: implement cache (in service class)
 namespace KnihovnyCz\Content\Covers;
 
 class ObalkyKnih extends \VuFind\Content\AbstractCover
-    implements \VuFindHttp\HttpServiceAwareInterface, \Zend\Log\LoggerAwareInterface
 {
-    use \VuFind\Log\LoggerAwareTrait;
-    //TODO: reafactor to service class
-    use \VuFindHttp\HttpServiceAwareTrait;
-    //TODO: refactor to service class
-    use \VuFind\ILS\Driver\CacheTrait;
-
     /**
-     * API URL
+     * Obalky knih service
      *
-     * @var string
+     * @var \KnihovnyCz\Content\ObalkyKnihService
      */
-    protected $apiUrl;
+    protected $service;
 
     /**
      * Constructor
      */
-    public function __construct($config)
+    public function __construct($service)
     {
         $this->supportsIsbn = true;
         $this->supportsIssn = true;
@@ -58,25 +49,7 @@ class ObalkyKnih extends \VuFind\Content\AbstractCover
         $this->supportsUpc = true;
         $this->cacheAllowed = false;
 
-        //TODO: refactor to service class
-        $this->apiUrl = $config->base_url1 . $config->books_endpoint;
-        $this->cacheLifetime = 1800;
-    }
-
-    /**
-     * Get an HTTP client
-     *
-     * @param string $url URL for client to use
-     *
-     * @return \Zend\Http\Client
-     */
-    // TODO: refactor to service class
-    protected function getHttpClient($url = null)
-    {
-        if (null === $this->httpService) {
-            throw new \Exception('HTTP service missing.');
-        }
-        return $this->httpService->createClient($url);
+        $this->service = $service;
     }
 
     /**
@@ -93,7 +66,7 @@ class ObalkyKnih extends \VuFind\Content\AbstractCover
      */
     public function getUrl($key, $size, $ids)
     {
-        $data = $this->getData($ids);
+        $data = $this->service->getData($ids);
         if (!isset($data)) {
             return false;
         }
@@ -112,37 +85,5 @@ class ObalkyKnih extends \VuFind\Content\AbstractCover
             break;
         }
         return $imageUrl;
-    }
-
-    /* TODO: refactor to service class */
-    public function getData($ids): ?\stdClass
-    {
-        $cachedData = $this->getCachedData($ids['recordid']);
-        if ($cachedData === null) {
-            $cachedData = $this->getFromService($ids);
-            $this->putCachedData($ids['recordid'], $cachedData);
-        }
-        return $cachedData;
-    }
-
-    /* TODO refactor to service class */
-    protected function getFromService($ids): ?\stdClass {
-        $param = "multi";
-        $query = [];
-        $isbn = $ids['isbn'] ? $ids['isbn']->get13() : null;
-        $isbn = $isbn ?? $ids['upc'] ?? $ids['issn'] ?? null;
-        $oclc = $ids['oclc'] ?? null;
-        $ismn = $ids['ismn'] ?? null;
-        $nbn = $ids['nbn'] ?? null;
-
-        foreach(['isbn', 'oclc', 'ismn', 'nbn' ] as $identifier) {
-            if (isset($$identifier)) {
-                $query[$identifier] = $$identifier;
-            }
-        }
-        $url = $this->apiUrl . "?";
-        $url .= http_build_query([$param => json_encode([$query])]);
-        $response = $this->getHttpClient($url)->send();
-        return $response->isSuccess() ? json_decode($response->getBody())[0]: null;
     }
 }
