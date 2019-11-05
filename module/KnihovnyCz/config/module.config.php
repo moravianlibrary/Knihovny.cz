@@ -72,14 +72,21 @@ $config = [
                     'usercommentsobalkyknih' => 'KnihovnyCz\RecordTab\UserCommentsObalkyKnih',
                     'ziskej' => 'KnihovnyCz\RecordTab\Ziskej',
                 ],
-
             ],
             'content_covers' => [
                 'factories' => [
-                    'KnihovnyCz\Content\Covers\ObalkyKnih' => 'KnihovnyCz\Content\Covers\ObalkyKnihCoversFactory'
+                    'KnihovnyCz\Content\Covers\ObalkyKnih' => 'KnihovnyCz\Content\ObalkyKnihContentFactory'
                 ],
                 'aliases' => [
                     'obalkyknih' => 'KnihovnyCz\Content\Covers\ObalkyKnih'
+                ]
+            ],
+            'content_toc' => [
+                'factories' => [
+                    'KnihovnyCz\Content\TOC\ObalkyKnih' => 'KnihovnyCz\Content\ObalkyKnihContentFactory'
+                ],
+                'aliases' => [
+                    'obalkyknih' => 'KnihovnyCz\Content\TOC\ObalkyKnih'
                 ]
             ]
         ],

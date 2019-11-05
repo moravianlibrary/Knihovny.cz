@@ -27,14 +27,14 @@
  * @link     https://knihovny.cz Main Page
  */
 
-namespace KnihovnyCz\Content\Covers;
+namespace KnihovnyCz\Content;
 
 use Interop\Container\ContainerInterface;
 use Interop\Container\Exception\ContainerException;
 use Zend\ServiceManager\Exception\ServiceNotCreatedException;
 use Zend\ServiceManager\Exception\ServiceNotFoundException;
 
-class ObalkyKnihCoversFactory implements \Zend\ServiceManager\Factory\FactoryInterface
+class ObalkyKnihContentFactory implements \Zend\ServiceManager\Factory\FactoryInterface
 {
     /**
      * Create an object
