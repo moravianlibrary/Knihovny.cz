@@ -41,24 +41,6 @@ class SolrDefault extends \VuFind\RecordDriver\SolrDefault {
     ];
 
     /**
-     * These Solr fields should NEVER be used for snippets.  (We exclude author
-     * and title because they are already covered by displayed fields; we exclude
-     * spelling because it contains lots of fields jammed together and may cause
-     * glitchy output; we exclude ID because random numbers are not helpful).
-     *
-     * @var array
-     */
-    protected $forbiddenSnippetFields = [
-        'author', 'author_autocomplete', 'author_display', 'author_facet_str_mv',
-        'author-letter', 'author_search', 'author_sort_str', 'author_str_mv',
-        'authorCorporation_search_txt_mv', 'ctrlnum', 'id','publishDate',
-        'source_title_facet_str', 'sourceTitle_search_txt_mv', 'spelling',
-        'spellingShingle',  'title',  'title_auth', 'title_autocomplete',
-        'title_display',  'title_full', 'title_fullStr',
-        'titleSeries_search_txt_mv', 'title_short', 'title_sort', 'title_sub',
-    ];
-
-    /**
      * @var \VuFind\RecordDriver\AbstractBase|\KnihovnyCz\RecordDriver\SolrDefault|null
      */
     protected $parentRecord = null;
