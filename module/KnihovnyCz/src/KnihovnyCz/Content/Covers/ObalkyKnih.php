@@ -45,8 +45,10 @@ class ObalkyKnih extends \VuFind\Content\AbstractCover
     {
         $this->supportsIsbn = true;
         $this->supportsIssn = true;
+        $this->supportsIsmn = true;
         $this->supportsOclc = true;
         $this->supportsUpc = true;
+        $this->supportsNbn = true;
         $this->cacheAllowed = false;
 
         $this->service = $service;
@@ -70,6 +72,7 @@ class ObalkyKnih extends \VuFind\Content\AbstractCover
         if (!isset($data)) {
             return false;
         }
+
         switch ($size) {
         case 'small':
             $imageUrl = $data->cover_icon_url;

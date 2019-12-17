@@ -81,7 +81,8 @@ class ObalkyKnihService implements \VuFindHttp\HttpServiceAwareInterface,
         $isbn = $ids['isbn'] ? $ids['isbn']->get13() : null;
         $isbn = $isbn ?? $ids['upc'] ?? $ids['issn'] ?? null;
         $oclc = $ids['oclc'] ?? null;
-        $ismn = $ids['ismn'] ?? null;
+        $isbn = $isbn ?? ($ids['ismn'] ? $ids['ismn']->get13() : null);
+        $ismn = $ids['ismn'] ? $ids['ismn']->get10() : null;
         $nbn = $ids['nbn'] ?? null;
 
         foreach(['isbn', 'oclc', 'ismn', 'nbn' ] as $identifier) {
