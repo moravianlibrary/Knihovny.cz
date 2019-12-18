@@ -62,20 +62,13 @@ class ObalkyKnih extends \VuFind\Content\AbstractBase
             'isbn' => $isbnObj
         ];
         $data = $this->service->getData($ids);
-        $toc = $data->toc_full_text ?? '';
-        $toc = explode("\r\n", $toc);
-        if ($toc[0] == 'Obsah') {
-            array_shift($toc);
+        $toc = [];
+        if(isset($data->toc_thumbnail_url)) {
+            $toc = [
+                'thumbnail' => $data->toc_thumbnail_url,
+                'pdf_url'   => $data->toc_pdf_url,
+            ];
         }
-        $toc = array_map(function($item) {
-            preg_match("/(.+)\s+(\d+)$/", $item, $matches);
-            if (empty($matches)) {
-                return [$item];
-            } else {
-                array_shift($matches);
-                return $matches;
-            }
-        }, $toc);
         return $toc;
     }
 }

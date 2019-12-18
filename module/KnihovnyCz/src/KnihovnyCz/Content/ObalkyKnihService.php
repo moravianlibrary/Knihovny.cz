@@ -65,12 +65,23 @@ class ObalkyKnihService implements \VuFindHttp\HttpServiceAwareInterface,
         return $this->httpService->createClient($url);
     }
 
+    protected function createCacheKey($ids) {
+        array_walk($ids, function(&$value, $key) {
+            if (gettype($value) === 'object') {
+                $value = $value->get13();
+            }
+            $value = "$key::$value";
+        });
+        return implode("%%", $ids);
+    }
+
     public function getData($ids): ?\stdClass
     {
-        $cachedData = $this->getCachedData($ids['recordid']);
+        $cacheKey = $this->createCacheKey($ids);
+        $cachedData = $this->getCachedData($cacheKey);
         if ($cachedData === null) {
             $cachedData = $this->getFromService($ids);
-            $this->putCachedData($ids['recordid'], $cachedData);
+            $this->putCachedData($cacheKey, $cachedData);
         }
         return $cachedData;
     }
