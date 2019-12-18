@@ -64,10 +64,9 @@ class ObalkyKnih extends \VuFind\Content\AbstractBase
         $data = $this->service->getData($ids);
         $toc = [];
         if(isset($data->toc_thumbnail_url)) {
-            $toc = [
-                'thumbnail' => $data->toc_thumbnail_url,
-                'pdf_url'   => $data->toc_pdf_url,
-            ];
+            $toc = "<br><a href='" . htmlspecialchars($data->toc_pdf_url)
+                . "' target='_blank' ><img src='"
+                . htmlspecialchars($data->toc_thumbnail_url) . "'></a>";
         }
         return $toc;
     }
