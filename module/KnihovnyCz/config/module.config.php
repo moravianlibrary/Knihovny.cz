@@ -72,8 +72,20 @@ $config = [
                     'usercommentsobalkyknih' => 'KnihovnyCz\RecordTab\UserCommentsObalkyKnih',
                     'ziskej' => 'KnihovnyCz\RecordTab\Ziskej',
                 ],
-
             ],
+            'ils_driver' => [
+                'factories' => [
+                    \KnihovnyCz\ILS\Driver\KohaRest::class => \KnihovnyCz\ILS\Driver\KohaRestFactory::class,
+                ],
+                'aliases' => [
+                    'koharest' => \KnihovnyCz\ILS\Driver\KohaRest::class,
+                ],
+            ]
+        ],
+    ],
+    'service_manager' => [
+        'factories' => [
+            \KnihovnyCz\ILS\Driver\KohaRest\Service::class => \KnihovnyCz\ILS\Driver\KohaRest\ServiceFactory::class,
         ],
     ],
 ];

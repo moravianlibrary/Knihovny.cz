@@ -24,19 +24,16 @@
  * @author   Bohdan Inhliziian <bohdan.inhliziian@gmail.com.cz>
  * @author   Ere Maijala <ere.maijala@helsinki.fi>
  * @author   Josef Moravec <josef.moravec@mzk.cz>
- * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
+ * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public Licens
  * @link     https://vufind.org/wiki/vufind2:building_an_ils_driver Wiki
  * @link     https://knihovny.cz Main Page
  */
 
 namespace KnihovnyCz\ILS\Driver;
 
-//use CPK\Auth\KohaRestService;
 use VuFind\ILS\Driver\AbstractBase;
-//use CPK\ILS\Logic\KohaRestNormalizer;
-use VuFind\Exception\Date as DateException;
+use VuFind\Date\DateException;
 use VuFind\Exception\ILS as ILSException;
-use \VuFind\Date\Converter as DateConverter;
 
 /**
  * VuFind Driver for Koha, using REST API
@@ -64,21 +61,21 @@ class KohaRest extends AbstractBase implements \Zend\Log\LoggerAwareInterface,
      */
     protected $source = '';
 
-    protected $dateConverter;
+    /**
+     * Date converter object
+     *
+     * @var \VuFind\Date\Converter
+     */
+    protected $dateConverter = null;
+
     protected $defaultPickUpLocation;
+
     protected $kohaRestService;
 
     /**
      * @var array|null cached libraries
      */
     protected static $libraries;
-
-    /**
-     * Normalizer
-     *
-     * @var KohaRestNormalizer
-     */
-    protected $normalizer;
 
     /**
      * Mappings from renewal block reasons
@@ -106,7 +103,7 @@ class KohaRest extends AbstractBase implements \Zend\Log\LoggerAwareInterface,
      *
      * @var array
      */
-    protected $finesAndChargesMappings = [
+    protected $finesMappings = [
         "L" => "Book Replacement Charge",
         "N" => "Card Replacement Charge",
         "OVERDUE" => "Reminder Charge",
@@ -131,11 +128,12 @@ class KohaRest extends AbstractBase implements \Zend\Log\LoggerAwareInterface,
     /**
      * Constructor
      *
-     * @param DateConverter   $dateConverter   Date converter
-     * @param KohaRestService $kohaRestService Koha API authentication service
+     * @param \VuFind\Date\Converter $dateConverter Date converter
+     * @param KohaRest\Service $kohaRestService Koha API authentication service
      */
-    public function __construct(DateConverter $dateConverter, KohaRestService $kohaRestService)
-    {
+    public function __construct(\VuFind\Date\Converter $dateConverter,
+        KohaRest\Service $kohaRestService
+    ) {
         $this->dateConverter = $dateConverter;
         $this->kohaRestService = $kohaRestService;
     }
@@ -152,30 +150,25 @@ class KohaRest extends AbstractBase implements \Zend\Log\LoggerAwareInterface,
     public function init()
     {
         // Validate config
-        $required = ['host'];
+        $required = ['host', 'tokenEndpoint', 'clientId', 'clientSecret'];
         foreach ($required as $current) {
             if (!isset($this->config['Catalog'][$current])) {
                 throw new ILSException("Missing Catalog/{$current} config setting.");
             }
         }
 
-        $this->defaultPickUpLocation
-            = isset($this->config['Holds']['defaultPickUpLocation'])
-            ? $this->config['Holds']['defaultPickUpLocation']
-            : '';
+        $this->defaultPickUpLocation =
+            $this->config['Holds']['defaultPickUpLocation'] ?? '';
+
         if ($this->defaultPickUpLocation === 'user-selected') {
             $this->defaultPickUpLocation = false;
         }
 
-        if (isset($this->config['Availability']['source']))
-            $this->source = $this->config['Availability']['source'];
+        $this->source = $this->config['Availability']['source'] ?? null;
 
         $this->kohaRestService->setConfig($this->config);
         $this->kohaRestService->setSource($this->source);
-
-        $this->normalizer = new KohaRestNormalizer($this->dateConverter);
     }
-
 
     /**
      * Get Status
@@ -185,8 +178,9 @@ class KohaRest extends AbstractBase implements \Zend\Log\LoggerAwareInterface,
      *
      * @param string $id The record id to retrieve the holdings for
      *
-     * @return array An associative array with the following keys:
-     * id, availability (boolean), status, location, reserve, callnumber.
+     * @return array    On success, an associative array with the following keys:
+     * id, availability (boolean), status, location, reserve, callnumber,
+     * use_unknown_message, services, error.
      */
     public function getStatus($id)
     {
@@ -205,11 +199,9 @@ class KohaRest extends AbstractBase implements \Zend\Log\LoggerAwareInterface,
      */
     public function getStatuses($ids)
     {
-        $items = [];
-        foreach ($ids as $id) {
-            $items[] = $this->getItemStatusesForBiblio($id);
-        }
-        return $items;
+        return array_map( function($id) {
+                return $this->getItemStatusesForBiblio($id);
+            }, $ids);
     }
 
     /**
@@ -219,16 +211,22 @@ class KohaRest extends AbstractBase implements \Zend\Log\LoggerAwareInterface,
      * record.
      *
      * @param string $id The record id to retrieve the holdings for
-     * @param array $patron Patron data
+     * @param array  $patron Patron data
+     * @param array $options Additional options - optional 'page', 'itemLimit' and
+     *                       'offset' parameters used for result pagination).
      *
-     * @return array         On success, an associative array with the following
-     * keys: id, availability (boolean), status, location, reserve, callnumber,
-     * duedate, number, barcode.
+     * @return array  On success an array with the key "total" containing the total
+     * number of items for the given bib id, and the key "holdings" containing an
+     * array of holding information each one with these keys: id, source,
+     * availability, status, location, reserve, callnumber, duedate, returnDate,
+     * number, barcode, item_notes, item_id, holding_id, addLink, description
      *
      *@throws ILSException
      */
-    public function getHolding($id, array $patron = null)
+    public function getHolding($id, ?array $patron = null, array $options = [])
     {
+        //FIXME return value should be as described in doc comment
+        //FIXME implement pagination (pass $options param)
         return $this->getItemStatusesForBiblio($id, $patron);
     }
 
@@ -258,7 +256,7 @@ class KohaRest extends AbstractBase implements \Zend\Log\LoggerAwareInterface,
      */
     public function getRequestBlocks($patron) //TODO deal if it is needed
     {
-        return $this->getPatronBlocks($patron);
+        return $this->getAccountBlocks($patron);
     }
 
     /**
@@ -271,7 +269,11 @@ class KohaRest extends AbstractBase implements \Zend\Log\LoggerAwareInterface,
      */
     public function getAccountBlocks($patron)
     {
-        return $this->getPatronBlocks($patron);
+        $result = $this->makeRequest(['v1', 'patrons', $patron['id']]);
+        if ($result['data']['restricted']) {
+            return ['patron_account_restricted'];
+        }
+        return false;
     }
 
     /**
@@ -298,14 +300,12 @@ class KohaRest extends AbstractBase implements \Zend\Log\LoggerAwareInterface,
      */
     public function getMyProfile($patron)
     {
-        $result = $this->makeRequest(
-            ['v1', 'patrons', $patron['id']], __FUNCTION__,false, 'GET'
-        );
+        $result = $this->makeRequest(['v1', 'patrons', $patron['id']]);
         $result = $result['data'];
         $expiryDate = isset($result['expiry_date'])
-            ? $this->normalizer->normalizeDate($result['expiry_date'])  : '';
+            ? $this->normalizeDate($result['expiry_date'])  : '';
         return [
-            'cat_username' => $patron['cat_username'],
+            //'cat_username' => $patron['cat_username'], //FIXME: is this needed?
             'id' => $patron['id'],
             'firstname' => $result['firstname'],
             'lastname' => $result['surname'],
@@ -315,12 +315,76 @@ class KohaRest extends AbstractBase implements \Zend\Log\LoggerAwareInterface,
             'country' => $result['country'],
             'zip' => $result['postal_code'],
             'phone' => $result['phone'],
-            'group' => $result['category_id'],
-            'blocks' => $result['restricted'],
-            'email' => $result['email'],
-            'expire' => $expiryDate,
-            'expiration_date' => $expiryDate, // For future compatibility with VuFind 6+
+            'group' => $result['category_id'], //FIXME: maybe better as category name - need future api enhancements
+            //'blocks' => $result['restricted'], //FIXME: is this needed?
+            //'email' => $result['email'], //FIXME: is this needed?
+            'expiration_date' => $expiryDate,
         ];
+    }
+
+    protected function getCheckouts( array $patron, array $params, bool $history = false)
+    {
+        $queryParams = [
+            'patron_id' => $patron['id'],
+            'checked_in' => $history,
+            '_page' => $params['page'] ?? 1,
+            '_per_page' => $params['limit'] ?? 20,
+            '_match' => 'exact',
+            '_order_by' => $params['sort'] ?? '-checkout_date',
+        ];
+
+        $transactions = $this->makeRequest(['v1', 'checkouts'], $queryParams);
+
+        $totalCountHeader = $transactions['headers']->get('x-total-count');
+        $totalCount = (int)$totalCountHeader->getFieldValue() ?? 0;
+        $result = [
+            'count' => $totalCount,
+            'transactions' => [],
+        ];
+
+        foreach ($transactions['data'] as $entry) {
+            if (isset($entry['item_id'])) {
+                try {
+                    $item = $this->getItem($entry['item_id']);
+                } catch (\Exception $e) {
+                    $item = [];
+                }
+                /* FIXME need biblio administrative data endpoint if (isset($item['biblio_id'])) {
+                    $biblio = $this->getBiblio($item['biblio_id']);
+                }*/
+            }
+
+            $transaction = [
+                'id' => $item['biblio_id'] ?? null,
+                'checkout_id' => $entry['checkout_id'],
+                'item_id' => $entry['item_id'],
+                'barcode' => $item['barcode'] ?? null,
+                //'title' => $biblio['title'],
+                'volume' => $item['serial_enum_chron'] ?? '',
+                'checkoutDate' => $this->normalizeDate($entry['checkout_date']),
+                'dueDate' => $this->normalizeDate($entry['due_date']),
+                //'duedate' => $this->normalizeDate($entry['due_date']), //FIXME is this variant needed
+                'dueStatus' => $this->determineDueStatus($entry['due_date']),
+                'returnDate' => $this->normalizeDate($entry['checkin_date']),
+                'renew' => $entry['renewals'],
+                // publication_year => $biblio[''],
+                'borrowingLocation' => $this->getLibraryName($entry['library_id']),
+            ];
+
+            if(!empty($entry['checkin_date'])) {
+                $renewability = $this->getCheckoutRenewability($entry['checkout_id']);
+                $holds = $this->makeRequest(['v1', 'contrib', 'bibliocommons', 'biblios', $item['biblio_id'], 'holds']);
+                $transaction['renewable'] = $renewability['allows_renewal'] ?? false;
+                $transaction['renewLimit'] = $renewability['max_renewals'] ?? null;
+                $transaction['message'] =
+                    $this->renewalBlockMappings[$renewability['error']]
+                    ?? $renewability['error'] ?? null;
+                $transaction['request'] = $holds['status'] == 200 ? count($holds['data']) : 0;
+            }
+
+            $result['transactions'][] = $transaction;
+        }
+        return $result;
     }
 
     /**
@@ -330,54 +394,36 @@ class KohaRest extends AbstractBase implements \Zend\Log\LoggerAwareInterface,
      * by a specific patron.
      *
      * @param array $patron The patron array from patronLogin
+     * @param array $params Parameters
      *
      * @throws ILSException
      * @return array        Array of the patron's transactions on success.
      */
-    public function getMyTransactions($patron)
+    public function getMyTransactions($patron, $params)
     {
-        $result = $this->makeRequest(
-            ['v1', 'checkouts'],
-            __FUNCTION__,
-            [
-                'patron_id' => $patron['id'],
-                '_match' => 'exact',
-            ],
-            'GET'
-        );
+        $checkouts = $this->getCheckouts($patron, $params, false);
+        return [
+            'count' => $checkouts['count'],
+            'records' => $checkouts['transactions'],
+        ];
+    }
 
-        $result = $result['data'];
-        $transactions = [];
-        if (empty($result)) {
-            return $transactions;
-        }
-        foreach ($result as $entry) {
-            $renewability = $this->getCheckoutRenewability($entry['checkout_id']);
-            $item = null;
-            //$biblio = null;
-            if (isset($entry['item_id'])) {
-                $item = $this->getItem($entry['item_id']);
-                /* FIXME need biblio administrative data endpoint if (isset($item['biblio_id'])) {
-                    $biblio = $this->getBiblioRecord($item['biblio_id']);
-                }*/
-            }
-            $transactions[] = [
-                'id' => $item['biblio_id'] ?? null,
-                'loan_id' => $entry['checkout_id'],
-                'item_id' => $entry['item_id'],
-                'duedate' => $entry['due_date'],
-                'dueStatus' => $entry['due_status'],
-                'renew' => $entry['renewals'],
-                'barcode' => $item['barcode'] ?? null,
-                'renewable' => $renewability['allows_renewal'] ?? false,
-                'renewLimit' => $renewability['max_renewals'] ?? null,
-                'message' => $this->renewalBlockMappings[$renewability['error']] ?? $renewability['error'] ?? null,
-                'borrowingLocation' => $entry['library_id'],
-                // publication_year => $biblio[''],
-                // title => $biblio[''],
-            ];
-        }
-        return $transactions;
+    /**
+     * Get Patron Loan History
+     *
+     * This is responsible for retrieving all historic loans (i.e. items previously
+     * checked out and then returned), for a specific patron.
+     *
+     * @param array $patron The patron array from patronLogin
+     * @param array $params Parameters
+     *
+     * @throws DateException
+     * @throws ILSException
+     * @return array        Array of the patron's transactions on success.
+     */
+    public function getMyTransactionHistory($patron, $params)
+    {
+        return $this->getCheckouts($patron, $params, true);
     }
 
     /**
@@ -385,16 +431,13 @@ class KohaRest extends AbstractBase implements \Zend\Log\LoggerAwareInterface,
      *
      * @param $checkoutId
      *
-     * @return bool
+     * @return array
      * @throws ILSException
      */
     public function getCheckoutRenewability($checkoutId)
     {
         $result = $this->makeRequest(
-            ['v1', 'checkouts', $checkoutId, 'allows_renewal'],
-            __FUNCTION__,
-            [],
-            'GET'
+            ['v1', 'checkouts', $checkoutId, 'allows_renewal']
         );
         return $result['data'];
     }
@@ -418,10 +461,7 @@ class KohaRest extends AbstractBase implements \Zend\Log\LoggerAwareInterface,
         foreach ($renewDetails['details'] as $details) {
             list($checkoutId, $itemId) = explode('|', $details);
             $result = $this->makeRequest(
-                ['v1', 'checkouts', $checkoutId, 'renewal'],
-                __FUNCTION__,
-                false,
-                'POST'
+                ['v1', 'checkouts', $checkoutId, 'renewal'], false, 'POST'
             );
             if ($result['code'] == 403) {
                 $finalResult['details'][$itemId] = [
@@ -433,110 +473,12 @@ class KohaRest extends AbstractBase implements \Zend\Log\LoggerAwareInterface,
                     'item_id' => $itemId,
                     'success' => true,
                     'new_date' => !empty($result['data']['due_date'])
-                        ? $this->normalizer->normalizeDate($result['data']['due_date'])
+                        ? $this->normalizeDate($result['data']['due_date'])
                         : '',
                 ];
             }
         }
         return $finalResult;
-    }
-
-    /**
-     * Get Patron Transaction History
-     *
-     * This is responsible for retrieving all historical transactions
-     * (i.e. checked out items)
-     * by a specific patron.
-     *
-     * @param array $patron The patron array from patronLogin
-     * @param integer $page page number
-     * @param integer $perPage items per page
-     *
-     * @throws ILSException
-     * @return array        Array of the patron's transactions on success.
-     */
-    public function getMyHistoryPage($patron, $page, $perPage)
-    {
-        $queryParams = [
-            'patron_id' => $patron['id'],
-            'checked_in' => true,
-            '_page' => $page,
-            '_per_page' => $perPage,
-            '_match' => 'exact',
-        ];
-
-        $transactions = $this->makeRequest(
-            ['v1', 'checkouts'],
-            __FUNCTION__,
-            $queryParams,
-            'GET'
-        );
-
-        $x_total_count = $transactions['headers']->get('x-total-count');
-        $totalPages = 0;
-        if (!empty($x_total_count)) {
-            $totalPages = ceil($x_total_count->getFieldValue() / $perPage );
-        }
-        $result = [
-            'totalPages' => $totalPages,
-            'historyPage' => [],
-        ];
-
-        $inc = 0;
-
-        foreach ($transactions['data'] as $entry) {
-
-            $inc++;
-
-            try {
-                $item = $this->getItem($entry['item_id']);
-            } catch (\Exception $e) {
-                $item = [];
-            }
-
-            $volume = $item['serial_enum_chron'] ?? '';
-            /* TODO: not implemented yet
-            $title = '';
-            if (!empty($item['biblio_id'])) {
-                $bib = $this->getBiblioRecord($item['biblio_id']);
-                if (!empty($bib['title'])) {
-                    $title = $bib['title'];
-                }
-                if (!empty($bib['title_remainder'])) {
-                    $title .= ' ' . $bib['title_remainder'];
-                    $title = trim($title);
-                }
-            }*/
-
-            $dueStatus = false;
-            $now = time();
-            $dueTimeStamp = strtotime($entry['due_date']);
-            if (is_numeric($dueTimeStamp)) {
-                if ($now > $dueTimeStamp) {
-                    $dueStatus = 'overdue';
-                } elseif ($now > $dueTimeStamp - (1 * 24 * 60 * 60)) {
-                    $dueStatus = 'due';
-                }
-            }
-
-            $transaction = [
-                'id' => $item['biblio_id'] ?? '',
-                'checkout_id' => $entry['checkout_id'],
-                'item_id' => $entry['item_id'],
-                //'title' => $title,
-                'volume' => $volume,
-                'checkoutdate' => $this->normalizer->normalizeDate($entry['checkout_date']),
-                'duedate' => $this->normalizer->normalizeDate($entry['due_date']),
-                'dueStatus' => $dueStatus,
-                'returndate' => $this->normalizer->normalizeDate($entry['checkin_date']),
-                'renew' => $entry['renewals'],
-                'rowNo' => ($page - 1) * $perPage + $inc,
-            ];
-
-            $result['historyPage'][] = $transaction;
-        }
-
-        return $result;
     }
 
     /**
@@ -553,27 +495,25 @@ class KohaRest extends AbstractBase implements \Zend\Log\LoggerAwareInterface,
     {
         $result = $this->makeRequest(
             ['v1', 'holds'],
-            __FUNCTION__,
-            [
-                'patron_id' => $patron['id'],
-                '_match' => 'exact',
-            ],
-            'GET'
+            ['patron_id' => $patron['id'], '_match' => 'exact', ]
         );
 
         $holds = [];
         foreach ($result['data'] as $entry) {
+            //FIXME add biblio information
             $holds[] = [
                 'id' => $entry['biblio_id'],
                 'item_id' => $entry['item_id'] ?? null,
-                'location' => $entry['pickup_library_id'] ?? null,
-                'create' => $entry['hold_date'],
-                'expire' => $entry['expiration_date'],
+                'location' => $this->getLibraryName(
+                    $entry['pickup_library_id'] ?? null),
+                'create' => !empty($entry['hold_date'])
+                    ? $this->normalizeDate($entry['hold_date']) : '',
+                'expire' => !empty($entry['expiration_date'])
+                    ? $this->normalizeDate($entry['expiration_date']) : '',
                 'position' => $entry['priority'],
                 'available' => !empty($entry['waiting_date']),
-                'requestId' => $entry['hold_id'],
+                'hold_id' => $entry['hold_id'],
                 'in_transit' => !empty($entry['status']) && $entry['status'] == 'T',
-                'barcode' => $entry['item_id'] ?? ''
             ];
         }
         return $holds;
@@ -600,7 +540,7 @@ class KohaRest extends AbstractBase implements \Zend\Log\LoggerAwareInterface,
         foreach ($details as $detail) {
             list($holdId, $itemId) = explode('|', $detail, 2);
             $result = $this->makeRequest(
-                ['v1', 'holds', $holdId], __FUNCTION__, [], 'DELETE'
+                ['v1', 'holds', $holdId], false, 'DELETE'
             );
 
             if ($result['code'] != 200) {
@@ -661,7 +601,6 @@ class KohaRest extends AbstractBase implements \Zend\Log\LoggerAwareInterface,
                 'locationDisplay' => $location['name']
             ];
         }
-
         return $locations;
     }
 
@@ -700,7 +639,7 @@ class KohaRest extends AbstractBase implements \Zend\Log\LoggerAwareInterface,
     public function getCancelHoldDetails($holdDetails)
     {
         return $holdDetails['available'] || $holdDetails['in_transit'] ? ''
-            : $holdDetails['requestId'] . '|' . $holdDetails['item_id'];
+            : $holdDetails['hold_id'] . '|' . $holdDetails['item_id'];
     }
 
     /**
@@ -719,16 +658,17 @@ class KohaRest extends AbstractBase implements \Zend\Log\LoggerAwareInterface,
      */
     public function checkRequestIsValid($id, $data, $patron)
     {
-        if ($this->getPatronBlocks($patron)) {
+        if ($this->getAccountBlocks($patron) !== false) {
             return false;
         }
         $level = $data['level'] ?? 'copy';
         if ('title' == $level) {
             $result = $this->makeRequest(
                 ['v1', 'contrib', 'knihovny_cz', 'biblios', $id, 'alows_hold'],
-                __FUNCTION__,
-                ['patron_id' => $patron['id'], 'library_id' => $this->getDefaultPickUpLocation($patron)],
-                'GET'
+                [
+                    'patron_id' => $patron['id'],
+                    'library_id' => $this->getDefaultPickUpLocation($patron)
+                ]
             );
             $result = $result['data'];
             if (!empty($result['allows_hold']) && $result['allows_hold'] == true) {
@@ -743,10 +683,13 @@ class KohaRest extends AbstractBase implements \Zend\Log\LoggerAwareInterface,
             ];
         }
         $result = $this->makeRequest(
-            ['v1', 'contrib', 'knihovny_cz', 'items', $data['item_id'], 'allows_hold'],
-            __FUNCTION__,
-            ['patron_id' => $patron['id'], 'library_id' => $this->getDefaultPickUpLocation($patron)],
-            'GET'
+            [
+                'v1', 'contrib', 'knihovny_cz', 'items', $data['item_id'],
+                'allows_hold'
+            ], [
+               'patron_id' => $patron['id'],
+                'library_id' => $this->getDefaultPickUpLocation($patron)
+            ]
         );
         $result = $result['data'];
         if (!empty($result['allows_hold']) && $result['allows_hold'] == true) {
@@ -833,10 +776,7 @@ class KohaRest extends AbstractBase implements \Zend\Log\LoggerAwareInterface,
         }
 
         $result = $this->makeRequest(
-            ['v1', 'holds'],
-            __FUNCTION__,
-            json_encode($request),
-            'POST'
+            ['v1', 'holds'], json_encode($request), 'POST'
         );
 
         if ($result['code'] >= 300) {
@@ -858,24 +798,21 @@ class KohaRest extends AbstractBase implements \Zend\Log\LoggerAwareInterface,
     public function getMyFines($patron)
     {
         $result = $this->makeRequest(
-            ['v1', 'patrons', $patron['id'], 'account'],
-            __FUNCTION__,
-            false,
-            'GET'
+            ['v1', 'patrons', $patron['id'], 'account'], false, 'GET'
         );
 
         $fines = [];
 
         foreach ($result['data']['outstanding_debits']['lines'] as $entry) {
-            $fineDescription = (isset($this->finesAndChargesMappings[$entry['account_type']]))
-                ? $this->translate($this->finesAndChargesMappings[$entry['account_type']])
+            $fineDescription = (isset($this->finesMappings[$entry['account_type']]))
+                ? $this->translate($this->finesMappings[$entry['account_type']])
                 : $entry['description'];
             $fines[] = [
-                'amount' => $entry['amount'],
-                'checkout' => $entry['date'],
+                'amount' => $entry['amount'] * 100,
+                'checkout' => $this->normalizeDate($entry['date']),
                 'fine' =>  $fineDescription,
                 'title' => $entry['description'],
-                'balance' => $entry['amount_outstanding'],
+                'balance' => $entry['amount_outstanding'] * 100,
                 'createdate' => $entry['date'],
                 'duedate' => '',
                 'item_id' => $entry['item_id'],
@@ -889,17 +826,16 @@ class KohaRest extends AbstractBase implements \Zend\Log\LoggerAwareInterface,
      *
      * Makes a request to the Koha REST API
      *
-     * @param array      $hierarchy  Array of values to embed in the URL path of
+     * @param array      $hierarchy Array of values to embed in the URL path of
      *                               the request
-     * @param            $action     string An action driver is doing now
-     * @param array|bool $params     A keyed array of query data
-     * @param string     $method     The http request method to use (Default is GET)
+     * @param array|bool $params A keyed array of query data
+     * @param string     $method The http request method to use (Default is GET)
      *
      * @return mixed
-     * @throws ILSException*@throws \Exception
+     * @throws ILSException *@throws \Exception
      * @internal param bool $authNeeded
      */
-    protected function makeRequest($hierarchy, $action, $params = false, $method = 'GET')
+    protected function makeRequest($hierarchy, $params = false, $method = 'GET')
     {
         // Set up the request
         $apiUrl = $this->config['Catalog']['host'];
@@ -912,7 +848,7 @@ class KohaRest extends AbstractBase implements \Zend\Log\LoggerAwareInterface,
         // Add params
         if (false !== $params) {
             if ('GET' === $method || 'DELETE' === $method) {
-                $client->setParameterGet($params);
+                    $client->setParameterGet($params);
             } else {
                 $body = '';
                 if (is_string($params)) {
@@ -993,7 +929,6 @@ class KohaRest extends AbstractBase implements \Zend\Log\LoggerAwareInterface,
             throw new ILSException('Problem with Koha REST API.');
         }
 
-        $decodedResult = $this->normalizer->normalize($decodedResult, $action);
         $result = [
             'data' => $decodedResult,
             'code' => $response->getStatusCode(),
@@ -1018,110 +953,77 @@ class KohaRest extends AbstractBase implements \Zend\Log\LoggerAwareInterface,
      */
     protected function getItemStatusesForBiblio($id, $patron = null)
     {
+        $result = [];
         $availability = $this->makeRequest(
-            ['v1', 'contrib', 'knihovny_cz', 'items', $id, 'allows_checkout'], //Should be biblio for original vufind
-            __FUNCTION__,
-            [],
-            'GET'
+            ['v1', 'contrib', 'knihovny_cz', 'biblios', $id, 'allows_checkout']
         );
         $availability = $availability['data'];
 
         $holdable = 'Y';
         if ($patron) {
             $holdability = $this->makeRequest(
-                ['v1', 'contrib', 'knihovny_cz', 'items', $id, 'allows_hold'], //Should be biblio for original vufind
-                __FUNCTION__,
-                ['patron_id' => $patron['id'], 'library_id' => $this->getDefaultPickUpLocation($patron) ],
-                'GET'
+                ['v1', 'contrib', 'knihovny_cz', 'biblios', $id, 'allows_hold'],
+                [
+                    'patron_id' => $patron['id'],
+                    'library_id' => $this->getDefaultPickUpLocation($patron)
+                ]
             );
             if ($holdability['code'] == '200' && $holdability['data']['allows_hold'] == false) {
                 $holdable = 'N';
             }
         }
 
-        $item = $this->makeRequest(
-            ['v1', 'contrib', 'bibliocommons', 'items', $id], //Should be biblios/$id/items
-            __FUNCTION__,
-            [],
-            'GET'
-        );
-        $item = $item['data'];
+        $items = $this->makeRequest(['v1', 'contrib', 'bibliocommons', 'biblios', $id, 'items']);
+        $items = $items['data'];
 
-        $holds = $this->makeRequest(
-            ['v1', 'holds'],
-            __FUNCTION__,
-            ['item_id' => $id],
-            'GET'
-        );
+        $holds = $this->makeRequest(['v1', 'holds'], ['biblio_id' => $id]);
         $holds = $holds['data'];
 
-        $itemStatus = [];
-        if ($item) {
-            $status = $this->statuses[$availability['allows_checkout_status']]
-                ?? 'Available On Shelf';
-            $label = $availability['allows_checkout'] ? 'label-success'
-                : 'label-warning';
-            $duedate = isset($availability['date_due'])
-                ? $this->normalizer->normalizeDate($availability['date_due']) : null;
-            $entry = [
-                'id' => $id,
-                'item_id' => $item['item_id'],
-                'department' => $this->getItemLocationName($item),
-                'location' => $item['location'],
-                'availability' => $item['notforloan'] ? 'P' : 'A',
-                'status' => $status,
-                'reserve' => count($holds) >= 1 ? 'Y' : 'N',
-                'callnumber' => $item['callnumber'],
-                'duedate' => $duedate,
-                'number' => $item['serial_enum_chron'],
-                'barcode' => $item['barcode'],
-                'label' => $label,
-            ];
-            if (!empty($item['public_notes'])) {
-                $entry['item_notes'] = [$item['public_notes']];
+        foreach ($items as $item) {
+            if ($item) {
+                $status = 'Available On Shelf';
+                $label = 'label-success';
+                $duedate = null;
+                if (isset($availability[$item['item_id']])) {
+                    $status = $this->statuses[
+                        $availability[$item['item_id']]['allows_checkout_status']
+                    ];
+                    $label = $availability[$item['item_id']]['allows_checkout']
+                        ? 'label-success' : 'label-warning';
+                    $duedate = isset($availability[$item['item_id']]['date_due'])
+                        ? $this->normalizeDate(
+                            $availability[$item['item_id']]['date_due']
+                        ) : null;
+                }
+
+                $entry = [
+                    'id' => $id,
+                    'item_id' => $item['item_id'],
+                    'department' => $this->getItemLocationName($item),
+                    'location' => $item['location'],
+                    'availability' => $item['notforloan'] ? 'P' : 'A',
+                    'status' => $status,
+                    'reserve' => count($holds) >= 1 ? 'Y' : 'N',
+                    'callnumber' => $item['callnumber'],
+                    'duedate' => $duedate,
+                    'number' => $item['serial_enum_chron'],
+                    'barcode' => $item['barcode'], 'label' => $label,
+                ];
+                if (!empty($item['public_notes'])) {
+                    $entry['item_notes'] = [$item['public_notes']];
+                }
+
+                if ($holdable == 'Y') {
+                    $entry['is_holdable'] = true;
+                    $entry['level'] = 'copy';
+                    $entry['addLink'] = 'check';
+                } else {
+                    $entry['is_holdable'] = false;
+                }
+                $result[] = $entry;
             }
-
-            if ($holdable) {
-                $entry['is_holdable'] = true;
-                $entry['level'] = 'copy';
-                $entry['addLink'] = 'check';
-            } else {
-                $entry['is_holdable'] = false;
-            }
-            $itemStatus = $entry;
         }
-        return $itemStatus;
-    }
-
-    /**
-     * @param $id
-     * @param $bibId
-     * @param $patron
-     * @return mixed
-     */
-    public function getItemStatus($id, $bibId, $patron)
-    {
-        return $this->getItemStatusesForBiblio($id, $patron);
-    }
-
-    /**
-     * Get patron's blocks, if any
-     *
-     * @param array $patron Patron
-     *
-     * @return mixed        A boolean false if no blocks are in place and an array
-     * of block reasons if blocks are in place
-     * @throws ILSException
-     */
-    protected function getPatronBlocks($patron)
-    {
-        $result = $this->makeRequest(
-            ['v1', 'patrons', $patron['id']], __FUNCTION__,false, 'GET'
-        );
-        if ($result['data']['restricted']) {
-            return ['patron_account_restricted'];
-        }
-        return false;
+        return $result;
     }
 
     /**
@@ -1136,7 +1038,9 @@ class KohaRest extends AbstractBase implements \Zend\Log\LoggerAwareInterface,
     {
         static $cachedRecords = [];
         if (!isset($cachedRecords[$id])) {
-            $result = $this->makeRequest(['v1', 'contrib', 'bibliocommons','items', $id], __FUNCTION__);
+            $result = $this->makeRequest(
+                ['v1', 'contrib', 'bibliocommons', 'items', $id]
+            );
             $cachedRecords[$id] = $result['data'];
         }
         return $cachedRecords[$id];
@@ -1150,12 +1054,14 @@ class KohaRest extends AbstractBase implements \Zend\Log\LoggerAwareInterface,
      * @return array|null
      * @throws ILSException
      */
-    protected function getBiblioRecord($id)
+    protected function getBiblio($id)
     {
-        //FIXME not working yet, we are missing endpoint for biblio administrative data
+        //FIXME not working yet, we are missing endpoint for biblio administrative data - Koha 19.11, Bug 23677
         static $cachedRecords = [];
         if (!isset($cachedRecords[$id])) {
-            $result = $this->makeRequest(['v1', 'contrib', 'bibliocommons', 'biblios', $id], __FUNCTION__);
+            $result = $this->makeRequest(
+                ['v1', 'biblios', $id]
+            );
             $cachedRecords[$id] = $result['data'];
         }
         return $cachedRecords[$id];
@@ -1200,9 +1106,7 @@ class KohaRest extends AbstractBase implements \Zend\Log\LoggerAwareInterface,
 
     protected function requestLibraries()
     {
-        $result = $this->makeRequest(
-            ['v1', 'libraries'], __FUNCTION__, false, 'GET'
-        );
+        $result = $this->makeRequest(['v1', 'libraries']);
         foreach ($result['data'] as $library) {
             self::$libraries[$library['library_id']] = $library;
         }
@@ -1221,6 +1125,17 @@ class KohaRest extends AbstractBase implements \Zend\Log\LoggerAwareInterface,
             $this->requestLibraries();
         }
         return self::$libraries[$libraryId] ?? null;
+    }
+
+    protected function getLibraryName(string $libraryId)
+    {
+        if (!isset(self::$libraries)) {
+            $this->requestLibraries();
+        }
+        if (isset(self::$libraries[$libraryId])) {
+            return self::$libraries[$libraryId]['name'];
+        }
+        return $libraryId;
     }
 
     /**
@@ -1258,7 +1173,41 @@ class KohaRest extends AbstractBase implements \Zend\Log\LoggerAwareInterface,
             case 'IllRequests':
                 $config = [ "HMACKeys" => "id:item_id" ];
                 break;
+            case 'getMyTransactionHistory':
+            case 'getMyTransactions':
+                $config = [
+                    'max_results' => '200',
+                    'default_page_size' => '20',
+                    'sort' => [
+                        '-checkout_date' => 'sort_checkout_date_desc',
+                        '+checkout_date' => 'sort_checkout_date_asc',
+                        '-checkin_date' => 'sort_return_date_desc',
+                        '+checkin_date' => 'sort_return_date_asc',
+                    ],
+                    'default_sort' => '-checkout_date',
+                ];
+                break;
         }
         return $config;
+    }
+
+    protected function normalizeDate($date, $withTime = false)
+    {
+        $createFormat = $withTime ? 'c': 'Y-m-d';
+        return $this->dateConverter->convertToDisplayDate($createFormat, $date);
+    }
+
+    protected function determineDueStatus($dueDate) {
+        $dueStatus = false;
+        $now = time();
+        $dueTimeStamp = strtotime($dueDate);
+        if (is_numeric($dueTimeStamp)) {
+            if ($now > $dueTimeStamp) {
+                $dueStatus = 'overdue';
+            } elseif ($now > $dueTimeStamp - (1 * 24 * 60 * 60)) {
+                $dueStatus = 'due';
+            }
+        }
+        return $dueStatus;
     }
 }
