@@ -80,8 +80,7 @@ RUN docker-php-ext-configure \
 RUN pecl install \
         apcu \
         apcu_bc-beta \
-        xdebug-2.8.0beta2 \
-        mcrypt-1.0.2
+        xdebug-2.8.0beta2
 
 # Enable all installed modules
 RUN docker-php-ext-enable \
