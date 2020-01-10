@@ -24,7 +24,7 @@
  * @author   Bohdan Inhliziian <bohdan.inhliziian@gmail.com.cz>
  * @author   Ere Maijala <ere.maijala@helsinki.fi>
  * @author   Josef Moravec <josef.moravec@mzk.cz>
- * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public Licens
+ * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://vufind.org/wiki/vufind2:building_an_ils_driver Wiki
  * @link     https://knihovny.cz Main Page
  */
@@ -128,8 +128,8 @@ class KohaRest extends AbstractBase implements \Zend\Log\LoggerAwareInterface,
     /**
      * Constructor
      *
-     * @param \VuFind\Date\Converter $dateConverter Date converter
-     * @param KohaRest\Service $kohaRestService Koha API authentication service
+     * @param \VuFind\Date\Converter $dateConverter   Date converter
+     * @param KohaRest\Service       $kohaRestService Koha API authentication service
      */
     public function __construct(\VuFind\Date\Converter $dateConverter,
         KohaRest\Service $kohaRestService
@@ -199,9 +199,11 @@ class KohaRest extends AbstractBase implements \Zend\Log\LoggerAwareInterface,
      */
     public function getStatuses($ids)
     {
-        return array_map( function($id) {
-                return $this->getItemStatusesForBiblio($id);
-            }, $ids);
+        return array_map(
+            function ($id) {
+                    return $this->getItemStatusesForBiblio($id);
+            }, $ids
+        );
     }
 
     /**
@@ -210,10 +212,10 @@ class KohaRest extends AbstractBase implements \Zend\Log\LoggerAwareInterface,
      * This is responsible for retrieving the holding information of a certain
      * record.
      *
-     * @param string $id The record id to retrieve the holdings for
-     * @param array  $patron Patron data
-     * @param array $options Additional options - optional 'page', 'itemLimit' and
-     *                       'offset' parameters used for result pagination).
+     * @param string $id      The record id to retrieve the holdings for
+     * @param array  $patron  Patron data
+     * @param array  $options Additional options - optional 'page', 'itemLimit' and
+     *                        'offset' parameters used for result pagination).
      *
      * @return array  On success an array with the key "total" containing the total
      * number of items for the given bib id, and the key "holdings" containing an
@@ -221,7 +223,7 @@ class KohaRest extends AbstractBase implements \Zend\Log\LoggerAwareInterface,
      * availability, status, location, reserve, callnumber, duedate, returnDate,
      * number, barcode, item_notes, item_id, holding_id, addLink, description
      *
-     *@throws ILSException
+     * @throws ILSException
      */
     public function getHolding($id, ?array $patron = null, array $options = [])
     {
@@ -505,7 +507,8 @@ class KohaRest extends AbstractBase implements \Zend\Log\LoggerAwareInterface,
                 'id' => $entry['biblio_id'],
                 'item_id' => $entry['item_id'] ?? null,
                 'location' => $this->getLibraryName(
-                    $entry['pickup_library_id'] ?? null),
+                    $entry['pickup_library_id'] ?? null
+                ),
                 'create' => !empty($entry['hold_date'])
                     ? $this->normalizeDate($entry['hold_date']) : '',
                 'expire' => !empty($entry['expiration_date'])
@@ -568,11 +571,14 @@ class KohaRest extends AbstractBase implements \Zend\Log\LoggerAwareInterface,
      *
      * @param array|false $patron      Patron information returned by the patronLogin
      * method.
-     * @param array|null $holdDetails Optional array, only passed in when getting a list
-     * in the context of placing a hold; contains most of the same values passed to
-     * placeHold, minus the patron data.  May be used to limit the pickup options
-     * or may be ignored.  The driver must not add new options to the return array
-     * based on this data or other areas of VuFind may behave incorrectly.
+     * @param array|null  $holdDetails Optional array, only passed in when getting a list
+     *                                 in the context of placing a hold; contains most of
+     *                                 the same values passed to placeHold, minus the
+     *                                 patron data.  May be used to limit the pickup
+     *                                 options or may be ignored.  The driver must not
+     *                                 add new options to the return array based on this
+     *                                 data or other areas of VuFind may behave
+     *                                 incorrectly.
      *
      * @throws ILSException
      * @return array        An array of associative arrays with locationID and
@@ -611,10 +617,11 @@ class KohaRest extends AbstractBase implements \Zend\Log\LoggerAwareInterface,
      *
      * @param array|false $patron      Patron information returned by the patronLogin
      * method.
-     * @param array|null $holdDetails Optional array, only passed in when getting a list
-     * in the context of placing a hold; contains most of the same values passed to
-     * placeHold, minus the patron data.  May be used to limit the pickup options
-     * or may be ignored.
+     * @param array|null  $holdDetails Optional array, only passed in when getting a list
+     *                                 in the context of placing a hold; contains most of
+     *                                 the same values passed to placeHold, minus the
+     *                                 patron data.  May be used to limit the pickup
+     *                                 options or may be ignored.
      *
      * @return false|string      The default pickup location for the patron or false
      * if the user has to choose.
@@ -827,12 +834,12 @@ class KohaRest extends AbstractBase implements \Zend\Log\LoggerAwareInterface,
      * Makes a request to the Koha REST API
      *
      * @param array      $hierarchy Array of values to embed in the URL path of
-     *                               the request
-     * @param array|bool $params A keyed array of query data
-     * @param string     $method The http request method to use (Default is GET)
+     *                              the request
+     * @param array|bool $params    A keyed array of query data
+     * @param string     $method    The http request method to use (Default is GET)
      *
-     * @return mixed
-     * @throws ILSException *@throws \Exception
+     * @return   mixed
+     * @throws   ILSException *@throws \Exception
      * @internal param bool $authNeeded
      */
     protected function makeRequest($hierarchy, $params = false, $method = 'GET')
@@ -865,8 +872,8 @@ class KohaRest extends AbstractBase implements \Zend\Log\LoggerAwareInterface,
                 if ('' !== $body) {
                     $client->getRequest()->setContent($body);
                     $client->getRequest()->getHeaders()->addHeaderLine(
-                            'Content-Type', 'application/json'
-                        );
+                        'Content-Type', 'application/json'
+                    );
                 }
             }
         }
@@ -984,30 +991,33 @@ class KohaRest extends AbstractBase implements \Zend\Log\LoggerAwareInterface,
                 $status = 'Available On Shelf';
                 $label = 'label-success';
                 $duedate = null;
+                $available = true;
                 if (isset($availability[$item['item_id']])) {
                     $status = $this->statuses[
                         $availability[$item['item_id']]['allows_checkout_status']
                     ];
+                    $status = $item['notforloan'] ? 'Not For Loan' : $status;
                     $label = $availability[$item['item_id']]['allows_checkout']
                         ? 'label-success' : 'label-warning';
+                    $available = $availability[$item['item_id']]['allows_checkout'];
                     $duedate = isset($availability[$item['item_id']]['date_due'])
                         ? $this->normalizeDate(
                             $availability[$item['item_id']]['date_due']
                         ) : null;
                 }
-
                 $entry = [
                     'id' => $id,
                     'item_id' => $item['item_id'],
                     'department' => $this->getItemLocationName($item),
                     'location' => $item['location'],
-                    'availability' => $item['notforloan'] ? 'P' : 'A',
+                    'availability' => $item['notforloan'] ? false : $available,
                     'status' => $status,
                     'reserve' => count($holds) >= 1 ? 'Y' : 'N',
                     'callnumber' => $item['callnumber'],
                     'duedate' => $duedate,
                     'number' => $item['serial_enum_chron'],
                     'barcode' => $item['barcode'], 'label' => $label,
+                    'supplements' => $item['materials_notes'],
                 ];
                 if (!empty($item['public_notes'])) {
                     $entry['item_notes'] = [$item['public_notes']];
@@ -1163,30 +1173,30 @@ class KohaRest extends AbstractBase implements \Zend\Log\LoggerAwareInterface,
     {
         $config = [];
         switch ($func) {
-            case 'Holds':
-                    $config = [
-                        "HMACKeys" => "id:item_id",
-                        "extraHoldFields" => "comments:requiredByDate:pickUpLocation",
-                        "defaultRequiredDate" => "0:0:1",
-                    ];
-                break;
-            case 'IllRequests':
-                $config = [ "HMACKeys" => "id:item_id" ];
-                break;
-            case 'getMyTransactionHistory':
-            case 'getMyTransactions':
+        case 'Holds':
                 $config = [
-                    'max_results' => '200',
-                    'default_page_size' => '20',
-                    'sort' => [
-                        '-checkout_date' => 'sort_checkout_date_desc',
-                        '+checkout_date' => 'sort_checkout_date_asc',
-                        '-checkin_date' => 'sort_return_date_desc',
-                        '+checkin_date' => 'sort_return_date_asc',
-                    ],
-                    'default_sort' => '-checkout_date',
+                    "HMACKeys" => "id:item_id",
+                    "extraHoldFields" => "comments:requiredByDate:pickUpLocation",
+                    "defaultRequiredDate" => "0:0:1",
                 ];
-                break;
+            break;
+        case 'IllRequests':
+            $config = [ "HMACKeys" => "id:item_id" ];
+            break;
+        case 'getMyTransactionHistory':
+        case 'getMyTransactions':
+            $config = [
+                'max_results' => '200',
+                'default_page_size' => '20',
+                'sort' => [
+                    '-checkout_date' => 'sort_checkout_date_desc',
+                    '+checkout_date' => 'sort_checkout_date_asc',
+                    '-checkin_date' => 'sort_return_date_desc',
+                    '+checkin_date' => 'sort_return_date_asc',
+                ],
+                'default_sort' => '-checkout_date',
+            ];
+            break;
         }
         return $config;
     }
@@ -1197,7 +1207,8 @@ class KohaRest extends AbstractBase implements \Zend\Log\LoggerAwareInterface,
         return $this->dateConverter->convertToDisplayDate($createFormat, $date);
     }
 
-    protected function determineDueStatus($dueDate) {
+    protected function determineDueStatus($dueDate)
+    {
         $dueStatus = false;
         $now = time();
         $dueTimeStamp = strtotime($dueDate);
