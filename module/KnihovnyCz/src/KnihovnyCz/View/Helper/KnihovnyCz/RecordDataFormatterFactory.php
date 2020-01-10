@@ -79,25 +79,31 @@ class RecordDataFormatterFactory extends \VuFind\View\Helper\Root\RecordDataForm
     {
         $fields = [];
         $setLine = function ($key, $dataMethod, $template = null,
-            $icon = 'pr-interface-circlerighttrue') use (&$fields)
-            {
+            $icon = 'pr-interface-circlerighttrue'
+        ) use (&$fields) {
                 $fields[$key] = [
                     'method' => ($template === null) ? 'setLine' : 'setTemplateLine',
                     'dataMethod' => $dataMethod,
                     'template' => $template,
                     'icon' => $icon
                 ];
-            };
+        };
 
-        $setLine('Book search', 'getBookSearchFilter',
-            'search_in_library_link.phtml');
+        $setLine(
+            'Book search', 'getBookSearchFilter',
+            'search_in_library_link.phtml'
+        );
         $setLine('Address', 'getLibraryAddress', null, 'pr-location-pinmap5');
-        $setLine('Opening hours', 'getLibraryHours',
-            'opening_hours.phtml', 'pr-interface-clocktime');
+        $setLine(
+            'Opening hours', 'getLibraryHours',
+            'opening_hours.phtml', 'pr-interface-clocktime'
+        );
         $setLine('Additional information', 'getLibNote');
         $setLine('Additional information2', 'getLibNote2');
-        $setLine('Web sites', 'getLibUrls', 'library_links.phtml',
-            'pr-web-browseinternetnetwork');
+        $setLine(
+            'Web sites', 'getLibUrls', 'library_links.phtml',
+            'pr-web-browseinternetnetwork'
+        );
         $setLine('Library type', 'getType');
         $setLine('Regional library', 'getRegLibrary', 'regional_library.phtml');
         $setLine('Interlibrary loan', 'getMvs');
@@ -175,12 +181,12 @@ class RecordDataFormatterFactory extends \VuFind\View\Helper\Root\RecordDataForm
         $spec->setTemplateLine(
             'Published', 'getPublicationDetails', 'data-publicationDetails.phtml'
         );
-        $spec->setTemplateLine('field773','getField773','data-7xx-field.phtml');
-        $spec->setTemplateLine('field770','getField770','data-7xx-field.phtml');
-        $spec->setTemplateLine('field772','getField772','data-7xx-field.phtml');
-        $spec->setTemplateLine('field777','getField777','data-7xx-field.phtml');
-        $spec->setTemplateLine('field780','getField780','data-7xx-field.phtml');
-        $spec->setTemplateLine('field785','getField785','data-7xx-field.phtml');
+        $spec->setTemplateLine('field773', 'getField773', 'data-7xx-field.phtml');
+        $spec->setTemplateLine('field770', 'getField770', 'data-7xx-field.phtml');
+        $spec->setTemplateLine('field772', 'getField772', 'data-7xx-field.phtml');
+        $spec->setTemplateLine('field777', 'getField777', 'data-7xx-field.phtml');
+        $spec->setTemplateLine('field780', 'getField780', 'data-7xx-field.phtml');
+        $spec->setTemplateLine('field785', 'getField785', 'data-7xx-field.phtml');
         $spec->setLine(
             'Edition', 'getEdition', null,
             ['prefix' => '<span property="bookEdition">', 'suffix' => '</span>']

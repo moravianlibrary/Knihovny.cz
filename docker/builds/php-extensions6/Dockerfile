@@ -1,4 +1,4 @@
-FROM php:7.4.0-apache-buster
+FROM php:7.4.1-apache-buster
 LABEL maintainer="Moravian Library <cpk-dev@mzk.cz>"
 LABEL version="2.0"
 LABEL description="Based on the 'php:7.4-apache-buster' build with appended modules to php & apache2 + productivity tools included (vim, mc, htop, ping, traceroute, dig, ssh, mysql-client, locate, git, curl, bash-completion)"
@@ -80,8 +80,7 @@ RUN docker-php-ext-configure \
 RUN pecl install \
         apcu \
         apcu_bc-beta \
-        xdebug-2.8.0beta2 \
-        mcrypt-1.0.2
+        xdebug-2.8.0beta2
 
 # Enable all installed modules
 RUN docker-php-ext-enable \

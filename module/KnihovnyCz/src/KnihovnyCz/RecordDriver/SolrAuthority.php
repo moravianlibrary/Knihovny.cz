@@ -55,7 +55,8 @@ class SolrAuthority extends \KnihovnyCz\RecordDriver\SolrMarc
      *
      * @return array
      */
-    public function getPseudonyms() {
+    public function getPseudonyms()
+    {
         $pseudonyms = [];
         $names = $this->fields['pseudonym_name_display_mv'] ?? [];
         $ids = $this->fields['pseudonym_record_ids_display_mv'] ?? [];

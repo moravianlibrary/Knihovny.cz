@@ -53,9 +53,11 @@ class SolrDublinCore extends SolrDefault
     public function getAllSubjectHeadings($extended = false)
     {
         $data = $this->getXmlFieldData("subject");
-        $data = array_filter($data, function($part) {
-            return !preg_match('/^([\W0-9]+|neuvedeno|n[ae]zadáno)$/', $part);
-        });
+        $data = array_filter(
+            $data, function ($part) {
+                return !preg_match('/^([\W0-9]+|neuvedeno|n[ae]zadáno)$/', $part);
+            }
+        );
         $callback = function ($part) use ($extended) {
             return $extended
                 ? ['heading' => [$part], 'type' => '', 'source' => '']
@@ -147,7 +149,7 @@ class SolrDublinCore extends SolrDefault
 
     protected function parseXML()
     {
-        if ( !isset($this->xmlCache)) {
+        if (!isset($this->xmlCache)) {
             $fullrecord     = $this->getXML('oai_dc');
             $xml = simplexml_load_string($fullrecord);
             $this->xmlCache =  $xml ? $xml : null;

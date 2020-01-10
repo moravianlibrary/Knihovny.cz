@@ -138,7 +138,7 @@ class SolrLibrary extends \KnihovnyCz\RecordDriver\SolrMarc
         $urls = $this->fields['url_display_mv'] ?? null;
         if (is_array($urls)) {
             $filter = function ($url) {
-                $parts = explode("|", trim($url),2);
+                $parts = explode("|", trim($url), 2);
                 $parts = array_map('trim', $parts);
                 return [
                     'url' => $parts[0] ?? null,
@@ -240,7 +240,8 @@ class SolrLibrary extends \KnihovnyCz\RecordDriver\SolrMarc
         return $this->fields['branchurl_display_mv'] ?? [];
     }
 
-    public function getBookSearchFilter(){
+    public function getBookSearchFilter()
+    {
         $institution = $this->fields['cpk_code_display'] ?? '';
         $institutionsMappings = $this->facetsConfig->InstitutionsMappings->toArray();
         return $institutionsMappings[$institution] ?? null;
@@ -250,14 +251,13 @@ class SolrLibrary extends \KnihovnyCz\RecordDriver\SolrMarc
      * get gps coordinates of library
      *
      * @return array
-     *
      */
     public function getGpsCoordinates()
     {
         $gps = $this->fields['gps_display'] ?? '';
         $coords = [];
         if ($gps != '' ) {
-            list($coords['lat'], $coords['lng']) = explode(" ", $gps,2);
+            list($coords['lat'], $coords['lng']) = explode(" ", $gps, 2);
         }
         return $coords;
     }
