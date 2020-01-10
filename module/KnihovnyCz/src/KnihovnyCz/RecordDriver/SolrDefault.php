@@ -28,7 +28,8 @@
 
 namespace KnihovnyCz\RecordDriver;
 
-class SolrDefault extends \VuFind\RecordDriver\SolrDefault {
+class SolrDefault extends \VuFind\RecordDriver\SolrDefault
+{
 
     /**
      * These Solr fields should be used for snippets if available (listed in order
@@ -78,7 +79,7 @@ class SolrDefault extends \VuFind\RecordDriver\SolrDefault {
     /**
      * Returns first of ISSNs, ISBNs and ISMNs from SOLR
      *
-     * @return  string
+     * @return string
      */
     public function getIsn()
     {
@@ -167,7 +168,7 @@ class SolrDefault extends \VuFind\RecordDriver\SolrDefault {
      * Returns name of the Author to display
      *
      * @deprecated Used in ajax controller, should be used getPrimaryAuthor at call
-     * @return string|NULL
+     * @return     string|NULL
      */
     public function getDisplayAuthor()
     {
@@ -364,14 +365,17 @@ class SolrDefault extends \VuFind\RecordDriver\SolrDefault {
      *
      * @return array
      */
-    public function getDeduplicatedRecords() {
-        return array_map(function ($localId) {
-            return [
+    public function getDeduplicatedRecords()
+    {
+        return array_map(
+            function ($localId) {
+                return [
                 'source' => 'source_'
                     . substr($localId, 0, (int)strpos($localId, '.')),
                 'id' => $localId,
-            ];
-        }, (array)$this->getParentRecord()->tryMethod('getChildrenIds'));
+                ];
+            }, (array)$this->getParentRecord()->tryMethod('getChildrenIds')
+        );
     }
 
     /**
