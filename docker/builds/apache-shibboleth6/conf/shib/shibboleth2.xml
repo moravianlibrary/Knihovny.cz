@@ -185,11 +185,6 @@
                               backingFilePath="/etc/shibboleth/vfu-knihovny-idp.xml"
                               reloadInterval="7200"/>
 
-            <!-- IdPs used for testing -->
-            <MetadataProvider type="XML" uri="https://saml.koha.cz/saml2/idp/metadata.php"
-                              backingFilePath="/etc/shibboleth/saml-koha-cz-idp.xml"
-                              reloadInterval="7200"/>
-
         </MetadataProvider>
 
         <!-- Chain the two built-in trust engines together. -->
