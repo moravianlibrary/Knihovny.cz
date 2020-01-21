@@ -201,7 +201,7 @@ class KohaRest extends AbstractBase implements \Zend\Log\LoggerAwareInterface,
     {
         return array_map(
             function ($id) {
-                    return $this->getItemStatusesForBiblio($id);
+                return $this->getItemStatusesForBiblio($id);
             }, $ids
         );
     }
@@ -351,9 +351,9 @@ class KohaRest extends AbstractBase implements \Zend\Log\LoggerAwareInterface,
                 } catch (\Exception $e) {
                     $item = [];
                 }
-                /* FIXME need biblio administrative data endpoint if (isset($item['biblio_id'])) {
+               if (isset($item['biblio_id'])) {
                     $biblio = $this->getBiblio($item['biblio_id']);
-                }*/
+                }
             }
 
             $transaction = [
@@ -361,19 +361,19 @@ class KohaRest extends AbstractBase implements \Zend\Log\LoggerAwareInterface,
                 'checkout_id' => $entry['checkout_id'],
                 'item_id' => $entry['item_id'],
                 'barcode' => $item['barcode'] ?? null,
-                //'title' => $biblio['title'],
+                'title' => $biblio['title'] ?? '',
                 'volume' => $item['serial_enum_chron'] ?? '',
                 'checkoutDate' => $this->normalizeDate($entry['checkout_date']),
                 'dueDate' => $this->normalizeDate($entry['due_date']),
-                //'duedate' => $this->normalizeDate($entry['due_date']), //FIXME is this variant needed
+                //'duedate' => $this->normalizeDate($entry['due_date']), //FIXME is this variant needed?
                 'dueStatus' => $this->determineDueStatus($entry['due_date']),
                 'returnDate' => $this->normalizeDate($entry['checkin_date']),
                 'renew' => $entry['renewals'],
-                // publication_year => $biblio[''],
+                'publication_year' => $biblio['copyright_date'] ?? $biblio['publication_year'] ?? '',
                 'borrowingLocation' => $this->getLibraryName($entry['library_id']),
             ];
 
-            if(!empty($entry['checkin_date'])) {
+            if(!empty($entry['checkin_date']) && !empty($item)) {
                 $renewability = $this->getCheckoutRenewability($entry['checkout_id']);
                 $holds = $this->makeRequest(['v1', 'contrib', 'bibliocommons', 'biblios', $item['biblio_id'], 'holds']);
                 $transaction['renewable'] = $renewability['allows_renewal'] ?? false;
@@ -431,7 +431,7 @@ class KohaRest extends AbstractBase implements \Zend\Log\LoggerAwareInterface,
     /**
      * Checks if item is renewable
      *
-     * @param $checkoutId
+     * @param integer $checkoutId Checkout identifier
      *
      * @return array
      * @throws ILSException
@@ -502,7 +502,7 @@ class KohaRest extends AbstractBase implements \Zend\Log\LoggerAwareInterface,
 
         $holds = [];
         foreach ($result['data'] as $entry) {
-            //FIXME add biblio information
+            $biblio = $this->getBiblio($entry['biblio_id']);
             $holds[] = [
                 'id' => $entry['biblio_id'],
                 'item_id' => $entry['item_id'] ?? null,
@@ -517,6 +517,11 @@ class KohaRest extends AbstractBase implements \Zend\Log\LoggerAwareInterface,
                 'available' => !empty($entry['waiting_date']),
                 'hold_id' => $entry['hold_id'],
                 'in_transit' => !empty($entry['status']) && $entry['status'] == 'T',
+                'volume' => $biblio['part_number'] ?? '',
+                'publication_year' => $biblio['copyright_date'] ?? $biblio["publication_year"] ?? '',
+                'title' => $biblio['title'] ?? '',
+                'isbn' => $biblio['isbn'] ?? '',
+                'issn' => $biblio['issn'] ?? '',
             ];
         }
         return $holds;
@@ -835,14 +840,16 @@ class KohaRest extends AbstractBase implements \Zend\Log\LoggerAwareInterface,
      *
      * @param array      $hierarchy Array of values to embed in the URL path of
      *                              the request
-     * @param array|bool $params    A keyed array of query data
-     * @param string     $method    The http request method to use (Default is GET)
+     * @param array|bool|string  $params  A keyed array of query data
+     * @param string             $method  The http request method to use (Default is GET)
+     * @param array              $headers Request headers, an array, where key is
+     *                                    header name and value is header value
      *
      * @return   mixed
      * @throws   ILSException *@throws \Exception
      * @internal param bool $authNeeded
      */
-    protected function makeRequest($hierarchy, $params = false, $method = 'GET')
+    protected function makeRequest($hierarchy, $params = false, $method = 'GET', $headers = [])
     {
         // Set up the request
         $apiUrl = $this->config['Catalog']['host'];
@@ -875,6 +882,13 @@ class KohaRest extends AbstractBase implements \Zend\Log\LoggerAwareInterface,
                         'Content-Type', 'application/json'
                     );
                 }
+            }
+        }
+
+        if (!empty($headers)) {
+            $requestHeaders = $client->getRequest()->getHeaders();
+            foreach ($headers as $name => $value) {
+                $requestHeaders->addHeaderLine($name, [$value]);
             }
         }
 
@@ -1066,13 +1080,15 @@ class KohaRest extends AbstractBase implements \Zend\Log\LoggerAwareInterface,
      */
     protected function getBiblio($id)
     {
-        //FIXME not working yet, we are missing endpoint for biblio administrative data - Koha 19.11, Bug 23677
         static $cachedRecords = [];
         if (!isset($cachedRecords[$id])) {
             $result = $this->makeRequest(
-                ['v1', 'biblios', $id]
+                ['v1', 'biblios', $id],
+                [],
+                'GET',
+                ['Accept' => 'application/json']
             );
-            $cachedRecords[$id] = $result['data'];
+            $cachedRecords[$id] = ($result['code'] == 200) ? $result['data'] : [];
         }
         return $cachedRecords[$id];
     }
