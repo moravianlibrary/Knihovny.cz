@@ -25,6 +25,7 @@
 namespace KnihovnyCz\ILS\Driver\KohaRest;
 
 use VuFind\Exception\ILS as ILSException;
+use Zend\Cache\Storage\StorageInterface;
 
 class Service implements \VuFindHttp\HttpServiceAwareInterface,
     \Zend\Log\LoggerAwareInterface
@@ -35,28 +36,28 @@ class Service implements \VuFindHttp\HttpServiceAwareInterface,
     /**
      * Institution configuration.
      *
-     * @var
+     * @var \Zend\Config\Config
      */
     protected $config;
 
     /**
      * Cache
      *
-     * @var
+     * @var null|StorageInterface
      */
     protected $cache;
 
     /**
      * Institution source
      *
-     * @var
+     * @var string
      */
     protected $source;
 
     /**
      * Access token
      *
-     * @var
+     * @var null|string
      */
     protected $token;
 
