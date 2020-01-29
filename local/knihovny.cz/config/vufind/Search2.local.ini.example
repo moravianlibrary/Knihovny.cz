@@ -5,10 +5,12 @@
 
 ; Any specific configuration for this view/instance should be in this file
 
-[SearchTabs]
-Solr = "Books and more"
-Search2 = "Libraries"
+[Index]
+engine = Solr
+url = http://localhost:8080/solr
+default_core = front
+perf_log = /var/www/knihovny-cz/log/solr-json.log
+harvest_ebooks_limit = 500000
 
 [Parent_Config]
-;relative_path = ../../../base/config/vufind/config.ini
-relative_path = config.view.ini
+relative_path = ../../../base/config/vufind/Search2.ini
