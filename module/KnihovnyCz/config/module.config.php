@@ -40,6 +40,7 @@ $config = [
                     \KnihovnyCz\RecordDriver\SolrLibrary::class => \KnihovnyCz\RecordDriver\SolrLibraryFactory::class,
                     \KnihovnyCz\RecordDriver\SolrMarc::class => \KnihovnyCz\RecordDriver\SolrDefaultFactory::class,
                     \KnihovnyCz\RecordDriver\SolrLocal::class => \KnihovnyCz\RecordDriver\SolrDefaultFactory::class,
+                    \KnihovnyCz\RecordDriver\Search2Library::class => \KnihovnyCz\RecordDriver\SolrLibraryFactory::class,
                 ],
                 'aliases' => [
                     'solrauthority' => \KnihovnyCz\RecordDriver\SolrAuthority::class,
@@ -49,6 +50,7 @@ $config = [
                     'solrlibrary' => \KnihovnyCz\RecordDriver\SolrLibrary::class,
                     \VuFind\RecordDriver\SolrMarc::class => \KnihovnyCz\RecordDriver\SolrMarc::class,
                     'solrlocal' => \KnihovnyCz\RecordDriver\SolrLocal::class,
+                    'search2library' => \KnihovnyCz\RecordDriver\Search2Library::class,
                 ],
                 'delegators' => [
                     \KnihovnyCz\RecordDriver\SolrMarc::class => [
