@@ -242,8 +242,8 @@ class SolrLibrary extends \KnihovnyCz\RecordDriver\SolrMarc
 
     public function getBookSearchFilter()
     {
-        $institution = $this->fields['cpk_code_display'] ?? '';
-        $institutionsMappings = $this->facetsConfig->InstitutionsMappings->toArray();
+        $institution = $this->fields['cpk_code_display'] ?? null;
+        $institutionsMappings = $institution ? $this->facetsConfig->InstitutionsMappings->toArray() : null;
         return $institutionsMappings[$institution] ?? null;
     }
 
