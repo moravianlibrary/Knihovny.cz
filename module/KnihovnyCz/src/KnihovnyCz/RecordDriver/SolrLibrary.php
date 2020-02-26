@@ -132,21 +132,18 @@ class SolrLibrary extends \KnihovnyCz\RecordDriver\SolrMarc
      *
      * @return array
      */
-    public function getLibUrls()
+    public function getUrls()
     {
-        $result = [];
-        $urls = $this->fields['url_display_mv'] ?? null;
-        if (is_array($urls)) {
-            $filter = function ($url) {
-                $parts = explode("|", trim($url), 2);
-                $parts = array_map('trim', $parts);
-                return [
-                    'url' => $parts[0] ?? null,
-                    'name' => $parts[1] ?? $parts[0] ?? null,
-                ];
-            };
-            $result = array_map($filter, $urls);
-        }
+        $urls = $this->fields['url_display_mv'] ?? [];
+        $filter = function ($url) {
+            $parts = explode("|", trim($url), 2);
+            list($url, $desc) = array_map('trim', $parts);
+            return [
+                'url' => $url ?? null,
+                'desc' => $desc ?? $url ?? null,
+            ];
+        };
+        $result = array_map($filter, $urls);
         return $result;
     }
 
