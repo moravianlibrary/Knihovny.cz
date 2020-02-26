@@ -1,6 +1,7 @@
-.idea
+.idea/*
 docker/local.env
 docker/devel.env
 nohup.out
 local/knihovny.cz/config/vufind/config.local.ini
 local/knihovny.cz/config/vufind/Search2.local.ini
+!.idea/runConfigurations/

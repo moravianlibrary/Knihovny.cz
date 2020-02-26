@@ -997,4 +997,11 @@ CREATE TABLE `auth_hash` (
 
 UPDATE `system` SET `value` = '66' WHERE `key`='DB_VERSION';
 
+--
+-- Add foreign key to user card
+--
+DELETE FROM `user_card` WHERE user_id NOT IN (SELECT id FROM user);
+ALTER TABLE `user_card`
+    ADD CONSTRAINT `user_card_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE;
+UPDATE `system` SET `value` = '67' WHERE `key`='DB_VERSION';
 
