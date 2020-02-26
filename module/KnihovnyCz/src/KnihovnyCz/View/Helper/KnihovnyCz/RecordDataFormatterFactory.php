@@ -101,7 +101,7 @@ class RecordDataFormatterFactory extends \VuFind\View\Helper\Root\RecordDataForm
         $setLine('Additional information', 'getLibNote');
         $setLine('Additional information2', 'getLibNote2');
         $setLine(
-            'Web sites', 'getLibUrls', 'library_links.phtml',
+            'Web sites', 'getUrls', 'library_links.phtml',
             'pr-web-browseinternetnetwork'
         );
         $setLine('Library type', 'getType');
