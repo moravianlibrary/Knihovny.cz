@@ -61,13 +61,17 @@ trait PatentTrait
         $patentInfoText .= $this->translate('Patent') . ': ' . $patentInfo['country'] . ', ';
         switch ($patentInfo['type']) {
         case 'B6':
-            $patentInfoText .= $this->translate('patent_file'); break;
+            $patentInfoText .= $this->translate('patent_file');
+            break;
         case 'A3':
-            $patentInfoText .= $this->translate('app_invention'); break;
+            $patentInfoText .= $this->translate('app_invention');
+            break;
         case 'U1':
-            $patentInfoText .= $this->translate('utility_model'); break;
+            $patentInfoText .= $this->translate('utility_model');
+            break;
         default:
-            $patentInfoText .= $this->translate('unknown_patent_type'); break;
+            $patentInfoText .= $this->translate('unknown_patent_type');
+            break;
         }
         $patentInfoText .= ', ' . $patentInfo['id'] . ', ' . $patentInfo['publish_date'] . "\r\n";
         return $patentInfoText;
@@ -76,12 +80,16 @@ trait PatentTrait
     public function getMpts(): array
     {
         $fields024 = $this->getStructuredDataFieldArray('024');
-        $mpts = array_filter($fields024, function($part) {
-            return $part['2'] !== 'MPTS';
-        });
-        $mpts = array_map(function($part) {
-            return $part['a'];
-        }, $mpts);
+        $mpts = array_filter(
+            $fields024, function ($part) {
+                return $part['2'] !== 'MPTS';
+            }
+        );
+        $mpts = array_map(
+            function ($part) {
+                return $part['a'];
+            }, $mpts
+        );
         return $mpts;
     }
 

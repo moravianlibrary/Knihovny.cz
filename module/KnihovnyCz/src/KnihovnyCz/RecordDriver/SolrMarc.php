@@ -67,7 +67,7 @@ class SolrMarc extends \KnihovnyCz\RecordDriver\SolrDefault
     /**
      * Returns document range info from field 300
      *
-     * @return  array
+     * @return array
      */
     public function getRange()
     {
@@ -89,9 +89,11 @@ class SolrMarc extends \KnihovnyCz\RecordDriver\SolrDefault
         foreach ($fieldsData as $fieldObj) {
             $subfieldsData = $fieldObj->getSubfields();
             $subfieldsArray = iterator_to_array($subfieldsData);
-            $result[] = array_map(function($part) {
-                return $part->getData();
-            }, $subfieldsArray);
+            $result[] = array_map(
+                function ($part) {
+                    return $part->getData();
+                }, $subfieldsArray
+            );
         }
         return $result;
     }

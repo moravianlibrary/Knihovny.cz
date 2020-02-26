@@ -111,6 +111,7 @@ trait MarcField996AwareTrait
 
     /**
      * Filter items which we do not wan't to show
+     *
      * @param array $fields
      *
      * @return array
@@ -120,9 +121,11 @@ trait MarcField996AwareTrait
         $mappings = $this->get996Mappings();
         if (isset($mappings['restricted'])) {
             $restrictions = $mappings['restricted'];
-            $fields = array_filter($fields, function($f) use ($restrictions) {
-                return !$this->isRestricted($f, $restrictions);
-            });
+            $fields = array_filter(
+                $fields, function ($f) use ($restrictions) {
+                    return !$this->isRestricted($f, $restrictions);
+                }
+            );
         }
         return $fields;
     }
@@ -144,19 +147,25 @@ trait MarcField996AwareTrait
         $mergedMappings = array_merge($defaultMappings, $overridenMappings);
 
         // special (translate, toUpper, restricted, ignoredVals) are arrays in config
-        $mappings = array_filter($mergedMappings, function($mapping) {
-            return is_array($mapping);
-        });
+        $mappings = array_filter(
+            $mergedMappings, function ($mapping) {
+                return is_array($mapping);
+            }
+        );
 
-        $data = array_filter($mergedMappings, function($mapping) {
-            return !is_array($mapping);
-        });
+        $data = array_filter(
+            $mergedMappings, function ($mapping) {
+                return !is_array($mapping);
+            }
+        );
         $mappings['data'] = $data;
 
         $ignored = $mappings['ignoredVals'] ?? [];
-        $mappings['ignoredVals'] = array_map(function($item) {
-            return array_map('trim', explode(',', $item));
-        }, $ignored);
+        $mappings['ignoredVals'] = array_map(
+            function ($item) {
+                return array_map('trim', explode(',', $item));
+            }, $ignored
+        );
 
         $translate = $mappings['translate'] ?? [];
         $translateMapping = [];
@@ -202,8 +211,8 @@ trait MarcField996AwareTrait
      * Returns true only if in $subfields is found key->value pair identical
      * with any key->value pair in restrictions.
      *
-     * @param array $subfields
-     * @param array $restrictions
+     * @param  array $subfields
+     * @param  array $restrictions
      * @return boolean
      */
     protected function isRestricted($subfields, $restrictions): bool
@@ -225,9 +234,9 @@ trait MarcField996AwareTrait
      *
      * Otherwise returns false.
      *
-     * @param string $subfieldValue
-     * @param string $subfieldKey
-     * @param array $ignoredKeyValsPairs
+     * @param  string $subfieldValue
+     * @param  string $subfieldKey
+     * @param  array  $ignoredKeyValsPairs
      * @return boolean
      */
     protected function isIgnored($subfieldValue, $subfieldKey, $ignoredKeyValsPairs): bool
@@ -244,13 +253,14 @@ trait MarcField996AwareTrait
      * There are rules how to sort holdings in some special cases.
      * Set $this->sortFields.
      *
-     * @param array $fields
+     * @param  array $fields
      * @return array
      */
     private function sortFields($fields): array
     {
         if ((isset($this->fields['format_display_mv'][0]))
-            && ($this->fields['format_display_mv'][0] === '0/PERIODICALS/')) {
+            && ($this->fields['format_display_mv'][0] === '0/PERIODICALS/')
+        ) {
             usort($fields, [$this, 'sortLogic']);
         }
         return $fields;

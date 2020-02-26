@@ -928,3 +928,80 @@ CREATE TABLE `shortlinks` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE utf8_bin;
 
 UPDATE `system` SET `value` = '65' WHERE `key`='DB_VERSION';
+
+
+/* VuFind 6.1 */
+--
+-- Modifications to table `user`
+--
+
+ALTER TABLE `user`
+  ADD COLUMN pending_email varchar(255) NOT NULL DEFAULT '';
+
+ALTER TABLE `user`
+  ADD COLUMN user_provided_email tinyint(1) NOT NULL DEFAULT '0';
+
+ALTER TABLE `user`
+  ADD COLUMN last_language varchar(30) NOT NULL DEFAULT '';
+
+--
+-- Modifications to table `search`
+--
+
+ALTER TABLE `search`
+  MODIFY COLUMN id bigint unsigned NOT NULL AUTO_INCREMENT;
+
+--
+-- Modifications to table `session`
+--
+
+ALTER TABLE `session`
+  MODIFY COLUMN id bigint unsigned NOT NULL AUTO_INCREMENT;
+
+--
+-- Modifications to table `external_session`
+--
+
+ALTER TABLE `external_session`
+  MODIFY COLUMN id bigint unsigned NOT NULL AUTO_INCREMENT;
+
+
+--
+-- Modifications to table `search`
+--
+
+ALTER TABLE `search`
+  ADD COLUMN notification_frequency int(11) NOT NULL DEFAULT '0',
+  ADD COLUMN last_notification_sent datetime NOT NULL DEFAULT '2000-01-01 00:00:00',
+  ADD COLUMN notification_base_url varchar(255) NOT NULL DEFAULT '';
+
+CREATE INDEX notification_frequency_idx ON search (notification_frequency);
+CREATE INDEX notification_base_url_idx ON search (notification_base_url);
+
+--
+-- Table structure for table auth_hash
+--
+
+CREATE TABLE `auth_hash` (
+  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
+  `session_id` varchar(128) DEFAULT NULL,
+  `hash` varchar(255) NOT NULL DEFAULT '',
+  `type` varchar(50) DEFAULT NULL,
+  `data` mediumtext,
+  `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `session_id` (`session_id`),
+  UNIQUE KEY `hash_type` (`hash`, `type`),
+  KEY `created` (`created`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+UPDATE `system` SET `value` = '66' WHERE `key`='DB_VERSION';
+
+--
+-- Add foreign key to user card
+--
+DELETE FROM `user_card` WHERE user_id NOT IN (SELECT id FROM user);
+ALTER TABLE `user_card`
+    ADD CONSTRAINT `user_card_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE;
+UPDATE `system` SET `value` = '67' WHERE `key`='DB_VERSION';
+
