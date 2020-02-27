@@ -75,25 +75,25 @@ $config = [
             ],
             'content_covers' => [
                 'factories' => [
-                    'KnihovnyCz\Content\Covers\ObalkyKnih' => 'KnihovnyCz\Content\ObalkyKnihContentFactory'
+                    \KnihovnyCz\Content\Covers\ObalkyKnih::class => \KnihovnyCz\Content\ObalkyKnihContentFactory::class
                 ],
                 'aliases' => [
-                    'obalkyknih' => 'KnihovnyCz\Content\Covers\ObalkyKnih'
+                    'obalkyknih' => \KnihovnyCz\Content\Covers\ObalkyKnih::class
                 ]
             ],
             'content_toc' => [
                 'factories' => [
-                    'KnihovnyCz\Content\TOC\ObalkyKnih' => 'KnihovnyCz\Content\ObalkyKnihContentFactory'
+                    \KnihovnyCz\Content\TOC\ObalkyKnih::class => \KnihovnyCz\Content\ObalkyKnihContentFactory::class
                 ],
                 'aliases' => [
-                    'obalkyknih' => 'KnihovnyCz\Content\TOC\ObalkyKnih'
+                    'obalkyknih' => \KnihovnyCz\Content\TOC\ObalkyKnih::class
                 ]
             ]
         ],
     ],
     'service_manager' => [
         'factories' => [
-            'KnihovnyCz\Content\ObalkyKnihService' => 'KnihovnyCz\Content\ObalkyKnihServiceFactory',
+            \KnihovnyCz\Content\ObalkyKnihService::class => \KnihovnyCz\Content\ObalkyKnihServiceFactory::class,
         ],
     ],
 ];
