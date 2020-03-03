@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Class SolrLibraryFactory
+ * Class ObalkyKnihCoversFactory
  *
  * PHP version 7
  *
@@ -21,21 +21,21 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  *
  * @category VuFind
- * @package  KnihovnyCz\RecordDriver
+ * @package  KnihovnyCz\Content\Covers
  * @author   Josef Moravec <moravec@mzk.cz>
  * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://knihovny.cz Main Page
  */
 
-namespace KnihovnyCz\RecordDriver;
+namespace KnihovnyCz\Content;
 
 use Interop\Container\ContainerInterface;
+use Interop\Container\Exception\ContainerException;
 use Laminas\ServiceManager\Exception\ServiceNotCreatedException;
 use Laminas\ServiceManager\Exception\ServiceNotFoundException;
 
-class SolrLibraryFactory extends SolrDefaultFactory
+class ObalkyKnihContentFactory implements \Laminas\ServiceManager\Factory\FactoryInterface
 {
-
     /**
      * Create an object
      *
@@ -48,15 +48,18 @@ class SolrLibraryFactory extends SolrDefaultFactory
      * @throws ServiceNotFoundException if unable to resolve the service.
      * @throws ServiceNotCreatedException if an exception is raised when
      * creating a service.
-     * @throws \Exception if any other error occurs
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __invoke(ContainerInterface $container, $requestedName,
         array $options = null
     ) {
-        $driver = parent::__invoke($container, $requestedName, $options);
-        $driver->attachFacetsConfig(
-            $container->get(\VuFind\Config\PluginManager::class)->get('facets')
-        );
-        return $driver;
+        if (!empty($options)) {
+            throw new ServiceNotCreatedException('Unexpected options passed to factory.');
+        }
+
+        $service = $container->get(\KnihovnyCz\Content\ObalkyKnihService::class);
+        $covers = new $requestedName($service);
+        return $covers;
     }
 }
