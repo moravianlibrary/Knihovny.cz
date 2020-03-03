@@ -29,7 +29,7 @@
 
 namespace KnihovnyCzConsole;
 
-use Zend\Console\Adapter\AdapterInterface as Console;
+use Laminas\Console\Adapter\AdapterInterface as Console;
 
 /**
  * Module for console commands
@@ -60,7 +60,7 @@ class Module
     public function getAutoloaderConfig()
     {
         return [
-            'Zend\Loader\StandardAutoloader' => [
+            'Laminas\Loader\StandardAutoloader' => [
                 'namespaces' => [
                     __NAMESPACE__ => __DIR__ . '/src/' . __NAMESPACE__,
                 ],
