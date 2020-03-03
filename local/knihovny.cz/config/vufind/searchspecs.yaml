@@ -286,7 +286,7 @@ Title:
     title_new:
       - [and, 100]
     title_old:
-      - [and, ~]  
+      - [and, ~]
 
 Series:
   DismaxFields:
@@ -363,7 +363,7 @@ AllFields:
       - [and, 50]
     series2:
       - [and, 30]
-    author:  
+    author:
       - [onephrase, 300]
       - [and, 250]
     author2:
@@ -473,7 +473,7 @@ adv_search_author_corporation:
       - [and, 50]
     author_viz:
     - [onephrase, 50]
-    - [and, 20]  
+    - [and, 20]
     corporation_viz:
     - [onephrase, 50]
     - [and, 20]
@@ -506,7 +506,7 @@ adv_search_subject_keywords:
       - [onephrase, 50]
       - [and, 20]
   FilterQuery: "NOT recordtype:library AND NOT recordtype:sfx"
-      
+
 adv_search_source_title:
   DismaxFiels:
    - sourceTitle_search_txt_mv
@@ -644,7 +644,7 @@ adv_search_nbn:
       - [onephrase, 100]
       - [and, 50]
   FilterQuery: "NOT recordtype:library AND NOT recordtype:sfx"
-      
+
 adv_search_fulltext:
   Dismaxfields:
    - toc_txt_mv^10
@@ -688,7 +688,7 @@ Libraries:
     - town_search_txt^100
     - address_search_txt_mv
     - note_search_txt
-    - type_search_txt
+    - type_search_txt_mv
     - function_search_txt_mv
     - responsibility_search_txt_mv
     - services_search_txt_mv
