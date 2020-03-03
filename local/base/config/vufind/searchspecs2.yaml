@@ -31,7 +31,7 @@ Name:
   DismaxHandler: edismax
 
 Town:
-  DismaFields:
+  DismaxFields:
     - town_search_txt^100
     - address_search_txt_mv
   FilterQuery: "recordtype:library"
@@ -40,18 +40,15 @@ Town:
   DismaxHandler: edismax
 
 Sigla:
-  DismaFields:
+  DismaxFields:
     - sigla_search_txt
   FilterQuery: "recordtype:library"
   DismaxParams:
     - [bf, ord(library_relevance_str)^9999]
   DismaxHandler: edismax
-  QueryFields:
-    sigla_search_txt:
-      - [onephrase, 100]
 
 People:
-  DismaFields:
+  DismaxFields:
     - responsibility_search_txt_mv
   FilterQuery: "recordtype:library"
   DismaxParams:
