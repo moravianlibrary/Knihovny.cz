@@ -6,7 +6,7 @@ AllLibraries:
     - town_search_txt^100
     - address_search_txt_mv
     - note_search_txt
-    - type_search_txt
+    - type_search_txt_mv
     - function_search_txt_mv
     - responsibility_search_txt_mv
     - services_search_txt_mv
@@ -50,6 +50,38 @@ Sigla:
 People:
   DismaxFields:
     - responsibility_search_txt_mv
+  FilterQuery: "recordtype:library"
+  DismaxParams:
+    - [bf, ord(library_relevance_str)^9999]
+  DismaxHandler: edismax
+
+adv_search_type:
+  DismaxFields:
+    - type_search_txt_mv
+  FilterQuery: "recordtype:library"
+  DismaxParams:
+    - [bf, ord(library_relevance_str)^9999]
+  DismaxHandler: edismax
+
+adv_search_function:
+  DismaxFields:
+    - function_search_txt_mv
+  FilterQuery: "recordtype:library"
+  DismaxParams:
+    - [bf, ord(library_relevance_str)^9999]
+  DismaxHandler: edismax
+
+adv_search_services:
+  DismaxFields:
+    - services_search_txt_mv
+  FilterQuery: "recordtype:library"
+  DismaxParams:
+    - [bf, ord(library_relevance_str)^9999]
+  DismaxHandler: edismax
+
+adv_search_projects:
+  DismaxFields:
+    - projects_search_txt_mv
   FilterQuery: "recordtype:library"
   DismaxParams:
     - [bf, ord(library_relevance_str)^9999]
