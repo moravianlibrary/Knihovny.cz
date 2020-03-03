@@ -29,7 +29,7 @@
 namespace KnihovnyCz\Content;
 
 class ObalkyKnihService implements \VuFindHttp\HttpServiceAwareInterface,
-    \Zend\Log\LoggerAwareInterface
+    \Laminas\Log\LoggerAwareInterface
 {
     use \VuFindHttp\HttpServiceAwareTrait;
     use \VuFind\ILS\Driver\CacheTrait;
@@ -55,7 +55,7 @@ class ObalkyKnihService implements \VuFindHttp\HttpServiceAwareInterface,
      *
      * @param string $url URL for client to use
      *
-     * @return \Zend\Http\Client
+     * @return \Laminas\Http\Client
      */
     protected function getHttpClient($url = null)
     {

@@ -32,7 +32,7 @@ class SolrLibrary extends \KnihovnyCz\RecordDriver\SolrMarc
 {
 
     /**
-     * @var \Zend\Config\Config
+     * @var \Laminas\Config\Config
      */
     protected $facetsConfig = null;
 
@@ -306,7 +306,7 @@ class SolrLibrary extends \KnihovnyCz\RecordDriver\SolrMarc
     }
 
     /**
-     * @param \Zend\Config\Config $facetsConfig
+     * @param \Laminas\Config\Config $facetsConfig
      */
     public function attachFacetsConfig($facetsConfig)
     {
