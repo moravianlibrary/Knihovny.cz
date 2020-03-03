@@ -84,7 +84,7 @@ forms:
     useCaptcha: true
     recipient:
       name: CPK
-      email: cpk-devs@mzk.cz
+      email: cpk-support@mzk.cz
 
     onlyForLoggedUsers: false
     emailSubject: Knihovny.cz feedback
