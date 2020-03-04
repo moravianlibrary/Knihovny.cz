@@ -173,4 +173,3 @@ if [[ $run == "true" ]]; then
     docker-compose -f "$docker_compose_file" up $compose_args $service
 fi
 
-rm "./builds/knihovny-cz-base6/composer.local.json"
