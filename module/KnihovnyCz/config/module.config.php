@@ -40,6 +40,7 @@ $config = [
                     \KnihovnyCz\RecordDriver\SolrLibrary::class => \KnihovnyCz\RecordDriver\SolrLibraryFactory::class,
                     \KnihovnyCz\RecordDriver\SolrMarc::class => \KnihovnyCz\RecordDriver\SolrDefaultFactory::class,
                     \KnihovnyCz\RecordDriver\SolrLocal::class => \KnihovnyCz\RecordDriver\SolrDefaultFactory::class,
+                    \KnihovnyCz\RecordDriver\Search2Library::class => \KnihovnyCz\RecordDriver\SolrLibraryFactory::class,
                 ],
                 'aliases' => [
                     'solrauthority' => \KnihovnyCz\RecordDriver\SolrAuthority::class,
@@ -49,6 +50,7 @@ $config = [
                     'solrlibrary' => \KnihovnyCz\RecordDriver\SolrLibrary::class,
                     \VuFind\RecordDriver\SolrMarc::class => \KnihovnyCz\RecordDriver\SolrMarc::class,
                     'solrlocal' => \KnihovnyCz\RecordDriver\SolrLocal::class,
+                    'search2library' => \KnihovnyCz\RecordDriver\Search2Library::class,
                 ],
                 'delegators' => [
                     \KnihovnyCz\RecordDriver\SolrMarc::class => [
@@ -72,8 +74,28 @@ $config = [
                     'usercommentsobalkyknih' => \KnihovnyCz\RecordTab\UserCommentsObalkyKnih::class,
                     'ziskej' => \KnihovnyCz\RecordTab\Ziskej::class,
                 ],
-
             ],
+            'content_covers' => [
+                'factories' => [
+                    \KnihovnyCz\Content\Covers\ObalkyKnih::class => \KnihovnyCz\Content\ObalkyKnihContentFactory::class
+                ],
+                'aliases' => [
+                    'obalkyknih' => \KnihovnyCz\Content\Covers\ObalkyKnih::class
+                ]
+            ],
+            'content_toc' => [
+                'factories' => [
+                    \KnihovnyCz\Content\TOC\ObalkyKnih::class => \KnihovnyCz\Content\ObalkyKnihContentFactory::class
+                ],
+                'aliases' => [
+                    'obalkyknih' => \KnihovnyCz\Content\TOC\ObalkyKnih::class
+                ]
+            ]
+        ],
+    ],
+    'service_manager' => [
+        'factories' => [
+            \KnihovnyCz\Content\ObalkyKnihService::class => \KnihovnyCz\Content\ObalkyKnihServiceFactory::class,
         ],
     ],
 ];
