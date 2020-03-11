@@ -1,0 +1,16 @@
+; Configuration of view/instance
+; This configuration is inherits from two other files
+; - base config in common directory local/config/vufind/
+; - local file from this directory - useful for development
+
+; Any specific configuration for this view/instance should be in this file
+
+[Index]
+engine = Solr
+url = http://localhost:8080/solr
+default_core = front
+perf_log = /var/www/knihovny-cz/log/solr-json.log
+harvest_ebooks_limit = 500000
+
+[Parent_Config]
+relative_path = ../../../base/config/vufind/Search2.ini

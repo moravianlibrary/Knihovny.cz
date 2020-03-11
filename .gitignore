@@ -1,8 +1,9 @@
 .idea/*
 docker/local.env
 docker/devel.env
+docker/builds/knihovny-cz-base6/composer.local.json
 nohup.out
 local/*/cache/
 local/knihovny.cz/config/vufind/config.local.ini
-
+local/knihovny.cz/config/vufind/Search2.local.ini
 !.idea/runConfigurations/
