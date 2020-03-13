@@ -6,7 +6,7 @@ Script for deploying testing containers on cpk-front.mzk.cz.
 After successful build and deploy, script echoes URL on which container
 is running.
 
-USAGE: deploy_cpk [-b branch] [-c directory_name]
+USAGE: $0 [-b branch] [-c directory_name]
 
   -b            Branch to use for build. Defaults to master
   -c            Config directory to use, aka view name. Defaults to knihovny.cz
