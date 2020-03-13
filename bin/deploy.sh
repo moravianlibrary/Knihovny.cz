@@ -65,4 +65,5 @@ container_name="knihovny-devel6-$branch"
 
 `dirname $0`/run.sh -d -t devel -p $http_port -s $https_port -b $branch -service $service -n $container_name
 
-echo "URL: https://cpk-front.mzk.cz:${port}/"
+echo "URL:"
+echo "https://cpk-front.mzk.cz:${port}/"
