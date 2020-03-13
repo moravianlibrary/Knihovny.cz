@@ -8,9 +8,9 @@ is running.
 
 USAGE: deploy_cpk [-b branch] [-c directory_name]
 
-  -b                   Branch to use for build
-  -c                   Config directory to use
-  --help|-h            Print usage
+  -b            Branch to use for build. Defaults to master
+  -c            Config directory to use, aka view name. Defaults to knihovny.cz
+  --help|-h     Print usage
 
 EOF
 }
