@@ -61,4 +61,5 @@ init_search2_config() {
 
 init_config_local "$@"
 init_eds_config "$@"
+init_search2_config "$@"
 exit $?
