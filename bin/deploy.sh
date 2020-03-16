@@ -1,16 +1,17 @@
 #!/usr/bin/env bash
 
 function print_usage {
+    name=$(basename $0)
     cat <<EOF
 Script for deploying testing containers on cpk-front.mzk.cz.
 After successful build and deploy, script echoes URL on which container
 is running.
 
-USAGE: deploy_cpk [-b branch] [-c directory_name]
+USAGE: $name [-b branch] [-c directory_name]
 
-  -b                   Branch to use for build
-  -c                   Config directory to use
-  --help|-h            Print usage
+  -b            Branch to use for build. Defaults to master
+  -c            Config directory to use, aka view name. Defaults to knihovny.cz
+  --help|-h     Print usage
 
 EOF
 }
@@ -61,8 +62,9 @@ fi
 service="devel6-${port}"
 http_port=$(($port+10000))
 https_port=$(($port+10443))
-container_name="knihovny-devel6-$branch"
+container_name="knihovny-devel-$branch"
 
-`dirname $0`/run.sh -d -t devel -p $http_port -s $https_port -b $branch -service $service -n $container_name
+`dirname $(readlink -nf $0)`/run.sh -d -t devel -p $http_port -s $https_port -b $branch -service $service -n $container_name
 
-echo "URL: https://cpk-front.mzk.cz:${port}/"
+echo "URL:"
+echo "https://cpk-front.mzk.cz:${port}/"

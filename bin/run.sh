@@ -26,10 +26,14 @@ EOF
 }
 
 function last_commit {
-    local branch=$1
-    local url="https://api.github.com/repos/moravianlibrary/Knihovny.cz/commits?sha=$branch"
-    local sha=`curl "$url" | php -r "echo (string) json_decode(file_get_contents('php://stdin'))[0]->sha;"`
-    echo $sha
+  local branch=$1
+  local data=$(printf '{"query":"{project(fullPath: \\"knihovny.cz/Knihovny-cz\\") { repository { tree(ref: \\"%s\\") { lastCommit { sha }}}}}"}' "$branch")
+  local response=`curl -s 'https://gitlab.mzk.cz/api/graphql' \
+    --header 'Content-Type: application/json' \
+    --header "Private-token: ${GITLAB_API_TOKEN}" \
+    --request POST \
+    --data "${data}"`
+  echo $response | php -r "echo (string)json_decode(file_get_contents('php://stdin'))->data->project->repository->tree->lastCommit->sha;"
 }
 
 # default variable values
@@ -124,17 +128,22 @@ while true ; do
     esac
 done
 
-LAST_COMMIT=`last_commit $branch`
+cd $(dirname "$0")"/../docker" || exit
 
-build_args="--build-arg PARAM_VUFIND_COMMIT_HASH=${LAST_COMMIT}"
 compose_args=""
 
 if [[ $detached == "true" ]]; then
     compose_args="-d"
 fi
 
+env_file="${build_type}.env"
+export $(cat $env_file | xargs)
+
+# We need this to enforce docker to run git clone when the branch is updated
+LAST_COMMIT=$(last_commit ${branch})
+build_args="$build_args --build-arg PARAM_VUFIND_BRANCH=$branch --build-arg PARAM_VUFIND_COMMIT_HASH=${LAST_COMMIT} --build-arg GITLAB_DEPLOY_USER=$GITLAB_DEPLOY_USER --build-arg GITLAB_DEPLOY_PASSWORD=$GITLAB_DEPLOY_PASSWORD"
+
 if [[ ! -z  "$branch" ]]; then
-    build_args="$build_args --build-arg PARAM_VUFIND_BRANCH=$branch"
     if [[ -z "$image_name" ]]; then
         image_name="knihovny_cz_${branch}"
     fi
@@ -148,8 +157,6 @@ export HTTPS_PORT="${https_port}"
 export IMAGE_NAME="${image_name}"
 export IMAGE_VERSION="${version}"
 export CONTAINER_NAME="${container_name}"
-
-cd $(dirname "$0")"/../docker"
 
 cp "../composer.local.json" "./builds/knihovny-cz-base6/"
 

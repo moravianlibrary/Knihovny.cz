@@ -11,5 +11,6 @@ services:
             context: "builds/knihovny-cz-source6"
             args:
                 PARAM_VUFIND_BRANCH: ""
-                PARAM_VUFIND_COMMIT_HASH: ""
+                GITLAB_DEPLOY_USER: ""
+                GITLAB_DEPLOY_PASSWORD: ""
         network_mode: bridge
