@@ -75,6 +75,32 @@ $config = [
                     'ziskej' => \KnihovnyCz\RecordTab\Ziskej::class,
                 ],
             ],
+            'contentblock' => [
+                'factories' => [
+                    \KnihovnyCz\ContentBlock\DocumentTypes::class => \KnihovnyCz\ContentBlock\DocumentTypesFactory::class,
+                    \KnihovnyCz\ContentBlock\Inspiration::class => \KnihovnyCz\ContentBlock\InspirationFactory::class,
+                    \KnihovnyCz\ContentBlock\UserList::class => \KnihovnyCz\ContentBlock\UserListFactory::class,
+                    \KnihovnyCz\ContentBlock\TemplateBased::class => \Laminas\ServiceManager\Factory\InvokableFactory::class,
+                ],
+                'aliases' => [
+                    'documenttypes' => \KnihovnyCz\ContentBlock\DocumentTypes::class,
+                    'inspiration' => \KnihovnyCz\ContentBlock\Inspiration::class,
+                    'userlist' => \KnihovnyCz\ContentBlock\UserList::class,
+                    'templatebased' => \KnihovnyCz\ContentBlock\TemplateBased::class,
+                ]
+            ],
+            'db_row' => [
+                'factories' => [
+                    \KnihovnyCz\Db\Row\Widget::class => \VuFind\Db\Row\RowGatewayFactory::class,
+                    \KnihovnyCz\Db\Row\WidgetContent::class => \VuFind\Db\Row\RowGatewayFactory::class,
+                ],
+            ],
+            'db_table' => [
+                'factories' => [
+                    \KnihovnyCz\Db\Table\Widget::class => \VuFind\Db\Table\GatewayFactory::class,
+                    \KnihovnyCz\Db\Table\WidgetContent::class => \VuFind\Db\Table\GatewayFactory::class,
+                ],
+            ],
             'content_covers' => [
                 'factories' => [
                     \KnihovnyCz\Content\Covers\ObalkyKnih::class => \KnihovnyCz\Content\ObalkyKnihContentFactory::class

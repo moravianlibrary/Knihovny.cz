@@ -1,5 +1,7 @@
 @import "bootstrap"; /* Include bootstrap theme's less base */
 
+@import "variables";
+
 /* Change variables to change colors and values through-out the theme */
 @image-path: "../../local_theme_example/images";
 @active-orange: #fff93c;
@@ -29,5 +31,22 @@ header {
 footer .container { border-bottom: 2px solid #137752; }
 .alert { padding: 8px; }
 
+.document-type-widget {
+  .iconlabel {
+    padding-top: 6px;
+  }
+
+  .widget-icon {
+    font-size: 3rem;
+    color: @grey-color;
+    padding-left: 5px;
+  }
+
+  .content {
+    padding-left: 20px;
+  }
+}
+
 /* You can also organize these styles in separate files and @import them */
 @import "home-page";
+@import "knihovny-cz-icons";

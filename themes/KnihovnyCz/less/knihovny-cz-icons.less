@@ -1,0 +1,133 @@
+/*
+  Classes for showing PR format icons
+*/
+
+.small-format-icon {
+  margin-right: 4px;
+}
+
+.pr-format-books:before, .pr-format-eds-book:before, .pr-format-eds-ebook:before, .pr-format-eds-dissertation:before {
+  content: "\ebb3";
+}
+.pr-format-electronicsource:before, .pr-format-othercomputercarrier:before {
+  content: "\e98d";
+}
+.pr-format-other:before, .pr-format-otherunspecified:before, .pr-format-eds-newspaperArticle:before, .pr-format-eds-conference:before, .pr-format-eds-report:before, .pr-format-eds-primarySource:before, .pr-format-eds-review:before {
+  content: "\ec24";
+}
+.pr-format-otherobject:before {
+  content: "\ec24";
+}
+.pr-format-periodicals:before, .pr-format-eds-serialPeriodical:before, .pr-format-eds-newspaperArticle:before {
+  content: "\ebaa";
+}
+.pr-format-visualdocuments:before {
+  content: "\ec0f";
+}
+.pr-format-articles:before, .pr-format-manuscripts:before, .pr-format-eds-academicJournal:before{
+  content: "\ebac";
+}
+.pr-format-audio:before, .pr-format-audiocd:before, .pr-format-audioother:before, .pr-format-audiocassette:before, .pr-format-audiolp:before, .pr-format-audiodvd:before, .pr-format-eds-audio:before {
+  content: "\e99d";
+}
+.pr-format-musicalscores:before {
+  content: "\ea23";
+}
+.pr-format-maps:before {
+  content: "\e9b4";
+}
+.pr-format-video:before, .pr-format-videoother:before {
+  content: "\ec01";
+}
+.pr-format-videodvd:before, .pr-format-videocd:before , .pr-format-videobluray:before {
+  content: "\ea02";
+}
+.pr-format-videovhs:before {
+  content: "\ec00";
+}
+.pr-format-otherkit:before {
+  content: "\eb1b";
+}
+.pr-format-otherbraille:before {
+  content: "\eb2a";
+}
+.pr-format-othermicroforms:before {
+  content: "\e982";
+}
+.pr-format-othermixdocument:before {
+  content: "\eb08";
+}
+.pr-format-norms:before {
+  content: "\ebd8";
+}
+.pr-format-eds-electronicResource:before {
+  content: "\e98d";
+}
+.pr-format-eds-unknown:before {
+  content: "\ec24";
+}
+.pr-format-eds-biography:before {
+  content: "\e95c";
+}
+
+[class^="pr-format-legislative"]:before, [class*=" pr-format-legislative"]:before {
+  font-family: 'knihovny'!important;
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  content: "\e607";
+}
+
+[class^="pr-format-patents"]:before, [class*=" pr-format-patents"]:before {
+  display: inline-block;
+  font: normal normal normal 14px/1 FontAwesome;
+  font-size: inherit;
+  text-rendering: auto;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  content: "\f0eb";
+}
+
+[class^="pr-format-blind"]:before, [class*=" pr-format-blind"]:before {
+  display: inline-block;
+  font: normal normal normal 14px/1 FontAwesome;
+  font-size: inherit;
+  text-rendering: auto;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  content: "\f070";
+}
+
+
+/*
+  Classes for showing Radim Kacer icons
+*/
+
+.fa {
+  &.knihovny-logo {
+    font-size: 220px;
+    margin-left: 5px;
+    margin-top: -84px;
+  }
+  &.knihovny-logo:before {
+    font-family: 'knihovny';
+    speak: none;
+    font-style: normal;
+    font-weight: normal;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 1;
+
+    /* Better Font Rendering =========== */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    content: "\e601";
+  }
+}
