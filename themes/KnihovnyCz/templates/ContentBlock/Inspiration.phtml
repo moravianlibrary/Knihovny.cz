@@ -1,0 +1,38 @@
+<?php
+  // Load search actions and settings (if any):
+  $options = $this->searchOptions($this->searchClassId);
+  $searchAction = $options->getSearchAction();
+  $listUrl = $this->url($searchAction) . "?" . http_build_query(
+    [
+      'lookfor' => $this->facetField . ':"' . $this->widget->name . '"',
+      'type' => $this->searchType,
+    ]
+  );
+?>
+
+
+<div class='col-md-4 widget'>
+  <div class='header'>
+    <a href='<?=$listUrl?>' title='<?= $this->translate('Show all') ?>'>
+      <h2><?=$this->widget->title_cs ?></h2>
+    </a>
+  </div>
+  <div class='list-group'>
+
+    <?php foreach ($this->items as $item):?>
+      <?=$this->context($this)->renderInContext('ContentBlock/inspiration-item', ['item' => $item]); ?>
+    <?php endforeach; ?>
+
+      <a href='<?=$listUrl ?>' class='list-group-item clearfix' title='<?= $this->translate('Show all')?> '>
+        <div class='row more-info'>
+          <div class='col-xs-10'>
+            <?=$this->translate('Show all') ?>
+          </div>
+          <div class='col-xs-2 text-right'>
+            <i class='pr-interface-arrowright'></i>
+          </div>
+        </div>
+      </a>
+
+  </div>
+</div>
