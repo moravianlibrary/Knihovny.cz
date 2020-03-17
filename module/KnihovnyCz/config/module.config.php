@@ -97,8 +97,12 @@ $config = [
             ],
             'db_table' => [
                 'factories' => [
+                    \KnihovnyCz\Db\Table\User::class => \VuFind\Db\Table\GatewayFactory::class,
                     \KnihovnyCz\Db\Table\Widget::class => \VuFind\Db\Table\GatewayFactory::class,
                     \KnihovnyCz\Db\Table\WidgetContent::class => \VuFind\Db\Table\GatewayFactory::class,
+                ],
+                'aliases' => [
+                    \VuFind\Db\Table\User::class => \KnihovnyCz\Db\Table\User::class,
                 ],
             ],
             'content_covers' => [
