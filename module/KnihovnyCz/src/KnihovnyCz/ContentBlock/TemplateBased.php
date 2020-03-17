@@ -31,6 +31,36 @@ namespace KnihovnyCz\ContentBlock;
 
 class TemplateBased implements \VuFind\ContentBlock\ContentBlockInterface
 {
+    /**
+     * Types/formats of content
+     *
+     * @var array $types
+     */
+    protected $types = [
+        'phtml',
+        'md',
+    ];
+
+    /**
+     * Theme info service
+     *
+     * @var \VuFindTheme\ThemeInfo
+     */
+    protected $themeInfo;
+
+    /**
+     * Translator
+     *
+     * @var \Laminas\Mvc\I18n\Translator
+     */
+    protected $translator;
+
+    /**
+     * Default langugae
+     *
+     * @var string
+     */
+    protected $defaultLanguage;
 
     /**
      * Name of template for rendering
@@ -38,6 +68,21 @@ class TemplateBased implements \VuFind\ContentBlock\ContentBlockInterface
      * @var string
      */
     protected $templateName;
+
+    /**
+     * TemplateBased constructor.
+     *
+     * @param \VuFindTheme\ThemeInfo       $theme      Theme info
+     * @param \Laminas\Mvc\I18n\Translator $translator Translator
+     * @param \Laminas\Config\Config       $config     Main config
+     */
+    public function __construct(\VuFindTheme\ThemeInfo $theme,
+        \Laminas\Mvc\I18n\Translator $translator, \Laminas\Config\Config $config
+    ) {
+        $this->themeInfo = $theme;
+        $this->translator = $translator;
+        $this->defaultLanguage  = $config->Site->language;
+    }
 
     /**
      * @inheritDoc
@@ -51,6 +96,59 @@ class TemplateBased implements \VuFind\ContentBlock\ContentBlockInterface
      * @inheritDoc
      */
     public function getContext()
+    {
+        $page = $this->templateName;
+        $language = $this->translator->getLocale();
+        $templates = [
+            "{$page}_$language",
+            "{$page}_$this->defaultLanguage",
+            $page,
+        ];
+        $pathPrefix = "templates/ContentBlock/TemplateBased/";
+
+        foreach ($templates as $template) {
+            foreach ($this->types as $type) {
+                $filename = "$pathPrefix$template.$type";
+                $path = $this->themeInfo->findContainingTheme($filename, true);
+                if (null != $path) {
+                    $page = $template;
+                    $renderer = $type;
+                    break 2;
+                }
+            }
+        }
+        $method = isset($renderer) ? 'getContextFor' . ucwords($renderer) : false;
+
+        return $method && is_callable([$this, $method])
+            ? $this->$method($page, $path)
+            : [];
+    }
+
+    /**
+     * Return context array for markdown
+     *
+     * @param string $page Page name
+     * @param string $path Full path of file
+     *
+     * @return array
+     */
+    protected function getContextForMd(string $page, string $path): array
+    {
+        return [
+            'templateName' => 'markdown',
+            'data' => file_get_contents($path),
+        ];
+    }
+
+    /**
+     * Return context array of phtml
+     *
+     * @param string $page Page name
+     * @param string $path Full path of fie
+     *
+     * @return array
+     */
+    protected function getContextForPhtml(string $page, string $path): array
     {
         return [
             'templateName' => $this->templateName,

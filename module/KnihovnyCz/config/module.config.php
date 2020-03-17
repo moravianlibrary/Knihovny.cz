@@ -80,7 +80,7 @@ $config = [
                     \KnihovnyCz\ContentBlock\DocumentTypes::class => \KnihovnyCz\ContentBlock\DocumentTypesFactory::class,
                     \KnihovnyCz\ContentBlock\Inspiration::class => \KnihovnyCz\ContentBlock\InspirationFactory::class,
                     \KnihovnyCz\ContentBlock\UserList::class => \KnihovnyCz\ContentBlock\UserListFactory::class,
-                    \KnihovnyCz\ContentBlock\TemplateBased::class => \Laminas\ServiceManager\Factory\InvokableFactory::class,
+                    \KnihovnyCz\ContentBlock\TemplateBased::class => \KnihovnyCz\ContentBlock\TemplateBasedFactory::class,
                 ],
                 'aliases' => [
                     'documenttypes' => \KnihovnyCz\ContentBlock\DocumentTypes::class,
