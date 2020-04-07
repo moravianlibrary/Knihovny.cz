@@ -82,7 +82,7 @@ trait PatentTrait
         $fields024 = $this->getStructuredDataFieldArray('024');
         $mpts = array_filter(
             $fields024, function ($part) {
-                return $part['2'] !== 'MPTS';
+                return isset($part['2']) && ($part['2'] === 'MPT');
             }
         );
         $mpts = array_map(
