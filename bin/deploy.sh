@@ -70,11 +70,13 @@ cd $PROJECT_PATH
 CURRENT_BRANCH=$(git symbolic-ref --short -q HEAD)
 CURRENT_BRANCH=${CURRENT_BRANCH:-HEAD}
 
-git checkout "$branch"
+git fetch
+git checkout "origin/$branch"
 if [[ $? != 0 ]]; then
   echo 'Cannot run git checkout, ensure you have ale changes commited'
   exit 1
 fi
+
 
 $PROJECT_PATH/bin/run.sh -d -t devel -p $http_port -s $https_port -b $branch -service $service -n $container_name
 
