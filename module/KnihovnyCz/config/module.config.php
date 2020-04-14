@@ -114,13 +114,25 @@ $config = [
                 'aliases' => [
                     'obalkyknih' => \KnihovnyCz\Content\TOC\ObalkyKnih::class
                 ]
-            ]
+            ],
+            'ajaxhandler' => [
+                'factories' => [
+                    \KnihovnyCz\AjaxHandler\UpdateContent::class => \KnihovnyCz\AjaxHandler\UpdateContentFactory::class,
+                ],
+                'aliases' => [
+                    'updateContent' => \KnihovnyCz\AjaxHandler\UpdateContent::class,
+                ],
+            ],
         ],
     ],
     'service_manager' => [
         'factories' => [
             \KnihovnyCz\Content\ObalkyKnihService::class => \KnihovnyCz\Content\ObalkyKnihServiceFactory::class,
+            \GitWrapper\GitWorkingCopy::class => \KnihovnyCz\Service\GitFactory::class,
         ],
+        'invokables' => [
+            \Symfony\Component\Filesystem\Filesystem::class,
+        ]
     ],
 ];
 

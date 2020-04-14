@@ -59,7 +59,17 @@ init_search2_config() {
         "$CONFIG_SEARCH2"
 }
 
+init_content_config() {
+    CONFIG_CONTENT="${PARAM_VUFIND_CONFIG_ABS_DIR}/config/vufind/content.local.ini"
+
+    cp /tmp/content.local.template.ini "$CONFIG_CONTENT"
+    sed -i \
+        -e "s#PARAM_PORTAL_PAGES_BRANCH#${PARAM_PORTAL_PAGES_BRANCH}#g" \
+        "$CONFIG_CONTENT"
+}
+
 init_config_local "$@"
 init_eds_config "$@"
 init_search2_config "$@"
+init_content_config "$@"
 exit $?
