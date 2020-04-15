@@ -32,7 +32,7 @@ namespace KnihovnyCz\Config;
 use Interop\Container\ContainerInterface;
 use Laminas\ServiceManager\Factory\FactoryInterface;
 
-class PluginManagerFactory implements FactoryInterface
+class PluginManagerFactory extends \VuFind\Config\PluginManagerFactory
 {
     /**
      * Create an object
@@ -51,13 +51,7 @@ class PluginManagerFactory implements FactoryInterface
     public function __invoke(ContainerInterface $container, $requestedName,
         array $options = null
     ) {
-        if (!empty($options)) {
-            throw new \Exception('Unexpected options sent to factory.');
-        }
-        $config = $container->get('Config');
-        $service = new $requestedName(
-            $container, $config['vufind']['config_reader'],
-        );
+        $service = parent::__invoke($container, $requestedName, $options);
         $service->addAbstractFactory(\KnihovnyCz\Config\PluginFactory::class);
         return $service;
     }
