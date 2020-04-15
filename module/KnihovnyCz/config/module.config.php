@@ -131,6 +131,10 @@ $config = [
         'factories' => [
             \KnihovnyCz\Content\ObalkyKnihService::class => \KnihovnyCz\Content\ObalkyKnihServiceFactory::class,
             \GitWrapper\GitWorkingCopy::class => \KnihovnyCz\Service\GitFactory::class,
+            \KnihovnyCz\Config\PluginManager::class => \KnihovnyCz\Config\PluginManagerFactory::class,
+        ],
+        'aliases' => [
+            \VuFind\Config\PluginManager::class => \KnihovnyCz\Config\PluginManager::class,
         ],
         'invokables' => [
             \Symfony\Component\Filesystem\Filesystem::class,
