@@ -20,17 +20,17 @@ ALTER TABLE `citation_style`
 ALTER TABLE `citation_style`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=2;
 
-INSERT INTO `citation_style` (`id`, `description`, `value`) 
+INSERT INTO `citation_style` (`id`, `description`, `value`)
   VALUES (NULL, 'ČSN ISO 690', '38673'),
-         (NULL, 'Harvard', '3'), 
+         (NULL, 'Harvard', '3'),
          (NULL, 'NISO/ANSI Z39.29 (2005)', '4'),
-         (NULL, 'MLA (7th edition)', '5'), 
-         (NULL, 'Turabian (7th edition)', '6'), 
-         (NULL, 'Chicago (16th edition)', '7'), 
-         (NULL, 'IEEE', '8'), 
-         (NULL, 'CSE', '9'), 
-         (NULL, 'CSE NY', '10'), 
-         (NULL, 'APA', '11'), 
+         (NULL, 'MLA (7th edition)', '5'),
+         (NULL, 'Turabian (7th edition)', '6'),
+         (NULL, 'Chicago (16th edition)', '7'),
+         (NULL, 'IEEE', '8'),
+         (NULL, 'CSE', '9'),
+         (NULL, 'CSE NY', '10'),
+         (NULL, 'APA', '11'),
          (NULL, 'ISO 690', '12');
 
 
@@ -49,7 +49,7 @@ ALTER TABLE `user_settings`
 
 ALTER TABLE `user_settings`
   ADD FOREIGN KEY (user_id) REFERENCES user(id);
-  
+
 ALTER TABLE `user_settings`
   ADD FOREIGN KEY (citation_style) REFERENCES citation_style(id);
 
@@ -236,7 +236,7 @@ ALTER TABLE `aleph_configs` ADD `type` MEDIUMTEXT NOT NULL COMMENT 'Which resolv
 
 ALTER TABLE `aleph_configs` CHANGE `hmac_key` `hmac_key` MEDIUMTEXT CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT 'This is used with creating a hash to verify prolongation url';
 
-ALTER TABLE `aleph_configs` CHANGE `default_patron` `default_patron` MEDIUMTEXT CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT 'Default patron ID will be included into these queries, where we want to know item''s requestability'; 
+ALTER TABLE `aleph_configs` CHANGE `default_patron` `default_patron` MEDIUMTEXT CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT 'Default patron ID will be included into these queries, where we want to know item''s requestability';
 
 ALTER TABLE `aleph_configs` CHANGE `maxItemsParsed` `maxItemsParsed` INT(2) NOT NULL COMMENT 'To disable this feature set this to -1 .. if you unset it, there will be set 10 as default';
 
@@ -549,7 +549,7 @@ DROP TABLE `favorite_authors`;
 
 UPDATE `system` SET `value`='40' WHERE `key`='DB_VERSION';
 
-ALTER TABLE `notifications` DROP FOREIGN KEY `notification_usercard_id`; 
+ALTER TABLE `notifications` DROP FOREIGN KEY `notification_usercard_id`;
 
 TRUNCATE TABLE `notifications` ;
 
@@ -559,7 +559,7 @@ ALTER TABLE `notifications` CHANGE `user` `user` INT(11) NULL DEFAULT NULL;
 
 ALTER TABLE `notifications` ADD `user_card` INT(11) NULL DEFAULT NULL AFTER `user`, ADD INDEX (`user_card`);
 
-ALTER TABLE `notifications` ADD CONSTRAINT `notification_usercard_id` FOREIGN KEY (`user_card`) REFERENCES `user_card`(`id`) ON DELETE CASCADE ON UPDATE CASCADE; 
+ALTER TABLE `notifications` ADD CONSTRAINT `notification_usercard_id` FOREIGN KEY (`user_card`) REFERENCES `user_card`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 UPDATE `system` SET `value`='41' WHERE `key`='DB_VERSION';
 
@@ -631,35 +631,35 @@ UPDATE `system` SET `value`='46' WHERE `key`='DB_VERSION';
 
 ALTER TABLE `widget` ADD `title_cs` VARCHAR(128) NOT NULL , ADD `title_en` VARCHAR(128) NOT NULL ;
 
-UPDATE `widget` 
-SET `title_cs` = 'Nejpůjčovanější knihy 2015', `title_en` = 'Popular books in 2015' 
-WHERE `widget`.`id` = 1; 
-UPDATE `widget` 
-SET `title_cs` = 'Akce', `title_en` = 'Events' 
-WHERE `widget`.`id` = 2; 
-UPDATE `widget` 
-SET `title_cs` = 'Víte, že ...', `title_en` = 'You know that ...' 
-WHERE `widget`.`id` = 3; 
-UPDATE `widget` 
-SET `title_cs` = 'Oblíbení autoři', `title_en` = 'Favorite authors' 
-WHERE `widget`.`id` = 4; 
-UPDATE `widget` 
-SET `title_cs` = 'Inspirace 1', `title_en` = 'Inspiration 1' 
-WHERE `widget`.`id` = 5; 
-UPDATE `widget` 
-SET `title_cs` = 'Inspirace 2', `title_en` = 'Inspiration 2' 
-WHERE `widget`.`id` = 6; 
-UPDATE `widget` 
-SET `title_cs` = 'Inspirace 3', `title_en` = 'Inspiration 3' 
-WHERE `widget`.`id` = 7; 
-UPDATE `widget` 
-SET `title_cs` = 'Inspirace 4', `title_en` = 'Inspiration 4' 
-WHERE `widget`.`id` = 8; 
-UPDATE `widget` 
-SET `title_cs` = 'Inspirace 5', `title_en` = 'Inspiration 5' 
-WHERE `widget`.`id` = 9; 
-UPDATE `widget` 
-SET `title_cs` = 'Inspirace 6', `title_en` = 'Inspiration 6' 
+UPDATE `widget`
+SET `title_cs` = 'Nejpůjčovanější knihy 2015', `title_en` = 'Popular books in 2015'
+WHERE `widget`.`id` = 1;
+UPDATE `widget`
+SET `title_cs` = 'Akce', `title_en` = 'Events'
+WHERE `widget`.`id` = 2;
+UPDATE `widget`
+SET `title_cs` = 'Víte, že ...', `title_en` = 'You know that ...'
+WHERE `widget`.`id` = 3;
+UPDATE `widget`
+SET `title_cs` = 'Oblíbení autoři', `title_en` = 'Favorite authors'
+WHERE `widget`.`id` = 4;
+UPDATE `widget`
+SET `title_cs` = 'Inspirace 1', `title_en` = 'Inspiration 1'
+WHERE `widget`.`id` = 5;
+UPDATE `widget`
+SET `title_cs` = 'Inspirace 2', `title_en` = 'Inspiration 2'
+WHERE `widget`.`id` = 6;
+UPDATE `widget`
+SET `title_cs` = 'Inspirace 3', `title_en` = 'Inspiration 3'
+WHERE `widget`.`id` = 7;
+UPDATE `widget`
+SET `title_cs` = 'Inspirace 4', `title_en` = 'Inspiration 4'
+WHERE `widget`.`id` = 8;
+UPDATE `widget`
+SET `title_cs` = 'Inspirace 5', `title_en` = 'Inspiration 5'
+WHERE `widget`.`id` = 9;
+UPDATE `widget`
+SET `title_cs` = 'Inspirace 6', `title_en` = 'Inspiration 6'
 WHERE `widget`.`id` = 10;
 
 ALTER TABLE `widget` ADD `show_all_records_link` BOOLEAN NOT NULL ;
@@ -667,28 +667,28 @@ UPDATE `widget` SET `show_all_records_link`=1 WHERE 1;
 
 ALTER TABLE `widget` ADD `shown_records_number` INT NOT NULL ;
 
-UPDATE `widget` SET `shown_records_number` = '5' WHERE `widget`.`id` = 1; 
-UPDATE `widget` SET `shown_records_number` = '5' WHERE `widget`.`id` = 2; 
-UPDATE `widget` SET `shown_records_number` = '4' WHERE `widget`.`id` = 3; 
-UPDATE `widget` SET `shown_records_number` = '5' WHERE `widget`.`id` = 4; 
-UPDATE `widget` SET `shown_records_number` = '5' WHERE `widget`.`id` = 5; 
-UPDATE `widget` SET `shown_records_number` = '5' WHERE `widget`.`id` = 6; 
-UPDATE `widget` SET `shown_records_number` = '5' WHERE `widget`.`id` = 7; 
-UPDATE `widget` SET `shown_records_number` = '5' WHERE `widget`.`id` = 8; 
-UPDATE `widget` SET `shown_records_number` = '5' WHERE `widget`.`id` = 9; 
+UPDATE `widget` SET `shown_records_number` = '5' WHERE `widget`.`id` = 1;
+UPDATE `widget` SET `shown_records_number` = '5' WHERE `widget`.`id` = 2;
+UPDATE `widget` SET `shown_records_number` = '4' WHERE `widget`.`id` = 3;
+UPDATE `widget` SET `shown_records_number` = '5' WHERE `widget`.`id` = 4;
+UPDATE `widget` SET `shown_records_number` = '5' WHERE `widget`.`id` = 5;
+UPDATE `widget` SET `shown_records_number` = '5' WHERE `widget`.`id` = 6;
+UPDATE `widget` SET `shown_records_number` = '5' WHERE `widget`.`id` = 7;
+UPDATE `widget` SET `shown_records_number` = '5' WHERE `widget`.`id` = 8;
+UPDATE `widget` SET `shown_records_number` = '5' WHERE `widget`.`id` = 9;
 UPDATE `widget` SET `shown_records_number` = '5' WHERE `widget`.`id` = 10;
 
 
 ALTER TABLE `widget` ADD `showCover` BOOLEAN NOT NULL ;
 
-UPDATE `widget` SET `showCover` = '1' WHERE `widget`.`id` = 1; 
-UPDATE `widget` SET `showCover` = '1' WHERE `widget`.`id` = 3; 
-UPDATE `widget` SET `showCover` = '1' WHERE `widget`.`id` = 4; 
-UPDATE `widget` SET `showCover` = '1' WHERE `widget`.`id` = 5; 
-UPDATE `widget` SET `showCover` = '1' WHERE `widget`.`id` = 6; 
-UPDATE `widget` SET `showCover` = '1' WHERE `widget`.`id` = 7; 
-UPDATE `widget` SET `showCover` = '1' WHERE `widget`.`id` = 8; 
-UPDATE `widget` SET `showCover` = '1' WHERE `widget`.`id` = 9; 
+UPDATE `widget` SET `showCover` = '1' WHERE `widget`.`id` = 1;
+UPDATE `widget` SET `showCover` = '1' WHERE `widget`.`id` = 3;
+UPDATE `widget` SET `showCover` = '1' WHERE `widget`.`id` = 4;
+UPDATE `widget` SET `showCover` = '1' WHERE `widget`.`id` = 5;
+UPDATE `widget` SET `showCover` = '1' WHERE `widget`.`id` = 6;
+UPDATE `widget` SET `showCover` = '1' WHERE `widget`.`id` = 7;
+UPDATE `widget` SET `showCover` = '1' WHERE `widget`.`id` = 8;
+UPDATE `widget` SET `showCover` = '1' WHERE `widget`.`id` = 9;
 UPDATE `widget` SET `showCover` = '1' WHERE `widget`.`id` = 10;
 
 ALTER TABLE `widget` CHANGE `showCover` `show_cover` TINYINT(1) NOT NULL;
@@ -698,15 +698,15 @@ UPDATE `system` SET `value`='47' WHERE `key`='DB_VERSION';
 ALTER TABLE `widget` ADD `description` VARCHAR(32) NOT NULL ;
 
 UPDATE `widget` SET `description` = 'author' WHERE `widget`.`id` = 1;
-UPDATE `widget` SET `description` = 'description' WHERE `widget`.`id` = 2; 
-UPDATE `widget` SET `description` = 'description' WHERE `widget`.`id` = 3; 
-UPDATE `widget` SET `description` = 'description' WHERE `widget`.`id` = 4; 
-UPDATE `widget` SET `description` = 'author' WHERE `widget`.`id` = 5; 
-UPDATE `widget` SET `description` = 'author' WHERE `widget`.`id` = 6; 
-UPDATE `widget` SET `description` = 'author' WHERE `widget`.`id` = 7; 
-UPDATE `widget` SET `description` = 'author' WHERE `widget`.`id` = 8; 
-UPDATE `widget` SET `description` = 'author' WHERE `widget`.`id` = 9; 
-UPDATE `widget` SET `description` = 'author' WHERE `widget`.`id` = 10; 
+UPDATE `widget` SET `description` = 'description' WHERE `widget`.`id` = 2;
+UPDATE `widget` SET `description` = 'description' WHERE `widget`.`id` = 3;
+UPDATE `widget` SET `description` = 'description' WHERE `widget`.`id` = 4;
+UPDATE `widget` SET `description` = 'author' WHERE `widget`.`id` = 5;
+UPDATE `widget` SET `description` = 'author' WHERE `widget`.`id` = 6;
+UPDATE `widget` SET `description` = 'author' WHERE `widget`.`id` = 7;
+UPDATE `widget` SET `description` = 'author' WHERE `widget`.`id` = 8;
+UPDATE `widget` SET `description` = 'author' WHERE `widget`.`id` = 9;
+UPDATE `widget` SET `description` = 'author' WHERE `widget`.`id` = 10;
 UPDATE `widget` SET `description` = 'author' WHERE `widget`.`id` = 13;
 
 UPDATE `system` SET `value`='48' WHERE `key`='DB_VERSION';
@@ -722,9 +722,9 @@ ALTER TABLE `modal_specific_contents` ADD `source` VARCHAR(12) NOT NULL ;
 UPDATE `system` SET `value`='49' WHERE `key`='DB_VERSION';
 
 ALTER TABLE `modal_specific_contents` DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci;
-ALTER TABLE `modal_specific_contents` 
-  CHANGE `language_code` `language_code` VARCHAR(32) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL, 
-  CHANGE `content` `content` TEXT CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL, 
+ALTER TABLE `modal_specific_contents`
+  CHANGE `language_code` `language_code` VARCHAR(32) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
+  CHANGE `content` `content` TEXT CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
   CHANGE `source` `source` VARCHAR(12) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL;
 UPDATE `system` SET `value`='50' WHERE `key`='DB_VERSION';
 
@@ -1005,3 +1005,17 @@ ALTER TABLE `user_card`
     ADD CONSTRAINT `user_card_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE;
 UPDATE `system` SET `value` = '67' WHERE `key`='DB_VERSION';
 
+--
+-- Create table config
+--
+CREATE TABLE `config` (
+    `id` int(11) NOT NULL AUTO_INCREMENT,
+    `file` varchar(191) COLLATE utf8_unicode_ci NOT NULL,
+    `section` varchar(191) COLLATE utf8_unicode_ci NOT NULL,
+    `item` varchar(191) COLLATE utf8_unicode_ci NOT NULL,
+    `array_key` varchar(191) COLLATE utf8_unicode_ci NOT NULL,
+    `value` text COLLATE utf8_unicode_ci NOT NULL,
+    PRIMARY KEY (`id`),
+    KEY `file` (`file`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+UPDATE `system` SET `value` = '68' WHERE `key`='DB_VERSION';
