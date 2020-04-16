@@ -1006,16 +1006,70 @@ ALTER TABLE `user_card`
 UPDATE `system` SET `value` = '67' WHERE `key`='DB_VERSION';
 
 --
+-- Create table config_files
+--
+CREATE TABLE `config_files` (
+    `id` int(11) NOT NULL AUTO_INCREMENT,
+    `file_name` varchar(191) COLLATE utf8_unicode_ci NOT NULL,
+    PRIMARY KEY (`id`),
+    KEY `name` (`file_name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='Konfigurační soubory';
+
+INSERT INTO `config_files` (`id`, `file_name`) VALUES
+(2,	'content'),
+(1,	'searches');
+
+--
+-- Create table config_sections
+--
+
+DROP TABLE IF EXISTS `config_sections`;
+CREATE TABLE `config_sections` (
+    `id` int(11) NOT NULL AUTO_INCREMENT,
+    `section_name` varchar(191) COLLATE utf8_unicode_ci NOT NULL,
+    PRIMARY KEY (`id`),
+    KEY `section_name` (`section_name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='Sekce konfigurace';
+
+INSERT INTO `config_sections` (`id`, `section_name`) VALUES
+(3,	'DocumentTypesContentBlock'),
+(1,	'HomePage'),
+(2,	'Inspiration');
+
+--
 -- Create table config
 --
+
+DROP TABLE IF EXISTS `config`;
 CREATE TABLE `config` (
     `id` int(11) NOT NULL AUTO_INCREMENT,
-    `file` varchar(191) COLLATE utf8_unicode_ci NOT NULL,
-    `section` varchar(191) COLLATE utf8_unicode_ci NOT NULL,
+    `file_id` int(11) NOT NULL,
+    `section_id` int(11) NOT NULL,
     `item` varchar(191) COLLATE utf8_unicode_ci NOT NULL,
-    `array_key` varchar(191) COLLATE utf8_unicode_ci NOT NULL,
+    `array_key` varchar(191) COLLATE utf8_unicode_ci DEFAULT NULL,
     `value` text COLLATE utf8_unicode_ci NOT NULL,
+    `order` int(11) NOT NULL,
     PRIMARY KEY (`id`),
-    KEY `file` (`file`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+    KEY `file_id` (`file_id`),
+    KEY `section_id` (`section_id`),
+    CONSTRAINT `config_ibfk_1` FOREIGN KEY (`section_id`) REFERENCES `config_sections` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT `config_ibfk_2` FOREIGN KEY (`file_id`) REFERENCES `config_files` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='Konfigurace';
+
+INSERT INTO `config` (`id`, `file_id`, `section_id`, `item`, `array_key`, `value`, `order`) VALUES
+(1,	2,	2,	'content_block',	NULL,	'Inspiration:ceny_nebula_a_hugo',	0),
+(2,	2,	2,	'content_block',	NULL,	'Inspiration:templars',	0),
+(3,	1,	1,	'content',	NULL,	'TemplateBased:header-panel',	10),
+(4,	1,	1,	'content',	NULL,	'DocumentTypes:DocumentTypesContentBlock',	20),
+(5,	2,	2,	'content_block',	NULL,	'TemplateBased:header-panel',	0),
+(6,	1,	1,	'content',	NULL,	'Inspiration:eknihy_ke_stazeni',	30),
+(7,	1,	1,	'content',	NULL,	'UserList:162',	40),
+(8,	1,	3,	'item',	NULL,	'doctypes_widget_norms;doctypes_widget_norms_description;pr-format-norms;0/NORMS/',	10),
+(9,	1,	3,	'item',	NULL,	'doctypes_widget_maps;doctypes_widget_maps_description;pr-format-maps;0/MAPS/',	20),
+(10,	1,	3,	'item',	NULL,	'doctypes_widget_legislative_laws;doctypes_widget_legislative_laws_description;pr-format-legislative;0/LEGISLATIVE/',	30),
+(11,	1,	3,	'item',	NULL,	'doctypes_widget_authorities;doctypes_widget_authorities_description;pr-format-user-single5;1/OTHER/PERSON/',	40),
+(12,	1,	3,	'item',	NULL,	'doctypes_widget_patents;doctypes_widget_patents_description;pr-format-patents;0/PATENTS/',	50),
+(13,	1,	3,	'item',	NULL,	'doctypes_widget_articles;doctypes_widget_articles_description;pr-format-articles;0/ARTICLES/',	60),
+(14,	1,	3,	'item',	NULL,	'doctypes_widget_musical_scores;doctypes_widget_musical_scores_description;pr-format-musicalscores;0/MUSICAL_SCORES/',	70);
+
 UPDATE `system` SET `value` = '68' WHERE `key`='DB_VERSION';
