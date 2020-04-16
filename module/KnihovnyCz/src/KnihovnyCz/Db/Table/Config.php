@@ -31,6 +31,8 @@ namespace KnihovnyCz\Db\Table;
 
 use Laminas\Config\Config as LaminasConfig;
 use Laminas\Db\Adapter\Adapter;
+use Laminas\Db\ResultSet\ResultSetInterface;
+use Laminas\Db\Sql\Select;
 use VuFind\Db\Row\RowGateway;
 use VuFind\Db\Table\Gateway;
 use VuFind\Db\Table\PluginManager;
@@ -54,7 +56,39 @@ class Config extends Gateway
 
     public function getConfigByFile(string $file): LaminasConfig
     {
-        $file = $this->select(['file' => $file]);
-        return new LaminasConfig($file->toArray());
+        $file = $this->getDataByConfigFile($file);
+        $data = [];
+        foreach ($file as $item) {
+            // We have array key, the configuration option is array with this key:
+            if (isset($item->array_key) && $item->array_key !== null) {
+                $data[$item->section][$item->item][$item->array_key] = $item->value;
+            // We have more then one value, we should turn the value into array
+            } elseif (isset($data[$item->section][$item->item]) && is_string($data[$item->section][$item->item])) {
+                $data[$item->section][$item->item] = [
+                    $data[$item->section][$item->item],
+                    $item->value
+                ];
+            // We have more then one value, and it is array, add new value to array:
+            } elseif (isset($data[$item->section][$item->item]) && is_array($data[$item->section][$item->item])) {
+                $data[$item->section][$item->item][] = $item->value;
+            // Option have single value:
+            } else {
+                $data[$item->section][$item->item] = $item->value;
+            }
+        }
+        return new LaminasConfig($data);
+    }
+
+    protected function getDataByConfigFile(string $filename): ResultSetInterface
+    {
+        $file = $this->select(function (Select $select) use ($filename) {
+            $select
+                ->columns(['id', 'item', 'array_key', 'value'])
+                ->join('config_files', 'file_id = config_files.id', [])
+                ->join('config_sections', 'section_id = config_sections.id', ['section' => 'section_name'] )
+                ->where(['config_files.file_name' => $filename])
+                ->order(['item', 'order']);
+        });
+        return $file;
     }
 }
