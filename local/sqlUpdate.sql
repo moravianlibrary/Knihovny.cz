@@ -1052,6 +1052,8 @@ CREATE TABLE `config` (
     PRIMARY KEY (`id`),
     KEY `file_id` (`file_id`),
     KEY `section_id` (`section_id`),
+    KEY `order` (`order`),
+    KEY `item` (`item`),
     CONSTRAINT `config_ibfk_1` FOREIGN KEY (`section_id`) REFERENCES `config_sections` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
     CONSTRAINT `config_ibfk_2` FOREIGN KEY (`file_id`) REFERENCES `config_files` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='Konfigurace';
