@@ -59,19 +59,17 @@ class Config extends Gateway
         $file = $this->getDataByConfigFile($file);
         $data = [];
         foreach ($file as $item) {
-            // We have array key, the configuration option is array with this key:
-            if (isset($item->array_key) && $item->array_key !== null) {
-                $data[$item->section][$item->item][$item->array_key] = $item->value;
-            // We have more then one value, we should turn the value into array
-            } elseif (isset($data[$item->section][$item->item]) && is_string($data[$item->section][$item->item])) {
-                $data[$item->section][$item->item] = [
-                    $data[$item->section][$item->item],
-                    $item->value
-                ];
-            // We have more then one value, and it is array, add new value to array:
-            } elseif (isset($data[$item->section][$item->item]) && is_array($data[$item->section][$item->item])) {
-                $data[$item->section][$item->item][] = $item->value;
-            // Option have single value:
+            // The type is array:
+            if ($item->type == 'array') {
+                // we have array_key, use it:
+                if (isset($item->array_key) && $item->array_key !== null) {
+                    $data[$item->section][$item->item][$item->array_key]
+                        = $item->value;
+                // We do not have array_key, just leave it on numbers:
+                } else {
+                    $data[$item->section][$item->item][] = $item->value;
+                }
+            // Type is string:
             } else {
                 $data[$item->section][$item->item] = $item->value;
             }
@@ -86,6 +84,7 @@ class Config extends Gateway
                 ->columns(['id', 'item', 'array_key', 'value'])
                 ->join('config_files', 'file_id = config_files.id', [])
                 ->join('config_sections', 'section_id = config_sections.id', ['section' => 'section_name'] )
+                ->join('config_items', 'item_id = config_items.id', ['type' => 'type'])
                 ->where(['config_files.file_name' => $filename, 'active' => 1])
                 ->order(['item', 'order']);
         });
