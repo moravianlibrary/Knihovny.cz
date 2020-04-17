@@ -1049,11 +1049,13 @@ CREATE TABLE `config` (
     `array_key` varchar(191) COLLATE utf8_unicode_ci DEFAULT NULL,
     `value` text COLLATE utf8_unicode_ci NOT NULL,
     `order` int(11) NOT NULL,
+    `active` tinyint(1) NOT NULL DEFAULT '1',
     PRIMARY KEY (`id`),
     KEY `file_id` (`file_id`),
     KEY `section_id` (`section_id`),
     KEY `order` (`order`),
     KEY `item` (`item`),
+    KEY `active` (`active`),
     CONSTRAINT `config_ibfk_1` FOREIGN KEY (`section_id`) REFERENCES `config_sections` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
     CONSTRAINT `config_ibfk_2` FOREIGN KEY (`file_id`) REFERENCES `config_files` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='Konfigurace';

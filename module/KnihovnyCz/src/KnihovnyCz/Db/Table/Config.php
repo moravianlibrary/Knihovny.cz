@@ -86,7 +86,7 @@ class Config extends Gateway
                 ->columns(['id', 'item', 'array_key', 'value'])
                 ->join('config_files', 'file_id = config_files.id', [])
                 ->join('config_sections', 'section_id = config_sections.id', ['section' => 'section_name'] )
-                ->where(['config_files.file_name' => $filename])
+                ->where(['config_files.file_name' => $filename, 'active' => 1])
                 ->order(['item', 'order']);
         });
         return $file;
