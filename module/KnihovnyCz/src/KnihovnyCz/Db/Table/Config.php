@@ -54,6 +54,13 @@ class Config extends Gateway
         parent::__construct($adapter, $tm, $cfg, $rowObj, $table);
     }
 
+    /**
+     * Get config by file
+     *
+     * @param string $file Filename as known in original VuFind
+     *
+     * @return LaminasConfig
+     */
     public function getConfigByFile(string $file): LaminasConfig
     {
         $file = $this->getDataByConfigFile($file);
@@ -77,6 +84,13 @@ class Config extends Gateway
         return new LaminasConfig($data);
     }
 
+    /**
+     * Get configuratoin data from database
+     *
+     * @param string $filename Filename as known in original VuFind
+     *
+     * @return ResultSetInterface
+     */
     protected function getDataByConfigFile(string $filename): ResultSetInterface
     {
         $file = $this->select(function (Select $select) use ($filename) {
