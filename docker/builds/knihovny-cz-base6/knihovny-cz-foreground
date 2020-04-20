@@ -56,8 +56,9 @@ mkdir "${PARAM_VUFIND_SRC:-/var/www/src}/log"
 env
 
 # This has to be done so that the server can create caches & logs
-chgrp -R www-data "${PARAM_VUFIND_SRC:-/var/www/src}"
-chmod -R g+w "${PARAM_VUFIND_SRC:-/var/www/src}"
+chgrp -R www-data "/var/www"
+chmod -R g+w "/var/www/knihovny-cz-extension/themes"
+chmod -R g+w "${PARAM_VUFIND_SRC:-/var/www/src}/log"
 
 echo
 echo " --- Bootstrapping done! "
