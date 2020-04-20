@@ -1103,4 +1103,12 @@ ALTER TABLE `inst_configs`
     CHANGE `key` `key` varchar(64) COLLATE 'utf8_general_ci' NOT NULL COMMENT 'Klíč' AFTER `section`,
     CHANGE `value` `value` mediumtext COLLATE 'utf8_general_ci' NOT NULL COMMENT 'Hodnota' AFTER `key`;
 
+--
+-- Komentáře k tabulce citation_styles
+--
+ALTER TABLE `citation_style`
+    CHANGE `description` `description` varchar(32) COLLATE 'utf8_general_ci' NULL COMMENT 'Popis citačního stylu' AFTER `id`,
+    CHANGE `value` `value` varchar(8) COLLATE 'utf8_general_ci' NULL COMMENT 'Id v Citace.com' AFTER `description`,
+    COMMENT='Citační styly';
+
 UPDATE `system` SET `value` = '68' WHERE `key`='DB_VERSION';
