@@ -1010,7 +1010,7 @@ UPDATE `system` SET `value` = '67' WHERE `key`='DB_VERSION';
 --
 CREATE TABLE `config_files` (
     `id` int(11) NOT NULL AUTO_INCREMENT,
-    `file_name` varchar(191) COLLATE utf8_unicode_ci NOT NULL,
+    `file_name` varchar(191) COLLATE utf8_unicode_ci NOT NULL COMMENT 'Název souboru',
     PRIMARY KEY (`id`),
     KEY `name` (`file_name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='Konfigurační soubory';
@@ -1026,7 +1026,7 @@ INSERT INTO `config_files` (`id`, `file_name`) VALUES
 DROP TABLE IF EXISTS `config_sections`;
 CREATE TABLE `config_sections` (
     `id` int(11) NOT NULL AUTO_INCREMENT,
-    `section_name` varchar(191) COLLATE utf8_unicode_ci NOT NULL,
+    `section_name` varchar(191) COLLATE utf8_unicode_ci NOT NULL COMMENT 'Název sekce',
     PRIMARY KEY (`id`),
     KEY `section_name` (`section_name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='Sekce konfigurace';
@@ -1043,8 +1043,8 @@ INSERT INTO `config_sections` (`id`, `section_name`) VALUES
 DROP TABLE IF EXISTS `config_items`;
 CREATE TABLE `config_items` (
     `id` int(11) NOT NULL AUTO_INCREMENT,
-    `name` varchar(191) COLLATE utf8_unicode_ci NOT NULL,
-    `type` enum('string','array') COLLATE utf8_unicode_ci NOT NULL DEFAULT 'string',
+    `name` varchar(191) COLLATE utf8_unicode_ci NOT NULL COMMENT 'Název položky',
+    `type` enum('string','array') COLLATE utf8_unicode_ci NOT NULL DEFAULT 'string' COMMENT 'Typ',
 PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='Konfigurační položky';
 
@@ -1059,21 +1059,21 @@ INSERT INTO `config_items` (`id`, `name`, `type`) VALUES
 DROP TABLE IF EXISTS `config`;
 CREATE TABLE `config` (
     `id` int(11) NOT NULL AUTO_INCREMENT,
-    `file_id` int(11) NOT NULL,
-    `section_id` int(11) NOT NULL,
-    `item_id` int(11) NOT NULL,
-    `array_key` varchar(191) COLLATE utf8_unicode_ci DEFAULT NULL,
-    `value` text COLLATE utf8_unicode_ci NOT NULL,
-    `order` int(11) NOT NULL,
-    `active` tinyint(1) NOT NULL DEFAULT '1',
+    `file_id` int(11) NOT NULL COMMENT 'Soubor',
+    `section_id` int(11) NOT NULL COMMENT 'Sekce',
+    `item` varchar(191) COLLATE utf8_unicode_ci NOT NULL COMMENT 'Položka (klíč) - text',
+    `item_id` int(11) NOT NULL COMMENT 'Položka (klíč)',
+    `array_key` varchar(191) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT 'Klíč pole (nepovinné)',
+    `value` text COLLATE utf8_unicode_ci NOT NULL COMMENT 'Hodnota',
+    `order` int(11) NOT NULL COMMENT 'Pořadí',
+    `active` tinyint(1) NOT NULL DEFAULT '1' COMMENT 'Aktivní?',
     PRIMARY KEY (`id`),
     KEY `file_id` (`file_id`),
     KEY `section_id` (`section_id`),
-    KEY `order` (`order`),
     KEY `active` (`active`),
     KEY `item_id` (`item_id`),
     CONSTRAINT `config_ibfk_1` FOREIGN KEY (`section_id`) REFERENCES `config_sections` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-    CONSTRAINT `config_ibfk_2` FOREIGN KEY (`file_id`) REFERENCES `config_files` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+    CONSTRAINT `config_ibfk_2` FOREIGN KEY (`file_id`) REFERENCES `config_files` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
     CONSTRAINT `config_ibfk_3` FOREIGN KEY (`item_id`) REFERENCES `config_items` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='Konfigurace';
 
@@ -1092,5 +1092,15 @@ INSERT INTO `config` (`id`, `file_id`, `section_id`, `item_id`, `array_key`, `va
 (12,	1,	3,	2,	NULL,	'doctypes_widget_patents;doctypes_widget_patents_description;pr-format-patents;0/PATENTS/',	50,	1),
 (13,	1,	3,	2,	NULL,	'doctypes_widget_articles;doctypes_widget_articles_description;pr-format-articles;0/ARTICLES/',	60,	1),
 (14,	1,	3,	2,	NULL,	'doctypes_widget_musical_scores;doctypes_widget_musical_scores_description;pr-format-musicalscores;0/MUSICAL_SCORES/',	70,	1);
+
+--
+-- Aktualizace tabulky inst_configs
+--
+ALTER TABLE `inst_configs`
+    COMMENT='Konfigurace knihoven',
+    CHANGE `source` `source` varchar(10) COLLATE 'utf8_general_ci' NOT NULL DEFAULT '' COMMENT 'Knihovna (source)' AFTER `id`,
+    CHANGE `section` `section` varchar(64) COLLATE 'utf8_general_ci' NOT NULL COMMENT 'Sekce' AFTER `source`,
+    CHANGE `key` `key` varchar(64) COLLATE 'utf8_general_ci' NOT NULL COMMENT 'Klíč' AFTER `section`,
+    CHANGE `value` `value` mediumtext COLLATE 'utf8_general_ci' NOT NULL COMMENT 'Hodnota' AFTER `key`;
 
 UPDATE `system` SET `value` = '68' WHERE `key`='DB_VERSION';
