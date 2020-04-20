@@ -29,6 +29,28 @@
 namespace KnihovnyCz\Module\Configuration;
 
 $config = [
+     'router' => [
+         'routes' => [
+             'inpspiration' => [
+                 'type' => \Laminas\Router\Http\Segment::class,
+                 'options' => [
+                     'route' => '/Inspiration',
+                     'defaults' => [
+                         'controller' => 'Inspiration',
+                         'action' => 'Home'
+                     ],
+                 ],
+             ],
+         ],
+     ],
+    'controllers' => [
+        'factories' => [
+            \KnihovnyCz\Controller\InspirationController::class => \VuFind\Controller\AbstractBaseFactory::class,
+        ],
+        'aliases' => [
+            'Inspiration' => \KnihovnyCz\Controller\InspirationController::class,
+        ],
+    ],
     'vufind' => [
         'plugin_managers' => [
             'recorddriver' =>  [
