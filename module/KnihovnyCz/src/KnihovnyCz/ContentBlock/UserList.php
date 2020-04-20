@@ -46,6 +46,13 @@ class UserList implements \VuFind\ContentBlock\ContentBlockInterface
     protected $listId;
 
     /**
+     * Limit
+     *
+     * @var int
+     */
+    protected $limit;
+
+    /**
      * Search runner
      *
      * @var \VuFind\Search\SearchRunner
@@ -61,14 +68,17 @@ class UserList implements \VuFind\ContentBlock\ContentBlockInterface
     }
 
     protected function getUserList() {
-        return $this->runner->run(['id' => $this->listId], $this->searchClassId);
+        return $this->runner->run(['id' => $this->listId, 'limit' => $this->limit],
+            $this->searchClassId
+        );
     }
     /**
      * @inheritDoc
      */
     public function setConfig($settings)
     {
-        $this->listId = $settings;
+        list($this->listId, $limit) = explode(':', $settings);
+        $this->limit = $limit ?? 10;
     }
 
     /**
