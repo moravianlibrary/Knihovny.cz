@@ -85,7 +85,7 @@ class Config extends Gateway
     }
 
     /**
-     * Get configuratoin data from database
+     * Get configuration data from database
      *
      * @param string $filename Filename as known in original VuFind
      *
