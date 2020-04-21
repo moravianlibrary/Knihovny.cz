@@ -77,6 +77,13 @@ class Inspiration implements \VuFind\ContentBlock\ContentBlockInterface
     protected $key;
 
     /**
+     * Limit
+     *
+     * @var int
+     */
+    protected $limit;
+
+    /**
      * Widget row
      *
      * @var \KnihovnyCz\Db\Row\Widget
@@ -116,7 +123,7 @@ class Inspiration implements \VuFind\ContentBlock\ContentBlockInterface
             );
             $select = $widgetContent->getSql()->select();
             $select->where(['widget_id' => $widget->id]);
-            $select->limit(10);
+            $select->limit($this->limit);
             $select->order(new Expression('RAND()'));
             $content = $widgetContent->selectWith($select);
             $this->items = [];
@@ -166,6 +173,7 @@ class Inspiration implements \VuFind\ContentBlock\ContentBlockInterface
      */
     public function setConfig($settings)
     {
-        $this->key = $settings;
+        list($this->key, $limit) = explode(':', $settings);
+        $this->limit = $limit ?? 10;
     }
 }
