@@ -1112,3 +1112,158 @@ ALTER TABLE `citation_style`
     COMMENT='Citační styly';
 
 UPDATE `system` SET `value` = '68' WHERE `key`='DB_VERSION';
+
+--
+-- Odstranění nepoužívaných tabulek
+--
+DROP TABLE `frontend`;
+DROP TABLE `infobox`;
+DROP TABLE `inspirations`;
+DROP TABLE `portal_pages`;
+
+--
+-- Vytvoření a naplnění sources
+--
+DROP TABLE IF EXISTS `inst_sources`;
+CREATE TABLE `inst_sources` (
+    `id` int(11) NOT NULL AUTO_INCREMENT,
+    `source` varchar(191) COLLATE utf8_general_ci NOT NULL COMMENT 'Knihovna (source)',
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci COMMENT='Knihovny';
+
+INSERT INTO inst_sources (source) SELECT DISTINCT source FROM inst_configs;
+ALTER TABLE `inst_configs` ADD `source_id` int NOT NULL COMMENT 'Knihovna (source)' AFTER `source`;
+UPDATE inst_configs c JOIN inst_sources s ON c.source = s.source SET c.source_id = s.id;
+
+ALTER TABLE `inst_configs`
+    ADD FOREIGN KEY (`source_id`) REFERENCES `inst_sources` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+ALTER TABLE `inst_configs` DROP `source`;
+
+--
+-- Vytvoření a naplnění sections
+--
+DROP TABLE IF EXISTS `inst_sections`;
+CREATE TABLE `inst_sections` (
+    `id` int(11) NOT NULL AUTO_INCREMENT,
+    `section_name` varchar(191) NOT NULL COMMENT 'Název sekce',
+    PRIMARY KEY (`id`),
+    KEY `section_name` (`section_name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Knihovny - sekce';
+UPDATE `system` SET `value` = '69' WHERE `key`='DB_VERSION';
+
+INSERT INTO inst_sections (section_name) SELECT DISTINCT section FROM inst_configs;
+ALTER TABLE `inst_configs` ADD `section_id` int NOT NULL COMMENT 'Sekce' AFTER `section`;
+UPDATE inst_configs c JOIN inst_sections s ON c.section = s.section_name SET c.section_id = s.id;
+
+ALTER TABLE `inst_configs` DROP `section`;
+
+--
+-- Vytvoření a naplnění items
+--
+DROP TABLE IF EXISTS `inst_keys`;
+CREATE TABLE `inst_keys` (
+    `id` int(11) NOT NULL AUTO_INCREMENT,
+    `key_name` varchar(191) NOT NULL COMMENT 'Název položky',
+    `section_id` int(11) NOT NULL COMMENT 'Sekce',
+    PRIMARY KEY (`id`),
+    KEY `key_name` (`key_name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Knihovny - položky konfigurace';
+
+INSERT INTO inst_keys (key_name) SELECT DISTINCT `key` FROM inst_configs;
+ALTER TABLE `inst_configs` ADD `key_id` int NOT NULL COMMENT 'Položka' AFTER `key`;
+UPDATE inst_configs c JOIN inst_keys k ON c.`key` = k.key_name SET c.key_id = k.id;
+
+ALTER TABLE `inst_configs`
+    ADD FOREIGN KEY (`key_id`) REFERENCES `inst_keys` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+ALTER TABLE `inst_configs` DROP `key`;
+
+DELETE FROM `inst_keys` WHERE (`key_name` = 'authMethod');
+DELETE FROM `inst_keys` WHERE (`key_name` = 'cannotUseLUIS');
+DELETE FROM `inst_keys` WHERE (`key_name` = 'contactPerson');
+DELETE FROM `inst_keys` WHERE (`key_name` = 'debug');
+DELETE FROM `inst_keys` WHERE (`key_name` = 'requester');
+DELETE FROM `inst_keys` WHERE (`key_name` = 'tokenEndpoint');
+DELETE FROM `inst_keys` WHERE (`key_name` = 'ttl');
+DELETE FROM `inst_keys` WHERE (`key_name` = 'type');
+
+-- rename dlfport to dlfurl and create it from host and port
+UPDATE inst_configs c
+    JOIN inst_keys k ON c.key_id = k.id
+    SET c.value = CONCAT(
+        (SELECT ic.value
+         FROM (SELECT * FROM inst_configs) AS ic
+                  JOIN inst_keys ik ON ic.key_id = ik.id
+         WHERE ik.key_name = 'host' AND ic.source_id = c.source_id
+        ), ':', c.value)
+WHERE k.key_name = 'dlfport';
+UPDATE `inst_keys` SET `key_name` = 'dlfurl' WHERE `key_name` = 'dlfport';
+
+-- Create reference from keys to sections
+UPDATE  inst_keys k JOIN inst_configs c ON k.id = c.key_id SET k.section_id = c.section_id;
+
+ALTER TABLE `inst_keys`
+    ADD FOREIGN KEY (`section_id`) REFERENCES `inst_sections` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+ALTER TABLE `inst_configs` DROP `section_id`;
+
+-- Create templates for inst_configs
+INSERT INTO `inst_sources` (`id`, `source`) VALUES
+('!aleph'),
+('!koha'),
+('!ncip');
+
+INSERT INTO `inst_configs` (`source_id`, `key_id`, `value`) VALUES
+((SELECT id FROM inst_sources WHERE source = '!aleph'),	2,	'Aleph.common.ini'),
+((SELECT id FROM inst_sources WHERE source = '!aleph'),	4,	'_API_HOST'),
+((SELECT id FROM inst_sources WHERE source = '!aleph'),	5,	'_DLF_API_URL'),
+((SELECT id FROM inst_sources WHERE source = '!aleph'),	7,	''),
+((SELECT id FROM inst_sources WHERE source = '!aleph'),	8,	'1'),
+((SELECT id FROM inst_sources WHERE source = '!aleph'),	9,	'_RANDOM_KEY'),
+((SELECT id FROM inst_sources WHERE source = '!aleph'),	10,	'_BIBBASE'),
+((SELECT id FROM inst_sources WHERE source = '!aleph'),	11,	'_ADMBASE'),
+((SELECT id FROM inst_sources WHERE source = '!aleph'),	12,	'_ADMBASE'),
+((SELECT id FROM inst_sources WHERE source = '!aleph'),	13,	''),
+((SELECT id FROM inst_sources WHERE source = '!aleph'),	14,	''),
+((SELECT id FROM inst_sources WHERE source = '!aleph'),	15,	'On Shelf,Na místě'),
+((SELECT id FROM inst_sources WHERE source = '!aleph'),	16,	''),
+((SELECT id FROM inst_sources WHERE source = '!aleph'),	17,	''),
+((SELECT id FROM inst_sources WHERE source = '!aleph'),	18,	''),
+((SELECT id FROM inst_sources WHERE source = '!aleph'),	19,	'_LOGO_URL'),
+((SELECT id FROM inst_sources WHERE source = '!aleph'),	20,	'_SOURCE'),
+((SELECT id FROM inst_sources WHERE source = '!aleph'),	21,	'_SOURCE'),
+((SELECT id FROM inst_sources WHERE source = '!aleph'),	22,	'15'),
+((SELECT id FROM inst_sources WHERE source = '!aleph'),	23,	''),
+((SELECT id FROM inst_sources WHERE source = '!aleph'),	24,	'z304-address-5'),
+((SELECT id FROM inst_sources WHERE source = '!aleph'),	25,	'z304-address-1'),
+((SELECT id FROM inst_sources WHERE source = '!aleph'),	26,	'z304-address-2'),
+((SELECT id FROM inst_sources WHERE source = '!aleph'),	27,	'z304-address-3'),
+((SELECT id FROM inst_sources WHERE source = '!aleph'),	28,	'z304-zip'),
+((SELECT id FROM inst_sources WHERE source = '!aleph'),	29,	'z304-email-address'),
+((SELECT id FROM inst_sources WHERE source = '!aleph'),	30,	'z304-telephone-1'),
+((SELECT id FROM inst_sources WHERE source = '!aleph'),	31,	'z305-bor-status'),
+((SELECT id FROM inst_sources WHERE source = '!aleph'),	32,	'z305-expiry-date'),
+((SELECT id FROM inst_sources WHERE source = '!aleph'),	36,	'10'),
+((SELECT id FROM inst_sources WHERE source = '!koha'),	4,	'_API_HOST'),
+((SELECT id FROM inst_sources WHERE source = '!koha'),	20,	'_SOURCE'),
+((SELECT id FROM inst_sources WHERE source = '!koha'),	21,	'_SOURCE'),
+((SELECT id FROM inst_sources WHERE source = '!koha'),	46,	'_CLIENT_ID'),
+((SELECT id FROM inst_sources WHERE source = '!koha'),	47,	'_CLIENT_SECRET'),
+((SELECT id FROM inst_sources WHERE source = '!koha'),	48,	'client_credentials'),
+((SELECT id FROM inst_sources WHERE source = '!koha'),	52,	'_MAIN_BRANCH'),
+((SELECT id FROM inst_sources WHERE source = '!ncip'),	19,	'_LOGO_URL'),
+((SELECT id FROM inst_sources WHERE source = '!ncip'),	20,	'_SOURCE'),
+((SELECT id FROM inst_sources WHERE source = '!ncip'),	21,	'_SOURCE'),
+((SELECT id FROM inst_sources WHERE source = '!ncip'),	33,	'_NCIP_URL'),
+((SELECT id FROM inst_sources WHERE source = '!ncip'),	34,	''),
+((SELECT id FROM inst_sources WHERE source = '!ncip'),	35,	'_SIGLA'),
+((SELECT id FROM inst_sources WHERE source = '!ncip'),	36,	'10'),
+((SELECT id FROM inst_sources WHERE source = '!ncip'),	37,	'0'),
+((SELECT id FROM inst_sources WHERE source = '!ncip'),	38,	'10'),
+((SELECT id FROM inst_sources WHERE source = '!ncip'),	39,	''),
+((SELECT id FROM inst_sources WHERE source = '!ncip'),	40,	''),
+((SELECT id FROM inst_sources WHERE source = '!ncip'),	42,	'0'),
+((SELECT id FROM inst_sources WHERE source = '!ncip'),	43,	'Arl,Clavius,DaVinci,Tritius,Verbis'),
+((SELECT id FROM inst_sources WHERE source = '!ncip'),	44,	'0');
+
+UPDATE `system` SET `value` = '69' WHERE `key`='DB_VERSION';
