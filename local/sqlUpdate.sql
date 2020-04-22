@@ -1061,7 +1061,6 @@ CREATE TABLE `config` (
     `id` int(11) NOT NULL AUTO_INCREMENT,
     `file_id` int(11) NOT NULL COMMENT 'Soubor',
     `section_id` int(11) NOT NULL COMMENT 'Sekce',
-    `item` varchar(191) COLLATE utf8_unicode_ci NOT NULL COMMENT 'Položka (klíč) - text',
     `item_id` int(11) NOT NULL COMMENT 'Položka (klíč)',
     `array_key` varchar(191) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT 'Klíč pole (nepovinné)',
     `value` text COLLATE utf8_unicode_ci NOT NULL COMMENT 'Hodnota',
