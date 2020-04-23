@@ -20,7 +20,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  *
  * @category VuFind
- * @package  RecordDrivers      
+ * @package  RecordDrivers
  * @author   Josef Moravec <moravec@mzk.cz>
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     http://github.com/moravianlibrary/Knihovny.cz Knihovny.cz
@@ -35,12 +35,6 @@ class SolrMarc extends \KnihovnyCz\RecordDriver\SolrDefault
     use \VuFind\RecordDriver\MarcAdvancedTrait;
     use MarcField996AwareTrait;
     use PatentTrait;
-
-    public function getSourceId()
-    {
-        list ($source, $localId) = explode('.', $this->getUniqueID());
-        return $source;
-    }
 
     public function getISSNFromMarc()
     {

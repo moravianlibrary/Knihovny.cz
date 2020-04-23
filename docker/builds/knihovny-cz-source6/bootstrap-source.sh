@@ -49,6 +49,27 @@ init_eds_config() {
     fi;
 }
 
+init_search2_config() {
+    CONFIG_SEARCH2="${PARAM_VUFIND_CONFIG_ABS_DIR}/config/vufind/Search2.local.ini"
+
+    cp /tmp/Search2.local.template.ini "$CONFIG_SEARCH2"
+    sed -i \
+        -e "s#PARAM_VUFIND_SEARCH2_SOLR_URL#${PARAM_VUFIND_SEARCH2_SOLR_URL}#g" \
+        -e "s#PARAM_VUFIND_SEARCH2_SOLR_INDEX#${PARAM_VUFIND_SEARCH2_SOLR_INDEX}#g" \
+        "$CONFIG_SEARCH2"
+}
+
+init_content_config() {
+    CONFIG_CONTENT="${PARAM_VUFIND_CONFIG_ABS_DIR}/config/vufind/content.local.ini"
+
+    cp /tmp/content.local.template.ini "$CONFIG_CONTENT"
+    sed -i \
+        -e "s#PARAM_PORTAL_PAGES_BRANCH#${PARAM_PORTAL_PAGES_BRANCH}#g" \
+        "$CONFIG_CONTENT"
+}
+
 init_config_local "$@"
 init_eds_config "$@"
+init_search2_config "$@"
+init_content_config "$@"
 exit $?
