@@ -39,7 +39,7 @@
 
 <?php
 $dataJson = json_encode($data);
-$select2 = <<<EOT
+$select2 = <<<JS
 var options = $dataJson;
 function template(option) {
   return $('<span class="institutions-selector"><img src="' + option.image + '">' + option.text + '</span>');
@@ -56,5 +56,5 @@ jQuery(document).ready(function($) {
     window.location.href = e.params.data.href;
   });
 });
-EOT;
+JS;
 echo $this->inlineScript(\Laminas\View\Helper\HeadScript::SCRIPT, $select2, 'SET');
