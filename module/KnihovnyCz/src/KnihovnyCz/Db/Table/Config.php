@@ -95,10 +95,10 @@ class Config extends Gateway
     {
         $file = $this->select(function (Select $select) use ($filename) {
             $select
-                ->columns(['id', 'item', 'array_key', 'value'])
+                ->columns(['id', 'array_key', 'value'])
                 ->join('config_files', 'file_id = config_files.id', [])
                 ->join('config_sections', 'section_id = config_sections.id', ['section' => 'section_name'] )
-                ->join('config_items', 'item_id = config_items.id', ['type' => 'type'])
+                ->join('config_items', 'item_id = config_items.id', ['type' => 'type', 'item' => 'name'])
                 ->where(['config_files.file_name' => $filename, 'active' => 1])
                 ->order(['item', 'order']);
         });
