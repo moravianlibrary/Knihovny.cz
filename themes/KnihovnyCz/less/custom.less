@@ -1,42 +1,24 @@
 @import url('https://fonts.googleapis.com/css?family=Lato:100,100i,300,300i,400,400i,700,700i,900,900i&display=swap&subset=latin-ext');
 
-@import "bootstrap"; /* Include bootstrap theme's less base */
+@import "bootstrap";
 @import "variables";
 
-@import "variables";
-
-/* Change variables to change colors and values through-out the theme */
-@image-path: "../../local_theme_example/images";
-@active-orange: #fff93c;
-@dark-green: #137752;
-/* Bootstrap variables as well */
-@brand-primary: #0045a1;
-@body-bg: #5ab48a;
-@grid-gutter-width: 20px;
-
-/* Change specific styles below */
-body {
-  font-size: 14px;
-  color: #333;
-}
 header {
   background-color: #fff;
   box-shadow: 0 1px 5px #ccc;
 }
 
-.document-type-widget {
-  .iconlabel {
-    padding-top: 6px;
+footer {
+  width: initial;
+  background-color: #222222;
+  color: #f6f6f6;
+
+  a {
+    color: #cccccc;
   }
 
-  .widget-icon {
-    font-size: 3rem;
-    color: @grey-color;
-    padding-left: 5px;
-  }
-
-  .content {
-    padding-left: 20px;
+  a:hover {
+    color: #ffffff;
   }
 }
 
@@ -46,6 +28,7 @@ header {
 
 span.institutions-selector {
   font-size: 1.2em;
+
   img {
     height: 1em;
     margin-right: 8px;
@@ -56,18 +39,5 @@ span.institutions-selector {
 .template-dir-inspiration.template-name-home {
   .col-md-4.widget:nth-child(3n+1) {
     clear: left;
-  }
-}
-
-/* You can also organize these styles in separate files and @import them */
-@import "home-page";
-@import "knihovny-cz-icons";
-
-  a {
-    color: #cccccc;
-  }
-
-  a:hover {
-    color: #ffffff;
   }
 }
