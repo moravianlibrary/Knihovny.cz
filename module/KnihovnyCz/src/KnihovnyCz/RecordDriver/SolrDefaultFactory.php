@@ -32,6 +32,12 @@ class SolrDefaultFactory extends \VuFind\RecordDriver\SolrDefaultFactory
             $container->get(\VuFind\Config\PluginManager::class)
                 ->get('MultiBackend')->LibraryIDMapping
         );
+        $driver->attachGoogleService(
+            $container->get(\KnihovnyCz\Service\GoogleBooksLinkService::class)
+        );
+        $driver->attachZboziService(
+            $container->get(\KnihovnyCz\Service\ZboziLinkService::class)
+        );
         return $driver;
     }
 }

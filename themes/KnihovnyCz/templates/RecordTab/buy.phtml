@@ -1,0 +1,17 @@
+<?php
+// Set page title.
+$this->headTitle($this->driver->getBreadcrumb());
+?>
+<h3><?= $this->translate('Compare prices via'); ?></h3>
+
+<div class="buy-links">
+  <?php
+  $links = $this->driver->getBuyLinks();
+  foreach ($links as $id => $link): ?>
+    <span id='<?= $id; ?>-link'>
+      <a title='<?= $this->translate($link['label']) ?>'
+         href='<?= $link['href'] ?>' class='btn btn-default' target='_blank'>
+        <?= $this->translate($link['label']) ?></a>
+    </span>
+  <?php endforeach; ?>
+</div>
