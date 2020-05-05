@@ -85,6 +85,7 @@ $config = [
             ],
             'recordtab' => [
                 'invokables' => [
+                    'buy' => \KnihovnyCz\RecordTab\Buy::class,
                     'dedupedrecords' => \KnihovnyCz\RecordTab\DedupedRecords::class,
                     'edsavailability' => \KnihovnyCz\RecordTab\EdsAvailability::class,
                     'eversion' => \KnihovnyCz\RecordTab\EVersion::class,
@@ -160,6 +161,8 @@ $config = [
         ],
         'invokables' => [
             \Symfony\Component\Filesystem\Filesystem::class,
+            \KnihovnyCz\Service\GoogleBooksLinkService::class,
+            \KnihovnyCz\Service\ZboziLinkService::class,
         ]
     ],
 ];

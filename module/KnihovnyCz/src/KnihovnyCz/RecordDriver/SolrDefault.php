@@ -28,8 +28,11 @@
 
 namespace KnihovnyCz\RecordDriver;
 
+use VuFind\Exception\RecordMissing as RecordMissingException;
+
 class SolrDefault extends \VuFind\RecordDriver\SolrDefault
 {
+    use BuyLinksTrait;
 
     /**
      * These Solr fields should be used for snippets if available (listed in order
@@ -347,7 +350,12 @@ class SolrDefault extends \VuFind\RecordDriver\SolrDefault
     {
         if ($this->parentRecord === null && $this->recordLoader !== null) {
             $parentRecordId = $this->getParentRecordID();
-            $this->parentRecord = $this->recordLoader->load($parentRecordId);
+            try {
+                $this->parentRecord = $this->recordLoader->load($parentRecordId);
+            } catch (RecordMissingException $exception) {
+                // If there is no parent record (e.g. this is parent), we could
+                // safely keep parent record variable at null
+            }
         }
         return $this->parentRecord;
     }
