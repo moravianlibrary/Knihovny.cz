@@ -28,8 +28,11 @@
 
 namespace KnihovnyCz\RecordDriver;
 
+use VuFind\Exception\RecordMissing as RecordMissingException;
+
 class SolrDefault extends \VuFind\RecordDriver\SolrDefault
 {
+    use BuyLinksTrait;
 
     /**
      * These Solr fields should be used for snippets if available (listed in order
@@ -50,6 +53,13 @@ class SolrDefault extends \VuFind\RecordDriver\SolrDefault
      * @var \VuFind\Record\Loader|null
      */
     protected $recordLoader = null;
+
+    /**
+     * Library id mappings (by source)
+     *
+     * @var \Laminas\Config\Config
+     */
+    protected $libraryIdMappings;
 
     /**
      * Get the publishers of the record.
@@ -74,6 +84,12 @@ class SolrDefault extends \VuFind\RecordDriver\SolrDefault
     public function getParentRecordID()
     {
         return $this->fields['parent_id_str'] ?? '';
+    }
+
+    public function getSourceId()
+    {
+        list ($source) = explode('.', $this->getUniqueID());
+        return $source;
     }
 
     /**
@@ -334,7 +350,12 @@ class SolrDefault extends \VuFind\RecordDriver\SolrDefault
     {
         if ($this->parentRecord === null && $this->recordLoader !== null) {
             $parentRecordId = $this->getParentRecordID();
-            $this->parentRecord = $this->recordLoader->load($parentRecordId);
+            try {
+                $this->parentRecord = $this->recordLoader->load($parentRecordId);
+            } catch (RecordMissingException $exception) {
+                // If there is no parent record (e.g. this is parent), we could
+                // safely keep parent record variable at null
+            }
         }
         return $this->parentRecord;
     }
@@ -369,10 +390,10 @@ class SolrDefault extends \VuFind\RecordDriver\SolrDefault
     {
         return array_map(
             function ($localId) {
+                list($source) = explode('.', $localId);
                 return [
-                'source' => 'source_'
-                    . substr($localId, 0, (int)strpos($localId, '.')),
-                'id' => $localId,
+                    'source' => $source,
+                    'id' => $localId,
                 ];
             }, (array)$this->getParentRecord()->tryMethod('getChildrenIds')
         );
@@ -388,5 +409,28 @@ class SolrDefault extends \VuFind\RecordDriver\SolrDefault
     public function attachRecordLoader(\VuFind\Record\Loader $recordLoader)
     {
         $this->recordLoader = $recordLoader;
+    }
+
+    /**
+     * Attach libary id mappings
+     *
+     * @param \Laminas\Config\Config $mappings Mappings from config
+     *
+     * @return void
+     */
+    public function attachLibraryIdMappings(\Laminas\Config\Config $mappings)
+    {
+        $this->libraryIdMappings = $mappings;
+    }
+
+    /**
+     * Get owning library id
+     *
+     * @return string|null
+     */
+    public function getOwningLibraryId(): ?string
+    {
+        $source = $this->getSourceId();
+        return $this->libraryIdMappings[$source] ?? null;
     }
 }

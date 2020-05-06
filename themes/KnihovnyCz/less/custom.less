@@ -1,33 +1,58 @@
-@import "bootstrap"; /* Include bootstrap theme's less base */
+@import url('https://fonts.googleapis.com/css?family=Lato:100,100i,300,300i,400,400i,700,700i,900,900i&display=swap&subset=latin-ext');
 
-/* Change variables to change colors and values through-out the theme */
-@image-path: "../../local_theme_example/images";
-@active-orange: #fff93c;
-@dark-green: #137752;
-/* Bootstrap variables as well */
-@brand-primary: #0045a1;
-@body-bg: #5ab48a;
-@grid-gutter-width: 20px;
+@import "bootstrap";
+@import "variables";
 
-/* Change specific styles below */
-body {
-  font-size: 14px;
-  color: #333;
-}
 header {
-  font-size: 16px;
-  color: @dark-green;
-}
-.container {
-  padding-left: 2rem;
-  padding-right: 2rem;
-  border-left: 2px solid @dark-green;
-  border-right: 2px solid @dark-green;
   background-color: #fff;
-  border-radius: 0;
+  box-shadow: 0 1px 5px #ccc;
 }
-footer .container { border-bottom: 2px solid #137752; }
-.alert { padding: 8px; }
 
-/* You can also organize these styles in separate files and @import them */
-@import "home-page";
+footer {
+  width: initial;
+  background-color: #222222;
+  color: #f6f6f6;
+
+  a {
+    color: #cccccc;
+  }
+
+  a:hover {
+    color: #ffffff;
+  }
+}
+
+#records-in-groups-container {
+  margin-top: 10px;
+}
+
+span.institutions-selector {
+  font-size: 1.2em;
+
+  img {
+    height: 1em;
+    margin-right: 8px;
+    vertical-align: baseline;
+  }
+}
+
+.template-dir-inspiration.template-name-home {
+  .col-md-4.widget:nth-child(3n+1) {
+    clear: left;
+  }
+}
+
+.buy-links a.btn {
+  font-weight: bold;
+}
+
+.buy-links a {
+  border: 1px solid @brand-primary;
+  color: @brand-primary;
+  text-transform: uppercase;
+  &:hover, &:focus {
+    color: #fff;
+    background-color: @primary-darken;
+    border: 1px solid @primary-darken;
+  }
+}

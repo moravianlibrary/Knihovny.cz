@@ -1,0 +1,55 @@
+<?php
+$coverDetails = $this->record($this->item)->getCoverDetails('result-list', 'medium', $this->recordLink()->getUrl($this->item));
+$cover = $coverDetails['html'];
+$thumbnail = false;
+$thumbnailAlignment = $this->record($this->item)->getThumbnailAlignment('result');
+if ($cover):
+  ob_start(); ?>
+  <div class="media-<?=$thumbnailAlignment ?> <?=$this->escapeHtmlAttr($coverDetails['size'])?>">
+    <?=$cover ?>
+  </div>
+  <?php $thumbnail = ob_get_contents(); ?>
+  <?php ob_end_clean(); ?>
+<?php endif; ?>
+
+<?php $itemUrl = $this->recordLink()->getUrl($this->item); ?>
+<div class='list-group-item clearfix'>
+  <div class='row'>
+    <?php
+    $formats  = $this->item->getFormats(); ?>
+    <div class='col-xs-3 col-sm-2 col-md-3'>
+      <?php if($thumbnail): ?>
+        <?=$thumbnail?>
+      <?php elseif(!empty($formats)): ?>
+        <div class='iconlabel formats-icon-label'>
+          <i class='pr-format-<?= $this->record($this->item)->getFormatClass($formats[0]) ?>'></i>
+        </div>
+      <?php else: ?>
+        <img class='recordcover'
+             src='<?= $this->url('cover-unavailable') ?>'
+             alt='<?= $this->transEsc('No Cover Image') ?>'>
+      <?php endif; ?>
+    </div>
+
+    <div class='col-xs-9 col-sm-10 col-md-9 content'>
+      <div class='col-xs-12 content'>
+        <a href='<?=$itemUrl ?>'>
+        <h4 class='list-group-item-heading'>
+          <?=$this->item->getTitle() ?>
+        </h4>
+        <p class='list-group-item-text'>
+          <?php
+            $author = $this->item->getDisplayAuthor();
+            if (!empty($author)): ?>
+              <?=$author ?>
+            <?php else: ?>
+              <?php $corpAuthors = $this->item->getCorporateAuthors(); if (!empty($author)): ?>
+                <?=$corpAuthors[0] ?>
+              <?php endif; ?>
+            <?php endif; ?>
+        </p>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>

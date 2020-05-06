@@ -64,7 +64,23 @@ http_port=$(($port+10000))
 https_port=$(($port+10443))
 container_name="knihovny-devel-$branch"
 
-`dirname $(readlink -nf $0)`/run.sh -d -t devel -p $http_port -s $https_port -b $branch -service $service -n $container_name
+PROJECT_PATH=`dirname $(readlink -nf $0)`/..
+cd $PROJECT_PATH
+
+CURRENT_BRANCH=$(git symbolic-ref --short -q HEAD)
+CURRENT_BRANCH=${CURRENT_BRANCH:-HEAD}
+
+git fetch
+git checkout "origin/$branch"
+if [[ $? != 0 ]]; then
+  echo 'Cannot run git checkout, ensure you have ale changes commited'
+  exit 1
+fi
+
+
+$PROJECT_PATH/bin/run.sh -d -t devel -p $http_port -s $https_port -b $branch -service $service -n $container_name
+
+git checkout "$CURRENT_BRANCH"
 
 echo "URL:"
 echo "https://cpk-front.mzk.cz:${port}/"

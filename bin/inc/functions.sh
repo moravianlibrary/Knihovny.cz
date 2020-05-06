@@ -24,11 +24,14 @@ function merge_directory
     local repository=$5
     local baseApiUrl="https://raw.githubusercontent.com/$repository"
 
-    for current in $localDir/*
+    shopt -s nullglob
+    for current in $localDir/*{.ini,.phtml,/}
     do
         local coreEquivalent=$coreDir${current:$localDirLength}
         if [ -d "$current" ]
         then
+          current=${current%*/}
+          coreEquivalent=${coreEquivalent%*/}
           merge_directory "$current" "$coreEquivalent" "$old_commit" "$new_commit" "$repository"
         else
           local oldOriginalFile="/tmp/tmp-merge-old-original-`basename "$coreEquivalent"`"
