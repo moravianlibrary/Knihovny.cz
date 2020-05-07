@@ -15,8 +15,7 @@
         'image' => $imageSrc,
         'href' => $recordUrl,
         'selected' => ($record['source'] == $recordSource) ? true : false,
-        // TODO: 'source_' will became 'source::' after language file refactoring
-        'text' => $this->translate('source_' . $record['source']),
+        'text' => $this->translate('Source::' . $record['source']),
       ];
     }
   }
