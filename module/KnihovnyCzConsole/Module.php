@@ -29,8 +29,6 @@
 
 namespace KnihovnyCzConsole;
 
-use Laminas\Console\Adapter\AdapterInterface as Console;
-
 /**
  * Module for console commands
  *
@@ -65,23 +63,6 @@ class Module
                     __NAMESPACE__ => __DIR__ . '/src/' . __NAMESPACE__,
                 ],
             ],
-        ];
-    }
-
-    /**
-     * Return usage information
-     *
-     * @param Console $console Console adapter
-     *
-     * @return array
-     *
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     */
-    public function getConsoleUsage(Console $console)
-    {
-        return [
-            'util expire_users' => 'Remove unactive user accounts',
-            'util harvest_ebooks' => 'Harvest e-books from Solr and import to Widget'
         ];
     }
 }

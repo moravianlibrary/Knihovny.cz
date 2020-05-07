@@ -26,16 +26,16 @@
  * @link     https://knihovny.cz Main Page
  */
 
-namespace KnihovnyCzConsole\Command\Harvest;
+namespace KnihovnyCzConsole\Command\Util;
 
 use KnihovnyCz\Db\Table\Widget;
+use KnihovnyCz\Db\Table\WidgetContent;
 use Laminas\Config\Config;
-use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use VuFind\Db\Table\PluginManager as TableManager;
 
-class EbooksCommand extends Symfony\Component\Console\Command
+class HarvestEbooksCommand extends \Symfony\Component\Console\Command\Command
 {
     /**
      * The name of the command (the part after "public/index.php")
@@ -45,15 +45,31 @@ class EbooksCommand extends Symfony\Component\Console\Command
     protected static $defaultName = 'util/harvest_ebooks';
 
     /**
+     * Widget table
+     *
+     * @var Widget
+     */
+    protected $widgetTable;
+
+    /**
+     * Widget content table
+     *
+     * @var WidgetContent
+     */
+    protected $widgetContentTable;
+
+    /**
      * Constructor
      *
      * @param Config $config      Main VuFind config
-     * @param Widget $widgetTable Widget table gateway
+     * @param TableManager $widgetTable Widget table gateway
      */
-    public function __construct(Config $config, Widget $widgetTable)
+    public function __construct(Config $config, TableManager $tableManager, $name = null)
     {
         $this->config = $config;
-        $this->widgetTable = $widgetTable;
+        $this->widgetTable = $tableManager->get(Widget::class);
+        $this->widgetContentTable = $tableManager->get(WidgetContent::class);
+        parent::__construct($name);
     }
 
     /**
