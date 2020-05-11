@@ -29,22 +29,32 @@
 
 namespace KnihovnyCz\Db\Table;
 
+use Laminas\Db\Sql\Select;
+
 class User extends \VuFind\Db\Table\User
 {
+    use \VuFind\Db\Table\ExpirationTrait;
+
     /**
-     * Get a query representing expired user accounts (this can be passed
-     * to select() or delete() for further processing).
+     * Update the select statement to find records to delete.
      *
-     * @param int $daysOld Days from last_login
+     * @param Select $select  Select clause
+     * @param int    $daysOld Age in days of an "expired" record.
+     * @param int    $idFrom  Lowest id of rows to delete.
+     * @param int    $idTo    Highest id of rows to delete.
      *
-     * @return callable
+     * @return void
      */
-    public function getExpiredQuery($daysOld = 730)
-    {
-        // Determine the expiration date:
+    protected function expirationCallback($select, $daysOld, $idFrom = null,
+        $idTo = null
+    ) {
         $expireDate = date('Y-m-d', strtotime(sprintf('-%d days', (int)$daysOld)));
-        return function ($select) use ($expireDate) {
-            $select->where->lessThan('last_login', $expireDate);
-        };
+        $where = $select->where->lessThan('last_login', $expireDate);
+        if (null !== $idFrom) {
+            $where->and->greaterThanOrEqualTo('id', $idFrom);
+        }
+        if (null !== $idTo) {
+            $where->and->lessThanOrEqualTo('id', $idTo);
+        }
     }
 }
