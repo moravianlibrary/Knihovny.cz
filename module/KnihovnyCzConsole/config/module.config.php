@@ -6,12 +6,12 @@ $config = [
         'plugin_managers' => [
             'command' => [
                 'factories' => [
-                    \KnihovnyCzConsole\Command\Expire\UsersCommand::class => \Laminas\ServiceManager\Factory\InvokableFactory::class,
-                    \KnihovnyCzConsole\Command\Harvest\EbooksCommand::class => \KnihovnyCzConsole\Command\Harvest\EbooksCommandFactory::class,
+                    \KnihovnyCzConsole\Command\Util\ExpireUsersCommand::class => \KnihovnyCzConsole\Command\Util\ExpireUsersCommandFactory::class,
+                    \KnihovnyCzConsole\Command\Util\HarvestEbooksCommand::class => \KnihovnyCzConsole\Command\Util\HarvestEbooksCommandFactory::class,
                 ],
                 'aliases' => [
-                    'util/expire_users' => \KnihovnyCzConsole\Command\Expire\UsersCommand::class,
-                    'util/harvest_ebooks' => \KnihovnyCzConsole\Command\Harvest\EbooksCommand::class,
+                    'util/expire_users' => \KnihovnyCzConsole\Command\Util\ExpireUsersCommand::class,
+                    'util/harvest_ebooks' => \KnihovnyCzConsole\Command\Util\HarvestEbooksCommand::class,
                 ]
             ]
         ]

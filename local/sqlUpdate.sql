@@ -20,17 +20,17 @@ ALTER TABLE `citation_style`
 ALTER TABLE `citation_style`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=2;
 
-INSERT INTO `citation_style` (`id`, `description`, `value`) 
+INSERT INTO `citation_style` (`id`, `description`, `value`)
   VALUES (NULL, 'ČSN ISO 690', '38673'),
-         (NULL, 'Harvard', '3'), 
+         (NULL, 'Harvard', '3'),
          (NULL, 'NISO/ANSI Z39.29 (2005)', '4'),
-         (NULL, 'MLA (7th edition)', '5'), 
-         (NULL, 'Turabian (7th edition)', '6'), 
-         (NULL, 'Chicago (16th edition)', '7'), 
-         (NULL, 'IEEE', '8'), 
-         (NULL, 'CSE', '9'), 
-         (NULL, 'CSE NY', '10'), 
-         (NULL, 'APA', '11'), 
+         (NULL, 'MLA (7th edition)', '5'),
+         (NULL, 'Turabian (7th edition)', '6'),
+         (NULL, 'Chicago (16th edition)', '7'),
+         (NULL, 'IEEE', '8'),
+         (NULL, 'CSE', '9'),
+         (NULL, 'CSE NY', '10'),
+         (NULL, 'APA', '11'),
          (NULL, 'ISO 690', '12');
 
 
@@ -49,7 +49,7 @@ ALTER TABLE `user_settings`
 
 ALTER TABLE `user_settings`
   ADD FOREIGN KEY (user_id) REFERENCES user(id);
-  
+
 ALTER TABLE `user_settings`
   ADD FOREIGN KEY (citation_style) REFERENCES citation_style(id);
 
@@ -236,7 +236,7 @@ ALTER TABLE `aleph_configs` ADD `type` MEDIUMTEXT NOT NULL COMMENT 'Which resolv
 
 ALTER TABLE `aleph_configs` CHANGE `hmac_key` `hmac_key` MEDIUMTEXT CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT 'This is used with creating a hash to verify prolongation url';
 
-ALTER TABLE `aleph_configs` CHANGE `default_patron` `default_patron` MEDIUMTEXT CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT 'Default patron ID will be included into these queries, where we want to know item''s requestability'; 
+ALTER TABLE `aleph_configs` CHANGE `default_patron` `default_patron` MEDIUMTEXT CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT 'Default patron ID will be included into these queries, where we want to know item''s requestability';
 
 ALTER TABLE `aleph_configs` CHANGE `maxItemsParsed` `maxItemsParsed` INT(2) NOT NULL COMMENT 'To disable this feature set this to -1 .. if you unset it, there will be set 10 as default';
 
@@ -549,7 +549,7 @@ DROP TABLE `favorite_authors`;
 
 UPDATE `system` SET `value`='40' WHERE `key`='DB_VERSION';
 
-ALTER TABLE `notifications` DROP FOREIGN KEY `notification_usercard_id`; 
+ALTER TABLE `notifications` DROP FOREIGN KEY `notification_usercard_id`;
 
 TRUNCATE TABLE `notifications` ;
 
@@ -559,7 +559,7 @@ ALTER TABLE `notifications` CHANGE `user` `user` INT(11) NULL DEFAULT NULL;
 
 ALTER TABLE `notifications` ADD `user_card` INT(11) NULL DEFAULT NULL AFTER `user`, ADD INDEX (`user_card`);
 
-ALTER TABLE `notifications` ADD CONSTRAINT `notification_usercard_id` FOREIGN KEY (`user_card`) REFERENCES `user_card`(`id`) ON DELETE CASCADE ON UPDATE CASCADE; 
+ALTER TABLE `notifications` ADD CONSTRAINT `notification_usercard_id` FOREIGN KEY (`user_card`) REFERENCES `user_card`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 UPDATE `system` SET `value`='41' WHERE `key`='DB_VERSION';
 
@@ -631,35 +631,35 @@ UPDATE `system` SET `value`='46' WHERE `key`='DB_VERSION';
 
 ALTER TABLE `widget` ADD `title_cs` VARCHAR(128) NOT NULL , ADD `title_en` VARCHAR(128) NOT NULL ;
 
-UPDATE `widget` 
-SET `title_cs` = 'Nejpůjčovanější knihy 2015', `title_en` = 'Popular books in 2015' 
-WHERE `widget`.`id` = 1; 
-UPDATE `widget` 
-SET `title_cs` = 'Akce', `title_en` = 'Events' 
-WHERE `widget`.`id` = 2; 
-UPDATE `widget` 
-SET `title_cs` = 'Víte, že ...', `title_en` = 'You know that ...' 
-WHERE `widget`.`id` = 3; 
-UPDATE `widget` 
-SET `title_cs` = 'Oblíbení autoři', `title_en` = 'Favorite authors' 
-WHERE `widget`.`id` = 4; 
-UPDATE `widget` 
-SET `title_cs` = 'Inspirace 1', `title_en` = 'Inspiration 1' 
-WHERE `widget`.`id` = 5; 
-UPDATE `widget` 
-SET `title_cs` = 'Inspirace 2', `title_en` = 'Inspiration 2' 
-WHERE `widget`.`id` = 6; 
-UPDATE `widget` 
-SET `title_cs` = 'Inspirace 3', `title_en` = 'Inspiration 3' 
-WHERE `widget`.`id` = 7; 
-UPDATE `widget` 
-SET `title_cs` = 'Inspirace 4', `title_en` = 'Inspiration 4' 
-WHERE `widget`.`id` = 8; 
-UPDATE `widget` 
-SET `title_cs` = 'Inspirace 5', `title_en` = 'Inspiration 5' 
-WHERE `widget`.`id` = 9; 
-UPDATE `widget` 
-SET `title_cs` = 'Inspirace 6', `title_en` = 'Inspiration 6' 
+UPDATE `widget`
+SET `title_cs` = 'Nejpůjčovanější knihy 2015', `title_en` = 'Popular books in 2015'
+WHERE `widget`.`id` = 1;
+UPDATE `widget`
+SET `title_cs` = 'Akce', `title_en` = 'Events'
+WHERE `widget`.`id` = 2;
+UPDATE `widget`
+SET `title_cs` = 'Víte, že ...', `title_en` = 'You know that ...'
+WHERE `widget`.`id` = 3;
+UPDATE `widget`
+SET `title_cs` = 'Oblíbení autoři', `title_en` = 'Favorite authors'
+WHERE `widget`.`id` = 4;
+UPDATE `widget`
+SET `title_cs` = 'Inspirace 1', `title_en` = 'Inspiration 1'
+WHERE `widget`.`id` = 5;
+UPDATE `widget`
+SET `title_cs` = 'Inspirace 2', `title_en` = 'Inspiration 2'
+WHERE `widget`.`id` = 6;
+UPDATE `widget`
+SET `title_cs` = 'Inspirace 3', `title_en` = 'Inspiration 3'
+WHERE `widget`.`id` = 7;
+UPDATE `widget`
+SET `title_cs` = 'Inspirace 4', `title_en` = 'Inspiration 4'
+WHERE `widget`.`id` = 8;
+UPDATE `widget`
+SET `title_cs` = 'Inspirace 5', `title_en` = 'Inspiration 5'
+WHERE `widget`.`id` = 9;
+UPDATE `widget`
+SET `title_cs` = 'Inspirace 6', `title_en` = 'Inspiration 6'
 WHERE `widget`.`id` = 10;
 
 ALTER TABLE `widget` ADD `show_all_records_link` BOOLEAN NOT NULL ;
@@ -667,28 +667,28 @@ UPDATE `widget` SET `show_all_records_link`=1 WHERE 1;
 
 ALTER TABLE `widget` ADD `shown_records_number` INT NOT NULL ;
 
-UPDATE `widget` SET `shown_records_number` = '5' WHERE `widget`.`id` = 1; 
-UPDATE `widget` SET `shown_records_number` = '5' WHERE `widget`.`id` = 2; 
-UPDATE `widget` SET `shown_records_number` = '4' WHERE `widget`.`id` = 3; 
-UPDATE `widget` SET `shown_records_number` = '5' WHERE `widget`.`id` = 4; 
-UPDATE `widget` SET `shown_records_number` = '5' WHERE `widget`.`id` = 5; 
-UPDATE `widget` SET `shown_records_number` = '5' WHERE `widget`.`id` = 6; 
-UPDATE `widget` SET `shown_records_number` = '5' WHERE `widget`.`id` = 7; 
-UPDATE `widget` SET `shown_records_number` = '5' WHERE `widget`.`id` = 8; 
-UPDATE `widget` SET `shown_records_number` = '5' WHERE `widget`.`id` = 9; 
+UPDATE `widget` SET `shown_records_number` = '5' WHERE `widget`.`id` = 1;
+UPDATE `widget` SET `shown_records_number` = '5' WHERE `widget`.`id` = 2;
+UPDATE `widget` SET `shown_records_number` = '4' WHERE `widget`.`id` = 3;
+UPDATE `widget` SET `shown_records_number` = '5' WHERE `widget`.`id` = 4;
+UPDATE `widget` SET `shown_records_number` = '5' WHERE `widget`.`id` = 5;
+UPDATE `widget` SET `shown_records_number` = '5' WHERE `widget`.`id` = 6;
+UPDATE `widget` SET `shown_records_number` = '5' WHERE `widget`.`id` = 7;
+UPDATE `widget` SET `shown_records_number` = '5' WHERE `widget`.`id` = 8;
+UPDATE `widget` SET `shown_records_number` = '5' WHERE `widget`.`id` = 9;
 UPDATE `widget` SET `shown_records_number` = '5' WHERE `widget`.`id` = 10;
 
 
 ALTER TABLE `widget` ADD `showCover` BOOLEAN NOT NULL ;
 
-UPDATE `widget` SET `showCover` = '1' WHERE `widget`.`id` = 1; 
-UPDATE `widget` SET `showCover` = '1' WHERE `widget`.`id` = 3; 
-UPDATE `widget` SET `showCover` = '1' WHERE `widget`.`id` = 4; 
-UPDATE `widget` SET `showCover` = '1' WHERE `widget`.`id` = 5; 
-UPDATE `widget` SET `showCover` = '1' WHERE `widget`.`id` = 6; 
-UPDATE `widget` SET `showCover` = '1' WHERE `widget`.`id` = 7; 
-UPDATE `widget` SET `showCover` = '1' WHERE `widget`.`id` = 8; 
-UPDATE `widget` SET `showCover` = '1' WHERE `widget`.`id` = 9; 
+UPDATE `widget` SET `showCover` = '1' WHERE `widget`.`id` = 1;
+UPDATE `widget` SET `showCover` = '1' WHERE `widget`.`id` = 3;
+UPDATE `widget` SET `showCover` = '1' WHERE `widget`.`id` = 4;
+UPDATE `widget` SET `showCover` = '1' WHERE `widget`.`id` = 5;
+UPDATE `widget` SET `showCover` = '1' WHERE `widget`.`id` = 6;
+UPDATE `widget` SET `showCover` = '1' WHERE `widget`.`id` = 7;
+UPDATE `widget` SET `showCover` = '1' WHERE `widget`.`id` = 8;
+UPDATE `widget` SET `showCover` = '1' WHERE `widget`.`id` = 9;
 UPDATE `widget` SET `showCover` = '1' WHERE `widget`.`id` = 10;
 
 ALTER TABLE `widget` CHANGE `showCover` `show_cover` TINYINT(1) NOT NULL;
@@ -698,15 +698,15 @@ UPDATE `system` SET `value`='47' WHERE `key`='DB_VERSION';
 ALTER TABLE `widget` ADD `description` VARCHAR(32) NOT NULL ;
 
 UPDATE `widget` SET `description` = 'author' WHERE `widget`.`id` = 1;
-UPDATE `widget` SET `description` = 'description' WHERE `widget`.`id` = 2; 
-UPDATE `widget` SET `description` = 'description' WHERE `widget`.`id` = 3; 
-UPDATE `widget` SET `description` = 'description' WHERE `widget`.`id` = 4; 
-UPDATE `widget` SET `description` = 'author' WHERE `widget`.`id` = 5; 
-UPDATE `widget` SET `description` = 'author' WHERE `widget`.`id` = 6; 
-UPDATE `widget` SET `description` = 'author' WHERE `widget`.`id` = 7; 
-UPDATE `widget` SET `description` = 'author' WHERE `widget`.`id` = 8; 
-UPDATE `widget` SET `description` = 'author' WHERE `widget`.`id` = 9; 
-UPDATE `widget` SET `description` = 'author' WHERE `widget`.`id` = 10; 
+UPDATE `widget` SET `description` = 'description' WHERE `widget`.`id` = 2;
+UPDATE `widget` SET `description` = 'description' WHERE `widget`.`id` = 3;
+UPDATE `widget` SET `description` = 'description' WHERE `widget`.`id` = 4;
+UPDATE `widget` SET `description` = 'author' WHERE `widget`.`id` = 5;
+UPDATE `widget` SET `description` = 'author' WHERE `widget`.`id` = 6;
+UPDATE `widget` SET `description` = 'author' WHERE `widget`.`id` = 7;
+UPDATE `widget` SET `description` = 'author' WHERE `widget`.`id` = 8;
+UPDATE `widget` SET `description` = 'author' WHERE `widget`.`id` = 9;
+UPDATE `widget` SET `description` = 'author' WHERE `widget`.`id` = 10;
 UPDATE `widget` SET `description` = 'author' WHERE `widget`.`id` = 13;
 
 UPDATE `system` SET `value`='48' WHERE `key`='DB_VERSION';
@@ -722,9 +722,9 @@ ALTER TABLE `modal_specific_contents` ADD `source` VARCHAR(12) NOT NULL ;
 UPDATE `system` SET `value`='49' WHERE `key`='DB_VERSION';
 
 ALTER TABLE `modal_specific_contents` DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci;
-ALTER TABLE `modal_specific_contents` 
-  CHANGE `language_code` `language_code` VARCHAR(32) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL, 
-  CHANGE `content` `content` TEXT CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL, 
+ALTER TABLE `modal_specific_contents`
+  CHANGE `language_code` `language_code` VARCHAR(32) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
+  CHANGE `content` `content` TEXT CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
   CHANGE `source` `source` VARCHAR(12) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL;
 UPDATE `system` SET `value`='50' WHERE `key`='DB_VERSION';
 
@@ -1005,3 +1005,264 @@ ALTER TABLE `user_card`
     ADD CONSTRAINT `user_card_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE;
 UPDATE `system` SET `value` = '67' WHERE `key`='DB_VERSION';
 
+--
+-- Create table config_files
+--
+CREATE TABLE `config_files` (
+    `id` int(11) NOT NULL AUTO_INCREMENT,
+    `file_name` varchar(191) COLLATE utf8_unicode_ci NOT NULL COMMENT 'Název souboru',
+    PRIMARY KEY (`id`),
+    KEY `name` (`file_name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='Konfigurační soubory';
+
+INSERT INTO `config_files` (`id`, `file_name`) VALUES
+(2,	'content'),
+(1,	'searches');
+
+--
+-- Create table config_sections
+--
+
+DROP TABLE IF EXISTS `config_sections`;
+CREATE TABLE `config_sections` (
+    `id` int(11) NOT NULL AUTO_INCREMENT,
+    `section_name` varchar(191) COLLATE utf8_unicode_ci NOT NULL COMMENT 'Název sekce',
+    PRIMARY KEY (`id`),
+    KEY `section_name` (`section_name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='Sekce konfigurace';
+
+INSERT INTO `config_sections` (`id`, `section_name`) VALUES
+(3,	'DocumentTypesContentBlock'),
+(1,	'HomePage'),
+(2,	'Inspiration');
+
+--
+-- Create table config_items
+--
+
+DROP TABLE IF EXISTS `config_items`;
+CREATE TABLE `config_items` (
+    `id` int(11) NOT NULL AUTO_INCREMENT,
+    `name` varchar(191) COLLATE utf8_unicode_ci NOT NULL COMMENT 'Název položky',
+    `type` enum('string','array') COLLATE utf8_unicode_ci NOT NULL DEFAULT 'string' COMMENT 'Typ',
+PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='Konfigurační položky';
+
+INSERT INTO `config_items` (`id`, `name`, `type`) VALUES
+(1,	'content',	'array'),
+(2,	'item',	'array'),
+(3,	'content_block',	'array');
+
+--
+-- Create table config
+--
+DROP TABLE IF EXISTS `config`;
+CREATE TABLE `config` (
+    `id` int(11) NOT NULL AUTO_INCREMENT,
+    `file_id` int(11) NOT NULL COMMENT 'Soubor',
+    `section_id` int(11) NOT NULL COMMENT 'Sekce',
+    `item_id` int(11) NOT NULL COMMENT 'Položka (klíč)',
+    `array_key` varchar(191) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT 'Klíč pole (nepovinné)',
+    `value` text COLLATE utf8_unicode_ci NOT NULL COMMENT 'Hodnota',
+    `order` int(11) NOT NULL COMMENT 'Pořadí',
+    `active` tinyint(1) NOT NULL DEFAULT '1' COMMENT 'Aktivní?',
+    PRIMARY KEY (`id`),
+    KEY `file_id` (`file_id`),
+    KEY `section_id` (`section_id`),
+    KEY `active` (`active`),
+    KEY `item_id` (`item_id`),
+    CONSTRAINT `config_ibfk_1` FOREIGN KEY (`section_id`) REFERENCES `config_sections` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT `config_ibfk_2` FOREIGN KEY (`file_id`) REFERENCES `config_files` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT `config_ibfk_3` FOREIGN KEY (`item_id`) REFERENCES `config_items` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='Konfigurace';
+
+INSERT INTO `config` (`id`, `file_id`, `section_id`, `item_id`, `array_key`, `value`, `order`, `active`) VALUES
+(1,	2,	2,	3,	NULL,	'Inspiration:ceny_nebula_a_hugo',	0,	1),
+(2,	2,	2,	3,	NULL,	'Inspiration:templars',	0,	1),
+(3,	1,	1,	1,	NULL,	'TemplateBased:header-panel',	10,	1),
+(4,	1,	1,	1,	NULL,	'DocumentTypes:DocumentTypesContentBlock',	20,	1),
+(5,	2,	2,	3,	NULL,	'TemplateBased:header-panel',	0,	1),
+(6,	1,	1,	1,	NULL,	'Inspiration:eknihy_ke_stazeni',	30,	1),
+(7,	1,	1,	1,	NULL,	'UserList:162',	40,	1),
+(8,	1,	3,	2,	NULL,	'doctypes_widget_norms;doctypes_widget_norms_description;pr-format-norms;0/NORMS/',	10,	1),
+(9,	1,	3,	2,	NULL,	'doctypes_widget_maps;doctypes_widget_maps_description;pr-format-maps;0/MAPS/',	20,	1),
+(10,	1,	3,	2,	NULL,	'doctypes_widget_legislative_laws;doctypes_widget_legislative_laws_description;pr-format-legislative;0/LEGISLATIVE/',	30,	1),
+(11,	1,	3,	2,	NULL,	'doctypes_widget_authorities;doctypes_widget_authorities_description;pr-format-user-single5;1/OTHER/PERSON/',	40,	1),
+(12,	1,	3,	2,	NULL,	'doctypes_widget_patents;doctypes_widget_patents_description;pr-format-patents;0/PATENTS/',	50,	1),
+(13,	1,	3,	2,	NULL,	'doctypes_widget_articles;doctypes_widget_articles_description;pr-format-articles;0/ARTICLES/',	60,	1),
+(14,	1,	3,	2,	NULL,	'doctypes_widget_musical_scores;doctypes_widget_musical_scores_description;pr-format-musicalscores;0/MUSICAL_SCORES/',	70,	1);
+
+--
+-- Aktualizace tabulky inst_configs
+--
+ALTER TABLE `inst_configs`
+    COMMENT='Konfigurace knihoven',
+    CHANGE `source` `source` varchar(10) COLLATE 'utf8_general_ci' NOT NULL DEFAULT '' COMMENT 'Knihovna (source)' AFTER `id`,
+    CHANGE `section` `section` varchar(64) COLLATE 'utf8_general_ci' NOT NULL COMMENT 'Sekce' AFTER `source`,
+    CHANGE `key` `key` varchar(64) COLLATE 'utf8_general_ci' NOT NULL COMMENT 'Klíč' AFTER `section`,
+    CHANGE `value` `value` mediumtext COLLATE 'utf8_general_ci' NOT NULL COMMENT 'Hodnota' AFTER `key`;
+
+--
+-- Komentáře k tabulce citation_styles
+--
+ALTER TABLE `citation_style`
+    CHANGE `description` `description` varchar(32) COLLATE 'utf8_general_ci' NULL COMMENT 'Popis citačního stylu' AFTER `id`,
+    CHANGE `value` `value` varchar(8) COLLATE 'utf8_general_ci' NULL COMMENT 'Id v Citace.com' AFTER `description`,
+    COMMENT='Citační styly';
+
+UPDATE `system` SET `value` = '68' WHERE `key`='DB_VERSION';
+
+--
+-- Odstranění nepoužívaných tabulek
+--
+DROP TABLE `frontend`;
+DROP TABLE `infobox`;
+DROP TABLE `inspirations`;
+DROP TABLE `portal_pages`;
+
+--
+-- Vytvoření a naplnění sources
+--
+DROP TABLE IF EXISTS `inst_sources`;
+CREATE TABLE `inst_sources` (
+    `id` int(11) NOT NULL AUTO_INCREMENT,
+    `source` varchar(191) COLLATE utf8_general_ci NOT NULL COMMENT 'Knihovna (source)',
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci COMMENT='Knihovny';
+
+INSERT INTO inst_sources (source) SELECT DISTINCT source FROM inst_configs;
+ALTER TABLE `inst_configs` ADD `source_id` int NOT NULL COMMENT 'Knihovna (source)' AFTER `source`;
+UPDATE inst_configs c JOIN inst_sources s ON c.source = s.source SET c.source_id = s.id;
+
+ALTER TABLE `inst_configs`
+    ADD FOREIGN KEY (`source_id`) REFERENCES `inst_sources` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+ALTER TABLE `inst_configs` DROP `source`;
+
+--
+-- Vytvoření a naplnění sections
+--
+DROP TABLE IF EXISTS `inst_sections`;
+CREATE TABLE `inst_sections` (
+    `id` int(11) NOT NULL AUTO_INCREMENT,
+    `section_name` varchar(191) NOT NULL COMMENT 'Název sekce',
+    PRIMARY KEY (`id`),
+    KEY `section_name` (`section_name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Knihovny - sekce';
+UPDATE `system` SET `value` = '69' WHERE `key`='DB_VERSION';
+
+INSERT INTO inst_sections (section_name) SELECT DISTINCT section FROM inst_configs;
+ALTER TABLE `inst_configs` ADD `section_id` int NOT NULL COMMENT 'Sekce' AFTER `section`;
+UPDATE inst_configs c JOIN inst_sections s ON c.section = s.section_name SET c.section_id = s.id;
+
+ALTER TABLE `inst_configs` DROP `section`;
+
+--
+-- Vytvoření a naplnění items
+--
+DROP TABLE IF EXISTS `inst_keys`;
+CREATE TABLE `inst_keys` (
+    `id` int(11) NOT NULL AUTO_INCREMENT,
+    `key_name` varchar(191) NOT NULL COMMENT 'Název položky',
+    `section_id` int(11) NOT NULL COMMENT 'Sekce',
+    PRIMARY KEY (`id`),
+    KEY `key_name` (`key_name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Knihovny - položky konfigurace';
+
+INSERT INTO inst_keys (key_name) SELECT DISTINCT `key` FROM inst_configs;
+ALTER TABLE `inst_configs` ADD `key_id` int NOT NULL COMMENT 'Položka' AFTER `key`;
+UPDATE inst_configs c JOIN inst_keys k ON c.`key` = k.key_name SET c.key_id = k.id;
+
+ALTER TABLE `inst_configs`
+    ADD FOREIGN KEY (`key_id`) REFERENCES `inst_keys` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+ALTER TABLE `inst_configs` DROP `key`;
+
+DELETE FROM `inst_keys` WHERE (`key_name` = 'authMethod');
+DELETE FROM `inst_keys` WHERE (`key_name` = 'cannotUseLUIS');
+DELETE FROM `inst_keys` WHERE (`key_name` = 'contactPerson');
+DELETE FROM `inst_keys` WHERE (`key_name` = 'debug');
+DELETE FROM `inst_keys` WHERE (`key_name` = 'requester');
+DELETE FROM `inst_keys` WHERE (`key_name` = 'tokenEndpoint');
+DELETE FROM `inst_keys` WHERE (`key_name` = 'ttl');
+DELETE FROM `inst_keys` WHERE (`key_name` = 'type');
+
+-- rename dlfport to dlfurl and create it from host and port
+UPDATE inst_configs c
+    JOIN inst_keys k ON c.key_id = k.id
+    SET c.value = CONCAT(
+        (SELECT ic.value
+         FROM (SELECT * FROM inst_configs) AS ic
+                  JOIN inst_keys ik ON ic.key_id = ik.id
+         WHERE ik.key_name = 'host' AND ic.source_id = c.source_id
+        ), ':', c.value)
+WHERE k.key_name = 'dlfport';
+UPDATE `inst_keys` SET `key_name` = 'dlfurl' WHERE `key_name` = 'dlfport';
+
+-- Create reference from keys to sections
+UPDATE  inst_keys k JOIN inst_configs c ON k.id = c.key_id SET k.section_id = c.section_id;
+
+ALTER TABLE `inst_keys`
+    ADD FOREIGN KEY (`section_id`) REFERENCES `inst_sections` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+ALTER TABLE `inst_configs` DROP `section_id`;
+
+-- Create templates for inst_configs
+INSERT INTO `inst_sources` (`id`, `source`) VALUES
+('!aleph'),
+('!koha'),
+('!ncip');
+
+INSERT INTO `inst_configs` (`source_id`, `key_id`, `value`) VALUES
+((SELECT id FROM inst_sources WHERE source = '!aleph'),	2,	'Aleph.common.ini'),
+((SELECT id FROM inst_sources WHERE source = '!aleph'),	4,	'_API_HOST'),
+((SELECT id FROM inst_sources WHERE source = '!aleph'),	5,	'_DLF_API_URL'),
+((SELECT id FROM inst_sources WHERE source = '!aleph'),	7,	''),
+((SELECT id FROM inst_sources WHERE source = '!aleph'),	8,	'1'),
+((SELECT id FROM inst_sources WHERE source = '!aleph'),	9,	'_RANDOM_KEY'),
+((SELECT id FROM inst_sources WHERE source = '!aleph'),	10,	'_BIBBASE'),
+((SELECT id FROM inst_sources WHERE source = '!aleph'),	11,	'_ADMBASE'),
+((SELECT id FROM inst_sources WHERE source = '!aleph'),	12,	'_ADMBASE'),
+((SELECT id FROM inst_sources WHERE source = '!aleph'),	13,	''),
+((SELECT id FROM inst_sources WHERE source = '!aleph'),	14,	''),
+((SELECT id FROM inst_sources WHERE source = '!aleph'),	15,	'On Shelf,Na místě'),
+((SELECT id FROM inst_sources WHERE source = '!aleph'),	16,	''),
+((SELECT id FROM inst_sources WHERE source = '!aleph'),	17,	''),
+((SELECT id FROM inst_sources WHERE source = '!aleph'),	18,	''),
+((SELECT id FROM inst_sources WHERE source = '!aleph'),	19,	'_LOGO_URL'),
+((SELECT id FROM inst_sources WHERE source = '!aleph'),	20,	'_SOURCE'),
+((SELECT id FROM inst_sources WHERE source = '!aleph'),	21,	'_SOURCE'),
+((SELECT id FROM inst_sources WHERE source = '!aleph'),	22,	'15'),
+((SELECT id FROM inst_sources WHERE source = '!aleph'),	23,	''),
+((SELECT id FROM inst_sources WHERE source = '!aleph'),	24,	'z304-address-5'),
+((SELECT id FROM inst_sources WHERE source = '!aleph'),	25,	'z304-address-1'),
+((SELECT id FROM inst_sources WHERE source = '!aleph'),	26,	'z304-address-2'),
+((SELECT id FROM inst_sources WHERE source = '!aleph'),	27,	'z304-address-3'),
+((SELECT id FROM inst_sources WHERE source = '!aleph'),	28,	'z304-zip'),
+((SELECT id FROM inst_sources WHERE source = '!aleph'),	29,	'z304-email-address'),
+((SELECT id FROM inst_sources WHERE source = '!aleph'),	30,	'z304-telephone-1'),
+((SELECT id FROM inst_sources WHERE source = '!aleph'),	31,	'z305-bor-status'),
+((SELECT id FROM inst_sources WHERE source = '!aleph'),	32,	'z305-expiry-date'),
+((SELECT id FROM inst_sources WHERE source = '!aleph'),	36,	'10'),
+((SELECT id FROM inst_sources WHERE source = '!koha'),	4,	'_API_HOST'),
+((SELECT id FROM inst_sources WHERE source = '!koha'),	20,	'_SOURCE'),
+((SELECT id FROM inst_sources WHERE source = '!koha'),	21,	'_SOURCE'),
+((SELECT id FROM inst_sources WHERE source = '!koha'),	46,	'_CLIENT_ID'),
+((SELECT id FROM inst_sources WHERE source = '!koha'),	47,	'_CLIENT_SECRET'),
+((SELECT id FROM inst_sources WHERE source = '!koha'),	48,	'client_credentials'),
+((SELECT id FROM inst_sources WHERE source = '!koha'),	52,	'_MAIN_BRANCH'),
+((SELECT id FROM inst_sources WHERE source = '!ncip'),	19,	'_LOGO_URL'),
+((SELECT id FROM inst_sources WHERE source = '!ncip'),	20,	'_SOURCE'),
+((SELECT id FROM inst_sources WHERE source = '!ncip'),	21,	'_SOURCE'),
+((SELECT id FROM inst_sources WHERE source = '!ncip'),	33,	'_NCIP_URL'),
+((SELECT id FROM inst_sources WHERE source = '!ncip'),	34,	''),
+((SELECT id FROM inst_sources WHERE source = '!ncip'),	35,	'_SIGLA'),
+((SELECT id FROM inst_sources WHERE source = '!ncip'),	36,	'10'),
+((SELECT id FROM inst_sources WHERE source = '!ncip'),	37,	'0'),
+((SELECT id FROM inst_sources WHERE source = '!ncip'),	38,	'10'),
+((SELECT id FROM inst_sources WHERE source = '!ncip'),	39,	''),
+((SELECT id FROM inst_sources WHERE source = '!ncip'),	40,	''),
+((SELECT id FROM inst_sources WHERE source = '!ncip'),	42,	'0'),
+((SELECT id FROM inst_sources WHERE source = '!ncip'),	43,	'Arl,Clavius,DaVinci,Tritius,Verbis'),
+((SELECT id FROM inst_sources WHERE source = '!ncip'),	44,	'0');
+
+UPDATE `system` SET `value` = '69' WHERE `key`='DB_VERSION';

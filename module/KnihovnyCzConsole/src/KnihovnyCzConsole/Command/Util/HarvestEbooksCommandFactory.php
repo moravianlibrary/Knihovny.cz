@@ -27,7 +27,7 @@
  * @link     https://knihovny.cz Main Page
  */
 
-namespace KnihovnyCzConsole\Command\Harvest;
+namespace KnihovnyCzConsole\Command\Util;
 
 use Interop\Container\ContainerInterface;
 use Interop\Container\Exception\ContainerException;
@@ -35,7 +35,7 @@ use Laminas\ServiceManager\Exception\ServiceNotCreatedException;
 use Laminas\ServiceManager\Exception\ServiceNotFoundException;
 use Laminas\ServiceManager\Factory\FactoryInterface;
 
-class EbooksCommandFactory implements FactoryInterface
+class HarvestEbooksCommandFactory implements FactoryInterface
 {
     /**
      * Create an object
@@ -59,8 +59,8 @@ class EbooksCommandFactory implements FactoryInterface
         }
         return new $requestedName(
             $container->get(\VuFind\Config\PluginManager::class)->get('config'),
-            $container->get(\VuFind\Db\Table\PluginManager::class)
-                ->get(\KnihovnyCz\Db\Table\Widget::class),
+            $container->get(\VuFind\Db\Table\PluginManager::class),
+            ...($options ?? [])
         );
     }
 }

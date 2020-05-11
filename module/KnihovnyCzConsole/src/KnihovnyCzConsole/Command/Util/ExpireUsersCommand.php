@@ -27,7 +27,7 @@
  * @link     https://knihovny.cz Main Page
  */
 
-namespace KnihovnyCzConsole\Command\Expire;
+namespace KnihovnyCzConsole\Command\Util;
 
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -35,8 +35,22 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use VuFind\Db\Table\User;
 
-class UsersCommand extends Symfony\Component\Console\Command
+class ExpireUsersCommand extends \VuFindConsole\Command\Util\AbstractExpireCommand
 {
+    /**
+     * Help description for the command.
+     *
+     * @var string
+     */
+    protected $commandDescription = 'Expired users cleanup';
+
+    /**
+     * Label to use for rows in help messages.
+     *
+     * @var string
+     */
+    protected $rowLabel = 'users';
+
     /**
      * The name of the command (the part after "public/index.php")
      *
@@ -44,36 +58,4 @@ class UsersCommand extends Symfony\Component\Console\Command
      */
     protected static $defaultName = 'util/expire_users';
 
-    /**
-     * Configure the command.
-     *
-     * @return void
-     */
-    protected function configure()
-    {
-        $this->setDescription('Expire old users in the database.')
-            ->addArgument('days', InputArgument::OPTIONAL,
-                'days from last login, at least 730 (= 2 years)\nby default, searches more than 730 days old will be removed'
-            );
-    }
-
-    /**
-     * Run the command.
-     *
-     * @param InputInterface  $input  Input object
-     * @param OutputInterface $output Output object
-     *
-     * @return int 0 for success
-     */
-    protected function execute(InputInterface $input, OutputInterface $output)
-    {
-        //TODO: use the generic function - when it will be refactored
-        return $this->expire(
-            'User',
-            '%%count%% inactive user accounts deleted.',
-            'No inactive user accounts to delete.',
-            730
-        );
-        //return 0;
-    }
 }

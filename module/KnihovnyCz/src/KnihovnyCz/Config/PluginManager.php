@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Class TemplateBased
+ * Class PluginManager
  *
  * PHP version 7
  *
@@ -21,39 +21,31 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  *
  * @category VuFind
- * @package  KnihovnyCz\ContentBlock
+ * @package  KnihovnyCz\Config
  * @author   Josef Moravec <moravec@mzk.cz>
  * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://knihovny.cz Main Page
  */
 
-namespace KnihovnyCz\ContentBlock;
+namespace KnihovnyCz\Config;
 
-class TemplateBased implements \VuFind\ContentBlock\ContentBlockInterface
+use Laminas\ServiceManager\AbstractPluginManager;
+
+class PluginManager extends \VuFind\Config\PluginManager
 {
-
     /**
-     * Name of template for rendering
+     * Constructor
      *
-     * @var string
+     * Make sure plugins are properly initialized.
+     *
+     * @param mixed $configOrContainerInstance Configuration or container instance
+     * @param array $v3config                  If $configOrContainerInstance is a
+     * container, this value will be passed to the parent constructor.
      */
-    protected $templateName;
-
-    /**
-     * @inheritDoc
-     */
-    public function setConfig($settings)
-    {
-        $this->templateName = $settings;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function getContext()
-    {
-        return [
-            'templateName' => $this->templateName,
-        ];
+    public function __construct($configOrContainerInstance = null,
+        array $v3config = []
+    ) {
+        // We need to skip parent constructor, this is constructor from Laminas
+        AbstractPluginManager::__construct($configOrContainerInstance, $v3config);
     }
 }

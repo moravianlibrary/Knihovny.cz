@@ -1,0 +1,7 @@
+<?php
+// Set page title.
+$this->headTitle($this->translate('Inspiration'));
+$this->layout()->breadcrumbs = false;
+?>
+
+<?=implode('', array_map([$this, 'contentBlock'], $blocks ?? []))?>
