@@ -45,7 +45,7 @@ class User extends \VuFind\Db\Table\User
      *
      * @return void
      */
-    protected function expirationCallback($select, $daysOld, $idFrom = null,
+    protected function expirationCallback($select, $daysOld = 730, $idFrom = null,
         $idTo = null
     ) {
         $expireDate = date('Y-m-d', strtotime(sprintf('-%d days', (int)$daysOld)));
