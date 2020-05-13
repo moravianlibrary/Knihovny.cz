@@ -51,6 +51,9 @@ COPY install-portal-content.sh /onstart/010-install-portal-content.sh
 
 #TODO: sentry/sentry still missing
 
+# Copy clear cache script
+COPY clear-cache /usr/local/bin/
+
 COPY ./knihovny-cz-foreground /usr/local/bin/
 
 CMD ["knihovny-cz-foreground"]
