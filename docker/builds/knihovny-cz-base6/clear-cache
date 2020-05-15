@@ -4,7 +4,6 @@ if [ ! -f /.dockerenv ]; then
     echo "This script needs to be run from container"
     exit 1
 fi
-exit 0
 
 cd /var/www/knihovny-cz
 
