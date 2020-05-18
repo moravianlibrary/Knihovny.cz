@@ -7,5 +7,4 @@ fi
 
 cd /var/www/knihovny-cz
 
-echo "local/$PARAM_VUFIND_CONFIG_DIR"
 VUFIND_LOCAL_DIR="local/$PARAM_VUFIND_CONFIG_DIR" VUFIND_LOCAL_MODULES="KnihovnyCz,KnihovnyCzConsole" php public/index.php util/clear_cache
