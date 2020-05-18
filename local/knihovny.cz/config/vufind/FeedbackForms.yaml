@@ -56,9 +56,9 @@
 #     help (string)      Element help text (translation key).
 #                        To include HTML formatting, use a translation key ending
 #                        in '_html' here, and define markup in the language files.
-#     
+#
 #     And for select and radio elements:
-# 
+#
 #     options (array) List of select values (translation keys)
 #
 #     or for select elements alternatively:
@@ -91,19 +91,23 @@ forms:
       email: cpk-support@mzk.cz
 
     onlyForLoggedUsers: false
-    emailSubject: Knihovny.cz feedback
+    emailSubject: %%subject%% - Knihovny.cz feedback
     response: Thank you for your feedback.
-    senderInfoRequired: true
+    senderNameRequired: false
+    senderEmailRequired: true
 
     help:
       pre: feedback_help_pre
     #  post: feedback_help_post
 
     fields:
+      - name: subject
+        type: text
+        label: Subject
+        required: true
       - name: message
         type: textarea
         label: Comments
         required: true
         settings:
         # help: message_help
-
