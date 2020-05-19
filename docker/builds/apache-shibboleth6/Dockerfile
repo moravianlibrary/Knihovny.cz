@@ -8,7 +8,6 @@ ARG PARAM_APACHE_KEY_OUT="apache2-key.pem"
 ARG PARAM_APACHE_CRT_OUT="apache2-cert.pem"
 ARG PARAM_SSL_VALIDITY_DAYS=3650
 ARG PARAM_SSL_ENABLED=true
-ARG PARAM_VUFIND_CONFIG_DIR=knihovny.cz
 
 # These scripts will make sure for proper configuration
 COPY ./bootstrap-shibboleth2.sh /onstart/002-shibboleth2.sh
