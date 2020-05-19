@@ -116,12 +116,22 @@ $config = [
                     \KnihovnyCz\Db\Row\Widget::class => \VuFind\Db\Row\RowGatewayFactory::class,
                     \KnihovnyCz\Db\Row\WidgetContent::class => \VuFind\Db\Row\RowGatewayFactory::class,
                 ],
+                'aliases' => [
+                    // VuFind\Db\Table\GatewayFactory search for row class by name
+                    // We do not need to customize row class for user, so we are
+                    // are aliasing back to original one
+                    \KnihovnyCz\Db\Row\User::class => \VuFind\Db\Row\User::class,
+                ]
             ],
             'db_table' => [
                 'factories' => [
                     \KnihovnyCz\Db\Table\Config::class => \VuFind\Db\Table\GatewayFactory::class,
+                    \KnihovnyCz\Db\Table\User::class => \VuFind\Db\Table\UserFactory::class,
                     \KnihovnyCz\Db\Table\Widget::class => \VuFind\Db\Table\GatewayFactory::class,
                     \KnihovnyCz\Db\Table\WidgetContent::class => \VuFind\Db\Table\GatewayFactory::class,
+                ],
+                'aliases' => [
+                    \VuFind\Db\Table\User::class => \KnihovnyCz\Db\Table\User::class,
                 ],
             ],
             'content_covers' => [
