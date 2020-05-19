@@ -38,7 +38,7 @@
                         <td><span class="label label-<?=$statusClass?>"><?=$this->transEsc('link_access_status_'.$link['status'])?></span></td>
                     <?php endif; ?>
                     <td><a title='<?=$this->transEsc($description)?>' href='<?=$link['url']?>' target='_blank'><?=$this->transEsc($description)?></a></td>
-                    <td><?=$this->transEsc('source_'.$link['source'])?></td>
+                    <td><?=$this->transEsc('Source::' . $link['source'])?></td>
                 </tr>
             <?php endforeach; ?>
         <?php endif; ?>
