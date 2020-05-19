@@ -7,8 +7,7 @@
   <?php foreach ($records as $record): ?>
     <li>
       <a class="hover-overlay" href="<?=$this->recordLink()->getUrl($record['id'])?>">
-        <?php  // TODO: 'source_' will became 'source::' after language file refactoring ?>
-        <?=$this->transEsc('source_' . $record['source'])?>
+        <?=$this->transEsc('Source::' . $record['source'])?>
       </a>
     </li>
   <?php endforeach; ?>

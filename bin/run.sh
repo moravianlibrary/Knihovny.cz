@@ -157,6 +157,7 @@ export HTTPS_PORT="${https_port}"
 export IMAGE_NAME="${image_name}"
 export IMAGE_VERSION="${version}"
 export CONTAINER_NAME="${container_name}"
+export PARAM_VUFIND_CONFIG_DIR=${PARAM_VUFIND_CONFIG_DIR:-knihovny.cz}
 
 cp "../composer.local.json" "./builds/knihovny-cz-base6/"
 
