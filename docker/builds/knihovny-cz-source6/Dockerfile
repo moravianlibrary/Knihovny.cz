@@ -17,6 +17,7 @@ COPY ./Search2.local.template.ini /tmp/
 COPY ./content.local.template.ini /tmp/
 COPY ./bootstrap-source.sh /onstart/004-source.sh
 COPY ./cron/expire-users /etc/cron.daily/expire-users
+COPY ./cron/harvest-ebooks /etc/cron.weekly/harvest-books
 
 # PARAM_VUFIND_COMMIT_HASH is not used in script itself, but passed to enforce
 # docker to run git clone when the branch is updated
