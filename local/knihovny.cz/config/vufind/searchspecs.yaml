@@ -286,7 +286,7 @@ Title:
     title_new:
       - [and, 100]
     title_old:
-      - [and, ~]  
+      - [and, ~]
 
 Series:
   DismaxFields:
@@ -363,7 +363,7 @@ AllFields:
       - [and, 50]
     series2:
       - [and, 30]
-    author:  
+    author:
       - [onephrase, 300]
       - [and, 250]
     author2:
@@ -414,7 +414,7 @@ AllFields:
       - [onephrase, ~]
     upv_ipc_search:
       - [onephrase, ~]
-  FilterQuery: "NOT recordtype:library AND NOT recordtype:sfx"
+  FilterQuery: "*:* NOT recordtype:library AND NOT recordtype:sfx"
 #  ExactSettings:
 #    DismaxFields:
 #      - isbn
@@ -447,7 +447,7 @@ adv_search_title_series:
     titleSeries_search_txt_mv:
       - [onephrase, 100]
       - [and, 50]
-  FilterQuery: "NOT recordtype:library AND NOT recordtype:sfx"
+  FilterQuery: "*:* NOT recordtype:library AND NOT recordtype:sfx"
 
 adv_search_author_corporation:
   DismaxFields:
@@ -473,11 +473,11 @@ adv_search_author_corporation:
       - [and, 50]
     author_viz:
     - [onephrase, 50]
-    - [and, 20]  
+    - [and, 20]
     corporation_viz:
     - [onephrase, 50]
     - [and, 20]
-  FilterQuery: "NOT recordtype:library AND NOT recordtype:sfx"
+  FilterQuery: "*:* NOT recordtype:library AND NOT recordtype:sfx"
 
 adv_search_subject_keywords:
   DismaxFields:
@@ -505,8 +505,8 @@ adv_search_subject_keywords:
     genre_viz:
       - [onephrase, 50]
       - [and, 20]
-  FilterQuery: "NOT recordtype:library AND NOT recordtype:sfx"
-      
+  FilterQuery: "*:* NOT recordtype:library AND NOT recordtype:sfx"
+
 adv_search_source_title:
   DismaxFiels:
    - sourceTitle_search_txt_mv
@@ -521,7 +521,7 @@ adv_search_source_title:
     sourceTitle_search_txt_mv:
       - [onephrase, 100]
       - [and, 50]
-  FilterQuery: "NOT recordtype:library AND NOT recordtype:sfx"
+  FilterQuery: "*:* NOT recordtype:library AND NOT recordtype:sfx"
 
 adv_search_isbn_issn_ismn:
   DismaxFields:
@@ -538,7 +538,7 @@ adv_search_isbn_issn_ismn:
     ismn_isn_mv:
       - [onephrase, 100]
       - [and, 50]
-  FilterQuery: "NOT recordtype:library AND NOT recordtype:sfx"
+  FilterQuery: "*:* NOT recordtype:library AND NOT recordtype:sfx"
 
 adv_search_call_number:
   Dismaxfields:
@@ -554,7 +554,7 @@ adv_search_call_number:
     callNumber_search_txt_mv:
       - [onephrase, 100]
       - [and, 50]
-  FilterQuery: "NOT recordtype:library AND NOT recordtype:sfx"
+  FilterQuery: "*:* NOT recordtype:library AND NOT recordtype:sfx"
 
 adv_search_publisher:
   Dismaxfields:
@@ -570,7 +570,7 @@ adv_search_publisher:
     publisher_search_txt_mv:
       - [onephrase, 100]
       - [and, 50]
-  FilterQuery: "NOT recordtype:library AND NOT recordtype:sfx"
+  FilterQuery: "*:* NOT recordtype:library AND NOT recordtype:sfx"
 
 adv_search_year_of_publication:
   Dismaxfields:
@@ -586,7 +586,7 @@ adv_search_year_of_publication:
     publishDate:
       - [onephrase, 100]
       - [and, 50]
-  FilterQuery: "NOT recordtype:library AND NOT recordtype:sfx"
+  FilterQuery: "*:* NOT recordtype:library AND NOT recordtype:sfx"
 
 adv_search_place_of_publication:
   Dismaxfields:
@@ -607,7 +607,7 @@ adv_search_place_of_publication:
       - [onephrase, 100]
     country_search_txt_mv:
       - [onephrase, 100]
-  FilterQuery: "NOT recordtype:library AND NOT recordtype:sfx"
+  FilterQuery: "*:* NOT recordtype:library AND NOT recordtype:sfx"
 
 adv_search_001:
   Dismaxfields:
@@ -627,7 +627,7 @@ adv_search_001:
     id_authority:
       - [onephrase, 100]
       - [and, 50]
-  FilterQuery: "NOT recordtype:library AND NOT recordtype:sfx"
+  FilterQuery: "*:* NOT recordtype:library AND NOT recordtype:sfx"
 
 adv_search_nbn:
   Dismaxfields:
@@ -643,8 +643,8 @@ adv_search_nbn:
     cnb_isn_mv:
       - [onephrase, 100]
       - [and, 50]
-  FilterQuery: "NOT recordtype:library AND NOT recordtype:sfx"
-      
+  FilterQuery: "*:* NOT recordtype:library AND NOT recordtype:sfx"
+
 adv_search_fulltext:
   Dismaxfields:
    - toc_txt_mv^10
@@ -663,7 +663,7 @@ adv_search_fulltext:
     toc_txt_mv:
       - [onephrase, 100]
       - [and, 50]
-  FilterQuery: "NOT recordtype:library AND NOT recordtype:sfx"
+  FilterQuery: "*:* NOT recordtype:library AND NOT recordtype:sfx"
 
 adv_search_ipc:
   CustomMunge:
@@ -678,7 +678,7 @@ adv_search_ipc:
       - [onephrase, 10000]
       - [withoutWhiteSpaces, 1000]
       - [withoutWhiteSpacesSlash, ~]
-  FilterQuery: "NOT recordtype:library AND NOT recordtype:sfx"
+  FilterQuery: "*:* NOT recordtype:library AND NOT recordtype:sfx"
 
 Libraries:
   DismaxFields:
@@ -688,7 +688,7 @@ Libraries:
     - town_search_txt^100
     - address_search_txt_mv
     - note_search_txt
-    - type_search_txt
+    - type_search_txt_mv
     - function_search_txt_mv
     - responsibility_search_txt_mv
     - services_search_txt_mv

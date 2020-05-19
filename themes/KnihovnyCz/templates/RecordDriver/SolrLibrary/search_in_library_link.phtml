@@ -1,0 +1,8 @@
+<?php
+if (!empty($data)):
+    $filter = urlencode('~region_institution:"'. $data . '"'); ?>
+    <a href='/Search/Results?lookFor[]=&type[]=AllFields&keepEnabledFilters=true&limit=<?=$this->layout()->limit?>&sort=<?=$this->layout()->sort?>&filter[]=<?=$filter?>' title='<?=$this->translate('Search in library')?>' >
+        <?=$this->transEsc('Search in library')?>
+    </a>
+<?php endif;
+

@@ -1,0 +1,59 @@
+<?php
+  $recordSource = $this->driver->getSourceId();
+  $logosPostfix = '_small';
+  $data = [];
+  $records = $this->driver->getDeduplicatedRecords();
+  if (!empty($records)) {
+    foreach ($records as $record) {
+      $imageSrc = $this->imageLink(
+        'institutions/logos/' . $record['source'] . '/' . $record['source']
+        . $logosPostfix . '.png'
+      );
+      $recordUrl = $this->recordLink()->getUrl($record['id']);
+      $data[] = [
+        'id' => $record['id'],
+        'image' => $imageSrc,
+        'href' => $recordUrl,
+        'selected' => ($record['source'] == $recordSource) ? true : false,
+        'text' => $this->translate('Source::' . $record['source']),
+      ];
+    }
+  }
+  ?>
+  <h3><strong><?=$this->translate('Select institution');?>:</strong></h3>
+  <div class='row' id='records-in-groups-container'>
+    <div class='col-xs-12 col-lg-9'>
+      <select id="institutions" style="width: 100%; height: 2em;"></select>
+    </div>
+
+    <?php if($libraryId = $this->driver->getOwningLibraryId()): ?>
+      <div class='col-xs-12 col-lg-3 information'>
+        <a href='<?=$this->recordLink()->getUrl("library.$libraryId")?>' target='_blank' title='<?=$this->translate('Information about library')?>'>
+          <i class='cpk-icon information-about-library'>i</i>
+          <span><?=$this->translate('Information about library')?></span>
+        </a>
+      </div>
+    <?php endif; ?>
+  </div>
+
+<?php
+$dataJson = json_encode($data);
+$select2 = <<<JS
+var options = $dataJson;
+function template(option) {
+  return $('<span class="institutions-selector"><img src="' + option.image + '">' + option.text + '</span>');
+}
+
+jQuery(document).ready(function($) {
+  $('#institutions').select2({
+    language: "cs",
+    data: options,
+    templateResult: template,
+		templateSelection: template
+  });
+  $('#institutions').on('select2:select', function (e) {
+    window.location.href = e.params.data.href;
+  });
+});
+JS;
+echo $this->inlineScript(\Laminas\View\Helper\HeadScript::SCRIPT, $select2, 'SET');

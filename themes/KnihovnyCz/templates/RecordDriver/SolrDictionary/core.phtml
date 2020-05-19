@@ -1,0 +1,20 @@
+<div class="media" vocab="http://schema.org/" resource="#record" typeof="<?=$this->driver->getSchemaOrgFormats()?> Product">
+  <div class="media-body">
+    <h1 property="name" class="record-title"><?=$this->escapeHtml($this->driver->getTitle())?></h1>
+    <?php /* Display Main Details */ ?>
+    <?php
+      $formatter = $this->recordDataFormatter();
+      $coreFields = $formatter->getData($driver, $formatter->getDefaults('dictionary'));
+    ?>
+    <?php if (!empty($coreFields)): ?>
+      <table class="table table-striped">
+        <caption class="sr-only"><?=$this->transEsc('Bibliographic Details')?></caption>
+        <?php foreach ($coreFields as $current): ?>
+          <tr><th><?=$this->transEsc($current['label'])?>:</th><td><?=$current['value']?></td></tr>
+        <?php endforeach; ?>
+      </table>
+    <?php endif; ?>
+    <?php /* End Main Details */ ?>
+  </div>
+</div>
+

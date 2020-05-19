@@ -1,0 +1,32 @@
+version: '2.2'
+services:
+    php-extensions6:
+        image: "localhost/php-extensions6"
+        build: "builds/php-extensions6"
+    apache-shibboleth6:
+        image: "localhost/apache-shibboleth6"
+        build:
+            context: "builds/apache-shibboleth6"
+            args:
+                PARAM_VUFIND_HOST: "beta.knihovny.cz"
+                PARAM_SSL_DIR: "/etc/ssl/private"
+                PARAM_APACHE_KEY_OUT: "apache2-key.pem"
+                PARAM_APACHE_CRT_OUT: "apache2-cert.pem"
+                PARAM_SHIB_KEY_OUT: "shibboleth2-sp-key.pem"
+                PARAM_SHIB_CRT_OUT: "shibboleth2-sp-cert.pem"
+                SSL_VALIDITY_DAYS: 3650
+    knihovny-cz:
+        image: "localhost/knihovny-cz-base6"
+        hostname: "beta.knihovny.cz"
+        build:
+            context: "builds/knihovny-cz-base6"
+            args:
+                PARAM_VUFIND_SRC: "/var/www/knihovny-cz"
+        ports:
+            - "${HTTP_PORT:-80}:80"
+            - "${HTTPS_PORT:-443}:443"
+        environment:
+            APACHE_RUN_USER: "www-data"
+            APACHE_RUN_GROUP: "www-data"
+            IGNORE_BOOTSTRAP_FAILURE: "false"
+            PARAM_VUFIND_CONFIG_DIR: ${PARAM_VUFIND_CONFIG_DIR}

@@ -1,0 +1,58 @@
+@import url('https://fonts.googleapis.com/css?family=Lato:100,100i,300,300i,400,400i,700,700i,900,900i&display=swap&subset=latin-ext');
+
+@import "bootstrap";
+@import "variables";
+
+header {
+  background-color: #fff;
+  box-shadow: 0 1px 5px #ccc;
+}
+
+footer {
+  width: initial;
+  background-color: #222222;
+  color: #f6f6f6;
+
+  a {
+    color: #cccccc;
+  }
+
+  a:hover {
+    color: #ffffff;
+  }
+}
+
+#records-in-groups-container {
+  margin-top: 10px;
+}
+
+span.institutions-selector {
+  font-size: 1.2em;
+
+  img {
+    height: 1em;
+    margin-right: 8px;
+    vertical-align: baseline;
+  }
+}
+
+.template-dir-inspiration.template-name-home {
+  .col-md-4.widget:nth-child(3n+1) {
+    clear: left;
+  }
+}
+
+.buy-links a.btn {
+  font-weight: bold;
+}
+
+.buy-links a {
+  border: 1px solid @brand-primary;
+  color: @brand-primary;
+  text-transform: uppercase;
+  &:hover, &:focus {
+    color: #fff;
+    background-color: @primary-darken;
+    border: 1px solid @primary-darken;
+  }
+}

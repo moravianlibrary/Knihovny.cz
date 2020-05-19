@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+
+# Some handy ls aliases
+alias ll='ls -l'
+alias la='ls -la'
+
+# Recursive colored grep with filename & line number
+alias gr='grep -Hrn --color'
+alias gri='grep -Hrn -I --color'
+
+# Recurrent 'cd ..' with usage:
+# .. NUMBER_OF_GOING_BACKS
+function .. {
+    for _ in $(seq 1 $1); do cd ..; done
+}

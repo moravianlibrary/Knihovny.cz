@@ -21,7 +21,7 @@ email           = cpk-support@mzk.cz
 defaultCurrency	= CZK
 browserDetectLanguage = false
 defaultAccountPage = CheckedOut
-theme		= bootstrap3
+theme		= KnihovnyCz
 
 notificationsEnabled = true
 ;notificationsEnabled = false
@@ -36,7 +36,7 @@ emailFrom		= cpk-dev@mzk.cz
 emailTo			= cpk-dev@mzk.cz
 
 [Record]
-;This will build links from 7xx fiedls. Link is build from subfields x or z for searching by ISN, 
+;This will build links from 7xx fiedls. Link is build from subfields x or z for searching by ISN,
 ; or t for searching by AllFields.\
 ;Anchor is build from subfields t and g. Anchor in field 773 is build from all subfields.
 ;It is better than ;marc_links so use this instead of ;marc_link
@@ -64,18 +64,18 @@ default_core    = beta
 ; Set Max limit for ebooks to harvest from Solr to MySQL
 ; Solr can't return all rows by default and need Limit option
 ; Set this to much higher value than count of ebooks in Solr.
-harvest_ebooks_limit = 500 000
+harvest_ebooks_limit = 500000
+harvest_ebooks_widget_name = "eknihy_ke_stazeni"
 
 [Authentication]
-method		= ShibbolethIdentityManager
-;method		= ShibbolethWithWAYF
+method		= Shibboleth
 
 [Shibboleth]
-login           = https://cpk-front.mzk.cz/Shibboleth.sso/DS
-logout          = https://cpk-front.mzk.cz/Shibboleth.sso/Logout
-
-target		= https://cpk-front-devel.mzk.cz/MyResearch/Home
-getAssertion    = 1
+login           = /Shibboleth.sso/DS
+logout          = /Shibboleth.sso/Logout
+target          = /MyResearch/Home
+username        = eduPersonPrincipalName
+cat_username    = userLibraryId
 
 [Database]
 database        = mysql://user:pw@localhost/dbName
@@ -83,15 +83,6 @@ database        = mysql://user:pw@localhost/dbName
 [Logging]
 file            = /home/vufind/git/VuFind/fatal-errors.log:alert,error
 ;file            = /home/vufind/git/VuFind/fatal-errors.log:alert,error,notice,debug
-
-[ExternalLinks]
-BOA001		= "https://vufind.mzk.cz/Record/"
-BOA001_end	= "/Holdings#tabnav"
-OLA001		= "http://aleph.vkol.cz/F?func=direct&doc_number="
-ZLG001		= "http://katalog.kfbz.cz/documents/"
-HKA001		= "http://aleph2.svkhk.cz/F?func=direct&doc_number="
-ABA013		= "http://aleph.techlib.cz/F?func=direct&doc_number="
-ABA008		= "http://www.medvik.cz/medvik/title_detail.do?id="
 
 ; Enables facets this way
 custom_variables = true
@@ -124,19 +115,8 @@ username = username
 password = password
 non_proxy_host[] = cache.obalkyknih.cz
 
-; This configuration handles list items in Document_Types_Widget
-[Document_Types_Widget]
-; Every list item contains semicolon separated list of folowing values:
-; Title translation key, description translation key, icon class name, facet filter
-; Eg:
-;list_item[] = 'title_translation_key;description_translation_key;icon_class_name;facet_filter'
-list_item[] = 'doctypes_widget_patents;doctypes_widget_patents_description;pr-format-patents;~region_institution:"1/Others/UPV/"'
-list_item[] = 'doctypes_widget_norms;doctypes_widget_norms_description;pr-format-norms;~cpk_detected_format_facet_str_mv:"0/NORMS/"'
-list_item[] = 'doctypes_widget_legislative_laws;doctypes_widget_legislative_laws_description;pr-format-legislative;~region_institution:"1/Others/ZAKONY/"'
-list_item[] = 'doctypes_widget_musical_scores;doctypes_widget_musical_scores_description;pr-format-musicalscores;~cpk_detected_format_facet_str_mv:"0/MUSICAL_SCORES/"'
-list_item[] = 'doctypes_widget_maps;doctypes_widget_maps_description;pr-format-maps;~cpk_detected_format_facet_str_mv:"0/MAPS/"'
-list_item[] = 'doctypes_widget_articles;doctypes_widget_articles_description;pr-format-articles;~cpk_detected_format_facet_str_mv:"0/ARTICLES/"'
-list_item[] = 'doctypes_widget_authorities;doctypes_widget_authorities_description;pr-user-single5;~cpk_detected_format_facet_str_mv:"1/OTHER/PERSON/"'
-
 ; List is rendered in given order, otherwise can be sorted randomly
 list_sorting = random
+
+[Parent_Config]
+relative_path = ../../../base/config/vufind/config.ini

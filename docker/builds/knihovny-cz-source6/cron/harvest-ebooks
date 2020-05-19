@@ -1,0 +1,7 @@
+#!/bin/bash
+if [ "$PARAM_VUFIND_CONFIG_DIR" = "knihovny.cz" ]; then
+    cd /var/www/knihovny-cz
+    VUFIND_HOME=/var/www/knihovny-cz/ VUFIND_LOCAL_MODULES=KnihovnyCz,KnihovnyCzConsole VUFIND_LOCAL_DIR=local/knihovny.cz php public/index.php util/harvest_ebooks
+else
+    echo "Not main app (knihovny.cz), not harvesting"
+fi

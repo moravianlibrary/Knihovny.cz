@@ -1,4 +1,5 @@
 <?=$this->doctype('HTML5')?>
+<?php //FIXME, update from CPK project - og metadata, tranlations, ... ?>
 <html lang="<?=$this->layout()->userLang?>"<?php if ($this->layout()->rtl): ?> dir="rtl"<?php endif; ?>>
   <head>
     <?php $this->headThemeResources(); ?>
@@ -22,6 +23,8 @@
     <?php if ($this->layout()->rtl) {
       $this->headLink()->appendStylesheet('vendor/bootstrap-rtl.min.css');
     } ?>
+
+    <?php $this->headLink()->appendStylesheet('pr-icons.css');?>
     <?=$this->headLink()?>
     <?=$this->headStyle()?>
     <?php

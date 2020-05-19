@@ -1,0 +1,48 @@
+<div class="media" vocab="http://schema.org/" resource="#record" typeof="<?=$this->driver->getSchemaOrgFormats()?> Product">
+<div class="row">
+    <div class="col-md-6 library-detail">
+        <!-- Library name -->
+        <h1 property="name" class="record-title"><?=$this->escapeHtml($this->driver->getTitle())?></h1>
+        <?php /* Display Main Details */ ?>
+        <?php
+            $formatter = $this->recordDataFormatter();
+            $coreFields = $formatter->getData($driver, $formatter->getDefaults('library'));
+        ?>
+        <?php if (!empty($coreFields)): ?>
+            <table class="table table-striped">
+                <caption class="sr-only"><?=$this->transEsc('Library Details')?></caption>
+                <?php foreach ($coreFields as $current): ?>
+                    <h2><i class="<?=$current['context']['icon']?>"></i> <?=$this->transEsc($current['label'])?></h2>
+                    <p><?=$current['value']?></p>
+                <?php endforeach; ?>
+            </table>
+        <?php endif; ?>
+        <?php /* End Main Details */ ?>
+    </div>
+
+    <div class="col-md-6">
+        <?php $coords = $this->driver->tryMethod('getGpsCoordinates'); if (!empty($coords)): ?>
+            <style> #map {height: 600px;} </style>
+            <div id="map"></div>
+
+            <script>
+            function initMap() {
+                var myLatLng = {lat: 49.78, lng: 15.39};
+                var map = new google.maps.Map(document.getElementById('map'), {
+                    zoom: 7,
+                    center: myLatLng
+                });
+                var position = {lat: <?=$coords['lat'] ?>, lng: <?=$coords['lng'] ?>};
+                var marker = new google.maps.Marker({
+                    position: position,
+                    map: map,
+                    title: 'name of library'
+                });
+            }
+            </script>
+            <?php //FIXME we need to propagate apikey from controller ?>
+            <script src="https://maps.googleapis.com/maps/api/js?key=<?=$this->apikey ?>&callback=initMap"
+                async defer></script>
+        <?php endif; ?>
+    </div>
+</div>

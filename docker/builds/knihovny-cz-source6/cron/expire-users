@@ -1,0 +1,4 @@
+#!/bin/bash
+
+cd /var/www/knihovny-cz
+VUFIND_HOME=/var/www/knihovny-cz/ VUFIND_LOCAL_MODULES=KnihovnyCz,KnihovnyCzConsole VUFIND_LOCAL_DIR=local/knihovny.cz php public/index.php util/expire_users 730
