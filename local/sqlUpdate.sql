@@ -1266,3 +1266,24 @@ INSERT INTO `inst_configs` (`source_id`, `key_id`, `value`) VALUES
 ((SELECT id FROM inst_sources WHERE source = '!ncip'),	44,	'0');
 
 UPDATE `system` SET `value` = '69' WHERE `key`='DB_VERSION';
+
+INSERT INTO `config_files` (`file_name`) VALUES ('citation');
+INSERT INTO `config_sections` (`section_name`) VALUES ('Citation');
+INSERT INTO `config_items` (`name`, `type`) VALUES ('default_citation_style', 1);
+INSERT INTO `config_items` (`name`, `type`) VALUES ('citation_local_domain', 1);
+
+INSERT INTO config (file_id, section_id, item_id, array_key, value, `order`, active)
+VALUES (
+           (SELECT id FROM config_files WHERE file_name = 'citation'),
+           (SELECT id FROM config_sections WHERE section_name = 'Citation'),
+           (SELECT id FROM config_items WHERE name = 'default_citation_style'),
+           NULL, '38673', 0, 1);
+
+INSERT INTO config (file_id, section_id, item_id, array_key, value, `order`, active)
+VALUES (
+           (SELECT id FROM config_files WHERE file_name = 'citation'),
+           (SELECT id FROM config_sections WHERE section_name = 'Citation'),
+           (SELECT id FROM config_items WHERE name = 'citation_local_domain'),
+           NULL, 'cpk-front.mzk.cz', 0, 1);
+
+UPDATE `system` SET `value` = '70' WHERE `key`='DB_VERSION';
