@@ -63,12 +63,13 @@
       $coreFields = $formatter->getData($driver, $formatter->getDefaults('core'));
     ?>
     <?php if (!empty($coreFields)): ?>
-      <table class="table table-striped">
-        <caption class="sr-only"><?=$this->transEsc('Bibliographic Details')?></caption>
+      <h4 class="sr-only"><?=$this->transEsc('Bibliographic Details')?></h4>
+      <dl class="dl-horizontal">
         <?php foreach ($coreFields as $current): ?>
-          <tr><th><?=$this->transEsc($current['label'])?>:</th><td><?=$current['value']?></td></tr>
+          <dt><?=$this->transEsc($current['label'])?>:</dt>
+          <dd><?=$current['value']?></dd>
         <?php endforeach; ?>
-      </table>
+      </dl>
     <?php endif; ?>
     <?php /* End Main Details */ ?>
   </div>
