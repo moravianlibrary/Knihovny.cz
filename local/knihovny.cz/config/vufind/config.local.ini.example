@@ -18,40 +18,14 @@ forms = changePassword, email, newAccount, passwordRecovery, sms
 [Site]
 url             = https://cpk-front.mzk.cz/
 email           = cpk-support@mzk.cz
-defaultCurrency	= CZK
 browserDetectLanguage = false
 defaultAccountPage = CheckedOut
 theme		= KnihovnyCz
 
-notificationsEnabled = true
-;notificationsEnabled = false
-
-offlineFavoritesEnabled = true
-;offlineFavoritesEnabled = false
-
-[Approval]
-emailEnabled		= 0
-emailFromName		= Centrální portál knihoven
-emailFrom		= cpk-dev@mzk.cz
-emailTo			= cpk-dev@mzk.cz
-
 [Record]
-;This will build links from 7xx fiedls. Link is build from subfields x or z for searching by ISN,
-; or t for searching by AllFields.\
-;Anchor is build from subfields t and g. Anchor in field 773 is build from all subfields.
-;It is better than ;marc_links so use this instead of ;marc_link
-fields_in_core = "773,770,772,777,780,785"
-
 ; Set this to true in order to enable "next" and "previous" links to navigate
 ; through the current result set from within the record view.
 next_prev_navigation = false
-
-; Set domain, where citations should work. Must be approved by CitacePro.
-citation_local_domain = cpk-front.mzk.czddddd
-
-[Catalog]
-library_cards = true
-minHoldingsToApplyFilters = 30
 
 [Index]
 engine          = Solr
@@ -84,16 +58,6 @@ database        = mysql://user:pw@localhost/dbName
 file            = /home/vufind/git/VuFind/fatal-errors.log:alert,error
 ;file            = /home/vufind/git/VuFind/fatal-errors.log:alert,error,notice,debug
 
-; Enables facets this way
-custom_variables = true
-
-; Enables tracking User's active Library Card & UserId
-track_user = true
-
-; Enables ClickHeat plugin
-click_heat_plugin      = false
-click_heat_site_number = 1
-
 [GoogleMaps]
 apikey = AIzaSyALBfl5KwpSRjsvl4h0gzZB1fdq4Ei6DW0
 
@@ -102,10 +66,6 @@ apikey = AIzaSyALBfl5KwpSRjsvl4h0gzZB1fdq4Ei6DW0
 [Feedback]
 RequestHelpRecipients = "cpk-support@mzk.cz"
 ReportBugRecipients   = "cpk-support@mzk.cz"
-
-[AdresarKnihoven]
-;apiUrl = http://cpk-front.mzk.cz:3000/api
-apiUrl  = http://knihovny.cz:3000/api
 
 [Proxy]
 type = curl

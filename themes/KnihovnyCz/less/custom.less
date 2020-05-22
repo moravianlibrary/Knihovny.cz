@@ -3,11 +3,71 @@
 @import "bootstrap";
 @import "variables";
 
+// GENERAL
+body > nav.breadcrumbs {
+  // dont show main breadcrumbs
+  display: none;
+}
+
+.nav > li > a:hover,
+.nav > li > a:focus {
+  outline: none;
+  text-decoration: underline;
+  background: transparent;
+}
+
+.nav-tabs > li.active > a,
+.nav-tabs > li.active > a:hover,
+.nav-tabs > li.active > a:focus {
+  font-weight: 600;
+}
+
+.list-group {
+  .list-group-item {
+    a {
+      text-decoration: none;
+
+      .list-group-item-heading {
+      }
+
+      .list-group-item-text {
+        color: @text-color;
+      }
+
+    }
+
+    a:hover {
+      .list-group-item-heading {
+        text-decoration: underline;
+      }
+    }
+  }
+}
+
+.well.tab-content {
+  padding: 19px;
+  border-top: 0;
+}
+
+dl.dl-horizontal {
+  dt {
+    text-align: left;
+    color: @text-muted;
+  }
+
+  dd {
+    margin-bottom: 0.5em;
+  }
+}
+
+// HEADER
 header {
   background-color: #fff;
   box-shadow: 0 1px 5px #ccc;
+  margin-bottom: 20px;
 }
 
+// FOOTER
 footer {
   width: initial;
   background-color: #222222;
