@@ -204,7 +204,7 @@ class RecordDataFormatterFactory extends \VuFind\View\Helper\Root\RecordDataForm
         $spec->setLine('Physical Description', 'getPhysicalDescriptions');
         $spec->setLine('Publication Frequency', 'getPublicationFrequency');
         $spec->setLine('Playing Time', 'getPlayingTimes');
-        $spec->setLine('Format', 'getSystemDetails');
+        $spec->setLine('System Details Note', 'getSystemDetails');
         $spec->setLine('Audience', 'getTargetAudienceNotes');
         $spec->setLine('Awards', 'getAwards');
         $spec->setLine('Production Credits', 'getProductionCredits');
