@@ -61,6 +61,8 @@ chgrp -R www-data "/var/www"
 chmod -R g+w "/var/www/knihovny-cz-extension/themes"
 chmod -R g+w "${PARAM_VUFIND_SRC:-/var/www/src}/log"
 
+clear-cache
+
 echo
 echo " --- Bootstrapping done! "
 echo
