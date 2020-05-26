@@ -33,6 +33,11 @@ done
 for config in /var/www/knihovny-cz-extension/local/*/; do
     name=$(basename "$config")
     ln -s "/var/www/knihovny-cz-extension/local/$name/" "/var/www/knihovny-cz/local/$name"
+    # Make cache dirs - if they not exist, the script clear-cache executed below
+    # will create them - but with root:root as owner
+    if [ ! -d "/var/www/knihovny-cz/local/$name/cache" ]; then
+      mkdir "/var/www/knihovny-cz/local/$name/cache"
+    fi
     # Make local data available to application
     chgrp -R www-data "/var/www/knihovny-cz/local/$name/"
     chmod -R g+w "/var/www/knihovny-cz/local/$name/"
