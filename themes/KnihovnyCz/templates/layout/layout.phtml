@@ -185,6 +185,13 @@ JS;
         <?php endif; ?>
       </div>
     </nav>
+    <?php if ($this->layout()->searchbox !== false): ?>
+      <div class="search container navbar">
+        <nav class="nav searchbox hidden-print">
+          <?=$this->layout()->searchbox ?>
+        </nav>
+      </div>
+    <?php endif; ?>
     <div role="main" class="main">
       <div id="content" class="container">
         <?=$this->layout()->content ?>
