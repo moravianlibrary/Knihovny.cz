@@ -63,8 +63,9 @@
     <?php if (!empty($tabs)): ?></div><?php endif; ?>
   </div>
 <?php else: ?>
-  <form id="searchForm" class="searchForm navbar-form navbar-left flip" method="get" action="<?=$this->url($basicSearch)?>" name="searchForm" autocomplete="off">
+  <form id="searchForm" class="searchForm navbar-form flip" method="get" action="<?=$this->url($basicSearch)?>" name="searchForm" autocomplete="off">
     <?= $this->context($this)->renderInContext('search/searchTabs', ['searchTabs' => $tabConfig['tabs']]); ?>
+    <div class="well">
     <?php $placeholder = $this->searchbox()->getPlaceholderText($tabConfig['selected']['id'] ?? null); ?>
     <input id="searchForm_lookfor" class="searchForm_lookfor form-control search-query<?php if($this->searchbox()->autocompleteEnabled($this->searchClassId)):?> autocomplete searcher:<?=$this->escapeHtmlAttr($this->searchClassId) ?><?=$this->searchbox()->autocompleteAutoSubmit($this->searchClassId) ? ' ac-auto-submit' : '' ?><?php endif ?>" type="text" name="lookfor" value="<?=$this->escapeHtmlAttr($this->lookfor)?>"<?php if ($placeholder): ?> placeholder="<?=$this->transEsc($placeholder) ?>"<?php endif ?> aria-label="<?=$this->transEsc("search_terms")?>" />
     <?php if ($handlerCount > 1): ?>
@@ -152,6 +153,7 @@
         'searchType' => $this->searchType,
       ]
     );?>
+    </div>
   </form>
 <?php endif; ?>
 
