@@ -36,11 +36,6 @@ class SolrLibrary extends \KnihovnyCz\RecordDriver\SolrMarc
      */
     protected $facetsConfig = null;
 
-    public function getParentRecordID()
-    {
-        return $this->fields['id'] ?? '';
-    }
-
     /**
      * Get the full title of the record
      *
