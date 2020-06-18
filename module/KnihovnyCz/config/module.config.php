@@ -41,14 +41,29 @@ $config = [
                      ],
                  ],
              ],
+             'portal-pages' => [
+                 'type' => \Laminas\Router\Http\Segment::class,
+                 'options' => [
+                     'route' => '/Portal/Page/[:page]',
+                     'constraints' => [
+                         'page'     => '[a-zA-Z][a-zA-Z0-9_-]*',
+                     ],
+                     'defaults' => [
+                         'controller' => 'PortalPage',
+                         'action' => 'Index',
+                     ],
+                 ],
+             ],
          ],
      ],
     'controllers' => [
         'factories' => [
             \KnihovnyCz\Controller\InspirationController::class => \VuFind\Controller\AbstractBaseFactory::class,
+            \KnihovnyCz\Controller\PortalPageController::class => \VuFind\Controller\AbstractBaseFactory::class,
         ],
         'aliases' => [
             'Inspiration' => \KnihovnyCz\Controller\InspirationController::class,
+            'PortalPage' => \KnihovnyCz\Controller\PortalPageController::class,
         ],
     ],
     'vufind' => [
