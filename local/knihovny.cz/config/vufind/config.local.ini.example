@@ -7,13 +7,13 @@ debug           = false
 ; and create keys for your domain.
 ; You will need to provide a sslcapath in the [Http] section for your Captcha to work.
 [Captcha]
-siteKey  = "6LceOg4TAAAAABNlNWpIH0cEjMhBOG_ec9eguSD_"
-secretKey = "6LceOg4TAAAAAMIpTAknf9opttn04gqVrB0aS0rZ"
+recaptcha_siteKey   = "6LceOg4TAAAAABNlNWpIH0cEjMhBOG_ec9eguSD_"
+recaptcha_secretKey = "6LceOg4TAAAAAMIpTAknf9opttn04gqVrB0aS0rZ"
 ; Valid theme values: dark, light
-theme      = light
+recaptcha_theme     = light
 ; Valid forms values: changePassword, email, newAccount, passwordRecovery, sms
 ; Use * for all supported forms
-forms = changePassword, email, newAccount, passwordRecovery, sms
+forms = *
 
 [Site]
 url             = https://cpk-front.mzk.cz/
