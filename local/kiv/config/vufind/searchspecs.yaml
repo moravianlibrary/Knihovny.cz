@@ -145,9 +145,9 @@ Author:
     - author_additional
     - author_find
   DismaxParams:
-    - [bq, "inspiration:top_kiv^1"]
+    - [bq, "inspiration:top_results^1"]
     - [bf, "if(exists(merged_records_boolean),10000,0)" ]
-    - [bq, "institution:3/Library/praha/NKP/KKL/^30000"]
+    - [bq, "region_institution:3/Library/PR/NKP/KKL/^30000"]
   QueryFields:
     author_search:
       - [onephrase, 350]
@@ -179,9 +179,9 @@ ISN:
     - isbn
     - issn
   DismaxParams:
-    - [bq, "inspiration:top_kiv^1"]
+    - [bq, "inspiration:top_results^1"]
     - [bf, "if(exists(merged_records_boolean),10000,0)" ]
-    - [bq, "institution:3/Library/praha/NKP/KKL/^30000"]
+    - [bq, "region_institution:3/Library/PR/NKP/KKL/^30000"]
   QueryFields:
     issn:
       - [and, 100]
@@ -197,9 +197,9 @@ Subject:
     - subject_viz
     - genre_viz
   DismaxParams:
-    - [bq, "inspiration:top_kiv^1"]
+    - [bq, "inspiration:top_results^1"]
     - [bf, "if(exists(merged_records_boolean),10000,0)" ]
-    - [bq, "institution:3/Library/praha/NKP/KKL/^30000"]
+    - [bq, "region_institution:3/Library/PR/NKP/KKL/^30000"]
   QueryFields:
     topic:
       - [onephrase, 300]
@@ -218,6 +218,7 @@ Subject:
     genre_viz:
       - [onephrase, 200]
       - [and, 100]
+
 Inspiration:
   DismaxFields:
     - inspiration
@@ -241,6 +242,10 @@ JournalTitle:
     - title_old
     - series^100
     - series2
+  DismaxParams:
+    - [bq, "inspiration:top_results^1"]
+    - [bf, "if(exists(merged_records_boolean),10000,0)" ]
+    - [bq, "region_institution:3/Library/PR/NKP/KKL/^30000"]
   QueryFields:
     title_short:
       - [onephrase, 500]
@@ -274,9 +279,9 @@ Title:
     - title_new^100
     - title_old
   DismaxParams:
-    - [bq, "inspiration:top_kiv^1"]
+    - [bq, "inspiration:top_results^1"]
     - [bf, "if(exists(merged_records_boolean),10000,0)" ]
-    - [bq, "institution:3/Library/praha/NKP/KKL/^30000"]
+    - [bq, "region_institution:3/Library/PR/NKP/KKL/^30000"]
   QueryFields:
     title_short:
       - [onephrase, 500]
@@ -290,12 +295,16 @@ Title:
     title_new:
       - [and, 100]
     title_old:
-      - [and, ~]  
+      - [and, ~]
 
 Series:
   DismaxFields:
     - series^100
     - series2
+  DismaxParams:
+    - [bq, "inspiration:top_results^1"]
+    - [bf, "if(exists(merged_records_boolean),10000,0)" ]
+    - [bq, "region_institution:3/Library/PR/NKP/KKL/^30000"]
   QueryFields:
     series:
       - [onephrase, 500]
@@ -338,13 +347,14 @@ AllFields:
     - country_search_txt_mv
     - language_search_txt_mv
     - format_search_txt_mv
+    - obalky_annotation_txt_mv
   DismaxParams:
-    - [bq, "inspiration:top_kiv^1"]
+    - [bq, "inspiration:top_results^1"]
     - [bf, "if(exists(merged_records_boolean),10000,0)" ]
     - [bq, "author_exact:\"@query\"^20000"]
     - [bq, "title_exact:\"@query\"^10000"]
     - [bq, "term_exact:\"@query\"^30000"]
-    - [bq, "institution:3/Library/praha/NKP/KKL/^30000"]
+    - [bq, "region_institution:3/Library/PR/NKP/KKL/^30000"]
     - [bf, ord(publishDateSort)^1]
   DismaxHandler: edismax
   QueryFields:
@@ -367,7 +377,7 @@ AllFields:
       - [and, 50]
     series2:
       - [and, 30]
-    author:  
+    author:
       - [onephrase, 300]
       - [and, 250]
     author2:
@@ -418,17 +428,6 @@ AllFields:
       - [onephrase, ~]
     upv_ipc_search:
       - [onephrase, ~]
-  FilterQuery: "NOT recordtype:sfx"
-#  ExactSettings:
-#    DismaxFields:
-#      - isbn
-#      - issn
-#    QueryFields:
-#      isbn:
-#        - [onephrase, ~]
-#      issn:
-#        - [onephrase, ~]
-
 
 adv_search_title_series:
   DismaxFields:
@@ -440,12 +439,12 @@ adv_search_title_series:
     - title_old
     - titleSeries_search_txt_mv
   DismaxParams:
-    - [bq, "inspiration:top_kiv^1"]
+    - [bq, "inspiration:top_results^1"]
     - [bf, "if(exists(merged_records_boolean),10000,0)" ]
     - [bq, "author_exact:\"@query\"^20000"]
     - [bq, "title_exact:\"@query\"^10000"]
     - [bq, "term_exact:\"@query\"^30000"]
-    - [bq, "institution:3/Library/praha/NKP/KKL/^30000"]
+    - [bq, "region_institution:3/Library/PR/NKP/KKL/^30000"]
     - [bf, ord(publishDateSort)^1]
   DismaxHandler: edismax
   QueryFields:
@@ -465,11 +464,11 @@ adv_search_author_corporation:
     - author_find
     - authorCorporation_search_txt_mv
   DismaxParams:
-    - [bq, "inspiration:top_kiv^1"]
+    - [bq, "inspiration:top_results^1"]
     - [bf, "if(exists(merged_records_boolean),10000,0)" ]
     - [bq, "author_exact:\"@query\"^20000"]
     - [bq, "title_exact:\"@query\"^10000"]
-    - [bq, "institution:3/Library/praha/NKP/KKL/^30000"]
+    - [bq, "region_institution:3/Library/PR/NKP/KKL/^30000"]
     - [bf, ord(publishDateSort)^1]
   DismaxHandler: edismax
   QueryFields:
@@ -478,10 +477,10 @@ adv_search_author_corporation:
       - [and, 50]
     author_viz:
     - [onephrase, 50]
-    - [and, 20]  
+    - [and, 20]
     corporation_viz:
     - [onephrase, 50]
-    - [and, 20]  
+    - [and, 20]
 
 adv_search_subject_keywords:
   DismaxFields:
@@ -493,11 +492,11 @@ adv_search_subject_keywords:
     - genre_viz
     - subjectKeywords_search_txt_mv
   DismaxParams:
-    - [bq, "inspiration:top_kiv^1"]
+    - [bq, "inspiration:top_results^1"]
     - [bf, "if(exists(merged_records_boolean),10000,0)" ]
     - [bq, "author_exact:\"@query\"^20000"]
     - [bq, "title_exact:\"@query\"^10000"]
-    - [bq, "institution:3/Library/praha/NKP/KKL/^30000"]
+    - [bq, "region_institution:3/Library/PR/NKP/KKL/^30000"]
     - [bf, ord(publishDateSort)^1]
   DismaxHandler: edismax
   QueryFields:
@@ -510,16 +509,16 @@ adv_search_subject_keywords:
     genre_viz:
       - [onephrase, 50]
       - [and, 20]
-      
+
 adv_search_source_title:
   DismaxFiels:
    - sourceTitle_search_txt_mv
   DismaxParams:
-    - [bq, "inspiration:top_kiv^1"]
+    - [bq, "inspiration:top_results^1"]
     - [bf, "if(exists(merged_records_boolean),10000,0)" ]
     - [bq, "author_exact:\"@query\"^20000"]
     - [bq, "title_exact:\"@query\"^10000"]
-    - [bq, "institution:3/Library/praha/NKP/KKL/^30000"]
+    - [bq, "region_institution:3/Library/PR/NKP/KKL/^30000"]
     - [bf, ord(publishDateSort)^1]
   DismaxHandler: edismax
   QueryFields:
@@ -532,6 +531,10 @@ adv_search_isbn_issn_ismn:
     - isbn
     - issn
     - ismn_isn_mv
+  DismaxParams:
+    - [bq, "inspiration:top_results^1"]
+    - [bf, "if(exists(merged_records_boolean),10000,0)" ]
+    - [bq, "region_institution:3/Library/PR/NKP/KKL/^30000"]
   QueryFields:
     isbn:
       - [onephrase, 100]
@@ -547,11 +550,11 @@ adv_search_call_number:
   Dismaxfields:
     - callNumber_search_txt_mv
   DismaxParams:
-    - [bq, "inspiration:top_kiv^1"]
+    - [bq, "inspiration:top_results^1"]
     - [bf, "if(exists(merged_records_boolean),10000,0)" ]
     - [bq, "author_exact:\"@query\"^20000"]
     - [bq, "title_exact:\"@query\"^10000"]
-    - [bq, "institution:3/Library/praha/NKP/KKL/^30000"]
+    - [bq, "region_institution:3/Library/PR/NKP/KKL/^30000"]
     - [bf, ord(publishDateSort)^1]
   DismaxHandler: edismax
   QueryFields:
@@ -563,11 +566,11 @@ adv_search_publisher:
   Dismaxfields:
     - publisher_search_txt_mv
   DismaxParams:
-    - [bq, "inspiration:top_kiv^1"]
+    - [bq, "inspiration:top_results^1"]
     - [bf, "if(exists(merged_records_boolean),10000,0)" ]
     - [bq, "author_exact:\"@query\"^20000"]
     - [bq, "title_exact:\"@query\"^10000"]
-    - [bq, "institution:3/Library/praha/NKP/KKL/^30000"]
+    - [bq, "region_institution:3/Library/PR/NKP/KKL/^30000"]
     - [bf, ord(publishDateSort)^1]
   DismaxHandler: edismax
   QueryFields:
@@ -579,11 +582,11 @@ adv_search_year_of_publication:
   Dismaxfields:
      - publishDate
   DismaxParams:
-    - [bq, "inspiration:top_kiv^1"]
+    - [bq, "inspiration:top_results^1"]
     - [bf, "if(exists(merged_records_boolean),10000,0)" ]
     - [bq, "author_exact:\"@query\"^20000"]
     - [bq, "title_exact:\"@query\"^10000"]
-    - [bq, "institution:3/Library/praha/NKP/KKL/^30000"]
+    - [bq, "region_institution:3/Library/PR/NKP/KKL/^30000"]
     - [bf, ord(publishDateSort)^1]
   DismaxHandler: edismax
   QueryFields:
@@ -597,11 +600,11 @@ adv_search_place_of_publication:
     - country_str_mv
     - country_search_txt_mv
   DismaxParams:
-    - [bq, "inspiration:top_kiv^1"]
+    - [bq, "inspiration:top_results^1"]
     - [bf, "if(exists(merged_records_boolean),10000,0)" ]
     - [bq, "author_exact:\"@query\"^20000"]
     - [bq, "title_exact:\"@query\"^10000"]
-    - [bq, "institution:3/Library/praha/NKP/KKL/^30000"]
+    - [bq, "region_institution:3/Library/PR/NKP/KKL/^30000"]
     - [bf, ord(publishDateSort)^1]
   DismaxHandler: edismax
   QueryFields:
@@ -617,11 +620,11 @@ adv_search_001:
     - id001_search
     - id_authority
   DismaxParams:
-    - [bq, "inspiration:top_kiv^1"]
+    - [bq, "inspiration:top_results^1"]
     - [bf, "if(exists(merged_records_boolean),10000,0)" ]
     - [bq, "author_exact:\"@query\"^20000"]
     - [bq, "title_exact:\"@query\"^10000"]
-    - [bq, "institution:3/Library/praha/NKP/KKL/^30000"]
+    - [bq, "region_institution:3/Library/PR/NKP/KKL/^30000"]
     - [bf, ord(publishDateSort)^1]
   DismaxHandler: edismax
   QueryFields:
@@ -636,28 +639,28 @@ adv_search_nbn:
   Dismaxfields:
     - cnb_isn_mv
   DismaxParams:
-    - [bq, "inspiration:top_kiv^1"]
+    - [bq, "inspiration:top_results^1"]
     - [bf, "if(exists(merged_records_boolean),10000,0)" ]
     - [bq, "author_exact:\"@query\"^20000"]
     - [bq, "title_exact:\"@query\"^10000"]
-    - [bq, "institution:3/Library/praha/NKP/KKL/^30000"]
+    - [bq, "region_institution:3/Library/PR/NKP/KKL/^30000"]
     - [bf, ord(publishDateSort)^1]
   DismaxHandler: edismax
   QueryFields:
     cnb_isn_mv:
       - [onephrase, 100]
       - [and, 50]
-      
+
 adv_search_fulltext:
   Dismaxfields:
    - toc_txt_mv^10
    - fulltext
   DismaxParams:
-    - [bq, "inspiration:top_kiv^1"]
+    - [bq, "inspiration:top_results^1"]
     - [bf, "if(exists(merged_records_boolean),10000,0)" ]
     - [bq, "author_exact:\"@query\"^20000"]
     - [bq, "title_exact:\"@query\"^10000"]
-    - [bq, "institution:3/Library/praha/NKP/KKL/^30000"]
+    - [bq, "region_institution:3/Library/PR/NKP/KKL/^30000"]
     - [bf, ord(publishDateSort)^1]
   DismaxHandler: edismax
   QueryFields:
@@ -682,3 +685,17 @@ adv_search_ipc:
       - [withoutWhiteSpaces, 1000]
       - [withoutWhiteSpacesSlash, ~]
 
+adv_search_monographic_series:
+  Dismaxfields:
+    - monographic_series_txt_mv
+  DismaxParams:
+    - [bq, "inspiration:top_results^1"]
+    - [bf, "if(exists(merged_records_boolean),10000,0)" ]
+    - [bq, "author_exact:\"@query\"^20000"]
+    - [bq, "title_exact:\"@query\"^10000"]
+    - [bq, "region_institution:3/Library/PR/NKP/KKL/^30000"]
+    - [bf, ord(publishDateSort)^1]
+  DismaxHandler: edismax
+  QueryFields:
+    monographic_series_txt_mv:
+      - [onephrase, 1]
