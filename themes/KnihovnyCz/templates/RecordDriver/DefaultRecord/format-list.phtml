@@ -1,3 +1,5 @@
 <?php foreach ($this->driver->getFormats() as $format): ?>
-  <span class="format <?=$this->record($this->driver)->getFormatClass($format) ?>"><?=$this->transEscWithPrefix('Format::', $format) ?></span>
+  <?php if ($translated = $this->transEscWithPrefix('Format::', $format)): ?>
+    <span class="format <?=$this->record($this->driver)->getFormatClass($format) ?>"><?=$translated ?></span>
+  <?php endif; ?>
 <?php endforeach; ?>
