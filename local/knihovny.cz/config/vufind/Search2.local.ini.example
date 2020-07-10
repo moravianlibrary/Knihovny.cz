@@ -7,7 +7,7 @@
 
 [Index]
 engine = Solr
-url = http://localhost:8080/solr
+url = http://solr-dev.app.knihovny.cz/solr
 default_core = front
 perf_log = /var/www/knihovny-cz/log/solr-json.log
 
