@@ -221,9 +221,9 @@
             </p>
             <ul class="list-unstyled">
               <?php $i = 0; ?>
-              <?php foreach ($dedupData as $source => $current): ?>
+              <?php foreach (array_slice($dedupData, 0, $maxInstitutionsShown) as $source => $current): ?>
                 <?php $i++; ?>
-                <?php if ($i == 1): ?>
+                <?php if ($i === 1): ?>
                   <li class="currentSource">
                     <a href="<?=$this->recordLink()->getUrl($this->driver)?>">
                       <?=$this->transEsc("Source::$source", [], $source)?>
@@ -236,11 +236,6 @@
                     </a>
                   </li>
                 <?php endif; ?>
-                <?php
-                  if ($i === $maxInstitutionsShown) {
-                    break;
-                  }
-                ?>
               <?php endforeach; ?>
             </ul>
 
@@ -250,14 +245,7 @@
                   <strong><?=$this->translate('Show next institutions')?></strong> <span class="caret"></span>
                 </a>
                 <ul class="dropdown-menu dropdown-menu-right">
-                  <?php $i = 0; ?>
-                  <?php foreach ($dedupData as $source => $current): ?>
-                    <?php $i++; ?>
-                    <?php
-                      if ($i <= $maxInstitutionsShown){
-                        continue;
-                      }
-                    ?>
+                  <?php foreach (array_slice($dedupData, $maxInstitutionsShown) as $source => $current): ?>
                     <li class="otherSource">
                       <a href="<?=$this->recordLink()->getUrl($current['id'])?>">
                         <?=$this->transEsc("Source::$source", [], $source)?>
