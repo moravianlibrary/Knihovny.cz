@@ -93,19 +93,13 @@ footer {
 
 // search results
 .result {
-  display: block;
-  position: relative;
-
-  .record-checkbox {
-    position: absolute;
-    top: 5px;
-    left: 8px;
+  .media,
+  .media-body {
+    overflow: visible; // to make dropdown works
   }
 
-  .record-number {
-    position: absolute;
-    top: 5px;
-    left: 26px;
+  .media-body {
+    width: auto;
   }
 
   .result-body {
@@ -145,6 +139,22 @@ footer {
       li {
         margin-bottom: 0.5em;
       }
+    }
+
+    .dropdown-menu {
+      max-height: 200px;
+      overflow-x: hidden;
+      overflow-y: scroll;
+
+      ul {
+        li {
+          margin-bottom: 0.2em;
+        }
+      }
+    }
+
+    .dropdown-menu > li > a {
+      color: @link-color;
     }
   }
 }

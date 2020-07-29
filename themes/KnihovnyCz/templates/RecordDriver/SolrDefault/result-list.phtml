@@ -200,11 +200,29 @@
       </div>
       <div class="col-xs-12 col-sm-12 col-md-3">
         <?php $dedupData = $this->driver->getDedupData(); ?>
+        <?php
+          $countRecords = count($dedupData);
+          if ($countRecords <= 2) {
+            $maxInstitutionsShown = 2;
+          } elseif ($countRecords === 3) {
+            $maxInstitutionsShown = 3;
+          } elseif ($countRecords >= 4) {
+            $maxInstitutionsShown = 2;
+          }
+        ?>
         <?php if ($dedupData): ?>
           <div class="dedupInformation">
+            <?php
+              $string = $this->translate(($countRecords > 1) ? 'institutions-in-locale' : 'institution-in-locale');
+              $titleHtml = $this->translate('Found in') . " " . $countRecords . " " . $string
+            ?>
+            <p class='records-in-libraries-title'>
+              <strong><?=$titleHtml?></strong>
+            </p>
             <ul class="list-unstyled">
-              <?php $i = 1; ?>
+              <?php $i = 0; ?>
               <?php foreach ($dedupData as $source => $current): ?>
+                <?php $i++; ?>
                 <?php if ($i == 1): ?>
                   <li class="currentSource">
                     <a href="<?=$this->recordLink()->getUrl($this->driver)?>">
@@ -218,9 +236,38 @@
                     </a>
                   </li>
                 <?php endif; ?>
-                <?php $i++; ?>
+                <?php
+                  if ($i === $maxInstitutionsShown) {
+                    break;
+                  }
+                ?>
               <?php endforeach; ?>
             </ul>
+
+            <? if ($countRecords > $maxInstitutionsShown): ?>
+              <div class="dropdown">
+                <a class="dropdown-toggle" type="button" data-toggle="dropdown">
+                  <strong><?=$this->translate('Show next institutions')?></strong> <span class="caret"></span>
+                </a>
+                <ul class="dropdown-menu dropdown-menu-right">
+                  <?php $i = 0; ?>
+                  <?php foreach ($dedupData as $source => $current): ?>
+                    <?php $i++; ?>
+                    <?php
+                      if ($i <= $maxInstitutionsShown){
+                        continue;
+                      }
+                    ?>
+                    <li class="otherSource">
+                      <a href="<?=$this->recordLink()->getUrl($current['id'])?>">
+                        <?=$this->transEsc("Source::$source", [], $source)?>
+                      </a>
+                    </li>
+                  <?php endforeach; ?>
+                </ul>
+              </div>
+            <?php endif; ?>
+
           </div>
         <?php endif; ?>
       </div>
