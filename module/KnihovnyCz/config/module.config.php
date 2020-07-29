@@ -128,6 +128,7 @@ $config = [
             'db_row' => [
                 'factories' => [
                     \KnihovnyCz\Db\Row\Config::class => \VuFind\Db\Row\RowGatewayFactory::class,
+                    \KnihovnyCz\Db\Row\InstConfigs::class => \VuFind\Db\Row\RowGatewayFactory::class,
                     \KnihovnyCz\Db\Row\Widget::class => \VuFind\Db\Row\RowGatewayFactory::class,
                     \KnihovnyCz\Db\Row\WidgetContent::class => \VuFind\Db\Row\RowGatewayFactory::class,
                 ],
@@ -141,12 +142,21 @@ $config = [
             'db_table' => [
                 'factories' => [
                     \KnihovnyCz\Db\Table\Config::class => \VuFind\Db\Table\GatewayFactory::class,
+                    \KnihovnyCz\Db\Table\InstConfigs::class => \VuFind\Db\Table\GatewayFactory::class,
                     \KnihovnyCz\Db\Table\User::class => \VuFind\Db\Table\UserFactory::class,
                     \KnihovnyCz\Db\Table\Widget::class => \VuFind\Db\Table\GatewayFactory::class,
                     \KnihovnyCz\Db\Table\WidgetContent::class => \VuFind\Db\Table\GatewayFactory::class,
                 ],
                 'aliases' => [
                     \VuFind\Db\Table\User::class => \KnihovnyCz\Db\Table\User::class,
+                ],
+            ],
+            'ils_driver' => [
+                'factories' => [
+                    \KnihovnyCz\ILS\Driver\MultiBackend::class => \KnihovnyCz\ILS\Driver\MultiBackendFactory::class
+                ],
+                'aliases' => [
+                    'multibackend' => \KnihovnyCz\ILS\Driver\MultiBackend::class,
                 ],
             ],
             'content_covers' => [
