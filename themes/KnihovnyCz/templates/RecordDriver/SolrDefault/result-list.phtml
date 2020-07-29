@@ -244,7 +244,7 @@
               <?php endforeach; ?>
             </ul>
 
-            <? if ($countRecords > $maxInstitutionsShown): ?>
+            <?php if ($countRecords > $maxInstitutionsShown): ?>
               <div class="dropdown">
                 <a class="dropdown-toggle" type="button" data-toggle="dropdown">
                   <strong><?=$this->translate('Show next institutions')?></strong> <span class="caret"></span>
