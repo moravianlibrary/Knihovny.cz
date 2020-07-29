@@ -199,16 +199,10 @@
         </div>
       </div>
       <div class="col-xs-12 col-sm-12 col-md-3">
-        <?php $dedupData = $this->driver->getDedupData(); ?>
         <?php
+          $dedupData = $this->driver->getDedupData();
           $countRecords = count($dedupData);
-          if ($countRecords <= 2) {
-            $maxInstitutionsShown = 2;
-          } elseif ($countRecords === 3) {
-            $maxInstitutionsShown = 3;
-          } elseif ($countRecords >= 4) {
-            $maxInstitutionsShown = 2;
-          }
+          $maxInstitutionsShown = ($countRecords === 3) ? 3 : 2;
         ?>
         <?php if ($dedupData): ?>
           <div class="dedupInformation">
