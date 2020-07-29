@@ -67,6 +67,13 @@
             <?php endif; ?>
           </div>
 
+          <?php $summary = $this->driver->getSummary(); $summary = isset($summary[0]) ? $this->escapeHtml($summary[0]) : false; ?>
+          <?php if ($summary): ?>
+            <p>
+              <?=explode('\n', wordwrap($summary, 200, '\n'))[0]?><?=strlen($summary) > 200 ? ' ...' : ''?>
+            </p>
+          <?php endif; ?>
+
           <?php if(!$this->driver->isCollection()): ?>
             <?php if ($snippet = $this->driver->getHighlightedSnippet()): ?>
               <?php if (!empty($snippet['caption'])): ?>

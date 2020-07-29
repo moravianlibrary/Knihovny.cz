@@ -261,6 +261,7 @@ class SolrDefault extends \VuFind\RecordDriver\SolrDefault
             && is_array($this->fields['isbn_display_mv']))
             ? $this->fields['isbn_display_mv'] : [];
     }
+
     /**
      * Get an array of summary strings for the record.
      *
@@ -268,7 +269,12 @@ class SolrDefault extends \VuFind\RecordDriver\SolrDefault
      */
     public function getSummary()
     {
-        return $this->fields['summary_display_mv'] ?? [];
+        $summary = $this->fields['summary_display_mv'] ?? [];
+        if (empty($summary)){
+            $summary = ($parent = $this->getParentRecord())
+                ? $parent->getSummary() : [];
+        }
+        return $summary;
     }
 
     protected function getMonographicSeriesFieldData()

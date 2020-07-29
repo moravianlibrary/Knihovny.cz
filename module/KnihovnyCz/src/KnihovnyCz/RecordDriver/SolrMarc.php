@@ -131,5 +131,16 @@ class SolrMarc extends \KnihovnyCz\RecordDriver\SolrDefault
     {
         return ['handler' => 'morelikethis'];
     }
+
+    /**
+     * Get an array of summary strings for the record.
+     *
+     * @return array
+     */
+    public function getSummary()
+    {
+        // This is needed to overcome getSummary method defined in MarcAdvancedTrait
+        return parent::getSummary();
+    }
 }
 

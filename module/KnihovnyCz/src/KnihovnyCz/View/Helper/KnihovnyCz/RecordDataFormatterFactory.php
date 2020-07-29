@@ -63,7 +63,13 @@ class RecordDataFormatterFactory extends \VuFind\View\Helper\Root\RecordDataForm
                 $key,
                 $data['dataMethod'],
                 $data['template'],
-                ['context' => ['icon' => $data['icon']]]
+                [
+                    'context' => [
+                        'icon' => $data['icon'],
+                        'heading' => $data['heading'],
+                        'content-class' => $data['content-class'],
+                    ]
+                ]
             );
         }
 
@@ -79,21 +85,26 @@ class RecordDataFormatterFactory extends \VuFind\View\Helper\Root\RecordDataForm
     {
         $fields = [];
         $setLine = function ($key, $dataMethod, $template = null,
-            $icon = 'pr-interface-circlerighttrue'
+            $icon = 'pr-interface-circlerighttrue', $heading = true,
+            $contentClass = ''
         ) use (&$fields) {
                 $fields[$key] = [
                     'method' => ($template === null) ? 'setLine' : 'setTemplateLine',
                     'dataMethod' => $dataMethod,
                     'template' => $template,
-                    'icon' => $icon
+                    'icon' => $icon,
+                    'heading' => $heading,
+                    'content-class' => $contentClass,
                 ];
         };
 
         $setLine(
             'Book search', 'getBookSearchFilter',
-            'search_in_library_link.phtml'
+            'search_in_library_link.phtml', 'pr-interface-search', false
         );
-        $setLine('Address', 'getLibraryAddress', null, 'pr-location-pinmap5');
+        $setLine('Address', 'getLibraryAddress', null, 'pr-location-pinmap5',
+            false, 'library-large'
+        );
         $setLine(
             'Opening hours', 'getLibraryHours',
             'opening_hours.phtml', 'pr-interface-clocktime'
@@ -204,7 +215,7 @@ class RecordDataFormatterFactory extends \VuFind\View\Helper\Root\RecordDataForm
         $spec->setLine('Physical Description', 'getPhysicalDescriptions');
         $spec->setLine('Publication Frequency', 'getPublicationFrequency');
         $spec->setLine('Playing Time', 'getPlayingTimes');
-        $spec->setLine('Format', 'getSystemDetails');
+        $spec->setLine('System Details Note', 'getSystemDetails');
         $spec->setLine('Audience', 'getTargetAudienceNotes');
         $spec->setLine('Awards', 'getAwards');
         $spec->setLine('Production Credits', 'getProductionCredits');

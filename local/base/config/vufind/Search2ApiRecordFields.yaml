@@ -1,0 +1,155 @@
+# Key is the field name that can be requested. It has the following subkeys:
+# - vufind.method: name to call (either in the SearchApiController class or the record driver)
+# - vufind.default: true if the field is displayed by default when the request does not specify fields
+# - Swagger specification fields describing the returned data.
+#
+# See http://swagger.io/specification/ for information on the Swagger-specific fields
+#
+sigla:
+  vufind.method: getSigla
+  vufind.default: true
+  description: Sigla - library location mark
+  type: string
+email:
+  vufind.method: getEmail
+  description: E-mail adresses
+  type: array
+  items:
+    type: string
+openingHours:
+  vufind.method: getLibraryHours
+  description: Opening hours
+  type: array
+  items:
+    type: string
+address:
+  vufind.method: getLibraryAddress
+  description: Postal adresses
+  type: array
+  items:
+    type: string
+ico:
+  vufind.method: getIco
+  description: Identification number of person
+  type: string
+note:
+  vufind.method: getLibNote
+  description: Note
+  type: string
+responsiblePerson:
+  vufind.method: getLibResponsibility
+  description: Person responsible of a library
+  type: array
+  items:
+    type: string
+phone:
+  vufind.method: getPhone
+  description: Phone numbers
+  type: array
+  items:
+    type: string
+function:
+  vufind.method: getFunction
+  description: Library functions
+  type: array
+  items:
+    type: string
+service:
+  vufind.method: getService
+  description: Library services
+  type: array
+  items:
+    type: string
+project:
+  vufind.method: getProject
+  description: Projects library is participating on
+  type: array
+  items:
+    type: string
+type:
+  vufind.method: getType
+  description: Library type
+  type: array
+  items:
+    type: string
+ill:
+  vufind.method: getMvs
+  description: ILL services status
+  type: array
+  items:
+    type: string
+coordinates:
+  vufind.method: getGpsCoordinates
+  description: Geographical coordinates
+  type: array
+  items:
+    type: string
+childRecordCount:
+  vufind.method: getChildRecordCount
+  description: Number of child records
+  type: integer
+dedupIds:
+  vufind.method: "Formatter::getDedupIds"
+  description: IDs of all records deduplicated with the current record
+  type: array
+  items:
+    type: string
+formats:
+  vufind.method: getFormats
+  description: Formats
+  type: array
+  items:
+    type: string
+fullRecord:
+  vufind.method: "Formatter::getFullRecord"
+  description: Full metadata record (typically XML)
+  type: array
+  items:
+    type: string
+geoLocations:
+  vufind.method: getGeoLocation
+  description: Geographic locations (e.g. points, bounding boxes)
+  type: array
+  items:
+    type: string
+id:
+  vufind.method: getUniqueID
+  vufind.default: true
+  description: Record unique ID (can be used in the record endpoint)
+  type: string
+rawData:
+  vufind.method: "Formatter::getRawData"
+  description: All data in the index fields
+  type: string
+recordPage:
+  vufind.method: "Formatter::getRecordPage"
+  description: Link to the record page in the UI
+  type: string
+shortTitle:
+  vufind.method: getShortTitle
+  description: Short title (title excluding any subtitle)
+  type: string
+summary:
+  vufind.method: getSummary
+  description: Summary
+  type: array
+  items:
+    type: string
+systemDetails:
+  vufind.method: getSystemDetails
+  description: Technical details on the represented item
+  type: array
+  items:
+    type: string
+title:
+  vufind.method: getTitle
+  vufind.default: true
+  description: Title including any subtitle
+  type: string
+urls:
+  vufind.method: "Formatter::getURLs"
+  vufind.default: true
+  description: URLs contained in the record
+  type: array
+  items:
+    $ref: '#/definitions/Url'

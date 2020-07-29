@@ -1,39 +1,24 @@
 [System]
 debug           = false
 
-; Activate Captcha validation on select forms
-; VuFind will use reCaptcha validation to prevent bots from using certain actions of
-; your instance. See http://www.google.com/recaptcha for more information on Captcha
-; and create keys for your domain.
-; You will need to provide a sslcapath in the [Http] section for your Captcha to work.
 [Captcha]
-siteKey  = "6LceOg4TAAAAABNlNWpIH0cEjMhBOG_ec9eguSD_"
-secretKey = "6LceOg4TAAAAAMIpTAknf9opttn04gqVrB0aS0rZ"
+recaptcha_siteKey   = "6LceOg4TAAAAABNlNWpIH0cEjMhBOG_ec9eguSD_"
+recaptcha_secretKey = "6LceOg4TAAAAAMIpTAknf9opttn04gqVrB0aS0rZ"
 ; Valid theme values: dark, light
-theme      = light
+recaptcha_theme     = light
 ; Valid forms values: changePassword, email, newAccount, passwordRecovery, sms
 ; Use * for all supported forms
-forms = changePassword, email, newAccount, passwordRecovery, sms
+forms = *
 
 [Site]
-url             = https://cpk-front.mzk.cz/
+url             = https://beta.knihovny.cz/
 email           = cpk-support@mzk.cz
-browserDetectLanguage = false
-defaultAccountPage = CheckedOut
 theme		= KnihovnyCz
 
-[Record]
-; Set this to true in order to enable "next" and "previous" links to navigate
-; through the current result set from within the record view.
-next_prev_navigation = false
-
 [Index]
-engine          = Solr
-;url		= http://cpk-back.mzk.cz:8080/solr
-;default_core    = biblio
-url		= http://cpk-front.mzk.cz:8080/solr
-;default_core   = index
-default_core    = beta
+engine       = Solr
+url          = http://solr-dev.app.knihovny.cz/solr
+default_core = front
 
 ; Set Max limit for ebooks to harvest from Solr to MySQL
 ; Solr can't return all rows by default and need Limit option
@@ -74,9 +59,6 @@ port = 8000
 username = username
 password = password
 non_proxy_host[] = cache.obalkyknih.cz
-
-; List is rendered in given order, otherwise can be sorted randomly
-list_sorting = random
 
 [Parent_Config]
 relative_path = ../../../base/config/vufind/config.ini
