@@ -8,6 +8,7 @@ docker/data
 nohup.out
 local/*/cache/
 local/knihovny.cz/config/vufind/*.local.ini
+themes/KnihovnyCz/css/compiled.css
 themes/KnihovnyCz/images/content
 themes/KnihovnyCz/templates/ContentBlock/TemplateBased
 themes/KnihovnyCz/templates/content/*
