@@ -9,5 +9,5 @@ return [
             'recordDataFormatter' => 'VuFind\View\Helper\Root\RecordDataFormatter',
         ],
     ],
-    'favicon' => 'favicon.ico',
+    'favicon' => 'icon-knihovny.png',
 ];
