@@ -4,10 +4,10 @@
     <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#header-collapse" aria-hidden="true">
       <i class="fa fa-bars"></i>
     </button>
-    <a class="navbar-brand lang-<?=$this->layout()->userLang ?>" href="<?=$this->url('home')?>">
+    <a class="navbar-brand lang-<?=$this->layout()->userLang?>" href="<?=$this->url('home')?>">
       <span class="knihovny-logo"></span>
       <span class="sr-only">knihovny.cz</span>
-      <span class="slogan"><?=$this->translate('slogan') ?></span>
+      <span class="slogan"><?=$this->translate('slogan')?></span>
     </a>
   </div>
   <?php if (!isset($this->layout()->renderingError)): ?>
