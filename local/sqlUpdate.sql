@@ -1287,3 +1287,18 @@ VALUES (
            NULL, 'cpk-front.mzk.cz', 0, 1);
 
 UPDATE `system` SET `value` = '70' WHERE `key`='DB_VERSION';
+
+
+/* Add table for record cache */
+CREATE TABLE `record` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `record_id` varchar(255) DEFAULT NULL,
+  `source` varchar(50) DEFAULT NULL,
+  `version` varchar(20) NOT NULL,
+  `data` longtext DEFAULT NULL,
+  `updated` datetime NOT NULL DEFAULT '2000-01-01 00:00:00',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `record_id_source` (`record_id`, `source`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+UPDATE `system` SET `value` = '71' WHERE `key`='DB_VERSION';
