@@ -6,7 +6,7 @@ function print_usage {
 USAGE: $0 [params]
 
 Available params
-  -b|--branch    Branch of original VuFind repository (https://github.com/vufind-org/vufind), default "master"
+  -b|--branch    Branch of original VuFind repository (https://github.com/vufind-org/vufind), defaults to "dev"
   -d|--dry-run   Only prints information about available update
   -h|--help      Print usage
 
@@ -19,7 +19,7 @@ FILENAME="${DIRNAME}/../docker/builds/knihovny-cz-base6/Dockerfile"
 
 # Set deafults
 repository="vufind-org/vufind"
-branch="master"
+branch="dev"
 dryrun=false
 
 while true ; do
