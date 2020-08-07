@@ -14,6 +14,9 @@
     <div class="collapse navbar-collapse" id="header-collapse">
       <nav>
         <ul class="nav navbar-nav navbar-right flip">
+          <li>
+            <a href="<?=$this->url('inpspiration') ?>"><i class="fa fa-compass" aria-hidden="true"></i> <?=$this->transEsc("Inspiration") ?></a>
+          </li>
           <?php if ($this->feedback()->tabEnabled()): ?>
             <li>
               <a id="feedbackLink" data-lightbox href="<?=$this->url('feedback-home') ?>"><i class="fa fa-envelope" aria-hidden="true"></i> <?=$this->transEsc("Feedback")?></a>
