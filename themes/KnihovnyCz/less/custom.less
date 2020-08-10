@@ -15,6 +15,13 @@
   font-style: normal;
 }
 
+// overwrite parent theme styles
+@media (min-width: 768px) {
+  .form-control {
+    max-width: none;
+  }
+}
+
 // GENERAL
 body > nav.breadcrumbs {
   // dont show main breadcrumbs
@@ -363,4 +370,52 @@ h6:hover .heading-permalink
       text-align: center;
     }
   }
+}
+
+// bootstrap 4 input group
+.b4-input-group {
+  width: 100%;
+
+  .form-control {
+    margin-bottom: 3px;
+  }
+
+  .b4-input-group-append {
+  }
+}
+
+@media (min-width: @screen-md) {
+  .b4-input-group {
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: stretch;
+
+    .form-control {
+      position: relative;
+      flex: 1 1 auto;
+      width: 1%;
+      min-width: 0;
+      margin-right: 3px;
+      margin-bottom: 0;
+    }
+
+    .b4-input-group-append {
+      display: flex;
+    }
+  }
+}
+
+.active-filters {
+  .filters {
+    .filter-value {
+      font-weight: 500;
+    }
+  }
+}
+
+.input-lg,
+.btn-lg,
+.btn-group-lg > .btn {
+  font-size: 1.067em;
 }
