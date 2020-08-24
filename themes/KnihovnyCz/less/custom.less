@@ -154,6 +154,16 @@ footer {
   width: initial;
   background-color: #222222;
   color: #f6f6f6;
+  padding: 0;
+
+  h3 {
+    font-size: 1.3em;
+    font-weight: normal;
+  }
+
+  p {
+    margin-bottom: 0;
+  }
 
   a {
     color: #cccccc;
@@ -161,6 +171,22 @@ footer {
 
   a:hover {
     color: #ffffff;
+  }
+
+  .infobar {
+    padding-bottom: 21px;
+
+    .logo {
+      max-height: 50px;
+    }
+  }
+
+  .copybar {
+    text-align: center;
+    background: #1a1a1a;
+    color: #cccccc;
+    padding: @padding-large-vertical 0;
+    border-top: 1px dotted #333333;
   }
 }
 
