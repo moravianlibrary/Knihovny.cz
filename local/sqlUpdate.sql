@@ -1302,3 +1302,15 @@ CREATE TABLE `record` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 UPDATE `system` SET `value` = '71' WHERE `key`='DB_VERSION';
+
+
+/* Update table resource_tags */
+ALTER TABLE `resource_tags` CHANGE COLUMN `resource_id` `resource_id` int(11) DEFAULT NULL;
+
+UPDATE `system` SET `value` = '72' WHERE `key`='DB_VERSION';
+/* Update table shortlinks */
+ALTER TABLE `shortlinks` ADD COLUMN `hash` varchar(32) AFTER `path`;
+ALTER TABLE `shortlinks` ADD UNIQUE KEY `shortlinks_hash_IDX` USING HASH (`hash`);
+
+UPDATE `system` SET `value` = '73' WHERE `key`='DB_VERSION';
+
