@@ -71,7 +71,9 @@ class MultiBackendFactory extends \VuFind\ILS\Driver\MultiBackendFactory impleme
             $container->get(\VuFind\Auth\ILSAuthenticator::class),
             $container->get(\VuFind\ILS\Driver\PluginManager::class),
             $container->get(\VuFind\Db\Table\PluginManager::class)
-                ->get(\KnihovnyCz\Db\Table\InstConfigs::class)
+                ->get(\KnihovnyCz\Db\Table\InstConfigs::class),
+            $container->get(\VuFind\Db\Table\PluginManager::class)
+                ->get(\KnihovnyCz\Db\Table\InstSources::class)
         );
     }
 }

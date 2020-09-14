@@ -30,6 +30,7 @@
 namespace KnihovnyCz\ILS\Driver;
 
 use KnihovnyCz\Db\Table\InstConfigs;
+use KnihovnyCz\Db\Table\InstSources;
 use VuFind\Auth\ILSAuthenticator;
 use VuFind\ILS\Driver\PluginManager;
 
@@ -41,6 +42,14 @@ class MultiBackend extends \VuFind\ILS\Driver\MultiBackend
      * @var InstConfigs
      */
     protected $instConfigs;
+
+    /**
+     * Table gateway to institution source
+     *
+     * @var InstSources
+     */
+    protected $instSources;
+
     /**
      * Constructor
      *
@@ -49,9 +58,10 @@ class MultiBackend extends \VuFind\ILS\Driver\MultiBackend
      * @param PluginManager                 $dm           ILS driver manager
      */
     public function __construct(\VuFind\Config\PluginManager $configLoader,
-        ILSAuthenticator $ilsAuth, PluginManager $dm, InstConfigs $instConfigs
+        ILSAuthenticator $ilsAuth, PluginManager $dm, InstConfigs $instConfigs, InstSources $instSources
     ) {
         $this->instConfigs = $instConfigs;
+        $this->instSources = $instSources;
         parent::__construct($configLoader, $ilsAuth, $dm);
     }
 
@@ -66,7 +76,11 @@ class MultiBackend extends \VuFind\ILS\Driver\MultiBackend
      */
     protected function getDriverConfig($source)
     {
-        return $this->instConfigs->getConfig($source);
+        $instSource = $this->instSources->getSource($source);
+        if ($instSource == null) {
+            return [];
+        }
+        return $this->instConfigs->getConfig($instSource);
     }
 
 }
