@@ -53,7 +53,7 @@ class DocumentTypes implements \VuFind\ContentBlock\ContentBlockInterface
      *
      * @var string
      */
-    protected $facetField = 'cpk_detected_format_facet_str_mv';
+    protected $facetField = 'record_format_facet_mv';
 
     /**
      * Configuration manager
