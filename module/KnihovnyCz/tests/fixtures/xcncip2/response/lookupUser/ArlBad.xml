@@ -1,0 +1,209 @@
+HTTP/1.1 200 OK
+Content-Type: application/xml
+Date: Wed, 18 Mar 2015 11:49:40 GMT
+
+<?xml version="1.0" encoding="UTF-8"?>
+<ns1:NCIPMessage xmlns:ns1="http://www.niso.org/2008/ncip" ns1:version="http://www.niso.org/schemas/ncip/v2_02/ncip_v2_02.xsd">
+    <ns1:LookupUserResponse>
+        <ns1:UserId>
+            <ns1:AgencyId ns1:Scheme="https://www.library.sk/ncip/v2_02/schemes.scm">CBA001</ns1:AgencyId>
+            <ns1:UserIdentifierType ns1:Scheme="https://www.library.sk/ncip/v2_02/schemes.scm">INSTITUTION_ID_NUMBER</ns1:UserIdentifierType>
+            <ns1:UserIdentifierValue>0066093</ns1:UserIdentifierValue>
+        </ns1:UserId>
+        <ns1:UserFiscalAccount>
+            <ns1:AccountBalance>
+                <ns1:CurrencyCode>CZK</ns1:CurrencyCode>
+                <ns1:MonetaryValue>0</ns1:MonetaryValue>
+            </ns1:AccountBalance>
+            <ns1:AccountDetails>
+                <ns1:AccrualDate>2019-07-12T00:00:00Z</ns1:AccrualDate>
+                <ns1:FiscalTransactionInformation>
+                    <ns1:FiscalActionType ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/fiscalactiontype/fiscalactiontype.scm">Payment</ns1:FiscalActionType>
+                    <ns1:FiscalTransactionType ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/fiscalactiontype/fiscalactiontype.scm">Service Charge</ns1:FiscalTransactionType>
+                    <ns1:Amount>
+                        <ns1:CurrencyCode>CZK</ns1:CurrencyCode>
+                        <ns1:MonetaryValue>-2000</ns1:MonetaryValue>
+                    </ns1:Amount>
+                    <ns1:FiscalTransactionDescription />
+                    <ns1:ItemDetails>
+                        <ns1:ItemId>
+                            <ns1:ItemIdentifierType ns1:Scheme="https://www.library.sk/ncip/v2_02/schemes.scm">BARCODE</ns1:ItemIdentifierType>
+                            <ns1:ItemIdentifierValue>2681016402</ns1:ItemIdentifierValue>
+                        </ns1:ItemId>
+                        <ns1:BibliographicDescription>
+                            <ns1:Author>Běhan, Petr</ns1:Author>
+                            <ns1:BibliographicItemId>
+                                <ns1:BibliographicItemIdentifier>8071750247</ns1:BibliographicItemIdentifier>
+                                <ns1:BibliographicItemIdentifierCode ns1:Scheme="https://www.library.sk/ncip/v2_02/schemes.scm">ISBN</ns1:BibliographicItemIdentifierCode>
+                            </ns1:BibliographicItemId>
+                            <ns1:ComponentId>
+                                <ns1:ComponentIdentifierType ns1:Scheme="https://www.library.sk/ncip/v2_02/schemes.scm">ACCESSION_NUMBER</ns1:ComponentIdentifierType>
+                                <ns1:ComponentIdentifier>2681016402</ns1:ComponentIdentifier>
+                            </ns1:ComponentId>
+                            <ns1:Edition />
+                            <ns1:PlaceOfPublication>Praha :</ns1:PlaceOfPublication>
+                            <ns1:PublicationDate>1995</ns1:PublicationDate>
+                            <ns1:Publisher>Prospektrum,</ns1:Publisher>
+                            <ns1:Title>Daňová soustava. Díl 3a, Daně z příjmů fyzické osoby, právnické osoby</ns1:Title>
+                        </ns1:BibliographicDescription>
+                    </ns1:ItemDetails>
+                </ns1:FiscalTransactionInformation>
+            </ns1:AccountDetails>
+            <ns1:AccountDetails>
+                <ns1:AccrualDate>2019-07-12T00:00:00Z</ns1:AccrualDate>
+                <ns1:FiscalTransactionInformation>
+                    <ns1:FiscalActionType ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/fiscalactiontype/fiscalactiontype.scm">Payment</ns1:FiscalActionType>
+                    <ns1:FiscalTransactionType ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/fiscalactiontype/fiscalactiontype.scm">Service Charge</ns1:FiscalTransactionType>
+                    <ns1:Amount>
+                        <ns1:CurrencyCode>CZK</ns1:CurrencyCode>
+                        <ns1:MonetaryValue>-2000</ns1:MonetaryValue>
+                    </ns1:Amount>
+                    <ns1:FiscalTransactionDescription />
+                    <ns1:ItemDetails>
+                        <ns1:ItemId>
+                            <ns1:ItemIdentifierType ns1:Scheme="https://www.library.sk/ncip/v2_02/schemes.scm">BARCODE</ns1:ItemIdentifierType>
+                            <ns1:ItemIdentifierValue>2680126053</ns1:ItemIdentifierValue>
+                        </ns1:ItemId>
+                        <ns1:BibliographicDescription>
+                            <ns1:Author>Störig, Hans Joachim</ns1:Author>
+                            <ns1:BibliographicItemId>
+                                <ns1:BibliographicItemIdentifier>8071130583</ns1:BibliographicItemIdentifier>
+                                <ns1:BibliographicItemIdentifierCode ns1:Scheme="https://www.library.sk/ncip/v2_02/schemes.scm">ISBN</ns1:BibliographicItemIdentifierCode>
+                            </ns1:BibliographicItemId>
+                            <ns1:ComponentId>
+                                <ns1:ComponentIdentifierType ns1:Scheme="https://www.library.sk/ncip/v2_02/schemes.scm">ACCESSION_NUMBER</ns1:ComponentIdentifierType>
+                                <ns1:ComponentIdentifier>2680126053</ns1:ComponentIdentifier>
+                            </ns1:ComponentId>
+                            <ns1:Edition />
+                            <ns1:PlaceOfPublication>Praha :</ns1:PlaceOfPublication>
+                            <ns1:PublicationDate>1993</ns1:PublicationDate>
+                            <ns1:Publisher>Zvon,</ns1:Publisher>
+                            <ns1:Title>Malé dějiny filozofie</ns1:Title>
+                        </ns1:BibliographicDescription>
+                    </ns1:ItemDetails>
+                </ns1:FiscalTransactionInformation>
+            </ns1:AccountDetails>
+        </ns1:UserFiscalAccount>
+        <ns1:LoanedItem>
+            <ns1:ItemId>
+                <ns1:ItemIdentifierType ns1:Scheme="https://www.library.sk/ncip/v2_02/schemes.scm">BARCODE</ns1:ItemIdentifierType>
+                <ns1:ItemIdentifierValue>2681016402</ns1:ItemIdentifierValue>
+            </ns1:ItemId>
+            <ns1:DateDue>2019-09-09T00:00:00Z</ns1:DateDue>
+            <ns1:Title>Daňová soustava. Díl 3a, Daně z příjmů fyzické osoby, právnické osoby</ns1:Title>
+            <ns1:Ext>
+                <ns1:RenewalCount>0</ns1:RenewalCount>
+                <ns1:DateCheckedOut>2019-07-12T00:00:00Z</ns1:DateCheckedOut>
+                <ns1:BibliographicDescription>
+                    <ns1:Author>Běhan, Petr</ns1:Author>
+                    <ns1:BibliographicItemId>
+                        <ns1:BibliographicItemIdentifier>8071750247</ns1:BibliographicItemIdentifier>
+                        <ns1:BibliographicItemIdentifierCode ns1:Scheme="https://www.library.sk/ncip/v2_02/schemes.scm">ISBN</ns1:BibliographicItemIdentifierCode>
+                    </ns1:BibliographicItemId>
+                    <ns1:ComponentId>
+                        <ns1:ComponentIdentifierType ns1:Scheme="https://www.library.sk/ncip/v2_02/schemes.scm">ACCESSION_NUMBER</ns1:ComponentIdentifierType>
+                        <ns1:ComponentIdentifier>2681016402</ns1:ComponentIdentifier>
+                    </ns1:ComponentId>
+                    <ns1:Edition />
+                    <ns1:PlaceOfPublication>Praha :</ns1:PlaceOfPublication>
+                    <ns1:PublicationDate>1995</ns1:PublicationDate>
+                    <ns1:Publisher>Prospektrum,</ns1:Publisher>
+                    <ns1:Title>Daňová soustava. Díl 3a, Daně z příjmů fyzické osoby, právnické osoby</ns1:Title>
+                </ns1:BibliographicDescription>
+                <ns1:RenewalNotPermitted />
+            </ns1:Ext>
+        </ns1:LoanedItem>
+        <ns1:LoanedItem>
+            <ns1:ItemId>
+                <ns1:ItemIdentifierType ns1:Scheme="https://www.library.sk/ncip/v2_02/schemes.scm">BARCODE</ns1:ItemIdentifierType>
+                <ns1:ItemIdentifierValue>2680126053</ns1:ItemIdentifierValue>
+            </ns1:ItemId>
+            <ns1:DateDue>2019-09-09T00:00:00Z</ns1:DateDue>
+            <ns1:Title>Malé dějiny filozofie</ns1:Title>
+            <ns1:Ext>
+                <ns1:RenewalCount>0</ns1:RenewalCount>
+                <ns1:DateCheckedOut>2019-07-12T00:00:00Z</ns1:DateCheckedOut>
+                <ns1:BibliographicDescription>
+                    <ns1:Author>Störig, Hans Joachim</ns1:Author>
+                    <ns1:BibliographicItemId>
+                        <ns1:BibliographicItemIdentifier>8071130583</ns1:BibliographicItemIdentifier>
+                        <ns1:BibliographicItemIdentifierCode ns1:Scheme="https://www.library.sk/ncip/v2_02/schemes.scm">ISBN</ns1:BibliographicItemIdentifierCode>
+                    </ns1:BibliographicItemId>
+                    <ns1:ComponentId>
+                        <ns1:ComponentIdentifierType ns1:Scheme="https://www.library.sk/ncip/v2_02/schemes.scm">ACCESSION_NUMBER</ns1:ComponentIdentifierType>
+                        <ns1:ComponentIdentifier>2680126053</ns1:ComponentIdentifier>
+                    </ns1:ComponentId>
+                    <ns1:Edition />
+                    <ns1:PlaceOfPublication>Praha :</ns1:PlaceOfPublication>
+                    <ns1:PublicationDate>1993</ns1:PublicationDate>
+                    <ns1:Publisher>Zvon,</ns1:Publisher>
+                    <ns1:Title>Malé dějiny filozofie</ns1:Title>
+                </ns1:BibliographicDescription>
+                <ns1:RenewalNotPermitted />
+            </ns1:Ext>
+        </ns1:LoanedItem>
+        <ns1:UserOptionalFields>
+            <ns1:NameInformation>
+                <ns1:PersonalNameInformation>
+                    <ns1:StructuredPersonalUserName>
+                        <ns1:GivenName>CPK 2</ns1:GivenName>
+                        <ns1:Surname>TEST</ns1:Surname>
+                    </ns1:StructuredPersonalUserName>
+                    <ns1:UnstructuredPersonalUserName>TEST CPK 2</ns1:UnstructuredPersonalUserName>
+                </ns1:PersonalNameInformation>
+            </ns1:NameInformation>
+            <ns1:UserAddressInformation>
+                <ns1:UserAddressRoleType ns1:Scheme="https://www.library.sk/ncip/v2_02/schemes.scm">Permanent</ns1:UserAddressRoleType>
+                <ns1:PhysicalAddress>
+                    <ns1:UnstructuredAddress>
+                        <ns1:UnstructuredAddressType ns1:Scheme="https://www.library.sk/ncip/v2_02/schemes.scm">text</ns1:UnstructuredAddressType>
+                        <ns1:UnstructuredAddressData>Lidická 1, České Budějovice, 370 01</ns1:UnstructuredAddressData>
+                    </ns1:UnstructuredAddress>
+                    <ns1:PhysicalAddressType ns1:Scheme="https://www.library.sk/ncip/v2_02/schemes.scm">Postal address</ns1:PhysicalAddressType>
+                </ns1:PhysicalAddress>
+            </ns1:UserAddressInformation>
+            <ns1:UserAddressInformation>
+                <ns1:UserAddressRoleType ns1:Scheme="https://www.library.sk/ncip/v2_02/schemes.scm">Temporary</ns1:UserAddressRoleType>
+                <ns1:PhysicalAddress>
+                    <ns1:UnstructuredAddress>
+                        <ns1:UnstructuredAddressType ns1:Scheme="https://www.library.sk/ncip/v2_02/schemes.scm">text</ns1:UnstructuredAddressType>
+                        <ns1:UnstructuredAddressData>Pražská 47, Borek, 373 67</ns1:UnstructuredAddressData>
+                    </ns1:UnstructuredAddress>
+                    <ns1:PhysicalAddressType ns1:Scheme="https://www.library.sk/ncip/v2_02/schemes.scm">Postal address</ns1:PhysicalAddressType>
+                </ns1:PhysicalAddress>
+            </ns1:UserAddressInformation>
+            <ns1:UserAddressInformation>
+                <ns1:UserAddressRoleType ns1:Scheme="https://www.library.sk/ncip/v2_02/schemes.scm">Email</ns1:UserAddressRoleType>
+                <ns1:ElectronicAddress>
+                    <ns1:ElectronicAddressType ns1:Scheme="http://www.iana.org/assignments/uri-schemes">mailto</ns1:ElectronicAddressType>
+                    <ns1:ElectronicAddressData>cpk2@cbvk.cz</ns1:ElectronicAddressData>
+                </ns1:ElectronicAddress>
+            </ns1:UserAddressInformation>
+            <ns1:UserPrivilege>
+                <ns1:AgencyId ns1:Scheme="https://www.library.sk/ncip/v2_02/schemes.scm">CBA001</ns1:AgencyId>
+                <ns1:AgencyUserPrivilegeType ns1:Scheme="https://www.library.sk/ncip/v2_02/schemes.scm">Licence card</ns1:AgencyUserPrivilegeType>
+                <ns1:ValidFromDate>2028-03-22T01:00:00Z</ns1:ValidFromDate>
+                <ns1:ValidToDate>2020-07-22T01:00:00Z</ns1:ValidToDate>
+                <ns1:UserPrivilegeDescription />
+            </ns1:UserPrivilege>
+            <ns1:UserPrivilege>
+                <ns1:AgencyId ns1:Scheme="https://www.library.sk/ncip/v2_02/schemes.scm">CBA001</ns1:AgencyId>
+                <ns1:AgencyUserPrivilegeType ns1:Scheme="https://www.library.sk/ncip/v2_02/schemes.scm">Category</ns1:AgencyUserPrivilegeType>
+                <ns1:UserPrivilegeDescription>UZ-JVK</ns1:UserPrivilegeDescription>
+            </ns1:UserPrivilege>
+            <ns1:BlockOrTrap>
+                <ns1:AgencyId ns1:Scheme="https://www.library.sk/ncip/v2_02/schemes.scm">CBA001</ns1:AgencyId>
+                <ns1:BlockOrTrapType ns1:Scheme="https://www.library.sk/ncip/v2_02/schemes.scm">Čtenář má blokující upomínku 5</ns1:BlockOrTrapType>
+            </ns1:BlockOrTrap>
+            <ns1:BlockOrTrap>
+                <ns1:AgencyId ns1:Scheme="https://www.library.sk/ncip/v2_02/schemes.scm">CBA001</ns1:AgencyId>
+                <ns1:BlockOrTrapType ns1:Scheme="https://www.library.sk/ncip/v2_02/schemes.scm">Čtenář má blokující upomínku 6</ns1:BlockOrTrapType>
+            </ns1:BlockOrTrap>
+            <ns1:UserId>
+                <ns1:AgencyId ns1:Scheme="https://www.library.sk/ncip/v2_02/schemes.scm">CBA001</ns1:AgencyId>
+                <ns1:UserIdentifierType ns1:Scheme="https://www.library.sk/ncip/v2_02/schemes.scm">INSTITUTION_ID_NUMBER</ns1:UserIdentifierType>
+                <ns1:UserIdentifierValue>0066093</ns1:UserIdentifierValue>
+            </ns1:UserId>
+        </ns1:UserOptionalFields>
+    </ns1:LookupUserResponse>
+</ns1:NCIPMessage>

@@ -20,7 +20,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  *
  * @category VuFind
- * @package  RecordDrivers      
+ * @package  RecordDrivers
  * @author   Josef Moravec <moravec@mzk.cz>
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     http://github.com/moravianlibrary/Knihovny.cz Knihovny.cz
@@ -30,29 +30,6 @@ namespace KnihovnyCz\RecordDriver;
 
 class SolrLocal extends \KnihovnyCz\RecordDriver\SolrMarc
 {
-    /**
-     * Get an array of information about record holdings, obtained in real-time
-     * from the ILS.
-     *
-     * @return array
-     */
-    public function getRealTimeHoldings()
-    {
-        try {
-            $holdings = parent::getRealTimeHoldings();
-        } catch (\VuFind\Exception\ILS $exception) {
-            //TODO create full array structure for holdings
-            $holdings = $this->parseHoldingsFrom996field();
-        }
-        return $holdings;
-    }
-
-    //FIXME: bypass this until ILS drivers are implemented
-    public function getRealTimeHistory()
-    {
-        // Get Acquisitions Data
-        return [];
-    }
 
 }
 

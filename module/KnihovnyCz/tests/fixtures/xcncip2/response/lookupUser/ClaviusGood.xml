@@ -1,0 +1,147 @@
+HTTP/1.1 200 OK
+Content-Type: application/xml
+Date: Wed, 18 Mar 2015 11:49:40 GMT
+
+<?xml version="1.0" encoding="UTF-8"?>
+<ns1:NCIPMessage xmlns:ns1="http://www.niso.org/2008/ncip" xmlns:ns2="https://ncip.knihovny.cz/ILSDI/ncip/2015/extensions" ns1:version="http://www.niso.org/schemas/ncip/v2_02/ncip_v2_02.xsd">
+    <ns1:LookupUserResponse>
+        <ns1:UserId>
+            <ns1:AgencyId>OPG001</ns1:AgencyId>
+            <ns1:UserIdentifierType ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/visibleuseridentifiertype/visibleuseridentifiertype.scm">Institution Id Number</ns1:UserIdentifierType>
+            <ns1:UserIdentifierValue>99045</ns1:UserIdentifierValue>
+        </ns1:UserId>
+        <ns1:UserFiscalAccount>
+            <ns1:AccountBalance>
+                <ns1:CurrencyCode ns1:Scheme="http://www.bsi-global.com/Technical+Information/Publications/_Publications/tig90x.doc">CZK</ns1:CurrencyCode>
+                <ns1:MonetaryValue>0</ns1:MonetaryValue>
+            </ns1:AccountBalance>
+        </ns1:UserFiscalAccount>
+        <ns1:LoanedItemsCount>
+            <ns1:CirculationStatus ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/circulationstatus/circulationstatus.scm">On Loan</ns1:CirculationStatus>
+            <ns1:LoanedItemCountValue>2</ns1:LoanedItemCountValue>
+        </ns1:LoanedItemsCount>
+        <ns1:LoanedItemsCount>
+            <ns1:ItemUseRestrictionType ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/itemuserestrictiontype/itemuserestrictiontype.scm">In Library Use Only</ns1:ItemUseRestrictionType>
+            <ns1:LoanedItemCountValue>0</ns1:LoanedItemCountValue>
+        </ns1:LoanedItemsCount>
+        <ns1:LoanedItem>
+            <ns1:ItemId>
+                <ns1:AgencyId>17</ns1:AgencyId>
+                <ns1:ItemIdentifierType ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/visibleitemidentifiertype/visibleitemidentifiertype.scm">Barcode</ns1:ItemIdentifierType>
+                <ns1:ItemIdentifierValue>318300523523</ns1:ItemIdentifierValue>
+            </ns1:ItemId>
+            <ns1:DateDue>2025-08-23T22:00:00Z</ns1:DateDue>
+            <ns1:Title>Kdysi dávno</ns1:Title>
+            <ns1:MediumType ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/mediumtype/mediumtype.scm">Book</ns1:MediumType>
+            <ns1:Ext>
+                <ns1:RenewalNotPermitted />
+            </ns1:Ext>
+        </ns1:LoanedItem>
+        <ns1:LoanedItem>
+            <ns1:ItemId>
+                <ns1:AgencyId>17</ns1:AgencyId>
+                <ns1:ItemIdentifierType ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/visibleitemidentifiertype/visibleitemidentifiertype.scm">Barcode</ns1:ItemIdentifierType>
+                <ns1:ItemIdentifierValue>318300456456</ns1:ItemIdentifierValue>
+            </ns1:ItemId>
+            <ns1:DateDue>2025-08-23T22:00:00Z</ns1:DateDue>
+            <ns1:Title>Bydlí s námi suchozemská želva</ns1:Title>
+            <ns1:MediumType ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/mediumtype/mediumtype.scm">Book</ns1:MediumType>
+        </ns1:LoanedItem>
+        <ns1:RequestedItem>
+            <ns1:RequestId>
+                <ns1:RequestIdentifierValue>14110080</ns1:RequestIdentifierValue>
+            </ns1:RequestId>
+            <ns1:ItemId>
+                <ns1:AgencyId>17</ns1:AgencyId>
+                <ns1:ItemIdentifierType ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/visibleitemidentifiertype/visibleitemidentifiertype.scm">Barcode</ns1:ItemIdentifierType>
+                <ns1:ItemIdentifierValue>318300675344</ns1:ItemIdentifierValue>
+            </ns1:ItemId>
+            <ns1:BibliographicId>
+                <ns1:BibliographicItemId>
+                    <ns1:BibliographicItemIdentifier>KN3183000000442993</ns1:BibliographicItemIdentifier>
+                </ns1:BibliographicItemId>
+            </ns1:BibliographicId>
+            <ns1:BibliographicId>
+                <ns1:BibliographicItemId>
+                    <ns1:BibliographicItemIdentifier>9788026706045</ns1:BibliographicItemIdentifier>
+                    <ns1:BibliographicItemIdentifierCode ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/bibliographicitemidentifiercode/bibliographicitemidentifiercode.scm">ISBN</ns1:BibliographicItemIdentifierCode>
+                </ns1:BibliographicItemId>
+            </ns1:BibliographicId>
+            <ns1:RequestType ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/requesttype/requesttype.scm">Hold</ns1:RequestType>
+            <ns1:RequestStatusType ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/requeststatustype/requeststatustype.scm">In Process</ns1:RequestStatusType>
+            <ns1:DatePlaced>2020-07-22T12:27:37Z</ns1:DatePlaced>
+            <ns1:HoldQueuePosition>1</ns1:HoldQueuePosition>
+            <ns1:Title>Bábovky</ns1:Title>
+            <ns1:MediumType ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/mediumtype/mediumtype.scm">Book</ns1:MediumType>
+        </ns1:RequestedItem>
+        <ns1:RequestedItem>
+            <ns1:RequestId>
+                <ns1:RequestIdentifierValue>14110083</ns1:RequestIdentifierValue>
+            </ns1:RequestId>
+            <ns1:ItemId>
+                <ns1:AgencyId>17</ns1:AgencyId>
+                <ns1:ItemIdentifierType ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/visibleitemidentifiertype/visibleitemidentifiertype.scm">Barcode</ns1:ItemIdentifierType>
+                <ns1:ItemIdentifierValue>318300720140</ns1:ItemIdentifierValue>
+            </ns1:ItemId>
+            <ns1:BibliographicId>
+                <ns1:BibliographicItemId>
+                    <ns1:BibliographicItemIdentifier>KN3183000004424060</ns1:BibliographicItemIdentifier>
+                </ns1:BibliographicItemId>
+            </ns1:BibliographicId>
+            <ns1:BibliographicId>
+                <ns1:BibliographicItemId>
+                    <ns1:BibliographicItemIdentifier>9788072274222</ns1:BibliographicItemIdentifier>
+                    <ns1:BibliographicItemIdentifierCode ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/bibliographicitemidentifiercode/bibliographicitemidentifiercode.scm">ISBN</ns1:BibliographicItemIdentifierCode>
+                </ns1:BibliographicItemId>
+            </ns1:BibliographicId>
+            <ns1:RequestType ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/requesttype/requesttype.scm">Stack Retrieval</ns1:RequestType>
+            <ns1:RequestStatusType ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/requeststatustype/requeststatustype.scm">In Process</ns1:RequestStatusType>
+            <ns1:DatePlaced>2020-07-22T12:29:34Z</ns1:DatePlaced>
+            <ns1:HoldQueuePosition>1</ns1:HoldQueuePosition>
+            <ns1:Title>Města</ns1:Title>
+            <ns1:MediumType ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/mediumtype/mediumtype.scm">Book</ns1:MediumType>
+        </ns1:RequestedItem>
+        <ns1:UserOptionalFields>
+            <ns1:NameInformation>
+                <ns1:PersonalNameInformation>
+                    <ns1:UnstructuredPersonalUserName>Testová Anna Marie Ncipovič</ns1:UnstructuredPersonalUserName>
+                </ns1:PersonalNameInformation>
+            </ns1:NameInformation>
+            <ns1:UserAddressInformation>
+                <ns1:UserAddressRoleType ns1:Scheme="http://www.niso.org/ncip/v2_0/imp1/schemes/useraddressroletype/useraddressroletype.scm">Multi-Purpose</ns1:UserAddressRoleType>
+                <ns1:PhysicalAddress>
+                    <ns1:StructuredAddress>
+                        <ns1:Line1>Knihovní 123</ns1:Line1>
+                        <ns1:Line2>Opava 74601</ns1:Line2>
+                    </ns1:StructuredAddress>
+                    <ns1:PhysicalAddressType ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/physicaladdresstype/physicaladdresstype.scm">Postal Address</ns1:PhysicalAddressType>
+                </ns1:PhysicalAddress>
+            </ns1:UserAddressInformation>
+            <ns1:UserAddressInformation>
+                <ns1:UserAddressRoleType ns1:Scheme="http://www.niso.org/ncip/v2_0/imp1/schemes/useraddressroletype/useraddressroletype.scm">Notice</ns1:UserAddressRoleType>
+                <ns1:ElectronicAddress>
+                    <ns1:ElectronicAddressType ns1:Scheme="http://www.iana.org/assignments/uri-schemes">mailto</ns1:ElectronicAddressType>
+                    <ns1:ElectronicAddressData>cpk-support@mzk.cz</ns1:ElectronicAddressData>
+                </ns1:ElectronicAddress>
+            </ns1:UserAddressInformation>
+            <ns1:UserAddressInformation>
+                <ns1:UserAddressRoleType ns1:Scheme="http://www.niso.org/ncip/v2_0/imp1/schemes/useraddressroletype/useraddressroletype.scm">Notice</ns1:UserAddressRoleType>
+                <ns1:ElectronicAddress>
+                    <ns1:ElectronicAddressType ns1:Scheme="http://www.iana.org/assignments/uri-schemes">tel</ns1:ElectronicAddressType>
+                    <ns1:ElectronicAddressData>111222333</ns1:ElectronicAddressData>
+                </ns1:ElectronicAddress>
+            </ns1:UserAddressInformation>
+            <ns1:UserPrivilege>
+                <ns1:AgencyId />
+                <ns1:AgencyUserPrivilegeType ns1:Scheme="" />
+                <ns1:ValidToDate>2025-07-21T21:59:59Z</ns1:ValidToDate>
+            </ns1:UserPrivilege>
+            <ns1:UserId>
+                <ns1:AgencyId>OPG001</ns1:AgencyId>
+                <ns1:UserIdentifierType ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/visibleuseridentifiertype/visibleuseridentifiertype.scm">Institution Id Number</ns1:UserIdentifierType>
+                <ns1:UserIdentifierValue>99045</ns1:UserIdentifierValue>
+            </ns1:UserId>
+        </ns1:UserOptionalFields>
+    </ns1:LookupUserResponse>
+</ns1:NCIPMessage>
+

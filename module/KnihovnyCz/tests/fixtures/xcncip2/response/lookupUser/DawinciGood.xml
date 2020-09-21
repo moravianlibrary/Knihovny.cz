@@ -1,0 +1,141 @@
+HTTP/1.1 200 OK
+Content-Type: application/xml
+Date: Wed, 18 Mar 2015 11:49:40 GMT
+
+<?xml version="1.0" encoding="UTF-8"?>
+<NCIPMessage version="http://www.niso.org/schemas/ncip/v2_0/imp1/xsd/ncip_v2_0.xsd">
+  <LookupUserResponse>
+    <ResponseHeader>
+      <FromAgencyId>
+        <AgencyId>ABA008</AgencyId>
+      </FromAgencyId>
+      <ToAgencyId>
+        <AgencyId>CPK</AgencyId>
+      </ToAgencyId>
+    </ResponseHeader>
+    <UserId>
+      <AgencyId>ABA008</AgencyId>
+      <UserIdentifierType Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/visibleuseridentifiertype/visibleuseridentifiertype.scm">Institution Id Number</UserIdentifierType>
+      <UserIdentifierValue>C5452001</UserIdentifierValue>
+    </UserId>
+    <UserOptionalFields>
+      <NameInformation>
+        <PersonalNameInformation>
+          <UnstructuredPersonalUserName>MUDr. Pan Hodný CSc</UnstructuredPersonalUserName>
+          <StructuredPersonalUserName>
+            <Prefix>MUDr.</Prefix>
+            <GivenName>Hodný</GivenName>
+            <Surname>Pan</Surname>
+            <Suffix>CSc</Suffix>
+          </StructuredPersonalUserName>
+        </PersonalNameInformation>
+      </NameInformation>
+      <UserAddressInformation>
+        <UserAddressRoleType Scheme="http://www.niso.org/ncip/v2_0/imp1/schemes/useraddressroletype/useraddressroletype.scm">Email</UserAddressRoleType>
+        <ElectronicAddress>
+          <ElectronicAddressType Scheme="http://www.iana.org/assignments/uri-schemes">mailto</ElectronicAddressType>
+          <ElectronicAddressData>kriz@nlk.cz</ElectronicAddressData>
+        </ElectronicAddress>
+      </UserAddressInformation>
+      <UserAddressInformation>
+        <UserAddressRoleType Scheme="http://www.niso.org/ncip/v2_0/imp1/schemes/useraddressroletype/useraddressroletype.scm">Telephone number</UserAddressRoleType>
+        <ElectronicAddress>
+          <ElectronicAddressType Scheme="http://www.iana.org/assignments/uri-schemes">tel</ElectronicAddressType>
+          <ElectronicAddressData>296335940</ElectronicAddressData>
+        </ElectronicAddress>
+      </UserAddressInformation>
+      <UserPrivilege>
+        <AgencyId></AgencyId>
+        <AgencyUserPrivilegeType>Licence card</AgencyUserPrivilegeType>
+        <ValidFromDate>2016-07-12T00:00:00.000+02:00</ValidFromDate>
+        <ValidToDate>2025-07-12T00:00:00.000+02:00</ValidToDate>
+      </UserPrivilege>
+      <UserPrivilege>
+        <AgencyId></AgencyId>
+        <AgencyUserPrivilegeType>Category</AgencyUserPrivilegeType>
+        <UserPrivilegeDescription>7</UserPrivilegeDescription>
+        <ValidToDate>2025-07-12T00:00:00.000+02:00</ValidToDate>
+      </UserPrivilege>
+    </UserOptionalFields>
+    <UserFiscalAccount>
+      <AccountBalance>
+        <CurrencyCode>CZK</CurrencyCode>
+        <MonetaryValue>0</MonetaryValue>
+      </AccountBalance>
+    </UserFiscalAccount>
+    <LoanedItemsCount>
+      <LoanedItemCountValue>3</LoanedItemCountValue>
+    </LoanedItemsCount>
+    <LoanedItem>
+      <ItemId>
+        <AgencyId>ABA008</AgencyId>
+        <ItemIdentifierType Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/visibleitemidentifiertype/visibleitemidentifiertype.scm">Accession Number</ItemIdentifierType>
+        <ItemIdentifierValue>K0153221</ItemIdentifierValue>
+      </ItemId>
+      <DateDue>2025-08-05T23:49:33.393+02:00</DateDue>
+      <Title>Testování softwaru /</Title>
+      <Ext>
+        <NotRenewable/>
+      </Ext>
+    </LoanedItem>
+    <LoanedItem>
+      <ItemId>
+        <AgencyId>ABA008</AgencyId>
+        <ItemIdentifierType Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/visibleitemidentifiertype/visibleitemidentifiertype.scm">Accession Number</ItemIdentifierType>
+        <ItemIdentifierValue>K0173487</ItemIdentifierValue>
+      </ItemId>
+      <DateDue>2025-08-05T23:49:33.517+02:00</DateDue>
+      <Title>Anatomie : : praktický průvodce kreslení : [výtvarná obrazová příručka] /</Title>
+      <Ext>
+        <NotRenewable/>
+      </Ext>
+    </LoanedItem>
+    <LoanedItem>
+      <ItemId>
+        <AgencyId>ABA008</AgencyId>
+        <ItemIdentifierType Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/visibleitemidentifiertype/visibleitemidentifiertype.scm">Accession Number</ItemIdentifierType>
+        <ItemIdentifierValue>P220058</ItemIdentifierValue>
+      </ItemId>
+      <DateDue>2025-08-02T23:49:38.740+02:00</DateDue>
+      <Title>Lékařská knihovna : : časopis pro odborné knihovny a informační střediska ve zdravotnictví</Title>
+      <Ext>
+        <NotRenewable/>
+      </Ext>      
+    </LoanedItem>
+    <RequestedItemsCount>
+      <RequestType Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/requesttype/requesttype.scm">Loan</RequestType>
+      <RequestedItemCountValue>2</RequestedItemCountValue>
+    </RequestedItemsCount>
+    <RequestedItem>
+      <RequestId>
+        <RequestIdentifierValue>894767</RequestIdentifierValue>
+      </RequestId>
+      <ItemId>
+        <AgencyId>ABA008</AgencyId>
+        <ItemIdentifierValue>K0186259</ItemIdentifierValue>
+      </ItemId>
+      <RequestType Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/requesttype/requesttype.scm">Hold</RequestType>
+      <RequestStatusType Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/requeststatustype/requeststatustype.scm">Available For Pickup</RequestStatusType>
+      <DatePlaced>2020-07-22T14:20:07.580+02:00</DatePlaced>
+      <PickupLocation>001@ABA008</PickupLocation>
+      <HoldQueuePosition>1</HoldQueuePosition>
+      <Title>Autismus &amp; Chardonnay.</Title>
+    </RequestedItem>
+    <RequestedItem>
+      <RequestId>
+        <RequestIdentifierValue>894768</RequestIdentifierValue>
+      </RequestId>
+      <ItemId>
+        <AgencyId>ABA008</AgencyId>
+        <ItemIdentifierValue>K0186185</ItemIdentifierValue>
+      </ItemId>
+      <RequestType Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/requesttype/requesttype.scm">Hold</RequestType>
+      <RequestStatusType Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/requeststatustype/requeststatustype.scm">In Process</RequestStatusType>
+      <DatePlaced>2020-07-22T14:20:31.000+02:00</DatePlaced>
+      <PickupLocation>001@ABA008</PickupLocation>
+      <PickupExpiryDate>2025-01-18T14:20:31.000+02:00</PickupExpiryDate>
+      <HoldQueuePosition>1</HoldQueuePosition>
+      <Title>Nebe nad Jemenem : : v jihozápadní Asii s Lékaři bez hranic /</Title>
+    </RequestedItem>
+  </LookupUserResponse>
+</NCIPMessage>

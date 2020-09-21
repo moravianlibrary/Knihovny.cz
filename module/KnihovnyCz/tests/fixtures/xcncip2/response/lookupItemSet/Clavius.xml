@@ -1,0 +1,451 @@
+HTTP/1.1 200 OK
+Content-Type: application/xml
+Date: Wed, 18 Mar 2015 11:49:40 GMT
+
+<?xml version="1.0" encoding="UTF-8"?>
+<ns1:NCIPMessage xmlns:ns1="http://www.niso.org/2008/ncip" xmlns:ns2="https://ncip.knihovny.cz/ILSDI/ncip/2015/extensions" ns1:version="http://www.niso.org/schemas/ncip/v2_02/ncip_v2_02.xsd">
+    <ns1:LookupItemSetResponse>
+        <ns1:BibInformation>
+            <ns1:BibliographicId>
+                <ns1:BibliographicItemId>
+                    <ns1:BibliographicItemIdentifier>KN3183000000266428</ns1:BibliographicItemIdentifier>
+                    <ns1:BibliographicItemIdentifierCode ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/bibliographicitemidentifiercode/bibliographicitemidentifiercode.scm">Legal Deposit Number</ns1:BibliographicItemIdentifierCode>
+                </ns1:BibliographicItemId>
+            </ns1:BibliographicId>
+            <ns1:BibliographicDescription>
+                <ns1:Author>James, E. L., 1963-</ns1:Author>
+                <ns1:BibliographicItemId>
+                    <ns1:BibliographicItemIdentifier>KN3183000000266428</ns1:BibliographicItemIdentifier>
+                </ns1:BibliographicItemId>
+                <ns1:PlaceOfPublication>V Praze</ns1:PlaceOfPublication>
+                <ns1:PublicationDate>2012</ns1:PublicationDate>
+                <ns1:Publisher>XYZ</ns1:Publisher>
+                <ns1:Title>Fifty shades of grey : Padesát odstínů šedi</ns1:Title>
+                <ns1:BibliographicLevel ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/bibliographiclevel/bibliographiclevel.scm">Monograph</ns1:BibliographicLevel>
+                <ns1:Language ns1:Scheme="http://lcweb.loc.gov/standards/iso639-2/bibcodes.html">cze</ns1:Language>
+                <ns1:MediumType ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/mediumtype/mediumtype.scm">Book</ns1:MediumType>
+            </ns1:BibliographicDescription>
+            <ns1:HoldingsSet>
+                <ns1:Location>
+                    <ns1:LocationType ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/locationtype/locationtype.scm">Permanent Location</ns1:LocationType>
+                    <ns1:LocationName>
+                        <ns1:LocationNameInstance>
+                            <ns1:LocationNameLevel>1</ns1:LocationNameLevel>
+                            <ns1:LocationNameValue>Oddělení pro dospělé</ns1:LocationNameValue>
+                        </ns1:LocationNameInstance>
+                    </ns1:LocationName>
+                </ns1:Location>
+                <ns1:CallNumber />
+                <ns1:ItemInformation>
+                    <ns1:ItemId>
+                        <ns1:AgencyId>17</ns1:AgencyId>
+                        <ns1:ItemIdentifierType ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/visibleitemidentifiertype/visibleitemidentifiertype.scm">Barcode</ns1:ItemIdentifierType>
+                        <ns1:ItemIdentifierValue>318300628006</ns1:ItemIdentifierValue>
+                    </ns1:ItemId>
+                    <ns1:ItemOptionalFields>
+                        <ns1:BibliographicDescription>
+                            <ns1:Author>James, E. L., 1963-</ns1:Author>
+                            <ns1:BibliographicItemId>
+                                <ns1:BibliographicItemIdentifier>KN3183000000266428</ns1:BibliographicItemIdentifier>
+                            </ns1:BibliographicItemId>
+                            <ns1:PlaceOfPublication>V Praze</ns1:PlaceOfPublication>
+                            <ns1:PublicationDate>2012</ns1:PublicationDate>
+                            <ns1:Publisher>XYZ</ns1:Publisher>
+                            <ns1:Title>Fifty shades of grey : Padesát odstínů šedi</ns1:Title>
+                            <ns1:BibliographicLevel ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/bibliographiclevel/bibliographiclevel.scm">Monograph</ns1:BibliographicLevel>
+                            <ns1:Language ns1:Scheme="http://lcweb.loc.gov/standards/iso639-2/bibcodes.html">cze</ns1:Language>
+                            <ns1:MediumType ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/mediumtype/mediumtype.scm">Book</ns1:MediumType>
+                        </ns1:BibliographicDescription>
+                        <ns1:ItemUseRestrictionType ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/itemuserestrictiontype/itemuserestrictiontype.scm">Limited Circulation, Normal Loan Period</ns1:ItemUseRestrictionType>
+                        <ns1:CirculationStatus ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/circulationstatus/circulationstatus.scm">Available On Shelf</ns1:CirculationStatus>
+                        <ns1:HoldQueueLength>0</ns1:HoldQueueLength>
+                        <ns1:ItemDescription>
+                            <ns1:ItemDescriptionLevel ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/itemdescriptionlevel/itemdescriptionlevel.scm">Bibliographic Item</ns1:ItemDescriptionLevel>
+                        </ns1:ItemDescription>
+                        <ns1:Location>
+                            <ns1:LocationType ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/locationtype/locationtype.scm">Permanent Location</ns1:LocationType>
+                            <ns1:LocationName>
+                                <ns1:LocationNameInstance>
+                                    <ns1:LocationNameLevel>1</ns1:LocationNameLevel>
+                                    <ns1:LocationNameValue>Oddělení pro dospělé</ns1:LocationNameValue>
+                                </ns1:LocationNameInstance>
+                            </ns1:LocationName>
+                        </ns1:Location>
+                    </ns1:ItemOptionalFields>
+                </ns1:ItemInformation>
+            </ns1:HoldingsSet>
+            <ns1:HoldingsSet>
+                <ns1:Location>
+                    <ns1:LocationType ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/locationtype/locationtype.scm">Permanent Location</ns1:LocationType>
+                    <ns1:LocationName>
+                        <ns1:LocationNameInstance>
+                            <ns1:LocationNameLevel>1</ns1:LocationNameLevel>
+                            <ns1:LocationNameValue>Pobočka Kylešovice</ns1:LocationNameValue>
+                        </ns1:LocationNameInstance>
+                    </ns1:LocationName>
+                </ns1:Location>
+                <ns1:CallNumber>KY</ns1:CallNumber>
+                <ns1:ItemInformation>
+                    <ns1:ItemId>
+                        <ns1:AgencyId>17</ns1:AgencyId>
+                        <ns1:ItemIdentifierType ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/visibleitemidentifiertype/visibleitemidentifiertype.scm">Barcode</ns1:ItemIdentifierType>
+                        <ns1:ItemIdentifierValue>318300628008</ns1:ItemIdentifierValue>
+                    </ns1:ItemId>
+                    <ns1:ItemOptionalFields>
+                        <ns1:BibliographicDescription>
+                            <ns1:Author>James, E. L., 1963-</ns1:Author>
+                            <ns1:BibliographicItemId>
+                                <ns1:BibliographicItemIdentifier>KN3183000000266428</ns1:BibliographicItemIdentifier>
+                            </ns1:BibliographicItemId>
+                            <ns1:PlaceOfPublication>V Praze</ns1:PlaceOfPublication>
+                            <ns1:PublicationDate>2012</ns1:PublicationDate>
+                            <ns1:Publisher>XYZ</ns1:Publisher>
+                            <ns1:Title>Fifty shades of grey : Padesát odstínů šedi</ns1:Title>
+                            <ns1:BibliographicLevel ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/bibliographiclevel/bibliographiclevel.scm">Monograph</ns1:BibliographicLevel>
+                            <ns1:Language ns1:Scheme="http://lcweb.loc.gov/standards/iso639-2/bibcodes.html">cze</ns1:Language>
+                            <ns1:MediumType ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/mediumtype/mediumtype.scm">Book</ns1:MediumType>
+                        </ns1:BibliographicDescription>
+                        <ns1:ItemUseRestrictionType ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/itemuserestrictiontype/itemuserestrictiontype.scm">Limited Circulation, Normal Loan Period</ns1:ItemUseRestrictionType>
+                        <ns1:CirculationStatus ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/circulationstatus/circulationstatus.scm">Available On Shelf</ns1:CirculationStatus>
+                        <ns1:HoldQueueLength>0</ns1:HoldQueueLength>
+                        <ns1:ItemDescription>
+                            <ns1:CallNumber>KY</ns1:CallNumber>
+                            <ns1:ItemDescriptionLevel ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/itemdescriptionlevel/itemdescriptionlevel.scm">Bibliographic Item</ns1:ItemDescriptionLevel>
+                        </ns1:ItemDescription>
+                        <ns1:Location>
+                            <ns1:LocationType ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/locationtype/locationtype.scm">Permanent Location</ns1:LocationType>
+                            <ns1:LocationName>
+                                <ns1:LocationNameInstance>
+                                    <ns1:LocationNameLevel>1</ns1:LocationNameLevel>
+                                    <ns1:LocationNameValue>Pobočka Kylešovice</ns1:LocationNameValue>
+                                </ns1:LocationNameInstance>
+                            </ns1:LocationName>
+                        </ns1:Location>
+                    </ns1:ItemOptionalFields>
+                </ns1:ItemInformation>
+            </ns1:HoldingsSet>
+            <ns1:HoldingsSet>
+                <ns1:Location>
+                    <ns1:LocationType ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/locationtype/locationtype.scm">Permanent Location</ns1:LocationType>
+                    <ns1:LocationName>
+                        <ns1:LocationNameInstance>
+                            <ns1:LocationNameLevel>1</ns1:LocationNameLevel>
+                            <ns1:LocationNameValue>Kateřinky sklady</ns1:LocationNameValue>
+                        </ns1:LocationNameInstance>
+                    </ns1:LocationName>
+                </ns1:Location>
+                <ns1:CallNumber>KASK</ns1:CallNumber>
+                <ns1:ItemInformation>
+                    <ns1:ItemId>
+                        <ns1:AgencyId>17</ns1:AgencyId>
+                        <ns1:ItemIdentifierType ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/visibleitemidentifiertype/visibleitemidentifiertype.scm">Barcode</ns1:ItemIdentifierType>
+                        <ns1:ItemIdentifierValue>318300628009</ns1:ItemIdentifierValue>
+                    </ns1:ItemId>
+                    <ns1:ItemOptionalFields>
+                        <ns1:BibliographicDescription>
+                            <ns1:Author>James, E. L., 1963-</ns1:Author>
+                            <ns1:BibliographicItemId>
+                                <ns1:BibliographicItemIdentifier>KN3183000000266428</ns1:BibliographicItemIdentifier>
+                            </ns1:BibliographicItemId>
+                            <ns1:PlaceOfPublication>V Praze</ns1:PlaceOfPublication>
+                            <ns1:PublicationDate>2012</ns1:PublicationDate>
+                            <ns1:Publisher>XYZ</ns1:Publisher>
+                            <ns1:Title>Fifty shades of grey : Padesát odstínů šedi</ns1:Title>
+                            <ns1:BibliographicLevel ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/bibliographiclevel/bibliographiclevel.scm">Monograph</ns1:BibliographicLevel>
+                            <ns1:Language ns1:Scheme="http://lcweb.loc.gov/standards/iso639-2/bibcodes.html">cze</ns1:Language>
+                            <ns1:MediumType ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/mediumtype/mediumtype.scm">Book</ns1:MediumType>
+                        </ns1:BibliographicDescription>
+                        <ns1:ItemUseRestrictionType ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/itemuserestrictiontype/itemuserestrictiontype.scm">Limited Circulation, Normal Loan Period</ns1:ItemUseRestrictionType>
+                        <ns1:CirculationStatus ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/circulationstatus/circulationstatus.scm">Available On Shelf</ns1:CirculationStatus>
+                        <ns1:HoldQueueLength>0</ns1:HoldQueueLength>
+                        <ns1:ItemDescription>
+                            <ns1:CallNumber>KASK</ns1:CallNumber>
+                            <ns1:ItemDescriptionLevel ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/itemdescriptionlevel/itemdescriptionlevel.scm">Bibliographic Item</ns1:ItemDescriptionLevel>
+                        </ns1:ItemDescription>
+                        <ns1:Location>
+                            <ns1:LocationType ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/locationtype/locationtype.scm">Permanent Location</ns1:LocationType>
+                            <ns1:LocationName>
+                                <ns1:LocationNameInstance>
+                                    <ns1:LocationNameLevel>1</ns1:LocationNameLevel>
+                                    <ns1:LocationNameValue>Kateřinky sklady</ns1:LocationNameValue>
+                                </ns1:LocationNameInstance>
+                            </ns1:LocationName>
+                        </ns1:Location>
+                    </ns1:ItemOptionalFields>
+                </ns1:ItemInformation>
+            </ns1:HoldingsSet>
+            <ns1:HoldingsSet>
+                <ns1:Location>
+                    <ns1:LocationType ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/locationtype/locationtype.scm">Permanent Location</ns1:LocationType>
+                    <ns1:LocationName>
+                        <ns1:LocationNameInstance>
+                            <ns1:LocationNameLevel>1</ns1:LocationNameLevel>
+                            <ns1:LocationNameValue>Sklad oddělení pro dospělé</ns1:LocationNameValue>
+                        </ns1:LocationNameInstance>
+                    </ns1:LocationName>
+                </ns1:Location>
+                <ns1:CallNumber>SK</ns1:CallNumber>
+                <ns1:ItemInformation>
+                    <ns1:ItemId>
+                        <ns1:AgencyId>17</ns1:AgencyId>
+                        <ns1:ItemIdentifierType ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/visibleitemidentifiertype/visibleitemidentifiertype.scm">Barcode</ns1:ItemIdentifierType>
+                        <ns1:ItemIdentifierValue>318300634873</ns1:ItemIdentifierValue>
+                    </ns1:ItemId>
+                    <ns1:ItemOptionalFields>
+                        <ns1:BibliographicDescription>
+                            <ns1:Author>James, E. L., 1963-</ns1:Author>
+                            <ns1:BibliographicItemId>
+                                <ns1:BibliographicItemIdentifier>KN3183000000266428</ns1:BibliographicItemIdentifier>
+                            </ns1:BibliographicItemId>
+                            <ns1:PlaceOfPublication>V Praze</ns1:PlaceOfPublication>
+                            <ns1:PublicationDate>2012</ns1:PublicationDate>
+                            <ns1:Publisher>XYZ</ns1:Publisher>
+                            <ns1:Title>Fifty shades of grey : Padesát odstínů šedi</ns1:Title>
+                            <ns1:BibliographicLevel ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/bibliographiclevel/bibliographiclevel.scm">Monograph</ns1:BibliographicLevel>
+                            <ns1:Language ns1:Scheme="http://lcweb.loc.gov/standards/iso639-2/bibcodes.html">cze</ns1:Language>
+                            <ns1:MediumType ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/mediumtype/mediumtype.scm">Book</ns1:MediumType>
+                        </ns1:BibliographicDescription>
+                        <ns1:ItemUseRestrictionType ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/itemuserestrictiontype/itemuserestrictiontype.scm">Limited Circulation, Normal Loan Period</ns1:ItemUseRestrictionType>
+                        <ns1:CirculationStatus ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/circulationstatus/circulationstatus.scm">Available On Shelf</ns1:CirculationStatus>
+                        <ns1:HoldQueueLength>0</ns1:HoldQueueLength>
+                        <ns1:ItemDescription>
+                            <ns1:CallNumber>SK</ns1:CallNumber>
+                            <ns1:ItemDescriptionLevel ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/itemdescriptionlevel/itemdescriptionlevel.scm">Bibliographic Item</ns1:ItemDescriptionLevel>
+                        </ns1:ItemDescription>
+                        <ns1:Location>
+                            <ns1:LocationType ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/locationtype/locationtype.scm">Permanent Location</ns1:LocationType>
+                            <ns1:LocationName>
+                                <ns1:LocationNameInstance>
+                                    <ns1:LocationNameLevel>1</ns1:LocationNameLevel>
+                                    <ns1:LocationNameValue>Sklad oddělení pro dospělé</ns1:LocationNameValue>
+                                </ns1:LocationNameInstance>
+                            </ns1:LocationName>
+                        </ns1:Location>
+                    </ns1:ItemOptionalFields>
+                </ns1:ItemInformation>
+            </ns1:HoldingsSet>
+            <ns1:HoldingsSet>
+                <ns1:Location>
+                    <ns1:LocationType ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/locationtype/locationtype.scm">Permanent Location</ns1:LocationType>
+                    <ns1:LocationName>
+                        <ns1:LocationNameInstance>
+                            <ns1:LocationNameLevel>1</ns1:LocationNameLevel>
+                            <ns1:LocationNameValue>Pobočka Kateřinky</ns1:LocationNameValue>
+                        </ns1:LocationNameInstance>
+                    </ns1:LocationName>
+                </ns1:Location>
+                <ns1:CallNumber>KA</ns1:CallNumber>
+                <ns1:ItemInformation>
+                    <ns1:ItemId>
+                        <ns1:AgencyId>17</ns1:AgencyId>
+                        <ns1:ItemIdentifierType ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/visibleitemidentifiertype/visibleitemidentifiertype.scm">Barcode</ns1:ItemIdentifierType>
+                        <ns1:ItemIdentifierValue>318300634874</ns1:ItemIdentifierValue>
+                    </ns1:ItemId>
+                    <ns1:ItemOptionalFields>
+                        <ns1:BibliographicDescription>
+                            <ns1:Author>James, E. L., 1963-</ns1:Author>
+                            <ns1:BibliographicItemId>
+                                <ns1:BibliographicItemIdentifier>KN3183000000266428</ns1:BibliographicItemIdentifier>
+                            </ns1:BibliographicItemId>
+                            <ns1:PlaceOfPublication>V Praze</ns1:PlaceOfPublication>
+                            <ns1:PublicationDate>2012</ns1:PublicationDate>
+                            <ns1:Publisher>XYZ</ns1:Publisher>
+                            <ns1:Title>Fifty shades of grey : Padesát odstínů šedi</ns1:Title>
+                            <ns1:BibliographicLevel ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/bibliographiclevel/bibliographiclevel.scm">Monograph</ns1:BibliographicLevel>
+                            <ns1:Language ns1:Scheme="http://lcweb.loc.gov/standards/iso639-2/bibcodes.html">cze</ns1:Language>
+                            <ns1:MediumType ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/mediumtype/mediumtype.scm">Book</ns1:MediumType>
+                        </ns1:BibliographicDescription>
+                        <ns1:ItemUseRestrictionType ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/itemuserestrictiontype/itemuserestrictiontype.scm">Limited Circulation, Normal Loan Period</ns1:ItemUseRestrictionType>
+                        <ns1:CirculationStatus ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/circulationstatus/circulationstatus.scm">Available On Shelf</ns1:CirculationStatus>
+                        <ns1:HoldQueueLength>0</ns1:HoldQueueLength>
+                        <ns1:ItemDescription>
+                            <ns1:CallNumber>KA</ns1:CallNumber>
+                            <ns1:ItemDescriptionLevel ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/itemdescriptionlevel/itemdescriptionlevel.scm">Bibliographic Item</ns1:ItemDescriptionLevel>
+                        </ns1:ItemDescription>
+                        <ns1:Location>
+                            <ns1:LocationType ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/locationtype/locationtype.scm">Permanent Location</ns1:LocationType>
+                            <ns1:LocationName>
+                                <ns1:LocationNameInstance>
+                                    <ns1:LocationNameLevel>1</ns1:LocationNameLevel>
+                                    <ns1:LocationNameValue>Pobočka Kateřinky</ns1:LocationNameValue>
+                                </ns1:LocationNameInstance>
+                            </ns1:LocationName>
+                        </ns1:Location>
+                    </ns1:ItemOptionalFields>
+                </ns1:ItemInformation>
+            </ns1:HoldingsSet>
+            <ns1:HoldingsSet>
+                <ns1:Location>
+                    <ns1:LocationType ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/locationtype/locationtype.scm">Permanent Location</ns1:LocationType>
+                    <ns1:LocationName>
+                        <ns1:LocationNameInstance>
+                            <ns1:LocationNameLevel>1</ns1:LocationNameLevel>
+                            <ns1:LocationNameValue>Sklad oddělení pro dospělé</ns1:LocationNameValue>
+                        </ns1:LocationNameInstance>
+                    </ns1:LocationName>
+                </ns1:Location>
+                <ns1:CallNumber>SK</ns1:CallNumber>
+                <ns1:ItemInformation>
+                    <ns1:ItemId>
+                        <ns1:AgencyId>17</ns1:AgencyId>
+                        <ns1:ItemIdentifierType ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/visibleitemidentifiertype/visibleitemidentifiertype.scm">Barcode</ns1:ItemIdentifierType>
+                        <ns1:ItemIdentifierValue>318300635334</ns1:ItemIdentifierValue>
+                    </ns1:ItemId>
+                    <ns1:DateDue>2019-12-08T23:00:00Z</ns1:DateDue>
+                    <ns1:ItemTransaction>
+                        <ns1:CurrentBorrower>
+                            <ns1:UserId>
+                                <ns1:AgencyId>OPG001</ns1:AgencyId>
+                                <ns1:UserIdentifierType ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/visibleuseridentifiertype/visibleuseridentifiertype.scm">Institution Id Number</ns1:UserIdentifierType>
+                                <ns1:UserIdentifierValue>130516</ns1:UserIdentifierValue>
+                            </ns1:UserId>
+                        </ns1:CurrentBorrower>
+                    </ns1:ItemTransaction>
+                    <ns1:ItemOptionalFields>
+                        <ns1:BibliographicDescription>
+                            <ns1:Author>James, E. L., 1963-</ns1:Author>
+                            <ns1:BibliographicItemId>
+                                <ns1:BibliographicItemIdentifier>KN3183000000266428</ns1:BibliographicItemIdentifier>
+                            </ns1:BibliographicItemId>
+                            <ns1:PlaceOfPublication>V Praze</ns1:PlaceOfPublication>
+                            <ns1:PublicationDate>2012</ns1:PublicationDate>
+                            <ns1:Publisher>XYZ</ns1:Publisher>
+                            <ns1:Title>Fifty shades of grey : Padesát odstínů šedi</ns1:Title>
+                            <ns1:BibliographicLevel ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/bibliographiclevel/bibliographiclevel.scm">Monograph</ns1:BibliographicLevel>
+                            <ns1:Language ns1:Scheme="http://lcweb.loc.gov/standards/iso639-2/bibcodes.html">cze</ns1:Language>
+                            <ns1:MediumType ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/mediumtype/mediumtype.scm">Book</ns1:MediumType>
+                        </ns1:BibliographicDescription>
+                        <ns1:ItemUseRestrictionType ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/itemuserestrictiontype/itemuserestrictiontype.scm">Limited Circulation, Normal Loan Period</ns1:ItemUseRestrictionType>
+                        <ns1:CirculationStatus ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/circulationstatus/circulationstatus.scm">On Loan</ns1:CirculationStatus>
+                        <ns1:HoldQueueLength>0</ns1:HoldQueueLength>
+                        <ns1:ItemDescription>
+                            <ns1:CallNumber>SK</ns1:CallNumber>
+                            <ns1:ItemDescriptionLevel ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/itemdescriptionlevel/itemdescriptionlevel.scm">Bibliographic Item</ns1:ItemDescriptionLevel>
+                        </ns1:ItemDescription>
+                        <ns1:Location>
+                            <ns1:LocationType ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/locationtype/locationtype.scm">Permanent Location</ns1:LocationType>
+                            <ns1:LocationName>
+                                <ns1:LocationNameInstance>
+                                    <ns1:LocationNameLevel>1</ns1:LocationNameLevel>
+                                    <ns1:LocationNameValue>Sklad oddělení pro dospělé</ns1:LocationNameValue>
+                                </ns1:LocationNameInstance>
+                            </ns1:LocationName>
+                        </ns1:Location>
+                        <ns1:DateDue>2019-12-08T23:00:00Z</ns1:DateDue>
+                    </ns1:ItemOptionalFields>
+                </ns1:ItemInformation>
+            </ns1:HoldingsSet>
+            <ns1:HoldingsSet>
+                <ns1:Location>
+                    <ns1:LocationType ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/locationtype/locationtype.scm">Permanent Location</ns1:LocationType>
+                    <ns1:LocationName>
+                        <ns1:LocationNameInstance>
+                            <ns1:LocationNameLevel>1</ns1:LocationNameLevel>
+                            <ns1:LocationNameValue>Oddělení pro dospělé</ns1:LocationNameValue>
+                        </ns1:LocationNameInstance>
+                    </ns1:LocationName>
+                </ns1:Location>
+                <ns1:CallNumber />
+                <ns1:ItemInformation>
+                    <ns1:ItemId>
+                        <ns1:AgencyId>17</ns1:AgencyId>
+                        <ns1:ItemIdentifierType ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/visibleitemidentifiertype/visibleitemidentifiertype.scm">Barcode</ns1:ItemIdentifierType>
+                        <ns1:ItemIdentifierValue>318300643795</ns1:ItemIdentifierValue>
+                    </ns1:ItemId>
+                    <ns1:DateDue>2020-07-26T22:00:00Z</ns1:DateDue>
+                    <ns1:ItemTransaction>
+                        <ns1:CurrentBorrower>
+                            <ns1:UserId>
+                                <ns1:AgencyId>OPG001</ns1:AgencyId>
+                                <ns1:UserIdentifierType ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/visibleuseridentifiertype/visibleuseridentifiertype.scm">Institution Id Number</ns1:UserIdentifierType>
+                                <ns1:UserIdentifierValue>58247</ns1:UserIdentifierValue>
+                            </ns1:UserId>
+                        </ns1:CurrentBorrower>
+                    </ns1:ItemTransaction>
+                    <ns1:ItemOptionalFields>
+                        <ns1:BibliographicDescription>
+                            <ns1:Author>James, E. L., 1963-</ns1:Author>
+                            <ns1:BibliographicItemId>
+                                <ns1:BibliographicItemIdentifier>KN3183000000266428</ns1:BibliographicItemIdentifier>
+                            </ns1:BibliographicItemId>
+                            <ns1:PlaceOfPublication>V Praze</ns1:PlaceOfPublication>
+                            <ns1:PublicationDate>2012</ns1:PublicationDate>
+                            <ns1:Publisher>XYZ</ns1:Publisher>
+                            <ns1:Title>Fifty shades of grey : Padesát odstínů šedi</ns1:Title>
+                            <ns1:BibliographicLevel ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/bibliographiclevel/bibliographiclevel.scm">Monograph</ns1:BibliographicLevel>
+                            <ns1:Language ns1:Scheme="http://lcweb.loc.gov/standards/iso639-2/bibcodes.html">cze</ns1:Language>
+                            <ns1:MediumType ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/mediumtype/mediumtype.scm">Book</ns1:MediumType>
+                        </ns1:BibliographicDescription>
+                        <ns1:ItemUseRestrictionType ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/itemuserestrictiontype/itemuserestrictiontype.scm">Limited Circulation, Normal Loan Period</ns1:ItemUseRestrictionType>
+                        <ns1:CirculationStatus ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/circulationstatus/circulationstatus.scm">On Loan</ns1:CirculationStatus>
+                        <ns1:HoldQueueLength>0</ns1:HoldQueueLength>
+                        <ns1:ItemDescription>
+                            <ns1:ItemDescriptionLevel ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/itemdescriptionlevel/itemdescriptionlevel.scm">Bibliographic Item</ns1:ItemDescriptionLevel>
+                        </ns1:ItemDescription>
+                        <ns1:Location>
+                            <ns1:LocationType ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/locationtype/locationtype.scm">Permanent Location</ns1:LocationType>
+                            <ns1:LocationName>
+                                <ns1:LocationNameInstance>
+                                    <ns1:LocationNameLevel>1</ns1:LocationNameLevel>
+                                    <ns1:LocationNameValue>Oddělení pro dospělé</ns1:LocationNameValue>
+                                </ns1:LocationNameInstance>
+                            </ns1:LocationName>
+                        </ns1:Location>
+                        <ns1:DateDue>2020-07-26T22:00:00Z</ns1:DateDue>
+                    </ns1:ItemOptionalFields>
+                </ns1:ItemInformation>
+            </ns1:HoldingsSet>
+            <ns1:HoldingsSet>
+                <ns1:Location>
+                    <ns1:LocationType ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/locationtype/locationtype.scm">Permanent Location</ns1:LocationType>
+                    <ns1:LocationName>
+                        <ns1:LocationNameInstance>
+                            <ns1:LocationNameLevel>1</ns1:LocationNameLevel>
+                            <ns1:LocationNameValue>Sklad oddělení pro dospělé</ns1:LocationNameValue>
+                        </ns1:LocationNameInstance>
+                    </ns1:LocationName>
+                </ns1:Location>
+                <ns1:CallNumber>SK</ns1:CallNumber>
+                <ns1:ItemInformation>
+                    <ns1:ItemId>
+                        <ns1:AgencyId>17</ns1:AgencyId>
+                        <ns1:ItemIdentifierType ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/visibleitemidentifiertype/visibleitemidentifiertype.scm">Barcode</ns1:ItemIdentifierType>
+                        <ns1:ItemIdentifierValue>318300663907</ns1:ItemIdentifierValue>
+                    </ns1:ItemId>
+                    <ns1:ItemOptionalFields>
+                        <ns1:BibliographicDescription>
+                            <ns1:Author>James, E. L., 1963-</ns1:Author>
+                            <ns1:BibliographicItemId>
+                                <ns1:BibliographicItemIdentifier>KN3183000000266428</ns1:BibliographicItemIdentifier>
+                            </ns1:BibliographicItemId>
+                            <ns1:PlaceOfPublication>V Praze</ns1:PlaceOfPublication>
+                            <ns1:PublicationDate>2012</ns1:PublicationDate>
+                            <ns1:Publisher>XYZ</ns1:Publisher>
+                            <ns1:Title>Fifty shades of grey : Padesát odstínů šedi</ns1:Title>
+                            <ns1:BibliographicLevel ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/bibliographiclevel/bibliographiclevel.scm">Monograph</ns1:BibliographicLevel>
+                            <ns1:Language ns1:Scheme="http://lcweb.loc.gov/standards/iso639-2/bibcodes.html">cze</ns1:Language>
+                            <ns1:MediumType ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/mediumtype/mediumtype.scm">Book</ns1:MediumType>
+                        </ns1:BibliographicDescription>
+                        <ns1:ItemUseRestrictionType ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/itemuserestrictiontype/itemuserestrictiontype.scm">Limited Circulation, Normal Loan Period</ns1:ItemUseRestrictionType>
+                        <ns1:CirculationStatus ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/circulationstatus/circulationstatus.scm">Available On Shelf</ns1:CirculationStatus>
+                        <ns1:HoldQueueLength>0</ns1:HoldQueueLength>
+                        <ns1:ItemDescription>
+                            <ns1:CallNumber>SK</ns1:CallNumber>
+                            <ns1:ItemDescriptionLevel ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/itemdescriptionlevel/itemdescriptionlevel.scm">Bibliographic Item</ns1:ItemDescriptionLevel>
+                        </ns1:ItemDescription>
+                        <ns1:Location>
+                            <ns1:LocationType ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/locationtype/locationtype.scm">Permanent Location</ns1:LocationType>
+                            <ns1:LocationName>
+                                <ns1:LocationNameInstance>
+                                    <ns1:LocationNameLevel>1</ns1:LocationNameLevel>
+                                    <ns1:LocationNameValue>Sklad oddělení pro dospělé</ns1:LocationNameValue>
+                                </ns1:LocationNameInstance>
+                            </ns1:LocationName>
+                        </ns1:Location>
+                    </ns1:ItemOptionalFields>
+                </ns1:ItemInformation>
+            </ns1:HoldingsSet>
+        </ns1:BibInformation>
+    </ns1:LookupItemSetResponse>
+</ns1:NCIPMessage>
+
