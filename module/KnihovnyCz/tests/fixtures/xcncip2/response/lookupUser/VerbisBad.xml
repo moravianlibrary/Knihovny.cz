@@ -1,0 +1,289 @@
+HTTP/1.1 200 OK
+Content-Type: application/xml
+Date: Wed, 18 Mar 2015 11:49:40 GMT
+
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ns1:NCIPMessage ns1:version="http://www.niso.org/schemas/ncip/v2_0/imp1/xsd/ncip_v2_0.xsd" xmlns:ns1="http://www.niso.org/2008/ncip">
+    <ns1:LookupUserResponse>
+        <ns1:UserId>
+            <ns1:AgencyId ns1:Scheme="http://www.niso.org/ncip/v1_0/schemes/agencyelementtype/agencyelementtype.scm">KPSYS-TEST</ns1:AgencyId>
+            <ns1:UserIdentifierType ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/visibleuseridentifiertype/visibleuseridentifiertype.scm">Institution Id Number</ns1:UserIdentifierType>
+            <ns1:UserIdentifierValue>217</ns1:UserIdentifierValue>
+        </ns1:UserId>
+        <ns1:UserFiscalAccount>
+            <ns1:AccountBalance>
+                <ns1:CurrencyCode>CZK</ns1:CurrencyCode>
+                <ns1:MonetaryValue>-46000</ns1:MonetaryValue>
+            </ns1:AccountBalance>
+            <ns1:AccountDetails>
+                <ns1:AccrualDate>2016-11-10T00:00:00.000+01:00</ns1:AccrualDate>
+                <ns1:FiscalTransactionInformation>
+                    <ns1:FiscalActionType ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/fiscalactiontype/fiscalactiontype.scm">Payment</ns1:FiscalActionType>
+                    <ns1:FiscalTransactionType ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/fiscaltransactiontype/fiscaltransactiontype.scm">Service Charge</ns1:FiscalTransactionType>
+                    <ns1:Amount>
+                        <ns1:CurrencyCode>CZK</ns1:CurrencyCode>
+                        <ns1:MonetaryValue>0</ns1:MonetaryValue>
+                    </ns1:Amount>
+                    <ns1:FiscalTransactionDescription>Objednávky</ns1:FiscalTransactionDescription>
+                </ns1:FiscalTransactionInformation>
+            </ns1:AccountDetails>
+            <ns1:AccountDetails>
+                <ns1:AccrualDate>2016-11-15T00:00:00.000+01:00</ns1:AccrualDate>
+                <ns1:FiscalTransactionInformation>
+                    <ns1:FiscalActionType ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/fiscalactiontype/fiscalactiontype.scm">Payment</ns1:FiscalActionType>
+                    <ns1:FiscalTransactionType ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/fiscaltransactiontype/fiscaltransactiontype.scm">Service Charge</ns1:FiscalTransactionType>
+                    <ns1:Amount>
+                        <ns1:CurrencyCode>CZK</ns1:CurrencyCode>
+                        <ns1:MonetaryValue>0</ns1:MonetaryValue>
+                    </ns1:Amount>
+                    <ns1:FiscalTransactionDescription>Rezervace</ns1:FiscalTransactionDescription>
+                </ns1:FiscalTransactionInformation>
+            </ns1:AccountDetails>
+            <ns1:AccountDetails>
+                <ns1:AccrualDate>2016-11-15T00:00:00.000+01:00</ns1:AccrualDate>
+                <ns1:FiscalTransactionInformation>
+                    <ns1:FiscalActionType ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/fiscalactiontype/fiscalactiontype.scm">Payment</ns1:FiscalActionType>
+                    <ns1:FiscalTransactionType ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/fiscaltransactiontype/fiscaltransactiontype.scm">Service Charge</ns1:FiscalTransactionType>
+                    <ns1:Amount>
+                        <ns1:CurrencyCode>CZK</ns1:CurrencyCode>
+                        <ns1:MonetaryValue>0</ns1:MonetaryValue>
+                    </ns1:Amount>
+                    <ns1:FiscalTransactionDescription>Rezervace</ns1:FiscalTransactionDescription>
+                </ns1:FiscalTransactionInformation>
+            </ns1:AccountDetails>
+            <ns1:AccountDetails>
+                <ns1:AccrualDate>2016-11-25T00:00:00.000+01:00</ns1:AccrualDate>
+                <ns1:FiscalTransactionInformation>
+                    <ns1:FiscalActionType ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/fiscalactiontype/fiscalactiontype.scm">Payment</ns1:FiscalActionType>
+                    <ns1:FiscalTransactionType ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/fiscaltransactiontype/fiscaltransactiontype.scm">Service Charge</ns1:FiscalTransactionType>
+                    <ns1:Amount>
+                        <ns1:CurrencyCode>CZK</ns1:CurrencyCode>
+                        <ns1:MonetaryValue>0</ns1:MonetaryValue>
+                    </ns1:Amount>
+                    <ns1:FiscalTransactionDescription>Objednávky</ns1:FiscalTransactionDescription>
+                </ns1:FiscalTransactionInformation>
+            </ns1:AccountDetails>
+            <ns1:AccountDetails>
+                <ns1:AccrualDate>2016-12-28T00:00:00.000+01:00</ns1:AccrualDate>
+                <ns1:FiscalTransactionInformation>
+                    <ns1:FiscalActionType ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/fiscalactiontype/fiscalactiontype.scm">Payment</ns1:FiscalActionType>
+                    <ns1:FiscalTransactionType ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/fiscaltransactiontype/fiscaltransactiontype.scm">Service Charge</ns1:FiscalTransactionType>
+                    <ns1:Amount>
+                        <ns1:CurrencyCode>CZK</ns1:CurrencyCode>
+                        <ns1:MonetaryValue>0</ns1:MonetaryValue>
+                    </ns1:Amount>
+                    <ns1:FiscalTransactionDescription>Upomínky</ns1:FiscalTransactionDescription>
+                </ns1:FiscalTransactionInformation>
+            </ns1:AccountDetails>
+            <ns1:AccountDetails>
+                <ns1:AccrualDate>2017-02-01T00:00:00.000+01:00</ns1:AccrualDate>
+                <ns1:FiscalTransactionInformation>
+                    <ns1:FiscalActionType ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/fiscalactiontype/fiscalactiontype.scm">Payment</ns1:FiscalActionType>
+                    <ns1:FiscalTransactionType ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/fiscaltransactiontype/fiscaltransactiontype.scm">Service Charge</ns1:FiscalTransactionType>
+                    <ns1:Amount>
+                        <ns1:CurrencyCode>CZK</ns1:CurrencyCode>
+                        <ns1:MonetaryValue>-5500</ns1:MonetaryValue>
+                    </ns1:Amount>
+                    <ns1:FiscalTransactionDescription>Upomínky</ns1:FiscalTransactionDescription>
+                </ns1:FiscalTransactionInformation>
+            </ns1:AccountDetails>
+            <ns1:AccountDetails>
+                <ns1:AccrualDate>2017-03-01T00:00:00.000+01:00</ns1:AccrualDate>
+                <ns1:FiscalTransactionInformation>
+                    <ns1:FiscalActionType ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/fiscalactiontype/fiscalactiontype.scm">Payment</ns1:FiscalActionType>
+                    <ns1:FiscalTransactionType ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/fiscaltransactiontype/fiscaltransactiontype.scm">Service Charge</ns1:FiscalTransactionType>
+                    <ns1:Amount>
+                        <ns1:CurrencyCode>CZK</ns1:CurrencyCode>
+                        <ns1:MonetaryValue>-3500</ns1:MonetaryValue>
+                    </ns1:Amount>
+                    <ns1:FiscalTransactionDescription>Upomínky</ns1:FiscalTransactionDescription>
+                </ns1:FiscalTransactionInformation>
+            </ns1:AccountDetails>
+            <ns1:AccountDetails>
+                <ns1:AccrualDate>2017-04-05T00:00:00.000+02:00</ns1:AccrualDate>
+                <ns1:FiscalTransactionInformation>
+                    <ns1:FiscalActionType ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/fiscalactiontype/fiscalactiontype.scm">Payment</ns1:FiscalActionType>
+                    <ns1:FiscalTransactionType ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/fiscaltransactiontype/fiscaltransactiontype.scm">Service Charge</ns1:FiscalTransactionType>
+                    <ns1:Amount>
+                        <ns1:CurrencyCode>CZK</ns1:CurrencyCode>
+                        <ns1:MonetaryValue>-7000</ns1:MonetaryValue>
+                    </ns1:Amount>
+                    <ns1:FiscalTransactionDescription>Upomínky</ns1:FiscalTransactionDescription>
+                </ns1:FiscalTransactionInformation>
+            </ns1:AccountDetails>
+            <ns1:AccountDetails>
+                <ns1:AccrualDate>2017-05-10T00:00:00.000+02:00</ns1:AccrualDate>
+                <ns1:FiscalTransactionInformation>
+                    <ns1:FiscalActionType ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/fiscalactiontype/fiscalactiontype.scm">Payment</ns1:FiscalActionType>
+                    <ns1:FiscalTransactionType ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/fiscaltransactiontype/fiscaltransactiontype.scm">Service Charge</ns1:FiscalTransactionType>
+                    <ns1:Amount>
+                        <ns1:CurrencyCode>CZK</ns1:CurrencyCode>
+                        <ns1:MonetaryValue>-14000</ns1:MonetaryValue>
+                    </ns1:Amount>
+                    <ns1:FiscalTransactionDescription>Upomínky</ns1:FiscalTransactionDescription>
+                </ns1:FiscalTransactionInformation>
+            </ns1:AccountDetails>
+            <ns1:AccountDetails>
+                <ns1:AccrualDate>2017-12-12T00:00:00.000+01:00</ns1:AccrualDate>
+                <ns1:FiscalTransactionInformation>
+                    <ns1:FiscalActionType ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/fiscalactiontype/fiscalactiontype.scm">Payment</ns1:FiscalActionType>
+                    <ns1:FiscalTransactionType ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/fiscaltransactiontype/fiscaltransactiontype.scm">Service Charge</ns1:FiscalTransactionType>
+                    <ns1:Amount>
+                        <ns1:CurrencyCode>CZK</ns1:CurrencyCode>
+                        <ns1:MonetaryValue>-14000</ns1:MonetaryValue>
+                    </ns1:Amount>
+                    <ns1:FiscalTransactionDescription>Registrační poplatek</ns1:FiscalTransactionDescription>
+                </ns1:FiscalTransactionInformation>
+            </ns1:AccountDetails>
+            <ns1:AccountDetails>
+                <ns1:AccrualDate>2018-05-30T00:00:00.000+02:00</ns1:AccrualDate>
+                <ns1:FiscalTransactionInformation>
+                    <ns1:FiscalActionType ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/fiscalactiontype/fiscalactiontype.scm">Payment</ns1:FiscalActionType>
+                    <ns1:FiscalTransactionType ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/fiscaltransactiontype/fiscaltransactiontype.scm">Service Charge</ns1:FiscalTransactionType>
+                    <ns1:Amount>
+                        <ns1:CurrencyCode>CZK</ns1:CurrencyCode>
+                        <ns1:MonetaryValue>-500</ns1:MonetaryValue>
+                    </ns1:Amount>
+                    <ns1:FiscalTransactionDescription>Objednávky</ns1:FiscalTransactionDescription>
+                </ns1:FiscalTransactionInformation>
+            </ns1:AccountDetails>
+            <ns1:AccountDetails>
+                <ns1:AccrualDate>2019-02-01T00:00:00.000+01:00</ns1:AccrualDate>
+                <ns1:FiscalTransactionInformation>
+                    <ns1:FiscalActionType ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/fiscalactiontype/fiscalactiontype.scm">Payment</ns1:FiscalActionType>
+                    <ns1:FiscalTransactionType ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/fiscaltransactiontype/fiscaltransactiontype.scm">Service Charge</ns1:FiscalTransactionType>
+                    <ns1:Amount>
+                        <ns1:CurrencyCode>CZK</ns1:CurrencyCode>
+                        <ns1:MonetaryValue>-500</ns1:MonetaryValue>
+                    </ns1:Amount>
+                    <ns1:FiscalTransactionDescription>Rezervace</ns1:FiscalTransactionDescription>
+                </ns1:FiscalTransactionInformation>
+            </ns1:AccountDetails>
+            <ns1:AccountDetails>
+                <ns1:AccrualDate>2019-11-28T00:00:00.000+01:00</ns1:AccrualDate>
+                <ns1:FiscalTransactionInformation>
+                    <ns1:FiscalActionType ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/fiscalactiontype/fiscalactiontype.scm">Payment</ns1:FiscalActionType>
+                    <ns1:FiscalTransactionType ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/fiscaltransactiontype/fiscaltransactiontype.scm">Service Charge</ns1:FiscalTransactionType>
+                    <ns1:Amount>
+                        <ns1:CurrencyCode>CZK</ns1:CurrencyCode>
+                        <ns1:MonetaryValue>-500</ns1:MonetaryValue>
+                    </ns1:Amount>
+                    <ns1:FiscalTransactionDescription>Rezervace</ns1:FiscalTransactionDescription>
+                </ns1:FiscalTransactionInformation>
+            </ns1:AccountDetails>
+            <ns1:AccountDetails>
+                <ns1:AccrualDate>2020-02-18T00:00:00.000+01:00</ns1:AccrualDate>
+                <ns1:FiscalTransactionInformation>
+                    <ns1:FiscalActionType ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/fiscalactiontype/fiscalactiontype.scm">Payment</ns1:FiscalActionType>
+                    <ns1:FiscalTransactionType ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/fiscaltransactiontype/fiscaltransactiontype.scm">Service Charge</ns1:FiscalTransactionType>
+                    <ns1:Amount>
+                        <ns1:CurrencyCode>CZK</ns1:CurrencyCode>
+                        <ns1:MonetaryValue>-500</ns1:MonetaryValue>
+                    </ns1:Amount>
+                    <ns1:FiscalTransactionDescription>Rezervace</ns1:FiscalTransactionDescription>
+                </ns1:FiscalTransactionInformation>
+            </ns1:AccountDetails>
+        </ns1:UserFiscalAccount>
+        <ns1:LoanedItem>
+            <ns1:ItemId>
+                <ns1:ItemIdentifierType ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/visibleitemidentifiertype/visibleitemidentifiertype.scm">Accession Number</ns1:ItemIdentifierType>
+                <ns1:ItemIdentifierValue>377700496260</ns1:ItemIdentifierValue>
+            </ns1:ItemId>
+            <ns1:DateDue>2017-05-17T00:00:00.000+02:00</ns1:DateDue>
+            <ns1:Title>Virtualizace</ns1:Title>
+            <ns1:Ext>
+                <ns1:BibliographicDescription>
+                    <ns1:Author>Ruest, Danielle</ns1:Author>
+                    <ns1:BibliographicItemId>
+                        <ns1:BibliographicItemIdentifier>456951</ns1:BibliographicItemIdentifier>
+                        <ns1:BibliographicItemIdentifierCode ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/bibliographicitemidentifiercode/bibliographicitemidentifiercode.scm">Legal Deposit Number</ns1:BibliographicItemIdentifierCode>
+                    </ns1:BibliographicItemId>
+                    <ns1:Pagination>408 s. :</ns1:Pagination>
+                    <ns1:PlaceOfPublication>Brno :</ns1:PlaceOfPublication>
+                    <ns1:Publisher>Computer Press,</ns1:Publisher>
+                    <ns1:Title>Virtualizace</ns1:Title>
+                </ns1:BibliographicDescription>
+                <ns1:RenewalNotPermitted/>
+            </ns1:Ext>
+        </ns1:LoanedItem>
+        <ns1:LoanedItem>
+            <ns1:ItemId>
+                <ns1:ItemIdentifierType ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/visibleitemidentifiertype/visibleitemidentifiertype.scm">Accession Number</ns1:ItemIdentifierType>
+                <ns1:ItemIdentifierValue>377700456602</ns1:ItemIdentifierValue>
+            </ns1:ItemId>
+            <ns1:DateDue>2017-05-17T00:00:00.000+02:00</ns1:DateDue>
+            <ns1:Title>Cisco</ns1:Title>
+            <ns1:Ext>
+                <ns1:BibliographicDescription>
+                    <ns1:Author>Raab, Stefan</ns1:Author>
+                    <ns1:BibliographicItemId>
+                        <ns1:BibliographicItemIdentifier>408388</ns1:BibliographicItemIdentifier>
+                        <ns1:BibliographicItemIdentifierCode ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/bibliographicitemidentifiercode/bibliographicitemidentifiercode.scm">Legal Deposit Number</ns1:BibliographicItemIdentifierCode>
+                    </ns1:BibliographicItemId>
+                    <ns1:Pagination>299 s. :</ns1:Pagination>
+                    <ns1:PlaceOfPublication>Praha :</ns1:PlaceOfPublication>
+                    <ns1:Publisher>Grada,</ns1:Publisher>
+                    <ns1:Title>Cisco</ns1:Title>
+                </ns1:BibliographicDescription>
+                <ns1:RenewalNotPermitted/>
+            </ns1:Ext>
+        </ns1:LoanedItem>
+        <ns1:UserOptionalFields>
+            <ns1:NameInformation>
+                <ns1:PersonalNameInformation>
+                    <ns1:StructuredPersonalUserName>
+                        <ns1:Prefix>Bc.</ns1:Prefix>
+                        <ns1:GivenName>Čtenář</ns1:GivenName>
+                        <ns1:Surname>Ncip</ns1:Surname>
+                    </ns1:StructuredPersonalUserName>
+                </ns1:PersonalNameInformation>
+            </ns1:NameInformation>
+            <ns1:UserAddressInformation>
+                <ns1:UserAddressRoleType ns1:Scheme="http://www.niso.org/ncip/v2_0/imp1/schemes/useraddressroletype/useraddressroletype.scm">Ship To</ns1:UserAddressRoleType>
+                <ns1:PhysicalAddress>
+                    <ns1:UnstructuredAddress>
+                        <ns1:UnstructuredAddressType ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/unstructuredaddresstype/unstructuredaddresstype.scm">Newline-Delimited Text</ns1:UnstructuredAddressType>
+                        <ns1:UnstructuredAddressData>Vavrečkova 84, 76001 Zlín</ns1:UnstructuredAddressData>
+                    </ns1:UnstructuredAddress>
+                    <ns1:PhysicalAddressType ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/physicaladdresstype/physicaladdresstype.scm">Street Address</ns1:PhysicalAddressType>
+                </ns1:PhysicalAddress>
+            </ns1:UserAddressInformation>
+            <ns1:UserAddressInformation>
+                <ns1:UserAddressRoleType ns1:Scheme="http://www.niso.org/ncip/v2_0/imp1/schemes/useraddressroletype/useraddressroletype.scm">Ship To</ns1:UserAddressRoleType>
+                <ns1:PhysicalAddress>
+                    <ns1:UnstructuredAddress>
+                        <ns1:UnstructuredAddressType ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/unstructuredaddresstype/unstructuredaddresstype.scm">Newline-Delimited Text</ns1:UnstructuredAddressType>
+                        <ns1:UnstructuredAddressData>Štormova, 68605 Uherské Hradiště</ns1:UnstructuredAddressData>
+                    </ns1:UnstructuredAddress>
+                    <ns1:PhysicalAddressType ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/physicaladdresstype/physicaladdresstype.scm">Street Address</ns1:PhysicalAddressType>
+                </ns1:PhysicalAddress>
+            </ns1:UserAddressInformation>
+            <ns1:UserAddressInformation>
+                <ns1:UserAddressRoleType ns1:Scheme="http://www.niso.org/ncip/v2_0/imp1/schemes/useraddressroletype/useraddressroletype.scm">Notice</ns1:UserAddressRoleType>
+                <ns1:ElectronicAddress>
+                    <ns1:ElectronicAddressType ns1:Scheme="http://www.iana.org/assignments/uri-schemes">mailto</ns1:ElectronicAddressType>
+                    <ns1:ElectronicAddressData>cpk@mzk.cz</ns1:ElectronicAddressData>
+                </ns1:ElectronicAddress>
+            </ns1:UserAddressInformation>
+            <ns1:DateOfBirth>1968-03-18T00:00:00.000+01:00</ns1:DateOfBirth>
+            <ns1:UserPrivilege>
+                <ns1:AgencyId ns1:Scheme="http://www.niso.org/ncip/v1_0/schemes/agencyelementtype/agencyelementtype.scm">KPSYS-TEST</ns1:AgencyId>
+                <ns1:AgencyUserPrivilegeType ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/agencyuserprivilegetype/agencyuserprivilegetype.scm">loaning</ns1:AgencyUserPrivilegeType>
+                <ns1:ValidFromDate>2019-10-18T00:00:00.000+02:00</ns1:ValidFromDate>
+                <ns1:UserPrivilegeDescription>Loaning, Renewing and other reader actions</ns1:UserPrivilegeDescription>
+            </ns1:UserPrivilege>
+            <ns1:BlockOrTrap>
+                <ns1:AgencyId ns1:Scheme="http://www.niso.org/ncip/v1_0/schemes/agencyelementtype/agencyelementtype.scm">KPSYS-TEST</ns1:AgencyId>
+                <ns1:BlockOrTrapType ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/blockortraptype/blockortraptype.scm">Skončená registrace</ns1:BlockOrTrapType>
+            </ns1:BlockOrTrap>            
+            <ns1:BlockOrTrap>
+                <ns1:AgencyId ns1:Scheme="http://www.niso.org/ncip/v1_0/schemes/agencyelementtype/agencyelementtype.scm">KPSYS-TEST</ns1:AgencyId>
+                <ns1:BlockOrTrapType ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/blockortraptype/blockortraptype.scm">Dluh 460.0 Kč</ns1:BlockOrTrapType>
+            </ns1:BlockOrTrap>
+            <ns1:UserId>
+                <ns1:UserIdentifierType ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/visibleuseridentifiertype/visibleuseridentifiertype.scm">Barcode</ns1:UserIdentifierType>
+                <ns1:UserIdentifierValue>5997776</ns1:UserIdentifierValue>
+            </ns1:UserId>
+        </ns1:UserOptionalFields>
+    </ns1:LookupUserResponse>
+</ns1:NCIPMessage>

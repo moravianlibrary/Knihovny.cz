@@ -1,0 +1,109 @@
+HTTP/1.1 200 OK
+Content-Type: application/xml
+Date: Wed, 18 Mar 2015 11:49:40 GMT
+
+<?xml version="1.0" encoding="UTF-8"?>
+<NCIPMessage xmlns="http://www.niso.org/2008/ncip">
+    <LookupUserResponse>
+        <UserId>
+            <AgencyId>SOG504</AgencyId>
+            <UserIdentifierType>Institution Id Number</UserIdentifierType>
+            <UserIdentifierValue>19403</UserIdentifierValue>
+        </UserId>
+        <UserFiscalAccount>
+            <AccountBalance>
+                <CurrencyCode>CZK</CurrencyCode>
+                <MonetaryValue>-2000</MonetaryValue>
+            </AccountBalance>
+            <AccountDetails>
+                <AccrualDate>2019-11-04T08:11:10.936+01:00</AccrualDate>
+                <FiscalTransactionInformation>
+                    <FiscalActionType>Payment</FiscalActionType>
+                    <FiscalTransactionType>Reminder Charge</FiscalTransactionType>
+                    <Amount>
+                        <CurrencyCode>CZK</CurrencyCode>
+                        <MonetaryValue>-1000</MonetaryValue>
+                    </Amount>
+                    <FiscalTransactionDescription>Poplatek za upomínku</FiscalTransactionDescription>
+                </FiscalTransactionInformation>
+            </AccountDetails>
+            <AccountDetails>
+                <AccrualDate>2019-12-12T14:47:51.395+01:00</AccrualDate>
+                <FiscalTransactionInformation>
+                    <FiscalActionType>Payment</FiscalActionType>
+                    <FiscalTransactionType>Reminder Charge</FiscalTransactionType>
+                    <Amount>
+                        <CurrencyCode>CZK</CurrencyCode>
+                        <MonetaryValue>-1000</MonetaryValue>
+                    </Amount>
+                    <FiscalTransactionDescription>Poplatek za upomínku</FiscalTransactionDescription>
+                </FiscalTransactionInformation>
+            </AccountDetails>
+        </UserFiscalAccount>
+        <LoanedItem>
+            <ItemId>
+                <ItemIdentifierType>Barcode</ItemIdentifierType>
+                <ItemIdentifierValue>421170125990</ItemIdentifierValue>
+            </ItemId>
+            <dateDue>2020-06-15T23:59:59.999+02:00</dateDue>
+            <Title>Tajemství Hrobaříků :</Title>
+            <Ext>
+                <RenewalNotPermitted>true</RenewalNotPermitted>
+            </Ext>
+        </LoanedItem>
+        <LoanedItem>
+            <ItemId>
+                <ItemIdentifierType>Barcode</ItemIdentifierType>
+                <ItemIdentifierValue>421170125992</ItemIdentifierValue>
+            </ItemId>
+            <dateDue>2020-06-15T23:59:59.999+02:00</dateDue>
+            <Title>Hrobaříci a Hrobaři /</Title>
+            <Ext>
+                <RenewalNotPermitted>true</RenewalNotPermitted>
+            </Ext>
+        </LoanedItem>
+        <UserOptionalFields>
+            <UserAddressInformation>
+                <UserAddressRoleType>Home</UserAddressRoleType>
+                <PhysicalAddress>
+                    <UnstructuredAddress>
+                        <UnstructuredAddressType>Newline-Delimited Text</UnstructuredAddressType>
+                        <UnstructuredAddressData>Lesní 25, 357 35, Chodov</UnstructuredAddressData>
+                    </UnstructuredAddress>
+                    <PhysicalAddressType>Street Address</PhysicalAddressType>
+                </PhysicalAddress>
+            </UserAddressInformation>
+            <UserAddressInformation>
+                <UserAddressRoleType>Multi-Purpose</UserAddressRoleType>
+                <PhysicalAddress>
+                    <UnstructuredAddress>
+                        <UnstructuredAddressType>Newline-Delimited Text</UnstructuredAddressType>
+                        <UnstructuredAddressData>357 35, Chodov</UnstructuredAddressData>
+                    </UnstructuredAddress>
+                    <PhysicalAddressType>Street Address</PhysicalAddressType>
+                </PhysicalAddress>
+            </UserAddressInformation>
+            <UserAddressInformation>
+                <UserAddressRoleType>Notice</UserAddressRoleType>
+                <PhysicalAddress>
+                    <ElectronicAddressType>mailto</ElectronicAddressType>
+                    <ElectronicAddressData>jbanzetova@email.cz</ElectronicAddressData>
+                </PhysicalAddress>
+            </UserAddressInformation>
+            <NameInformation>
+                <PersonalNameInformation>
+                    <StructuredPersonalUserName>
+                        <Prefix />
+                        <GivenName>Beruška</GivenName>
+                        <Surname>Sedmitečná</Surname>
+                        <Suffix />
+                    </StructuredPersonalUserName>
+                </PersonalNameInformation>
+            </NameInformation>
+            <UserPrivilege>
+                <ValidToDate>2020-07-26T23:59:59.999+02:00</ValidToDate>
+            </UserPrivilege>
+        </UserOptionalFields>
+    </LookupUserResponse>
+</NCIPMessage>
+

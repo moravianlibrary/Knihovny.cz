@@ -1,0 +1,156 @@
+HTTP/1.1 200 OK
+Content-Type: application/xml
+Date: Wed, 18 Mar 2015 11:49:40 GMT
+
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ns1:NCIPMessage ns1:version="http://www.niso.org/schemas/ncip/v2_0/imp1/xsd/ncip_v2_0.xsd" xmlns:ns1="http://www.niso.org/2008/ncip">
+    <ns1:LookupItemSetResponse>
+        <ns1:BibInformation>
+            <ns1:BibliographicId>
+                <ns1:BibliographicItemId>
+                    <ns1:BibliographicItemIdentifier>692155</ns1:BibliographicItemIdentifier>
+                    <ns1:BibliographicItemIdentifierCode ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/bibliographicitemidentifiercode/bibliographicitemidentifiercode.scm">Legal Deposit Number</ns1:BibliographicItemIdentifierCode>
+                </ns1:BibliographicItemId>
+            </ns1:BibliographicId>
+            <ns1:HoldingsSet>
+                <ns1:ItemInformation>
+                    <ns1:ItemId>
+                        <ns1:ItemIdentifierType ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/visibleitemidentifiertype/visibleitemidentifiertype.scm">Accession Number</ns1:ItemIdentifierType>
+                        <ns1:ItemIdentifierValue>377700598332</ns1:ItemIdentifierValue>
+                    </ns1:ItemId>
+                    <ns1:ItemOptionalFields>
+                        <ns1:BibliographicDescription>
+                            <ns1:Author>Šebek, Tomáš,</ns1:Author>
+                            <ns1:BibliographicItemId>
+                                <ns1:BibliographicItemIdentifier>692155</ns1:BibliographicItemIdentifier>
+                                <ns1:BibliographicItemIdentifierCode ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/bibliographicitemidentifiercode/bibliographicitemidentifiercode.scm">Legal Deposit Number</ns1:BibliographicItemIdentifierCode>
+                            </ns1:BibliographicItemId>
+                            <ns1:Pagination>284 stran :</ns1:Pagination>
+                            <ns1:PlaceOfPublication></ns1:PlaceOfPublication>
+                            <ns1:Publisher></ns1:Publisher>
+                            <ns1:Title>Africká zima</ns1:Title>
+                        </ns1:BibliographicDescription>
+                        <ns1:ItemUseRestrictionType ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/itemuserestrictiontype/itemuserestrictiontype.scm">Not For Loan</ns1:ItemUseRestrictionType>
+                        <ns1:CirculationStatus ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/circulationstatus/circulationstatus.scm">Circulation Status Undefined</ns1:CirculationStatus>
+                        <ns1:HoldQueueLength>0</ns1:HoldQueueLength>
+                        <ns1:ItemDescription>
+                            <ns1:CopyNumber>918693</ns1:CopyNumber>
+                        </ns1:ItemDescription>
+                        <ns1:Location>
+                            <ns1:LocationType ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/locationtype/locationtype.scm">Current Location</ns1:LocationType>
+                            <ns1:LocationName>
+                                <ns1:LocationNameInstance>
+                                    <ns1:LocationNameLevel>4</ns1:LocationNameLevel>
+                                    <ns1:LocationNameValue>Ústřední knihovna</ns1:LocationNameValue>
+                                </ns1:LocationNameInstance>
+                            </ns1:LocationName>
+                        </ns1:Location>
+                    </ns1:ItemOptionalFields>
+                </ns1:ItemInformation>
+                <ns1:ItemInformation>
+                    <ns1:ItemId>
+                        <ns1:ItemIdentifierType ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/visibleitemidentifiertype/visibleitemidentifiertype.scm">Accession Number</ns1:ItemIdentifierType>
+                        <ns1:ItemIdentifierValue>377700600764</ns1:ItemIdentifierValue>
+                    </ns1:ItemId>
+                    <ns1:ItemOptionalFields>
+                        <ns1:BibliographicDescription>
+                            <ns1:Author>Šebek, Tomáš,</ns1:Author>
+                            <ns1:BibliographicItemId>
+                                <ns1:BibliographicItemIdentifier>692155</ns1:BibliographicItemIdentifier>
+                                <ns1:BibliographicItemIdentifierCode ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/bibliographicitemidentifiercode/bibliographicitemidentifiercode.scm">Legal Deposit Number</ns1:BibliographicItemIdentifierCode>
+                            </ns1:BibliographicItemId>
+                            <ns1:Pagination>284 stran :</ns1:Pagination>
+                            <ns1:PlaceOfPublication></ns1:PlaceOfPublication>
+                            <ns1:Publisher></ns1:Publisher>
+                            <ns1:Title>Africká zima</ns1:Title>
+                        </ns1:BibliographicDescription>
+                        <ns1:ItemUseRestrictionType ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/itemuserestrictiontype/itemuserestrictiontype.scm">Limited Circulation</ns1:ItemUseRestrictionType>
+                        <ns1:CirculationStatus ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/circulationstatus/circulationstatus.scm">On Loan</ns1:CirculationStatus>
+                        <ns1:HoldQueueLength>1</ns1:HoldQueueLength>
+                        <ns1:ItemDescription>
+                            <ns1:CopyNumber>921125</ns1:CopyNumber>
+                        </ns1:ItemDescription>
+                        <ns1:Location>
+                            <ns1:LocationType ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/locationtype/locationtype.scm">Current Location</ns1:LocationType>
+                            <ns1:LocationName>
+                                <ns1:LocationNameInstance>
+                                    <ns1:LocationNameLevel>4</ns1:LocationNameLevel>
+                                    <ns1:LocationNameValue>Ústřední knihovna</ns1:LocationNameValue>
+                                </ns1:LocationNameInstance>
+                            </ns1:LocationName>
+                        </ns1:Location>
+                        <ns1:DateDue>2020-08-15T00:00:00.000+02:00</ns1:DateDue>
+                    </ns1:ItemOptionalFields>
+                </ns1:ItemInformation>
+                <ns1:ItemInformation>
+                    <ns1:ItemId>
+                        <ns1:ItemIdentifierType ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/visibleitemidentifiertype/visibleitemidentifiertype.scm">Accession Number</ns1:ItemIdentifierType>
+                        <ns1:ItemIdentifierValue>377700598331</ns1:ItemIdentifierValue>
+                    </ns1:ItemId>
+                    <ns1:ItemOptionalFields>
+                        <ns1:BibliographicDescription>
+                            <ns1:Author>Šebek, Tomáš,</ns1:Author>
+                            <ns1:BibliographicItemId>
+                                <ns1:BibliographicItemIdentifier>692155</ns1:BibliographicItemIdentifier>
+                                <ns1:BibliographicItemIdentifierCode ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/bibliographicitemidentifiercode/bibliographicitemidentifiercode.scm">Legal Deposit Number</ns1:BibliographicItemIdentifierCode>
+                            </ns1:BibliographicItemId>
+                            <ns1:Pagination>284 stran :</ns1:Pagination>
+                            <ns1:PlaceOfPublication></ns1:PlaceOfPublication>
+                            <ns1:Publisher></ns1:Publisher>
+                            <ns1:Title>Africká zima</ns1:Title>
+                        </ns1:BibliographicDescription>
+                        <ns1:ItemUseRestrictionType ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/itemuserestrictiontype/itemuserestrictiontype.scm">Not For Loan</ns1:ItemUseRestrictionType>
+                        <ns1:CirculationStatus ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/circulationstatus/circulationstatus.scm">Circulation Status Undefined</ns1:CirculationStatus>
+                        <ns1:HoldQueueLength>0</ns1:HoldQueueLength>
+                        <ns1:ItemDescription>
+                            <ns1:CopyNumber>918692</ns1:CopyNumber>
+                        </ns1:ItemDescription>
+                        <ns1:Location>
+                            <ns1:LocationType ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/locationtype/locationtype.scm">Current Location</ns1:LocationType>
+                            <ns1:LocationName>
+                                <ns1:LocationNameInstance>
+                                    <ns1:LocationNameLevel>4</ns1:LocationNameLevel>
+                                    <ns1:LocationNameValue>Obvodní knihovna Jižní Svahy</ns1:LocationNameValue>
+                                </ns1:LocationNameInstance>
+                            </ns1:LocationName>
+                        </ns1:Location>
+                    </ns1:ItemOptionalFields>
+                </ns1:ItemInformation>
+                <ns1:ItemInformation>
+                    <ns1:ItemId>
+                        <ns1:ItemIdentifierType ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/visibleitemidentifiertype/visibleitemidentifiertype.scm">Accession Number</ns1:ItemIdentifierType>
+                        <ns1:ItemIdentifierValue>377700598960</ns1:ItemIdentifierValue>
+                    </ns1:ItemId>
+                    <ns1:ItemOptionalFields>
+                        <ns1:BibliographicDescription>
+                            <ns1:Author>Šebek, Tomáš,</ns1:Author>
+                            <ns1:BibliographicItemId>
+                                <ns1:BibliographicItemIdentifier>692155</ns1:BibliographicItemIdentifier>
+                                <ns1:BibliographicItemIdentifierCode ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/bibliographicitemidentifiercode/bibliographicitemidentifiercode.scm">Legal Deposit Number</ns1:BibliographicItemIdentifierCode>
+                            </ns1:BibliographicItemId>
+                            <ns1:Pagination>284 stran :</ns1:Pagination>
+                            <ns1:PlaceOfPublication></ns1:PlaceOfPublication>
+                            <ns1:Publisher></ns1:Publisher>
+                            <ns1:Title>Africká zima</ns1:Title>
+                        </ns1:BibliographicDescription>
+                        <ns1:ItemUseRestrictionType ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/itemuserestrictiontype/itemuserestrictiontype.scm">Limited Circulation</ns1:ItemUseRestrictionType>
+                        <ns1:CirculationStatus ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/circulationstatus/circulationstatus.scm">Available On Shelf</ns1:CirculationStatus>
+                        <ns1:HoldQueueLength>0</ns1:HoldQueueLength>
+                        <ns1:ItemDescription>
+                            <ns1:CopyNumber>919321</ns1:CopyNumber>
+                        </ns1:ItemDescription>
+                        <ns1:Location>
+                            <ns1:LocationType ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/locationtype/locationtype.scm">Current Location</ns1:LocationType>
+                            <ns1:LocationName>
+                                <ns1:LocationNameInstance>
+                                    <ns1:LocationNameLevel>4</ns1:LocationNameLevel>
+                                    <ns1:LocationNameValue>Obvodní knihovna Díly</ns1:LocationNameValue>
+                                </ns1:LocationNameInstance>
+                            </ns1:LocationName>
+                        </ns1:Location>
+                    </ns1:ItemOptionalFields>
+                </ns1:ItemInformation>
+            </ns1:HoldingsSet>
+        </ns1:BibInformation>
+    </ns1:LookupItemSetResponse>
+</ns1:NCIPMessage>

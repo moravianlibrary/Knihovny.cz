@@ -1,0 +1,533 @@
+HTTP/1.1 200 OK
+Content-Type: application/xml
+Date: Wed, 18 Mar 2015 11:49:40 GMT
+
+<?xml version="1.0" encoding="UTF-8"?>
+<ns1:NCIPMessage xmlns:ns1="http://www.niso.org/2008/ncip" ns1:version="http://www.niso.org/schemas/ncip/v2_02/ncip_v2_02.xsd">
+    <ns1:LookupItemSetResponse>
+        <ns1:BibInformation>
+            <ns1:BibliographicId>
+                <ns1:BibliographicItemId>
+                    <ns1:BibliographicItemIdentifier>cbvk_us_cat*0645161</ns1:BibliographicItemIdentifier>
+                    <ns1:BibliographicItemIdentifierCode ns1:Scheme="https://www.library.sk/ncip/v2_02/schemes.scm">IDX</ns1:BibliographicItemIdentifierCode>
+                </ns1:BibliographicItemId>
+            </ns1:BibliographicId>
+            <ns1:BibliographicDescription>
+                <ns1:Author>Třeštíková, Radka</ns1:Author>
+                <ns1:BibliographicItemId>
+                    <ns1:BibliographicItemIdentifier>9788026706045</ns1:BibliographicItemIdentifier>
+                    <ns1:BibliographicItemIdentifierCode ns1:Scheme="https://www.library.sk/ncip/v2_02/schemes.scm">ISBN</ns1:BibliographicItemIdentifierCode>
+                </ns1:BibliographicItemId>
+                <ns1:ComponentId>
+                    <ns1:ComponentIdentifierType ns1:Scheme="" />
+                    <ns1:ComponentIdentifier />
+                </ns1:ComponentId>
+                <ns1:Edition>Román</ns1:Edition>
+                <ns1:PlaceOfPublication />
+                <ns1:Publisher />
+                <ns1:Title>Bábovky</ns1:Title>
+            </ns1:BibliographicDescription>
+            <ns1:TitleHoldQueueLength>0</ns1:TitleHoldQueueLength>
+            <ns1:HoldingsSet>
+                <ns1:ItemInformation>
+                    <ns1:ItemOptionalFields>
+                        <ns1:BibliographicDescription>
+                            <ns1:Author>Třeštíková, Radka</ns1:Author>
+                            <ns1:BibliographicItemId>
+                                <ns1:BibliographicItemIdentifier>9788026706045</ns1:BibliographicItemIdentifier>
+                                <ns1:BibliographicItemIdentifierCode ns1:Scheme="https://www.library.sk/ncip/v2_02/schemes.scm">ISBN</ns1:BibliographicItemIdentifierCode>
+                            </ns1:BibliographicItemId>
+                            <ns1:ComponentId>
+                                <ns1:ComponentIdentifierType ns1:Scheme="https://www.library.sk/ncip/v2_02/schemes.scm">ACCESSION_NUMBER</ns1:ComponentIdentifierType>
+                                <ns1:ComponentIdentifier>2681338534</ns1:ComponentIdentifier>
+                            </ns1:ComponentId>
+                            <ns1:Edition>Román</ns1:Edition>
+                            <ns1:PlaceOfPublication />
+                            <ns1:Publisher />
+                            <ns1:Title>Bábovky</ns1:Title>
+                        </ns1:BibliographicDescription>
+                        <ns1:ItemUseRestrictionType ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/itemuserestrictiontype/itemuserestrictiontype.scm">Limited Circulation, Normal Loan Period</ns1:ItemUseRestrictionType>
+                        <ns1:CirculationStatus ns1:Scheme="https://www.library.sk/ncip/v2_02/schemes.scm">On Loan</ns1:CirculationStatus>
+                        <ns1:HoldQueueLength>0</ns1:HoldQueueLength>
+                        <ns1:ItemDescription>
+                            <ns1:CallNumber>C 196.250 a</ns1:CallNumber>
+                            <ns1:CopyNumber>0645161_0001</ns1:CopyNumber>
+                            <ns1:ItemDescriptionLevel ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/itemdescriptionlevel/itemdescriptionlevel.scm">Item</ns1:ItemDescriptionLevel>
+                            <ns1:HoldingsInformation>
+                                <ns1:UnstructuredHoldingsData>Bábovky</ns1:UnstructuredHoldingsData>
+                            </ns1:HoldingsInformation>
+                            <ns1:NumberOfPieces>15</ns1:NumberOfPieces>
+                        </ns1:ItemDescription>
+                        <ns1:Location>
+                            <ns1:LocationType ns1:Scheme="https://www.library.sk/ncip/v2_02/schemes.scm">Permanent Location</ns1:LocationType>
+                            <ns1:LocationName>
+                                <ns1:LocationNameInstance>
+                                    <ns1:LocationNameLevel>1</ns1:LocationNameLevel>
+                                    <ns1:LocationNameValue>Na Sadech - dospělí</ns1:LocationNameValue>
+                                </ns1:LocationNameInstance>
+                            </ns1:LocationName>
+                        </ns1:Location>
+                        <ns1:Location>
+                            <ns1:LocationType ns1:Scheme="https://www.library.sk/ncip/v2_02/schemes.scm">Permanent Location</ns1:LocationType>
+                            <ns1:LocationName>
+                                <ns1:LocationNameInstance>
+                                    <ns1:LocationNameLevel>2</ns1:LocationNameLevel>
+                                    <ns1:LocationNameValue>Na Sadech - dospělé - beletrie</ns1:LocationNameValue>
+                                </ns1:LocationNameInstance>
+                            </ns1:LocationName>
+                        </ns1:Location>
+                        <ns1:DateDue>2020-09-15T00:00:00Z</ns1:DateDue>
+                    </ns1:ItemOptionalFields>
+                </ns1:ItemInformation>
+                <ns1:ItemInformation>
+                    <ns1:ItemOptionalFields>
+                        <ns1:BibliographicDescription>
+                            <ns1:Author>Třeštíková, Radka</ns1:Author>
+                            <ns1:BibliographicItemId>
+                                <ns1:BibliographicItemIdentifier>9788026706045</ns1:BibliographicItemIdentifier>
+                                <ns1:BibliographicItemIdentifierCode ns1:Scheme="https://www.library.sk/ncip/v2_02/schemes.scm">ISBN</ns1:BibliographicItemIdentifierCode>
+                            </ns1:BibliographicItemId>
+                            <ns1:ComponentId>
+                                <ns1:ComponentIdentifierType ns1:Scheme="https://www.library.sk/ncip/v2_02/schemes.scm">ACCESSION_NUMBER</ns1:ComponentIdentifierType>
+                                <ns1:ComponentIdentifier>2681338989</ns1:ComponentIdentifier>
+                            </ns1:ComponentId>
+                            <ns1:Edition>Román</ns1:Edition>
+                            <ns1:PlaceOfPublication />
+                            <ns1:Publisher />
+                            <ns1:Title>Bábovky</ns1:Title>
+                        </ns1:BibliographicDescription>
+                        <ns1:ItemUseRestrictionType ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/itemuserestrictiontype/itemuserestrictiontype.scm">Limited Circulation, Normal Loan Period</ns1:ItemUseRestrictionType>
+                        <ns1:CirculationStatus ns1:Scheme="https://www.library.sk/ncip/v2_02/schemes.scm">On Loan</ns1:CirculationStatus>
+                        <ns1:HoldQueueLength>0</ns1:HoldQueueLength>
+                        <ns1:ItemDescription>
+                            <ns1:CallNumber>C 196.250 ČD</ns1:CallNumber>
+                            <ns1:CopyNumber>0645161_0002</ns1:CopyNumber>
+                            <ns1:ItemDescriptionLevel ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/itemdescriptionlevel/itemdescriptionlevel.scm">Item</ns1:ItemDescriptionLevel>
+                            <ns1:HoldingsInformation>
+                                <ns1:UnstructuredHoldingsData>Bábovky</ns1:UnstructuredHoldingsData>
+                            </ns1:HoldingsInformation>
+                            <ns1:NumberOfPieces>15</ns1:NumberOfPieces>
+                        </ns1:ItemDescription>
+                        <ns1:Location>
+                            <ns1:LocationType ns1:Scheme="https://www.library.sk/ncip/v2_02/schemes.scm">Permanent Location</ns1:LocationType>
+                            <ns1:LocationName>
+                                <ns1:LocationNameInstance>
+                                    <ns1:LocationNameLevel>1</ns1:LocationNameLevel>
+                                    <ns1:LocationNameValue>Čtyři Dvory</ns1:LocationNameValue>
+                                </ns1:LocationNameInstance>
+                            </ns1:LocationName>
+                        </ns1:Location>
+                        <ns1:Location>
+                            <ns1:LocationType ns1:Scheme="https://www.library.sk/ncip/v2_02/schemes.scm">Permanent Location</ns1:LocationType>
+                            <ns1:LocationName>
+                                <ns1:LocationNameInstance>
+                                    <ns1:LocationNameLevel>2</ns1:LocationNameLevel>
+                                    <ns1:LocationNameValue />
+                                </ns1:LocationNameInstance>
+                            </ns1:LocationName>
+                        </ns1:Location>
+                        <ns1:DateDue>2020-09-02T00:00:00Z</ns1:DateDue>
+                    </ns1:ItemOptionalFields>
+                </ns1:ItemInformation>
+                <ns1:ItemInformation>
+                    <ns1:ItemOptionalFields>
+                        <ns1:BibliographicDescription>
+                            <ns1:Author>Třeštíková, Radka</ns1:Author>
+                            <ns1:BibliographicItemId>
+                                <ns1:BibliographicItemIdentifier>9788026706045</ns1:BibliographicItemIdentifier>
+                                <ns1:BibliographicItemIdentifierCode ns1:Scheme="https://www.library.sk/ncip/v2_02/schemes.scm">ISBN</ns1:BibliographicItemIdentifierCode>
+                            </ns1:BibliographicItemId>
+                            <ns1:ComponentId>
+                                <ns1:ComponentIdentifierType ns1:Scheme="https://www.library.sk/ncip/v2_02/schemes.scm">ACCESSION_NUMBER</ns1:ComponentIdentifierType>
+                                <ns1:ComponentIdentifier>2681338990</ns1:ComponentIdentifier>
+                            </ns1:ComponentId>
+                            <ns1:Edition>Román</ns1:Edition>
+                            <ns1:PlaceOfPublication />
+                            <ns1:Publisher />
+                            <ns1:Title>Bábovky</ns1:Title>
+                        </ns1:BibliographicDescription>
+                        <ns1:ItemUseRestrictionType ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/itemuserestrictiontype/itemuserestrictiontype.scm">Limited Circulation, Normal Loan Period</ns1:ItemUseRestrictionType>
+                        <ns1:CirculationStatus ns1:Scheme="https://www.library.sk/ncip/v2_02/schemes.scm">On Loan</ns1:CirculationStatus>
+                        <ns1:HoldQueueLength>0</ns1:HoldQueueLength>
+                        <ns1:ItemDescription>
+                            <ns1:CallNumber>C 196.250 R</ns1:CallNumber>
+                            <ns1:CopyNumber>0645161_0003</ns1:CopyNumber>
+                            <ns1:ItemDescriptionLevel ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/itemdescriptionlevel/itemdescriptionlevel.scm">Item</ns1:ItemDescriptionLevel>
+                            <ns1:HoldingsInformation>
+                                <ns1:UnstructuredHoldingsData>Bábovky</ns1:UnstructuredHoldingsData>
+                            </ns1:HoldingsInformation>
+                            <ns1:NumberOfPieces>15</ns1:NumberOfPieces>
+                        </ns1:ItemDescription>
+                        <ns1:Location>
+                            <ns1:LocationType ns1:Scheme="https://www.library.sk/ncip/v2_02/schemes.scm">Permanent Location</ns1:LocationType>
+                            <ns1:LocationName>
+                                <ns1:LocationNameInstance>
+                                    <ns1:LocationNameLevel>1</ns1:LocationNameLevel>
+                                    <ns1:LocationNameValue>Rožnov</ns1:LocationNameValue>
+                                </ns1:LocationNameInstance>
+                            </ns1:LocationName>
+                        </ns1:Location>
+                        <ns1:Location>
+                            <ns1:LocationType ns1:Scheme="https://www.library.sk/ncip/v2_02/schemes.scm">Permanent Location</ns1:LocationType>
+                            <ns1:LocationName>
+                                <ns1:LocationNameInstance>
+                                    <ns1:LocationNameLevel>2</ns1:LocationNameLevel>
+                                    <ns1:LocationNameValue />
+                                </ns1:LocationNameInstance>
+                            </ns1:LocationName>
+                        </ns1:Location>
+                        <ns1:DateDue>2020-09-10T00:00:00Z</ns1:DateDue>
+                    </ns1:ItemOptionalFields>
+                </ns1:ItemInformation>
+                <ns1:ItemInformation>
+                    <ns1:ItemOptionalFields>
+                        <ns1:BibliographicDescription>
+                            <ns1:Author>Třeštíková, Radka</ns1:Author>
+                            <ns1:BibliographicItemId>
+                                <ns1:BibliographicItemIdentifier>9788026706045</ns1:BibliographicItemIdentifier>
+                                <ns1:BibliographicItemIdentifierCode ns1:Scheme="https://www.library.sk/ncip/v2_02/schemes.scm">ISBN</ns1:BibliographicItemIdentifierCode>
+                            </ns1:BibliographicItemId>
+                            <ns1:ComponentId>
+                                <ns1:ComponentIdentifierType ns1:Scheme="https://www.library.sk/ncip/v2_02/schemes.scm">ACCESSION_NUMBER</ns1:ComponentIdentifierType>
+                                <ns1:ComponentIdentifier>2681338991</ns1:ComponentIdentifier>
+                            </ns1:ComponentId>
+                            <ns1:Edition>Román</ns1:Edition>
+                            <ns1:PlaceOfPublication />
+                            <ns1:Publisher />
+                            <ns1:Title>Bábovky</ns1:Title>
+                        </ns1:BibliographicDescription>
+                        <ns1:ItemUseRestrictionType ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/itemuserestrictiontype/itemuserestrictiontype.scm">Limited Circulation, Normal Loan Period</ns1:ItemUseRestrictionType>
+                        <ns1:CirculationStatus ns1:Scheme="https://www.library.sk/ncip/v2_02/schemes.scm">On Loan</ns1:CirculationStatus>
+                        <ns1:HoldQueueLength>0</ns1:HoldQueueLength>
+                        <ns1:ItemDescription>
+                            <ns1:CallNumber>C 196.250 Va</ns1:CallNumber>
+                            <ns1:CopyNumber>0645161_0004</ns1:CopyNumber>
+                            <ns1:ItemDescriptionLevel ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/itemdescriptionlevel/itemdescriptionlevel.scm">Item</ns1:ItemDescriptionLevel>
+                            <ns1:HoldingsInformation>
+                                <ns1:UnstructuredHoldingsData>Bábovky</ns1:UnstructuredHoldingsData>
+                            </ns1:HoldingsInformation>
+                            <ns1:NumberOfPieces>15</ns1:NumberOfPieces>
+                        </ns1:ItemDescription>
+                        <ns1:Location>
+                            <ns1:LocationType ns1:Scheme="https://www.library.sk/ncip/v2_02/schemes.scm">Permanent Location</ns1:LocationType>
+                            <ns1:LocationName>
+                                <ns1:LocationNameInstance>
+                                    <ns1:LocationNameLevel>1</ns1:LocationNameLevel>
+                                    <ns1:LocationNameValue>Vltava</ns1:LocationNameValue>
+                                </ns1:LocationNameInstance>
+                            </ns1:LocationName>
+                        </ns1:Location>
+                        <ns1:Location>
+                            <ns1:LocationType ns1:Scheme="https://www.library.sk/ncip/v2_02/schemes.scm">Permanent Location</ns1:LocationType>
+                            <ns1:LocationName>
+                                <ns1:LocationNameInstance>
+                                    <ns1:LocationNameLevel>2</ns1:LocationNameLevel>
+                                    <ns1:LocationNameValue />
+                                </ns1:LocationNameInstance>
+                            </ns1:LocationName>
+                        </ns1:Location>
+                        <ns1:DateDue>2020-09-14T00:00:00Z</ns1:DateDue>
+                    </ns1:ItemOptionalFields>
+                </ns1:ItemInformation>
+                <ns1:ItemInformation>
+                    <ns1:ItemOptionalFields>
+                        <ns1:BibliographicDescription>
+                            <ns1:Author>Třeštíková, Radka</ns1:Author>
+                            <ns1:BibliographicItemId>
+                                <ns1:BibliographicItemIdentifier>9788026706045</ns1:BibliographicItemIdentifier>
+                                <ns1:BibliographicItemIdentifierCode ns1:Scheme="https://www.library.sk/ncip/v2_02/schemes.scm">ISBN</ns1:BibliographicItemIdentifierCode>
+                            </ns1:BibliographicItemId>
+                            <ns1:ComponentId>
+                                <ns1:ComponentIdentifierType ns1:Scheme="https://www.library.sk/ncip/v2_02/schemes.scm">ACCESSION_NUMBER</ns1:ComponentIdentifierType>
+                                <ns1:ComponentIdentifier>2681338992</ns1:ComponentIdentifier>
+                            </ns1:ComponentId>
+                            <ns1:Edition>Román</ns1:Edition>
+                            <ns1:PlaceOfPublication />
+                            <ns1:Publisher />
+                            <ns1:Title>Bábovky</ns1:Title>
+                        </ns1:BibliographicDescription>
+                        <ns1:ItemUseRestrictionType ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/itemuserestrictiontype/itemuserestrictiontype.scm">Limited Circulation, Normal Loan Period</ns1:ItemUseRestrictionType>
+                        <ns1:CirculationStatus ns1:Scheme="https://www.library.sk/ncip/v2_02/schemes.scm">Not Available</ns1:CirculationStatus>
+                        <ns1:HoldQueueLength>0</ns1:HoldQueueLength>
+                        <ns1:ItemDescription>
+                            <ns1:CallNumber>C 196.250 DK</ns1:CallNumber>
+                            <ns1:CopyNumber>0645161_0005</ns1:CopyNumber>
+                            <ns1:ItemDescriptionLevel ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/itemdescriptionlevel/itemdescriptionlevel.scm">Item</ns1:ItemDescriptionLevel>
+                            <ns1:HoldingsInformation>
+                                <ns1:UnstructuredHoldingsData>Bábovky</ns1:UnstructuredHoldingsData>
+                            </ns1:HoldingsInformation>
+                            <ns1:NumberOfPieces>15</ns1:NumberOfPieces>
+                        </ns1:ItemDescription>
+                        <ns1:Location>
+                            <ns1:LocationType ns1:Scheme="https://www.library.sk/ncip/v2_02/schemes.scm">Permanent Location</ns1:LocationType>
+                            <ns1:LocationName>
+                                <ns1:LocationNameInstance>
+                                    <ns1:LocationNameLevel>1</ns1:LocationNameLevel>
+                                    <ns1:LocationNameValue>Výměnný fond</ns1:LocationNameValue>
+                                </ns1:LocationNameInstance>
+                            </ns1:LocationName>
+                        </ns1:Location>
+                        <ns1:Location>
+                            <ns1:LocationType ns1:Scheme="https://www.library.sk/ncip/v2_02/schemes.scm">Permanent Location</ns1:LocationType>
+                            <ns1:LocationName>
+                                <ns1:LocationNameInstance>
+                                    <ns1:LocationNameLevel>2</ns1:LocationNameLevel>
+                                    <ns1:LocationNameValue />
+                                </ns1:LocationNameInstance>
+                            </ns1:LocationName>
+                        </ns1:Location>
+                    </ns1:ItemOptionalFields>
+                </ns1:ItemInformation>
+                <ns1:ItemInformation>
+                    <ns1:ItemOptionalFields>
+                        <ns1:BibliographicDescription>
+                            <ns1:Author>Třeštíková, Radka</ns1:Author>
+                            <ns1:BibliographicItemId>
+                                <ns1:BibliographicItemIdentifier>9788026706045</ns1:BibliographicItemIdentifier>
+                                <ns1:BibliographicItemIdentifierCode ns1:Scheme="https://www.library.sk/ncip/v2_02/schemes.scm">ISBN</ns1:BibliographicItemIdentifierCode>
+                            </ns1:BibliographicItemId>
+                            <ns1:ComponentId>
+                                <ns1:ComponentIdentifierType ns1:Scheme="https://www.library.sk/ncip/v2_02/schemes.scm">ACCESSION_NUMBER</ns1:ComponentIdentifierType>
+                                <ns1:ComponentIdentifier>2681338993</ns1:ComponentIdentifier>
+                            </ns1:ComponentId>
+                            <ns1:Edition>Román</ns1:Edition>
+                            <ns1:PlaceOfPublication />
+                            <ns1:Publisher />
+                            <ns1:Title>Bábovky</ns1:Title>
+                        </ns1:BibliographicDescription>
+                        <ns1:ItemUseRestrictionType ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/itemuserestrictiontype/itemuserestrictiontype.scm">Limited Circulation, Normal Loan Period</ns1:ItemUseRestrictionType>
+                        <ns1:CirculationStatus ns1:Scheme="https://www.library.sk/ncip/v2_02/schemes.scm">Not Available</ns1:CirculationStatus>
+                        <ns1:HoldQueueLength>0</ns1:HoldQueueLength>
+                        <ns1:ItemDescription>
+                            <ns1:CallNumber>C 196.250 DK1</ns1:CallNumber>
+                            <ns1:CopyNumber>0645161_0006</ns1:CopyNumber>
+                            <ns1:ItemDescriptionLevel ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/itemdescriptionlevel/itemdescriptionlevel.scm">Item</ns1:ItemDescriptionLevel>
+                            <ns1:HoldingsInformation>
+                                <ns1:UnstructuredHoldingsData>Bábovky</ns1:UnstructuredHoldingsData>
+                            </ns1:HoldingsInformation>
+                            <ns1:NumberOfPieces>15</ns1:NumberOfPieces>
+                        </ns1:ItemDescription>
+                        <ns1:Location>
+                            <ns1:LocationType ns1:Scheme="https://www.library.sk/ncip/v2_02/schemes.scm">Permanent Location</ns1:LocationType>
+                            <ns1:LocationName>
+                                <ns1:LocationNameInstance>
+                                    <ns1:LocationNameLevel>1</ns1:LocationNameLevel>
+                                    <ns1:LocationNameValue>Výměnný fond</ns1:LocationNameValue>
+                                </ns1:LocationNameInstance>
+                            </ns1:LocationName>
+                        </ns1:Location>
+                        <ns1:Location>
+                            <ns1:LocationType ns1:Scheme="https://www.library.sk/ncip/v2_02/schemes.scm">Permanent Location</ns1:LocationType>
+                            <ns1:LocationName>
+                                <ns1:LocationNameInstance>
+                                    <ns1:LocationNameLevel>2</ns1:LocationNameLevel>
+                                    <ns1:LocationNameValue />
+                                </ns1:LocationNameInstance>
+                            </ns1:LocationName>
+                        </ns1:Location>
+                    </ns1:ItemOptionalFields>
+                </ns1:ItemInformation>
+                <ns1:ItemInformation>
+                    <ns1:ItemOptionalFields>
+                        <ns1:BibliographicDescription>
+                            <ns1:Author>Třeštíková, Radka</ns1:Author>
+                            <ns1:BibliographicItemId>
+                                <ns1:BibliographicItemIdentifier>9788026706045</ns1:BibliographicItemIdentifier>
+                                <ns1:BibliographicItemIdentifierCode ns1:Scheme="https://www.library.sk/ncip/v2_02/schemes.scm">ISBN</ns1:BibliographicItemIdentifierCode>
+                            </ns1:BibliographicItemId>
+                            <ns1:ComponentId>
+                                <ns1:ComponentIdentifierType ns1:Scheme="https://www.library.sk/ncip/v2_02/schemes.scm">ACCESSION_NUMBER</ns1:ComponentIdentifierType>
+                                <ns1:ComponentIdentifier>2681339660</ns1:ComponentIdentifier>
+                            </ns1:ComponentId>
+                            <ns1:Edition>Román</ns1:Edition>
+                            <ns1:PlaceOfPublication />
+                            <ns1:Publisher />
+                            <ns1:Title>Bábovky</ns1:Title>
+                        </ns1:BibliographicDescription>
+                        <ns1:ItemUseRestrictionType ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/itemuserestrictiontype/itemuserestrictiontype.scm">Limited Circulation, Normal Loan Period</ns1:ItemUseRestrictionType>
+                        <ns1:CirculationStatus ns1:Scheme="https://www.library.sk/ncip/v2_02/schemes.scm">On Loan</ns1:CirculationStatus>
+                        <ns1:HoldQueueLength>0</ns1:HoldQueueLength>
+                        <ns1:ItemDescription>
+                            <ns1:CallNumber>C 196.250 SV</ns1:CallNumber>
+                            <ns1:CopyNumber>0645161_0007</ns1:CopyNumber>
+                            <ns1:ItemDescriptionLevel ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/itemdescriptionlevel/itemdescriptionlevel.scm">Item</ns1:ItemDescriptionLevel>
+                            <ns1:HoldingsInformation>
+                                <ns1:UnstructuredHoldingsData>Bábovky</ns1:UnstructuredHoldingsData>
+                            </ns1:HoldingsInformation>
+                            <ns1:NumberOfPieces>15</ns1:NumberOfPieces>
+                        </ns1:ItemDescription>
+                        <ns1:Location>
+                            <ns1:LocationType ns1:Scheme="https://www.library.sk/ncip/v2_02/schemes.scm">Permanent Location</ns1:LocationType>
+                            <ns1:LocationName>
+                                <ns1:LocationNameInstance>
+                                    <ns1:LocationNameLevel>1</ns1:LocationNameLevel>
+                                    <ns1:LocationNameValue>Suché Vrbné</ns1:LocationNameValue>
+                                </ns1:LocationNameInstance>
+                            </ns1:LocationName>
+                        </ns1:Location>
+                        <ns1:Location>
+                            <ns1:LocationType ns1:Scheme="https://www.library.sk/ncip/v2_02/schemes.scm">Permanent Location</ns1:LocationType>
+                            <ns1:LocationName>
+                                <ns1:LocationNameInstance>
+                                    <ns1:LocationNameLevel>2</ns1:LocationNameLevel>
+                                    <ns1:LocationNameValue />
+                                </ns1:LocationNameInstance>
+                            </ns1:LocationName>
+                        </ns1:Location>
+                        <ns1:DateDue>2017-12-18T01:00:00Z</ns1:DateDue>
+                    </ns1:ItemOptionalFields>
+                </ns1:ItemInformation>
+                <ns1:ItemInformation>
+                    <ns1:ItemOptionalFields>
+                        <ns1:BibliographicDescription>
+                            <ns1:Author>Třeštíková, Radka</ns1:Author>
+                            <ns1:BibliographicItemId>
+                                <ns1:BibliographicItemIdentifier>9788026706045</ns1:BibliographicItemIdentifier>
+                                <ns1:BibliographicItemIdentifierCode ns1:Scheme="https://www.library.sk/ncip/v2_02/schemes.scm">ISBN</ns1:BibliographicItemIdentifierCode>
+                            </ns1:BibliographicItemId>
+                            <ns1:ComponentId>
+                                <ns1:ComponentIdentifierType ns1:Scheme="https://www.library.sk/ncip/v2_02/schemes.scm">ACCESSION_NUMBER</ns1:ComponentIdentifierType>
+                                <ns1:ComponentIdentifier>2681340701</ns1:ComponentIdentifier>
+                            </ns1:ComponentId>
+                            <ns1:Edition>Román</ns1:Edition>
+                            <ns1:PlaceOfPublication />
+                            <ns1:Publisher />
+                            <ns1:Title>Bábovky</ns1:Title>
+                        </ns1:BibliographicDescription>
+                        <ns1:ItemUseRestrictionType ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/itemuserestrictiontype/itemuserestrictiontype.scm">Limited Circulation, Normal Loan Period</ns1:ItemUseRestrictionType>
+                        <ns1:CirculationStatus ns1:Scheme="https://www.library.sk/ncip/v2_02/schemes.scm">On Loan</ns1:CirculationStatus>
+                        <ns1:HoldQueueLength>0</ns1:HoldQueueLength>
+                        <ns1:ItemDescription>
+                            <ns1:CallNumber>C 196.250</ns1:CallNumber>
+                            <ns1:CopyNumber>0645161_0008</ns1:CopyNumber>
+                            <ns1:ItemDescriptionLevel ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/itemdescriptionlevel/itemdescriptionlevel.scm">Item</ns1:ItemDescriptionLevel>
+                            <ns1:HoldingsInformation>
+                                <ns1:UnstructuredHoldingsData>Bábovky</ns1:UnstructuredHoldingsData>
+                            </ns1:HoldingsInformation>
+                            <ns1:NumberOfPieces>15</ns1:NumberOfPieces>
+                        </ns1:ItemDescription>
+                        <ns1:Location>
+                            <ns1:LocationType ns1:Scheme="https://www.library.sk/ncip/v2_02/schemes.scm">Permanent Location</ns1:LocationType>
+                            <ns1:LocationName>
+                                <ns1:LocationNameInstance>
+                                    <ns1:LocationNameLevel>1</ns1:LocationNameLevel>
+                                    <ns1:LocationNameValue>Lidická</ns1:LocationNameValue>
+                                </ns1:LocationNameInstance>
+                            </ns1:LocationName>
+                        </ns1:Location>
+                        <ns1:Location>
+                            <ns1:LocationType ns1:Scheme="https://www.library.sk/ncip/v2_02/schemes.scm">Permanent Location</ns1:LocationType>
+                            <ns1:LocationName>
+                                <ns1:LocationNameInstance>
+                                    <ns1:LocationNameLevel>2</ns1:LocationNameLevel>
+                                    <ns1:LocationNameValue>Lidická - sklad</ns1:LocationNameValue>
+                                </ns1:LocationNameInstance>
+                            </ns1:LocationName>
+                        </ns1:Location>
+                        <ns1:DateDue>2020-09-02T00:00:00Z</ns1:DateDue>
+                    </ns1:ItemOptionalFields>
+                </ns1:ItemInformation>
+                <ns1:ItemInformation>
+                    <ns1:ItemOptionalFields>
+                        <ns1:BibliographicDescription>
+                            <ns1:Author>Třeštíková, Radka</ns1:Author>
+                            <ns1:BibliographicItemId>
+                                <ns1:BibliographicItemIdentifier>9788026706045</ns1:BibliographicItemIdentifier>
+                                <ns1:BibliographicItemIdentifierCode ns1:Scheme="https://www.library.sk/ncip/v2_02/schemes.scm">ISBN</ns1:BibliographicItemIdentifierCode>
+                            </ns1:BibliographicItemId>
+                            <ns1:ComponentId>
+                                <ns1:ComponentIdentifierType ns1:Scheme="https://www.library.sk/ncip/v2_02/schemes.scm">ACCESSION_NUMBER</ns1:ComponentIdentifierType>
+                                <ns1:ComponentIdentifier>2681341621</ns1:ComponentIdentifier>
+                            </ns1:ComponentId>
+                            <ns1:Edition>Román</ns1:Edition>
+                            <ns1:PlaceOfPublication />
+                            <ns1:Publisher />
+                            <ns1:Title>Bábovky</ns1:Title>
+                        </ns1:BibliographicDescription>
+                        <ns1:ItemUseRestrictionType ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/itemuserestrictiontype/itemuserestrictiontype.scm">Limited Circulation, Normal Loan Period</ns1:ItemUseRestrictionType>
+                        <ns1:CirculationStatus ns1:Scheme="https://www.library.sk/ncip/v2_02/schemes.scm">On Loan</ns1:CirculationStatus>
+                        <ns1:HoldQueueLength>0</ns1:HoldQueueLength>
+                        <ns1:ItemDescription>
+                            <ns1:CallNumber>C 196.250 a1</ns1:CallNumber>
+                            <ns1:CopyNumber>0645161_0009</ns1:CopyNumber>
+                            <ns1:ItemDescriptionLevel ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/itemdescriptionlevel/itemdescriptionlevel.scm">Item</ns1:ItemDescriptionLevel>
+                            <ns1:HoldingsInformation>
+                                <ns1:UnstructuredHoldingsData>Bábovky</ns1:UnstructuredHoldingsData>
+                            </ns1:HoldingsInformation>
+                            <ns1:NumberOfPieces>15</ns1:NumberOfPieces>
+                        </ns1:ItemDescription>
+                        <ns1:Location>
+                            <ns1:LocationType ns1:Scheme="https://www.library.sk/ncip/v2_02/schemes.scm">Permanent Location</ns1:LocationType>
+                            <ns1:LocationName>
+                                <ns1:LocationNameInstance>
+                                    <ns1:LocationNameLevel>1</ns1:LocationNameLevel>
+                                    <ns1:LocationNameValue>Na Sadech - dospělí</ns1:LocationNameValue>
+                                </ns1:LocationNameInstance>
+                            </ns1:LocationName>
+                        </ns1:Location>
+                        <ns1:Location>
+                            <ns1:LocationType ns1:Scheme="https://www.library.sk/ncip/v2_02/schemes.scm">Permanent Location</ns1:LocationType>
+                            <ns1:LocationName>
+                                <ns1:LocationNameInstance>
+                                    <ns1:LocationNameLevel>2</ns1:LocationNameLevel>
+                                    <ns1:LocationNameValue>Na Sadech - dospělé - beletrie</ns1:LocationNameValue>
+                                </ns1:LocationNameInstance>
+                            </ns1:LocationName>
+                        </ns1:Location>
+                        <ns1:DateDue>2020-09-16T00:00:00Z</ns1:DateDue>
+                    </ns1:ItemOptionalFields>
+                </ns1:ItemInformation>
+                <ns1:ItemInformation>
+                    <ns1:ItemOptionalFields>
+                        <ns1:BibliographicDescription>
+                            <ns1:Author>Třeštíková, Radka</ns1:Author>
+                            <ns1:BibliographicItemId>
+                                <ns1:BibliographicItemIdentifier>9788026706045</ns1:BibliographicItemIdentifier>
+                                <ns1:BibliographicItemIdentifierCode ns1:Scheme="https://www.library.sk/ncip/v2_02/schemes.scm">ISBN</ns1:BibliographicItemIdentifierCode>
+                            </ns1:BibliographicItemId>
+                            <ns1:ComponentId>
+                                <ns1:ComponentIdentifierType ns1:Scheme="https://www.library.sk/ncip/v2_02/schemes.scm">ACCESSION_NUMBER</ns1:ComponentIdentifierType>
+                                <ns1:ComponentIdentifier>2681343951</ns1:ComponentIdentifier>
+                            </ns1:ComponentId>
+                            <ns1:Edition>Román</ns1:Edition>
+                            <ns1:PlaceOfPublication />
+                            <ns1:Publisher />
+                            <ns1:Title>Bábovky</ns1:Title>
+                        </ns1:BibliographicDescription>
+                        <ns1:ItemUseRestrictionType ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/itemuserestrictiontype/itemuserestrictiontype.scm">Limited Circulation, Normal Loan Period</ns1:ItemUseRestrictionType>
+                        <ns1:CirculationStatus ns1:Scheme="https://www.library.sk/ncip/v2_02/schemes.scm">Available On Shelf</ns1:CirculationStatus>
+                        <ns1:HoldQueueLength>0</ns1:HoldQueueLength>
+                        <ns1:ItemDescription>
+                            <ns1:CallNumber>C 196.250 a2</ns1:CallNumber>
+                            <ns1:CopyNumber>0645161_0010</ns1:CopyNumber>
+                            <ns1:ItemDescriptionLevel ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/itemdescriptionlevel/itemdescriptionlevel.scm">Item</ns1:ItemDescriptionLevel>
+                            <ns1:HoldingsInformation>
+                                <ns1:UnstructuredHoldingsData>Bábovky</ns1:UnstructuredHoldingsData>
+                            </ns1:HoldingsInformation>
+                            <ns1:NumberOfPieces>15</ns1:NumberOfPieces>
+                        </ns1:ItemDescription>
+                        <ns1:Location>
+                            <ns1:LocationType ns1:Scheme="https://www.library.sk/ncip/v2_02/schemes.scm">Permanent Location</ns1:LocationType>
+                            <ns1:LocationName>
+                                <ns1:LocationNameInstance>
+                                    <ns1:LocationNameLevel>1</ns1:LocationNameLevel>
+                                    <ns1:LocationNameValue>Na Sadech - dospělí</ns1:LocationNameValue>
+                                </ns1:LocationNameInstance>
+                            </ns1:LocationName>
+                        </ns1:Location>
+                        <ns1:Location>
+                            <ns1:LocationType ns1:Scheme="https://www.library.sk/ncip/v2_02/schemes.scm">Permanent Location</ns1:LocationType>
+                            <ns1:LocationName>
+                                <ns1:LocationNameInstance>
+                                    <ns1:LocationNameLevel>2</ns1:LocationNameLevel>
+                                    <ns1:LocationNameValue>Na Sadech - dospělé - beletrie</ns1:LocationNameValue>
+                                </ns1:LocationNameInstance>
+                            </ns1:LocationName>
+                        </ns1:Location>
+                    </ns1:ItemOptionalFields>
+                </ns1:ItemInformation>
+            </ns1:HoldingsSet>
+        </ns1:BibInformation>
+    </ns1:LookupItemSetResponse>
+</ns1:NCIPMessage>
+

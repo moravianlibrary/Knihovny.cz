@@ -1,0 +1,149 @@
+HTTP/1.1 200 OK
+Content-Type: application/xml
+Date: Wed, 18 Mar 2015 11:49:40 GMT
+
+<?xml version="1.0" encoding="UTF-8"?>
+<NCIPMessage xmlns="http://www.niso.org/2008/ncip">
+    <LookupItemSetResponse>
+        <BibInformation>
+            <BibliographicId>
+                <BibliographicItemId>
+                    <BibliographicItemIdentifier>2354926</BibliographicItemIdentifier>
+                    <BibliographicItemIdentifierCode>Legal Deposit Number</BibliographicItemIdentifierCode>
+                </BibliographicItemId>
+            </BibliographicId>
+            <HoldingsSet>
+                <ItemInformation>
+                    <ItemId>
+                        <ItemIdentifierType>Barcode</ItemIdentifierType>
+                        <ItemIdentifierValue>356600413263</ItemIdentifierValue>
+                    </ItemId>
+                    <ItemOptionalFields>
+                        <CirculationStatus>On Loan</CirculationStatus>
+                        <HoldQueueLength>4</HoldQueueLength>
+                        <Location>
+                            <LocationType>Permanent Location</LocationType>
+                            <LocationName>
+                                <LocationNameInstance>
+                                    <LocationNameLevel>1</LocationNameLevel>
+                                    <LocationNameValue>Td - Ústřední půjčovna dosp.</LocationNameValue>
+                                </LocationNameInstance>
+                            </LocationName>
+                        </Location>
+                        <DateDue>2020-07-23T23:59:59.999+02:00</DateDue>
+                    </ItemOptionalFields>
+                </ItemInformation>
+            </HoldingsSet>
+            <HoldingsSet>
+                <ItemInformation>
+                    <ItemId>
+                        <ItemIdentifierType>Barcode</ItemIdentifierType>
+                        <ItemIdentifierValue>356600413266</ItemIdentifierValue>
+                    </ItemId>
+                    <ItemOptionalFields>
+                        <CirculationStatus>On Loan</CirculationStatus>
+                        <HoldQueueLength>4</HoldQueueLength>
+                        <Location>
+                            <LocationType>Permanent Location</LocationType>
+                            <LocationName>
+                                <LocationNameInstance>
+                                    <LocationNameLevel>1</LocationNameLevel>
+                                    <LocationNameValue>Bd - Moravské Předm., J.Masaryka dosp.</LocationNameValue>
+                                </LocationNameInstance>
+                            </LocationName>
+                        </Location>
+                        <DateDue>2020-08-20T23:59:59.999+02:00</DateDue>
+                    </ItemOptionalFields>
+                </ItemInformation>
+            </HoldingsSet>
+            <HoldingsSet>
+                <ItemInformation>
+                    <ItemId>
+                        <ItemIdentifierType>Barcode</ItemIdentifierType>
+                        <ItemIdentifierValue>356600413268</ItemIdentifierValue>
+                    </ItemId>
+                    <ItemOptionalFields>
+                        <CirculationStatus>On Loan</CirculationStatus>
+                        <HoldQueueLength>4</HoldQueueLength>
+                        <Location>
+                            <LocationType>Permanent Location</LocationType>
+                            <LocationName>
+                                <LocationNameInstance>
+                                    <LocationNameLevel>1</LocationNameLevel>
+                                    <LocationNameValue>Sd - Slezské Předm. dosp.</LocationNameValue>
+                                </LocationNameInstance>
+                            </LocationName>
+                        </Location>
+                        <DateDue>2020-07-27T23:59:59.999+02:00</DateDue>
+                    </ItemOptionalFields>
+                </ItemInformation>
+            </HoldingsSet>
+            <HoldingsSet>
+                <ItemInformation>
+                    <ItemId>
+                        <ItemIdentifierType>Barcode</ItemIdentifierType>
+                        <ItemIdentifierValue>356600413269</ItemIdentifierValue>
+                    </ItemId>
+                    <ItemOptionalFields>
+                        <CirculationStatus>Available On Shelf</CirculationStatus>
+                        <HoldQueueLength>4</HoldQueueLength>
+                        <Location>
+                            <LocationType>Permanent Location</LocationType>
+                            <LocationName>
+                                <LocationNameInstance>
+                                    <LocationNameLevel>1</LocationNameLevel>
+                                    <LocationNameValue>Fd - Moravské Předm., Formánkova dosp.</LocationNameValue>
+                                </LocationNameInstance>
+                            </LocationName>
+                        </Location>
+                    </ItemOptionalFields>
+                </ItemInformation>
+            </HoldingsSet>
+            <HoldingsSet>
+                <ItemInformation>
+                    <ItemId>
+                        <ItemIdentifierType>Barcode</ItemIdentifierType>
+                        <ItemIdentifierValue>356600413270</ItemIdentifierValue>
+                    </ItemId>
+                    <ItemOptionalFields>
+                        <CirculationStatus>On Loan</CirculationStatus>
+                        <HoldQueueLength>4</HoldQueueLength>
+                        <Location>
+                            <LocationType>Permanent Location</LocationType>
+                            <LocationName>
+                                <LocationNameInstance>
+                                    <LocationNameLevel>1</LocationNameLevel>
+                                    <LocationNameValue>Md - Malšovice dosp.</LocationNameValue>
+                                </LocationNameInstance>
+                            </LocationName>
+                        </Location>
+                        <DateDue>2020-08-17T23:59:59.999+02:00</DateDue>
+                    </ItemOptionalFields>
+                </ItemInformation>
+            </HoldingsSet>
+            <HoldingsSet>
+                <ItemInformation>
+                    <ItemId>
+                        <ItemIdentifierType>Barcode</ItemIdentifierType>
+                        <ItemIdentifierValue>356600427645</ItemIdentifierValue>
+                    </ItemId>
+                    <ItemOptionalFields>
+                        <CirculationStatus>On Loan</CirculationStatus>
+                        <HoldQueueLength>4</HoldQueueLength>
+                        <Location>
+                            <LocationType>Permanent Location</LocationType>
+                            <LocationName>
+                                <LocationNameInstance>
+                                    <LocationNameLevel>1</LocationNameLevel>
+                                    <LocationNameValue>Td - Ústřední půjčovna dosp.</LocationNameValue>
+                                </LocationNameInstance>
+                            </LocationName>
+                        </Location>
+                        <DateDue>2020-08-21T23:59:59.999+02:00</DateDue>
+                    </ItemOptionalFields>
+                </ItemInformation>
+            </HoldingsSet>
+        </BibInformation>
+    </LookupItemSetResponse>
+</NCIPMessage>
+

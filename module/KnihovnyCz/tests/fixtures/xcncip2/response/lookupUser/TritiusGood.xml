@@ -1,0 +1,106 @@
+HTTP/1.1 200 OK
+Content-Type: application/xml
+Date: Wed, 18 Mar 2015 11:49:40 GMT
+
+<?xml version="1.0" encoding="UTF-8"?>
+<NCIPMessage xmlns="http://www.niso.org/2008/ncip">
+    <LookupUserResponse>
+        <UserId>
+            <AgencyId>KMG001</AgencyId>
+            <UserIdentifierType>Institution Id Number</UserIdentifierType>
+            <UserIdentifierValue>30904</UserIdentifierValue>
+        </UserId>
+        <UserFiscalAccount>
+            <AccountBalance>
+                <CurrencyCode>CZK</CurrencyCode>
+                <MonetaryValue>0</MonetaryValue>
+            </AccountBalance>
+        </UserFiscalAccount>
+        <LoanedItem>
+            <ItemId>
+                <ItemIdentifierType>Barcode</ItemIdentifierType>
+                <ItemIdentifierValue>311800245840</ItemIdentifierValue>
+            </ItemId>
+            <dateDue>2025-08-17T23:59:59.999+02:00</dateDue>
+            <Title>Led Zeppelin : MoDERN iCoNS /</Title>
+            <Ext>
+                <RenewalNotPermitted>false</RenewalNotPermitted>
+            </Ext>
+        </LoanedItem>
+        <LoanedItem>
+            <ItemId>
+                <ItemIdentifierType>Barcode</ItemIdentifierType>
+                <ItemIdentifierValue>311800274022</ItemIdentifierValue>
+            </ItemId>
+            <dateDue>2025-08-17T23:59:59.999+02:00</dateDue>
+            <Title>Právo testy : testy k přijímacím zkouškám na právnické fakulty</Title>
+            <Ext>
+                <RenewalNotPermitted>true</RenewalNotPermitted>
+            </Ext>
+        </LoanedItem>
+        <RequestedItem>
+            <RequestId>
+                <RequestIdentifierValue>4678769</RequestIdentifierValue>
+            </RequestId>
+            <BibliographicId>
+                <BibliographicItemId>
+                    <BibliographicItemIdentifier>178108</BibliographicItemIdentifier>
+                    <BibliographicItemIdentifierCode>Legal Deposit Number</BibliographicItemIdentifierCode>
+                </BibliographicItemId>
+            </BibliographicId>
+            <RequestType>Hold</RequestType>
+            <RequestStatusType>In Process</RequestStatusType>
+            <DatePlaced>2020-07-27T14:18:08.063+02:00</DatePlaced>
+            <PickupLocation>Dospělé</PickupLocation>
+            <HoldQueuePosition>1</HoldQueuePosition>
+            <Title>Bábovky /</Title>
+        </RequestedItem>
+        <RequestedItem>
+            <ItemId>
+                <ItemIdentifierType>Barcode</ItemIdentifierType>
+                <ItemIdentifierValue>311800264884</ItemIdentifierValue>
+            </ItemId>
+            <RequestId>
+                <RequestIdentifierValue>2522240</RequestIdentifierValue>
+            </RequestId>
+            <BibliographicId>
+                <BibliographicItemId>
+                    <BibliographicItemIdentifier>233720</BibliographicItemIdentifier>
+                    <BibliographicItemIdentifierCode>Legal Deposit Number</BibliographicItemIdentifierCode>
+                </BibliographicItemId>
+            </BibliographicId>
+            <RequestType>Hold</RequestType>
+            <RequestStatusType>In Process</RequestStatusType>
+            <DatePlaced>2020-07-27T14:27:09.294+02:00</DatePlaced>
+            <PickupLocation>Dětské</PickupLocation>
+            <HoldQueuePosition>1</HoldQueuePosition>
+            <Title>Akordy pro kytaru, mandolínu, pětistrunné bendžo, basu a klávesové nástroje,</Title>
+        </RequestedItem>
+        <UserOptionalFields>
+            <UserAddressInformation>
+                <UserAddressRoleType>Home</UserAddressRoleType>
+                <PhysicalAddress>
+                    <UnstructuredAddress>
+                        <UnstructuredAddressType>Newline-Delimited Text</UnstructuredAddressType>
+                        <UnstructuredAddressData>Nová 1, 76701, Kroměříž</UnstructuredAddressData>
+                    </UnstructuredAddress>
+                    <PhysicalAddressType>Street Address</PhysicalAddressType>
+                </PhysicalAddress>
+            </UserAddressInformation>
+            <NameInformation>
+                <PersonalNameInformation>
+                    <StructuredPersonalUserName>
+                        <Prefix />
+                        <GivenName>Jana</GivenName>
+                        <Surname>Nováková</Surname>
+                        <Suffix />
+                    </StructuredPersonalUserName>
+                </PersonalNameInformation>
+            </NameInformation>
+            <UserPrivilege>
+                <ValidToDate>2025-07-15T23:59:59.999+02:00</ValidToDate>
+            </UserPrivilege>
+        </UserOptionalFields>
+    </LookupUserResponse>
+</NCIPMessage>
+

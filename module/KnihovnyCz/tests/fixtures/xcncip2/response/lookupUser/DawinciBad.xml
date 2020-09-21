@@ -1,0 +1,108 @@
+HTTP/1.1 200 OK
+Content-Type: application/xml
+Date: Wed, 18 Mar 2015 11:49:40 GMT
+
+<?xml version="1.0" encoding="UTF-8"?>
+<NCIPMessage xmlns="http://www.niso.org/2008/ncip" version="http://www.niso.org/schemas/ncip/v2_0/imp1/xsd/ncip_v2_0.xsd">
+  <LookupUserResponse>
+    <ResponseHeader>
+      <FromAgencyId>
+        <AgencyId>KAG001</AgencyId>
+      </FromAgencyId>
+      <ToAgencyId>
+        <AgencyId>CPK</AgencyId>
+      </ToAgencyId>
+    </ResponseHeader>
+    <UserId>
+      <AgencyId>KAG001</AgencyId>
+      <UserIdentifierType Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/visibleuseridentifiertype/visibleuseridentifiertype.scm">Institution Id Number</UserIdentifierType>
+      <UserIdentifierValue>2021/CPK</UserIdentifierValue>
+    </UserId>
+    <UserOptionalFields>
+      <NameInformation>
+        <PersonalNameInformation>
+          <UnstructuredPersonalUserName>CPK Zlý</UnstructuredPersonalUserName>
+          <StructuredPersonalUserName>
+            <Prefix></Prefix>
+            <GivenName>Zlý</GivenName>
+            <Surname>CPK</Surname>
+            <Suffix></Suffix>
+          </StructuredPersonalUserName>
+        </PersonalNameInformation>
+      </NameInformation>
+      <UserPrivilege>
+        <AgencyId></AgencyId>
+        <AgencyUserPrivilegeType>Licence card</AgencyUserPrivilegeType>
+        <ValidFromDate>1899-12-30T00:00:00.000+02:00</ValidFromDate>
+        <ValidToDate>1900-12-30T00:00:00.000+02:00</ValidToDate>
+      </UserPrivilege>
+      <UserPrivilege>
+        <AgencyId></AgencyId>
+        <AgencyUserPrivilegeType>Category</AgencyUserPrivilegeType>
+        <UserPrivilegeDescription>čtenář</UserPrivilegeDescription>
+        <ValidToDate>1900-12-30T00:00:00.000+02:00</ValidToDate>
+      </UserPrivilege>
+      <BlockOrTrap>
+        <BlockOrTrapType Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/blockortraptype/blockortraptype.scm">Block Request Item</BlockOrTrapType>
+      </BlockOrTrap>
+      <BlockOrTrap>
+        <BlockOrTrapType Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/blockortraptype/blockortraptype.scm">Block Renewal</BlockOrTrapType>
+      </BlockOrTrap>
+    </UserOptionalFields>
+    <UserFiscalAccount>
+      <AccountBalance>
+        <CurrencyCode>CZK</CurrencyCode>
+        <MonetaryValue>-12500</MonetaryValue>
+      </AccountBalance>
+      <AccountDetails>
+        <AccrualDate>2020-03-19T12:09:20.453+02:00</AccrualDate>
+        <FiscalTransactionInformation>
+          <FiscalActionType>Payment</FiscalActionType>
+          <FiscalTransactionType>Service Charge</FiscalTransactionType>
+          <FiscalTransactionDescription>registrační poplatek (poplatek) [-5] {19.03.2020}</FiscalTransactionDescription>
+          <Amount>
+            <CurrencyCode>CZK</CurrencyCode>
+            <MonetaryValue>-12000</MonetaryValue>
+          </Amount>
+        </FiscalTransactionInformation>
+      </AccountDetails>
+      <AccountDetails>
+        <AccrualDate>2020-07-07T07:09:27.473+02:00</AccrualDate>
+        <FiscalTransactionInformation>
+          <FiscalActionType>Payment</FiscalActionType>
+          <FiscalTransactionType>Service Charge</FiscalTransactionType>
+          <FiscalTransactionDescription>0. upom. - 5,00 Kč</FiscalTransactionDescription>
+          <Amount>
+            <CurrencyCode>CZK</CurrencyCode>
+            <MonetaryValue>-500</MonetaryValue>
+          </Amount>
+        </FiscalTransactionInformation>
+      </AccountDetails>
+    </UserFiscalAccount>
+    <LoanedItemsCount>
+      <LoanedItemCountValue>4</LoanedItemCountValue>
+    </LoanedItemsCount>
+    <LoanedItem>
+      <ItemId>
+        <AgencyId>KAG001</AgencyId>
+        <ItemIdentifierType Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/visibleitemidentifiertype/visibleitemidentifiertype.scm">Accession Number</ItemIdentifierType>
+        <ItemIdentifierValue>C1315/1/KI</ItemIdentifierValue>
+      </ItemId>
+      <DateDue>2019-08-07T05:09:27.443+02:00</DateDue>
+      <Title>30 let muzea v Českém Těšíně : : Katalog výstavy /</Title>
+    </LoanedItem>
+    <LoanedItem>
+      <ItemId>
+        <AgencyId>KAG001</AgencyId>
+        <ItemIdentifierType Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/visibleitemidentifiertype/visibleitemidentifiertype.scm">Accession Number</ItemIdentifierType>
+        <ItemIdentifierValue>C1325/1/KI</ItemIdentifierValue>
+      </ItemId>
+      <DateDue>2019-08-07T05:09:27.647+02:00</DateDue>
+      <Title>Od drobných polí k lánům /</Title>
+    </LoanedItem>
+    <RequestedItemsCount>
+      <RequestType Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/requesttype/requesttype.scm">Loan</RequestType>
+      <RequestedItemCountValue>0</RequestedItemCountValue>
+    </RequestedItemsCount>
+  </LookupUserResponse>
+</NCIPMessage>

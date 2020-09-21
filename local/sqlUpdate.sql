@@ -1303,7 +1303,6 @@ CREATE TABLE `record` (
 
 UPDATE `system` SET `value` = '71' WHERE `key`='DB_VERSION';
 
-
 /* Update table resource_tags */
 ALTER TABLE `resource_tags` CHANGE COLUMN `resource_id` `resource_id` int(11) DEFAULT NULL;
 
@@ -1314,3 +1313,7 @@ ALTER TABLE `shortlinks` ADD UNIQUE KEY `shortlinks_hash_IDX` USING HASH (`hash`
 
 UPDATE `system` SET `value` = '73' WHERE `key`='DB_VERSION';
 
+INSERT INTO `inst_keys` (`key_name`, `aleph`, `ncip`, `koha`, `default`, `section_id`) VALUES
+	('fromAgency', 0, 1, 0, 'CPK', 1);
+
+UPDATE `system` SET `value` = '74' WHERE `key`='DB_VERSION';

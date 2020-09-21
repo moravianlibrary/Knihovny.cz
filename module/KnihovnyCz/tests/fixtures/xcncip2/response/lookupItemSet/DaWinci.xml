@@ -1,0 +1,128 @@
+HTTP/1.1 200 OK
+Content-Type: application/xml
+Date: Wed, 18 Mar 2015 11:49:40 GMT
+
+<?xml version="1.0" encoding="UTF-8"?>
+<NCIPMessage xmlns="http://www.niso.org/2008/ncip" version="http://www.niso.org/schemas/ncip/v2_0/imp1/xsd/ncip_v2_0.xsd">
+  <LookupItemSetResponse>
+    <BibInformation>
+      <BibliographicId>
+        <BibliographicItemId>
+          <BibliographicItemIdentifier>780795</BibliographicItemIdentifier>
+          <BibliographicItemIdentifierCode Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/bibliographicitemidentifiercode/bibliographicitemidentifiercode.scm">Legal Deposit Number</BibliographicItemIdentifierCode>
+        </BibliographicItemId>
+      </BibliographicId>
+      <HoldingsSet>
+        <Location>
+          <LocationType Scheme="http://www.niso.org/ncip/;1_0/imp1/schemes/locationtype/locationtype.scm">Permanent Location</LocationType>
+          <LocationName>
+            <LocationNameInstance>
+              <LocationNameLevel>1</LocationNameLevel>
+              <LocationNameValue>T#@</LocationNameValue>
+            </LocationNameInstance>
+          </LocationName>
+        </Location>
+        <CallNumber>133709/KF</CallNumber>
+        <ItemInformation>
+          <ItemId>
+            <ItemIdentifierType Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/visibleitemidentifiertype/visibleitemidentifiertype.scm">Accession Number</ItemIdentifierType>
+            <ItemIdentifierValue>133709/KF</ItemIdentifierValue>
+          </ItemId>
+          <ItemOptionalFields>
+            <HoldQueueLength>0</HoldQueueLength>
+            <CirculationStatus Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/circulationstatus/circulationstatus.scm">Not Available</CirculationStatus>
+          </ItemOptionalFields>
+        </ItemInformation>
+      </HoldingsSet>
+      <HoldingsSet>
+        <Location>
+          <LocationType Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/locationtype/locationtype.scm">Permanent Location</LocationType>
+          <LocationName>
+            <LocationNameInstance>
+              <LocationNameLevel>1</LocationNameLevel>
+              <LocationNameValue>informační oddělení Karviná 7</LocationNameValue>
+            </LocationNameInstance>
+          </LocationName>
+        </Location>
+        <CallNumber>N2525/17/KI</CallNumber>
+        <ItemInformation>
+          <ItemId>
+            <ItemIdentifierType Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/visibleitemidentifiertype/visibleitemidentifiertype.scm">Accession Number</ItemIdentifierType>
+            <ItemIdentifierValue>N2525/17/KI</ItemIdentifierValue>
+          </ItemId>
+          <ItemOptionalFields>
+            <HoldQueueLength>0</HoldQueueLength>
+            <CirculationStatus Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/circulationstatus/circulationstatus.scm">Available On Shelf</CirculationStatus>
+          </ItemOptionalFields>
+        </ItemInformation>
+      </HoldingsSet>
+      <HoldingsSet>
+        <Location>
+          <LocationType Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/locationtype/locationtype.scm">Permanent Location</LocationType>
+          <LocationName>
+            <LocationNameInstance>
+              <LocationNameLevel>1</LocationNameLevel>
+              <LocationNameValue>T#@</LocationNameValue>
+            </LocationNameInstance>
+          </LocationName>
+        </Location>
+        <CallNumber>90381/T#</CallNumber>
+        <ItemInformation>
+          <ItemId>
+            <ItemIdentifierType Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/visibleitemidentifiertype/visibleitemidentifiertype.scm">Accession Number</ItemIdentifierType>
+            <ItemIdentifierValue>90381/T#</ItemIdentifierValue>
+          </ItemId>
+          <ItemOptionalFields>
+            <HoldQueueLength>0</HoldQueueLength>
+            <CirculationStatus Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/circulationstatus/circulationstatus.scm">Not Available</CirculationStatus>
+          </ItemOptionalFields>
+        </ItemInformation>
+      </HoldingsSet>
+      <HoldingsSet>
+        <Location>
+          <LocationType Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/locationtype/locationtype.scm">Permanent Location</LocationType>
+          <LocationName>
+            <LocationNameInstance>
+              <LocationNameLevel>1</LocationNameLevel>
+              <LocationNameValue>T#@</LocationNameValue>
+            </LocationNameInstance>
+          </LocationName>
+        </Location>
+        <CallNumber>170495/T#</CallNumber>
+        <ItemInformation>
+          <ItemId>
+            <ItemIdentifierType Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/visibleitemidentifiertype/visibleitemidentifiertype.scm">Accession Number</ItemIdentifierType>
+            <ItemIdentifierValue>170495/T#</ItemIdentifierValue>
+          </ItemId>
+          <ItemOptionalFields>
+            <HoldQueueLength>0</HoldQueueLength>
+            <CirculationStatus Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/circulationstatus/circulationstatus.scm">Not Available</CirculationStatus>
+          </ItemOptionalFields>
+        </ItemInformation>
+      </HoldingsSet>
+      <HoldingsSet>
+        <Location>
+          <LocationType Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/locationtype/locationtype.scm">Permanent Location</LocationType>
+          <LocationName>
+            <LocationNameInstance>
+              <LocationNameLevel>1</LocationNameLevel>
+              <LocationNameValue>informační oddělení Karviná 7</LocationNameValue>
+            </LocationNameInstance>
+          </LocationName>
+        </Location>
+        <CallNumber>N3071/17/KI</CallNumber>
+        <ItemInformation>
+          <ItemId>
+            <ItemIdentifierType Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/visibleitemidentifiertype/visibleitemidentifiertype.scm">Accession Number</ItemIdentifierType>
+            <ItemIdentifierValue>N3071/17/KI</ItemIdentifierValue>
+          </ItemId>
+          <ItemOptionalFields>
+            <HoldQueueLength>0</HoldQueueLength>
+            <CirculationStatus Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/circulationstatus/circulationstatus.scm">On Loan</CirculationStatus>
+          </ItemOptionalFields>
+        </ItemInformation>
+      </HoldingsSet>
+    </BibInformation>
+    <NextItemToken></NextItemToken>
+  </LookupItemSetResponse>
+</NCIPMessage>

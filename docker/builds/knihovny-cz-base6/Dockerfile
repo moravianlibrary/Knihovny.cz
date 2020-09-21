@@ -56,4 +56,6 @@ COPY clear-cache /usr/local/bin/
 
 COPY ./knihovny-cz-foreground /usr/local/bin/
 
+COPY phpunit.xml /var/www/knihovny-cz/
+
 CMD ["knihovny-cz-foreground"]

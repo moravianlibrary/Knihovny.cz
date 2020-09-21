@@ -1,0 +1,240 @@
+HTTP/1.1 200 OK
+Content-Type: application/xml
+Date: Wed, 18 Mar 2015 11:49:40 GMT
+
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ns1:NCIPMessage ns1:version="http://www.niso.org/schemas/ncip/v2_0/imp1/xsd/ncip_v2_0.xsd" xmlns:ns1="http://www.niso.org/2008/ncip">
+    <ns1:LookupUserResponse>
+        <ns1:UserId>
+            <ns1:AgencyId ns1:Scheme="http://www.niso.org/ncip/v1_0/schemes/agencyelementtype/agencyelementtype.scm">KPSYS-TEST</ns1:AgencyId>
+            <ns1:UserIdentifierType ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/visibleuseridentifiertype/visibleuseridentifiertype.scm">Institution Id Number</ns1:UserIdentifierType>
+            <ns1:UserIdentifierValue>217</ns1:UserIdentifierValue>
+        </ns1:UserId>
+        <ns1:UserFiscalAccount>
+            <ns1:AccountBalance>
+                <ns1:CurrencyCode>CZK</ns1:CurrencyCode>
+                <ns1:MonetaryValue>0</ns1:MonetaryValue>
+            </ns1:AccountBalance>
+        </ns1:UserFiscalAccount>
+        <ns1:LoanedItem>
+            <ns1:ItemId>
+                <ns1:ItemIdentifierType ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/visibleitemidentifiertype/visibleitemidentifiertype.scm">Accession Number</ns1:ItemIdentifierType>
+                <ns1:ItemIdentifierValue>377700496260</ns1:ItemIdentifierValue>
+            </ns1:ItemId>
+            <ns1:DateDue>2025-05-17T00:00:00.000+02:00</ns1:DateDue>
+            <ns1:Title>Virtualizace</ns1:Title>
+            <ns1:Ext>
+                <ns1:BibliographicDescription>
+                    <ns1:Author>Ruest, Danielle</ns1:Author>
+                    <ns1:BibliographicItemId>
+                        <ns1:BibliographicItemIdentifier>456951</ns1:BibliographicItemIdentifier>
+                        <ns1:BibliographicItemIdentifierCode ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/bibliographicitemidentifiercode/bibliographicitemidentifiercode.scm">Legal Deposit Number</ns1:BibliographicItemIdentifierCode>
+                    </ns1:BibliographicItemId>
+                    <ns1:Pagination>408 s. :</ns1:Pagination>
+                    <ns1:PlaceOfPublication>Brno :</ns1:PlaceOfPublication>
+                    <ns1:Publisher>Computer Press,</ns1:Publisher>
+                    <ns1:Title>Virtualizace</ns1:Title>
+                </ns1:BibliographicDescription>
+                <ns1:RenewalNotPermitted/>
+            </ns1:Ext>
+        </ns1:LoanedItem>
+        <ns1:LoanedItem>
+            <ns1:ItemId>
+                <ns1:ItemIdentifierType ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/visibleitemidentifiertype/visibleitemidentifiertype.scm">Accession Number</ns1:ItemIdentifierType>
+                <ns1:ItemIdentifierValue>377700456602</ns1:ItemIdentifierValue>
+            </ns1:ItemId>
+            <ns1:DateDue>2025-05-17T00:00:00.000+02:00</ns1:DateDue>
+            <ns1:Title>Cisco</ns1:Title>
+            <ns1:Ext>
+                <ns1:BibliographicDescription>
+                    <ns1:Author>Raab, Stefan</ns1:Author>
+                    <ns1:BibliographicItemId>
+                        <ns1:BibliographicItemIdentifier>408388</ns1:BibliographicItemIdentifier>
+                        <ns1:BibliographicItemIdentifierCode ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/bibliographicitemidentifiercode/bibliographicitemidentifiercode.scm">Legal Deposit Number</ns1:BibliographicItemIdentifierCode>
+                    </ns1:BibliographicItemId>
+                    <ns1:Pagination>299 s. :</ns1:Pagination>
+                    <ns1:PlaceOfPublication>Praha :</ns1:PlaceOfPublication>
+                    <ns1:Publisher>Grada,</ns1:Publisher>
+                    <ns1:Title>Cisco</ns1:Title>
+                </ns1:BibliographicDescription>
+                <ns1:RenewalNotPermitted/>
+            </ns1:Ext>
+        </ns1:LoanedItem>
+        <ns1:LoanedItem>
+            <ns1:ItemId>
+                <ns1:ItemIdentifierType ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/visibleitemidentifiertype/visibleitemidentifiertype.scm">Accession Number</ns1:ItemIdentifierType>
+                <ns1:ItemIdentifierValue>377700482113</ns1:ItemIdentifierValue>
+            </ns1:ItemId>
+            <ns1:DateDue>2025-08-03T00:00:00.000+02:00</ns1:DateDue>
+            <ns1:Title>Microsoft Windows SharePoint Services</ns1:Title>
+            <ns1:Ext>
+                <ns1:BibliographicDescription>
+                    <ns1:Author>Pasch, Ondřej</ns1:Author>
+                    <ns1:BibliographicItemId>
+                        <ns1:BibliographicItemIdentifier>443201</ns1:BibliographicItemIdentifier>
+                        <ns1:BibliographicItemIdentifierCode ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/bibliographicitemidentifiercode/bibliographicitemidentifiercode.scm">Legal Deposit Number</ns1:BibliographicItemIdentifierCode>
+                    </ns1:BibliographicItemId>
+                    <ns1:Pagination>208 s. :</ns1:Pagination>
+                    <ns1:PlaceOfPublication>Brno :</ns1:PlaceOfPublication>
+                    <ns1:Publisher>CP Books,</ns1:Publisher>
+                    <ns1:Title>Microsoft Windows SharePoint Services</ns1:Title>
+                </ns1:BibliographicDescription>
+                <ns1:RenewalNotPermitted/>
+            </ns1:Ext>
+        </ns1:LoanedItem>
+        <ns1:LoanedItem>
+            <ns1:ItemId>
+                <ns1:ItemIdentifierType ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/visibleitemidentifiertype/visibleitemidentifiertype.scm">Accession Number</ns1:ItemIdentifierType>
+                <ns1:ItemIdentifierValue>377700549872</ns1:ItemIdentifierValue>
+            </ns1:ItemId>
+            <ns1:DateDue>2025-12-28T00:00:00.000+01:00</ns1:DateDue>
+            <ns1:Title>Dieta pro posílení imunity</ns1:Title>
+            <ns1:Ext>
+                <ns1:BibliographicDescription>
+                    <ns1:Author>Poschet, Jutta</ns1:Author>
+                    <ns1:BibliographicItemId>
+                        <ns1:BibliographicItemIdentifier>506890</ns1:BibliographicItemIdentifier>
+                        <ns1:BibliographicItemIdentifierCode ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/bibliographicitemidentifiercode/bibliographicitemidentifiercode.scm">Legal Deposit Number</ns1:BibliographicItemIdentifierCode>
+                    </ns1:BibliographicItemId>
+                    <ns1:Pagination>152 s. :</ns1:Pagination>
+                    <ns1:PlaceOfPublication>Praha :</ns1:PlaceOfPublication>
+                    <ns1:Publisher>Fortuna Libri,</ns1:Publisher>
+                    <ns1:Title>Dieta pro posílení imunity</ns1:Title>
+                </ns1:BibliographicDescription>
+            </ns1:Ext>
+        </ns1:LoanedItem>
+        <ns1:LoanedItem>
+            <ns1:ItemId>
+                <ns1:ItemIdentifierType ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/visibleitemidentifiertype/visibleitemidentifiertype.scm">Accession Number</ns1:ItemIdentifierType>
+                <ns1:ItemIdentifierValue>377700438707</ns1:ItemIdentifierValue>
+            </ns1:ItemId>
+            <ns1:DateDue>2020-01-11T00:00:00.000+01:00</ns1:DateDue>
+            <ns1:Title>Automasáže</ns1:Title>
+            <ns1:Ext>
+                <ns1:BibliographicDescription>
+                    <ns1:Author>Corsi, Enrico</ns1:Author>
+                    <ns1:BibliographicItemId>
+                        <ns1:BibliographicItemIdentifier>361179</ns1:BibliographicItemIdentifier>
+                        <ns1:BibliographicItemIdentifierCode ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/bibliographicitemidentifiercode/bibliographicitemidentifiercode.scm">Legal Deposit Number</ns1:BibliographicItemIdentifierCode>
+                    </ns1:BibliographicItemId>
+                    <ns1:Pagination>125 s. :</ns1:Pagination>
+                    <ns1:PlaceOfPublication>Praha :</ns1:PlaceOfPublication>
+                    <ns1:Publisher>Portál,</ns1:Publisher>
+                    <ns1:Title>Automasáže</ns1:Title>
+                </ns1:BibliographicDescription>
+            </ns1:Ext>
+        </ns1:LoanedItem>
+        <ns1:LoanedItem>
+            <ns1:ItemId>
+                <ns1:ItemIdentifierType ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/visibleitemidentifiertype/visibleitemidentifiertype.scm">Accession Number</ns1:ItemIdentifierType>
+                <ns1:ItemIdentifierValue>377700549895</ns1:ItemIdentifierValue>
+            </ns1:ItemId>
+            <ns1:DateDue>2020-01-05T00:00:00.000+01:00</ns1:DateDue>
+            <ns1:Title>Klávesy</ns1:Title>
+            <ns1:Ext>
+                <ns1:BibliographicDescription>
+                    <ns1:Author>Ashworth, Steve,</ns1:Author>
+                    <ns1:BibliographicItemId>
+                        <ns1:BibliographicItemIdentifier>506888</ns1:BibliographicItemIdentifier>
+                        <ns1:BibliographicItemIdentifierCode ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/bibliographicitemidentifiercode/bibliographicitemidentifiercode.scm">Legal Deposit Number</ns1:BibliographicItemIdentifierCode>
+                    </ns1:BibliographicItemId>
+                    <ns1:Pagination>256 s. :</ns1:Pagination>
+                    <ns1:PlaceOfPublication>V Praze :</ns1:PlaceOfPublication>
+                    <ns1:Publisher>Slovart,</ns1:Publisher>
+                    <ns1:Title>Klávesy</ns1:Title>
+                </ns1:BibliographicDescription>
+            </ns1:Ext>
+        </ns1:LoanedItem>
+        <ns1:RequestedItem>
+            <ns1:RequestId>
+                <ns1:RequestIdentifierValue>8186683-622962-a</ns1:RequestIdentifierValue>
+            </ns1:RequestId>
+            <ns1:RequestType ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/requesttype/requesttype.scm">Loan</ns1:RequestType>
+            <ns1:RequestStatusType ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/requeststatustype/requeststatustype.scm">In Process</ns1:RequestStatusType>
+            <ns1:DatePlaced>2020-07-27T17:02:25.028+02:00</ns1:DatePlaced>
+            <ns1:Ext>
+                <ns1:BibliographicDescription>
+                    <ns1:Author>Janál, Dan,</ns1:Author>
+                    <ns1:BibliographicItemId>
+                        <ns1:BibliographicItemIdentifier>155622</ns1:BibliographicItemIdentifier>
+                        <ns1:BibliographicItemIdentifierCode ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/bibliographicitemidentifiercode/bibliographicitemidentifiercode.scm">Legal Deposit Number</ns1:BibliographicItemIdentifierCode>
+                    </ns1:BibliographicItemId>
+                    <ns1:Pagination>1 zvuková deska (42:27) :</ns1:Pagination>
+                    <ns1:PlaceOfPublication>Czech Republik :</ns1:PlaceOfPublication>
+                    <ns1:Publisher>Tigris,Kytarová škola Platero Zlín,</ns1:Publisher>
+                    <ns1:Title>Kytara</ns1:Title>
+                </ns1:BibliographicDescription>
+            </ns1:Ext>
+        </ns1:RequestedItem>
+        <ns1:RequestedItem>
+            <ns1:RequestId>
+                <ns1:RequestIdentifierValue>8186681-622961-a</ns1:RequestIdentifierValue>
+            </ns1:RequestId>
+            <ns1:RequestType ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/requesttype/requesttype.scm">Hold</ns1:RequestType>
+            <ns1:RequestStatusType ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/requeststatustype/requeststatustype.scm">In Process</ns1:RequestStatusType>
+            <ns1:DatePlaced>2020-07-27T17:01:35.545+02:00</ns1:DatePlaced>
+            <ns1:Ext>
+                <ns1:BibliographicDescription>
+                    <ns1:Author>Třeštíková, Radka,</ns1:Author>
+                    <ns1:BibliographicItemId>
+                        <ns1:BibliographicItemIdentifier>544289</ns1:BibliographicItemIdentifier>
+                        <ns1:BibliographicItemIdentifierCode ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/bibliographicitemidentifiercode/bibliographicitemidentifiercode.scm">Legal Deposit Number</ns1:BibliographicItemIdentifierCode>
+                    </ns1:BibliographicItemId>
+                    <ns1:Pagination>322 stran ;</ns1:Pagination>
+                    <ns1:PlaceOfPublication></ns1:PlaceOfPublication>
+                    <ns1:Publisher></ns1:Publisher>
+                    <ns1:Title>Bábovky</ns1:Title>
+                </ns1:BibliographicDescription>
+            </ns1:Ext>
+        </ns1:RequestedItem>
+        <ns1:UserOptionalFields>
+            <ns1:NameInformation>
+                <ns1:PersonalNameInformation>
+                    <ns1:StructuredPersonalUserName>
+                        <ns1:Prefix>Bc.</ns1:Prefix>
+                        <ns1:GivenName>Čtenář</ns1:GivenName>
+                        <ns1:Surname>Ncip</ns1:Surname>
+                    </ns1:StructuredPersonalUserName>
+                </ns1:PersonalNameInformation>
+            </ns1:NameInformation>
+            <ns1:UserAddressInformation>
+                <ns1:UserAddressRoleType ns1:Scheme="http://www.niso.org/ncip/v2_0/imp1/schemes/useraddressroletype/useraddressroletype.scm">Ship To</ns1:UserAddressRoleType>
+                <ns1:PhysicalAddress>
+                    <ns1:UnstructuredAddress>
+                        <ns1:UnstructuredAddressType ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/unstructuredaddresstype/unstructuredaddresstype.scm">Newline-Delimited Text</ns1:UnstructuredAddressType>
+                        <ns1:UnstructuredAddressData>Vavrečkova 84, 76001 Zlín</ns1:UnstructuredAddressData>
+                    </ns1:UnstructuredAddress>
+                    <ns1:PhysicalAddressType ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/physicaladdresstype/physicaladdresstype.scm">Street Address</ns1:PhysicalAddressType>
+                </ns1:PhysicalAddress>
+            </ns1:UserAddressInformation>
+            <ns1:UserAddressInformation>
+                <ns1:UserAddressRoleType ns1:Scheme="http://www.niso.org/ncip/v2_0/imp1/schemes/useraddressroletype/useraddressroletype.scm">Ship To</ns1:UserAddressRoleType>
+                <ns1:PhysicalAddress>
+                    <ns1:UnstructuredAddress>
+                        <ns1:UnstructuredAddressType ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/unstructuredaddresstype/unstructuredaddresstype.scm">Newline-Delimited Text</ns1:UnstructuredAddressType>
+                        <ns1:UnstructuredAddressData>Štormova, 68605 Uherské Hradiště</ns1:UnstructuredAddressData>
+                    </ns1:UnstructuredAddress>
+                    <ns1:PhysicalAddressType ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/physicaladdresstype/physicaladdresstype.scm">Street Address</ns1:PhysicalAddressType>
+                </ns1:PhysicalAddress>
+            </ns1:UserAddressInformation>
+            <ns1:UserAddressInformation>
+                <ns1:UserAddressRoleType ns1:Scheme="http://www.niso.org/ncip/v2_0/imp1/schemes/useraddressroletype/useraddressroletype.scm">Notice</ns1:UserAddressRoleType>
+                <ns1:ElectronicAddress>
+                    <ns1:ElectronicAddressType ns1:Scheme="http://www.iana.org/assignments/uri-schemes">mailto</ns1:ElectronicAddressType>
+                    <ns1:ElectronicAddressData>cpk@mzk.cz</ns1:ElectronicAddressData>
+                </ns1:ElectronicAddress>
+            </ns1:UserAddressInformation>
+            <ns1:DateOfBirth>1968-03-18T00:00:00.000+01:00</ns1:DateOfBirth>
+            <ns1:UserPrivilege>
+                <ns1:AgencyId ns1:Scheme="http://www.niso.org/ncip/v1_0/schemes/agencyelementtype/agencyelementtype.scm">KPSYS-TEST</ns1:AgencyId>
+                <ns1:AgencyUserPrivilegeType ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/agencyuserprivilegetype/agencyuserprivilegetype.scm">loaning</ns1:AgencyUserPrivilegeType>
+                <ns1:ValidFromDate>2025-10-18T00:00:00.000+02:00</ns1:ValidFromDate>
+                <ns1:UserPrivilegeDescription>Loaning, Renewing and other reader actions</ns1:UserPrivilegeDescription>
+            </ns1:UserPrivilege>
+            <ns1:UserId>
+                <ns1:UserIdentifierType ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/visibleuseridentifiertype/visibleuseridentifiertype.scm">Barcode</ns1:UserIdentifierType>
+                <ns1:UserIdentifierValue>5997776</ns1:UserIdentifierValue>
+            </ns1:UserId>
+        </ns1:UserOptionalFields>
+    </ns1:LookupUserResponse>
+</ns1:NCIPMessage>
