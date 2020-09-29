@@ -28,27 +28,30 @@
 
     <div class="col-md-6">
         <?php $coords = $this->driver->tryMethod('getGpsCoordinates'); if (!empty($coords)): ?>
-            <style> #map {height: 600px;} </style>
             <div id="map"></div>
-
-            <script>
-            function initMap() {
-                var myLatLng = {lat: 49.78, lng: 15.39};
-                var map = new google.maps.Map(document.getElementById('map'), {
+            <?php
+              $lat = $coords['lat'];
+              $lng = $coords['lng'];
+              $initMap = <<<JS
+                function initMap() {
+                  var myLatLng = {lat: 49.78, lng: 15.39};
+                  var map = new google.maps.Map(document.getElementById('map'), {
                     zoom: 7,
                     center: myLatLng
-                });
-                var position = {lat: <?=$coords['lat'] ?>, lng: <?=$coords['lng'] ?>};
-                var marker = new google.maps.Marker({
+                  });
+                  var position = { lat: $lat, lng: $lng };
+                  var marker = new google.maps.Marker({
                     position: position,
                     map: map,
                     title: 'name of library'
-                });
-            }
-            </script>
-            <?php //FIXME we need to propagate apikey from controller ?>
-            <script src="https://maps.googleapis.com/maps/api/js?key=<?=$this->apikey ?>&callback=initMap"
-                async defer></script>
+                  });
+                }
+JS;
+            //FIXME we need to propagate apikey from controller
+            $googleMapsScript = "https://maps.googleapis.com/maps/api/js?key=" . $this->escapeUrl($this->apikey) . "&callback=initMap";
+            $this->inlineScript(\Laminas\View\Helper\HeadScript::SCRIPT, $initMap, 'SET');
+            echo $this->inlineScript()->appendFile($googleMapsScript);
+          ?>
         <?php endif; ?>
     </div>
 </div>

@@ -1,6 +1,6 @@
 <?php
 if (!empty($data)):
-    $filter = urlencode('~region_institution:"'. $data . '"'); ?>
+    $filter = urlencode('~region_institution_facet_mv:"'. $data . '"'); ?>
     <a href='/Search/Results?lookFor[]=&type[]=AllFields&keepEnabledFilters=true&limit=<?=$this->layout()->limit?>&sort=<?=$this->layout()->sort?>&filter[]=<?=$filter?>' title='<?=$this->translate('Search in library')?>' >
         <?=$this->transEsc('Search in library')?>
     </a>

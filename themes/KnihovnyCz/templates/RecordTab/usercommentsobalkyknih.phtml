@@ -26,7 +26,8 @@ $this->headTitle($this->driver->getBreadcrumb());
 </form>
 
 <script>
-    $('form[name=commentRecordObalkyKnih] .btn-primary').on('click', function() {
+  // FIXME: refactor and use inlineScript plugin to insert javascript code
+  $('form[name=commentRecordObalkyKnih] .btn-primary').on('click', function() {
         dataLayer.push({
             'event': 'action.record',
             'actionContext': {

@@ -574,7 +574,7 @@ adv_search_publisher:
 
 adv_search_year_of_publication:
   Dismaxfields:
-     - publishDate
+     - publishDate_txt_mv
   DismaxParams:
     - [bq, "inspiration:top_results^1"]
     - [bf, "if(exists(merged_records_boolean),10000,0)" ]
@@ -583,7 +583,7 @@ adv_search_year_of_publication:
     - [bf, ord(publishDateSort)^1]
   DismaxHandler: edismax
   QueryFields:
-    publishDate:
+    publishDate_txt_mv:
       - [onephrase, 100]
       - [and, 50]
   FilterQuery: "*:* NOT recordtype:sfx"
@@ -591,7 +591,6 @@ adv_search_year_of_publication:
 adv_search_place_of_publication:
   Dismaxfields:
     - placeOfPublication_txt_mv
-    - country_str_mv
     - country_search_txt_mv
   DismaxParams:
     - [bq, "inspiration:top_results^1"]
@@ -602,8 +601,6 @@ adv_search_place_of_publication:
   DismaxHandler: edismax
   QueryFields:
     placeOfPublication_txt_mv:
-      - [onephrase, 100]
-    country_str_mv:
       - [onephrase, 100]
     country_search_txt_mv:
       - [onephrase, 100]

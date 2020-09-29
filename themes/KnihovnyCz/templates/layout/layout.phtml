@@ -31,7 +31,6 @@
       $appendScripts = [];
 
       if (!isset($this->renderingError)) {
-        echo $this->render('js-translations.phtml');
         // Deal with cart stuff:
         $cart = $this->cart();
         if ($cart->isActive()) {
@@ -68,7 +67,7 @@
       }
 
       $root = rtrim($this->url('home'), '/');
-      $translations = $this->jsTranslations()->getJSON();
+      $translations = !isset($this->renderingError) ? $this->render('js-translations.phtml') : '{}';
       $dsb = DEFAULT_SEARCH_BACKEND;
       $appendScripts[] = <<<JS
 VuFind.path = '{$root}';
@@ -145,7 +144,9 @@ JS;
     <div id="modal" class="modal fade hidden-print" tabindex="-1" role="dialog" aria-labelledby="modal-title" aria-hidden="true">
       <div class="modal-dialog">
         <div class="modal-content">
-          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+          <button type="button" class="close" data-dismiss="modal">
+            <svg aria-label="<?=$this->transEsc('Close') ?>" viewBox="0 0 24 24"><path d="M6 18L18 6M6 6l12 12"></path></svg>
+          </button>
           <div class="modal-body"><?=$this->transEsc('Loading') ?>...</div>
         </div>
       </div>

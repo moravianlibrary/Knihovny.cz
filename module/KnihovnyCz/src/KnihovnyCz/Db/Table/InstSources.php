@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Class InstConfigs
+ * Class InstSources
  *
  * PHP version 7
  *
@@ -22,9 +22,9 @@
  *
  * @category VuFind
  * @package  KnihovnyCz\Db\Table
- * @author   Josef Moravec <moravec@mzk.cz>
+ * @author   Václav Rosecký <vaclav.rosecky@mzk.cz>
  * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
- * @link     https://knihovny.cz Main Page
+ * @link https://knihovny.cz Main Page
  */
 
 namespace KnihovnyCz\Db\Table;
@@ -34,8 +34,9 @@ use Laminas\Db\Sql\Select;
 use VuFind\Db\Row\RowGateway;
 use VuFind\Db\Table\PluginManager;
 
-class InstConfigs extends \VuFind\Db\Table\Gateway
+class InstSources extends \VuFind\Db\Table\Gateway
 {
+
     /**
      * Constructor
      *
@@ -46,47 +47,18 @@ class InstConfigs extends \VuFind\Db\Table\Gateway
      * @param string        $table   Name of database table to interface with
      */
     public function __construct(Adapter $adapter, PluginManager $tm, $cfg,
-        RowGateway $rowObj = null, $table = 'inst_configs'
+        RowGateway $rowObj = null, $table = 'inst_sources'
     ) {
         parent::__construct($adapter, $tm, $cfg, $rowObj, $table);
     }
 
-    /**
-     * Retrieves config specified by a source
-     *
-     * Returns empty array if no configuration found for an institution
-     *
-     * @param \KnihovnyCz\Db\Table\InstSources $source
-     *
-     * @return array
-     */
-    public function getConfig($source)
+    public function getSource($shortcut)
     {
-        $config = [];
-        $templateSource = '!' . $source['driver'];
-        $this->applyConfig($config, $templateSource);
-        $this->applyConfig($config, $source['source']);
-        return $config;
-    }
-
-    protected function applyConfig(&$config, $source) {
-        $dbConfig = $this->select(function (Select $select) use ($source)  {
+        return $this->select(function (Select $select) use ($shortcut)  {
             $select
-                ->columns(['id', 'value'])
-                ->join('inst_sources', 'source_id = inst_sources.id')
-                ->join('inst_keys', 'key_id = inst_keys.id', ['key' => 'key_name'])
-                ->join('inst_sections', 'inst_keys.section_id = inst_sections.id', ['section' => 'section_name'])
-                ->where(['inst_sources.source' => $source]);
-        });
-
-        foreach ($dbConfig as $dbConfigRow) {
-            $section = $dbConfigRow['section'];
-            $key = $dbConfigRow['key'];
-            $value = $dbConfigRow['value'];
-            $config[$section][$key] = $value;
-        }
-
-        return $config;
+                ->columns(['id', 'library_name', 'source', 'driver'])
+                ->where(['source' => $shortcut]);
+        })->current();
     }
 
 }

@@ -1317,3 +1317,73 @@ INSERT INTO `inst_keys` (`key_name`, `aleph`, `ncip`, `koha`, `default`, `sectio
 	('fromAgency', 0, 1, 0, 'CPK', 1);
 
 UPDATE `system` SET `value` = '74' WHERE `key`='DB_VERSION';
+
+-- Aleph - section for IdResolver
+INSERT INTO inst_sections(id, section_name) VALUES (12, 'IdResolver');
+
+-- Aleph MZK - IdResolver configuration
+INSERT INTO inst_keys(id, key_name, aleph, ncip, koha, `default`, section_id) VALUES (66, 'type', true, false, false, 'solr', 12);
+INSERT INTO inst_keys(id, key_name, aleph, ncip, koha, `default`, section_id) VALUES (67, 'solrQueryField', true, false, false, 'barcodes', 12);
+INSERT INTO inst_keys(id, key_name, aleph, ncip, koha, `default`, section_id) VALUES (68, 'itemIdentifier', true, false, false, 'barcode', 12);
+INSERT INTO inst_keys(id, key_name, aleph, ncip, koha, `default`, section_id) VALUES (69, 'stripPrefix', true, false, false, 'true', 12);
+INSERT INTO inst_keys(id, key_name, aleph, ncip, koha, `default`, section_id) VALUES (70, 'prefix', true, false, false, '', 12);
+
+-- Aleph migration - dlfport
+INSERT INTO inst_configs(source_id, key_id, value, timestamp)
+  SELECT src.id source_id, 6 key_id, SUBSTRING_INDEX(ic.value, ':', -1) value, NOW() timestamp
+  FROM inst_sources src
+    JOIN inst_configs ic ON ic.source_id = src.id AND ic.key_id = 5
+  WHERE src.id IN (4, 9, 10, 12, 40, 41, 43, 47, 49, 50, 54, 56)
+        AND SUBSTRING_INDEX(ic.value, ':', -1) REGEXP '[0-9]+'
+        AND NOT EXISTS(SELECT 1 FROM inst_configs ic2 WHERE ic2.key_id = 6 AND ic2.source_id = src.id);
+
+-- Aleph migration - dlfurl
+UPDATE inst_configs ic SET value = SUBSTRING(REPLACE(value, 'https://', ''), 1, POSITION(':' IN REPLACE(value, 'https://', '')) - 1)
+WHERE ic.source_id IN (4, 9, 10, 12, 40, 41, 43, 47, 49, 50, 54, 56)
+      AND ic.key_id = 5
+      AND ic.value NOT REGEXP '^([a-z]\.)+$';
+
+-- Aleph migration - sublibadm
+INSERT INTO inst_configs(source_id, key_id, value, timestamp)
+  SELECT src.id source_id, 63 key_id, '' value, NOW() timestamp
+  FROM inst_sources src
+  WHERE src.id IN (4, 9, 10, 12, 40, 41, 43, 47, 49, 50, 54, 56)
+        AND NOT EXISTS(SELECT 1 FROM inst_configs ic2 WHERE ic2.key_id = 63 AND ic2.source_id = src.id);
+
+-- Aleph migration - host
+UPDATE inst_configs ic
+SET value = REPLACE(value, 'https://', '')
+WHERE ic.source_id IN (4, 9, 10, 12, 40, 41, 43, 47, 49, 50, 54, 56);
+
+-- Aleph migration - debug
+INSERT INTO inst_configs(source_id, key_id, value, timestamp)
+SELECT src.id source_id, 62 key_id, 'true' value, NOW() timestamp
+FROM inst_sources src
+WHERE src.id IN (4, 9, 10, 12, 40, 41, 43, 47, 49, 50, 54, 56)
+  AND NOT EXISTS(SELECT 1 FROM inst_configs ic2 WHERE ic2.key_id = 52 AND ic2.source_id = src.id);
+
+-- Aleph migration - delete empty wwwuser and wwwpasswd
+DELETE FROM inst_configs
+WHERE source_id IN (4, 9, 10, 12, 40, 41, 43, 47, 49, 50, 54, 56)
+  AND TRIM(value) = ''
+  AND key_id IN (13, 14);
+
+-- Aleph migration - dlfbaseurl
+INSERT INTO inst_configs(source_id, key_id, value, timestamp)
+SELECT src.id source_id, 64 key_id, CONCAT('https://', ic1.value, ':', ic2.value, '/rest-dlf/') value, NOW() timestamp
+FROM inst_sources src
+  JOIN inst_configs ic1 ON ic1.source_id = src.id AND ic1.key_id = 5
+  JOIN inst_configs ic2 ON ic2.source_id = src.id AND ic2.key_id = 6
+WHERE src.id IN (4, 9, 10, 12, 40, 41, 43, 47, 49, 50, 54, 56)
+  AND NOT EXISTS(SELECT 1 FROM inst_configs ic WHERE ic.key_id = 64 AND ic.source_id = src.id);
+
+-- Aleph migration - empty AddressMappings in Aleph.ini
+DELETE FROM inst_configs
+WHERE key_id IN (SELECT ik.id FROM inst_keys ik WHERE ik.section_id = 6)
+      AND value = '';
+
+-- Aleph migration - delete wwwuser and wwwpasswd from Aleph template
+DELETE FROM inst_configs
+WHERE source_id = 64 AND key_id IN (13, 14);
+
+UPDATE `system` SET `value` = '75' WHERE `key`='DB_VERSION';

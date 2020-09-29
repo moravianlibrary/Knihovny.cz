@@ -147,7 +147,7 @@ Author:
   DismaxParams:
     - [bq, "inspiration:top_results^1"]
     - [bf, "if(exists(merged_records_boolean),10000,0)" ]
-    - [bq, "region_institution:2/Library/PR/IIR/^30000"]
+    - [bq, "region_institution_facet_mv:2/Library/PR/IIR/^30000"]
   QueryFields:
     author_search:
       - [onephrase, 350]
@@ -181,7 +181,7 @@ ISN:
   DismaxParams:
     - [bq, "inspiration:top_results^1"]
     - [bf, "if(exists(merged_records_boolean),10000,0)" ]
-    - [bq, "region_institution:2/Library/PR/IIR/^30000"]
+    - [bq, "region_institution_facet_mv:2/Library/PR/IIR/^30000"]
   QueryFields:
     issn:
       - [and, 100]
@@ -199,7 +199,7 @@ Subject:
   DismaxParams:
     - [bq, "inspiration:top_results^1"]
     - [bf, "if(exists(merged_records_boolean),10000,0)" ]
-    - [bq, "region_institution:2/Library/PR/IIR/^30000"]
+    - [bq, "region_institution_facet_mv:2/Library/PR/IIR/^30000"]
   QueryFields:
     topic:
       - [onephrase, 300]
@@ -245,7 +245,7 @@ JournalTitle:
   DismaxParams:
     - [bq, "inspiration:top_results^1"]
     - [bf, "if(exists(merged_records_boolean),10000,0)" ]
-    - [bq, "region_institution:2/Library/PR/IIR/^30000"]
+    - [bq, "region_institution_facet_mv:2/Library/PR/IIR/^30000"]
   QueryFields:
     title_short:
       - [onephrase, 500]
@@ -281,7 +281,7 @@ Title:
   DismaxParams:
     - [bq, "inspiration:top_results^1"]
     - [bf, "if(exists(merged_records_boolean),10000,0)" ]
-    - [bq, "region_institution:2/Library/PR/IIR/^30000"]
+    - [bq, "region_institution_facet_mv:2/Library/PR/IIR/^30000"]
   QueryFields:
     title_short:
       - [onephrase, 500]
@@ -304,7 +304,7 @@ Series:
   DismaxParams:
     - [bq, "inspiration:top_results^1"]
     - [bf, "if(exists(merged_records_boolean),10000,0)" ]
-    - [bq, "region_institution:2/Library/PR/IIR/^30000"]
+    - [bq, "region_institution_facet_mv:2/Library/PR/IIR/^30000"]
   QueryFields:
     series:
       - [onephrase, 500]
@@ -354,7 +354,7 @@ AllFields:
     - [bq, "author_exact:\"@query\"^20000"]
     - [bq, "title_exact:\"@query\"^10000"]
     - [bq, "term_exact:\"@query\"^30000"]
-    - [bq, "region_institution:2/Library/PR/IIR/^30000"]
+    - [bq, "region_institution_facet_mv:2/Library/PR/IIR/^30000"]
     - [bf, ord(publishDateSort)^1]
   DismaxHandler: edismax
   QueryFields:
@@ -444,7 +444,7 @@ adv_search_title_series:
     - [bq, "author_exact:\"@query\"^20000"]
     - [bq, "title_exact:\"@query\"^10000"]
     - [bq, "term_exact:\"@query\"^30000"]
-    - [bq, "region_institution:2/Library/PR/IIR/^30000"]
+    - [bq, "region_institution_facet_mv:2/Library/PR/IIR/^30000"]
     - [bf, ord(publishDateSort)^1]
   DismaxHandler: edismax
   QueryFields:
@@ -468,7 +468,7 @@ adv_search_author_corporation:
     - [bf, "if(exists(merged_records_boolean),10000,0)" ]
     - [bq, "author_exact:\"@query\"^20000"]
     - [bq, "title_exact:\"@query\"^10000"]
-    - [bq, "region_institution:2/Library/PR/IIR/^30000"]
+    - [bq, "region_institution_facet_mv:2/Library/PR/IIR/^30000"]
     - [bf, ord(publishDateSort)^1]
   DismaxHandler: edismax
   QueryFields:
@@ -496,7 +496,7 @@ adv_search_subject_keywords:
     - [bf, "if(exists(merged_records_boolean),10000,0)" ]
     - [bq, "author_exact:\"@query\"^20000"]
     - [bq, "title_exact:\"@query\"^10000"]
-    - [bq, "region_institution:2/Library/PR/IIR/^30000"]
+    - [bq, "region_institution_facet_mv:2/Library/PR/IIR/^30000"]
     - [bf, ord(publishDateSort)^1]
   DismaxHandler: edismax
   QueryFields:
@@ -518,7 +518,7 @@ adv_search_source_title:
     - [bf, "if(exists(merged_records_boolean),10000,0)" ]
     - [bq, "author_exact:\"@query\"^20000"]
     - [bq, "title_exact:\"@query\"^10000"]
-    - [bq, "region_institution:2/Library/PR/IIR/^30000"]
+    - [bq, "region_institution_facet_mv:2/Library/PR/IIR/^30000"]
     - [bf, ord(publishDateSort)^1]
   DismaxHandler: edismax
   QueryFields:
@@ -534,7 +534,7 @@ adv_search_isbn_issn_ismn:
   DismaxParams:
     - [bq, "inspiration:top_results^1"]
     - [bf, "if(exists(merged_records_boolean),10000,0)" ]
-    - [bq, "region_institution:2/Library/PR/IIR/^30000"]
+    - [bq, "region_institution_facet_mv:2/Library/PR/IIR/^30000"]
   QueryFields:
     isbn:
       - [onephrase, 100]
@@ -554,7 +554,7 @@ adv_search_call_number:
     - [bf, "if(exists(merged_records_boolean),10000,0)" ]
     - [bq, "author_exact:\"@query\"^20000"]
     - [bq, "title_exact:\"@query\"^10000"]
-    - [bq, "region_institution:2/Library/PR/IIR/^30000"]
+    - [bq, "region_institution_facet_mv:2/Library/PR/IIR/^30000"]
     - [bf, ord(publishDateSort)^1]
   DismaxHandler: edismax
   QueryFields:
@@ -570,7 +570,7 @@ adv_search_publisher:
     - [bf, "if(exists(merged_records_boolean),10000,0)" ]
     - [bq, "author_exact:\"@query\"^20000"]
     - [bq, "title_exact:\"@query\"^10000"]
-    - [bq, "region_institution:2/Library/PR/IIR/^30000"]
+    - [bq, "region_institution_facet_mv:2/Library/PR/IIR/^30000"]
     - [bf, ord(publishDateSort)^1]
   DismaxHandler: edismax
   QueryFields:
@@ -580,37 +580,34 @@ adv_search_publisher:
 
 adv_search_year_of_publication:
   Dismaxfields:
-     - publishDate
+     - publishDate_txt_mv
   DismaxParams:
     - [bq, "inspiration:top_results^1"]
     - [bf, "if(exists(merged_records_boolean),10000,0)" ]
     - [bq, "author_exact:\"@query\"^20000"]
     - [bq, "title_exact:\"@query\"^10000"]
-    - [bq, "region_institution:2/Library/PR/IIR/^30000"]
+    - [bq, "region_institution_facet_mv:2/Library/PR/IIR/^30000"]
     - [bf, ord(publishDateSort)^1]
   DismaxHandler: edismax
   QueryFields:
-    publishDate:
+    publishDate_txt_mv:
       - [onephrase, 100]
       - [and, 50]
 
 adv_search_place_of_publication:
   Dismaxfields:
     - placeOfPublication_txt_mv
-    - country_str_mv
     - country_search_txt_mv
   DismaxParams:
     - [bq, "inspiration:top_results^1"]
     - [bf, "if(exists(merged_records_boolean),10000,0)" ]
     - [bq, "author_exact:\"@query\"^20000"]
     - [bq, "title_exact:\"@query\"^10000"]
-    - [bq, "region_institution:2/Library/PR/IIR/^30000"]
+    - [bq, "region_institution_facet_mv:2/Library/PR/IIR/^30000"]
     - [bf, ord(publishDateSort)^1]
   DismaxHandler: edismax
   QueryFields:
     placeOfPublication_txt_mv:
-      - [onephrase, 100]
-    country_str_mv:
       - [onephrase, 100]
     country_search_txt_mv:
       - [onephrase, 100]
@@ -624,7 +621,7 @@ adv_search_001:
     - [bf, "if(exists(merged_records_boolean),10000,0)" ]
     - [bq, "author_exact:\"@query\"^20000"]
     - [bq, "title_exact:\"@query\"^10000"]
-    - [bq, "region_institution:2/Library/PR/IIR/^30000"]
+    - [bq, "region_institution_facet_mv:2/Library/PR/IIR/^30000"]
     - [bf, ord(publishDateSort)^1]
   DismaxHandler: edismax
   QueryFields:
@@ -643,7 +640,7 @@ adv_search_nbn:
     - [bf, "if(exists(merged_records_boolean),10000,0)" ]
     - [bq, "author_exact:\"@query\"^20000"]
     - [bq, "title_exact:\"@query\"^10000"]
-    - [bq, "region_institution:2/Library/PR/IIR/^30000"]
+    - [bq, "region_institution_facet_mv:2/Library/PR/IIR/^30000"]
     - [bf, ord(publishDateSort)^1]
   DismaxHandler: edismax
   QueryFields:
@@ -660,7 +657,7 @@ adv_search_fulltext:
     - [bf, "if(exists(merged_records_boolean),10000,0)" ]
     - [bq, "author_exact:\"@query\"^20000"]
     - [bq, "title_exact:\"@query\"^10000"]
-    - [bq, "region_institution:2/Library/PR/IIR/^30000"]
+    - [bq, "region_institution_facet_mv:2/Library/PR/IIR/^30000"]
     - [bf, ord(publishDateSort)^1]
   DismaxHandler: edismax
   QueryFields:
@@ -693,7 +690,7 @@ adv_search_monographic_series:
     - [bf, "if(exists(merged_records_boolean),10000,0)" ]
     - [bq, "author_exact:\"@query\"^20000"]
     - [bq, "title_exact:\"@query\"^10000"]
-    - [bq, "region_institution:2/Library/PR/IIR/^30000"]
+    - [bq, "region_institution_facet_mv:2/Library/PR/IIR/^30000"]
     - [bf, ord(publishDateSort)^1]
   DismaxHandler: edismax
   QueryFields:

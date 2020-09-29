@@ -4,23 +4,27 @@
 <?php $this->headScript()->appendFile('select2/en.js'); ?>
 <?php $this->headScript()->appendFile('select2/cs.js'); ?>
 <?php
-// Set up standard record scripts:
-$this->headScript()->appendFile("record.js");
-$this->headScript()->appendFile("check_save_statuses.js");
-// Activate Syndetics Plus if necessary:
-if ($this->syndeticsPlus()->isActive()) {
-  $this->headScript()->appendFile($this->syndeticsPlus()->getScript());
-}
+  // Set up standard record scripts:
+  $this->headScript()->appendFile("record.js");
+  $this->headScript()->appendFile("check_save_statuses.js");
+  // Activate Syndetics Plus if necessary:
+  if ($this->syndeticsPlus()->isActive()) {
+    $this->headScript()->appendFile($this->syndeticsPlus()->getScript());
+  }
+  // Add any extra scripts the tabs require:
+  foreach ($this->tabsExtraScripts as $script) {
+    $this->headScript()->appendFile($script);
+  }
 
-// Add RDF header link if applicable:
-if ($this->export()->recordSupportsFormat($this->driver, 'RDF')) {
-  $this->headLink()->appendAlternate($this->recordLink()->getActionUrl($this->driver, 'RDF'), 'application/rdf+xml', 'RDF Representation');
-}
+  // Add RDF header link if applicable:
+  if ($this->export()->recordSupportsFormat($this->driver, 'RDF')) {
+    $this->headLink()->appendAlternate($this->recordLink()->getActionUrl($this->driver, 'RDF'), 'application/rdf+xml', 'RDF Representation');
+  }
 
-// Set up breadcrumbs:
-$this->layout()->breadcrumbs = '<li>' . $this->searchMemory()->getLastSearchLink($this->transEsc('Search'), '', '</li> ') .
-  '<li class="active" aria-current="page">' . $this->recordLink()->getBreadcrumb($this->driver) . '</li> ';
-$this->layout()->title = $this->driver->getShortTitle();
+  // Set up breadcrumbs:
+  $this->layout()->breadcrumbs = '<li>' . $this->searchMemory()->getLastSearchLink($this->transEsc('Search'), '', '</li> ') .
+    '<li class="active" aria-current="page">' . $this->recordLink()->getBreadcrumb($this->driver) . '</li> ';
+  $this->layout()->title = $this->driver->getShortTitle();
 ?>
 
 <?php if (isset($this->scrollData) && ($this->scrollData['previousRecord'] || $this->scrollData['nextRecord'])): ?>
