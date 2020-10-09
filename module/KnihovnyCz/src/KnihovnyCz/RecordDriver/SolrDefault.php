@@ -33,6 +33,7 @@ use VuFind\Exception\RecordMissing as RecordMissingException;
 class SolrDefault extends \VuFind\RecordDriver\SolrDefault
 {
     use BuyLinksTrait;
+    use ObalkyKnihTrait;
 
     /**
      * These Solr fields should be used for snippets if available (listed in order

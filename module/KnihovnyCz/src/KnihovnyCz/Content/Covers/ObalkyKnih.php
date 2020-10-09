@@ -1,11 +1,11 @@
-<?php declare(strict_types=1);
+<?php
 
 /**
  * Class ObalkyKnih
  *
  * PHP version 7
  *
- * Copyright (C) Moravian Library 2019.
+ * Copyright (C) Moravian Library 2020.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -29,31 +29,8 @@
 
 namespace KnihovnyCz\Content\Covers;
 
-class ObalkyKnih extends \VuFind\Content\AbstractCover
+class ObalkyKnih extends \VuFind\Content\Covers\ObalkyKnih
 {
-    /**
-     * Obalky knih service
-     *
-     * @var \KnihovnyCz\Content\ObalkyKnihService
-     */
-    protected $service;
-
-    /**
-     * Constructor
-     */
-    public function __construct($service)
-    {
-        $this->supportsIsbn = true;
-        $this->supportsIssn = true;
-        $this->supportsIsmn = true;
-        $this->supportsOclc = true;
-        $this->supportsUpc = true;
-        $this->supportsNbn = true;
-        $this->cacheAllowed = false;
-
-        $this->service = $service;
-    }
-
     /**
      * Get image URL for a particular API key and set of IDs (or false if invalid).
      *
@@ -68,23 +45,31 @@ class ObalkyKnih extends \VuFind\Content\AbstractCover
      */
     public function getUrl($key, $size, $ids)
     {
-        $data = $this->service->getData($ids);
+        if (isset($ids['nbn']) && substr($ids['recordid'] ?? '', 0, 4) === 'auth') {
+            return $this->getAuthorityImageUrl($ids['nbn'], $size);
+        } else {
+            return parent::getUrl($key, $size, $ids);
+        }
+    }
+
+    protected function getAuthorityImageUrl($authId, $size)
+    {
+        $data = $this->service->getAuthorityData($authId);
         if (!isset($data)) {
             return false;
         }
-
         switch ($size) {
         case 'small':
-            $imageUrl = $data->cover_icon_url;
+            $imageUrl = $data->cover_icon_url ?? false;
             break;
         case 'medium':
-            $imageUrl = $data->cover_medium_url;
+            $imageUrl = $data->cover_medium_url ?? false;
             break;
         case 'large':
-            $imageUrl = $data->cover_preview510_url;
+            $imageUrl = $data->cover_preview510_url ?? false;
             break;
         default:
-            $imageUrl = $data->cover_medium_url;
+            $imageUrl = $data->cover_medium_url ?? false;
             break;
         }
         return $imageUrl;

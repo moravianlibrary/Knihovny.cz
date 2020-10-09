@@ -20,7 +20,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  *
  * @category VuFind
- * @package  RecordDrivers      
+ * @package  RecordDrivers
  * @author   Josef Moravec <moravec@mzk.cz>
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     http://github.com/moravianlibrary/Knihovny.cz Knihovny.cz
@@ -83,11 +83,6 @@ class SolrAuthority extends \KnihovnyCz\RecordDriver\SolrMarc
     public function getHighlightedTitle()
     {
         return rtrim($this->getTitle(), ',');
-    }
-
-    public function getBibinfoForObalkyKnihV3()
-    {
-        return ['auth_id' => $this->getAuthorityId()];
     }
 
     /**
@@ -199,6 +194,25 @@ class SolrAuthority extends \KnihovnyCz\RecordDriver\SolrMarc
             ];
         }
         return $urls;
+    }
+
+    /**
+     * Returns array with one key: authority_id
+     *
+     * @param string $size Size of thumbnail (small, medium or large -- small is
+     * default).
+     *
+     * @return string|array|bool
+     */
+    public function getThumbnail($size = 'small')
+    {
+        return [
+            'recordid' => $this->getUniqueID(),
+            'source' => $this->getSourceIdentifier(),
+            'size' => $size,
+            'title' => $this->getTitle(),
+            'nbn' => $this->getAuthorityId(),
+        ];
     }
 }
 

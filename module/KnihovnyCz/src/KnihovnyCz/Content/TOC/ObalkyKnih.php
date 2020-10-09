@@ -34,7 +34,7 @@ class ObalkyKnih extends \VuFind\Content\AbstractBase
     /**
      * Obalky knih service
      *
-     * @var \KnihovnyCz\Content\ObalkyKnihService
+     * @var \VuFind\Content\ObalkyKnihService
      */
     protected $service;
 
