@@ -76,3 +76,63 @@ services:
         container_name: "${CONTAINER_NAME:-vufind-devel6-10009}"
         environment:
             PARAM_VUFIND_SSL_PORT: "10009"
+    devel6-10010:
+        extends:
+            service: devel6
+        container_name: "${CONTAINER_NAME:-vufind-devel6-10010}"
+        environment:
+            PARAM_VUFIND_SSL_PORT: "10010"
+    devel6-10011:
+        extends:
+            service: devel6
+        container_name: "${CONTAINER_NAME:-vufind-devel6-10011}"
+        environment:
+            PARAM_VUFIND_SSL_PORT: "10011"
+    devel6-10012:
+        extends:
+            service: devel6
+        container_name: "${CONTAINER_NAME:-vufind-devel6-10012}"
+        environment:
+            PARAM_VUFIND_SSL_PORT: "10012"
+    devel6-10013:
+        extends:
+            service: devel6
+        container_name: "${CONTAINER_NAME:-vufind-devel6-10013}"
+        environment:
+            PARAM_VUFIND_SSL_PORT: "10013"
+    devel6-10014:
+        extends:
+            service: devel6
+        container_name: "${CONTAINER_NAME:-vufind-devel6-10014}"
+        environment:
+            PARAM_VUFIND_SSL_PORT: "10014"
+    devel6-10015:
+        extends:
+            service: devel6
+        container_name: "${CONTAINER_NAME:-vufind-devel6-10015}"
+        environment:
+            PARAM_VUFIND_SSL_PORT: "10015"
+    devel6-10016:
+        extends:
+            service: devel6
+        container_name: "${CONTAINER_NAME:-vufind-devel6-10016}"
+        environment:
+            PARAM_VUFIND_SSL_PORT: "10016"
+    devel6-10017:
+        extends:
+            service: devel6
+        container_name: "${CONTAINER_NAME:-vufind-devel6-10017}"
+        environment:
+            PARAM_VUFIND_SSL_PORT: "10017"
+    devel6-10018:
+        extends:
+            service: devel6
+        container_name: "${CONTAINER_NAME:-vufind-devel6-10018}"
+        environment:
+            PARAM_VUFIND_SSL_PORT: "10018"
+    devel6-10019:
+        extends:
+            service: devel6
+        container_name: "${CONTAINER_NAME:-vufind-devel6-10019}"
+        environment:
+            PARAM_VUFIND_SSL_PORT: "10019"

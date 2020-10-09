@@ -11,6 +11,7 @@ USAGE: $name [-b branch] [-c directory_name]
 
   -b            Branch to use for build. Defaults to master
   -c            Config directory to use, aka view name. Defaults to knihovny.cz
+  -l            Enable shibboleth login [true|false], default enabled
   --help|-h     Print usage
 
 EOF
@@ -18,6 +19,7 @@ EOF
 
 branch="master"
 config_dir=""
+shib_login="true"
 while true ; do
     case "$1" in
         -b)
@@ -34,6 +36,13 @@ while true ; do
                    echo "Processing argument: $1 = $2";
                    shift 2 ;;
             esac ;;
+         -l)
+            case "$2" in
+                "") shift 2 ;;
+                *) echo "Processing argument: $1 = $2";
+                   shib_login=$2
+                   shift 2 ;;
+            esac ;;
         --help|-h)
             print_usage;
             exit 0;;
@@ -42,7 +51,13 @@ while true ; do
 done
 
 port=0
-for i in $(seq 10000 10009); do
+port_start=10000
+port_end=10009
+if [ "$shib_login" == "false" ]; then
+    port_start=10010
+    port_end=10019
+fi
+for i in $(seq "$port_start" "$port_end"); do
     docker_port=$((i+10000));
     if ! netstat -ln | grep ":$docker_port " | grep -q 'LISTEN'; then
         port=$i
