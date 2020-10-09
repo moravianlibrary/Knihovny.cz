@@ -38,6 +38,9 @@ class SolrDefaultFactory extends \VuFind\RecordDriver\SolrDefaultFactory
         $driver->attachZboziService(
             $container->get(\KnihovnyCz\Service\ZboziLinkService::class)
         );
+        $driver->attachObalkyKnihService(
+            $container->get(\VuFind\Content\ObalkyKnihService::class)
+        );
         return $driver;
     }
 }

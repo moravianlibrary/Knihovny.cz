@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Class ObalkyKnihCoversFactory
+ * Class Obalky Knih Content Factory
  *
  * PHP version 7
  *
@@ -21,7 +21,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  *
  * @category VuFind
- * @package  KnihovnyCz\Content\Covers
+ * @package  KnihovnyCz\Content
  * @author   Josef Moravec <moravec@mzk.cz>
  * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://knihovny.cz Main Page
@@ -30,11 +30,11 @@
 namespace KnihovnyCz\Content;
 
 use Interop\Container\ContainerInterface;
-use Interop\Container\Exception\ContainerException;
 use Laminas\ServiceManager\Exception\ServiceNotCreatedException;
 use Laminas\ServiceManager\Exception\ServiceNotFoundException;
+use Laminas\ServiceManager\Factory\FactoryInterface;
 
-class ObalkyKnihContentFactory implements \Laminas\ServiceManager\Factory\FactoryInterface
+class ObalkyKnihContentFactory implements FactoryInterface
 {
     /**
      * Create an object
@@ -58,7 +58,7 @@ class ObalkyKnihContentFactory implements \Laminas\ServiceManager\Factory\Factor
             throw new ServiceNotCreatedException('Unexpected options passed to factory.');
         }
 
-        $service = $container->get(\KnihovnyCz\Content\ObalkyKnihService::class);
+        $service = $container->get(\VuFind\Content\ObalkyKnihService::class);
         $covers = new $requestedName($service);
         return $covers;
     }

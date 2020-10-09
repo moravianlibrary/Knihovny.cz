@@ -1,0 +1,11 @@
+<?php
+  $previews = isset($this->config->Content->previews)
+    ? explode(',', $this->config->Content->previews) : [];
+  if (in_array('ObalkyKnih', $previews) && !empty($data = $this->driver->getObalkyKnihToc())):
+?>
+  <div class="obalkyKnihToc'">
+    <a title="<?=$this->translate('toc_obalkyknih')?>" href="<?=$data['url']?>" class="obalkyKnihToc" target="_blank">
+      <img src="<?=$data['image']?>" alt="<?=$this->transEsc('toc_obalkyknih')?>" />
+    </a>
+  </div>
+<?php endif; ?>

@@ -1,11 +1,11 @@
 <?php
 
 /**
- * Service class for ObalkyKnih
+ * Class ObalkyKnihService
  *
  * PHP version 7
  *
- * Copyright (C) Moravian Library 2019.
+ * Copyright (C) Moravian Library 2020.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -26,84 +26,52 @@
  * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://knihovny.cz Main Page
  */
+
 namespace KnihovnyCz\Content;
 
-class ObalkyKnihService implements \VuFindHttp\HttpServiceAwareInterface,
-    \Laminas\Log\LoggerAwareInterface
+class ObalkyKnihService extends \VuFind\Content\ObalkyKnihService
 {
-    use \VuFindHttp\HttpServiceAwareTrait;
-    use \VuFind\ILS\Driver\CacheTrait;
-    use \VuFind\Log\LoggerAwareTrait;
-    /**
-     * API URL
-     *
-     * @var string
-     */
-    protected $apiUrl;
+    protected $authorityApiUrl;
 
     /**
      * Constructor
-     */
-    public function __construct($config)
-    {
-        $this->apiUrl = $config->base_url1 . $config->books_endpoint;
-        $this->cacheLifetime = 1800;
-    }
-
-    /**
-     * Get an HTTP client
      *
-     * @param string $url URL for client to use
-     *
-     * @return \Laminas\Http\Client
+     * @param \Laminas\Config\Config $config Configuration for service
      */
-    protected function getHttpClient($url = null)
+    public function __construct(\Laminas\Config\Config $config)
     {
-        if (null === $this->httpService) {
-            throw new \Exception('HTTP service missing.');
+        parent::__construct($config);
+        if (!isset($config->authority_endpoint)) {
+            throw new \Exception(
+                "Configuration for ObalkyKnih.cz service is not valid"
+            );
         }
-        return $this->httpService->createClient($url);
+        $this->authorityApiUrl =
+            $config->base_url[0] . $config->authority_endpoint . '/meta';
     }
 
-    protected function createCacheKey($ids) {
-        array_walk($ids, function(&$value, $key) {
-            if (gettype($value) === 'object') {
-                $value = $value->get13();
-            }
-            $value = "$key::$value";
-        });
-        return implode("%%", $ids);
-    }
-
-    public function getData($ids): ?\stdClass
+    public function getAuthorityData(string $authId)
     {
-        $cacheKey = $this->createCacheKey($ids);
+        $cacheKey = $this->createCacheKey(['authority_id' => $authId]);
         $cachedData = $this->getCachedData($cacheKey);
         if ($cachedData === null) {
-            $cachedData = $this->getFromService($ids);
+            $cachedData = $this->getAuthorityFromService($authId);
             $this->putCachedData($cacheKey, $cachedData);
         }
         return $cachedData;
     }
 
-    protected function getFromService($ids): ?\stdClass {
-        $param = "multi";
-        $query = [];
-        $isbn = $ids['isbn'] ? $ids['isbn']->get13() : null;
-        $isbn = $isbn ?? $ids['upc'] ?? $ids['issn'] ?? null;
-        $oclc = $ids['oclc'] ?? null;
-        $isbn = $isbn ?? ($ids['ismn'] ? $ids['ismn']->get13() : null);
-        $ismn = $ids['ismn'] ? $ids['ismn']->get10() : null;
-        $nbn = $ids['nbn'] ?? null;
-
-        foreach(['isbn', 'oclc', 'ismn', 'nbn' ] as $identifier) {
-            if (isset($$identifier)) {
-                $query[$identifier] = $$identifier;
-            }
+    protected function getAuthorityFromService(string $authId)
+    {
+        $url = $this->authorityApiUrl . "?";
+        $url .= http_build_query(['auth_id' => $authId]);
+        $client = $this->getHttpClient($url);
+        try {
+            $response = $client->send();
+        } catch (\Exception $e) {
+            return null;
         }
-        $url = $this->apiUrl . "?";
-        $url .= http_build_query([$param => json_encode([$query])]);
-        $response = $this->getHttpClient($url)->send();
-        return $response->isSuccess() ? json_decode($response->getBody())[0]: null;
+        return $response->isSuccess() ? json_decode($response->getBody())[0] : null;
     }
+
 }
