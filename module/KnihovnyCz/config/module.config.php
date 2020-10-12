@@ -185,6 +185,14 @@ $config = [
                     'updateContent' => \KnihovnyCz\AjaxHandler\UpdateContent::class,
                 ],
             ],
+            'related' => [
+                'invokables' => [
+                    \KnihovnyCz\Related\SolrField::class,
+                ],
+                'aliases' => [
+                    'solrfield' => \KnihovnyCz\Related\SolrField::class,
+                ],
+            ],
         ],
     ],
     'service_manager' => [

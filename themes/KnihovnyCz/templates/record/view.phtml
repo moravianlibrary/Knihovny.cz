@@ -85,8 +85,8 @@
 </div>
 </div>
 <div class="col-sm-3">
-    <?=$this->record($this->driver)->getToolbar()?>
-  <div class="<?=$this->layoutClass('sidebar')?>">
+  <?=$this->record($this->driver)->getToolbar()?>
+  <div>
     <?php foreach ($sidebarList as $current): ?>
       <?=$this->related()->render($current)?>
     <?php endforeach; ?>
