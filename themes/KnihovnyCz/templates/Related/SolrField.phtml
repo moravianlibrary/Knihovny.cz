@@ -1,0 +1,36 @@
+<?php $similarRecords = $this->related->getResults(); ?>
+<?php if (!empty($similarRecords)): ?>
+  <h2><?=$this->transEsc('Similar Items')?></h2>
+  <div class='similar-items-container list-group'>
+    <?php foreach ($similarRecords as $data): ?>
+      <?php
+        $format = $data->format ?? null;
+        $url = $this->recordLink()->getUrl($data->id);
+      ?>
+      <div class="row list-group-item clearfix">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3 similar-item">
+          <a href="<?=$url?>" title='<?=$this->escapeHtml($data->title)?> (<?=$this->transEscWithPrefix("Format::", $format)?>)' tabindex='-1'>
+              <div class="ajaxcover">
+                <div class="spinner"><i class="fa fa-spinner fa-spin"></i> <?=$this->translate('Loading')?>...</div>
+                <div class="cover-container">
+                  <img data-recordsource="Solr" data-recordid="<?=$data->id?>" data-coversize="small" class="recordcover ajax" alt="<?=$this->escapeHtmlAttr($alt); ?>" />
+                </div>
+              </div>
+          </a>
+        </div>
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-9 similar-item content">
+          <h5 class="list-group-item-heading">
+            <a href='<?=$url?>' title='<?=$this->escapeHtml($data->title)?> (<?=$this->translate($format)?>)'>
+              <strong><?=$this->escapeHtml($data->title)?></strong>
+            </a>
+          </h5>
+          <p class="list-group-item-text">
+            <?php $author = $data->author ?? null; if (isset($author)): ?>
+              <?=$this->escapeHtml($author);?>
+            <?php endif; ?>
+          </p>
+        </div>
+      </div>
+    <?php endforeach; ?>
+  </div>
+<?php endif;

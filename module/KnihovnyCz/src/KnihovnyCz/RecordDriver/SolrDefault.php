@@ -417,7 +417,7 @@ class SolrDefault extends \VuFind\RecordDriver\SolrDefault
         $this->recordLoader = $recordLoader;
     }
 
-    /**
+   /**
      * Attach libary id mappings
      *
      * @param \Laminas\Config\Config $mappings Mappings from config
@@ -438,5 +438,11 @@ class SolrDefault extends \VuFind\RecordDriver\SolrDefault
     {
         $source = $this->getSourceId();
         return $this->libraryIdMappings[$source] ?? null;
+    }
+
+    public function getSimilarFromSolrField(): array
+    {
+        $field = $this->fields['similar_display_mv'] ?? [];
+        return array_map('json_decode', $field);
     }
 }
