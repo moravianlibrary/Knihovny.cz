@@ -183,17 +183,6 @@ class SolrDefault extends \VuFind\RecordDriver\SolrDefault
     }
 
     /**
-     * Returns name of the Author to display
-     *
-     * @deprecated Used in ajax controller, should be used getPrimaryAuthor at call
-     * @return     string|NULL
-     */
-    public function getDisplayAuthor()
-    {
-        return $this->getPrimaryAuthors()[0];
-    }
-
-    /**
      * Get the main author of the record.
      *
      * @return array

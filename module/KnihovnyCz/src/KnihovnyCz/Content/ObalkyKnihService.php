@@ -67,9 +67,9 @@ class ObalkyKnihService extends \VuFind\Content\ObalkyKnihService
         $url .= http_build_query(['auth_id' => $authId]);
         $client = $this->getHttpClient($url);
         try {
-            $this->logError('Unexpected ' . get_class($e) . ': ' . $e->getMessage());
             $response = $client->send();
         } catch (\Exception $e) {
+            $this->logError('Unexpected ' . get_class($e) . ': ' . $e->getMessage());
             return null;
         }
         return $response->isSuccess() ? json_decode($response->getBody())[0] : null;
