@@ -180,7 +180,7 @@ class RecordDataFormatterFactory extends \VuFind\View\Helper\Root\RecordDataForm
             'Previous Title', 'getPreviousTitles', null, ['recordLink' => 'title']
         );
         $spec->setMultiLine(
-            'Authors', 'getDeduplicatedAuthors', $this->getAuthorFunction() //FIXME - need to render links for authors
+            'Authors', 'getDeduplicatedAuthors', $this->getAuthorFunction()
         );
         $spec->setLine(
             'Format', 'getFormats', 'RecordHelper',

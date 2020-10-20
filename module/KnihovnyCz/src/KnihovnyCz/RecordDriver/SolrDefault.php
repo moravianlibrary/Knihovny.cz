@@ -174,11 +174,12 @@ class SolrDefault extends \VuFind\RecordDriver\SolrDefault
     /**
      * Get authority ID of main author.
      *
-     * @return string
+     * @return array
      */
-    public function getMainAuthorAuthorityRecordId()
+    public function getPrimaryAuthorsIds()
     {
-        return $this->fields['author_authority_id_display'] ?? false;
+        return isset($this->fields['author_authority_id_display'])
+            ? [$this->fields['author_authority_id_display']] : [];
     }
 
     /**
@@ -223,7 +224,7 @@ class SolrDefault extends \VuFind\RecordDriver\SolrDefault
      *
      * @return array
      */
-    public function getSecondaryAuthoritiesRecordIds()
+    public function getSecondaryAuthorsIds()
     {
         return $this->fields['author2_authority_id_display_mv'] ?? [];
     }
@@ -407,7 +408,7 @@ class SolrDefault extends \VuFind\RecordDriver\SolrDefault
         $this->recordLoader = $recordLoader;
     }
 
-   /**
+    /**
      * Attach libary id mappings
      *
      * @param \Laminas\Config\Config $mappings Mappings from config
@@ -435,4 +436,19 @@ class SolrDefault extends \VuFind\RecordDriver\SolrDefault
         $field = $this->fields['similar_display_mv'] ?? [];
         return array_map('json_decode', $field);
     }
+
+    /**
+     * Deduplicate author information into associative array with main/corporate/
+     * secondary keys.
+     *
+     * @param array $dataFields An array of extra data fields to retrieve (see
+     * getAuthorDataFields)
+     *
+     * @return array
+     */
+    public function getDeduplicatedAuthors($dataFields = ['role'])
+    {
+        return parent::getDeduplicatedAuthors(array_merge($dataFields, ['id']));
+    }
+
 }
