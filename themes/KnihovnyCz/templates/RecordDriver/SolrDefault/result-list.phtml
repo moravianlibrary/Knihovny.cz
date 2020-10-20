@@ -32,12 +32,20 @@
               <?=implode('<br>', array_map([$this, 'escapeHtml'], $this->driver->getSummary())); ?>
             <?php else: ?>
               <?php $summAuthors = $this->driver->getPrimaryAuthorsWithHighlighting(); if (!empty($summAuthors)): ?>
+                <?php $authRecordIds = $this->driver->tryMethod('getPrimaryAuthorsIds'); ?>
                 <?php $authorCount = count($summAuthors); ?>
                 <p class="authors">
                   <?php foreach ($summAuthors as $i => $summAuthor): ?>
-                    <a class="author-link" href="<?=$this->record($this->driver)->getLink('author', $this->highlight($summAuthor, null, true, false))?>">
+                    <a class="author-link" href="<?=$this->record($this->driver)->getLink('author', $this->highlight($summAuthor, null, true, false))?>"
+                       title="<?=$this->translate('Show publications by')?> <?=$this->escapeHtmlAttr($summAuthor)?>">
                       <?=$this->highlight(rtrim($summAuthor, ','))?>
                     </a>
+                    <?php if (!empty($authRecordIds)): ?>
+                      <a title="<?=$this->translate('Show person')?> <?=$this->escapeHtmlAttr($summAuthor)?>"
+                         href="<?=$this->recordLink()->getUrl($authRecordIds[0])?>"
+                         class="author-link"><i class="fa fa-user-circle-o"></i>
+                      </a>
+                    <?php endif; ?>
                     <?=$i + 1 < $authorCount ? '<br>' : ''?>
                   <?php endforeach; ?>
                 </p>
