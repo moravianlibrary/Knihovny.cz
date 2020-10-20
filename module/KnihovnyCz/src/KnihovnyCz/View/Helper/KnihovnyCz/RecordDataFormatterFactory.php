@@ -85,7 +85,7 @@ class RecordDataFormatterFactory extends \VuFind\View\Helper\Root\RecordDataForm
     {
         $fields = [];
         $setLine = function ($key, $dataMethod, $template = null,
-            $icon = 'pr-interface-circlerighttrue', $heading = true,
+            $icon = 'fa fa-circle-thin', $heading = true,
             $contentClass = ''
         ) use (&$fields) {
                 $fields[$key] = [
@@ -100,20 +100,20 @@ class RecordDataFormatterFactory extends \VuFind\View\Helper\Root\RecordDataForm
 
         $setLine(
             'Book search', 'getBookSearchFilter',
-            'search_in_library_link.phtml', 'pr-interface-search', false
+            'search_in_library_link.phtml', 'fa fa-search', false
         );
-        $setLine('Address', 'getLibraryAddress', null, 'pr-location-pinmap5',
+        $setLine('Address', 'getLibraryAddress', null, 'fa fa-map-marker',
             false, 'library-large'
         );
         $setLine(
             'Opening hours', 'getLibraryHours',
-            'opening_hours.phtml', 'pr-interface-clocktime'
+            'opening_hours.phtml', 'fa fa-clock-o'
         );
         $setLine('Additional information', 'getLibNote');
         $setLine('Additional information2', 'getLibNote2');
         $setLine(
             'Web sites', 'getUrls', 'library_links.phtml',
-            'pr-web-browseinternetnetwork'
+            'fa fa-globe'
         );
         $setLine('Library type', 'getType');
         $setLine('Regional library', 'getRegLibrary', 'regional_library.phtml');

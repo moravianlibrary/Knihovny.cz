@@ -4,12 +4,12 @@
 ?>
 
 <?php $sigla = $this->driver->getSigla(); if (!empty($sigla)): ?>
-    <h2><i class="pr-interface-circlerighttrue"></i> <?=$this->translate('Sigla')?></h2>
+    <h2><i class="fa fa-circle-thin"></i> <?=$this->translate('Sigla')?></h2>
     <p><?=$this->escapeHtml($sigla)?></p>
 <?php endif; ?>
 
 <?php $lastupdated = $this->driver->getLastUpdated(); if (!empty($lastupdated)): ?>
-    <h2><i class="pr-interface-circlerighttrue"></i> <?=$this->translate('LastUpdated')?></h2>
+    <h2><i class="fa fa-circle-thin"></i> <?=$this->translate('LastUpdated')?></h2>
     <?php $lastUpdatedDate = \DateTime::createFromFormat("Ymd", $lastupdated);?>
     <p><span title="<?=$lastupdated?>"><?=$lastUpdatedDate->format('j. n. Y')?></span></p>
 <? endif; ?>
