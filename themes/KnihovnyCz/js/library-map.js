@@ -1,0 +1,73 @@
+function initMap(url) {
+  let map = $(
+    '<div class="row">' +
+    '<div id="map-loader" class="col-xs-12 text-center"><i class="fa fa-spinner fa-spin fa-3x fa-fw"></i></div>' +
+    '<div id="map" class="hidden"></div>' +
+    '</div>'
+  );
+  $('.search-header').after(map);
+  if (undefined !== url) {
+    $.getJSON(url, function(data) {
+      $('#map-loader').addClass( 'hidden' );
+      if (data.error) {
+        console.error( data.error );
+      } else {
+        initialize(data.records);
+        $('#map').css('height', '600px').removeClass('hidden');
+      }
+    });
+  }
+}
+
+function initialize(libraries) {
+  let mapCenter = { lat: 49.78, lng: 15.39 };
+  let markers = [];
+  let map = new google.maps.Map(document.getElementById('map'), {
+    zoom: 7,
+    center: mapCenter
+  });
+  let bounds = new google.maps.LatLngBounds();
+
+  let info = [];
+
+  for (let i = 0; i < libraries.length; i++) {
+    let library = libraries[i];
+    if (isNaN(library.coordinates.lat)
+      || library.coordinates.lat === undefined
+      || isNaN(library.coordinates.lng)
+      || library.coordinates.lng === undefined
+    ) {
+      continue;
+    }
+    let contentString = '<div id="content" class="marker-info">'+
+      '<div class="marker-title">' + library.title + '</div>'+
+      '<div class="marker-subtitle">' + library.address[0] + '</div>' +
+      '<div class="marker-link"><strong><a href="/Search2Record/' + library.id +
+      '">' + VuFind.translate('Library detail') + '</a></strong>' +
+    '</div>';
+    info[i] = new google.maps.InfoWindow({ content: contentString });
+
+    let marker = new google.maps.Marker({
+      position: new google.maps.LatLng(library.coordinates.lat, library.coordinates.lng),
+      map: map,
+      title: library.title
+    });
+
+    bounds.extend(marker.getPosition());
+    markers.push(marker);
+
+    marker.addListener("click", () => {
+      let isMap = info[i].getMap();
+      info.forEach(function closeInfoWindows(infoWindow) {
+        infoWindow.close();
+      });
+      if (!isMap) {
+        info[i].open(map, marker);
+      }
+    });
+  }
+
+  map.fitBounds(bounds);
+  let mcOptions = { gridSize: 75, maxZoom: 10, imagePath: '/themes/KnihovnyCz/images/markerclusterer/m' };
+  let mc = new MarkerClusterer(map, markers, mcOptions);
+}
