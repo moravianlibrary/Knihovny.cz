@@ -16,7 +16,7 @@ enable_site() {
     fi
 
     if test -z "$PARAM_VUFIND_LOCAL_MODULES"; then
-        PARAM_VUFIND_LOCAL_MODULES="KnihovnyCz"
+        PARAM_VUFIND_LOCAL_MODULES="KnihovnyCz,KnihovnyCzApi"
         #TODO: add module "Debug"
     fi
 
