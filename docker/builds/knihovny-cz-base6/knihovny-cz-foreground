@@ -21,6 +21,7 @@ export PARAM_VUFIND_CONFIG_ABS_DIR
 # Make links to our extensions
 # Module
 ln -s "/var/www/knihovny-cz-extension/module/KnihovnyCz/" "/var/www/knihovny-cz/module/KnihovnyCz"
+ln -s "/var/www/knihovny-cz-extension/module/KnihovnyCzApi/" "/var/www/knihovny-cz/module/KnihovnyCzApi"
 ln -s "/var/www/knihovny-cz-extension/module/KnihovnyCzConsole/" "/var/www/knihovny-cz/module/KnihovnyCzConsole"
 
 # Themes
