@@ -7,16 +7,40 @@ function initMap(url) {
   );
   $('.search-header').after(map);
   if (undefined !== url) {
-    $.getJSON(url, function(data) {
-      $('#map-loader').addClass( 'hidden' );
-      if (data.error) {
-        console.error( data.error );
-      } else {
-        initialize(data.records);
-        $('#map').css('height', '600px').removeClass('hidden');
-      }
-    });
+    loadPage(url, 1, []);
   }
+}
+
+function hideMapLoader() {
+  $('#map-loader').addClass('hidden');
+}
+
+function showMap() {
+  hideMapLoader();
+  $('#map').css('height', '600px').removeClass('hidden');
+}
+
+function loadPage(url, page, records) {
+  $.ajax(url, {
+    data: { page: page },
+    error: function error() {
+      console.error('Cannot load data from API: ' + url + ', page: ' + page);
+    },
+    success: function success(data) {
+      if (data.error) {
+        hideMapLoader();
+        console.error(data.error);
+      } else {
+        records.push(...data.records);
+        if (data.resultCount <= page * 1000) {
+          initialize(records);
+          showMap();
+        } else {
+          loadPage(url, page + 1, records);
+        }
+      }
+    }
+  });
 }
 
 function initialize(libraries) {

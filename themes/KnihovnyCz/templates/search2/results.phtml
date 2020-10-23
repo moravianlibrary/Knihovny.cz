@@ -10,7 +10,7 @@
     'lookfor' => $query->getString(),
     'field' => ['id', 'title', 'address', 'coordinates'],
     'filter' => $this->results->getParams()->getFilterSettings(),
-    'limit' => 10000,
+    'limit' => 1000,
   ];
   $url = '/api/v1/index2/search?' . http_build_query($urlParams);
 ?>

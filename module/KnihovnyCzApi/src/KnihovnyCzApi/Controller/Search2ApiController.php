@@ -36,5 +36,5 @@ class Search2ApiController extends \VuFindApi\Controller\Search2ApiController
      *
      * @var int
      */
-    protected $maxLimit = 10000;
+    protected $maxLimit = 1000;
 }
