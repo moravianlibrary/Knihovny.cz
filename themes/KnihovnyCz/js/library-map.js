@@ -38,7 +38,6 @@ function loadPage(url, page, records) {
         records.push(...data.records);
         if (data.resultCount <= page * 1000) {
           initialize(records);
-          showMap();
         } else {
           loadPage(url, page + 1, records);
         }
@@ -95,7 +94,12 @@ function initialize(libraries) {
     });
   }
 
-  map.fitBounds(bounds);
-  let mcOptions = { gridSize: 75, maxZoom: 10, imagePath: '/themes/KnihovnyCz/images/markerclusterer/m' };
-  let mc = new MarkerClusterer(map, markers, mcOptions);
+  if (markers.length !== 0 ) {
+    map.fitBounds(bounds);
+    let mcOptions = { gridSize: 75, maxZoom: 10, imagePath: '/themes/KnihovnyCz/images/markerclusterer/m' };
+    let mc = new MarkerClusterer(map, markers, mcOptions);
+    showMap();
+  } else {
+    hideMapLoader();
+  }
 }
