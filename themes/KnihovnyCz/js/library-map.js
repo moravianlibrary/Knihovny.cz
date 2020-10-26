@@ -31,6 +31,10 @@ function loadPage(url, page, records) {
         hideMapLoader();
         console.error(data.error);
       } else {
+        if (data.resultCount === 0) {
+          hideMapLoader();
+          return;
+        }
         records.push(...data.records);
         if (data.resultCount <= page * 1000) {
           initialize(records);
