@@ -1,3 +1,5 @@
+const LIBRARY_MAP_MAX_ZOOM = 14;
+
 function initMap(url) {
   let map = $(
     '<div class="row">' +
@@ -98,6 +100,11 @@ function initialize(libraries) {
     map.fitBounds(bounds);
     let mcOptions = { gridSize: 75, maxZoom: 10, imagePath: '/themes/KnihovnyCz/images/markerclusterer/m' };
     let mc = new MarkerClusterer(map, markers, mcOptions);
+    google.maps.event.addListenerOnce(map, 'zoom_changed', function fixInitialZoom() {
+      if (map.getZoom() > LIBRARY_MAP_MAX_ZOOM) {
+        map.setZoom(LIBRARY_MAP_MAX_ZOOM);
+      }
+    });
     showMap();
   } else {
     hideMapLoader();
