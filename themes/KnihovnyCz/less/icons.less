@@ -1,4 +1,4 @@
-[class^="pr-"], [class*=" pr-"] {
+[class^="pr-"], [class*=" pr-"], .cover-icon, .format:before {
   display: inline-block;
   font: normal normal normal 14px/1 FontAwesome;
   font-size: inherit;
@@ -13,31 +13,113 @@
   font-size: 2em;
 }
 
-.pr-format-norms:before {
+.cover-icon {
+  font-size: 4em;
+  color: #ccc;
+}
+
+.format:before {
+  padding-right: 0.2em;
+}
+
+.pr-format-norms:before, .cover-icon[class*="norms"]:before, .format[class*="norms"]:before {
   content: "\f0f6";
 }
 
-.pr-format-maps:before {
+.pr-format-maps:before, .cover-icon[class*="maps"]:before, .format[class*="maps"]:before  {
   content: "\f278";
 }
 
-.pr-format-legislative:before {
+.pr-format-legislative:before, .cover-icon[class*="legislative"]:before, .format[class*="legislative"]:before {
   content: "\f0e3";
 }
 
-.pr-format-user-single5:before {
+.pr-format-user-single5:before, .cover-icon[class*="otherperson"]:before, .format[class*="otherperson"]:before {
   content: "\f2c0";
 }
 
-.pr-format-patents:before {
+.pr-format-patents:before, .cover-icon[class*="patents"]:before, .format[class*="patents"]:before {
   content: "\f0eb";
 }
 
-.pr-format-articles:before {
+.pr-format-articles:before, .cover-icon[class*="articles"]:before, .cover-icon[class*="periodicals"]:before,
+.format[class*="articles"]:before, .format[class*="periodicals"]:before {
   content: "\f1ea";
 }
 
-.pr-format-musicalscores:before {
+.pr-format-musicalscores:before, .cover-icon[class*="musicalscores"]:before, .cover-icon[class*="audio"]:before,
+.format[class*="musicalscores"]:before, .format[class*="audio"]:before {
   content: "\f001";
 }
+
+.cover-icon[class*="book"]:before, .format[class*="book"]:before {
+  content: "\f02d";
+}
+
+.cover-icon[class*="other"]:before, .format[class*="other"]:before {
+  content: "\f29c";
+}
+
+.cover-icon[class*="blind"]:before, .format[class*="blind"]:before {
+  content: "\f070";
+}
+
+.cover-icon[class*="video"]:before, .format[class*="video"]:before {
+  content: "\f03d";
+}
+
+.cover-icon[class*="visualdocuments"]:before, .format[class*="visualdocuments"]:before {
+  content: "\f03e";
+}
+
+/*
+More possible values, in case they are needed in future
+
+audiocd
+audiolp
+audiocassette
+audioother
+audiodvd
+
+blindaudio
+blindbraille
+
+video
+videodvd
+videovhs
+videoother
+videobluray
+videocd
+
+patentspatents
+patentspatentapplications
+patentsutilitymodels
+
+otherother
+othermicroforms
+otherdictionaryentry
+othercomputercarriers
+
+legislativeordinances
+legislativelaws
+legislativecommunication
+legislativegovernmentorders
+legislativefinding
+legislativelawstext
+legislativeresolutions
+legislativenotice
+legislativeeditorial
+legislativemeasures
+legislativeconstitutionallaws
+legislativedecisions
+legislativeregulations
+legislativedecrees
+legislativeagreements
+legislativeprinciples
+legislativetreaties
+legislativedirectives
+legislativeguidelines
+legislativesenatemeasures
+legislativerules
+*/
 
