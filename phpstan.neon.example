@@ -1,9 +1,7 @@
 parameters:
-    autoload_directories:
-        - %currentWorkingDirectory%/module/KnihovnyCz
-        - %currentWorkingDirectory%/module/KnihovnyCzConsole
+    scanDirectories:
         - %currentWorkingDirectory%/../vufind/module
-    autoload_files:
+    bootstrapFiles:
         - %currentWorkingDirectory%/../vufind/vendor/autoload.php
     excludes_analyse:
         - %currentWorkingDirectory%/../vufind/module/VuFind/src/VuFind/View/Helper/Root/AuthorNotesFactory.php
