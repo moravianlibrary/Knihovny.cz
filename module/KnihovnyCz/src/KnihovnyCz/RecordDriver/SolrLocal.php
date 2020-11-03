@@ -31,5 +31,15 @@ namespace KnihovnyCz\RecordDriver;
 class SolrLocal extends \KnihovnyCz\RecordDriver\SolrMarc
 {
 
+    /**
+     * Get the sigla for display
+     *
+     * @return string
+     */
+    public function getSiglaDisplay()
+    {
+        return $this->fields['sigla_display'] ?? null;
+    }
+
 }
 
