@@ -1,3 +1,22 @@
-VuFind.cart.updateCount = function updateCountKnihovnyCz() {
-  console.log('card updated');
-};
+// We only need to observe change of type childList
+const config = { attributes: false, childList: true, subtree: false };
+const observer = new MutationObserver(observeCartHandler);
+
+// Callback function to execute when mutations are observed
+const observeCartHandler = function observeCartHandler(mutationsList, observer) {
+  // Use traditional 'for loops' for IE 11
+  for (const mutation of mutationsList) {
+    if (mutation.type === 'childList') {
+      if (mutation.target.innerText === '0') {
+        mutation.target.parentNode.style.display = 'none';
+      } else {
+        mutation.target.parentNode.style.display = '';
+      }
+    }
+  }
+}
+
+document.addEventListener('DOMContentLoaded', function runObserver() {
+  const targetNode = document.querySelector('#cartItems strong');
+  observer.observe(targetNode, config);
+}, false);
