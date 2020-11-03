@@ -341,10 +341,6 @@ h6:hover .heading-permalink
   font-size: @font-size-large;
 }
 
-.pr-location-pinmap5 {
-  margin-left: -3px;
-}
-
 #map {
   height: 600px;
 }
@@ -464,4 +460,13 @@ h6:hover .heading-permalink
       top: -10px;
     }
   }
+
+/**
+ * An icon for heading permalink markdown extension
+ */
+.heading-permalink::after {
+  display: inline-block;
+  content: "\f0c1";
+  font: normal normal normal 14px/1 FontAwesome;
+  font-size: inherit;
 }

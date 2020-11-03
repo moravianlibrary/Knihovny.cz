@@ -14,19 +14,21 @@
 <input type="hidden" value="<?=$this->escapeHtmlAttr($this->driver->getUniqueID())?>" class="hiddenId" />
 <input type="hidden" value="<?=$this->escapeHtmlAttr($this->driver->getSourceIdentifier())?>" class="hiddenSource" />
 <div class="media">
-  <?php if ($thumbnail && $thumbnailAlignment == 'left'): ?>
-    <?=$thumbnail ?>
-  <?php endif ?>
+
   <div class="media-body">
     <div class="row">
-      <div class="col-xs-12 col-sm-12 col-md-9">
+      <div class="col-xs-12">
         <div class="result-body">
           <h3 class="title">
             <a href="<?=$this->recordLink()->getUrl($this->driver)?>" class="getFull" data-view="<?=$this->params->getOptions()->getListViewOption() ?>">
               <?=$this->record($this->driver)->getTitleHtml()?>
             </a>
           </h3>
-
+          <?php $addresses = $this->driver->getLibraryAddress(); if (!empty($addresses)): ?>
+            <?php foreach ($addresses as $address): ?>
+              <p><i class="fa fa-fw fa-map-marker"></i> <?=$address?></p>
+            <?php endforeach; ?>
+          <?php endif; ?>
           <div>
             <?php if($this->driver->isCollection()): ?>
               <?=implode('<br>', array_map([$this, 'escapeHtml'], $this->driver->getSummary())); ?>
@@ -93,6 +95,10 @@
             <?php endif; ?>
           <?php endif; ?>
 
+          <?php $searchFilter = $this->driver->getBookSearchFilter(); if (!empty($searchFilter)): ?>
+            <i class="fa fa-fw fa-search"></i> <?=$this->render('RecordDriver/SolrLibrary/search_in_library_link.phtml', ['data' => $searchFilter]); ?>
+          <?php endif; ?>
+
           <div class="callnumAndLocation ajax-availability hidden">
             <?php if ($this->driver->supportsAjaxStatus()): ?>
               <strong class="hideIfDetailed"><?=$this->transEsc('Call Number')?>:</strong>
@@ -110,34 +116,6 @@
               <?php endif; ?>
             <?php endif; ?>
           </div>
-
-          <?php /* We need to find out if we're supposed to display an OpenURL link ($openUrlActive),
-            but even if we don't plan to display the link, we still want to get the $openUrl
-            value for use in generating a COinS (Z3988) tag -- see bottom of file.
-          */
-          $openUrl = $this->openUrl($this->driver, 'results');
-          $openUrlActive = $openUrl->isActive();
-          $doi = $this->doi($this->driver, 'results');
-          $doiActive = $doi->isActive();
-          // Account for replace_other_urls setting
-          $urls = $this->record($this->driver)->getLinkDetails($openUrlActive);
-
-          if ($openUrlActive || $doiActive || !empty($urls)): ?>
-            <?php if ($openUrlActive): ?>
-              <br/>
-              <?=$openUrl->renderTemplate()?>
-            <?php endif; ?>
-            <?php if ($doiActive): ?>
-              <br/>
-              <?=$doi->renderTemplate()?>
-            <?php endif; ?>
-            <?php if (!is_array($urls)) $urls = [];
-            if(!$this->driver->isCollection()):
-              foreach ($urls as $current): ?>
-                <a href="<?=$this->escapeHtmlAttr($this->proxyUrl($current['url']))?>" class="fulltext" target="new"><i class="fa fa-external-link" aria-hidden="true"></i> <?=($current['url'] == $current['desc']) ? $this->transEsc('Get full text') : $this->escapeHtml($current['desc'])?></a><br/>
-              <?php endforeach; ?>
-            <?php endif; ?>
-          <?php endif; ?>
 
           <div class="result-formats">
             <?=$this->record($this->driver)->getFormatList() ?>
@@ -202,61 +180,6 @@
 
           <?=$this->driver->supportsCoinsOpenUrl()?'<span class="Z3988" title="' . $this->escapeHtmlAttr($this->driver->getCoinsOpenUrl()) . '"></span>':''?>
         </div>
-      </div>
-      <div class="col-xs-12 col-sm-12 col-md-3">
-        <?php
-          $dedupData = $this->driver->getDedupData();
-          $countRecords = count($dedupData);
-          $maxInstitutionsShown = ($countRecords === 3) ? 3 : 2;
-        ?>
-        <?php if ($dedupData): ?>
-          <div class="dedupInformation">
-            <?php
-              $string = $this->translate(($countRecords > 1) ? 'institutions-in-locale' : 'institution-in-locale');
-              $titleHtml = $this->translate('Found in') . " " . $countRecords . " " . $string
-            ?>
-            <p class='records-in-libraries-title'>
-              <strong><?=$titleHtml?></strong>
-            </p>
-            <ul class="list-unstyled">
-              <?php $i = 0; ?>
-              <?php foreach (array_slice($dedupData, 0, $maxInstitutionsShown) as $source => $current): ?>
-                <?php $i++; ?>
-                <?php if ($i === 1): ?>
-                  <li class="currentSource">
-                    <a href="<?=$this->recordLink()->getUrl($this->driver)?>">
-                      <?=$this->transEsc("Source::$source", [], $source)?>
-                    </a>
-                  </li>
-                <?php else: ?>
-                  <li class="otherSource">
-                    <a href="<?=$this->recordLink()->getUrl($current['id'])?>">
-                      <?=$this->transEsc("Source::$source", [], $source)?>
-                    </a>
-                  </li>
-                <?php endif; ?>
-              <?php endforeach; ?>
-            </ul>
-
-            <?php if ($countRecords > $maxInstitutionsShown): ?>
-              <div class="dropdown">
-                <a class="dropdown-toggle" type="button" data-toggle="dropdown">
-                  <strong><?=$this->translate('Show next institutions')?></strong> <span class="caret"></span>
-                </a>
-                <ul class="dropdown-menu dropdown-menu-right">
-                  <?php foreach (array_slice($dedupData, $maxInstitutionsShown) as $source => $current): ?>
-                    <li class="otherSource">
-                      <a href="<?=$this->recordLink()->getUrl($current['id'])?>">
-                        <?=$this->transEsc("Source::$source", [], $source)?>
-                      </a>
-                    </li>
-                  <?php endforeach; ?>
-                </ul>
-              </div>
-            <?php endif; ?>
-
-          </div>
-        <?php endif; ?>
       </div>
     </div>
   </div>

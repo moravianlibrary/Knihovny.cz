@@ -20,7 +20,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  *
  * @category VuFind
- * @package  RecordDrivers      
+ * @package  RecordDrivers
  * @author   Josef Moravec <moravec@mzk.cz>
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     http://github.com/moravianlibrary/Knihovny.cz Knihovny.cz
@@ -85,11 +85,6 @@ class SolrAuthority extends \KnihovnyCz\RecordDriver\SolrMarc
         return rtrim($this->getTitle(), ',');
     }
 
-    public function getBibinfoForObalkyKnihV3()
-    {
-        return ['auth_id' => $this->getAuthorityId()];
-    }
-
     /**
      * Get the authority's bibliographic details.
      *
@@ -118,6 +113,25 @@ class SolrAuthority extends \KnihovnyCz\RecordDriver\SolrMarc
     {
         return $this->fields['authority_id_display'] ?? '';
     }
+
+    /**
+     * Get count of results for given search
+     *
+     * @param string $field Field to search
+     * @param string $value Value to search for
+     *
+     * @return int
+     */
+    protected function getCountByField(string $field, string $value)
+    {
+        $safeValue = addcslashes($value, '"');
+        $query = new \VuFindSearch\Query\Query($field .  ':"' . $safeValue . '"');
+        $params = new \VuFindSearch\ParamBag(['hl' => ['false']]);
+        return $this->searchService
+            ->search($this->sourceIdentifier, $query, 0, 0, $params)
+            ->getTotal();
+    }
+
     /**
      * Returns true, if authority has publications.
      *
@@ -125,11 +139,11 @@ class SolrAuthority extends \KnihovnyCz\RecordDriver\SolrMarc
      */
     public function hasPublications()
     {
-        // TODO: not implemented yet (and should be refactored)
-        //$results = $this->searchController->getAuthorityPublicationsCount($this->getAuthorityId());
-        $results = 10; //placeholder value
-        return ($results > 1);
+        return 1 < $this->getCountByField(
+            'authorCorporation_search_txt_mv', $this->getAuthorityId()
+        );
     }
+
     /**
      * Returns true, if there are publications about this authority.
      *
@@ -137,11 +151,11 @@ class SolrAuthority extends \KnihovnyCz\RecordDriver\SolrMarc
      */
     public function hasPublicationsAbout()
     {
-        // TODO: not implemented yet (and should be refactored)
-        //$results = $this->searchController->getPublicationsAboutAvailableCount($this->getAuthorityId());
-        $results = 10; //placeholder value
-        return ($results > 0);
+        return 0 < $this->getCountByField(
+            'subjectKeywords_search_txt_mv', $this->getAuthorityId()
+        );
     }
+
     /**
      * Get link to search publications of authority.
      *
@@ -158,6 +172,7 @@ class SolrAuthority extends \KnihovnyCz\RecordDriver\SolrMarc
         }
         return $url;
     }
+
     /**
      * Get link to search publications about authority.
      *
@@ -199,6 +214,25 @@ class SolrAuthority extends \KnihovnyCz\RecordDriver\SolrMarc
             ];
         }
         return $urls;
+    }
+
+    /**
+     * Returns array with one key: authority_id
+     *
+     * @param string $size Size of thumbnail (small, medium or large -- small is
+     * default).
+     *
+     * @return string|array|bool
+     */
+    public function getThumbnail($size = 'small')
+    {
+        return [
+            'recordid' => $this->getUniqueID(),
+            'source' => $this->getSourceIdentifier(),
+            'size' => $size,
+            'title' => $this->getTitle(),
+            'nbn' => $this->getAuthorityId(),
+        ];
     }
 }
 

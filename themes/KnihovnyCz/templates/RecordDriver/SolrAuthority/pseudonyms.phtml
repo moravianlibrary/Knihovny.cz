@@ -1,7 +1,7 @@
-<?php foreach ($data as $name => $authRecordId):
-  $escapedName = $this->escapeHtml($name); ?>
+<?php foreach ($data as $author => $authRecordId):
+  $escapedName = $this->escapeHtmlAttr($author); ?>
   <div>
-    <a title="<?=$this->translate('Show person')?> <?=$escapedName?>" href="/Record/<?=urlencode($authRecordId)?>"><i class="pr-user-single5 author-icon"></i></a>
-    <a title="<?=$this->translate('Show publications by')?> <?=$escapedName?>" href="/Search/Results?sort=relevance&amp;join=AND&amp;type0[]=adv_search_author_corporation&amp;bool0[]=AND&amp;searchTypeTemplate=advanced&amp;lookfor0[]=<?=urlencode($name)?>"><?=$escapedName?></a>
+    <a title="<?=$this->translate('Show person')?> <?=$escapedName?>" href="<?=$this->recordLink()->getUrl($authRecordId)?>"><i class="fa fa-user-circle-o"></i></a>
+    <a title="<?=$this->translate('Show publications by')?> <?=$escapedName?>" href="<?=$this->record($this->driver)->getLink('author', $author)?>"><?=$escapedName?></a>
   </div>
 <? endforeach;

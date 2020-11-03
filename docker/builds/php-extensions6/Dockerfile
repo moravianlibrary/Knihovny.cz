@@ -1,4 +1,4 @@
-FROM php:7.4.8-apache-buster
+FROM php:7.4.11-apache-buster
 LABEL maintainer="Moravian Library <cpk-dev@mzk.cz>"
 LABEL version="2.0"
 LABEL description="Based on the 'php:7.4-apache-buster' build with appended modules to php & apache2 + productivity tools included (vim, mc, htop, ping, traceroute, dig, ssh, mysql-client, locate, git, curl, bash-completion)"
@@ -106,7 +106,7 @@ COPY ./bootstrap-php.sh /onstart/001-php.sh
 RUN apt-get purge -y \
         ${TMP_DEV_PKGS}
 
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer --version="1.10.16"
 
 # Update mlocate's files database
 RUN updatedb

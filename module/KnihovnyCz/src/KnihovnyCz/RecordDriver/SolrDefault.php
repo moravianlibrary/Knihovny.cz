@@ -33,6 +33,7 @@ use VuFind\Exception\RecordMissing as RecordMissingException;
 class SolrDefault extends \VuFind\RecordDriver\SolrDefault
 {
     use BuyLinksTrait;
+    use ObalkyKnihTrait;
 
     /**
      * These Solr fields should be used for snippets if available (listed in order
@@ -173,22 +174,12 @@ class SolrDefault extends \VuFind\RecordDriver\SolrDefault
     /**
      * Get authority ID of main author.
      *
-     * @return string
+     * @return array
      */
-    public function getMainAuthorAuthorityRecordId()
+    public function getPrimaryAuthorsIds()
     {
-        return $this->fields['author_authority_id_display'] ?? false;
-    }
-
-    /**
-     * Returns name of the Author to display
-     *
-     * @deprecated Used in ajax controller, should be used getPrimaryAuthor at call
-     * @return     string|NULL
-     */
-    public function getDisplayAuthor()
-    {
-        return $this->getPrimaryAuthors()[0];
+        return isset($this->fields['author_authority_id_display'])
+            ? [$this->fields['author_authority_id_display']] : [];
     }
 
     /**
@@ -233,7 +224,7 @@ class SolrDefault extends \VuFind\RecordDriver\SolrDefault
      *
      * @return array
      */
-    public function getSecondaryAuthoritiesRecordIds()
+    public function getSecondaryAuthorsIds()
     {
         return $this->fields['author2_authority_id_display_mv'] ?? [];
     }
@@ -439,4 +430,25 @@ class SolrDefault extends \VuFind\RecordDriver\SolrDefault
         $source = $this->getSourceId();
         return $this->libraryIdMappings[$source] ?? null;
     }
+
+    public function getSimilarFromSolrField(): array
+    {
+        $field = $this->fields['similar_display_mv'] ?? [];
+        return array_map('json_decode', $field);
+    }
+
+    /**
+     * Deduplicate author information into associative array with main/corporate/
+     * secondary keys.
+     *
+     * @param array $dataFields An array of extra data fields to retrieve (see
+     * getAuthorDataFields)
+     *
+     * @return array
+     */
+    public function getDeduplicatedAuthors($dataFields = ['role'])
+    {
+        return parent::getDeduplicatedAuthors(array_merge($dataFields, ['id']));
+    }
+
 }

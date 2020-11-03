@@ -161,14 +161,6 @@ $config = [
                     'multibackend' => \KnihovnyCz\ILS\Driver\MultiBackend::class,
                 ],
             ],
-            'content_covers' => [
-                'factories' => [
-                    \KnihovnyCz\Content\Covers\ObalkyKnih::class => \KnihovnyCz\Content\ObalkyKnihContentFactory::class
-                ],
-                'aliases' => [
-                    'obalkyknih' => \KnihovnyCz\Content\Covers\ObalkyKnih::class
-                ]
-            ],
             'content_toc' => [
                 'factories' => [
                     \KnihovnyCz\Content\TOC\ObalkyKnih::class => \KnihovnyCz\Content\ObalkyKnihContentFactory::class
@@ -176,6 +168,14 @@ $config = [
                 'aliases' => [
                     'obalkyknih' => \KnihovnyCz\Content\TOC\ObalkyKnih::class
                 ]
+            ],
+            'content_covers' => [
+                'factories' => [
+                    \KnihovnyCz\Content\Covers\ObalkyKnih::class => \VuFind\Content\ObalkyKnihContentFactory::class,
+                ],
+                'aliases' => [
+                    'obalkyknih' => \KnihovnyCz\Content\Covers\ObalkyKnih::class,
+                ],
             ],
             'ajaxhandler' => [
                 'factories' => [
@@ -185,16 +185,25 @@ $config = [
                     'updateContent' => \KnihovnyCz\AjaxHandler\UpdateContent::class,
                 ],
             ],
+            'related' => [
+                'invokables' => [
+                    \KnihovnyCz\Related\SolrField::class,
+                ],
+                'aliases' => [
+                    'solrfield' => \KnihovnyCz\Related\SolrField::class,
+                ],
+            ],
         ],
     ],
     'service_manager' => [
         'factories' => [
-            \KnihovnyCz\Content\ObalkyKnihService::class => \KnihovnyCz\Content\ObalkyKnihServiceFactory::class,
             \GitWrapper\GitWorkingCopy::class => \KnihovnyCz\Service\GitFactory::class,
             \KnihovnyCz\Config\PluginManager::class => \KnihovnyCz\Config\PluginManagerFactory::class,
+            \KnihovnyCz\Content\ObalkyKnihService::class => \VuFind\Content\ObalkyKnihServiceFactory::class,
         ],
         'aliases' => [
             \VuFind\Config\PluginManager::class => \KnihovnyCz\Config\PluginManager::class,
+            \VuFind\Content\ObalkyKnihService::class => \KnihovnyCz\Content\ObalkyKnihService::class,
         ],
         'invokables' => [
             \Symfony\Component\Filesystem\Filesystem::class,
