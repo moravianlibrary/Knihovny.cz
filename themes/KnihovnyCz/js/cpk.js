@@ -1,6 +1,5 @@
 // We only need to observe change of type childList
 const config = { attributes: false, childList: true, subtree: false };
-const observer = new MutationObserver(observeCartHandler);
 
 // Callback function to execute when mutations are observed
 const observeCartHandler = function observeCartHandler(mutationsList, observer) {
@@ -15,6 +14,8 @@ const observeCartHandler = function observeCartHandler(mutationsList, observer) 
     }
   }
 }
+
+const observer = new MutationObserver(observeCartHandler);
 
 document.addEventListener('DOMContentLoaded', function runObserver() {
   const targetNode = document.querySelector('#cartItems strong');
