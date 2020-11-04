@@ -80,6 +80,7 @@ JS;
           $this->headScript()->appendFile("covers.js");
       }
     ?>
+    <?php $this->headScript()->appendFile("cpk.js") ?>
     <?=$this->headScript()?>
   </head>
   <body class="template-dir-<?=$this->templateDir?> template-name-<?=$this->templateName?> <?=$this->layoutClass('offcanvas-row')?><?php if ($this->layout()->rtl): ?> rtl<?php endif; ?>">
