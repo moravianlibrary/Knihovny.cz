@@ -27,9 +27,6 @@
  */
 namespace KnihovnyCzApi;
 
-use Laminas\ModuleManager\ModuleManager;
-use Laminas\Mvc\MvcEvent;
-
 /**
  * Template for code module for storing local overrides.
  *
