@@ -23,7 +23,7 @@
 }
 
 .pr-format-norms:before, .cover-icon[class*="norms"]:before, .format[class*="norms"]:before {
-  content: "\f0f6";
+  content: "\f016"; /* fa-file-o*/
 }
 
 .pr-format-maps:before, .cover-icon[class*="maps"]:before, .format[class*="maps"]:before  {
@@ -42,14 +42,20 @@
   content: "\f0eb";
 }
 
-.pr-format-articles:before, .cover-icon[class*="articles"]:before, .cover-icon[class*="periodicals"]:before,
-.format[class*="articles"]:before, .format[class*="periodicals"]:before {
+.pr-format-articles:before, .cover-icon[class*="articles"]:before, .format[class*="articles"]:before {
+  content: "\f0f6"; /* fa-file-text-o */
+}
+
+.cover-icon[class*="periodicals"]:before, .format[class*="periodicals"]:before {
   content: "\f1ea";
 }
 
-.pr-format-musicalscores:before, .cover-icon[class*="musicalscores"]:before, .cover-icon[class*="audio"]:before,
-.format[class*="musicalscores"]:before, .format[class*="audio"]:before {
+.pr-format-musicalscores:before, .cover-icon[class*="musicalscores"]:before, .format[class*="musicalscores"]:before {
   content: "\f001";
+}
+
+.cover-icon[class*="audio"]:before, .format[class*="audio"]:before {
+  content: "\f1c7";
 }
 
 .cover-icon[class*="book"]:before, .format[class*="book"]:before {
