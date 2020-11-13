@@ -1,0 +1,117 @@
+/**
+ * Format icons font
+ */
+
+@format-icons-font-family: "format-icons";
+@format-icons-font-path: "../fonts";
+
+@arrayFormats: articles "\e900",
+audio "\e901",
+audiocassette "\e902",
+audiocd "\e903",
+audiodvd "\e904",
+audiolp "\e905",
+audioother "\e906",
+blind "\e907",
+blindaudio "\e908",
+blindbraille "\e909",
+books "\e90a",
+legislative "\e90b",
+legislativeagreements "\e90c",
+legislativecommunication "\e90d",
+legislativeconstitutionallaws "\e90e",
+legislativedecisions "\e90f",
+legislativedecrees "\e910",
+legislativedirectives "\e911",
+legislativeeditorial "\e912",
+legislativefinding "\e913",
+legislativegovernmentorders "\e914",
+legislativeguidelines "\e915",
+legislativelaws "\e916",
+legislativelawstext "\e917",
+legislativemeasures "\e918",
+legislativenotice "\e919",
+legislativeordinances "\e91a",
+legislativeprinciples "\e91b",
+legislativeregulations "\e91c",
+legislativeresolutions "\e91d",
+legislativerules "\e91e",
+legislativesenatemeasures "\e91f",
+legislativetreaties "\e920",
+maps "\e921",
+musicalscores "\e922",
+norms "\e923",
+other "\e924",
+othercomputercarriers "\e925",
+otherdictionaryentry "\e926",
+othermicroforms "\e927",
+otherother "\e928",
+otherperson "\e936",
+patents "\e929",
+patentspatentapplications "\e92a",
+patentspatents "\e92b",
+patentsutilitymodels "\e92c",
+periodicals "\e92d",
+user "\e92e",
+video "\e92f",
+videobluray "\e930",
+videocd "\e931",
+videodvd "\e932",
+videoother "\e933",
+videovhs "\e934",
+visualdocuments "\e935";
+
+
+@font-face {
+  font-family: '@{format-icons-font-family}';
+  src: url('@{format-icons-font-path}/@{format-icons-font-family}.eot?6r8c45');
+  src: url('@{format-icons-font-path}/@{format-icons-font-family}.eot?6r8c45#iefix') format('embedded-opentype'),
+  url('@{format-icons-font-path}/@{format-icons-font-family}.ttf?6r8c45') format('truetype'),
+  url('@{format-icons-font-path}/@{format-icons-font-family}.woff?6r8c45') format('woff'),
+  url('@{format-icons-font-path}/@{format-icons-font-family}.svg?6r8c45#@{format-icons-font-family}') format('svg');
+  font-weight: normal;
+  font-style: normal;
+  font-display: block;
+}
+
+.fi,
+.widget-icon,
+.cover-icon,
+.format:before {
+  display: inline-block;
+  font: normal normal normal 14px/1 '@{format-icons-font-family}';
+  font-family: '@{format-icons-font-family}';
+  font-size: inherit;
+  text-rendering: auto;
+  -webkit-font-smoothing: antialiased;
+  text-transform: none;
+  -moz-osx-font-smoothing: grayscale;
+  width: 1.28571429em;
+  text-align: center;
+}
+
+.widget-icon {
+  font-size: 2em;
+}
+
+.cover-icon {
+  font-size: 4em;
+  color: #ccc;
+}
+
+.format:before {
+  padding-right: 0.2em;
+}
+
+.createFormatClasses(@iterator:1) when (@iterator <= length(@arrayFormats)) {
+  @name: extract(extract(@arrayFormats, @iterator), 1);
+  .fi-@{name}:before,
+  .pr-format-@{name}:before,
+  .cover-icon.@{name}:before,
+  .format.@{name}:before {
+    content: extract(extract(@arrayFormats, @iterator),2);
+  }
+  .createFormatClasses(@iterator + 1);
+}
+
+.createFormatClasses();
