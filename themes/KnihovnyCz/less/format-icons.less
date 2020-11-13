@@ -107,8 +107,8 @@ visualdocuments "\e935";
   @name: extract(extract(@arrayFormats, @iterator), 1);
   .fi-@{name}:before,
   .pr-format-@{name}:before,
-  .cover-icon.@{name}:before,
-  .format.@{name}:before {
+  .cover-icon.format-@{name}:before,
+  .format.format-@{name}:before {
     content: extract(extract(@arrayFormats, @iterator),2);
   }
   .createFormatClasses(@iterator + 1);
