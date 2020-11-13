@@ -22,6 +22,31 @@
   }
 }
 
+.record-nav .cart-add,
+.record-nav .cart-remove {
+  color: @link-color;
+  background-color: transparent;
+
+  &:hover {
+    background-color: @link-hover-color;
+    text-decoration: @link-hover-decoration;
+  }
+}
+
+.nav .btn-bookbag-toggle a {
+  display: block;
+  padding: @nav-link-padding;
+  text-decoration: none;
+
+  &:hover,
+  &:focus {
+    outline: none;
+    color: @link-hover-color;
+    text-decoration: @link-hover-decoration;
+    background-color: transparent;
+  }
+}
+
 // GENERAL
 body > nav.breadcrumbs {
   // dont show main breadcrumbs

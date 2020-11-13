@@ -1,7 +1,7 @@
 <?php $cart = $this->cart(); ?>
 <?php if ($cart->isActive()): ?>
   <?php $cartId = $this->source . '|' . $this->id; ?>
-  <span class="btn-bookbag-toggle" data-cart-id="<?=$this->escapeHtmlAttr($this->id)?>" data-cart-source="<?=$this->escapeHtmlAttr($this->source)?>">
+  <li role="none" class="btn-bookbag-toggle" data-cart-id="<?=$this->escapeHtmlAttr($this->id)?>" data-cart-source="<?=$this->escapeHtmlAttr($this->source)?>">
     <a href="#" class="cart-add hidden<?php if(!$cart->contains($cartId)): ?> correct<?php endif ?>">
       <span class="cart-link-label btn-type-add"><?=$this->transEsc('Add to Book Bag') ?></span>
     </a>
@@ -18,5 +18,5 @@
         <?php endif; ?>
       </form>
     </noscript>
-  </span>
+  </li>
 <?php endif; ?>
