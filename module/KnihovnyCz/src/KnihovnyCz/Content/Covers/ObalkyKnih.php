@@ -29,8 +29,17 @@
 
 namespace KnihovnyCz\Content\Covers;
 
+use KnihovnyCz\Content\ObalkyKnihService;
+
 class ObalkyKnih extends \VuFind\Content\Covers\ObalkyKnih
 {
+    /**
+     * Obalky knih service
+     *
+     * @var ObalkyKnihService
+     */
+    protected $service;
+
     /**
      * Get image URL for a particular API key and set of IDs (or false if invalid).
      *
@@ -52,6 +61,14 @@ class ObalkyKnih extends \VuFind\Content\Covers\ObalkyKnih
         }
     }
 
+    /**
+     * Get image url for given authority
+     *
+     * @param string $authId
+     * @param string $size
+     *
+     * @return string|false
+     */
     protected function getAuthorityImageUrl($authId, $size)
     {
         $data = $this->service->getAuthorityData($authId);
@@ -60,16 +77,16 @@ class ObalkyKnih extends \VuFind\Content\Covers\ObalkyKnih
         }
         switch ($size) {
         case 'small':
-            $imageUrl = $data->cover_icon_url ?? false;
+            $imageUrl = $data->cover_icon_url ?? false; // @phpstan-ignore-line
             break;
         case 'medium':
-            $imageUrl = $data->cover_medium_url ?? false;
+            $imageUrl = $data->cover_medium_url ?? false; // @phpstan-ignore-line
             break;
         case 'large':
-            $imageUrl = $data->cover_preview510_url ?? false;
+            $imageUrl = $data->cover_preview510_url ?? false; // @phpstan-ignore-line
             break;
         default:
-            $imageUrl = $data->cover_medium_url ?? false;
+            $imageUrl = $data->cover_medium_url ?? false; // @phpstan-ignore-line
             break;
         }
         return $imageUrl;

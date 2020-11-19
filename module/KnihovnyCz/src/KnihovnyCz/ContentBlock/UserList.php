@@ -67,6 +67,11 @@ class UserList implements \VuFind\ContentBlock\ContentBlockInterface
         $this->runner = $runner;
     }
 
+    /**
+     * Get user list
+     *
+     * @return \VuFind\Search\Base\Results
+     */
     protected function getUserList() {
         return $this->runner->run(['id' => $this->listId, 'limit' => $this->limit],
             $this->searchClassId
@@ -78,7 +83,7 @@ class UserList implements \VuFind\ContentBlock\ContentBlockInterface
     public function setConfig($settings)
     {
         list($this->listId, $limit) = explode(':', $settings);
-        $this->limit = $limit ?? 10;
+        $this->limit = (int)$limit ?? 10;
     }
 
     /**

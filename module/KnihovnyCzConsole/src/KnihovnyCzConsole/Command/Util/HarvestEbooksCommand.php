@@ -45,6 +45,13 @@ class HarvestEbooksCommand extends \Symfony\Component\Console\Command\Command
     protected static $defaultName = 'util/harvest_ebooks';
 
     /**
+     * Application configuration
+     *
+     * @var Config
+     */
+    protected $config;
+
+    /**
      * Widget table
      *
      * @var Widget
@@ -61,11 +68,13 @@ class HarvestEbooksCommand extends \Symfony\Component\Console\Command\Command
     /**
      * Constructor
      *
-     * @param Config $config      Main VuFind config
-     * @param TableManager $widgetTable Widget table gateway
+     * @param Config       $config       Main VuFind config
+     * @param TableManager $tableManager Widget table gateway
+     * @param string       $name         Command name
      */
-    public function __construct(Config $config, TableManager $tableManager, $name = null)
-    {
+    public function __construct(
+        Config $config, TableManager $tableManager, string $name = null
+    ) {
         $this->config = $config;
         $this->widgetTable = $tableManager->get(Widget::class);
         $this->widgetContentTable = $tableManager->get(WidgetContent::class);
@@ -144,14 +153,21 @@ class HarvestEbooksCommand extends \Symfony\Component\Console\Command\Command
         $url  = "$solrUrl/$solrCore/select?" . http_build_query($params);
 
         $client = curl_init($url);
+        if ($client === false){
+            throw new \Exception('Cannot initialize cURL session');
+        }
         curl_setopt($client, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($client, CURLOPT_BINARYTRANSFER, true);
         $response = curl_exec($client);
         curl_close($client);
 
-        $json = json_decode($response, true);
+        if ($response === false) {
+            $errno = curl_errno($client);
+            $error = curl_error($client);
+            throw new \Exception('Cannot connect to Solr index: Error ' . $errno . ' - ' . $error);
+        }
+        $json = json_decode((string)$response, true);
 
         return $json['response']['docs'];
     }
-
 }

@@ -48,7 +48,11 @@ class User extends \VuFind\Db\Table\User
     protected function expirationCallback($select, $daysOld, $idFrom = null,
         $idTo = null
     ) {
-        $expireDate = date('Y-m-d', strtotime(sprintf('-%d days', (int)$daysOld)));
+        $timestamp = strtotime(sprintf('-%d days', (int)$daysOld));
+        if ($timestamp === false) {
+            throw new \Exception('Could not parse timestamp');
+        }
+        $expireDate = date('Y-m-d', $timestamp);
         $where = $select->where->lessThan('last_login', $expireDate);
         if (null !== $idFrom) {
             $where->and->greaterThanOrEqualTo('id', $idFrom);

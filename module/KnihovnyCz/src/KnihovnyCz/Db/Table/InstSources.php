@@ -52,7 +52,12 @@ class InstSources extends \VuFind\Db\Table\Gateway
         parent::__construct($adapter, $tm, $cfg, $rowObj, $table);
     }
 
-    public function getSource($shortcut)
+    /**
+     * @param string $shortcut
+     *
+     * @return \KnihovnyCz\Db\Row\InstSources|null
+     */
+    public function getSource(string $shortcut)
     {
         return $this->select(function (Select $select) use ($shortcut)  {
             $select
@@ -60,5 +65,4 @@ class InstSources extends \VuFind\Db\Table\Gateway
                 ->where(['source' => $shortcut]);
         })->current();
     }
-
 }

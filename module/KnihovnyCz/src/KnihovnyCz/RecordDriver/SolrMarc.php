@@ -36,12 +36,22 @@ class SolrMarc extends \KnihovnyCz\RecordDriver\SolrDefault
     use MarcField996AwareTrait;
     use PatentTrait;
 
+    /**
+     * ISSN from marc record
+     *
+     * @return array
+     */
     public function getISSNFromMarc()
     {
         $issn = $this->getFieldArray('022', array('a'));
         return $issn;
     }
 
+    /**
+     * Cartographic material scale from marc record
+     *
+     * @return array
+     */
     public function getScales()
     {
         $scales = $this->getFieldArray('255', array('a'));
@@ -68,12 +78,21 @@ class SolrMarc extends \KnihovnyCz\RecordDriver\SolrDefault
         return $this->getFieldArray('300');
     }
 
+    /**
+     * Non-standard ISBNs from marc record
+     *
+     * @return array
+     */
     public function getNonStandardISBN()
     {
         return $this->getFieldArray('902');
     }
 
-    /*
+    /**
+     * Get field and its subfields as array
+     *
+     * @param string $field Field tag
+     *
      * @return array
      */
     protected function getStructuredDataFieldArray($field)
@@ -92,31 +111,61 @@ class SolrMarc extends \KnihovnyCz\RecordDriver\SolrDefault
         return $result;
     }
 
+    /**
+     * Marc field 773
+     *
+     * @return array
+     */
     public function getField773()
     {
         return $this->getStructuredDataFieldArray("773");
     }
 
+    /**
+     * Marc field 770
+     *
+     * @return array
+     */
     public function getField770()
     {
         return $this->getStructuredDataFieldArray("770");
     }
 
+    /**
+     * Marc field 772
+     *
+     * @return array
+     */
     public function getField772()
     {
         return $this->getStructuredDataFieldArray("772");
     }
 
+    /**
+     * Marc field 777
+     *
+     * @return array
+     */
     public function getField777()
     {
         return $this->getStructuredDataFieldArray("777");
     }
 
+    /**
+     * Marc field 780
+     *
+     * @return array
+     */
     public function getField780()
     {
         return $this->getStructuredDataFieldArray("780");
     }
 
+    /**
+     * Marc field 785
+     *
+     * @return array
+     */
     public function getField785()
     {
         return $this->getStructuredDataFieldArray("785");

@@ -31,6 +31,11 @@ namespace KnihovnyCz\Content;
 
 class ObalkyKnihService extends \VuFind\Content\ObalkyKnihService
 {
+    /**
+     * API endpoint for authoritie
+     *
+     * @var string
+     */
     protected $authorityApiUrl;
 
     /**
@@ -50,6 +55,13 @@ class ObalkyKnihService extends \VuFind\Content\ObalkyKnihService
             $config->base_url[0] . $config->authority_endpoint . '/meta';
     }
 
+    /**
+     * Get obalkyknih metadata for authority
+     *
+     * @param string $authId
+     *
+     * @return object|null
+     */
     public function getAuthorityData(string $authId)
     {
         $cacheKey = $this->createCacheKey(['authority_id' => $authId]);
@@ -61,6 +73,14 @@ class ObalkyKnihService extends \VuFind\Content\ObalkyKnihService
         return $cachedData;
     }
 
+    /**
+     * Get obalkyknih metadata for authority from external service
+     *
+     * @param string $authId
+     *
+     * @return object|null
+     * @throws \Exception
+     */
     protected function getAuthorityFromService(string $authId)
     {
         $url = $this->authorityApiUrl . "?";

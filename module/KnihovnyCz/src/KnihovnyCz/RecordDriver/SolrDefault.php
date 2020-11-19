@@ -46,7 +46,7 @@ class SolrDefault extends \VuFind\RecordDriver\SolrDefault
     ];
 
     /**
-     * @var \VuFind\RecordDriver\AbstractBase|\KnihovnyCz\RecordDriver\SolrDefault|null
+     * @var \VuFind\RecordDriver\AbstractBase|null
      */
     protected $parentRecord = null;
 
@@ -87,6 +87,12 @@ class SolrDefault extends \VuFind\RecordDriver\SolrDefault
         return $this->fields['parent_id_str'] ?? '';
     }
 
+    /**
+     * Identificator of record source
+     *
+     * @return string
+     * @throws \Exception
+     */
     public function getSourceId()
     {
         list ($source) = explode('.', $this->getUniqueID());
@@ -137,11 +143,21 @@ class SolrDefault extends \VuFind\RecordDriver\SolrDefault
         return $this->getTitle();
     }
 
+    /**
+     * Get the subtitle of the record.
+     *
+     * @return string
+     */
     public function getSubtitle()
     {
         return $this->fields['title_sub_display'] ?? '';
     }
 
+    /**
+     * Get record type for citation
+     *
+     * @return string
+     */
     public function getCitationRecordType()
     {
         return $this->fields['citation_record_type_str'] ?? '';
@@ -262,17 +278,28 @@ class SolrDefault extends \VuFind\RecordDriver\SolrDefault
     {
         $summary = $this->fields['summary_display_mv'] ?? [];
         if (empty($summary)){
-            $summary = ($parent = $this->getParentRecord())
-                ? $parent->getSummary() : [];
+            /** @var \KnihovnyCz\RecordDriver\SolrDefault|null $parent */
+            $parent = $this->getParentRecord();
+            $summary = ($parent !== null) ? $parent->getSummary() : [];
         }
         return $summary;
     }
 
+    /**
+     * Get raw data of monographic series
+     *
+     * @return array
+     */
     protected function getMonographicSeriesFieldData()
     {
         return $this->fields['monographic_series_display_mv'] ?? [];
     }
 
+    /**
+     * Get monographic series for display
+     *
+     * @return array
+     */
     public function getMonographicSeries()
     {
         $result = [];
@@ -333,6 +360,11 @@ class SolrDefault extends \VuFind\RecordDriver\SolrDefault
         return $links;
     }
 
+    /**
+     * Get links from marc field 856
+     *
+     * @return array
+     */
     protected function get856Links()
     {
         return isset($this->fields['url']) ? $this->fields['url'] : [];
@@ -341,7 +373,7 @@ class SolrDefault extends \VuFind\RecordDriver\SolrDefault
     /**
      * Get parent record
      *
-     * @return \VuFind\RecordDriver\AbstractBase|\KnihovnyCz\RecordDriver\SolrDefault|null
+     * @return \VuFind\RecordDriver\AbstractBase|null
      */
     public function getParentRecord()
     {
@@ -374,7 +406,9 @@ class SolrDefault extends \VuFind\RecordDriver\SolrDefault
      */
     public function hasDeduplicatedRecords()
     {
-        return !empty((array)$this->getParentRecord()->tryMethod('getChildrenIds'));
+        $parent = $this->getParentRecord();
+        return ($parent !== null) ?
+            !empty((array)$parent->tryMethod('getChildrenIds')) : false;
     }
 
     /**
@@ -385,6 +419,10 @@ class SolrDefault extends \VuFind\RecordDriver\SolrDefault
      */
     public function getDeduplicatedRecords()
     {
+        $parent = $this->getParentRecord();
+        if ($parent === null) {
+            return [];
+        }
         return array_map(
             function ($localId) {
                 list($source) = explode('.', $localId);
@@ -392,7 +430,7 @@ class SolrDefault extends \VuFind\RecordDriver\SolrDefault
                     'source' => $source,
                     'id' => $localId,
                 ];
-            }, (array)$this->getParentRecord()->tryMethod('getChildrenIds')
+            }, (array)$parent->tryMethod('getChildrenIds')
         );
     }
 

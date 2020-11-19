@@ -20,7 +20,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  *
  * @category VuFind
- * @package  RecordDrivers      
+ * @package  RecordDrivers
  * @author   Josef Moravec <moravec@mzk.cz>
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     http://github.com/moravianlibrary/Knihovny.cz Knihovny.cz
@@ -232,6 +232,11 @@ class SolrLibrary extends \KnihovnyCz\RecordDriver\SolrMarc
         return $this->fields['branchurl_display_mv'] ?? [];
     }
 
+    /**
+     * Get facet value for library represented by this record
+     *
+     * @return string|null
+     */
     public function getBookSearchFilter()
     {
         $institution = $this->fields['cpk_code_display'] ?? null;
@@ -254,11 +259,21 @@ class SolrLibrary extends \KnihovnyCz\RecordDriver\SolrMarc
         return $coords;
     }
 
+    /**
+     * Does library has any additional data? (sigla or last update date)
+     *
+     * @return bool
+     */
     public function hasAdditionalInfo()
     {
         return (!empty($this->getSigla()) || !empty($this->getLastUpdated()) );
     }
 
+    /**
+     * Does library has any contact defined?
+     *
+     * @return bool
+     */
     public function hasContacts()
     {
         return (!empty($this->getPhone())
@@ -266,6 +281,11 @@ class SolrLibrary extends \KnihovnyCz\RecordDriver\SolrMarc
             || !empty($this->getLibResponsibility()));
     }
 
+    /**
+     * Does library has any provided service defined?
+     *
+     * @return bool
+     */
     public function hasServices()
     {
         return (!empty($this->getService())
@@ -273,6 +293,11 @@ class SolrLibrary extends \KnihovnyCz\RecordDriver\SolrMarc
             || !empty($this->getProject()));
     }
 
+    /**
+     * Does library has a branch?
+     *
+     * @return bool
+     */
     public function hasBranches()
     {
         return !empty($this->getLibBranch());
@@ -301,7 +326,11 @@ class SolrLibrary extends \KnihovnyCz\RecordDriver\SolrMarc
     }
 
     /**
-     * @param \Laminas\Config\Config $facetsConfig
+     * Attach facets config to property
+     *
+     * @param \Laminas\Config\Config $facetsConfig Config for facets
+     *
+     * @return void
      */
     public function attachFacetsConfig($facetsConfig)
     {

@@ -40,6 +40,8 @@ class ObalkyKnih extends \VuFind\Content\AbstractBase
 
     /**
      * Constructor
+     *
+     * @param \VuFind\Content\ObalkyKnihService $service
      */
     public function __construct($service)
     {
@@ -64,7 +66,7 @@ class ObalkyKnih extends \VuFind\Content\AbstractBase
         $data = $this->service->getData($ids);
         $toc = [];
         if(isset($data->toc_thumbnail_url)) {
-            $toc = "<br><a href='" . htmlspecialchars($data->toc_pdf_url)
+            $toc[] = "<br><a href='" . htmlspecialchars($data->toc_pdf_url)
                 . "' target='_blank' ><img src='"
                 . htmlspecialchars($data->toc_thumbnail_url) . "'></a>";
         }

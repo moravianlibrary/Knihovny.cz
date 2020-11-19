@@ -30,15 +30,26 @@ namespace KnihovnyCz\RecordDriver;
 
 trait MarcField996AwareTrait
 {
-    protected $sortFields =  ['y', 'v', 'i'];
-    protected $ilsConfig = null;
+    /**
+     * Sort fields
+     *
+     * @var array
+     */
+    protected array $sortFields =  ['y', 'v', 'i'];
+
+    /**
+     * ILS driver config
+     *
+     * @var array|null
+     */
+    protected ?array $ilsConfig = null;
 
     protected function getIlsConfig(): array
     {
         if ($this->ilsConfig === null && $this->hasILS()) {
               $this->ilsConfig = $this->ils->getDriverConfig();
         }
-        return $this->ilsConfig;
+        return $this->ilsConfig; // @phpstan-ignore-line
     }
 
     /**
@@ -55,7 +66,15 @@ trait MarcField996AwareTrait
         return array_map([$this, 'processField'], $fields);
     }
 
-    protected function processField($field)
+    /**
+     * Process field
+     *
+     * @param array $field
+     *
+     * @return array
+     *
+     */
+    protected function processField(array $field): array
     {
         $mappings = $this->get996Mappings();
         $holding = [];
@@ -292,7 +311,7 @@ trait MarcField996AwareTrait
                 break;
             }
         }
-        $ret = $first - $second;
+        $ret = $first - $second; // @phpstan-ignore-line
         return $found ? $ret : 0;
     }
 }

@@ -73,15 +73,19 @@ class UpdateContent extends \VuFind\AjaxHandler\AbstractBase
      */
     public function handleRequest(Params $params)
     {
-        /** @var Request $request */
-        $request = $params->getController()->getRequest();
-        $header = $request->getHeaders()->get('X-Gitlab-Event');
-        if ($header === false || $header->getFieldValue() !== 'Push Hook') {
+        $header = $params->fromHeader('X-Gitlab-Event');
+        if ($header === null || $header->getFieldValue() !== 'Push Hook') {
             return $this->formatErrorResponse(
                 'Bad webhook type. This handler could handle only \'Push Hook\' type.'
             );
         }
-        $body = json_decode($request->getContent(), true);
+        $controller = $params->getController();
+        if ($controller === null) {
+            throw new \Exception('Could not find controller');
+        }
+        $body = json_decode(
+            $controller->getRequest()->getContent(), true
+        );
         $ref = $body['ref'] ?? null;
         if (!preg_match('#refs/heads/(.*)#', $ref, $matches)) {
             return $this->formatErrorResponse(
