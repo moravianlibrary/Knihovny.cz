@@ -71,7 +71,7 @@ class DocumentTypes implements \VuFind\ContentBlock\ContentBlockInterface
     /**
      * DocumentTypes constructor.
      *
-     * @param $cm \VuFind\Config\PluginManager
+     * @param \VuFind\Config\PluginManager $configManager Configuration manager
      */
     public function __construct($configManager)
     {

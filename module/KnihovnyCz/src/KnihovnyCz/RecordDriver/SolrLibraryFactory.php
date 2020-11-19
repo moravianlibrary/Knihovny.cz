@@ -53,6 +53,7 @@ class SolrLibraryFactory extends SolrDefaultFactory
     public function __invoke(ContainerInterface $container, $requestedName,
         array $options = null
     ) {
+        /** @var SolrLibrary $driver */
         $driver = parent::__invoke($container, $requestedName, $options);
         $driver->attachFacetsConfig(
             $container->get(\VuFind\Config\PluginManager::class)->get('facets')

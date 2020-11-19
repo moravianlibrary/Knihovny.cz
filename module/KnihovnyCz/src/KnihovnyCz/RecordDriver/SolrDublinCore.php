@@ -20,7 +20,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  *
  * @category VuFind
- * @package  RecordDrivers      
+ * @package  RecordDrivers
  * @author   Josef Moravec <moravec@mzk.cz>
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     http://github.com/moravianlibrary/Knihovny.cz Knihovny.cz
@@ -123,6 +123,9 @@ class SolrDublinCore extends SolrDefault
     protected function getXmlFieldData(string $field): array
     {
         $dc = $this->parseXML();
+        if ($dc === null)  {
+            return [];
+        }
         $value = $dc->xpath('//dc:' . $field);
         return ($value === false) ? [] : array_map('strval', $value);
     }
@@ -147,6 +150,11 @@ class SolrDublinCore extends SolrDefault
             : parent::getXML($format, $baseUrl, $recordLink);
     }
 
+    /**
+     * Parse this record XML data into object
+     *
+     * @return \SimpleXMLElement|null
+     */
     protected function parseXML()
     {
         if (!isset($this->xmlCache)) {

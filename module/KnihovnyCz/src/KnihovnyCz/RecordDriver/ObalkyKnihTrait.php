@@ -39,6 +39,7 @@ trait ObalkyKnihTrait
 
     public function getObalkyKnihToc(): ?array
     {
+        $toc = null;
         $ids = $this->getThumbnail();
         if (!is_array($ids)) {
             return null;

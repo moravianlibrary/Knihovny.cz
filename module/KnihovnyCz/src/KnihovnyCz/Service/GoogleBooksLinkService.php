@@ -53,6 +53,7 @@ class GoogleBooksLinkService extends LinkServiceAbstractBase
 
         $url = 'https://www.googleapis.com/books/v1/volumes';
 
+        $params = [];
         if (!empty($isbn)) {
             $params = ['q' => 'isbn:' . str_replace("-", "", $isbn)];
         }

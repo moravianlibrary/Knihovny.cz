@@ -29,6 +29,8 @@
 
 namespace KnihovnyCz\Related;
 
+use KnihovnyCz\RecordDriver\SolrDefault;
+
 class SolrField implements \VuFind\Related\RelatedInterface
 {
     /**
@@ -42,7 +44,7 @@ class SolrField implements \VuFind\Related\RelatedInterface
      * Establishes base settings for making recommendations.
      *
      * @param string $settings Settings from config.ini
-     * @param \VuFind\RecordDriver\AbstractBase $driver Record driver object
+     * @param SolrDefault $driver Record driver object
      *
      * @return void
      */

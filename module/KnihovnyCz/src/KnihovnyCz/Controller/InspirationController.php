@@ -31,6 +31,11 @@ namespace KnihovnyCz\Controller;
 
 class InspirationController extends \VuFind\Controller\AbstractBase
 {
+    /**
+     * Home action
+     *
+     * @return \Laminas\View\Model\ViewModel
+     */
     public function homeAction()
     {
         $blocks = $this->serviceLocator->get(\VuFind\ContentBlock\BlockLoader::class)

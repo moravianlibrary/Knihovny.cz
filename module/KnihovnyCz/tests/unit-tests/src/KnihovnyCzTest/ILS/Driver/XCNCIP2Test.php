@@ -34,6 +34,13 @@ use Laminas\Http\Response as HttpResponse;
 
 class XCNCIP2Test extends \VuFindTest\ILS\Driver\XCNCIP2Test
 {
+    /**
+     * ILS driver
+     *
+     * @var \VuFind\ILS\Driver\XCNCIP2
+     */
+    protected $driver;
+
     protected $statusesTests = [
         [
             'file' => 'lookupItemSet/ARL.xml',
@@ -1843,6 +1850,9 @@ class XCNCIP2Test extends \VuFindTest\ILS\Driver\XCNCIP2Test
             );
         }
         $response = file_get_contents($file);
+        if ($response === false) {
+            throw new \Exception('Could not read file ' . $file);
+        }
         return HttpResponse::fromString($response);
     }
 }

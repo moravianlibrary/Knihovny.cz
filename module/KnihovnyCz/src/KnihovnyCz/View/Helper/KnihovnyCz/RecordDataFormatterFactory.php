@@ -42,6 +42,7 @@ class RecordDataFormatterFactory extends \VuFind\View\Helper\Root\RecordDataForm
     public function __invoke(ContainerInterface $container, $requestedName,
         array $options = null
     ) {
+        /** @var \VuFind\View\Helper\Root\RecordDataFormatter */
         $helper = parent::__invoke($container, $requestedName, $options);
         $helper->setDefaults('library', [$this, 'getDefaultLibraryCoreSpecs']);
         $helper->setDefaults('dictionary', [$this, 'getDefaultDictionaryCoreSpecs']);
@@ -230,6 +231,7 @@ class RecordDataFormatterFactory extends \VuFind\View\Helper\Root\RecordDataForm
         $spec->setLine('Access', 'getAccessRestrictions');
         $spec->setLine('Finding Aid', 'getFindingAids');
         $spec->setLine('Publication_Place', 'getHierarchicalPlaceNames');
+        /* @phpstan-ignore-next-line */
         $spec->setTemplateLine('Author Notes', true, 'data-authorNotes.phtml');
         $spec->setTemplateLine(
             'Related Items', 'getAllRecordLinks', 'data-allRecordLinks.phtml'

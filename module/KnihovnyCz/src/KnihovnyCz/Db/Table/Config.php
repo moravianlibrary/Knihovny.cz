@@ -65,6 +65,7 @@ class Config extends Gateway
     {
         $file = $this->getDataByConfigFile($file);
         $data = [];
+        /** @var \KnihovnyCz\Db\Row\Config $item */
         foreach ($file as $item) {
             // The type is array:
             if ($item->type == 'array') {

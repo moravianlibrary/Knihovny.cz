@@ -83,6 +83,7 @@ class ClearCacheCommand extends \Symfony\Component\Console\Command\Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $return = 0;
         $caches = $this->cacheManager->getCacheList();
         $baseCacheDir = $this->cacheManager->getCacheDir(false);
         foreach ($caches as $cacheName) {
@@ -117,9 +118,11 @@ class ClearCacheCommand extends \Symfony\Component\Console\Command\Command
             $error = ErrorHandler::stop();
             if ($error) {
                 $output->writeln('Error clearing cacheName "' . $cacheName . '"');
+                $return = 1;
             } else {
                 $output->writeln('Cache "' . $cacheName . '" cleared sucessfully');
             }
         }
+        return $return;
     }
 }

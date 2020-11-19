@@ -31,6 +31,11 @@ namespace KnihovnyCz\Controller;
 
 class PortalPageController extends \VuFind\Controller\AbstractBase
 {
+    /**
+     * Index action - redirects to legacy url
+     *
+     * @return \Laminas\Http\Response|\Laminas\View\Model\ViewModel
+     */
     public function indexAction()
     {
         return $this->redirect()->toRoute('content-page', $this->params()->fromRoute());

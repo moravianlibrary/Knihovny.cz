@@ -56,19 +56,27 @@ class InstConfigs extends \VuFind\Db\Table\Gateway
      *
      * Returns empty array if no configuration found for an institution
      *
-     * @param \KnihovnyCz\Db\Table\InstSources $source
+     * @param \KnihovnyCz\Db\Row\InstSources $source
      *
      * @return array
      */
-    public function getConfig($source)
+    public function getConfig(\KnihovnyCz\Db\Row\InstSources $source)
     {
         $config = [];
-        $templateSource = '!' . $source['driver'];
+        $templateSource = '!' . $source->driver;
         $this->applyConfig($config, $templateSource);
-        $this->applyConfig($config, $source['source']);
+        $this->applyConfig($config, $source->source);
         return $config;
     }
 
+    /**
+     * Add config on top of current one
+     *
+     * @param array $config
+     * @param string $source
+     *
+     * @return array
+     */
     protected function applyConfig(&$config, $source) {
         $dbConfig = $this->select(function (Select $select) use ($source)  {
             $select
@@ -88,5 +96,4 @@ class InstConfigs extends \VuFind\Db\Table\Gateway
 
         return $config;
     }
-
 }

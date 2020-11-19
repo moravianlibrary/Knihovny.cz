@@ -113,6 +113,7 @@ trait BuyLinksTrait
     {
         $link = $this->fields['external_links_str_mv'][0] ?? null;
         if ($link === null) {
+            /** @var \KnihovnyCz\RecordDriver\SolrDefault $parentRecord */
             $parentRecord = $this->getParentRecord();
             if ($parentRecord !== null) {
                 return $parentRecord->getAntikvariatyLink();

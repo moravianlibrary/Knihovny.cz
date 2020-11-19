@@ -30,7 +30,9 @@
 namespace KnihovnyCz\Config;
 
 use Interop\Container\ContainerInterface;
-use Laminas\ServiceManager\Factory\FactoryInterface;
+use Interop\Container\Exception\ContainerException;
+use Laminas\ServiceManager\Exception\ServiceNotCreatedException;
+use Laminas\ServiceManager\Exception\ServiceNotFoundException;
 
 class PluginManagerFactory extends \VuFind\Config\PluginManagerFactory
 {
@@ -51,6 +53,7 @@ class PluginManagerFactory extends \VuFind\Config\PluginManagerFactory
     public function __invoke(ContainerInterface $container, $requestedName,
         array $options = null
     ) {
+        /** @var PluginManager $service */
         $service = parent::__invoke($container, $requestedName, $options);
         $service->addAbstractFactory(\KnihovnyCz\Config\PluginFactory::class);
         return $service;
