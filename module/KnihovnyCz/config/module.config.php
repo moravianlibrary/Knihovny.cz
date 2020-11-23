@@ -180,9 +180,11 @@ $config = [
             'ajaxhandler' => [
                 'factories' => [
                     \KnihovnyCz\AjaxHandler\UpdateContent::class => \KnihovnyCz\AjaxHandler\UpdateContentFactory::class,
+                    \KnihovnyCz\AjaxHandler\Edd::class => \KnihovnyCz\AjaxHandler\EddFactory::class,
                 ],
                 'aliases' => [
                     'updateContent' => \KnihovnyCz\AjaxHandler\UpdateContent::class,
+                    'edd' => \KnihovnyCz\AjaxHandler\Edd::class,
                 ],
             ],
             'related' => [
