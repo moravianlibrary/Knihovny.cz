@@ -42,6 +42,28 @@
     <?php if (!empty($addThis)): ?>
       <li role="none"><a class="addThis addthis_button" href="https://www.addthis.com/bookmark.php?v=250&amp;pub=<?=urlencode($addThis)?>"><i class="fa fa-bookmark" aria-hidden="true"></i> <?=$this->transEsc('Bookmark')?></a></li>
     <?php endif; ?>
-    <?=$this->render('record/cart-buttons.phtml', ['id' => $this->driver->getUniqueId(), 'source' => $this->driver->getSourceIdentifier()]); ?>
+
+    <?php $cart = $this->cart(); ?>
+    <?php if ($cart->isActive()): ?>
+      <?php $cartId = $this->driver->getSourceIdentifier() . '|' . $this->driver->getUniqueId(); ?>
+      <li role="none" class="btn-bookbag-toggle" data-cart-id="<?=$this->escapeHtmlAttr($this->driver->getUniqueId())?>" data-cart-source="<?=$this->escapeHtmlAttr($this->driver->getSourceIdentifier())?>">
+        <a href="#" class="cart-add hidden<?php if(!$cart->contains($cartId)): ?> correct<?php endif ?>">
+          <span class="cart-link-label btn-type-add"><?=$this->transEsc('Add to Book Bag') ?></span>
+        </a>
+        <a href="#" class="cart-remove hidden<?php if($cart->contains($cartId)): ?> correct<?php endif ?>">
+          <span class="cart-link-label btn-type-minus"><?=$this->transEsc('Remove from Book Bag') ?></span>
+        </a>
+        <noscript>
+          <form method="post" name="addForm" action="<?=$this->url('cart-processor')?>">
+            <input type="hidden" name="ids[]" value="<?=$this->escapeHtmlAttr($cartId)?>" />
+            <?php if ($cart->contains($cartId)): ?>
+              <input class="btn btn-default" type="submit" name="delete" value="<?=$this->transEsc('Remove from Book Bag')?>"/>
+            <?php else: ?>
+              <input class="btn btn-default" type="submit" name="add" value="<?=$this->transEsc('Add to Book Bag')?>"/>
+            <?php endif; ?>
+          </form>
+        </noscript>
+      </li>
+    <?php endif; ?>
   </ul>
 </nav>
