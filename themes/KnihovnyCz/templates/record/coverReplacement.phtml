@@ -1,0 +1,6 @@
+<?php
+  $formats = $this->driver->getFormats();
+  $format = end($formats);
+  $formatClass = $this->record($this->driver)->getFormatClass($format);
+?>
+<i class="cover-icon <?=$formatClass?>"></i>

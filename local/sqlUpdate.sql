@@ -1087,7 +1087,7 @@ INSERT INTO `config` (`id`, `file_id`, `section_id`, `item_id`, `array_key`, `va
 (8,	1,	3,	2,	NULL,	'doctypes_widget_norms;doctypes_widget_norms_description;pr-format-norms;0/NORMS/',	10,	1),
 (9,	1,	3,	2,	NULL,	'doctypes_widget_maps;doctypes_widget_maps_description;pr-format-maps;0/MAPS/',	20,	1),
 (10,	1,	3,	2,	NULL,	'doctypes_widget_legislative_laws;doctypes_widget_legislative_laws_description;pr-format-legislative;0/LEGISLATIVE/',	30,	1),
-(11,	1,	3,	2,	NULL,	'doctypes_widget_authorities;doctypes_widget_authorities_description;pr-format-user-single5;1/OTHER/PERSON/',	40,	1),
+(11,	1,	3,	2,	NULL,	'doctypes_widget_authorities;doctypes_widget_authorities_description;pr-format-otherperson;1/OTHER/PERSON/',	40,	1),
 (12,	1,	3,	2,	NULL,	'doctypes_widget_patents;doctypes_widget_patents_description;pr-format-patents;0/PATENTS/',	50,	1),
 (13,	1,	3,	2,	NULL,	'doctypes_widget_articles;doctypes_widget_articles_description;pr-format-articles;0/ARTICLES/',	60,	1),
 (14,	1,	3,	2,	NULL,	'doctypes_widget_musical_scores;doctypes_widget_musical_scores_description;pr-format-musicalscores;0/MUSICAL_SCORES/',	70,	1);
