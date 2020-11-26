@@ -30,6 +30,15 @@ namespace KnihovnyCz\ContentBlock;
 
 use Laminas\Db\Sql\Predicate\Expression;
 
+/**
+ * Class Inspiration
+ *
+ * @category VuFind
+ * @package  KnihovnyCz\ContentBlock
+ * @author   Josef Moravec <moravec@mzk.cz>
+ * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
+ * @link     https://knihovny.cz Main Page
+ */
 class Inspiration implements \VuFind\ContentBlock\ContentBlockInterface
 {
     /**
@@ -98,7 +107,8 @@ class Inspiration implements \VuFind\ContentBlock\ContentBlockInterface
     /**
      * Constructor
      *
-     * @param \VuFind\Db\Table\PluginManager $tables  Table manager
+     * @param \VuFind\Db\Table\PluginManager $tables Table manager
+     * @param \VuFind\Record\Loader          $loader Record loader
      */
     public function __construct(\VuFind\Db\Table\PluginManager $tables,
         \VuFind\Record\Loader $loader
@@ -167,7 +177,11 @@ class Inspiration implements \VuFind\ContentBlock\ContentBlockInterface
     }
 
     /**
-     * @inheritDoc
+     * Store the configuration of the content block.
+     *
+     * @param string $settings Settings from searches.ini.
+     *
+     * @return void
      */
     public function setConfig($settings)
     {

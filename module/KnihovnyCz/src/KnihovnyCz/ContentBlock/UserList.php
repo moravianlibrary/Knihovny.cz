@@ -28,6 +28,15 @@
  */
 namespace KnihovnyCz\ContentBlock;
 
+/**
+ * Class UserList
+ *
+ * @category VuFind
+ * @package  KnihovnyCz\ContentBlock
+ * @author   Josef Moravec <moravec@mzk.cz>
+ * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
+ * @link     https://knihovny.cz Main Page
+ */
 class UserList implements \VuFind\ContentBlock\ContentBlockInterface
 {
     /**
@@ -61,6 +70,7 @@ class UserList implements \VuFind\ContentBlock\ContentBlockInterface
     /**
      * Constructor
      *
+     * @param \VuFind\Search\SearchRunner $runner Search runner
      */
     public function __construct(\VuFind\Search\SearchRunner $runner)
     {
@@ -74,13 +84,18 @@ class UserList implements \VuFind\ContentBlock\ContentBlockInterface
      */
     protected function getUserList()
     {
-        return $this->runner->run(['id' => $this->listId, 'limit' => $this->limit],
+        return $this->runner->run(
+            ['id' => $this->listId, 'limit' => $this->limit],
             $this->searchClassId
         );
     }
 
     /**
-     * @inheritDoc
+     * Store the configuration of the content block.
+     *
+     * @param string $settings Settings from searches.ini.
+     *
+     * @return void
      */
     public function setConfig($settings)
     {
@@ -89,7 +104,9 @@ class UserList implements \VuFind\ContentBlock\ContentBlockInterface
     }
 
     /**
-     * @inheritDoc
+     * Return context variables used for rendering the block's template.
+     *
+     * @return array
      */
     public function getContext()
     {

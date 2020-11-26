@@ -32,8 +32,18 @@ use Interop\Container\ContainerInterface;
 use Interop\Container\Exception\ContainerException;
 use Laminas\ServiceManager\Exception\ServiceNotCreatedException;
 use Laminas\ServiceManager\Exception\ServiceNotFoundException;
+use Laminas\ServiceManager\Factory\FactoryInterface;
 
-class UpdateContentFactory implements \Laminas\ServiceManager\Factory\FactoryInterface
+/**
+ * Class UpdateContentFactory
+ *
+ * @category VuFind
+ * @package  KnihovnyCz\AjaxHandler
+ * @author   Josef Moravec <moravec@mzk.cz>
+ * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
+ * @link     https://knihovny.cz Main Page
+ */
+class UpdateContentFactory implements FactoryInterface
 {
     /**
      * Create an object
@@ -55,7 +65,9 @@ class UpdateContentFactory implements \Laminas\ServiceManager\Factory\FactoryInt
         array $options = null
     ) {
         if (!empty($options)) {
-            throw new ServiceNotCreatedException('Unexpected options passed to factory.');
+            throw new ServiceNotCreatedException(
+                'Unexpected options passed to factory.'
+            );
         }
         return new $requestedName(
             $container->get(\GitWrapper\GitWorkingCopy::class),

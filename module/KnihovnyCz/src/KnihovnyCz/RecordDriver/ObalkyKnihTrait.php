@@ -32,10 +32,29 @@ use VuFind\Content\ObalkyKnihService;
 use VuFindCode\ISBN;
 use VuFindCode\ISMN;
 
+/**
+ * Trait ObalkyKnihTrait
+ *
+ * @category VuFind
+ * @package  KnihovnyCz\RecordDriver
+ * @author   Josef Moravec <moravec@mzk.cz>
+ * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
+ * @link     https://knihovny.cz Main Page
+ */
 trait ObalkyKnihTrait
 {
+    /**
+     * ObalkyKnih.cz API client
+     *
+     * @var ObalkyKnihService
+     */
     protected ObalkyKnihService $obalkyKnih;
 
+    /**
+     * Get TOC URL
+     *
+     * @return array|null
+     */
     public function getObalkyKnihToc(): ?array
     {
         $toc = null;
@@ -62,7 +81,9 @@ trait ObalkyKnihTrait
     /**
      * Attach service for ObalkyKnih.cz
      *
-     * @param ObalkyKnihService $obalkyService
+     * @param ObalkyKnihService $obalkyService ObalkyKnih.cz API client
+     *
+     * @return void
      */
     public function attachObalkyKnihService(ObalkyKnihService $obalkyService): void
     {

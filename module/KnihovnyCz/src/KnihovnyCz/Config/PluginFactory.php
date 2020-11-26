@@ -32,9 +32,20 @@ use Interop\Container\ContainerInterface;
 use KnihovnyCz\Db\Table\Config as ConfigTable;
 use Laminas\Config\Config;
 
+/**
+ * Class PluginFactory
+ *
+ * @category VuFind
+ * @package  KnihovnyCz\Config
+ * @author   Josef Moravec <moravec@mzk.cz>
+ * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
+ * @link     https://knihovny.cz Main Page
+ */
 class PluginFactory extends \VuFind\Config\PluginFactory
 {
     /**
+     * Configuration table
+     *
      * @var ConfigTable
      */
     protected $configTable;

@@ -21,7 +21,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  *
  * @category VuFind
- * @package  KnihovnyCzConsole\Command\Util
+ * @package  KnihovnyCzConsole
  * @author   Josef Moravec <moravec@mzk.cz>
  * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://knihovny.cz Main Page
@@ -34,6 +34,15 @@ use Laminas\ServiceManager\Exception\ServiceNotCreatedException;
 use Laminas\ServiceManager\Exception\ServiceNotFoundException;
 use Laminas\ServiceManager\Factory\FactoryInterface;
 
+/**
+ * Class ExpireUsersCommandFactory
+ *
+ * @category VuFind
+ * @package  KnihovnyCzConsole
+ * @author   Josef Moravec <moravec@mzk.cz>
+ * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
+ * @link     https://knihovny.cz Main Page
+ */
 class ExpireUsersCommandFactory implements FactoryInterface
 {
     /**

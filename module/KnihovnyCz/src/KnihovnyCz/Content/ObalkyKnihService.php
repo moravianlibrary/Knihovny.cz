@@ -28,6 +28,15 @@
  */
 namespace KnihovnyCz\Content;
 
+/**
+ * Class ObalkyKnihService
+ *
+ * @category VuFind
+ * @package  KnihovnyCz\Content
+ * @author   Josef Moravec <moravec@mzk.cz>
+ * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
+ * @link     https://knihovny.cz Main Page
+ */
 class ObalkyKnihService extends \VuFind\Content\ObalkyKnihService
 {
     /**
@@ -50,14 +59,14 @@ class ObalkyKnihService extends \VuFind\Content\ObalkyKnihService
                 "Configuration for ObalkyKnih.cz service is not valid"
             );
         }
-        $this->authorityApiUrl =
-            $config->base_url[0] . $config->authority_endpoint . '/meta';
+        $this->authorityApiUrl
+            = $config->base_url[0] . $config->authority_endpoint . '/meta';
     }
 
     /**
      * Get obalkyknih metadata for authority
      *
-     * @param string $authId
+     * @param string $authId Authority record identifier
      *
      * @return object|null
      */
@@ -75,7 +84,7 @@ class ObalkyKnihService extends \VuFind\Content\ObalkyKnihService
     /**
      * Get obalkyknih metadata for authority from external service
      *
-     * @param string $authId
+     * @param string $authId Authority record identifier
      *
      * @return object|null
      * @throws \Exception

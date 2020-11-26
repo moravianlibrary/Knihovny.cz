@@ -32,6 +32,15 @@ use Laminas\Db\Adapter\Adapter;
 use VuFind\Db\Row\RowGateway;
 use VuFind\Db\Table\PluginManager;
 
+/**
+ * Class Widget
+ *
+ * @category VuFind
+ * @package  KnihovnyCz\Db\Table
+ * @author   Josef Moravec <moravec@mzk.cz>
+ * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
+ * @link     https://knihovny.cz Main Page
+ */
 class Widget extends \VuFind\Db\Table\Gateway
 {
     /**

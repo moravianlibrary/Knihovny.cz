@@ -28,6 +28,15 @@
  */
 namespace KnihovnyCz\Db\Row;
 
+/**
+ * Class WidgetContent
+ *
+ * @category VuFind
+ * @package  KnihovnyCz\Db\Row
+ * @author   Josef Moravec <moravec@mzk.cz>
+ * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
+ * @link     https://knihovny.cz Main Page
+ */
 class WidgetContent extends \VuFind\Db\Row\RowGateway
     implements \VuFind\Db\Table\DbTableAwareInterface
 {

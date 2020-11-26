@@ -29,9 +29,20 @@ namespace KnihovnyCz\RecordDriver;
 
 use VuFind\View\Helper\Root\RecordLink;
 
+/**
+ * Class solr dublin core record driver
+ *
+ * @category VuFind
+ * @package  RecordDrivers
+ * @author   Josef Moravec <moravec@mzk.cz>
+ * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
+ * @link     http://github.com/moravianlibrary/Knihovny.cz Knihovny.cz
+ */
 class SolrDublinCore extends SolrDefault
 {
     /**
+     * Parsed XML
+     *
      * @var \SimpleXMLElement|null
      */
     protected $xmlCache = null;
@@ -117,7 +128,11 @@ class SolrDublinCore extends SolrDefault
     }
 
     /**
-     * Get xml field data as array of strings
+     * Get XML field data as array of strings
+     *
+     * @param string $field XML tag
+     *
+     * @return array
      */
     protected function getXmlFieldData(string $field): array
     {

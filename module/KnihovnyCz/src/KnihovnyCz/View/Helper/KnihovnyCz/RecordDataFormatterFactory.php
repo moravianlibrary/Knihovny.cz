@@ -31,17 +31,25 @@ namespace KnihovnyCz\View\Helper\KnihovnyCz;
 use Interop\Container\ContainerInterface;
 use VuFind\View\Helper\Root\RecordDataFormatter\SpecBuilder;
 
-class RecordDataFormatterFactory extends \VuFind\View\Helper\Root\RecordDataFormatterFactory
+class RecordDataFormatterFactory
+    extends \VuFind\View\Helper\Root\RecordDataFormatterFactory
 {
     /**
      * Create the helper.
+     *
+     * @param ContainerInterface $container     Service manager
+     * @param string             $requestedName Service being created
+     * @param null|array         $options       Extra options (optional)
      *
      * @return object
      */
     public function __invoke(ContainerInterface $container, $requestedName,
         array $options = null
     ) {
-        /** @var \VuFind\View\Helper\Root\RecordDataFormatter */
+        /**
+         * Record data formatter view helper
+         * @var \VuFind\View\Helper\Root\RecordDataFormatter
+         */
         $helper = parent::__invoke($container, $requestedName, $options);
         $helper->setDefaults('library', [$this, 'getDefaultLibraryCoreSpecs']);
         $helper->setDefaults('dictionary', [$this, 'getDefaultDictionaryCoreSpecs']);
@@ -51,7 +59,9 @@ class RecordDataFormatterFactory extends \VuFind\View\Helper\Root\RecordDataForm
     }
 
     /**
-     * @return array;
+     * Library record detail display specifications
+     *
+     * @return array
      */
     public function getDefaultLibraryCoreSpecs()
     {
@@ -102,7 +112,8 @@ class RecordDataFormatterFactory extends \VuFind\View\Helper\Root\RecordDataForm
             'Book search', 'getBookSearchFilter',
             'search_in_library_link.phtml', 'fa fa-search', false
         );
-        $setLine('Address', 'getLibraryAddress', null, 'fa fa-map-marker',
+        $setLine(
+            'Address', 'getLibraryAddress', null, 'fa fa-map-marker',
             false, 'library-large'
         );
         $setLine(
@@ -123,7 +134,9 @@ class RecordDataFormatterFactory extends \VuFind\View\Helper\Root\RecordDataForm
     }
 
     /**
-     * @return array;
+     * Dictionary record detail display specifications
+     *
+     * @return array
      */
     public function getDefaultDictionaryCoreSpecs()
     {
@@ -144,20 +157,26 @@ class RecordDataFormatterFactory extends \VuFind\View\Helper\Root\RecordDataForm
     }
 
     /**
-     * @return array;
+     * Authority record detail display specifications
+     *
+     * @return array
      */
     public function getDefaultAuthorityCoreSpecs()
     {
         $spec = new SpecBuilder();
-        $spec->setLine('Bibliographic Details', 'getSummary' /*'getBibliographicDetails'*/);
+        $spec->setLine('Bibliographic Details', 'getSummary');
         $spec->setLine('Alternative names', 'getAddedEntryPersonalNames');
         $spec->setLine('Source', 'getSource');
-        $spec->setTemplateLine('Published also like', 'getPseudonyms', 'pseudonyms.phtml');
+        $spec->setTemplateLine(
+            'Published also like', 'getPseudonyms', 'pseudonyms.phtml'
+        );
         $spec->setLine(
             'Format', 'getFormats', 'RecordHelper',
             ['helperMethod' => 'getFormatList']
         );
-        $spec->setTemplateLine('Publications', 'getRelatedUrls', 'publicationurls.phtml');
+        $spec->setTemplateLine(
+            'Publications', 'getRelatedUrls', 'publicationurls.phtml'
+        );
 
         return $spec->getArray();
     }
@@ -188,7 +207,10 @@ class RecordDataFormatterFactory extends \VuFind\View\Helper\Root\RecordDataForm
         );
         $spec->setLine('Language', 'getLanguages');
         $spec->setLine('Document range', 'getRange');
-        $spec->setTemplateLine('From monographic series', 'getMonographicSeries', 'data-monographic-series.phtml');
+        $spec->setTemplateLine(
+            'From monographic series', 'getMonographicSeries',
+            'data-monographic-series.phtml'
+        );
         $spec->setTemplateLine(
             'Published', 'getPublicationDetails', 'data-publicationDetails.phtml'
         );

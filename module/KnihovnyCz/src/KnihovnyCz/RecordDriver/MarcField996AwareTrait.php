@@ -71,7 +71,6 @@ trait MarcField996AwareTrait
      * @param array $field
      *
      * @return array
-     *
      */
     protected function processField(array $field): array
     {

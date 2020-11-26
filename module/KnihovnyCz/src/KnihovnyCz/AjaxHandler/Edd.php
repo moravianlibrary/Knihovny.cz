@@ -31,6 +31,15 @@ namespace KnihovnyCz\AjaxHandler;
 use Laminas\Mvc\Controller\Plugin\Params;
 use VuFind\Http\PhpEnvironment\Request;
 
+/**
+ * Class Edd - API for electronic document delivery
+ *
+ * @category VuFind
+ * @package  KnihovnyCz\AjaxHandler
+ * @author   Vaclav Rosecky <vaclav.rosecky@mzk.cz>
+ * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
+ * @link     https://knihovny.cz Main Page
+ */
 class Edd extends \VuFind\AjaxHandler\AbstractBase
 {
     /**
@@ -43,6 +52,7 @@ class Edd extends \VuFind\AjaxHandler\AbstractBase
     /**
      * Edd constructor.
      *
+     * @param \VuFindSearch\Service $searchService Search service class
      */
     public function __construct(\VuFindSearch\Service $searchService)
     {
@@ -73,7 +83,9 @@ class Edd extends \VuFind\AjaxHandler\AbstractBase
         if (!empty($year)) {
             $fq[] = 'periodical_availability_int_mv:' . addcslashes($year, '"');
         }
-        $params = new \VuFindSearch\ParamBag(['fq' => $fq, 'fl' => 'id, sigla_display, recordtype', 'hl' => false ]);
+        $params = new \VuFindSearch\ParamBag(
+            ['fq' => $fq, 'fl' => 'id, sigla_display, recordtype', 'hl' => false ]
+        );
         $result = $this->searchService->search('Solr', $query, 0, 10, $params);
         $records = $result->getRecords();
         $results = [];

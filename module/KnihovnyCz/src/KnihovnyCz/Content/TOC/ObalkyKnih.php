@@ -29,6 +29,15 @@ declare(strict_types=1);
  */
 namespace KnihovnyCz\Content\TOC;
 
+/**
+ * Class ObalkyKnih
+ *
+ * @category VuFind
+ * @package  KnihovnyCz\Content\TOC
+ * @author   Josef Moravec <moravec@mzk.cz>
+ * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
+ * @link     https://knihovny.cz Main Page
+ */
 class ObalkyKnih extends \VuFind\Content\AbstractBase
 {
     /**
@@ -41,7 +50,7 @@ class ObalkyKnih extends \VuFind\Content\AbstractBase
     /**
      * Constructor
      *
-     * @param \VuFind\Content\ObalkyKnihService $service
+     * @param \VuFind\Content\ObalkyKnihService $service ObalkyKnih.cz API client
      */
     public function __construct($service)
     {

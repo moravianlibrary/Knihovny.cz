@@ -30,12 +30,21 @@ namespace KnihovnyCz\Service;
 
 use KnihovnyCz\RecordDriver\SolrDefault;
 
+/**
+ * Class GoogleBooksLinkService
+ *
+ * @category VuFind
+ * @package  KnihovnyCz\Service
+ * @author   Josef Moravec <moravec@mzk.cz>
+ * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
+ * @link     https://knihovny.cz Main Page
+ */
 class GoogleBooksLinkService extends LinkServiceAbstractBase
 {
     /**
      * Get link to record representation on given service
      *
-     * @param SolrDefault $record
+     * @param SolrDefault $record Record driver
      *
      * @return string|null
      */
@@ -67,7 +76,8 @@ class GoogleBooksLinkService extends LinkServiceAbstractBase
 
         $link = null;
         if (!empty($data) && $data['totalItems'] >= 1) {
-            $canonicalLink = $data['items'][0]['volumeInfo']['canonicalVolumeLink'] ?? null;
+            $canonicalLink
+                = $data['items'][0]['volumeInfo']['canonicalVolumeLink'] ?? null;
             $link = isset($canonicalLink) ? $canonicalLink . '&sitesec=buy' : null;
         }
 

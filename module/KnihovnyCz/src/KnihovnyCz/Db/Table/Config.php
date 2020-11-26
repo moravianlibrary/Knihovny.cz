@@ -36,6 +36,15 @@ use VuFind\Db\Row\RowGateway;
 use VuFind\Db\Table\Gateway;
 use VuFind\Db\Table\PluginManager;
 
+/**
+ * Class Config
+ *
+ * @category VuFind
+ * @package  KnihovnyCz\Db\Table
+ * @author   Josef Moravec <moravec@mzk.cz>
+ * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
+ * @link     https://knihovny.cz Main Page
+ */
 class Config extends Gateway
 {
     /**
@@ -64,7 +73,11 @@ class Config extends Gateway
     {
         $file = $this->getDataByConfigFile($file);
         $data = [];
-        /** @var \KnihovnyCz\Db\Row\Config $item */
+        /**
+         * Configuration item
+         *
+         * @var \KnihovnyCz\Db\Row\Config $item
+         */
         foreach ($file as $item) {
             // The type is array:
             if ($item->type == 'array') {
@@ -72,7 +85,7 @@ class Config extends Gateway
                 if (isset($item->array_key) && $item->array_key !== null) {
                     $data[$item->section][$item->item][$item->array_key]
                         = $item->value;
-                // We do not have array_key, just leave it on numbers:
+                    // We do not have array_key, just leave it on numbers:
                 } else {
                     $data[$item->section][$item->item][] = $item->value;
                 }
@@ -93,15 +106,21 @@ class Config extends Gateway
      */
     protected function getDataByConfigFile(string $filename): ResultSetInterface
     {
-        $file = $this->select(function (Select $select) use ($filename) {
-            $select
-                ->columns(['id', 'array_key', 'value'])
-                ->join('config_files', 'file_id = config_files.id', [])
-                ->join('config_sections', 'section_id = config_sections.id', ['section' => 'section_name'])
-                ->join('config_items', 'item_id = config_items.id', ['type' => 'type', 'item' => 'name'])
-                ->where(['config_files.file_name' => $filename, 'active' => 1])
-                ->order(['item', 'order']);
-        });
+        $file = $this->select(
+            function (Select $select) use ($filename) {
+                $select
+                    ->columns(['id', 'array_key', 'value'])
+                    ->join('config_files', 'file_id = config_files.id', [])
+                    ->join(
+                        'config_sections', 'section_id = config_sections.id',
+                        ['section' => 'section_name']
+                    )->join(
+                        'config_items', 'item_id = config_items.id',
+                        ['type' => 'type', 'item' => 'name']
+                    )->where(['config_files.file_name' => $filename, 'active' => 1])
+                    ->order(['item', 'order']);
+            }
+        );
         return $file;
     }
 }

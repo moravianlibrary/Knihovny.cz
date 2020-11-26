@@ -34,6 +34,15 @@ use Laminas\ServiceManager\Exception\ServiceNotCreatedException;
 use Laminas\ServiceManager\Exception\ServiceNotFoundException;
 use Laminas\ServiceManager\Factory\FactoryInterface;
 
+/**
+ * Class GitFactory
+ *
+ * @category VuFind
+ * @package  KnihovnyCz\Service
+ * @author   Josef Moravec <moravec@mzk.cz>
+ * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
+ * @link     https://knihovny.cz Main Page
+ */
 class GitFactory implements FactoryInterface
 {
     /**
@@ -53,13 +62,16 @@ class GitFactory implements FactoryInterface
     public function __invoke(ContainerInterface $container, $requestedName,
         array $options = null
     ) {
-        $config = $container->get(\VuFind\Config\PluginManager::class)->get('content')
-            ->Repository;
+        $config = $container->get(\VuFind\Config\PluginManager::class)
+            ->get('content')->Repository;
         if (!isset($config['repository_path'])
             || !is_dir($config['repository_path'])
             || !is_writable($config['repository_path'])
         ) {
-            throw new ServiceNotCreatedException("Service $requestedName could not be created. Bad repository_path configuration: " . $config['repository_path']);
+            throw new ServiceNotCreatedException(
+                "Service $requestedName could not be created. " .
+                "Bad repository_path configuration: " . $config['repository_path']
+            );
         }
         $gitWrapper = new \GitWrapper\GitWrapper();
         if (isset($config['ssh_key_file'])) {

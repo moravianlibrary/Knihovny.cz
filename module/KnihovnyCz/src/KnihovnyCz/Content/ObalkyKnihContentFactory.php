@@ -33,6 +33,15 @@ use Laminas\ServiceManager\Exception\ServiceNotCreatedException;
 use Laminas\ServiceManager\Exception\ServiceNotFoundException;
 use Laminas\ServiceManager\Factory\FactoryInterface;
 
+/**
+ * Class Obalky Knih Content Factory
+ *
+ * @category VuFind
+ * @package  KnihovnyCz\Content
+ * @author   Josef Moravec <moravec@mzk.cz>
+ * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
+ * @link     https://knihovny.cz Main Page
+ */
 class ObalkyKnihContentFactory implements FactoryInterface
 {
     /**
@@ -54,7 +63,9 @@ class ObalkyKnihContentFactory implements FactoryInterface
         array $options = null
     ) {
         if (!empty($options)) {
-            throw new ServiceNotCreatedException('Unexpected options passed to factory.');
+            throw new ServiceNotCreatedException(
+                'Unexpected options passed to factory.'
+            );
         }
 
         $service = $container->get(\VuFind\Content\ObalkyKnihService::class);

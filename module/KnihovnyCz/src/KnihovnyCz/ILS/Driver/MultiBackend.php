@@ -31,8 +31,18 @@ namespace KnihovnyCz\ILS\Driver;
 use KnihovnyCz\Db\Table\InstConfigs;
 use KnihovnyCz\Db\Table\InstSources;
 use VuFind\Auth\ILSAuthenticator;
+use VuFind\Config\PluginManager as ConfigManager;
 use VuFind\ILS\Driver\PluginManager;
 
+/**
+ * Class MultiBackend
+ *
+ * @category VuFind
+ * @package  KnihovnyCz\ILS\Driver
+ * @author   Josef Moravec <moravec@mzk.cz>
+ * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
+ * @link     https://knihovny.cz Main Page
+ */
 class MultiBackend extends \VuFind\ILS\Driver\MultiBackend
 {
     /**
@@ -52,13 +62,17 @@ class MultiBackend extends \VuFind\ILS\Driver\MultiBackend
     /**
      * Constructor
      *
-     * @aparam \VuFind\Config\PluginManager  $configLoader Configuration loader
-     * @aparam ILSAuthenticator $ilsAuth      ILS authenticator
-     * @aparam PluginManager                 $dm           ILS driver manager
+     * @param ConfigManager    $configLoader Configuration loader
+     * @param ILSAuthenticator $ilsAuth      ILS authenticator
+     * @param PluginManager    $dm           ILS driver manager
+     * @param InstConfigs      $instConfigs  Instances configurations
+     * @param InstSources      $instSources  Instances names
      */
-    public function __construct(\VuFind\Config\PluginManager $configLoader,
-        ILSAuthenticator $ilsAuth, PluginManager $dm, InstConfigs $instConfigs, InstSources $instSources)
-    {
+    public function __construct(
+        ConfigManager $configLoader,
+        ILSAuthenticator $ilsAuth, PluginManager $dm, InstConfigs $instConfigs,
+        InstSources $instSources
+    ) {
         $this->instConfigs = $instConfigs;
         $this->instSources = $instSources;
         parent::__construct($configLoader, $ilsAuth, $dm);

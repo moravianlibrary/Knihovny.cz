@@ -30,6 +30,15 @@ namespace KnihovnyCz\Config;
 
 use Laminas\ServiceManager\AbstractPluginManager;
 
+/**
+ * Class PluginManager
+ *
+ * @category VuFind
+ * @package  KnihovnyCz\Config
+ * @author   Josef Moravec <moravec@mzk.cz>
+ * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
+ * @link     https://knihovny.cz Main Page
+ */
 class PluginManager extends \VuFind\Config\PluginManager
 {
     /**

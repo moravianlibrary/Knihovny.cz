@@ -28,6 +28,15 @@
  */
 namespace KnihovnyCz\RecordTab;
 
+/**
+ * Class LibraryContacts
+ *
+ * @category VuFind
+ * @package  KnihovnyCz\RecordTab
+ * @author   Josef Moravec <moravec@mzk.cz>
+ * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
+ * @link     https://knihovny.cz Main Page
+ */
 class LibraryContacts extends \VuFind\RecordTab\AbstractBase
 {
     /**

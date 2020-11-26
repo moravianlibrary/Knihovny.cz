@@ -33,6 +33,15 @@ use Laminas\ServiceManager\Exception\ServiceNotCreatedException;
 use Laminas\ServiceManager\Exception\ServiceNotFoundException;
 use Psr\Container\ContainerInterface;
 
+/**
+ * Class EddFactory - API for electronic document delivery
+ *
+ * @category VuFind
+ * @package  KnihovnyCz\AjaxHandler
+ * @author   Vaclav Rosecky <vaclav.rosecky@mzk.cz>
+ * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
+ * @link     https://knihovny.cz Main Page
+ */
 class EddFactory implements \Laminas\ServiceManager\Factory\FactoryInterface
 {
     /**
@@ -52,7 +61,7 @@ class EddFactory implements \Laminas\ServiceManager\Factory\FactoryInterface
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __invoke(ContainerInterface $container, $requestedName,
-                             array $options = null
+        array $options = null
     ) {
         if (!empty($options)) {
             throw new \Exception('Unexpected options passed to factory.');

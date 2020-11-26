@@ -30,6 +30,15 @@ namespace KnihovnyCz\Content\Covers;
 
 use KnihovnyCz\Content\ObalkyKnihService;
 
+/**
+ * Class ObalkyKnih
+ *
+ * @category VuFind
+ * @package  KnihovnyCz\Content\Covers
+ * @author   Josef Moravec <moravec@mzk.cz>
+ * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
+ * @link     https://knihovny.cz Main Page
+ */
 class ObalkyKnih extends \VuFind\Content\Covers\ObalkyKnih
 {
     /**
@@ -63,8 +72,8 @@ class ObalkyKnih extends \VuFind\Content\Covers\ObalkyKnih
     /**
      * Get image url for given authority
      *
-     * @param string $authId
-     * @param string $size
+     * @param string $authId Authority record identifier
+     * @param string $size   Desired size of cover
      *
      * @return string|false
      */

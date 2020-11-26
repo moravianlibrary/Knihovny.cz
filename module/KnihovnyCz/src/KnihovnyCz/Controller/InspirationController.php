@@ -28,6 +28,15 @@
  */
 namespace KnihovnyCz\Controller;
 
+/**
+ * Class Inspiration
+ *
+ * @category VuFind
+ * @package  KnihovnyCz\Controllers
+ * @author   Josef Moravec <moravec@mzk.cz>
+ * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
+ * @link     https://knihovny.cz Main Page
+ */
 class InspirationController extends \VuFind\Controller\AbstractBase
 {
     /**

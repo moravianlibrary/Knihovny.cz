@@ -37,6 +37,7 @@ use Laminas\ServiceManager\Exception\ServiceNotCreatedException;
  * @package  KnihovnyCz\ContentBlock
  * @author   Josef Moravec <moravec@mzk.cz>
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
+ * @link     https://knihovny.cz Main Page
  */
 class DocumentTypes implements \VuFind\ContentBlock\ContentBlockInterface
 {
@@ -90,6 +91,8 @@ class DocumentTypes implements \VuFind\ContentBlock\ContentBlockInterface
             throw new ServiceNotCreatedException('Missing configuration.');
         }
         /**
+         * Search configuration
+         *
          * @var \Laminas\Config\Config
          */
         $searchConfig = $this->configManager->get('searches');
@@ -110,15 +113,17 @@ class DocumentTypes implements \VuFind\ContentBlock\ContentBlockInterface
      */
     public function getDocumentTypes()
     {
-        return array_map(function ($item) {
-            $itemArray = explode(';', $item);
-            return [
+        return array_map(
+            function ($item) {
+                $itemArray = explode(';', $item);
+                return [
                 'title' => $itemArray[0] ?? null,
                 'description' => $itemArray[1] ?? null,
                 'icon' => $itemArray[2] ?? null,
                 'value' => $itemArray[3] ?? null,
-            ];
-        }, $this->itemsConfig->toArray());
+                ];
+            }, $this->itemsConfig->toArray()
+        );
     }
 
     /**

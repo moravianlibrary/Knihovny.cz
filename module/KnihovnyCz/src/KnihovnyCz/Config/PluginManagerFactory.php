@@ -33,6 +33,15 @@ use Interop\Container\Exception\ContainerException;
 use Laminas\ServiceManager\Exception\ServiceNotCreatedException;
 use Laminas\ServiceManager\Exception\ServiceNotFoundException;
 
+/**
+ * Class PluginManagerFactory
+ *
+ * @category VuFind
+ * @package  KnihovnyCz\Config
+ * @author   Josef Moravec <moravec@mzk.cz>
+ * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
+ * @link     https://knihovny.cz Main Page
+ */
 class PluginManagerFactory extends \VuFind\Config\PluginManagerFactory
 {
     /**
@@ -52,7 +61,11 @@ class PluginManagerFactory extends \VuFind\Config\PluginManagerFactory
     public function __invoke(ContainerInterface $container, $requestedName,
         array $options = null
     ) {
-        /** @var PluginManager $service */
+        /**
+         * Config plugin manager
+         *
+         * @var PluginManager $service
+         */
         $service = parent::__invoke($container, $requestedName, $options);
         $service->addAbstractFactory(\KnihovnyCz\Config\PluginFactory::class);
         return $service;
