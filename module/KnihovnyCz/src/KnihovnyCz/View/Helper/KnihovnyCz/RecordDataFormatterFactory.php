@@ -1,4 +1,5 @@
-<?php declare(strict_types=1);
+<?php
+declare(strict_types=1);
 /**
  * Class RecordDataFormatterFactory
  *
@@ -25,7 +26,6 @@
  * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://knihovny.cz Main Page
  */
-
 namespace KnihovnyCz\View\Helper\KnihovnyCz;
 
 use Interop\Container\ContainerInterface;
@@ -33,7 +33,6 @@ use VuFind\View\Helper\Root\RecordDataFormatter\SpecBuilder;
 
 class RecordDataFormatterFactory extends \VuFind\View\Helper\Root\RecordDataFormatterFactory
 {
-
     /**
      * Create the helper.
      *
@@ -89,7 +88,7 @@ class RecordDataFormatterFactory extends \VuFind\View\Helper\Root\RecordDataForm
             $icon = 'fa fa-circle-thin', $heading = true,
             $contentClass = ''
         ) use (&$fields) {
-                $fields[$key] = [
+            $fields[$key] = [
                     'method' => ($template === null) ? 'setLine' : 'setTemplateLine',
                     'dataMethod' => $dataMethod,
                     'template' => $template,

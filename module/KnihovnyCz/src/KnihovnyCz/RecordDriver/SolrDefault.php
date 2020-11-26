@@ -25,7 +25,6 @@
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     http://github.com/moravianlibrary/Knihovny.cz Knihovny.cz
  */
-
 namespace KnihovnyCz\RecordDriver;
 
 use VuFind\Exception\RecordMissing as RecordMissingException;
@@ -95,7 +94,7 @@ class SolrDefault extends \VuFind\RecordDriver\SolrDefault
      */
     public function getSourceId()
     {
-        list ($source) = explode('.', $this->getUniqueID());
+        list($source) = explode('.', $this->getUniqueID());
         return $source;
     }
 
@@ -277,7 +276,7 @@ class SolrDefault extends \VuFind\RecordDriver\SolrDefault
     public function getSummary()
     {
         $summary = $this->fields['summary_display_mv'] ?? [];
-        if (empty($summary)){
+        if (empty($summary)) {
             /** @var \KnihovnyCz\RecordDriver\SolrDefault|null $parent */
             $parent = $this->getParentRecord();
             $summary = ($parent !== null) ? $parent->getSummary() : [];
@@ -342,7 +341,7 @@ class SolrDefault extends \VuFind\RecordDriver\SolrDefault
     {
         $links = [];
         $parentRecord = $this->getParentRecord();
-        if ($parentRecord !== null ) {
+        if ($parentRecord !== null) {
             $rawLinks = (array)$parentRecord->tryMethod('get856Links');
             foreach ($rawLinks as $rawLink) {
                 $parts = explode("|", $rawLink);
@@ -367,7 +366,7 @@ class SolrDefault extends \VuFind\RecordDriver\SolrDefault
      */
     protected function get856Links()
     {
-        return isset($this->fields['url']) ? $this->fields['url'] : [];
+        return $this->fields['url'] ?? [];
     }
 
     /**
@@ -488,5 +487,4 @@ class SolrDefault extends \VuFind\RecordDriver\SolrDefault
     {
         return parent::getDeduplicatedAuthors(array_merge($dataFields, ['id']));
     }
-
 }

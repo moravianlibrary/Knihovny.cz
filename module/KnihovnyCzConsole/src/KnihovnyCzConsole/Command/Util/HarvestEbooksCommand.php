@@ -25,7 +25,6 @@
  * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://knihovny.cz Main Page
  */
-
 namespace KnihovnyCzConsole\Command\Util;
 
 use KnihovnyCz\Db\Table\Widget;
@@ -132,6 +131,7 @@ class HarvestEbooksCommand extends \Symfony\Component\Console\Command\Command
         $output->writeln('Added ' . number_format(count($ebooks), 0, ',', ' ') . ' records.');
         return 0;
     }
+
     /**
      * Get ebooks from Solr
      *
@@ -153,7 +153,7 @@ class HarvestEbooksCommand extends \Symfony\Component\Console\Command\Command
         $url  = "$solrUrl/$solrCore/select?" . http_build_query($params);
 
         $client = curl_init($url);
-        if ($client === false){
+        if ($client === false) {
             throw new \Exception('Cannot initialize cURL session');
         }
         curl_setopt($client, CURLOPT_RETURNTRANSFER, true);

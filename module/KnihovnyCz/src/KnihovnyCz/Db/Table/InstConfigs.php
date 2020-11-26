@@ -26,7 +26,6 @@
  * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://knihovny.cz Main Page
  */
-
 namespace KnihovnyCz\Db\Table;
 
 use Laminas\Db\Adapter\Adapter;
@@ -77,8 +76,9 @@ class InstConfigs extends \VuFind\Db\Table\Gateway
      *
      * @return array
      */
-    protected function applyConfig(&$config, $source) {
-        $dbConfig = $this->select(function (Select $select) use ($source)  {
+    protected function applyConfig(&$config, $source)
+    {
+        $dbConfig = $this->select(function (Select $select) use ($source) {
             $select
                 ->columns(['id', 'value'])
                 ->join('inst_sources', 'source_id = inst_sources.id')

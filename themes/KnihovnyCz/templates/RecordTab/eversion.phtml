@@ -18,7 +18,7 @@
             <?php foreach ($links as $link):
                 if ($link['status'] === 'online') {
                     $statusClass = 'success';
-                } else if ($link['status'] === 'unknown') {
+                } elseif ($link['status'] === 'unknown') {
                     $statusClass = 'warning';
                 } else {
                     $statusClass = 'danger';
@@ -31,11 +31,11 @@
                     <?php if ($linkk['status'] === 'protected') : ?>
                         <td>
                             <a target='_blank' data-toggle="tooltip" data-placement="top" rel='nofollow' title="<?=$this->translate('What does it mean?')?>" href='https://cs.wikipedia.org/wiki/Voln%C3%A9_d%C3%ADlo'>
-                                <span class="label label-<?=$statusClass?>"><?=$this->transEsc('link_access_status_'.$link['status'])?></span>
+                                <span class="label label-<?=$statusClass?>"><?=$this->transEsc('link_access_status_' . $link['status'])?></span>
                             </a>
                         </td>
                     <?php else : ?>
-                        <td><span class="label label-<?=$statusClass?>"><?=$this->transEsc('link_access_status_'.$link['status'])?></span></td>
+                        <td><span class="label label-<?=$statusClass?>"><?=$this->transEsc('link_access_status_' . $link['status'])?></span></td>
                     <?php endif; ?>
                     <td><a title='<?=$this->transEsc($description)?>' href='<?=$link['url']?>' target='_blank'><?=$this->transEsc($description)?></a></td>
                     <td><?=$this->transEsc('Source::' . $link['source'])?></td>

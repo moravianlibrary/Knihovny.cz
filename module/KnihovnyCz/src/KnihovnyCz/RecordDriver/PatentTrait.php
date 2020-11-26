@@ -26,7 +26,6 @@
  * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://knihovny.cz Main Page
  */
-
 namespace KnihovnyCz\RecordDriver;
 
 trait PatentTrait
@@ -38,11 +37,11 @@ trait PatentTrait
     public function getPatentInfo(): string
     {
         $patentInfo = [];
-        $patentInfo['country'] = $this->getFieldArray('013', array('b'))[0];
-        $patentInfo['type'] = $this->getFieldArray('013', array('c'))[0];
-        $patentInfo['id'] = $this->getFieldArray('013', array('a'))[0];
-        $patentInfo['publish_date'] = $this->getFieldArray('013', array('d'))[0];
-        if(empty($patentInfo)) {
+        $patentInfo['country'] = $this->getFieldArray('013', ['b'])[0];
+        $patentInfo['type'] = $this->getFieldArray('013', ['c'])[0];
+        $patentInfo['id'] = $this->getFieldArray('013', ['a'])[0];
+        $patentInfo['publish_date'] = $this->getFieldArray('013', ['d'])[0];
+        if (empty($patentInfo)) {
             return '';
         }
         return $this->renderPatentInfo($patentInfo);
@@ -92,5 +91,4 @@ trait PatentTrait
         );
         return $mpts;
     }
-
 }

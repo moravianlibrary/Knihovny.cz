@@ -26,7 +26,6 @@
  * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://knihovny.cz Main Page
  */
-
 namespace KnihovnyCz\AjaxHandler;
 
 use GitWrapper\GitWorkingCopy;
@@ -130,7 +129,6 @@ class UpdateContent extends \VuFind\AjaxHandler\AbstractBase
      *
      * @return array
      */
-
     protected function formatErrorResponse(string $message, int $httpCode = 400)
     {
         $response = [

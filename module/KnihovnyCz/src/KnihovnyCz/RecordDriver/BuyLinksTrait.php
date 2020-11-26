@@ -26,7 +26,6 @@
  * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://knihovny.cz Main Page
  */
-
 namespace KnihovnyCz\RecordDriver;
 
 use KnihovnyCz\Service\LinkServiceInterface;
@@ -159,6 +158,6 @@ trait BuyLinksTrait
      */
     public function attachZboziService(LinkServiceInterface $zboziService): void
     {
-         $this->zboziService = $zboziService;
+        $this->zboziService = $zboziService;
     }
 }

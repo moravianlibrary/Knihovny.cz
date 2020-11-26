@@ -26,7 +26,6 @@
  * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://knihovny.cz Main Page
  */
-
 namespace KnihovnyCz\RecordTab;
 
 class Ziskej extends \VuFind\RecordTab\AbstractBase
@@ -50,5 +49,4 @@ class Ziskej extends \VuFind\RecordTab\AbstractBase
     {
         return $this->getRecordDriver()->tryMethod('getZiskejBoolean');
     }
-
 }

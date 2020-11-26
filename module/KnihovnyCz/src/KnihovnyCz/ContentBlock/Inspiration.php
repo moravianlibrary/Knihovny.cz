@@ -26,13 +26,11 @@
  * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://knihovny.cz Main Page
  */
-
 namespace KnihovnyCz\ContentBlock;
 
-use \Laminas\Db\Sql\Predicate\Expression;
+use Laminas\Db\Sql\Predicate\Expression;
 
 class Inspiration implements \VuFind\ContentBlock\ContentBlockInterface
-
 {
     /**
      * Search class ID to use for retrieving facets.
@@ -116,7 +114,7 @@ class Inspiration implements \VuFind\ContentBlock\ContentBlockInterface
      */
     public function getItems()
     {
-        if($this->items === null) {
+        if ($this->items === null) {
             $widget = $this->getWidget();
             $widgetContent = $this->tableManager->get(
                 \KnihovnyCz\Db\Table\WidgetContent::class

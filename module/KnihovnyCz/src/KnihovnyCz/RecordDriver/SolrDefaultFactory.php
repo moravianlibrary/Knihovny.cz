@@ -1,5 +1,4 @@
 <?php
-
 namespace KnihovnyCz\RecordDriver;
 
 use Interop\Container\ContainerInterface;
@@ -8,7 +7,6 @@ use Laminas\ServiceManager\Exception\ServiceNotFoundException;
 
 class SolrDefaultFactory extends \VuFind\RecordDriver\SolrDefaultFactory
 {
-
     /**
      * Create an object
      *
@@ -45,4 +43,3 @@ class SolrDefaultFactory extends \VuFind\RecordDriver\SolrDefaultFactory
         return $driver;
     }
 }
-

@@ -26,7 +26,6 @@
  * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://knihovny.cz Main Page
  */
-
 namespace KnihovnyCz\RecordDriver;
 
 use Interop\Container\ContainerInterface;
@@ -35,7 +34,6 @@ use Laminas\ServiceManager\Exception\ServiceNotFoundException;
 
 class SolrLibraryFactory extends SolrDefaultFactory
 {
-
     /**
      * Create an object
      *

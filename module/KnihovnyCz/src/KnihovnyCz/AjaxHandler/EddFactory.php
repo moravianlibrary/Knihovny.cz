@@ -26,7 +26,6 @@
  * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://knihovny.cz Main Page
  */
-
 namespace KnihovnyCz\AjaxHandler;
 
 use Interop\Container\Exception\ContainerException;
@@ -36,7 +35,6 @@ use Psr\Container\ContainerInterface;
 
 class EddFactory implements \Laminas\ServiceManager\Factory\FactoryInterface
 {
-
     /**
      * Create an object
      *

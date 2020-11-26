@@ -26,7 +26,6 @@
  * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://knihovny.cz Main Page
  */
-
 namespace KnihovnyCz\Config;
 
 use Interop\Container\ContainerInterface;
@@ -67,7 +66,6 @@ class PluginFactory extends \VuFind\Config\PluginFactory
         $fileConfig = $this->loadConfigFile($requestedName . '.ini');
         return $fileConfig->merge($dbConfig);
     }
-
 
     /**
      * Load the specified configuration file from database

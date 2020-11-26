@@ -26,7 +26,6 @@
  * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://knihovny.cz Main Page
  */
-
 namespace KnihovnyCzTest\ILS\Driver;
 
 use InvalidArgumentException;
@@ -1773,7 +1772,6 @@ class XCNCIP2Test extends \VuFindTest\ILS\Driver\XCNCIP2Test
             ],
         ],
     ];
-
 
     // No need to add more tests, upstream tests covers our needs
     protected $placeHoldTests = [];

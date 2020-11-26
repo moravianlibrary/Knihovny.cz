@@ -25,7 +25,6 @@
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     http://github.com/moravianlibrary/Knihovny.cz Knihovny.cz
  */
-
 namespace KnihovnyCz\RecordDriver;
 
 class SolrAuthority extends \KnihovnyCz\RecordDriver\SolrMarc
@@ -75,6 +74,7 @@ class SolrAuthority extends \KnihovnyCz\RecordDriver\SolrMarc
     {
         return $this->fields['source_display_mv'][0] ?? '';
     }
+
     /**
      * Get the authority's name, shown as title of record.
      *
@@ -94,6 +94,7 @@ class SolrAuthority extends \KnihovnyCz\RecordDriver\SolrMarc
     {
         return $this->fields['bibliographic_details_display_mv'] ?? [];
     }
+
     /**
      * Get the bibliographic details of authority.
      *
@@ -104,6 +105,7 @@ class SolrAuthority extends \KnihovnyCz\RecordDriver\SolrMarc
         return isset($this->fields['bibliographic_details_display_mv'])
             ? $this->fields['bibliographic_details_display_mv'][0] : '';
     }
+
     /**
      * Get id_authority.
      *
@@ -125,7 +127,7 @@ class SolrAuthority extends \KnihovnyCz\RecordDriver\SolrMarc
     protected function getCountByField(string $field, string $value)
     {
         $safeValue = addcslashes($value, '"');
-        $query = new \VuFindSearch\Query\Query($field .  ':"' . $safeValue . '"');
+        $query = new \VuFindSearch\Query\Query($field . ':"' . $safeValue . '"');
         $params = new \VuFindSearch\ParamBag(['hl' => ['false']]);
         return $this->searchService
             ->search($this->sourceIdentifier, $query, 0, 0, $params)
@@ -235,4 +237,3 @@ class SolrAuthority extends \KnihovnyCz\RecordDriver\SolrMarc
         ];
     }
 }
-

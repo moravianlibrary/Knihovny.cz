@@ -26,7 +26,6 @@
  * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://knihovny.cz Main Page
  */
-
 namespace KnihovnyCz\Db\Table;
 
 use Laminas\Config\Config as LaminasConfig;
@@ -77,7 +76,7 @@ class Config extends Gateway
                 } else {
                     $data[$item->section][$item->item][] = $item->value;
                 }
-            // Type is string:
+                // Type is string:
             } else {
                 $data[$item->section][$item->item] = $item->value;
             }
@@ -98,7 +97,7 @@ class Config extends Gateway
             $select
                 ->columns(['id', 'array_key', 'value'])
                 ->join('config_files', 'file_id = config_files.id', [])
-                ->join('config_sections', 'section_id = config_sections.id', ['section' => 'section_name'] )
+                ->join('config_sections', 'section_id = config_sections.id', ['section' => 'section_name'])
                 ->join('config_items', 'item_id = config_items.id', ['type' => 'type', 'item' => 'name'])
                 ->where(['config_files.file_name' => $filename, 'active' => 1])
                 ->order(['item', 'order']);

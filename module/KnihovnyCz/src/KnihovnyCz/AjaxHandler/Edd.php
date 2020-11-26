@@ -26,16 +26,13 @@
  * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://knihovny.cz Main Page
  */
-
 namespace KnihovnyCz\AjaxHandler;
 
 use Laminas\Mvc\Controller\Plugin\Params;
 use VuFind\Http\PhpEnvironment\Request;
-use VuFind\Search\SearchRunner;
 
 class Edd extends \VuFind\AjaxHandler\AbstractBase
 {
-
     /**
      * Search results plugin manager
      *
@@ -66,7 +63,7 @@ class Edd extends \VuFind\AjaxHandler\AbstractBase
             'merged_child_boolean:true',
         ];
         $childFilter = '{!child of=\'merged_boolean:true\'} merged_boolean:true';
-        foreach(['issn', 'title'] as $parameter) {
+        foreach (['issn', 'title'] as $parameter) {
             $value = $params->fromQuery($parameter, '');
             if (!empty($value)) {
                 $fq[] = "$childFilter AND $parameter:" . addcslashes($value, '"');
@@ -80,7 +77,7 @@ class Edd extends \VuFind\AjaxHandler\AbstractBase
         $result = $this->searchService->search('Solr', $query, 0, 10, $params);
         $records = $result->getRecords();
         $results = [];
-        foreach($records as $record) {
+        foreach ($records as $record) {
             $results[] = [
                 'id' => $record->getUniqueID(),
                 'sigla' => $record->getSiglaDisplay(),
@@ -88,5 +85,4 @@ class Edd extends \VuFind\AjaxHandler\AbstractBase
         }
         return $this->formatResponse($results, 200);
     }
-
 }

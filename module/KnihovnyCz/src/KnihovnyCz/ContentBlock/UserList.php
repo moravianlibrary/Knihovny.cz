@@ -26,7 +26,6 @@
  * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://knihovny.cz Main Page
  */
-
 namespace KnihovnyCz\ContentBlock;
 
 class UserList implements \VuFind\ContentBlock\ContentBlockInterface
@@ -63,7 +62,8 @@ class UserList implements \VuFind\ContentBlock\ContentBlockInterface
      * Constructor
      *
      */
-    public function __construct(\VuFind\Search\SearchRunner $runner) {
+    public function __construct(\VuFind\Search\SearchRunner $runner)
+    {
         $this->runner = $runner;
     }
 
@@ -72,11 +72,13 @@ class UserList implements \VuFind\ContentBlock\ContentBlockInterface
      *
      * @return \VuFind\Search\Base\Results
      */
-    protected function getUserList() {
+    protected function getUserList()
+    {
         return $this->runner->run(['id' => $this->listId, 'limit' => $this->limit],
             $this->searchClassId
         );
     }
+
     /**
      * @inheritDoc
      */

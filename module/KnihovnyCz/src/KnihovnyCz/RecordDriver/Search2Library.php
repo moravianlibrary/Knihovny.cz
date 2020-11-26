@@ -25,13 +25,10 @@
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     http://github.com/moravianlibrary/Knihovny.cz Knihovny.cz
  */
-
-
 namespace KnihovnyCz\RecordDriver;
 
 class Search2Library extends SolrLibrary
 {
-
     /**
      * Used for identifying search backends
      *
@@ -48,5 +45,4 @@ class Search2Library extends SolrLibrary
     {
         return parent::getHierarchyType() ? 'search2' : false;
     }
-
 }

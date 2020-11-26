@@ -26,12 +26,11 @@
  * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://knihovny.cz Main Page
  */
-
 namespace KnihovnyCz\Db\Table;
 
 use Laminas\Db\Adapter\Adapter;
-use VuFind\Db\Table\PluginManager;
 use VuFind\Db\Row\RowGateway;
+use VuFind\Db\Table\PluginManager;
 
 class WidgetContent extends \VuFind\Db\Table\Gateway
 {

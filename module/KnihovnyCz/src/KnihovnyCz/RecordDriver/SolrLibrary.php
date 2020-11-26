@@ -25,12 +25,10 @@
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     http://github.com/moravianlibrary/Knihovny.cz Knihovny.cz
  */
-
 namespace KnihovnyCz\RecordDriver;
 
 class SolrLibrary extends \KnihovnyCz\RecordDriver\SolrMarc
 {
-
     /**
      * @var \Laminas\Config\Config
      */
@@ -253,7 +251,7 @@ class SolrLibrary extends \KnihovnyCz\RecordDriver\SolrMarc
     {
         $gps = $this->fields['gps_display'] ?? '';
         $coords = [];
-        if ($gps != '' ) {
+        if ($gps != '') {
             list($coords['lat'], $coords['lng']) = explode(" ", $gps, 2);
         }
         return $coords;
@@ -266,7 +264,7 @@ class SolrLibrary extends \KnihovnyCz\RecordDriver\SolrMarc
      */
     public function hasAdditionalInfo()
     {
-        return (!empty($this->getSigla()) || !empty($this->getLastUpdated()) );
+        return !empty($this->getSigla()) || !empty($this->getLastUpdated());
     }
 
     /**
@@ -276,9 +274,9 @@ class SolrLibrary extends \KnihovnyCz\RecordDriver\SolrMarc
      */
     public function hasContacts()
     {
-        return (!empty($this->getPhone())
+        return !empty($this->getPhone())
             || !empty($this->getEmail())
-            || !empty($this->getLibResponsibility()));
+            || !empty($this->getLibResponsibility());
     }
 
     /**
@@ -288,9 +286,9 @@ class SolrLibrary extends \KnihovnyCz\RecordDriver\SolrMarc
      */
     public function hasServices()
     {
-        return (!empty($this->getService())
+        return !empty($this->getService())
             || !empty($this->getFunction())
-            || !empty($this->getProject()));
+            || !empty($this->getProject());
     }
 
     /**
@@ -337,4 +335,3 @@ class SolrLibrary extends \KnihovnyCz\RecordDriver\SolrMarc
         $this->facetsConfig = $facetsConfig;
     }
 }
-

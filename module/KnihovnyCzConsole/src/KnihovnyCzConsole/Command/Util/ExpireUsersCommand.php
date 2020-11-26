@@ -26,14 +26,7 @@
  * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://knihovny.cz Main Page
  */
-
 namespace KnihovnyCzConsole\Command\Util;
-
-use Symfony\Component\Console\Input\InputArgument;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Console\Output\OutputInterface;
-use VuFind\Db\Table\User;
 
 class ExpireUsersCommand extends \VuFindConsole\Command\Util\AbstractExpireCommand
 {
@@ -57,5 +50,4 @@ class ExpireUsersCommand extends \VuFindConsole\Command\Util\AbstractExpireComma
      * @var string
      */
     protected static $defaultName = 'util/expire_users';
-
 }

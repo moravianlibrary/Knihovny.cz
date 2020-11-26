@@ -84,14 +84,14 @@
                     url: '/AJAX/JSON?method=getEdsFulltextLink',
                     data: {
                         recordData: {
-                            <?php if (!empty($issns)): ?> <?="'issns': '".implode(", ", $issns)."'," ?> <?php endif; ?>
-                            <?php if (!empty($electronicIssns)): ?> <?="'electronicIssns': '".implode(", ", $electronicIssns)."'," ?> <?php endif; ?>
-                            <?php if (!empty($isbns)): ?> <?="'isbns': '".implode(", ", $isbns)."'," ?> <?php endif; ?>
-                            <?php if (!empty($publishDate)): ?> <?="'publishDate': '".$publishDate."'," ?> <?php endif; ?>
-                            <?php if (!empty($titles)): ?> <?="'titles': \"".implode(", ", $titles)."\"," ?> <?php endif; ?>
-                            <?php if (!empty($authors)): ?> <?="'authors': \"".implode(", ", $authors)."\"," ?> <?php endif; ?>
-                            <?php if (!empty($sourceTitle)): ?> <?="'sourceTitle': \"".$sourceTitle."\"," ?> <?php endif; ?>
-                            <?php if (!empty($volume)): ?> <?="'volume': '".$volume."'," ?> <?php endif; ?>
+                            <?php if (!empty($issns)): ?> <?="'issns': '" . implode(", ", $issns) . "'," ?> <?php endif; ?>
+                            <?php if (!empty($electronicIssns)): ?> <?="'electronicIssns': '" . implode(", ", $electronicIssns) . "'," ?> <?php endif; ?>
+                            <?php if (!empty($isbns)): ?> <?="'isbns': '" . implode(", ", $isbns) . "'," ?> <?php endif; ?>
+                            <?php if (!empty($publishDate)): ?> <?="'publishDate': '" . $publishDate . "'," ?> <?php endif; ?>
+                            <?php if (!empty($titles)): ?> <?="'titles': \"" . implode(", ", $titles) . "\"," ?> <?php endif; ?>
+                            <?php if (!empty($authors)): ?> <?="'authors': \"" . implode(", ", $authors) . "\"," ?> <?php endif; ?>
+                            <?php if (!empty($sourceTitle)): ?> <?="'sourceTitle': \"" . $sourceTitle . "\"," ?> <?php endif; ?>
+                            <?php if (!empty($volume)): ?> <?="'volume': '" . $volume . "'," ?> <?php endif; ?>
                         }
                     },
                     beforeSend: function () {

@@ -26,7 +26,6 @@
  * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://knihovny.cz Main Page
  */
-
 namespace KnihovnyCz\Content;
 
 class ObalkyKnihService extends \VuFind\Content\ObalkyKnihService
@@ -94,5 +93,4 @@ class ObalkyKnihService extends \VuFind\Content\ObalkyKnihService
         }
         return $response->isSuccess() ? json_decode($response->getBody())[0] : null;
     }
-
 }

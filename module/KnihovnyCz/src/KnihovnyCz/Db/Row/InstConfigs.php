@@ -26,12 +26,10 @@
  * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://knihovny.cz Main Page
  */
-
 namespace KnihovnyCz\Db\Row;
 
 class InstConfigs extends \VuFind\Db\Row\RowGateway
     implements \VuFind\Db\Table\DbTableAwareInterface
-
 {
     use \VuFind\Db\Table\DbTableAwareTrait;
 

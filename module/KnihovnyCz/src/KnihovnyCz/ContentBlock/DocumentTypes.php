@@ -26,7 +26,6 @@
  * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://knihovny.cz Main Page
  */
-
 namespace KnihovnyCz\ContentBlock;
 
 use Laminas\ServiceManager\Exception\ServiceNotCreatedException;
@@ -96,7 +95,7 @@ class DocumentTypes implements \VuFind\ContentBlock\ContentBlockInterface
         $searchConfig = $this->configManager->get('searches');
         $config = $searchConfig->get($settings);
 
-        if(empty($config)) {
+        if (empty($config)) {
             throw new ServiceNotCreatedException('Missing configuration.');
         }
         $this->searchClassId = $config->searchClassId ?? $this->searchClassId;
@@ -109,8 +108,9 @@ class DocumentTypes implements \VuFind\ContentBlock\ContentBlockInterface
      *
      * @return array
      */
-    public function getDocumentTypes() {
-        return array_map(function($item) {
+    public function getDocumentTypes()
+    {
+        return array_map(function ($item) {
             $itemArray = explode(';', $item);
             return [
                 'title' => $itemArray[0] ?? null,
@@ -120,6 +120,7 @@ class DocumentTypes implements \VuFind\ContentBlock\ContentBlockInterface
             ];
         }, $this->itemsConfig->toArray());
     }
+
     /**
      * Return context variables used for rendering the block's template.
      *

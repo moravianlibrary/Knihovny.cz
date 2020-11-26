@@ -26,7 +26,6 @@
  * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://knihovny.cz Main Page
  */
-
 namespace KnihovnyCz\ILS\Driver;
 
 use KnihovnyCz\Db\Table\InstConfigs;
@@ -53,13 +52,13 @@ class MultiBackend extends \VuFind\ILS\Driver\MultiBackend
     /**
      * Constructor
      *
-     * @param \VuFind\Config\PluginManager  $configLoader Configuration loader
-     * @param ILSAuthenticator $ilsAuth      ILS authenticator
-     * @param PluginManager                 $dm           ILS driver manager
+     * @aparam \VuFind\Config\PluginManager  $configLoader Configuration loader
+     * @aparam ILSAuthenticator $ilsAuth      ILS authenticator
+     * @aparam PluginManager                 $dm           ILS driver manager
      */
     public function __construct(\VuFind\Config\PluginManager $configLoader,
-        ILSAuthenticator $ilsAuth, PluginManager $dm, InstConfigs $instConfigs, InstSources $instSources
-    ) {
+        ILSAuthenticator $ilsAuth, PluginManager $dm, InstConfigs $instConfigs, InstSources $instSources)
+    {
         $this->instConfigs = $instConfigs;
         $this->instSources = $instSources;
         parent::__construct($configLoader, $ilsAuth, $dm);
@@ -82,5 +81,4 @@ class MultiBackend extends \VuFind\ILS\Driver\MultiBackend
         }
         return $this->instConfigs->getConfig($instSource);
     }
-
 }
