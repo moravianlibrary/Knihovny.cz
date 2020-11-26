@@ -1387,3 +1387,14 @@ DELETE FROM inst_configs
 WHERE source_id = 64 AND key_id IN (13, 14);
 
 UPDATE `system` SET `value` = '75' WHERE `key`='DB_VERSION';
+
+-- Issue 172: CitacePro
+INSERT INTO `config_items` (`name`, `type`) VALUES ('citation_styles', 'array');
+INSERT INTO `config` (`file_id`, `section_id`, `item_id`, `array_key`, `value`, `order`, `active`)
+SELECT (SELECT `id` FROM `config_files` WHERE `file_name` = 'citation'),
+       (SELECT `id` FROM `config_sections` WHERE `section_name` = 'Citation'),
+       (SELECT `id` FROM `config_items` WHERE `name` = 'citation_styles'),
+       `value`, `description`, `id`, 1
+FROM `citation_style`;
+
+UPDATE `system` SET `value` = '76' WHERE `key`='DB_VERSION';
