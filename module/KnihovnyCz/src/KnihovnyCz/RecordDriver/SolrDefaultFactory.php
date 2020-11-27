@@ -79,6 +79,9 @@ class SolrDefaultFactory extends \VuFind\RecordDriver\SolrDefaultFactory
         $driver->attachObalkyKnihService(
             $container->get(\VuFind\Content\ObalkyKnihService::class)
         );
+        $driver->attachCitaceProService(
+            $container->get(\KnihovnyCz\Service\CitaceProService::class)
+        );
         return $driver;
     }
 }
