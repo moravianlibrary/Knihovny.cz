@@ -48,7 +48,7 @@ trait ObalkyKnihTrait
             $ids['isbn'] = new ISBN($ids['isbn']);
         }
         if (isset($ids['ismn'])) {
-            $ids['isbn'] = new ISMN($ids['ismn']);
+            $ids['ismn'] = new ISMN($ids['ismn']);
         }
         $data = $this->obalkyKnih->getData($ids);
         if (isset($data->toc_thumbnail_url)) {
