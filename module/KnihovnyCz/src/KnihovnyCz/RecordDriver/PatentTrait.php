@@ -87,7 +87,7 @@ trait PatentTrait
         }
         $patentInfoText = implode(
             ',', [$patentInfoText, $patentInfo['id'], $patentInfo['publish_date']]
-        ). "\r\n";
+        ) . "\r\n";
         return $patentInfoText;
     }
 
