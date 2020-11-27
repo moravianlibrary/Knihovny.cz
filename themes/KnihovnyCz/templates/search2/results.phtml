@@ -3,7 +3,7 @@
   if ($resultsCount != 0) {
     $apiKey = $this->config()->get('config')->GoogleMaps->apikey;
     $this->headScript()->appendFile('library-map.js');
-    $this->headScript()->appendFile('marker-clusterer.js');
+    $this->headScript()->appendFile('lib/marker-clusterer.js');
     $this->headScript()->appendFile('https://maps.googleapis.com/maps/api/js?key=' . $this->escapeUrl($apiKey) . '&amp;callback=initMap');
 
     $query = $this->results->getParams()->getQuery();

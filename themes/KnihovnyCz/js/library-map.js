@@ -1,4 +1,7 @@
+/* exported initMap */
+/* global google, VuFind, MarkerClusterer */
 const LIBRARY_MAP_MAX_ZOOM = 14;
+
 
 function initMap(url) {
   let map = $(
@@ -68,8 +71,8 @@ function initialize(libraries) {
     ) {
       continue;
     }
-    let contentString = '<div id="content" class="marker-info">'+
-      '<div class="marker-title">' + library.title + '</div>'+
+    let contentString = '<div id="content" class="marker-info">' +
+      '<div class="marker-title">' + library.title + '</div>' +
       '<div class="marker-subtitle">' + library.address[0] + '</div>' +
       '<div class="marker-link"><strong><a href="/Search2Record/' + library.id +
       '">' + VuFind.translate('Library detail') + '</a></strong>' +
@@ -99,7 +102,7 @@ function initialize(libraries) {
   if (markers.length !== 0 ) {
     map.fitBounds(bounds);
     let mcOptions = { gridSize: 75, maxZoom: 10, imagePath: '/themes/KnihovnyCz/images/markerclusterer/m' };
-    let mc = new MarkerClusterer(map, markers, mcOptions);
+    new MarkerClusterer(map, markers, mcOptions);
     google.maps.event.addListenerOnce(map, 'zoom_changed', function fixInitialZoom() {
       if (map.getZoom() > LIBRARY_MAP_MAX_ZOOM) {
         map.setZoom(LIBRARY_MAP_MAX_ZOOM);

@@ -2,7 +2,7 @@
 const config = { attributes: false, childList: true, subtree: false };
 
 // Callback function to execute when mutations are observed
-const observeCartHandler = function observeCartHandler(mutationsList, observer) {
+const observeCartHandler = function observeCartHandler(mutationsList) {
   // Use traditional 'for loops' for IE 11
   for (const mutation of mutationsList) {
     if (mutation.type === 'childList') {
