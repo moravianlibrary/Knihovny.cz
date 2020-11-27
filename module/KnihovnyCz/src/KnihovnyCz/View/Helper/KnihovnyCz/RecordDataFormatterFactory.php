@@ -31,6 +31,15 @@ namespace KnihovnyCz\View\Helper\KnihovnyCz;
 use Interop\Container\ContainerInterface;
 use VuFind\View\Helper\Root\RecordDataFormatter\SpecBuilder;
 
+/**
+ * Class RecordDataFormatterFactory
+ *
+ * @category VuFind
+ * @package  KnihovnyCz\View\Helper\KnihovnyCz
+ * @author   Josef Moravec <moravec@mzk.cz>
+ * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
+ * @link     https://knihovny.cz Main Page
+ */
 class RecordDataFormatterFactory
     extends \VuFind\View\Helper\Root\RecordDataFormatterFactory
 {
@@ -48,6 +57,7 @@ class RecordDataFormatterFactory
     ) {
         /**
          * Record data formatter view helper
+         *
          * @var \VuFind\View\Helper\Root\RecordDataFormatter
          */
         $helper = parent::__invoke($container, $requestedName, $options);
