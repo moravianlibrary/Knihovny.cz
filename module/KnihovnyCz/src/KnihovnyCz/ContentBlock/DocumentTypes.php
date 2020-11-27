@@ -26,7 +26,6 @@
  * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://knihovny.cz Main Page
  */
-
 namespace KnihovnyCz\ContentBlock;
 
 use Laminas\ServiceManager\Exception\ServiceNotCreatedException;
@@ -38,6 +37,7 @@ use Laminas\ServiceManager\Exception\ServiceNotCreatedException;
  * @package  KnihovnyCz\ContentBlock
  * @author   Josef Moravec <moravec@mzk.cz>
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
+ * @link     https://knihovny.cz Main Page
  */
 class DocumentTypes implements \VuFind\ContentBlock\ContentBlockInterface
 {
@@ -91,12 +91,14 @@ class DocumentTypes implements \VuFind\ContentBlock\ContentBlockInterface
             throw new ServiceNotCreatedException('Missing configuration.');
         }
         /**
+         * Search configuration
+         *
          * @var \Laminas\Config\Config
          */
         $searchConfig = $this->configManager->get('searches');
         $config = $searchConfig->get($settings);
 
-        if(empty($config)) {
+        if (empty($config)) {
             throw new ServiceNotCreatedException('Missing configuration.');
         }
         $this->searchClassId = $config->searchClassId ?? $this->searchClassId;
@@ -109,17 +111,21 @@ class DocumentTypes implements \VuFind\ContentBlock\ContentBlockInterface
      *
      * @return array
      */
-    public function getDocumentTypes() {
-        return array_map(function($item) {
-            $itemArray = explode(';', $item);
-            return [
+    public function getDocumentTypes()
+    {
+        return array_map(
+            function ($item) {
+                $itemArray = explode(';', $item);
+                return [
                 'title' => $itemArray[0] ?? null,
                 'description' => $itemArray[1] ?? null,
                 'icon' => $itemArray[2] ?? null,
                 'value' => $itemArray[3] ?? null,
-            ];
-        }, $this->itemsConfig->toArray());
+                ];
+            }, $this->itemsConfig->toArray()
+        );
     }
+
     /**
      * Return context variables used for rendering the block's template.
      *

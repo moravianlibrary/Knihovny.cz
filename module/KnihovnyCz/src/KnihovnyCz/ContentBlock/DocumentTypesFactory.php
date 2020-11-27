@@ -26,7 +26,6 @@
  * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://knihovny.cz Main Page
  */
-
 namespace KnihovnyCz\ContentBlock;
 
 use Interop\Container\ContainerInterface;
@@ -41,7 +40,8 @@ use Laminas\ServiceManager\Factory\FactoryInterface;
  * @package  ContentBlock
  * @author   Josef Moravec <moravec@mzk.cz>
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
-  */
+ * @link     https://knihovny.cz Main Page
+ */
 class DocumentTypesFactory implements FactoryInterface
 {
     /**
@@ -68,5 +68,4 @@ class DocumentTypesFactory implements FactoryInterface
         $configManager = $container->get(\VuFind\Config\PluginManager::class);
         return new $requestedName($configManager);
     }
-
 }

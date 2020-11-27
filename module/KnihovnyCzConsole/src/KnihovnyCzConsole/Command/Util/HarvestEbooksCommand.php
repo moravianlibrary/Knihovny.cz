@@ -21,11 +21,11 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  *
  * @category VuFind
+ * @package  KnihovnyCzConsole
  * @author   Josef Moravec <moravec@mzk.cz>
  * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://knihovny.cz Main Page
  */
-
 namespace KnihovnyCzConsole\Command\Util;
 
 use KnihovnyCz\Db\Table\Widget;
@@ -35,6 +35,15 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use VuFind\Db\Table\PluginManager as TableManager;
 
+/**
+ * Class HarvestCommand
+ *
+ * @category VuFind
+ * @package  KnihovnyCzConsole
+ * @author   Josef Moravec <moravec@mzk.cz>
+ * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
+ * @link     https://knihovny.cz Main Page
+ */
 class HarvestEbooksCommand extends \Symfony\Component\Console\Command\Command
 {
     /**
@@ -111,34 +120,44 @@ class HarvestEbooksCommand extends \Symfony\Component\Console\Command\Command
             return 1;
         }
 
-        $widget = $this->widgetTable->select([
+        $widget = $this->widgetTable->select(
+            [
             'name' => $widgetName
-        ]);
+            ]
+        );
         $widget = $widget->current();
 
         // Remove all data first
-        $widgetContent = $this->widgetContentTable->delete([
+        $widgetContent = $this->widgetContentTable->delete(
+            [
             'widget_id' => $widget['id'],
-        ]);
+            ]
+        );
 
         foreach ($ebooks as $ebook) {
-            $this->widgetContentTable->insert([
+            $this->widgetContentTable->insert(
+                [
                 'widget_id' => $widget['id'],
                 'value' => trim($ebook['id']),
                 'preferred_value' => 0,
-            ]);
+                ]
+            );
         }
 
-        $output->writeln('Added ' . number_format(count($ebooks), 0, ',', ' ') . ' records.');
+        $output->writeln(
+            'Added ' . number_format(count($ebooks), 0, ',', ' ') . ' records.'
+        );
         return 0;
     }
+
     /**
      * Get ebooks from Solr
      *
      * @return array
+     *
+     * TODO: This should be refactored to a service
      */
-    // TODO: This should be refactored to a service
-    private function getEbooks()
+    protected function getEbooks()
     {
         $solrUrl = $this->config->Index->url;
         $solrCore = $this->config->Index->default_core;
@@ -153,7 +172,7 @@ class HarvestEbooksCommand extends \Symfony\Component\Console\Command\Command
         $url  = "$solrUrl/$solrCore/select?" . http_build_query($params);
 
         $client = curl_init($url);
-        if ($client === false){
+        if ($client === false) {
             throw new \Exception('Cannot initialize cURL session');
         }
         curl_setopt($client, CURLOPT_RETURNTRANSFER, true);
@@ -164,7 +183,9 @@ class HarvestEbooksCommand extends \Symfony\Component\Console\Command\Command
         if ($response === false) {
             $errno = curl_errno($client);
             $error = curl_error($client);
-            throw new \Exception('Cannot connect to Solr index: Error ' . $errno . ' - ' . $error);
+            throw new \Exception(
+                'Cannot connect to Solr index: Error ' . $errno . ' - ' . $error
+            );
         }
         $json = json_decode((string)$response, true);
 

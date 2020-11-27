@@ -20,14 +20,22 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  *
  * @category VuFind
- * @package  RecordDrivers      
+ * @package  RecordDrivers
  * @author   Josef Moravec <moravec@mzk.cz>
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     http://github.com/moravianlibrary/Knihovny.cz Knihovny.cz
  */
-
 namespace KnihovnyCz\RecordDriver;
 
+/**
+ * Knihovny.cz solr dictionary record driver
+ *
+ * @category VuFind
+ * @package  RecordDrivers
+ * @author   Josef Moravec <moravec@mzk.cz>
+ * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
+ * @link     http://github.com/moravianlibrary/Knihovny.cz Knihovny.cz
+ */
 class SolrDictionary extends \KnihovnyCz\RecordDriver\SolrMarc
 {
     /**
@@ -48,8 +56,7 @@ class SolrDictionary extends \KnihovnyCz\RecordDriver\SolrMarc
      */
     public function getTermAuthors()
     {
-        return isset($this->fields['author_term_display_mv'])
-            ? $this->fields['author_term_display_mv'] : [];
+        return $this->fields['author_term_display_mv'] ?? [];
     }
 
     /**
@@ -59,7 +66,7 @@ class SolrDictionary extends \KnihovnyCz\RecordDriver\SolrMarc
      */
     public function getTitle()
     {
-        return $this->fields ['title'] ?? '';
+        return $this->fields['title'] ?? '';
     }
 
     /**
@@ -69,7 +76,7 @@ class SolrDictionary extends \KnihovnyCz\RecordDriver\SolrMarc
      */
     public function getEnglish()
     {
-        return $this->fields ['english_display'] ?? '';
+        return $this->fields['english_display'] ?? '';
     }
 
     /**
@@ -79,8 +86,9 @@ class SolrDictionary extends \KnihovnyCz\RecordDriver\SolrMarc
      */
     public function getRelatives()
     {
-        return $this->fields ['relative_display_mv'] ?? [];
+        return $this->fields['relative_display_mv'] ?? [];
     }
+
     /**
      * Get alternative terms.
      *
@@ -88,8 +96,9 @@ class SolrDictionary extends \KnihovnyCz\RecordDriver\SolrMarc
      */
     public function getAlternatives()
     {
-        return $this->fields ['alternative_display_mv'] ?? [];
+        return $this->fields['alternative_display_mv'] ?? [];
     }
+
     /**
      * Get source.
      *
@@ -109,9 +118,4 @@ class SolrDictionary extends \KnihovnyCz\RecordDriver\SolrMarc
     {
         return ['handler' => 'morelikethisdictionary'];
     }
-
-
-
-
 }
-

@@ -25,7 +25,6 @@
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     http://github.com/moravianlibrary/Knihovny.cz Knihovny.cz
  */
-
 namespace KnihovnyCz\Module\Configuration;
 
 $config = [
@@ -136,8 +135,9 @@ $config = [
                 'aliases' => [
                     // VuFind\Db\Table\GatewayFactory search for row class by name
                     // We do not need to customize row class for user, so we are
-                    // are aliasing back to original one
-                    \KnihovnyCz\Db\Row\User::class => \VuFind\Db\Row\User::class,
+                    // are aliasing back to original one. It has to be string as the
+                    // class does not exist
+                    'KnihovnyCz\Db\Row\User' => \VuFind\Db\Row\User::class,
                 ]
             ],
             'db_table' => [

@@ -14,19 +14,19 @@
         </ul>
     </div>
     <div class="col-md-6 text-center" id="ziskejMinimalButton">
-        <? if (isset($this->mvsUrl)): ?>
+        <?php if (isset($this->mvsUrl)): ?>
             <form action="<?=$this->mvsUrl ?>" id="mvs" method="post">
                 <input type="hidden" name="source_id" value="<?=$this->escapeHtmlAttr($this->serverName) ?>">
-                <input type="hidden" name="user_id" value="<?=$this->escapeHtmlAttr(isset($this->eppn) ? $this->eppn : '') ?>">
+                <input type="hidden" name="user_id" value="<?=$this->escapeHtmlAttr($this->eppn ?? '') ?>">
                 <input type="hidden" name="doc_id" value="<?=$this->escapeHtmlAttr($this->driver->getUniqueID()) ?>">
                 <input type="hidden" name="entity_id"
-                       value="<?=$this->escapeHtmlAttr(isset($this->entityId) ? $this->entityId : '') ?>">
-                <? $records = $tabs['DedupedRecords']->getRecordsInGroup(); ?>
-                <? foreach ($records as $record): ?>
+                       value="<?=$this->escapeHtmlAttr($this->entityId ?? '') ?>">
+                <?php $records = $tabs['DedupedRecords']->getRecordsInGroup(); ?>
+                <?php foreach ($records as $record): ?>
                     <input type="hidden" name="doc_alt_ids[]" value="<?=$this->escapeHtmlAttr($record['id']) ?>">
-                <? endforeach; ?>
+                <?php endforeach; ?>
                 <input id="ziskejSubmitButton" type="image" src="<?=$this->imageLink('ziskejlogo.png')?>" alt="<?=$this->translate('ziskej')?>" >
             </form>
-        <? endif; ?>
+        <?php endif; ?>
     </div>
 </div>

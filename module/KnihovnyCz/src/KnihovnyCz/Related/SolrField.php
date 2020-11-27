@@ -26,11 +26,19 @@
  * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://knihovny.cz Main Page
  */
-
 namespace KnihovnyCz\Related;
 
 use KnihovnyCz\RecordDriver\SolrDefault;
 
+/**
+ * Class SolrField
+ *
+ * @category VuFind
+ * @package  KnihovnyCz\Related
+ * @author   Josef Moravec <moravec@mzk.cz>
+ * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
+ * @link     https://knihovny.cz Main Page
+ */
 class SolrField implements \VuFind\Related\RelatedInterface
 {
     /**
@@ -43,8 +51,8 @@ class SolrField implements \VuFind\Related\RelatedInterface
     /**
      * Establishes base settings for making recommendations.
      *
-     * @param string $settings Settings from config.ini
-     * @param SolrDefault $driver Record driver object
+     * @param string      $settings Settings from config.ini
+     * @param SolrDefault $driver   Record driver object
      *
      * @return void
      */

@@ -26,11 +26,19 @@
  * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://knihovny.cz Main Page
  */
-
 namespace KnihovnyCz\Db\Table;
 
 use Laminas\Db\Sql\Select;
 
+/**
+ * Class User
+ *
+ * @category VuFind
+ * @package  KnihovnyCz\Db\Table
+ * @author   Josef Moravec <moravec@mzk.cz>
+ * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
+ * @link     https://knihovny.cz Main Page
+ */
 class User extends \VuFind\Db\Table\User
 {
     use \VuFind\Db\Table\ExpirationTrait;

@@ -26,17 +26,25 @@
  * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://knihovny.cz Main Page
  */
-
 namespace KnihovnyCz\Service;
 
-use \KnihovnyCz\RecordDriver\SolrDefault;
+use KnihovnyCz\RecordDriver\SolrDefault;
 
+/**
+ * Class ZboziService
+ *
+ * @category VuFind
+ * @package  KnihovnyCz\Service
+ * @author   Josef Moravec <moravec@mzk.cz>
+ * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
+ * @link     https://knihovny.cz Main Page
+ */
 class ZboziLinkService extends LinkServiceAbstractBase
 {
     /**
      * Get link to record representation on given service
      *
-     * @param  SolrDefault $record
+     * @param SolrDefault $record Record driver
      *
      * @return string|null
      */
