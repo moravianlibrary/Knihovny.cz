@@ -13,7 +13,7 @@ const observeCartHandler = function observeCartHandler(mutationsList) {
       }
     }
   }
-}
+};
 
 const observer = new MutationObserver(observeCartHandler);
 
