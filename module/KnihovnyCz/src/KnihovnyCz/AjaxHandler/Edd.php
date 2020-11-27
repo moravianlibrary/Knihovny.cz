@@ -76,7 +76,7 @@ class Edd extends \VuFind\AjaxHandler\AbstractBase
         if (!empty($year)) {
             $fq[] = 'periodical_availability_int_mv:' . addcslashes($year, '"');
         }
-        $params = new \VuFindSearch\ParamBag(['fq' => $fq, 'fl' => 'id, sigla_display, recordtype', 'hl' => false ]);
+        $params = new \VuFindSearch\ParamBag(['fq' => $fq, 'fl' => 'id, sigla_display, record_format', 'hl' => false ]);
         $result = $this->searchService->search('Solr', $query, 0, 10, $params);
         $records = $result->getRecords();
         $results = [];

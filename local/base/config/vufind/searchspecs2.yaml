@@ -15,7 +15,7 @@ AllLibraries:
     - branch_search_txt
     - sigla_search_txt
     - cpk_code_search_txt
-  FilterQuery: "recordtype:library"
+  FilterQuery: "record_format:library"
   DismaxParams:
     - [bf, ord(library_relevance_str)^9999]
     - [bq, "inspiration:top_results^1"]
@@ -25,7 +25,7 @@ Name:
   DismaxFields:
     - name_search_txt^150
     - name_alt_search_txt_mv^50
-  FilterQuery: "recordtype:library"
+  FilterQuery: "record_format:library"
   DismaxParams:
     - [bf, ord(library_relevance_str)^9999]
   DismaxHandler: edismax
@@ -34,7 +34,7 @@ Town:
   DismaxFields:
     - town_search_txt^100
     - address_search_txt_mv
-  FilterQuery: "recordtype:library"
+  FilterQuery: "record_format:library"
   DismaxParams:
     - [bf, ord(library_relevance_str)^9999]
   DismaxHandler: edismax
@@ -42,7 +42,7 @@ Town:
 Sigla:
   DismaxFields:
     - sigla_search_txt
-  FilterQuery: "recordtype:library"
+  FilterQuery: "record_format:library"
   DismaxParams:
     - [bf, ord(library_relevance_str)^9999]
   DismaxHandler: edismax
@@ -50,7 +50,7 @@ Sigla:
 People:
   DismaxFields:
     - responsibility_search_txt_mv
-  FilterQuery: "recordtype:library"
+  FilterQuery: "record_format:library"
   DismaxParams:
     - [bf, ord(library_relevance_str)^9999]
   DismaxHandler: edismax
@@ -58,7 +58,7 @@ People:
 adv_search_type:
   DismaxFields:
     - type_search_txt_mv
-  FilterQuery: "recordtype:library"
+  FilterQuery: "record_format:library"
   DismaxParams:
     - [bf, ord(library_relevance_str)^9999]
   DismaxHandler: edismax
@@ -66,7 +66,7 @@ adv_search_type:
 adv_search_function:
   DismaxFields:
     - function_search_txt_mv
-  FilterQuery: "recordtype:library"
+  FilterQuery: "record_format:library"
   DismaxParams:
     - [bf, ord(library_relevance_str)^9999]
   DismaxHandler: edismax
@@ -74,7 +74,7 @@ adv_search_function:
 adv_search_services:
   DismaxFields:
     - services_search_txt_mv
-  FilterQuery: "recordtype:library"
+  FilterQuery: "record_format:library"
   DismaxParams:
     - [bf, ord(library_relevance_str)^9999]
   DismaxHandler: edismax
@@ -82,7 +82,7 @@ adv_search_services:
 adv_search_projects:
   DismaxFields:
     - projects_search_txt_mv
-  FilterQuery: "recordtype:library"
+  FilterQuery: "record_format:library"
   DismaxParams:
     - [bf, ord(library_relevance_str)^9999]
   DismaxHandler: edismax
