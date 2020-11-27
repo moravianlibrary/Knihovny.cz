@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Class LinkServiceAbstractBase
+ * Abstract class LinkServiceAbstractBase
  *
  * PHP version 7
  *
@@ -26,13 +26,22 @@
  * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://knihovny.cz Main Page
  */
-
 namespace KnihovnyCz\Service;
 
 use VuFindHttp\HttpServiceAwareInterface;
 use VuFindHttp\HttpServiceAwareTrait;
 
-abstract class LinkServiceAbstractBase implements LinkServiceInterface, HttpServiceAwareInterface
+/**
+ * Abstract class LinkServiceAbstractBase
+ *
+ * @category VuFind
+ * @package  KnihovnyCz\Service
+ * @author   Josef Moravec <moravec@mzk.cz>
+ * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
+ * @link     https://knihovny.cz Main Page
+ */
+abstract class LinkServiceAbstractBase implements LinkServiceInterface,
+    HttpServiceAwareInterface
 {
     use HttpServiceAwareTrait;
 

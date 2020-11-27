@@ -24,23 +24,31 @@
  * @package  KnihovnyCz\Db\Row
  * @author   Václav Rosecký <vaclav.rosecky@mzk.cz>
  * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
- * @link https://knihovny.cz Main Page
+ * @link     https://knihovny.cz Main Page
  */
-
 namespace KnihovnyCz\Db\Row;
 
+/**
+ * Class InstSources
+ *
+ * @category VuFind
+ * @package  KnihovnyCz\Db\Row
+ * @author   Václav Rosecký <vaclav.rosecky@mzk.cz>
+ * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
+ * @link     https://knihovny.cz Main Page
+ */
 class InstSources extends \VuFind\Db\Row\RowGateway
-    implements \VuFind\Db\Table\DbTableAwareInterface {
+    implements \VuFind\Db\Table\DbTableAwareInterface
+{
     use \VuFind\Db\Table\DbTableAwareTrait;
 
     /**
-    * Constructor
-    *
-    * @param \Laminas\Db\Adapter\Adapter $adapter Database adapter
-    */
+     * Constructor
+     *
+     * @param \Laminas\Db\Adapter\Adapter $adapter Database adapter
+     */
     public function __construct($adapter)
     {
         parent::__construct('id', 'inst_sources', $adapter);
     }
-
 }

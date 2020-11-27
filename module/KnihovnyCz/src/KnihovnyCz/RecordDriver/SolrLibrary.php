@@ -25,19 +25,28 @@
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     http://github.com/moravianlibrary/Knihovny.cz Knihovny.cz
  */
-
 namespace KnihovnyCz\RecordDriver;
 
+/**
+ * Knihovny.cz solr library record driver
+ *
+ * @category VuFind
+ * @package  RecordDrivers
+ * @author   Josef Moravec <moravec@mzk.cz>
+ * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
+ * @link     http://github.com/moravianlibrary/Knihovny.cz Knihovny.cz
+ */
 class SolrLibrary extends \KnihovnyCz\RecordDriver\SolrMarc
 {
-
     /**
+     * Facets configuration
+     *
      * @var \Laminas\Config\Config
      */
     protected $facetsConfig = null;
 
     /**
-     * Get the full title of the record
+     * Get library name
      *
      * @return string
      */
@@ -47,7 +56,7 @@ class SolrLibrary extends \KnihovnyCz\RecordDriver\SolrMarc
     }
 
     /**
-     * Get an array of note about the libraryhours
+     * Get library opening hours
      *
      * @return array
      */
@@ -66,7 +75,7 @@ class SolrLibrary extends \KnihovnyCz\RecordDriver\SolrMarc
     }
 
     /**
-     * Get date
+     * Get last updated metadata date
      *
      * @return String
      */
@@ -76,7 +85,7 @@ class SolrLibrary extends \KnihovnyCz\RecordDriver\SolrMarc
     }
 
     /**
-     * Get an array of note about the libraryname
+     * Get library postal addresses
      *
      * @return array
      */
@@ -96,7 +105,7 @@ class SolrLibrary extends \KnihovnyCz\RecordDriver\SolrMarc
     }
 
     /**
-     * Get an array of library ico and dicn
+     * Get notes
      *
      * @return string
      */
@@ -106,6 +115,7 @@ class SolrLibrary extends \KnihovnyCz\RecordDriver\SolrMarc
     }
 
     /**
+     * Get secondary notes
      *
      * @return string
      */
@@ -115,6 +125,7 @@ class SolrLibrary extends \KnihovnyCz\RecordDriver\SolrMarc
     }
 
     /**
+     * Get sigla identifier
      *
      * @return string
      */
@@ -124,6 +135,7 @@ class SolrLibrary extends \KnihovnyCz\RecordDriver\SolrMarc
     }
 
     /**
+     * Get related URLs
      *
      * @return array
      */
@@ -143,6 +155,7 @@ class SolrLibrary extends \KnihovnyCz\RecordDriver\SolrMarc
     }
 
     /**
+     * Get library branches
      *
      * @return array
      */
@@ -152,6 +165,7 @@ class SolrLibrary extends \KnihovnyCz\RecordDriver\SolrMarc
     }
 
     /**
+     * Get responsible people names
      *
      * @return array
      */
@@ -161,6 +175,7 @@ class SolrLibrary extends \KnihovnyCz\RecordDriver\SolrMarc
     }
 
     /**
+     * Get phone number
      *
      * @return array
      */
@@ -170,6 +185,7 @@ class SolrLibrary extends \KnihovnyCz\RecordDriver\SolrMarc
     }
 
     /**
+     * Get email address
      *
      * @return array
      */
@@ -179,6 +195,7 @@ class SolrLibrary extends \KnihovnyCz\RecordDriver\SolrMarc
     }
 
     /**
+     * Get provided services
      *
      * @return array
      */
@@ -188,6 +205,7 @@ class SolrLibrary extends \KnihovnyCz\RecordDriver\SolrMarc
     }
 
     /**
+     * Get library roles
      *
      * @return array
      */
@@ -197,6 +215,7 @@ class SolrLibrary extends \KnihovnyCz\RecordDriver\SolrMarc
     }
 
     /**
+     * Get projects library participates in
      *
      * @return array
      */
@@ -206,6 +225,7 @@ class SolrLibrary extends \KnihovnyCz\RecordDriver\SolrMarc
     }
 
     /**
+     * Get type of library
      *
      * @return array
      */
@@ -215,6 +235,7 @@ class SolrLibrary extends \KnihovnyCz\RecordDriver\SolrMarc
     }
 
     /**
+     * Get ILL service information
      *
      * @return array
      */
@@ -224,6 +245,7 @@ class SolrLibrary extends \KnihovnyCz\RecordDriver\SolrMarc
     }
 
     /**
+     * Get branch URL
      *
      * @return array
      */
@@ -240,12 +262,13 @@ class SolrLibrary extends \KnihovnyCz\RecordDriver\SolrMarc
     public function getBookSearchFilter()
     {
         $institution = $this->fields['cpk_code_display'] ?? null;
-        $institutionsMappings = $institution ? $this->facetsConfig->InstitutionsMappings->toArray() : null;
+        $institutionsMappings = $institution
+            ? $this->facetsConfig->InstitutionsMappings->toArray() : [];
         return $institutionsMappings[$institution] ?? null;
     }
 
     /**
-     * get gps coordinates of library
+     * Get GPS coordinates of library
      *
      * @return array
      */
@@ -253,7 +276,7 @@ class SolrLibrary extends \KnihovnyCz\RecordDriver\SolrMarc
     {
         $gps = $this->fields['gps_display'] ?? '';
         $coords = [];
-        if ($gps != '' ) {
+        if ($gps != '') {
             list($coords['lat'], $coords['lng']) = explode(" ", $gps, 2);
         }
         return $coords;
@@ -266,7 +289,7 @@ class SolrLibrary extends \KnihovnyCz\RecordDriver\SolrMarc
      */
     public function hasAdditionalInfo()
     {
-        return (!empty($this->getSigla()) || !empty($this->getLastUpdated()) );
+        return !empty($this->getSigla()) || !empty($this->getLastUpdated());
     }
 
     /**
@@ -276,9 +299,9 @@ class SolrLibrary extends \KnihovnyCz\RecordDriver\SolrMarc
      */
     public function hasContacts()
     {
-        return (!empty($this->getPhone())
+        return !empty($this->getPhone())
             || !empty($this->getEmail())
-            || !empty($this->getLibResponsibility()));
+            || !empty($this->getLibResponsibility());
     }
 
     /**
@@ -288,9 +311,9 @@ class SolrLibrary extends \KnihovnyCz\RecordDriver\SolrMarc
      */
     public function hasServices()
     {
-        return (!empty($this->getService())
+        return !empty($this->getService())
             || !empty($this->getFunction())
-            || !empty($this->getProject()));
+            || !empty($this->getProject());
     }
 
     /**
@@ -322,7 +345,8 @@ class SolrLibrary extends \KnihovnyCz\RecordDriver\SolrMarc
     {
         $library       = $this->fields['reg_lib_id_display_mv'] ?? [];
         $parsedLibrary = empty($library) ? [] : explode('|', $library[0]);
-        return empty($parsedLibrary) ? [] : ['id' => $parsedLibrary[0], 'name' => $parsedLibrary[1]];
+        return empty($parsedLibrary) ? []
+            : ['id' => $parsedLibrary[0], 'name' => $parsedLibrary[1]];
     }
 
     /**
@@ -337,4 +361,3 @@ class SolrLibrary extends \KnihovnyCz\RecordDriver\SolrMarc
         $this->facetsConfig = $facetsConfig;
     }
 }
-

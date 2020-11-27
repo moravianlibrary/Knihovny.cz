@@ -1,4 +1,5 @@
-<?php declare(strict_types=1);
+<?php
+declare(strict_types=1);
 /**
  * Class RecordDataFormatterFactory
  *
@@ -25,24 +26,40 @@
  * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://knihovny.cz Main Page
  */
-
 namespace KnihovnyCz\View\Helper\KnihovnyCz;
 
 use Interop\Container\ContainerInterface;
 use VuFind\View\Helper\Root\RecordDataFormatter\SpecBuilder;
 
-class RecordDataFormatterFactory extends \VuFind\View\Helper\Root\RecordDataFormatterFactory
+/**
+ * Class RecordDataFormatterFactory
+ *
+ * @category VuFind
+ * @package  KnihovnyCz\View\Helper\KnihovnyCz
+ * @author   Josef Moravec <moravec@mzk.cz>
+ * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
+ * @link     https://knihovny.cz Main Page
+ */
+class RecordDataFormatterFactory
+    extends \VuFind\View\Helper\Root\RecordDataFormatterFactory
 {
-
     /**
      * Create the helper.
+     *
+     * @param ContainerInterface $container     Service manager
+     * @param string             $requestedName Service being created
+     * @param null|array         $options       Extra options (optional)
      *
      * @return object
      */
     public function __invoke(ContainerInterface $container, $requestedName,
         array $options = null
     ) {
-        /** @var \VuFind\View\Helper\Root\RecordDataFormatter */
+        /**
+         * Record data formatter view helper
+         *
+         * @var \VuFind\View\Helper\Root\RecordDataFormatter
+         */
         $helper = parent::__invoke($container, $requestedName, $options);
         $helper->setDefaults('library', [$this, 'getDefaultLibraryCoreSpecs']);
         $helper->setDefaults('dictionary', [$this, 'getDefaultDictionaryCoreSpecs']);
@@ -52,7 +69,9 @@ class RecordDataFormatterFactory extends \VuFind\View\Helper\Root\RecordDataForm
     }
 
     /**
-     * @return array;
+     * Library record detail display specifications
+     *
+     * @return array
      */
     public function getDefaultLibraryCoreSpecs()
     {
@@ -89,7 +108,7 @@ class RecordDataFormatterFactory extends \VuFind\View\Helper\Root\RecordDataForm
             $icon = 'fa fa-circle-thin', $heading = true,
             $contentClass = ''
         ) use (&$fields) {
-                $fields[$key] = [
+            $fields[$key] = [
                     'method' => ($template === null) ? 'setLine' : 'setTemplateLine',
                     'dataMethod' => $dataMethod,
                     'template' => $template,
@@ -103,7 +122,8 @@ class RecordDataFormatterFactory extends \VuFind\View\Helper\Root\RecordDataForm
             'Book search', 'getBookSearchFilter',
             'search_in_library_link.phtml', 'fa fa-search', false
         );
-        $setLine('Address', 'getLibraryAddress', null, 'fa fa-map-marker',
+        $setLine(
+            'Address', 'getLibraryAddress', null, 'fa fa-map-marker',
             false, 'library-large'
         );
         $setLine(
@@ -124,7 +144,9 @@ class RecordDataFormatterFactory extends \VuFind\View\Helper\Root\RecordDataForm
     }
 
     /**
-     * @return array;
+     * Dictionary record detail display specifications
+     *
+     * @return array
      */
     public function getDefaultDictionaryCoreSpecs()
     {
@@ -145,20 +167,26 @@ class RecordDataFormatterFactory extends \VuFind\View\Helper\Root\RecordDataForm
     }
 
     /**
-     * @return array;
+     * Authority record detail display specifications
+     *
+     * @return array
      */
     public function getDefaultAuthorityCoreSpecs()
     {
         $spec = new SpecBuilder();
-        $spec->setLine('Bibliographic Details', 'getSummary' /*'getBibliographicDetails'*/);
+        $spec->setLine('Bibliographic Details', 'getSummary');
         $spec->setLine('Alternative names', 'getAddedEntryPersonalNames');
         $spec->setLine('Source', 'getSource');
-        $spec->setTemplateLine('Published also like', 'getPseudonyms', 'pseudonyms.phtml');
+        $spec->setTemplateLine(
+            'Published also like', 'getPseudonyms', 'pseudonyms.phtml'
+        );
         $spec->setLine(
             'Format', 'getFormats', 'RecordHelper',
             ['helperMethod' => 'getFormatList']
         );
-        $spec->setTemplateLine('Publications', 'getRelatedUrls', 'publicationurls.phtml');
+        $spec->setTemplateLine(
+            'Publications', 'getRelatedUrls', 'publicationurls.phtml'
+        );
 
         return $spec->getArray();
     }
@@ -189,7 +217,10 @@ class RecordDataFormatterFactory extends \VuFind\View\Helper\Root\RecordDataForm
         );
         $spec->setLine('Language', 'getLanguages');
         $spec->setLine('Document range', 'getRange');
-        $spec->setTemplateLine('From monographic series', 'getMonographicSeries', 'data-monographic-series.phtml');
+        $spec->setTemplateLine(
+            'From monographic series', 'getMonographicSeries',
+            'data-monographic-series.phtml'
+        );
         $spec->setTemplateLine(
             'Published', 'getPublicationDetails', 'data-publicationDetails.phtml'
         );

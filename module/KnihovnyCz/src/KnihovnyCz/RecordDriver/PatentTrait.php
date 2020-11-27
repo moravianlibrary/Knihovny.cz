@@ -26,23 +26,34 @@
  * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://knihovny.cz Main Page
  */
-
 namespace KnihovnyCz\RecordDriver;
 
+/**
+ * Trait PatentTrait
+ *
+ * @category VuFind
+ * @package  KnihovnyCz\RecordDriver
+ * @author   Josef Moravec <moravec@mzk.cz>
+ * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
+ * @link     https://knihovny.cz Main Page
+ */
 trait PatentTrait
 {
     /**
      * Get patent info for export in txt
-     * TODO: Do we really need these two methods? If so, shouldn't it be rendered in template?
+     *
+     * @return string
+     * TODO: Do we really need these two methods? If so, shouldn't it be rendered
+     * in template?
      */
     public function getPatentInfo(): string
     {
         $patentInfo = [];
-        $patentInfo['country'] = $this->getFieldArray('013', array('b'))[0];
-        $patentInfo['type'] = $this->getFieldArray('013', array('c'))[0];
-        $patentInfo['id'] = $this->getFieldArray('013', array('a'))[0];
-        $patentInfo['publish_date'] = $this->getFieldArray('013', array('d'))[0];
-        if(empty($patentInfo)) {
+        $patentInfo['country'] = $this->getFieldArray('013', ['b'])[0];
+        $patentInfo['type'] = $this->getFieldArray('013', ['c'])[0];
+        $patentInfo['id'] = $this->getFieldArray('013', ['a'])[0];
+        $patentInfo['publish_date'] = $this->getFieldArray('013', ['d'])[0];
+        if (empty($patentInfo)) {
             return '';
         }
         return $this->renderPatentInfo($patentInfo);
@@ -58,7 +69,8 @@ trait PatentTrait
     public function renderPatentInfo(array $patentInfo): string
     {
         $patentInfoText = '';
-        $patentInfoText .= $this->translate('Patent') . ': ' . $patentInfo['country'] . ', ';
+        $patentInfoText .= $this->translate('Patent') . ': '
+            . $patentInfo['country'] . ', ';
         switch ($patentInfo['type']) {
         case 'B6':
             $patentInfoText .= $this->translate('patent_file');
@@ -73,10 +85,17 @@ trait PatentTrait
             $patentInfoText .= $this->translate('unknown_patent_type');
             break;
         }
-        $patentInfoText .= ', ' . $patentInfo['id'] . ', ' . $patentInfo['publish_date'] . "\r\n";
+        $patentInfoText = implode(
+            ',', [$patentInfoText, $patentInfo['id'], $patentInfo['publish_date']]
+        ) . "\r\n";
         return $patentInfoText;
     }
 
+    /**
+     * Get international patent classification
+     *
+     * @return array
+     */
     public function getMpts(): array
     {
         $fields024 = $this->getStructuredDataFieldArray('024');
@@ -92,5 +111,4 @@ trait PatentTrait
         );
         return $mpts;
     }
-
 }

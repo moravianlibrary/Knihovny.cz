@@ -26,7 +26,6 @@
  * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://knihovny.cz Main Page
  */
-
 namespace KnihovnyCz\Db\Table;
 
 use Laminas\Db\Adapter\Adapter;
@@ -34,6 +33,15 @@ use Laminas\Db\Sql\Select;
 use VuFind\Db\Row\RowGateway;
 use VuFind\Db\Table\PluginManager;
 
+/**
+ * Class InstConfigs
+ *
+ * @category VuFind
+ * @package  KnihovnyCz\Db\Table
+ * @author   Josef Moravec <moravec@mzk.cz>
+ * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
+ * @link     https://knihovny.cz Main Page
+ */
 class InstConfigs extends \VuFind\Db\Table\Gateway
 {
     /**
@@ -56,7 +64,7 @@ class InstConfigs extends \VuFind\Db\Table\Gateway
      *
      * Returns empty array if no configuration found for an institution
      *
-     * @param \KnihovnyCz\Db\Row\InstSources $source
+     * @param \KnihovnyCz\Db\Row\InstSources $source Instance identifier
      *
      * @return array
      */
@@ -72,20 +80,27 @@ class InstConfigs extends \VuFind\Db\Table\Gateway
     /**
      * Add config on top of current one
      *
-     * @param array $config
-     * @param string $source
+     * @param array  $config Configuration array
+     * @param string $source Instance identifier
      *
      * @return array
      */
-    protected function applyConfig(&$config, $source) {
-        $dbConfig = $this->select(function (Select $select) use ($source)  {
-            $select
-                ->columns(['id', 'value'])
-                ->join('inst_sources', 'source_id = inst_sources.id')
-                ->join('inst_keys', 'key_id = inst_keys.id', ['key' => 'key_name'])
-                ->join('inst_sections', 'inst_keys.section_id = inst_sections.id', ['section' => 'section_name'])
-                ->where(['inst_sources.source' => $source]);
-        });
+    protected function applyConfig(&$config, $source)
+    {
+        $dbConfig = $this->select(
+            function (Select $select) use ($source) {
+                $select
+                    ->columns(['id', 'value'])
+                    ->join('inst_sources', 'source_id = inst_sources.id')
+                    ->join(
+                        'inst_keys', 'key_id = inst_keys.id',
+                        ['key' => 'key_name']
+                    )->join(
+                        'inst_sections', 'inst_keys.section_id = inst_sections.id',
+                        ['section' => 'section_name']
+                    )->where(['inst_sources.source' => $source]);
+            }
+        );
 
         foreach ($dbConfig as $dbConfigRow) {
             $section = $dbConfigRow['section'];

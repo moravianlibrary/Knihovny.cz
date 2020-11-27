@@ -25,11 +25,19 @@
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     http://github.com/moravianlibrary/Knihovny.cz Knihovny.cz
  */
-
 namespace KnihovnyCz\RecordDriver;
 
 use VuFind\Exception\RecordMissing as RecordMissingException;
 
+/**
+ * Knihovny.cz solr default record driver
+ *
+ * @category VuFind
+ * @package  RecordDrivers
+ * @author   Josef Moravec <moravec@mzk.cz>
+ * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
+ * @link     http://github.com/moravianlibrary/Knihovny.cz Knihovny.cz
+ */
 class SolrDefault extends \VuFind\RecordDriver\SolrDefault
 {
     use BuyLinksTrait;
@@ -46,11 +54,15 @@ class SolrDefault extends \VuFind\RecordDriver\SolrDefault
     ];
 
     /**
+     * Parent record
+     *
      * @var \VuFind\RecordDriver\AbstractBase|null
      */
     protected $parentRecord = null;
 
     /**
+     * Record loader
+     *
      * @var \VuFind\Record\Loader|null
      */
     protected $recordLoader = null;
@@ -72,6 +84,11 @@ class SolrDefault extends \VuFind\RecordDriver\SolrDefault
         return $this->fields['publisher_display_mv'] ?? [];
     }
 
+    /**
+     * Get formats for display
+     *
+     * @return array
+     */
     public function getFormats()
     {
         return $this->fields['format_display_mv'] ?? [];
@@ -95,7 +112,7 @@ class SolrDefault extends \VuFind\RecordDriver\SolrDefault
      */
     public function getSourceId()
     {
-        list ($source) = explode('.', $this->getUniqueID());
+        list($source) = explode('.', $this->getUniqueID());
         return $source;
     }
 
@@ -277,8 +294,12 @@ class SolrDefault extends \VuFind\RecordDriver\SolrDefault
     public function getSummary()
     {
         $summary = $this->fields['summary_display_mv'] ?? [];
-        if (empty($summary)){
-            /** @var \KnihovnyCz\RecordDriver\SolrDefault|null $parent */
+        if (empty($summary)) {
+            /**
+             * Parent record
+             *
+             * @var \KnihovnyCz\RecordDriver\SolrDefault|null $parent
+             */
             $parent = $this->getParentRecord();
             $summary = ($parent !== null) ? $parent->getSummary() : [];
         }
@@ -307,20 +328,36 @@ class SolrDefault extends \VuFind\RecordDriver\SolrDefault
         if (!$seriesField) {
             $parentRecord = $this->getParentRecord();
             if ($parentRecord !== null) {
-                $seriesField = (array)$parentRecord->tryMethod('getMonographicSeriesFieldData');
+                $seriesField = (array)$parentRecord->tryMethod(
+                    'getMonographicSeriesFieldData'
+                );
             }
         }
+        $params = http_build_query(
+            [
+                'type0[]' => 'adv_search_monographic_series',
+                'join' => 'AND',
+                'searchTypeTemplate' => 'advanced',
+                'page' => '1',
+                'bool0[]' => 'AND',
+            ], '', '&amp;'
+        );
         foreach ($seriesField as $serie) {
             $result[] = [
                 'url' => '/Search/Results?lookfor0[]='
                     . urlencode(explode("|", $serie)[0])
-                    . '&amp;type0[]=adv_search_monographic_series&amp;join=AND&amp;searchTypeTemplate=advanced&amp;page=1&amp;bool0[]=AND',
+                    . '&amp;' . $params,
                 'desc' => str_replace('|', ' | ', $serie),
             ];
         }
         return $result;
     }
 
+    /**
+     * Is record available in Ziskej service?
+     *
+     * @return bool
+     */
     public function getZiskejBoolean() : bool
     {
         return $this->fields['ziskej_boolean'] ?? false;
@@ -329,12 +366,11 @@ class SolrDefault extends \VuFind\RecordDriver\SolrDefault
     /**
      * Return an array of associative URL arrays with one or more of the following
      * keys:
-     *
-     *      desc: URL description text to display (optional)
-     *      url: fully-formed URL (required if 'route' is absent)
-     *      destination: web or digital library
-     *      status: access status
-     *      source: source of data
+     * - desc: URL description text to display (optional)
+     * - url: fully-formed URL (required if 'route' is absent)
+     * - destination: web or digital library
+     * - status: access status
+     * - source: source of data
      *
      * @return array
      */
@@ -342,7 +378,7 @@ class SolrDefault extends \VuFind\RecordDriver\SolrDefault
     {
         $links = [];
         $parentRecord = $this->getParentRecord();
-        if ($parentRecord !== null ) {
+        if ($parentRecord !== null) {
             $rawLinks = (array)$parentRecord->tryMethod('get856Links');
             foreach ($rawLinks as $rawLink) {
                 $parts = explode("|", $rawLink);
@@ -367,7 +403,7 @@ class SolrDefault extends \VuFind\RecordDriver\SolrDefault
      */
     protected function get856Links()
     {
-        return isset($this->fields['url']) ? $this->fields['url'] : [];
+        return $this->fields['url'] ?? [];
     }
 
     /**
@@ -469,6 +505,11 @@ class SolrDefault extends \VuFind\RecordDriver\SolrDefault
         return $this->libraryIdMappings[$source] ?? null;
     }
 
+    /**
+     * Get related record data
+     *
+     * @return array
+     */
     public function getSimilarFromSolrField(): array
     {
         $field = $this->fields['similar_display_mv'] ?? [];
@@ -488,5 +529,4 @@ class SolrDefault extends \VuFind\RecordDriver\SolrDefault
     {
         return parent::getDeduplicatedAuthors(array_merge($dataFields, ['id']));
     }
-
 }

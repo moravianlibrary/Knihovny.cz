@@ -26,16 +26,22 @@
  * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://knihovny.cz Main Page
  */
-
 namespace KnihovnyCz\AjaxHandler;
 
 use Laminas\Mvc\Controller\Plugin\Params;
 use VuFind\Http\PhpEnvironment\Request;
-use VuFind\Search\SearchRunner;
 
+/**
+ * Class Edd - API for electronic document delivery
+ *
+ * @category VuFind
+ * @package  KnihovnyCz\AjaxHandler
+ * @author   Vaclav Rosecky <vaclav.rosecky@mzk.cz>
+ * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
+ * @link     https://knihovny.cz Main Page
+ */
 class Edd extends \VuFind\AjaxHandler\AbstractBase
 {
-
     /**
      * Search results plugin manager
      *
@@ -46,6 +52,7 @@ class Edd extends \VuFind\AjaxHandler\AbstractBase
     /**
      * Edd constructor.
      *
+     * @param \VuFindSearch\Service $searchService Search service class
      */
     public function __construct(\VuFindSearch\Service $searchService)
     {
@@ -66,7 +73,7 @@ class Edd extends \VuFind\AjaxHandler\AbstractBase
             'merged_child_boolean:true',
         ];
         $childFilter = '{!child of=\'merged_boolean:true\'} merged_boolean:true';
-        foreach(['issn', 'title'] as $parameter) {
+        foreach (['issn', 'title'] as $parameter) {
             $value = $params->fromQuery($parameter, '');
             if (!empty($value)) {
                 $fq[] = "$childFilter AND $parameter:" . addcslashes($value, '"');
@@ -76,11 +83,13 @@ class Edd extends \VuFind\AjaxHandler\AbstractBase
         if (!empty($year)) {
             $fq[] = 'periodical_availability_int_mv:' . addcslashes($year, '"');
         }
-        $params = new \VuFindSearch\ParamBag(['fq' => $fq, 'fl' => 'id, sigla_display, record_format', 'hl' => false ]);
+        $params = new \VuFindSearch\ParamBag(
+            ['fq' => $fq, 'fl' => 'id, sigla_display, record_format', 'hl' => false ]
+        );
         $result = $this->searchService->search('Solr', $query, 0, 10, $params);
         $records = $result->getRecords();
         $results = [];
-        foreach($records as $record) {
+        foreach ($records as $record) {
             $results[] = [
                 'id' => $record->getUniqueID(),
                 'sigla' => $record->getSiglaDisplay(),
@@ -88,5 +97,4 @@ class Edd extends \VuFind\AjaxHandler\AbstractBase
         }
         return $this->formatResponse($results, 200);
     }
-
 }

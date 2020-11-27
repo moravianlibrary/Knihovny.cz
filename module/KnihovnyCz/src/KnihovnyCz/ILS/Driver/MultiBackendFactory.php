@@ -26,7 +26,6 @@
  * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://knihovny.cz Main Page
  */
-
 namespace KnihovnyCz\ILS\Driver;
 
 use Interop\Container\ContainerInterface;
@@ -34,6 +33,7 @@ use Interop\Container\Exception\ContainerException;
 use Laminas\ServiceManager\Exception\ServiceNotCreatedException;
 use Laminas\ServiceManager\Exception\ServiceNotFoundException;
 use Laminas\ServiceManager\Factory\FactoryInterface;
+use VuFind\ILS\Driver\MultiBackendFactory as OrgMultiBackendFactory;
 
 /**
  * Factory for MultiBackend ILS driver.
@@ -44,7 +44,7 @@ use Laminas\ServiceManager\Factory\FactoryInterface;
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://vufind.org/wiki/development Wiki
  */
-class MultiBackendFactory extends \VuFind\ILS\Driver\MultiBackendFactory implements FactoryInterface
+class MultiBackendFactory extends OrgMultiBackendFactory implements FactoryInterface
 {
     /**
      * Create an object

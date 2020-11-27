@@ -25,7 +25,6 @@
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     http://github.com/moravianlibrary/Knihovny.cz Knihovny.cz
  */
-
 namespace KnihovnyCz\RecordDriver;
 
 trait MarcField996AwareTrait
@@ -47,7 +46,7 @@ trait MarcField996AwareTrait
     protected function getIlsConfig(): array
     {
         if ($this->ilsConfig === null && $this->hasILS()) {
-              $this->ilsConfig = $this->ils->getDriverConfig();
+            $this->ilsConfig = $this->ils->getDriverConfig();
         }
         return $this->ilsConfig; // @phpstan-ignore-line
     }
@@ -72,7 +71,6 @@ trait MarcField996AwareTrait
      * @param array $field
      *
      * @return array
-     *
      */
     protected function processField(array $field): array
     {

@@ -26,16 +26,23 @@
  * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://knihovny.cz Main Page
  */
-
 namespace KnihovnyCz\RecordDriver;
 
 use Interop\Container\ContainerInterface;
 use Laminas\ServiceManager\Exception\ServiceNotCreatedException;
 use Laminas\ServiceManager\Exception\ServiceNotFoundException;
 
+/**
+ * Class SolrLibraryFactory
+ *
+ * @category VuFind
+ * @package  KnihovnyCz\RecordDriver
+ * @author   Josef Moravec <moravec@mzk.cz>
+ * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
+ * @link     https://knihovny.cz Main Page
+ */
 class SolrLibraryFactory extends SolrDefaultFactory
 {
-
     /**
      * Create an object
      *
@@ -53,7 +60,11 @@ class SolrLibraryFactory extends SolrDefaultFactory
     public function __invoke(ContainerInterface $container, $requestedName,
         array $options = null
     ) {
-        /** @var SolrLibrary $driver */
+        /**
+         * Record driver
+         *
+         * @var SolrLibrary $driver
+         */
         $driver = parent::__invoke($container, $requestedName, $options);
         $driver->attachFacetsConfig(
             $container->get(\VuFind\Config\PluginManager::class)->get('facets')

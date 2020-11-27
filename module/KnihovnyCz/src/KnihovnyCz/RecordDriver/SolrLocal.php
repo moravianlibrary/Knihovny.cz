@@ -25,12 +25,19 @@
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     http://github.com/moravianlibrary/Knihovny.cz Knihovny.cz
  */
-
 namespace KnihovnyCz\RecordDriver;
 
+/**
+ * Knihovny.cz solr marc local record driver
+ *
+ * @category VuFind
+ * @package  RecordDrivers
+ * @author   Josef Moravec <moravec@mzk.cz>
+ * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
+ * @link     http://github.com/moravianlibrary/Knihovny.cz Knihovny.cz
+ */
 class SolrLocal extends \KnihovnyCz\RecordDriver\SolrMarc
 {
-
     /**
      * Get the sigla for display
      *
@@ -40,6 +47,4 @@ class SolrLocal extends \KnihovnyCz\RecordDriver\SolrMarc
     {
         return $this->fields['sigla_display'] ?? null;
     }
-
 }
-

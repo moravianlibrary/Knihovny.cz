@@ -21,20 +21,22 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  *
  * @category VuFind
- * @package  KnihovnyCzConsole\Command\Expire
+ * @package  KnihovnyCzConsole
  * @author   Josef Moravec <moravec@mzk.cz>
  * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://knihovny.cz Main Page
  */
-
 namespace KnihovnyCzConsole\Command\Util;
 
-use Symfony\Component\Console\Input\InputArgument;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Console\Output\OutputInterface;
-use VuFind\Db\Table\User;
-
+/**
+ * Class Users
+ *
+ * @category VuFind
+ * @package  KnihovnyCzConsole
+ * @author   Josef Moravec <moravec@mzk.cz>
+ * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
+ * @link     https://knihovny.cz Main Page
+ */
 class ExpireUsersCommand extends \VuFindConsole\Command\Util\AbstractExpireCommand
 {
     /**
@@ -57,5 +59,4 @@ class ExpireUsersCommand extends \VuFindConsole\Command\Util\AbstractExpireComma
      * @var string
      */
     protected static $defaultName = 'util/expire_users';
-
 }

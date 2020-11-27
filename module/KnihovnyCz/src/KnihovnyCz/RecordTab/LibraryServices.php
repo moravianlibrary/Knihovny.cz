@@ -26,9 +26,17 @@
  * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://knihovny.cz Main Page
  */
-
 namespace KnihovnyCz\RecordTab;
 
+/**
+ * Class LibraryServices
+ *
+ * @category VuFind
+ * @package  KnihovnyCz\RecordTab
+ * @author   Josef Moravec <moravec@mzk.cz>
+ * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
+ * @link     https://knihovny.cz Main Page
+ */
 class LibraryServices extends \VuFind\RecordTab\AbstractBase
 {
     /**

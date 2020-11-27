@@ -26,7 +26,6 @@
  * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://knihovny.cz Main Page
  */
-
 namespace KnihovnyCz\AjaxHandler;
 
 use GitWrapper\GitWorkingCopy;
@@ -35,19 +34,34 @@ use Symfony\Component\Filesystem\Exception\IOException;
 use Symfony\Component\Filesystem\Filesystem;
 use VuFind\Http\PhpEnvironment\Request;
 
+/**
+ * Class UpdateContent
+ *
+ * @category VuFind
+ * @package  KnihovnyCz\AjaxHandler
+ * @author   Josef Moravec <moravec@mzk.cz>
+ * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
+ * @link     https://knihovny.cz Main Page
+ */
 class UpdateContent extends \VuFind\AjaxHandler\AbstractBase
 {
     /**
+     * Git service
+     *
      * @var GitWorkingCopy
      */
     protected $git;
 
     /**
+     * Git branch
+     *
      * @var string
      */
     protected $branch;
 
     /**
+     * Filesystem utils
+     *
      * @var Filesystem
      */
     protected $filesystem;
@@ -55,10 +69,13 @@ class UpdateContent extends \VuFind\AjaxHandler\AbstractBase
     /**
      * UpdateContent constructor.
      *
-     * @param GitWorkingCopy $git
+     * @param GitWorkingCopy $git        Git service
+     * @param string         $branch     Git branch
+     * @param Filesystem     $filesystem File system util service
      */
-    public function __construct(GitWorkingCopy $git, string $branch, Filesystem $filesystem)
-    {
+    public function __construct(
+        GitWorkingCopy $git, string $branch, Filesystem $filesystem
+    ) {
         $this->git = $git;
         $this->branch = $branch;
         $this->filesystem = $filesystem;
@@ -76,7 +93,7 @@ class UpdateContent extends \VuFind\AjaxHandler\AbstractBase
         $header = $params->fromHeader('X-Gitlab-Event');
         if ($header === null || $header->getFieldValue() !== 'Push Hook') {
             return $this->formatErrorResponse(
-                'Bad webhook type. This handler could handle only \'Push Hook\' type.'
+                'Bad request. This handler could handle only \'Push Hook\' type.'
             );
         }
         $controller = $params->getController();
@@ -125,12 +142,11 @@ class UpdateContent extends \VuFind\AjaxHandler\AbstractBase
     /**
      * Format error response
      *
-     * @param string $message
-     * @param int    $httpCode
+     * @param string $message  Error message
+     * @param int    $httpCode HTTP code
      *
      * @return array
      */
-
     protected function formatErrorResponse(string $message, int $httpCode = 400)
     {
         $response = [

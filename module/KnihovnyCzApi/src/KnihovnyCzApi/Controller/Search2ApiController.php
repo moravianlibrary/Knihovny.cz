@@ -26,9 +26,17 @@
  * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://knihovny.cz Main Page
  */
-
 namespace KnihovnyCzApi\Controller;
 
+/**
+ * Class Search2ApiController
+ *
+ * @category VuFind
+ * @package  KnihovnyCzApi
+ * @author   Josef Moravec <moravec@mzk.cz>
+ * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
+ * @link     https://knihovny.cz Main Page
+ */
 class Search2ApiController extends \VuFindApi\Controller\Search2ApiController
 {
     /**

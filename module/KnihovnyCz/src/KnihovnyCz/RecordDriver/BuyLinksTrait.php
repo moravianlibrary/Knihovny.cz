@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Class BuyLinksTrait
+ * Trait BuyLinksTrait
  *
  * PHP version 7
  *
@@ -26,20 +26,32 @@
  * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://knihovny.cz Main Page
  */
-
 namespace KnihovnyCz\RecordDriver;
 
 use KnihovnyCz\Service\LinkServiceInterface;
 
+/**
+ * Trait BuyLinksTrait
+ *
+ * @category VuFind
+ * @package  KnihovnyCz\RecordDriver
+ * @author   Josef Moravec <moravec@mzk.cz>
+ * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
+ * @link     https://knihovny.cz Main Page
+ */
 trait BuyLinksTrait
 {
     /**
-     * @var LinkServiceInterface Service for getting link Google Books
+     * Service for getting link Google Books
+     *
+     * @var LinkServiceInterface
      */
     protected LinkServiceInterface $googlebooksService;
 
     /**
-     * @var LinkServiceInterface Service for getting link to Zboží.cz
+     * Service for getting link to Zboží.cz
+     *
+     * @var LinkServiceInterface
      */
     protected LinkServiceInterface $zboziService;
 
@@ -113,7 +125,11 @@ trait BuyLinksTrait
     {
         $link = $this->fields['external_links_str_mv'][0] ?? null;
         if ($link === null) {
-            /** @var \KnihovnyCz\RecordDriver\SolrDefault $parentRecord */
+            /**
+             * Parent record
+             *
+             * @var \KnihovnyCz\RecordDriver\SolrDefault $parentRecord
+             */
             $parentRecord = $this->getParentRecord();
             if ($parentRecord !== null) {
                 return $parentRecord->getAntikvariatyLink();
@@ -145,7 +161,9 @@ trait BuyLinksTrait
     /**
      * Attach service for Google Books
      *
-     * @param LinkServiceInterface $googleService
+     * @param LinkServiceInterface $googleService Google books API client
+     *
+     * @return void
      */
     public function attachGoogleService(LinkServiceInterface $googleService): void
     {
@@ -155,10 +173,12 @@ trait BuyLinksTrait
     /**
      * Attach service for Zboží.cz
      *
-     * @param LinkServiceInterface $zboziService
+     * @param LinkServiceInterface $zboziService Zbozi.cz API client
+     *
+     * @return void
      */
     public function attachZboziService(LinkServiceInterface $zboziService): void
     {
-         $this->zboziService = $zboziService;
+        $this->zboziService = $zboziService;
     }
 }
