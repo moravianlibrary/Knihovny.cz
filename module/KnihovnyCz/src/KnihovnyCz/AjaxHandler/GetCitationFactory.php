@@ -1,4 +1,5 @@
-<?php declare(strict_types=1);
+<?php
+declare(strict_types=1);
 
 /**
  * Class GetCitationFactory
@@ -26,7 +27,6 @@
  * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://knihovny.cz Main Page
  */
-
 namespace KnihovnyCz\AjaxHandler;
 
 use Interop\Container\ContainerInterface;
@@ -35,6 +35,15 @@ use Laminas\ServiceManager\Exception\ServiceNotCreatedException;
 use Laminas\ServiceManager\Exception\ServiceNotFoundException;
 use Laminas\ServiceManager\Factory\FactoryInterface;
 
+/**
+ * Class GetCitationFactory
+ *
+ * @category VuFind
+ * @package  KnihovnyCz\AjaxHandler
+ * @author   Josef Moravec <moravec@mzk.cz>
+ * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
+ * @link     https://knihovny.cz Main Page
+ */
 class GetCitationFactory implements FactoryInterface
 {
     /**

@@ -1,10 +1,12 @@
 <?php
+declare(strict_types=1);
+
 /**
- * Knihovny.cz solr default record driver factory
+ * Class SolrLocalFactory
  *
  * PHP version 7
  *
- * Copyright (C) The Moravian Library 2015-2019.
+ * Copyright (C) Moravian Library 2020.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -20,10 +22,10 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  *
  * @category VuFind
- * @package  RecordDrivers
+ * @package  KnihovnyCz\RecordDriver
  * @author   Josef Moravec <moravec@mzk.cz>
- * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
- * @link     http://github.com/moravianlibrary/Knihovny.cz Knihovny.cz
+ * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
+ * @link     https://knihovny.cz Main Page
  */
 namespace KnihovnyCz\RecordDriver;
 
@@ -32,15 +34,15 @@ use Laminas\ServiceManager\Exception\ServiceNotCreatedException;
 use Laminas\ServiceManager\Exception\ServiceNotFoundException;
 
 /**
- * Class solr default record driver factory
+ * Class SolrLocalFactory
  *
  * @category VuFind
- * @package  RecordDrivers
+ * @package  KnihovnyCz\RecordDriver
  * @author   Josef Moravec <moravec@mzk.cz>
- * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
- * @link     http://github.com/moravianlibrary/Knihovny.cz Knihovny.cz
+ * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
+ * @link     https://knihovny.cz Main Page
  */
-class SolrDefaultFactory extends \VuFind\RecordDriver\SolrDefaultFactory
+class SolrLocalFactory extends SolrDefaultFactory
 {
     /**
      * Create an object
@@ -62,22 +64,11 @@ class SolrDefaultFactory extends \VuFind\RecordDriver\SolrDefaultFactory
         /**
          * Record driver
          *
-         * @var SolrDefault $driver
+         * @var SolrLocal $driver
          */
         $driver = parent::__invoke($container, $requestedName, $options);
-        $driver->attachRecordLoader($container->get(\VuFind\Record\Loader::class));
-        $driver->attachLibraryIdMappings(
-            $container->get(\VuFind\Config\PluginManager::class)
-                ->get('MultiBackend')->LibraryIDMapping
-        );
-        $driver->attachGoogleService(
-            $container->get(\KnihovnyCz\Service\GoogleBooksLinkService::class)
-        );
-        $driver->attachZboziService(
-            $container->get(\KnihovnyCz\Service\ZboziLinkService::class)
-        );
-        $driver->attachObalkyKnihService(
-            $container->get(\VuFind\Content\ObalkyKnihService::class)
+        $driver->attachCitaceProService(
+            $container->get(\KnihovnyCz\Service\CitaceProService::class)
         );
         return $driver;
     }

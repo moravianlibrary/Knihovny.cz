@@ -1,4 +1,5 @@
-<?php declare(strict_types=1);
+<?php
+declare(strict_types=1);
 
 /**
  * Class CitaceProService
@@ -26,11 +27,19 @@
  * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://knihovny.cz Main Page
  */
-
 namespace KnihovnyCz\Service;
 
 use Laminas\Config\Config;
 
+/**
+ * Class CitaceProService
+ *
+ * @category VuFind
+ * @package  KnihovnyCz\Service
+ * @author   Josef Moravec <moravec@mzk.cz>
+ * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
+ * @link     https://knihovny.cz Main Page
+ */
 class CitaceProService implements \VuFindHttp\HttpServiceAwareInterface
 {
     use \VuFindHttp\HttpServiceAwareTrait;
@@ -89,17 +98,19 @@ class CitaceProService implements \VuFindHttp\HttpServiceAwareInterface
     /**
      * Get available citation styles
      *
-     * @return array|null
+     * @return array
      */
-    public function getCitationStyles(): ?array
+    public function getCitationStyles(): array
     {
-        return $this->config->Citation->citation_styles->toArray() ?? null;
+        return $this->config->Citation->citation_styles->toArray() ?? [];
     }
 
     /**
      * Validates citation style
      *
      * @param string $style Citation style code
+     *
+     * @return bool
      */
     protected function isCitationStyleValid(string $style): bool
     {
@@ -110,6 +121,8 @@ class CitaceProService implements \VuFindHttp\HttpServiceAwareInterface
 
     /**
      * Get default citation style
+     *
+     * @return string
      */
     public function getDefaultCitationStyle(): string
     {
@@ -118,6 +131,8 @@ class CitaceProService implements \VuFindHttp\HttpServiceAwareInterface
 
     /**
      * Get local domain
+     *
+     * @return string
      */
     protected function getCitationLocalDomain(): string
     {
