@@ -1,4 +1,5 @@
-<?php declare(strict_types=1);
+<?php
+declare(strict_types=1);
 
 /**
  * Class GetCitation
@@ -26,12 +27,20 @@
  * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://knihovny.cz Main Page
  */
-
 namespace KnihovnyCz\AjaxHandler;
 
 use KnihovnyCz\Service\CitaceProService;
 use Laminas\Mvc\Controller\Plugin\Params;
 
+/**
+ * Class GetCitation
+ *
+ * @category VuFind
+ * @package  KnihovnyCz\AjaxHandler
+ * @author   Josef Moravec <moravec@mzk.cz>
+ * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
+ * @link     https://knihovny.cz Main Page
+ */
 class GetCitation extends \VuFind\AjaxHandler\AbstractBase
 {
     /**
@@ -41,6 +50,8 @@ class GetCitation extends \VuFind\AjaxHandler\AbstractBase
 
     /**
      * Get citation ajax handler constructor.
+     *
+     * @param CitaceProService $citacePro CitacePro API service
      */
     public function __construct(CitaceProService $citacePro)
     {

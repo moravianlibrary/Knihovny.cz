@@ -1,4 +1,5 @@
-<?php declare(strict_types=1);
+<?php
+declare(strict_types=1);
 
 /**
  * Trait CitaceProTrait
@@ -26,17 +27,32 @@
  * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://knihovny.cz Main Page
  */
-
 namespace KnihovnyCz\RecordDriver;
 
 use KnihovnyCz\Service\CitaceProService;
 
+/**
+ * Trait CitaceProTrait
+ *
+ * @category VuFind
+ * @package  KnihovnyCz\RecordDriver
+ * @author   Josef Moravec <moravec@mzk.cz>
+ * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
+ * @link     https://knihovny.cz Main Page
+ */
 trait CitaceProTrait
 {
+    /**
+     * CitacePro API service
+     */
     protected CitaceProService $citacePro;
 
     /**
      * Attach CitacePro service to record driver
+     *
+     * @param CitaceProService $citacePro CitacePro API service
+     *
+     * @return void
      */
     public function attachCitaceProService(CitaceProService $citacePro): void
     {
@@ -45,14 +61,18 @@ trait CitaceProTrait
 
     /**
      * Get citation formats
+     *
+     * @return array
      */
-    public function getCitationFormats(): ?array
+    public function getCitationFormats(): array
     {
         return $this->citacePro->getCitationStyles();
     }
 
     /**
      * Get default citation style identifier
+     *
+     * @return string
      */
     public function getDefaultCitationStyle(): string
     {
@@ -62,6 +82,9 @@ trait CitaceProTrait
     /**
      * Get citation HTML snippet
      *
+     * @param string|null $style Style identifier
+     *
+     * @return string
      * @throws \Exception
      */
     public function getCitation(?string $style = null): string
