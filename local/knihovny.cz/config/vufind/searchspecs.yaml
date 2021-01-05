@@ -343,6 +343,9 @@ AllFields:
     - format_search_txt_mv
     - obalky_annotation_txt_mv
     - uniftitle_viz^100
+    - fulltext_analyser_txt_mv^5
+    - semantic_enrichment_txt_mv^5
+    - auto_conspectus_txt_mv^5
   DismaxParams:
     - [bq, "inspiration:top_results^1"]
     - [bf, "if(exists(merged_records_boolean),10000,0)" ]
@@ -649,6 +652,8 @@ adv_search_nbn:
 adv_search_fulltext:
   Dismaxfields:
    - toc_txt_mv^10
+   - semantic_enrichment_txt_mv^5
+   - fulltext_analyser_txt_mv^5
    - fulltext
   DismaxParams:
     - [bq, "inspiration:top_results^1"]
@@ -662,6 +667,12 @@ adv_search_fulltext:
       - [onephrase, 100]
       - [and, 50]
     toc_txt_mv:
+      - [onephrase, 100]
+      - [and, 50]
+    semantic_enrichment_txt_mv:
+      - [onephrase, 100]
+      - [and, 50]
+    fulltext_analyser_txt_mv:
       - [onephrase, 100]
       - [and, 50]
   FilterQuery: "*:* NOT record_format:sfx"
