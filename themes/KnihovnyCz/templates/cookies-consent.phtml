@@ -1,0 +1,7 @@
+<?php if (empty($_COOKIE['knihovnycz-cookies-consent'])): ?>
+  <div class="cookies-consent">
+    <?=$this->translate('cookies_consent_text')?>
+    <button class="btn btn-default cookies-consent-dismiss"><?=$this->translate('All right')?></button>
+    <a href="https://policies.google.com/technologies/cookies"><?=$this->translate('More information')?></a>
+  </div>
+<?php endif; ?>
