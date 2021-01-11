@@ -1784,6 +1784,8 @@ class XCNCIP2Test extends \VuFindTest\ILS\Driver\XCNCIP2Test
     protected $profileTests = [];
     protected $storageRetrievalTests = [];
     protected $requestTests = [];
+    protected $notRenewableTransactionsTests = [];
+    protected $renewMyItemsWithDisabledRenewals = [];
 
     public function testGetStatuses()
     {
