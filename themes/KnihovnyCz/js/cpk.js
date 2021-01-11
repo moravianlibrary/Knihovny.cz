@@ -25,7 +25,7 @@ document.addEventListener('DOMContentLoaded', function runObserver() {
 // Cookie consent bar handling
 $(document).ready(function cookiesConsentInit() {
   $('.cookies-consent-dismiss').click(function setCookie() {
-    Cookies.set('knihovnycz-cookies-consent', 1, { expires: 365 });
+    window.Cookies.set('knihovnycz-cookies-consent', 1, { expires: 365 });
     $('.cookies-consent').hide();
   });
 });
