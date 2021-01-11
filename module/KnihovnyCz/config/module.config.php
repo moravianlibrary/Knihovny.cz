@@ -75,7 +75,7 @@ $config = [
                     \KnihovnyCz\RecordDriver\SolrDublinCore::class => \KnihovnyCz\RecordDriver\SolrDefaultFactory::class,
                     \KnihovnyCz\RecordDriver\SolrLibrary::class => \KnihovnyCz\RecordDriver\SolrLibraryFactory::class,
                     \KnihovnyCz\RecordDriver\SolrMarc::class => \KnihovnyCz\RecordDriver\SolrDefaultFactory::class,
-                    \KnihovnyCz\RecordDriver\SolrLocal::class => \KnihovnyCz\RecordDriver\SolrDefaultFactory::class,
+                    \KnihovnyCz\RecordDriver\SolrLocal::class => \KnihovnyCz\RecordDriver\SolrLocalFactory::class,
                     \KnihovnyCz\RecordDriver\Search2Library::class => \KnihovnyCz\RecordDriver\SolrLibraryFactory::class,
                 ],
                 'aliases' => [
@@ -181,10 +181,12 @@ $config = [
                 'factories' => [
                     \KnihovnyCz\AjaxHandler\UpdateContent::class => \KnihovnyCz\AjaxHandler\UpdateContentFactory::class,
                     \KnihovnyCz\AjaxHandler\Edd::class => \KnihovnyCz\AjaxHandler\EddFactory::class,
+                    \KnihovnyCz\AjaxHandler\GetCitation::class => \KnihovnyCz\AjaxHandler\GetCitationFactory::class,
                 ],
                 'aliases' => [
                     'updateContent' => \KnihovnyCz\AjaxHandler\UpdateContent::class,
                     'edd' => \KnihovnyCz\AjaxHandler\Edd::class,
+                    'getcitation' => \KnihovnyCz\AjaxHandler\GetCitation::class,
                 ],
             ],
             'related' => [
@@ -200,6 +202,7 @@ $config = [
     'service_manager' => [
         'factories' => [
             \GitWrapper\GitWorkingCopy::class => \KnihovnyCz\Service\GitFactory::class,
+            \KnihovnyCz\Service\CitaceProService::class => \KnihovnyCz\Service\CitaceProServiceFactory::class,
             \KnihovnyCz\Config\PluginManager::class => \KnihovnyCz\Config\PluginManagerFactory::class,
             \KnihovnyCz\Content\ObalkyKnihService::class => \VuFind\Content\ObalkyKnihServiceFactory::class,
         ],

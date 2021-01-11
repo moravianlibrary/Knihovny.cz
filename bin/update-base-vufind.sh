@@ -45,7 +45,7 @@ REMOTE_VERSION=$(last_commit $branch $repository)
 OUR_VERSION=$(grep "ENV PARAM_VUFIND_COMMIT" "${FILENAME}" | sed 's/ENV PARAM_VUFIND_COMMIT="\(.*\)"/\1/g')
 
 if [ "$REMOTE_VERSION" == "$OUR_VERSION" ]; then
-  echo "Remote and local versions are some. No update needed."
+  echo "Remote and local versions are same. No update needed."
   exit 0;
 fi;
 echo "Is available update to version $REMOTE_VERSION. Your current version is $OUR_VERSION."
