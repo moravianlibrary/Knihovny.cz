@@ -85,8 +85,7 @@ class Config extends Gateway
                 if (isset($item->array_key) && $item->array_key !== null) {
                     $data[$item->section][$item->item][$item->array_key]
                         = $item->value;
-                // We do not have array_key, just leave it on numbers:
-                } else {
+                } else { // We do not have array_key, just leave it on numbers
                     $data[$item->section][$item->item][] = $item->value;
                 }
                 // Type is string:
