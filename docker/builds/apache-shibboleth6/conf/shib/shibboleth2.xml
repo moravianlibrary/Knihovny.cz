@@ -1,7 +1,7 @@
 <SPConfig xmlns="urn:mace:shibboleth:2.0:native:sp:config"
     xmlns:conf="urn:mace:shibboleth:2.0:native:sp:config"
     xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
-    xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"    
+    xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
     xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata"
     logger="syslog.logger" clockSkew="180">
 
@@ -56,7 +56,7 @@
             exportLocation="PARAM_VUFIND_URL/Shibboleth.sso/GetAssertion"
             exportACL="127.0.0.1 172.17.0.1"
             idpHistory="false" idpHistoryDays="7" cookieProps="; path=/;">
-            
+
             <!--
             SessionInitiators handle session requests and relay them to a Discovery page,
             or to an IdP if possible. Automatic session setup will use the default or first
@@ -66,9 +66,9 @@
                 <SessionInitiator type="SAML2" template="bindingTemplate.html" outgoingBindings="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST-SimpleSign urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Artifact urn:oasis:names:tc:SAML:2.0:bindings:SOAP"/>
                 <SessionInitiator type="Shib1"/>
                 <!-- Filter set to eduID's IdP & Social IdP's provided by extidp.cesnet.cz -->
-                <SessionInitiator type="SAMLDS" URL="https://ds.eduid.cz/wayf.php?filter=eyJ2ZXIiOiIyIiwiYWxsb3dGZWVkcyI6eyJlZHVJRC5jeiI6eyJhbGxvd0VDIjpbImh0dHA6Ly9lZHVpZC5jei91cmkvaWRwLWdyb3VwL2xpYnJhcnkiXX19fQ=="/>
+                <SessionInitiator type="SAMLDS" URL="https://ds.eduid.cz/wayf.php?filter=eyJ2ZXIiOiIyIiwiYWxsb3dGZWVkcyI6eyJlZHVJRC5jeiI6e30sIlNvY2lhbElkUHMiOnt9fX0="/>
             </SessionInitiator>
- 
+
             <!--
             md:AssertionConsumerService locations handle specific SSO protocol bindings,
             such as SAML 2.0 POST or SAML 1.1 Artifact. The isDefault and index attributes
@@ -165,7 +165,7 @@
 
             <!-- eduID.cz -->
             <MetadataProvider type="XML" uri="https://metadata.eduid.cz/entities/eduid+idp"
-                              backingFilePath="/etc/shibboleth/eduid-metadata.xml" 
+                              backingFilePath="/etc/shibboleth/eduid-metadata.xml"
                               reloadInterval="7200"/>
 
             <MetadataProvider type="XML" uri="https://metadata.eduid.cz/entities/socialidps"
@@ -173,7 +173,7 @@
                               reloadInterval="7200"/>
 
             <MetadataProvider type="XML" uri="https://metadata.cesnet.cz/entities/extidp.cesnet.cz"
-                              backingFilePath="/etc/shibboleth/eduid-extern-metadata.xml" 
+                              backingFilePath="/etc/shibboleth/eduid-extern-metadata.xml"
                               reloadInterval="7200"/>
 
             <MetadataProvider type="XML" uri="https://login.cesnet.cz/proxy/saml2/idp/metadata.php"

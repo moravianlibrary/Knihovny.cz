@@ -29,4 +29,6 @@
     <Attribute name="urn:oid:1.3.6.1.4.1.5923.1.1.1.9" id="eduPersonScopedAffiliation"/>
     <Attribute name="urn:oid:1.3.6.1.4.1.5923.1.1.1.1" id="eduPersonUnscopedAffiliation"/>
 
+    <Attribute name="urn:oid:1.2.840.113549.1.9.2" id="unstructuredName"/>
+
 </Attributes>
