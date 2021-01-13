@@ -32,9 +32,9 @@ method		= Shibboleth
 [Shibboleth]
 login           = /Shibboleth.sso/DS
 logout          = /Shibboleth.sso/Logout
-target          = /MyResearch/Home
 username        = eduPersonPrincipalName
 cat_username    = userLibraryId
+allow_configuration_override = true
 
 [Database]
 database        = mysql://user:pw@localhost/dbName
