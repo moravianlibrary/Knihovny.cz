@@ -39,6 +39,8 @@ main() {
         PARAM_VUFIND_ENTITY_ID=$PARAM_VUFIND_URL
     fi;
 
+    WAYF_FILE_URL="$PARAM_VUFIND_URL/wayf.txt"
+
     sed -i \
         -e "s#PARAM_VUFIND_HOST#${PARAM_VUFIND_HOST}#g" \
         -e "s#PARAM_VUFIND_SSL_PORT#${PARAM_VUFIND_SSL_PORT}#g" \
@@ -47,13 +49,14 @@ main() {
         -e "s#PARAM_SSL_DIR#${PARAM_SSL_DIR:-/etc/ssl/private}#g" \
         -e "s#PARAM_SHIB_KEY_OUT#${PARAM_SHIB_KEY_OUT:-shibboleth2-sp-key.pem}#g" \
         -e "s#PARAM_SHIB_CRT_OUT#${PARAM_SHIB_CRT_OUT:-shibboleth2-sp-cert.pem}#g" \
+        -e "s#WAYF_FILE_URL#${WAYF_FILE_URL}#g" \
         "$SHIB_CONF_ABS_PATH" || return $?
 
     /usr/local/bin/generate_key.sh "$PARAM_SSL_DIR/$PARAM_SHIB_KEY_OUT" "$PARAM_SSL_DIR/$PARAM_SHIB_CRT_OUT" \
         "$PARAM_VUFIND_HOST" "$PARAM_SSL_VALIDITY_DAYS" || return $?
 
     service shibd stop &>/dev/null
-    
+
     service shibd start || (perror "Failed starting shibboleth daemon, something may be wrong with the configuration ..." && return 4)
 }
 
