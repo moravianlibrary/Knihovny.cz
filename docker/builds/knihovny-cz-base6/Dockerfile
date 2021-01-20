@@ -32,9 +32,9 @@ RUN curl "https://github.com/vufind-org/vufind/archive/${PARAM_VUFIND_COMMIT}.zi
 RUN unzip -q /tmp/vufind.zip -d /tmp
 
 # Move them to target place
-RUN mv /tmp/vufind-${PARAM_VUFIND_COMMIT}/* /var/www/knihovny-cz/ && \
+RUN cp -rl /tmp/vufind-${PARAM_VUFIND_COMMIT}/* /var/www/knihovny-cz/ && \
     mv /tmp/vufind-${PARAM_VUFIND_COMMIT}/.[!.]* /var/www/knihovny-cz/ && \
-    rmdir /tmp/vufind-${PARAM_VUFIND_COMMIT} && \
+    rm -r /tmp/vufind-${PARAM_VUFIND_COMMIT} && \
     rm /tmp/vufind.zip
 
 # Add local dependecies

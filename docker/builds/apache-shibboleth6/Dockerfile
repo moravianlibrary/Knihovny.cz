@@ -19,6 +19,7 @@ COPY ./conf/shib/shibboleth2.xml /etc/shibboleth/shibboleth2.xml.templ
 COPY ./conf/shib/template.xml /etc/shibboleth/template.xml
 COPY ./conf/apache/000-default.conf /etc/apache2/sites-available/000-default.conf.templ
 COPY ./conf/apache/001-default-ssl.conf /etc/apache2/sites-available/001-default-ssl.conf.templ
+COPY ./conf/shib/wayf.txt /var/www/knihovny-cz/public/wayf.txt
 
 # What was specified as argument on build time, pass as ENV
 ENV PARAM_VUFIND_HOST=${PARAM_VUFIND_HOST}
