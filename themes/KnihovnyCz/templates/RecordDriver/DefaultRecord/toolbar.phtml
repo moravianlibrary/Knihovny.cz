@@ -5,7 +5,7 @@
   }
 ?>
 <nav class="record-nav">
-  <ul class="nav nav-pills nav-stacked" aria-label="<?=$this->transEsc('ajaxview_label_tools'); ?>">
+  <ul class="nav nav-pills nav-stacked" aria-label="<?=$this->transEscAttr('ajaxview_label_tools'); ?>">
     <?php if (count($this->driver->getCitationFormats()) > 0): ?>
       <li role="none"><a class="cite-record btn-type-cite" data-lightbox href="<?=$this->recordLink()->getActionUrl($this->driver, 'Cite')?>" title="<?=$this->transEsc('Cite this')?>" rel="nofollow"><?=$this->transEsc('Cite this')?></a></li>
     <?php endif; ?>
