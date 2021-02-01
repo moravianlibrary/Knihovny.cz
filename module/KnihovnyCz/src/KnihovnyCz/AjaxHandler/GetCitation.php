@@ -30,6 +30,7 @@ declare(strict_types=1);
 namespace KnihovnyCz\AjaxHandler;
 
 use KnihovnyCz\Service\CitaceProService;
+use VuFind\Session\Settings as SessionSettings;
 use Laminas\Mvc\Controller\Plugin\Params;
 
 /**
@@ -53,8 +54,9 @@ class GetCitation extends \VuFind\AjaxHandler\AbstractBase
      *
      * @param CitaceProService $citacePro CitacePro API service
      */
-    public function __construct(CitaceProService $citacePro)
+    public function __construct(SessionSettings $ss, CitaceProService $citacePro)
     {
+        $this->sessionSettings = $ss;
         $this->citacePro = $citacePro;
     }
 
@@ -67,6 +69,7 @@ class GetCitation extends \VuFind\AjaxHandler\AbstractBase
      */
     public function handleRequest(Params $params): array
     {
+        $this->disableSessionWrites();  // avoid session write timing bug
         $recordId = $params->fromPost('recordId');
         $citeStyle = $params->fromPost('citationStyle');
 
