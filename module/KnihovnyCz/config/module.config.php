@@ -53,16 +53,28 @@ $config = [
                      ],
                  ],
              ],
+             'wayf' => [
+                 'type' => \Laminas\Router\Http\Segment::class,
+                 'options' => [
+                     'route' => '/Wayf',
+                     'defaults' => [
+                         'controller' => 'Wayf',
+                         'action' => 'Index',
+                     ],
+                 ],
+             ],
          ],
      ],
     'controllers' => [
         'factories' => [
             \KnihovnyCz\Controller\InspirationController::class => \VuFind\Controller\AbstractBaseFactory::class,
             \KnihovnyCz\Controller\PortalPageController::class => \VuFind\Controller\AbstractBaseFactory::class,
+            \KnihovnyCz\Controller\WayfController::class =>\VuFind\Controller\AbstractBaseFactory::class,
         ],
         'aliases' => [
             'Inspiration' => \KnihovnyCz\Controller\InspirationController::class,
             'PortalPage' => \KnihovnyCz\Controller\PortalPageController::class,
+            'Wayf' => \KnihovnyCz\Controller\WayfController::class,
         ],
     ],
     'vufind' => [
@@ -205,6 +217,7 @@ $config = [
             \KnihovnyCz\Service\CitaceProService::class => \KnihovnyCz\Service\CitaceProServiceFactory::class,
             \KnihovnyCz\Config\PluginManager::class => \KnihovnyCz\Config\PluginManagerFactory::class,
             \KnihovnyCz\Content\ObalkyKnihService::class => \VuFind\Content\ObalkyKnihServiceFactory::class,
+            \KnihovnyCz\Service\WayfFilterGenerator::class => \KnihovnyCz\Service\WayfFilterGeneratorFactory::class,
         ],
         'aliases' => [
             \VuFind\Config\PluginManager::class => \KnihovnyCz\Config\PluginManager::class,
