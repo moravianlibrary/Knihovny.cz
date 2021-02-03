@@ -209,6 +209,11 @@ $config = [
                     'solrfield' => \KnihovnyCz\Related\SolrField::class,
                 ],
             ],
+            'search_backend' => [
+                'factories' => [
+                    'Solr' => 'KnihovnyCz\Search\Factory\SolrDefaultBackendFactory',
+                ],
+            ],
         ],
     ],
     'service_manager' => [
