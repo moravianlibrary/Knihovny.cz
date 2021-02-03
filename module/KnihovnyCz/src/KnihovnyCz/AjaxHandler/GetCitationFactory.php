@@ -66,6 +66,7 @@ class GetCitationFactory implements FactoryInterface
         array $options = null
     ) {
         return new $requestedName(
+            $container->get(\VuFind\Session\Settings::class),
             $container->get(\KnihovnyCz\Service\CitaceProService::class)
         );
     }

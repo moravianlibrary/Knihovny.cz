@@ -67,6 +67,7 @@ class EddFactory implements \Laminas\ServiceManager\Factory\FactoryInterface
             throw new \Exception('Unexpected options passed to factory.');
         }
         return new $requestedName(
+            $container->get(\VuFind\Session\Settings::class),
             $container->get(\VuFindSearch\Service::class)
         );
     }
