@@ -61,5 +61,8 @@ username = username
 password = password
 non_proxy_host[] = cache.obalkyknih.cz
 
+[Session]
+type = File
+
 [Parent_Config]
 relative_path = ../../../base/config/vufind/config.ini
