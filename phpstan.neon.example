@@ -16,4 +16,5 @@ parameters:
         - module/KnihovnyCz
         - module/KnihovnyCzApi
         - module/KnihovnyCzConsole
+        - module/KnihovnyCzCronApi
     level: 8

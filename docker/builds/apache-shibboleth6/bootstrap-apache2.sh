@@ -16,7 +16,7 @@ enable_site() {
     fi
 
     if test -z "$PARAM_VUFIND_LOCAL_MODULES"; then
-        PARAM_VUFIND_LOCAL_MODULES="KnihovnyCz,KnihovnyCzApi"
+        PARAM_VUFIND_LOCAL_MODULES="KnihovnyCz,KnihovnyCzApi,VuFindConsole,KnihovnyCzConsole,KnihovnyCzCronApi"
         #TODO: add module "Debug"
     fi
 
@@ -42,6 +42,7 @@ enable_site() {
         -e "s#PARAM_APACHE_CRT_OUT#${PARAM_APACHE_CRT_OUT:-apache2-cert.pem}#g" \
         -e "s#PARAM_SENTRY_DSN#${PARAM_SENTRY_DSN}#g" \
         -e "s#PARAM_VUFIND_SSL_URL#${PARAM_VUFIND_SSL_URL}#g" \
+        -e "s#PARAM_CRONJOB_SECRET#${PARAM_CRONJOB_SECRET}#g" \
         "$APACHE_CONF_ABS_PATH" || return $?
 
     if test ! -f "$APACHE_CONF_ENABLED_ABS_PATH"; then

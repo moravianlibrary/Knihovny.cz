@@ -9,6 +9,7 @@ ARG GITLAB_DEPLOY_PASSWORD
 
 ENV PARAM_VUFIND_HOST=${PARAM_VUFIND_HOST}
 ENV PARAM_VUFIND_SSL_PORT=${PARAM_VUFIND_SSL_PORT}
+ENV PARAM_CRONJOB_SECRET=${PARAM_CRONJOB_SECRET}
 
 COPY ./knihovny-cz-install.sh /usr/local/bin/knihovny-cz-install.sh
 COPY ./config.local.template.ini /tmp/
@@ -16,8 +17,6 @@ COPY ./EDS.local.template.ini /tmp/
 COPY ./Search2.local.template.ini /tmp/
 COPY ./content.local.template.ini /tmp/
 COPY ./bootstrap-source.sh /onstart/004-source.sh
-COPY ./cron/expire-users /etc/cron.daily/expire-users
-COPY ./cron/harvest-ebooks /etc/cron.weekly/harvest-books
 
 # PARAM_VUFIND_COMMIT_HASH is not used in script itself, but passed to enforce
 # docker to run git clone when the branch is updated
