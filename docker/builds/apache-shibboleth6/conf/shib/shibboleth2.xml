@@ -66,7 +66,7 @@
                 <SessionInitiator type="SAML2" template="bindingTemplate.html" outgoingBindings="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST-SimpleSign urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Artifact urn:oasis:names:tc:SAML:2.0:bindings:SOAP"/>
                 <SessionInitiator type="Shib1"/>
                 <!-- Filter set to eduID's IdP & Social IdP's provided by extidp.cesnet.cz -->
-                <SessionInitiator type="SAMLDS" URL="https://ds.eduid.cz/wayf.php?efilter=WAYF_FILE_URL"/>
+                <SessionInitiator type="SAMLDS" URL="https://ds.eduid.cz/wayf.php?efilter=WAYF_FILE_URL&amp;hideFilteredOutIdps=1"/>
             </SessionInitiator>
 
             <!--
