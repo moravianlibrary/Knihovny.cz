@@ -30,8 +30,8 @@ declare(strict_types=1);
 namespace KnihovnyCz\AjaxHandler;
 
 use KnihovnyCz\Service\CitaceProService;
-use VuFind\Session\Settings as SessionSettings;
 use Laminas\Mvc\Controller\Plugin\Params;
+use VuFind\Session\Settings as SessionSettings;
 
 /**
  * Class GetCitation
@@ -52,6 +52,7 @@ class GetCitation extends \VuFind\AjaxHandler\AbstractBase
     /**
      * Get citation ajax handler constructor.
      *
+     * @param SessionSettings  $ss        Session settings
      * @param CitaceProService $citacePro CitacePro API service
      */
     public function __construct(SessionSettings $ss, CitaceProService $citacePro)

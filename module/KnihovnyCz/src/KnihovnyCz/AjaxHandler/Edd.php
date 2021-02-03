@@ -29,8 +29,8 @@
 namespace KnihovnyCz\AjaxHandler;
 
 use Laminas\Mvc\Controller\Plugin\Params;
-use VuFind\Http\PhpEnvironment\Request;
 use VuFind\Session\Settings as SessionSettings;
+use VuFindSearch\Service as SearchService;
 
 /**
  * Class Edd - API for electronic document delivery
@@ -46,16 +46,17 @@ class Edd extends \VuFind\AjaxHandler\AbstractBase
     /**
      * Search results plugin manager
      *
-     * @var \VuFindSearch\Service
+     * @var SearchService
      */
     protected $searchService = null;
 
     /**
      * Edd constructor.
      *
-     * @param \VuFindSearch\Service $searchService Search service class
+     * @param SessionSettings $ss            Session settings
+     * @param SearchService   $searchService Search service class
      */
-    public function __construct(SessionSettings $ss, \VuFindSearch\Service $searchService)
+    public function __construct(SessionSettings $ss, SearchService $searchService)
     {
         $this->sessionSettings = $ss;
         $this->searchService = $searchService;
