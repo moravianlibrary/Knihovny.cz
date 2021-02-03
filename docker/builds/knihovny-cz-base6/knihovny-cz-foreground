@@ -23,6 +23,7 @@ export PARAM_VUFIND_CONFIG_ABS_DIR
 ln -s "/var/www/knihovny-cz-extension/module/KnihovnyCz/" "/var/www/knihovny-cz/module/KnihovnyCz"
 ln -s "/var/www/knihovny-cz-extension/module/KnihovnyCzApi/" "/var/www/knihovny-cz/module/KnihovnyCzApi"
 ln -s "/var/www/knihovny-cz-extension/module/KnihovnyCzConsole/" "/var/www/knihovny-cz/module/KnihovnyCzConsole"
+ln -s "/var/www/knihovny-cz-extension/module/KnihovnyCzCronApi/" "/var/www/knihovny-cz/module/KnihovnyCzCronApi"
 
 # Themes
 for theme in /var/www/knihovny-cz-extension/themes/*/; do
