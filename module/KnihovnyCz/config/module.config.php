@@ -211,7 +211,7 @@ $config = [
             ],
             'search_backend' => [
                 'factories' => [
-                    'Solr' => 'KnihovnyCz\Search\Factory\SolrDefaultBackendFactory',
+                    'Solr' => \KnihovnyCz\Search\Factory\SolrDefaultBackendFactory::class,
                 ],
             ],
         ],

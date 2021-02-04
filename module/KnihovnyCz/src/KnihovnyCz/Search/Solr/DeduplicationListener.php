@@ -1,12 +1,12 @@
 <?php
+declare(strict_types=1);
 
 /**
  * Solr deduplication (merged records) listener.
  *
- * PHP version 5
+ * PHP version 7
  *
- * Copyright (C) Villanova University 2013.
- * Copyright (C) The National Library of Finland 2013.
+ * Copyright (C) Moravian Library 2020.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -25,13 +25,18 @@
  * @package  Search
  * @author   David Maus <maus@hab.de>
  * @author   Ere Maijala <ere.maijala@helsinki.fi>
+ * @author   Vaclav Rosecky <vaclav.rosecky@mzk.cz>
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     http://vufind.org   Main Site
  */
 namespace KnihovnyCz\Search\Solr;
 
+use Interop\Container\ContainerInterface;
 use VuFindSearch\Backend\BackendInterface;
+use VuFindSearch\Backend\Solr\Backend;
 use VuFindSearch\ParamBag;
+use VuFind\Search\Solr\DeduplicationListener as ParentDeduplicationListener;
+use VuFind\Auth\Manager as AuthManager;
 use Zend\EventManager\SharedEventManagerInterface;
 use Zend\EventManager\EventInterface;
 
@@ -42,10 +47,11 @@ use Zend\EventManager\EventInterface;
  * @package  Search
  * @author   David Maus <maus@hab.de>
  * @author   Ere Maijala <ere.maijala@helsinki.fi>
+ * @author   Vaclav Rosecky <vaclav.rosecky@mzk.cz>
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     http://vufind.org   Main Site
  */
-class MZKDeduplicationListener
+class DeduplicationListener extends ParentDeduplicationListener
 {
 
     const OR_FACETS_REGEX = '/(\\{[^\\}]*\\})*([\S]+):\\((.+)\\)/';
@@ -53,23 +59,9 @@ class MZKDeduplicationListener
     const FILTER_REGEX = '/(\S+):"([^"]+)"/';
 
     /**
-     * Backend.
+     * Facet configuration file id
      *
-     * @var BackendInterface
-     */
-    protected $backend;
-
-    /**
-     * Search configuration
-     *
-     * @var \Laminas\Config\Config
-     */
-    protected $searchConfig;
-
-    /**
-     * Facet configuration
-     *
-     * @var \Laminas\Config\Config
+     * @var string
      */
     protected $facetConfig;
 
@@ -81,133 +73,40 @@ class MZKDeduplicationListener
     protected $authManager;
 
     /**
-     * Solr instution field
+     * Solr institution field
      *
      * @var string
      */
-    protected $institutionField = 'region_institution';
-
-    /**
-     * Whether deduplication is enabled.
-     *
-     * @var bool
-     */
-    protected $enabled;
-
-    /**
-     * Whether deduplication is enabled.
-     *
-     * @var bool
-     */
-    protected $useLibraryCardsForPriority = true;
+    protected $institutionField = 'region_institution_facet_mv';
 
     /**
      * Constructor.
      *
-     * @param BackendInterface       $backend      Search backend
-     * @param \VuFind\Auth\Manager   $authManager  Auth manager
-     * @param \Laminas\Config\Config $searchConfig Search config file id
-     * @param \Laminas\Config\Config $facetConfig  Data source file id
-     * @param bool                   $enabled      Whether deduplication is
-     *                                             enabled
-     *
-     * @return void
+     * @param Backend            $backend        Search backend
+     * @param ContainerInterface $serviceLocator Service locator
+     * @param string             $searchCfg      Search config file id
+     * @param AuthManager        $authManager    AuthManager
+     * @param string             $facetCfg       Facet config file id
+     * @param string             $dataSourceCfg  Data source file id
+     * @param bool               $enabled        Whether deduplication is
+     *                                           enabled
      */
     public function __construct(
-        BackendInterface $backend,
-        \VuFind\Auth\Manager $authManager,
-        $searchConfig, $facetConfig, $enabled
+        Backend $backend,  ContainerInterface $serviceLocator,
+        $searchCfg, $authManager, $facetCfg,
+        $dataSourceCfg = 'datasources', $enabled = true
     ) {
-        $this->backend = $backend;
+        parent::__construct(
+            $backend, $serviceLocator, $searchCfg,
+            $dataSourceCfg, $enabled
+        );
         $this->authManager = $authManager;
-        $this->searchConfig = $searchConfig;
-        $this->facetConfig = $facetConfig;
-        $this->enabled = $enabled;
+        $this->facetConfig = $facetCfg;
+        $config = $this->serviceLocator->get(\VuFind\Config\PluginManager::class);
+        $searchConfig = $config->get($this->searchConfig);
         if (isset($searchConfig->Records->institution_field)) {
             $this->institutionField = $searchConfig->Records->institution_field;
         }
-    }
-
-    /**
-     * Attach listener to shared event manager.
-     *
-     * @param SharedEventManagerInterface $manager Shared event manager
-     *
-     * @return void
-     */
-    public function attach(
-        SharedEventManagerInterface $manager
-    ) {
-        $manager->attach('VuFind\Search', 'pre', [$this, 'onSearchPre']);
-        $manager->attach('VuFind\Search', 'post', [$this, 'onSearchPost']);
-    }
-
-    /**
-     * Set up filter for excluding merge children.
-     *
-     * @param EventInterface $event Event
-     *
-     * @return EventInterface
-     */
-    public function onSearchPre(EventInterface $event)
-    {
-        // Do nothing if deduplication is disabled....
-        if (!$this->enabled) {
-            return $event;
-        }
-        $backend = $event->getTarget();
-        if ($backend === $this->backend) {
-            $params = $event->getParam('params');
-            $context = $event->getParam('context');
-            if (($context == 'search' || $context == 'similar') && $params) {
-                $disableDedup = $params->get('disableDedup');
-                if (isset($disableDedup[0]) && $disableDedup[0] == true) {
-                    $this->enabled = false;
-                }
-                $params->remove('disableDedup');
-                // If deduplication is enabled, filter out merged child records,
-                // otherwise filter out dedup records.
-                if ($this->enabled) {
-                    $params->set('uniqueId', 'local_ids_str_mv');
-                    $fq = '-merged_child_boolean:true';
-                    if ($context == 'similar' && $id = $event->getParam('id')) {
-                        $fq .= ' AND -local_ids_str_mv:"'
-                            . addcslashes($id, '"') . '"';
-                    }
-                } else {
-                    $fq = '-merged_boolean:true';
-                }
-                $params->add('fq', $fq);
-            }
-        }
-        return $event;
-    }
-
-    /**
-     * Fetch appropriate dedup child
-     *
-     * @param EventInterface $event Event
-     *
-     * @return EventInterface
-     */
-    public function onSearchPost(EventInterface $event)
-    {
-        // Do nothing if deduplication is disabled....
-        if (!$this->enabled) {
-            return $event;
-        }
-
-        // Inject deduplication details into record objects:
-        $backend = $event->getTarget();
-
-        if ($backend != $event->getTarget()) {
-            return $event;
-        }
-        $context = $event->getParam('context');
-        if ($this->enabled && ($context == 'search' || $context == 'similar')) {
-            $this->fetchLocalRecords($event);
-        }
-        return $event;
     }
 
     /**
@@ -219,13 +118,16 @@ class MZKDeduplicationListener
      */
     protected function fetchLocalRecords($event)
     {
-        $dataSourceConfig = [];
-        $recordSources = $this->searchConfig->Records->sources ?? '';
         $params = $event->getParam('params');
-        $sourcePriority = $this->determineSourcePriority($recordSources, $params);
+        $sourcePriority = $this->determineRecordPriority($params);
 
         $idList = [];
         // Find out the best records and list their IDs:
+        /**
+         * Result
+         *
+         * @var \VuFindSearch\Backend\Solr\Response\Json\RecordCollection
+         */
         $result = $event->getTarget();
         foreach ($result->getRecords() as $record) {
             $fields = $record->getRawData();
@@ -296,7 +198,7 @@ class MZKDeduplicationListener
 
             // Copy dedup_data for the active data sources:
             foreach ($dedupRecordData['dedup_data'] as $dedupDataKey => $dedupData) {
-                if (!$recordSources || isset($sourcePriority[$dedupDataKey])) {
+                if (isset($sourcePriority[$dedupDataKey])) {
                     $localRecordData['dedup_data'][$dedupDataKey] = $dedupData;
                 }
             }
@@ -305,7 +207,7 @@ class MZKDeduplicationListener
             $localRecordData = $this->appendDedupRecordFields(
                 $localRecordData,
                 $dedupRecordData,
-                $recordSources,
+                [],
                 $sourcePriority
             );
             $foundLocalRecord->setRawData($localRecordData);
@@ -315,87 +217,56 @@ class MZKDeduplicationListener
     }
 
     /**
-     * Append fields from dedup record to the selected local record. Note: the last
-     * two parameters are unused in this default method, but they may be useful for
-     * custom behavior in subclasses.
-     *
-     * @param array  $localRecordData Local record data
-     * @param array  $dedupRecordData Dedup record data
-     * @param string $recordSources   List of active record sources, empty if all
-     * @param array  $sourcePriority  Array of source priorities keyed by source id
-     *
-     * @return array Local record data
-     *
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     */
-    protected function appendDedupRecordFields($localRecordData, $dedupRecordData,
-        $recordSources, $sourcePriority
-    ) {
-        $localRecordData['local_ids_str_mv'] = $dedupRecordData['local_ids_str_mv'];
-        return $localRecordData;
-    }
-
-    /**
      * Function that determines the priority for sources
      *
-     * @param string   $recordSources Record sources defined in searches.ini
-     * @param ParamBag $params        Parameters
+     * @param ParamBag $params Parameters
      *
      * @return array Array keyed by source with priority as the value
      */
-    protected function determineSourcePriority($recordSources, $params)
+    protected function determineRecordPriority($params)
     {
-        $userLibraries = $this->getUsersHomeLibraries();
-        $priorities = array_flip($this->getUsersHomeLibraries());
-        if (!empty($priorities)) {
-            return array_reverse($priorities);
-        }
-        $priorities = $this->determineInstitutionPriority($params);
-        if (!empty($priorities)) {
-            return $priorities;
-        }
-        return array_flip(explode(',', $recordSources));
+        return $this->getUsersHomeLibraries() ?:
+            $this->determinePriorityFromFilters($params) ?:
+            $this->getDefaultSources();
     }
 
     /**
-     * User's Library cards (home_library values)
+     * Determine priority from user's library cards
      *
      * @return array
      */
     public function getUsersHomeLibraries()
     {
-        if ($this->useLibraryCardsForPriority
-            && ($user = $this->authManager->isLoggedIn())
-            && $user->libraryCardsEnabled()
-        ) {
-            $libraryCards = $user->getLibraryCards()->toArray();
-            $myLibs = array();
-            foreach ($libraryCards as $libCard) {
-                $ids = explode('.', $libCard['cat_username'], 2);
-                if (count($ids) == 2) {
-                    $myLibs[] = $ids[0];
-                }
-            }
-            return array_unique($myLibs);
+        $user = $this->authManager->isLoggedIn();
+        if (!$user || !$user->libraryCardsEnabled()) {
+            return [];
         }
-        return [];
+        $myLibs = array();
+        foreach ($user->getLibraryCards() as $libCard) {
+            $ids = explode('.', $libCard['cat_username'], 2);
+            if (count($ids) == 2) {
+                $myLibs[] = $ids[0];
+            }
+        }
+        return array_flip(array_unique($myLibs));
     }
 
     /**
-     * User's Library cards (home_library values)
+     * Determine priority from filters
      *
      * @param ParamBag $params parameters
      *
      * @return array preferred institutions from user library cards
      */
-    public function determineInstitutionPriority($params)
+    public function determinePriorityFromFilters($params)
     {
-        if (!isset($this->facetConfig->InstitutionsMappings)) {
+        $config = $this->serviceLocator->get(\VuFind\Config\PluginManager::class);
+        $facetConfig = $config->get($this->facetConfig);
+        if (!isset($facetConfig->InstitutionsMappings)) {
             return [];
         }
         $institutionMappings = array_flip(
-            $this->facetConfig
-                ->InstitutionsMappings->toArray()
+            $facetConfig->InstitutionsMappings->toArray()
         );
         $result = [];
         foreach ($params->get('fq') as $fq) {
@@ -428,6 +299,20 @@ class MZKDeduplicationListener
         }
         $result = array_flip($result);
         return $result;
+    }
+
+    /**
+     * Determine default priority from configuration
+     *
+     * @return array
+     */
+    public function getDefaultSources()
+    {
+        $config = $this->serviceLocator->get(\VuFind\Config\PluginManager::class);
+        $searchConfig = $config->get($this->searchConfig);
+        return !empty($searchConfig->Records->sources)
+            ? array_flip(explode(',', $searchConfig->Records->sources))
+            : [];
     }
 
 }

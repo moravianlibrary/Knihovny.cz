@@ -1,11 +1,12 @@
 <?php
+declare(strict_types=1);
 
 /**
  * Factory for the default SOLR backend.
  *
  * PHP version 7
  *
- * Copyright (C) Villanova University 2013.
+ * Copyright (C) Moravian Library 2020.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -35,7 +36,7 @@ use VuFindSearch\Backend\Solr\Backend;
 use VuFindSearch\Backend\Solr\Connector;
 use VuFindSearch\Backend\Solr\Response\Json\RecordCollectionFactory;
 
-use KnihovnyCz\Search\Solr\MZKDeduplicationListener;
+use KnihovnyCz\Search\Solr\DeduplicationListener;
 
 /**
  * Factory for the default SOLR backend.
@@ -66,22 +67,22 @@ class SolrDefaultBackendFactory extends ParentSolrDefaultBackendFactory
     /**
      * Get a deduplication listener for the backend
      *
-     * @param BackendInterface $backend Search backend
-     * @param bool             $enabled Whether deduplication is enabled
+     * @param Backend $backend Search backend
+     * @param bool    $enabled Whether deduplication is enabled
      *
-     * @return MZKDeduplicationListener
+     * @return DeduplicationListener
      */
     protected function getDeduplicationListener(BackendInterface $backend,
         $enabled
     ) {
-        $searchConfig = $this->config->get($this->searchConfig);
-        $facetConfig = $this->config->get($this->facetConfig);
         $authManager = $this->serviceLocator->get('VuFind\AuthManager');
-        return new MZKDeduplicationListener(
+        return new DeduplicationListener(
             $backend,
+            $this->serviceLocator,
+            $this->searchConfig,
             $authManager,
-            $searchConfig,
-            $facetConfig,
+            $this->facetConfig,
+            'datasources',
             $enabled
         );
     }
