@@ -225,9 +225,9 @@ class DeduplicationListener extends ParentDeduplicationListener
      */
     protected function determineRecordPriority($params)
     {
-        return $this->getUsersHomeLibraries() ?:
+        return $this->determinePriorityFromLibraryCards() ?:
             $this->determinePriorityFromFilters($params) ?:
-            $this->getDefaultSources();
+            $this->determineDefaultPriority();
     }
 
     /**
@@ -235,7 +235,7 @@ class DeduplicationListener extends ParentDeduplicationListener
      *
      * @return array
      */
-    public function getUsersHomeLibraries()
+    public function determinePriorityFromLibraryCards()
     {
         $user = $this->authManager->isLoggedIn();
         if (!$user || !$user->libraryCardsEnabled()) {
@@ -306,7 +306,7 @@ class DeduplicationListener extends ParentDeduplicationListener
      *
      * @return array
      */
-    public function getDefaultSources()
+    public function determineDefaultPriority()
     {
         $config = $this->serviceLocator->get(\VuFind\Config\PluginManager::class);
         $searchConfig = $config->get($this->searchConfig);
