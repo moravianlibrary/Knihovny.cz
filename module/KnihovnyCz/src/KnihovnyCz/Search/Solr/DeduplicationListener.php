@@ -32,12 +32,10 @@ declare(strict_types=1);
 namespace KnihovnyCz\Search\Solr;
 
 use Interop\Container\ContainerInterface;
-use VuFindSearch\Backend\BackendInterface;
+use VuFind\Auth\Manager as AuthManager;
+use VuFind\Search\Solr\DeduplicationListener as ParentDeduplicationListener;
 use VuFindSearch\Backend\Solr\Backend;
 use VuFindSearch\ParamBag;
-use VuFind\Search\Solr\DeduplicationListener as ParentDeduplicationListener;
-use VuFind\Auth\Manager as AuthManager;
-use Zend\EventManager\SharedEventManagerInterface;
 use Zend\EventManager\EventInterface;
 
 /**
@@ -53,7 +51,6 @@ use Zend\EventManager\EventInterface;
  */
 class DeduplicationListener extends ParentDeduplicationListener
 {
-
     const OR_FACETS_REGEX = '/(\\{[^\\}]*\\})*([\S]+):\\((.+)\\)/';
 
     const FILTER_REGEX = '/(\S+):"([^"]+)"/';
@@ -92,7 +89,7 @@ class DeduplicationListener extends ParentDeduplicationListener
      *                                           enabled
      */
     public function __construct(
-        Backend $backend,  ContainerInterface $serviceLocator,
+        Backend $backend, ContainerInterface $serviceLocator,
         $searchCfg, $authManager, $facetCfg,
         $dataSourceCfg = 'datasources', $enabled = true
     ) {
@@ -155,7 +152,7 @@ class DeduplicationListener extends ParentDeduplicationListener
                 }
                 $dedupData[$source] = [
                     'id' => $localId,
-                    'priority' => isset($localPriority) ? $localPriority : 99999
+                    'priority' => $localPriority ?? 99999
                 ];
             }
             $fields['dedup_id'] = $dedupId;
@@ -241,7 +238,7 @@ class DeduplicationListener extends ParentDeduplicationListener
         if (!$user || !$user->libraryCardsEnabled()) {
             return [];
         }
-        $myLibs = array();
+        $myLibs = [];
         foreach ($user->getLibraryCards() as $libCard) {
             $ids = explode('.', $libCard['cat_username'] ?? '', 2);
             if (count($ids) == 2) {
@@ -281,11 +278,11 @@ class DeduplicationListener extends ParentDeduplicationListener
                         $value = $matches[2];
                         $prefix = $institutionMappings[$value];
                         if ($prefix) {
-                                $result[] = $prefix;
+                            $result[] = $prefix;
                         }
                     }
                 }
-            } else if (preg_match(self::FILTER_REGEX, $fq, $matches)) {
+            } elseif (preg_match(self::FILTER_REGEX, $fq, $matches)) {
                 $field = $matches[1];
                 if ($field != $this->institutionField) {
                     continue;
@@ -314,5 +311,4 @@ class DeduplicationListener extends ParentDeduplicationListener
             ? array_flip(explode(',', $searchConfig->Records->sources))
             : [];
     }
-
 }

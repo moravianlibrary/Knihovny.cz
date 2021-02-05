@@ -29,14 +29,12 @@ declare(strict_types=1);
  */
 namespace KnihovnyCz\Search\Factory;
 
+use KnihovnyCz\Search\Solr\DeduplicationListener;
 use VuFind\Search\Factory\SolrDefaultBackendFactory
     as ParentSolrDefaultBackendFactory;
 use VuFindSearch\Backend\BackendInterface;
-use VuFindSearch\Backend\Solr\Backend;
-use VuFindSearch\Backend\Solr\Connector;
-use VuFindSearch\Backend\Solr\Response\Json\RecordCollectionFactory;
 
-use KnihovnyCz\Search\Solr\DeduplicationListener;
+use VuFindSearch\Backend\Solr\Backend;
 
 /**
  * Factory for the default SOLR backend.
@@ -86,5 +84,4 @@ class SolrDefaultBackendFactory extends ParentSolrDefaultBackendFactory
             $enabled
         );
     }
-
 }
