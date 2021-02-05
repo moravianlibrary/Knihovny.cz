@@ -195,9 +195,7 @@ class DeduplicationListener extends ParentDeduplicationListener
 
             // Copy dedup_data for the active data sources:
             foreach ($dedupRecordData['dedup_data'] as $dedupDataKey => $dedupData) {
-                if (isset($sourcePriority[$dedupDataKey])) {
-                    $localRecordData['dedup_data'][$dedupDataKey] = $dedupData;
-                }
+                $localRecordData['dedup_data'][$dedupDataKey] = $dedupData;
             }
 
             // Copy fields from dedup record to local record
