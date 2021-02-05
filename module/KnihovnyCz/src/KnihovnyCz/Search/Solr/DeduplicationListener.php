@@ -243,7 +243,7 @@ class DeduplicationListener extends ParentDeduplicationListener
         }
         $myLibs = array();
         foreach ($user->getLibraryCards() as $libCard) {
-            $ids = explode('.', $libCard['cat_username'], 2);
+            $ids = explode('.', $libCard['cat_username'] ?? '', 2);
             if (count($ids) == 2) {
                 $myLibs[] = $ids[0];
             }
