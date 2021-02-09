@@ -86,7 +86,7 @@ class DeduplicationListener extends ParentDeduplicationListener
      * @param string             $facetCfg       Facet config file id
      * @param string             $dataSourceCfg  Data source file id
      * @param bool               $enabled        Whether deduplication is
-     *                                           enabled
+     * enabled
      */
     public function __construct(
         Backend $backend, ContainerInterface $serviceLocator,

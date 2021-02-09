@@ -32,8 +32,6 @@ namespace KnihovnyCz\Search\Factory;
 use KnihovnyCz\Search\Solr\DeduplicationListener;
 use VuFind\Search\Factory\SolrDefaultBackendFactory
     as ParentSolrDefaultBackendFactory;
-use VuFindSearch\Backend\BackendInterface;
-
 use VuFindSearch\Backend\Solr\Backend;
 
 /**
@@ -47,20 +45,6 @@ use VuFindSearch\Backend\Solr\Backend;
  */
 class SolrDefaultBackendFactory extends ParentSolrDefaultBackendFactory
 {
-    /**
-     * Method for creating a record driver.
-     *
-     * @var string
-     */
-    protected $createRecordMethod = 'getSolrRecord';
-
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
 
     /**
      * Get a deduplication listener for the backend
@@ -70,7 +54,7 @@ class SolrDefaultBackendFactory extends ParentSolrDefaultBackendFactory
      *
      * @return DeduplicationListener
      */
-    protected function getDeduplicationListener(BackendInterface $backend,
+    protected function getDeduplicationListener(Backend $backend,
         $enabled
     ) {
         $authManager = $this->serviceLocator->get('VuFind\AuthManager');
