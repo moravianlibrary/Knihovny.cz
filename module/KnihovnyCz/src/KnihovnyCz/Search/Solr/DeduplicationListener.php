@@ -260,10 +260,21 @@ class DeduplicationListener extends ParentDeduplicationListener
         if (!isset($facetConfig->InstitutionsMappings)) {
             return [];
         }
-        $institutionMappings = array_flip(
-            $facetConfig->InstitutionsMappings->toArray()
-        );
-        $result = [];
+        $institutionMappings = [];
+        foreach ($facetConfig->InstitutionsMappings as $source => $filter) {
+            $index = 0;
+            $path = '';
+            $elements = array_slice(explode('/', $filter), 1);
+            foreach ($elements as $element) {
+                if (empty($element)) {
+                    break;
+                }
+                $path .= '/' . $element;
+                $institutionMappings[$index . $path . '/'][] = $source;
+                $index++;
+            }
+        }
+        $values = [];
         foreach ($params->get('fq') as $fq) {
             if (preg_match(self::OR_FACETS_REGEX, $fq, $matches)) {
                 $field = $matches[2];
@@ -273,11 +284,7 @@ class DeduplicationListener extends ParentDeduplicationListener
                 $filters = explode('OR', $matches[3]);
                 foreach ($filters as $filter) {
                     if (preg_match(self::FILTER_REGEX, $filter, $matches)) {
-                        $value = $matches[2];
-                        $prefix = $institutionMappings[$value];
-                        if ($prefix) {
-                            $result[] = $prefix;
-                        }
+                        $values[] = $matches[2];
                     }
                 }
             } elseif (preg_match(self::FILTER_REGEX, $fq, $matches)) {
@@ -285,15 +292,17 @@ class DeduplicationListener extends ParentDeduplicationListener
                 if ($field != $this->institutionField) {
                     continue;
                 }
-                $value = $matches[2];
-                $prefix = $institutionMappings[$value];
-                if ($prefix) {
-                    $result[] = $prefix;
-                }
+                $values[] = $matches[2];
             }
         }
-        $result = array_flip($result);
-        return $result;
+        $priorities = [];
+        foreach ($values as $value) {
+            $prefixes = $institutionMappings[$value];
+            if ($prefixes) {
+                array_push($priorities, ...$prefixes);
+            }
+        }
+        return array_flip($priorities);
     }
 
     /**
