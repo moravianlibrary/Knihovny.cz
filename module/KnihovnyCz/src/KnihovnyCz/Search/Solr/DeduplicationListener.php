@@ -55,6 +55,10 @@ class DeduplicationListener extends ParentDeduplicationListener
 
     const FILTER_REGEX = '/(\S+):"([^"]+)"/';
 
+    const UNDEF_PRIORITY = 99999;
+
+    const MIN_PRIORITY = 999999;
+
     /**
      * Facet configuration file id
      *
@@ -134,8 +138,8 @@ class DeduplicationListener extends ParentDeduplicationListener
             }
             $localIds = $fields['local_ids_str_mv'];
             $dedupId = $localIds[0];
-            $priority = 99999;
-            $undefPriority = 99999;
+            $priority = self::UNDEF_PRIORITY;
+            $undefPriority = self::UNDEF_PRIORITY;
             // Find the document that matches the source priority best:
             $dedupData = [];
             foreach ($localIds as $localId) {
@@ -220,17 +224,28 @@ class DeduplicationListener extends ParentDeduplicationListener
      */
     protected function determineRecordPriority($params)
     {
-        return $this->determinePriorityFromLibraryCards() ?:
-            $this->determinePriorityFromFilters($params) ?:
-            $this->determineDefaultPriority();
+        $cards = $this->getSourcesFromLibraryCards();
+        $filters = $this->getSourcesFromFilters($params);
+        $common = array_intersect($cards, $filters);
+        $sources = array_unique(array_merge($common, $filters, $cards));
+        $sourcePriority = [];
+        $index = 0;
+        foreach ($sources as $source) {
+            $sourcePriority[$source] = $index++;
+        }
+        $index = self::MIN_PRIORITY;
+        foreach ($this->getNonPreferredSources() as $source) {
+            $sourcePriority[$source] = $index++;
+        }
+        return $sourcePriority;
     }
 
     /**
-     * Determine priority from user's library cards
+     * Get institutions from user's library cards
      *
      * @return array
      */
-    public function determinePriorityFromLibraryCards()
+    public function getSourcesFromLibraryCards()
     {
         $user = $this->authManager->isLoggedIn();
         if (!$user || !$user->libraryCardsEnabled()) {
@@ -243,17 +258,17 @@ class DeduplicationListener extends ParentDeduplicationListener
                 $myLibs[] = $ids[0];
             }
         }
-        return array_flip(array_unique($myLibs));
+        return array_unique($myLibs);
     }
 
     /**
-     * Determine priority from filters
+     * Get sources from facet filters
      *
      * @param ParamBag $params parameters
      *
      * @return array preferred institutions from user library cards
      */
-    public function determinePriorityFromFilters($params)
+    public function getSourcesFromFilters($params)
     {
         $config = $this->serviceLocator->get(\VuFind\Config\PluginManager::class);
         $facetConfig = $config->get($this->facetConfig);
@@ -302,20 +317,22 @@ class DeduplicationListener extends ParentDeduplicationListener
                 array_push($priorities, ...$prefixes);
             }
         }
-        return array_flip($priorities);
+        return $priorities;
     }
 
     /**
-     * Determine default priority from configuration
+     * Get non preferred sources
      *
      * @return array
      */
-    public function determineDefaultPriority()
+    public function getNonPreferredSources()
     {
         $config = $this->serviceLocator->get(\VuFind\Config\PluginManager::class);
         $searchConfig = $config->get($this->searchConfig);
-        return !empty($searchConfig->Records->sources)
-            ? array_flip(explode(',', $searchConfig->Records->sources))
-            : [];
+        if (empty($searchConfig->Records->nonPreferredSources)) {
+            return [];
+        }
+        return explode(',',  $searchConfig->Records->nonPreferredSources);
     }
+
 }
