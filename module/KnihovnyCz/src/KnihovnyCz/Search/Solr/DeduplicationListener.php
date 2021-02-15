@@ -235,7 +235,9 @@ class DeduplicationListener extends ParentDeduplicationListener
         }
         $index = self::MIN_PRIORITY;
         foreach ($this->getNonPreferredSources() as $source) {
-            $sourcePriority[$source] = $index++;
+            if (!array_key_exists($source, $sourcePriority)) {
+                $sourcePriority[$source] = $index++;
+            }
         }
         return $sourcePriority;
     }
