@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
+set -e
 
 PARAM_VUFIND_BRANCH="$1"
-
 USER="$2"
 PASS="$3"
 
