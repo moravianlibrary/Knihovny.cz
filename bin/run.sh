@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
+[ -n "$DEBUG" ] && set -x
+set -e
+
 function print_usage {
     cat <<EOF
 
@@ -20,9 +23,16 @@ Available params
   --version|-v             Image version to use when building container with vufind, default "latest"
   --push                   Push image after successful build to docker hub
   --push-only              Push image after successful build to docker hub without running container
+  --no-run                 Don't run 'docker-compose up'
+  --private-registry       Push image after successful build to private registry
   --help|-h                Print usage
 
 EOF
+}
+
+function _fail {
+  echo "[!] $1" >&2
+  exit 1
 }
 
 function last_commit {
@@ -33,7 +43,9 @@ function last_commit {
     --header "Private-token: ${GITLAB_API_TOKEN}" \
     --request POST \
     --data "${data}"`
-  echo $response | php -r "echo (string)json_decode(file_get_contents('php://stdin'))->data->project->repository->tree->lastCommit->sha;"
+  local last_commit=$(echo $response | php -r "echo (string)json_decode(file_get_contents('php://stdin'))->data->project->repository->tree->lastCommit->sha;" 2> /dev/null)
+  [ ${#last_commit} -eq 0 ] &&  _fail "Failed to get last commit for '$branch' branch"
+  echo $last_commit
 }
 
 # default variable values
@@ -49,6 +61,7 @@ version="latest"
 detached=false
 service=vufind
 container_name=""
+push_to_private_registry="false"
 # extract options and their arguments into variables.
 while true ; do
     case "$1" in
@@ -98,6 +111,14 @@ while true ; do
          --push-only)
             push="true"
             run="false"
+            shift
+            ;;
+         --no-run)
+            run="false"
+            shift
+            ;;
+         --private-registry)
+            push_to_private_registry="true"
             shift
             ;;
          --image|-i)
@@ -176,6 +197,17 @@ if [ $? -ne 0 ]; then
 fi
 if [[ $push == "true" ]]; then
     docker-compose -f "$docker_compose_file" push $service
+fi
+if [[ $push_to_private_registry == "true" ]]; then
+  REGISTRY_URL="${REGISTRY_URL:-localhost:5001}"
+  REGISTRY_USER="${REGISTRY_USER:-docker}"
+  REGISTRY_PASSWORD="${REGISTRY_PASSWORD:-docker}"
+
+  docker logout "$REGISTRY_URL"
+  echo "$REGISTRY_PASSWORD" | docker login "$REGISTRY_URL" --username "$REGISTRY_USER" --password-stdin
+  tag="$REGISTRY_URL/$IMAGE_NAME"
+  docker tag "localhost/$IMAGE_NAME" "$tag"
+  docker push "$tag"
 fi
 if [[ $run == "true" ]]; then
     docker-compose -f "$docker_compose_file" up $compose_args $service
