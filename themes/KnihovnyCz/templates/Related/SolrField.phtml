@@ -6,6 +6,7 @@
       <?php
         $format = $data->format ?? null;
         $url = $this->recordLink()->getUrl($data->id);
+        $alt = $this->escapeHtmlAttr($data->title);
       ?>
       <div class="row list-group-item clearfix">
         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3 similar-item">
@@ -13,7 +14,7 @@
               <div class="ajaxcover">
                 <div class="spinner"><i class="fa fa-spinner fa-spin"></i> <?=$this->translate('Loading')?>...</div>
                 <div class="cover-container">
-                  <img data-recordsource="Solr" data-recordid="<?=$data->id?>" data-coversize="small" class="recordcover ajax" alt="<?=$this->escapeHtmlAttr($alt); ?>" />
+                  <img data-recordsource="Solr" data-recordid="<?=$data->id?>" data-coversize="small" class="recordcover ajax" alt="<?=$alt ?>" />
                 </div>
               </div>
           </a>
