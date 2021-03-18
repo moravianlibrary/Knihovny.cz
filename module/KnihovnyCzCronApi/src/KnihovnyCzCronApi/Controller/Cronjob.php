@@ -48,6 +48,11 @@ use VuFindConsole\Command\PluginManager as CommandPluginManager;
  */
 class Cronjob extends \VuFind\Controller\AbstractBase
 {
+    /**
+     * Test endpoint
+     *
+     * @return HttpResponse
+     */
     public function testAction(): HttpResponse
     {
         $response = new HttpResponse();
@@ -55,20 +60,39 @@ class Cronjob extends \VuFind\Controller\AbstractBase
         return $response;
     }
 
+    /**
+     * Expire users endpoint
+     *
+     * @return HttpResponse
+     */
     public function expireUsersAction(): HttpResponse
     {
         $input = new ArrayInput(['age' => '730',]);
         return $this->runCommand(ExpireUsersCommand::class, $input);
     }
 
+    /**
+     * Harvest ebooks endpoint
+     *
+     * @return HttpResponse
+     */
     public function harvestEbooksAction(): HttpResponse
     {
         $input = new ArrayInput([]);
         return $this->runCommand(HarvestEbooksCommand::class, $input);
     }
 
-    protected function runCommand(string $commandName, InputInterface $input): HttpResponse
-    {
+    /**
+     * Run console command
+     *
+     * @param string         $commandName Command name
+     * @param InputInterface $input       Command input
+     *
+     * @return HttpResponse
+     */
+    protected function runCommand(
+        string $commandName, InputInterface $input
+    ): HttpResponse {
         $pluginManager = $this->serviceLocator->get(CommandPluginManager::class);
         $command = $pluginManager->get($commandName);
         $output = new BufferedOutput();
