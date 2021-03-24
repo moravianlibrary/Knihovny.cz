@@ -5,7 +5,7 @@
  *
  * PHP version 7
  *
- * Copyright (C) Moravian Library 2020.
+ * Copyright (C) Moravian Library 2020-2021.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -169,5 +169,36 @@ class MultiBackend extends \VuFind\ILS\Driver\MultiBackend
         $sourceConfig = $this->getDriverConfig($source);
         $config = $sourceConfig['IdResolver'] ?? [];
         return $this->idResolver->resolveIds($data, $config);
+    }
+
+    /**
+     * Takes sigla and return library source for it
+     *
+     * @param string $sigla SIGLA library identifier
+     *
+     * @return string|null
+     */
+    public function siglaToSource($sigla): ?string
+    {
+        $source = null;
+        foreach ($this->config['SiglaMapping'] as $source => $paired_sigla) {
+            if ($sigla === $paired_sigla)
+                return $source;
+        }
+
+        return $source;
+    }
+
+    /**
+     * Library source to sigla
+     *
+     * @param string $source Library source identifier
+     *
+     * @return string|null
+     */
+    public function sourceToSigla(string $source): ?string
+    {
+        $siglaMapping = $this->config['SiglaMapping'];
+        return isset($siglaMapping[$source]) ? $siglaMapping[$source] : null;
     }
 }
