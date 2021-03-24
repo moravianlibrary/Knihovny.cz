@@ -66,3 +66,13 @@ type = File
 
 [Parent_Config]
 relative_path = ../../../base/config/vufind/config.ini
+
+[Ziskej]
+techlib_url =
+default_mode_mvs =
+default_mode_edd =
+modes["disabled"] =
+modes["prod"] =
+modes["test"] =
+modes["demo"] =
+modes["dev"] =
