@@ -95,4 +95,34 @@ class MultiBackend extends \VuFind\ILS\Driver\MultiBackend
         }
         return $this->instConfigs->getConfig($instSource);
     }
+
+    /**
+     * Takes sigla and return library source for it
+     *
+     * @param $sigla
+     *
+     * @return int|string|null
+     */
+    public function siglaToSource($sigla)
+    {
+        $source = null;
+        foreach ($this->config['SiglaMapping'] as $source => $paired_sigla) {
+            if ($sigla === $paired_sigla)
+                return $source;
+        }
+
+        return $source;
+    }
+
+    /**
+     * Library source to sigla
+     *
+     * @param string $source
+     * @return string|null
+     */
+    public function sourceToSigla(string $source): ?string
+    {
+        $siglaMapping = $this->config['SiglaMapping'];
+        return isset($siglaMapping[$source]) ? $siglaMapping[$source] : null;
+    }
 }
