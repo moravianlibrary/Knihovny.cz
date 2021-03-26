@@ -334,7 +334,6 @@ class DeduplicationListener extends ParentDeduplicationListener
         if (empty($searchConfig->Records->nonPreferredSources)) {
             return [];
         }
-        return explode(',',  $searchConfig->Records->nonPreferredSources);
+        return explode(',', $searchConfig->Records->nonPreferredSources);
     }
-
 }

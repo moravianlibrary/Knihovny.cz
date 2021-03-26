@@ -45,7 +45,6 @@ use VuFindSearch\Backend\Solr\Backend;
  */
 class SolrDefaultBackendFactory extends ParentSolrDefaultBackendFactory
 {
-
     /**
      * Get a deduplication listener for the backend
      *
