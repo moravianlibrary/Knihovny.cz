@@ -106,15 +106,12 @@ class SolrMarc extends \KnihovnyCz\RecordDriver\SolrDefault
     protected function getStructuredDataFieldArray($field)
     {
         $result = [];
-        $fieldsData = $this->getMarcRecord()->getFields($field);
-        foreach ($fieldsData as $fieldObj) {
-            $subfieldsData = $fieldObj->getSubfields();
-            $subfieldsArray = iterator_to_array($subfieldsData);
-            $result[] = array_map(
-                function ($part) {
-                    return $part->getData();
-                }, $subfieldsArray
-            );
+        foreach ($this->getMarcReader()->getFields($field) as $fieldData) {
+            $subfields = [];
+            foreach ($fieldData['subfields'] as $subfield) {
+                $subfields[$subfield['code']] = trim($subfield['data']);
+            }
+            $result[] = $subfields;
         }
         return $result;
     }
