@@ -73,6 +73,16 @@ $config = [
                      ],
                  ],
              ],
+             'myresearch-ziskej-home' => [
+                 'type' => \Laminas\Router\Http\Segment::class,
+                 'options' => [
+                     'route' => '/MyResearchZiskej',
+                     'defaults' => [
+                         'controller' => 'MyResearchZiskej',
+                         'action' => 'Home'
+                     ],
+                 ],
+             ],
          ],
      ],
     'controllers' => [
@@ -81,12 +91,14 @@ $config = [
             \KnihovnyCz\Controller\PortalPageController::class => \VuFind\Controller\AbstractBaseFactory::class,
             \KnihovnyCz\Controller\WayfController::class =>\VuFind\Controller\AbstractBaseFactory::class,
             \KnihovnyCz\Controller\ZiskejAdminController::class => \VuFind\Controller\AbstractBaseFactory::class,
+            \KnihovnyCz\Controller\MyResearchZiskejController::class => \VuFind\Controller\AbstractBaseFactory::class,
         ],
         'aliases' => [
             'Inspiration' => \KnihovnyCz\Controller\InspirationController::class,
             'PortalPage' => \KnihovnyCz\Controller\PortalPageController::class,
             'Wayf' => \KnihovnyCz\Controller\WayfController::class,
             'ZiskejAdmin' => \KnihovnyCz\Controller\ZiskejAdminController::class,
+            'MyResearchZiskej' => \KnihovnyCz\Controller\MyResearchZiskejController::class,
         ],
     ],
     'vufind' => [
