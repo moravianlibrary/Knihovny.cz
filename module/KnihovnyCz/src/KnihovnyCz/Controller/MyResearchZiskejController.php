@@ -78,7 +78,7 @@ class MyResearchZiskejController extends AbstractBase
             return $this->forceLogin();
         }
 
-        $userCard = $this->getCardByEppnDomain($user, $eppnDomain);
+        $userCard = $user->getCardByEppnDomain($eppnDomain);
 
         if (!$userCard || !$userCard->eppn) {
             throw new TicketNotFoundException('The requested order was not found');
@@ -116,18 +116,4 @@ class MyResearchZiskejController extends AbstractBase
         return $sigla && $ziskejApi->getLibrary($sigla);
     }
 
-
-    private function getCardByEppnDomain(User $user, string $eppnDomain): ?UserCard
-    {
-        //@todo move to class Row\User
-
-        /** @var \KnihovnyCz\Db\Row\UserCard $userCard */
-        foreach ($user->getLibraryCards() as $userCard) {
-            if ($userCard->getEppnDomain() === $eppnDomain) {
-                return $userCard;
-            }
-        }
-
-        return null;
-    }
 }
