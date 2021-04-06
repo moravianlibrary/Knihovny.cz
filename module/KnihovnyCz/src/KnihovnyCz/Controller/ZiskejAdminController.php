@@ -42,7 +42,7 @@ class ZiskejAdminController extends AbstractBase
             return $view;
         }
 
-        /** @var \VuFind\Db\Row\User $user */
+        /** @var \KnihovnyCz\Db\Row\User $user */
         $user = $this->getUser();
         if (!$user) {
             return $view;

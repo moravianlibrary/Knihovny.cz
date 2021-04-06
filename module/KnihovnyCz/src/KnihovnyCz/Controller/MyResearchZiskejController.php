@@ -10,7 +10,7 @@ use KnihovnyCz\RecordDriver\SolrLocal;
 use KnihovnyCz\Ziskej\ZiskejMvs;
 use Laminas\View\Model\ViewModel;
 use VuFind\Controller\AbstractBase;
-use VuFind\Db\Row\User;
+use KnihovnyCz\Db\Row\User;
 
 class MyResearchZiskejController extends AbstractBase
 {
@@ -25,7 +25,7 @@ class MyResearchZiskejController extends AbstractBase
             echo '!$cpkZiskejMvs->isEnabled()'; //@todo!!!
         }
 
-        /** @var \VuFind\Db\Row\User $user */
+        /** @var \KnihovnyCz\Db\Row\User $user */
         $user = $this->getUser();
         if (!$user) {
             echo '!$user';  //@todo!!!
@@ -117,7 +117,7 @@ class MyResearchZiskejController extends AbstractBase
     }
 
     /**
-     * @param \VuFind\Db\Row\User $user
+     * @param \KnihovnyCz\Db\Row\User $user
      * @param string              $cardName
      *
      * @return \KnihovnyCz\Db\Row\UserCard|null
