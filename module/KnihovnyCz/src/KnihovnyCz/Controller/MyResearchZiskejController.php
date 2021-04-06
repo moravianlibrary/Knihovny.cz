@@ -34,7 +34,7 @@ class MyResearchZiskejController extends AbstractBase
         /** @var \Mzk\ZiskejApi\Api $ziskejApi */
         $ziskejApi = $this->serviceLocator->get('Mzk\ZiskejApi\Api');
 
-        $userCard = $this->getCardByName($user, $user->cat_username);
+        $userCard = $user->getCardByName($user->cat_username);
         if (!$userCard->eppn) {
             echo '!$userCard->eppn';  //@todo!!!
         }
@@ -116,26 +116,6 @@ class MyResearchZiskejController extends AbstractBase
         return $sigla && $ziskejApi->getLibrary($sigla);
     }
 
-    /**
-     * @param \KnihovnyCz\Db\Row\User $user
-     * @param string              $cardName
-     *
-     * @return \KnihovnyCz\Db\Row\UserCard|null
-     * @throws \VuFind\Exception\LibraryCard
-     */
-    private function getCardByName(User $user, string $cardName): ?UserCard
-    {
-        //@todo move to class Row\User
-
-        /** @var \KnihovnyCz\Db\Row\UserCard $userCard */
-        foreach ($user->getLibraryCards() as $userCard) {
-            if ($userCard->card_name === $cardName) {
-                return $userCard;
-            }
-        }
-
-        return null;
-    }
 
     private function getCardByEppnDomain(User $user, string $eppnDomain): ?UserCard
     {

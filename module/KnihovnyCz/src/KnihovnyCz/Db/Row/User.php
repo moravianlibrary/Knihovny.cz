@@ -36,4 +36,25 @@ class User extends \VuFind\Db\Row\User
     {
         parent::__construct($adapter);
     }
+
+
+    /**
+     * Get UserCard by card name
+     *
+     * @param string $cardName
+     *
+     * @return \KnihovnyCz\Db\Row\UserCard|null
+     * @throws \VuFind\Exception\LibraryCard
+     */
+    public function getCardByName(string $cardName): ?UserCard
+    {
+        /** @var \KnihovnyCz\Db\Row\UserCard $userCard */
+        foreach ($this->getLibraryCards() as $userCard) {
+            if ($userCard->card_name === $cardName) {
+                return $userCard;
+            }
+        }
+
+        return null;
+    }
 }
