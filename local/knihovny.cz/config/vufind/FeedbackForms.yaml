@@ -91,7 +91,7 @@ forms:
       email: cpk-support@mzk.cz
 
     onlyForLoggedUsers: false
-    emailSubject: %%subject%% - Knihovny.cz feedback
+    emailSubject: '%%subject%% - Knihovny.cz feedback'
     response: Thank you for your feedback.
     senderNameRequired: false
     senderEmailRequired: true
