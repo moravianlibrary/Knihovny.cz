@@ -112,7 +112,7 @@ class SolrDefault extends \VuFind\RecordDriver\SolrDefault
      */
     public function getSourceId()
     {
-        list($source) = explode('.', $this->getUniqueID());
+        [$source] = explode('.', $this->getUniqueID());
         return $source;
     }
 
@@ -461,7 +461,7 @@ class SolrDefault extends \VuFind\RecordDriver\SolrDefault
         }
         return array_map(
             function ($localId) {
-                list($source) = explode('.', $localId);
+                [$source] = explode('.', $localId);
                 return [
                     'source' => $source,
                     'id' => $localId,

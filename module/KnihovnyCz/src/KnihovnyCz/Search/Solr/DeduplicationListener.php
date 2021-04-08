@@ -144,7 +144,7 @@ class DeduplicationListener extends ParentDeduplicationListener
             $dedupData = [];
             foreach ($localIds as $localId) {
                 $localPriority = null;
-                list($source) = explode('.', $localId, 2);
+                [$source] = explode('.', $localId, 2);
                 if (isset($sourcePriority[$source])) {
                     $localPriority = $sourcePriority[$source];
                 } else {

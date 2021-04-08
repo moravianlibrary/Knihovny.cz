@@ -187,7 +187,7 @@ trait MarcField996AwareTrait
         $translate = $mappings['translate'] ?? [];
         $translateMapping = [];
         foreach ($translate as $t) {
-            list($field, $prefix) = explode(':', $t, 2);
+            [$field, $prefix] = explode(':', $t, 2);
             $translateMapping[$field] = $prefix ?? '';
         }
         $mappings['translate'] = $translateMapping;
