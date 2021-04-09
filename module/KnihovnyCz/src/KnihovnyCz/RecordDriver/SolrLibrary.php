@@ -277,7 +277,7 @@ class SolrLibrary extends \KnihovnyCz\RecordDriver\SolrMarc
         $gps = $this->fields['gps_display'] ?? '';
         $coords = [];
         if ($gps != '') {
-            list($coords['lat'], $coords['lng']) = explode(" ", $gps, 2);
+            [$coords['lat'], $coords['lng']] = explode(" ", $gps, 2);
         }
         return $coords;
     }
