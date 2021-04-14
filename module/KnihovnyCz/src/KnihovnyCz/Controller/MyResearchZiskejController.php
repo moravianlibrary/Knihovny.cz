@@ -11,54 +11,78 @@ use KnihovnyCz\Ziskej\ZiskejMvs;
 use Laminas\View\Model\ViewModel;
 use VuFind\Controller\AbstractBase;
 use KnihovnyCz\Db\Row\User;
+use VuFind\Log\LoggerAwareTrait;
 
 class MyResearchZiskejController extends AbstractBase
 {
+    use LoggerAwareTrait;
 
     public function homeAction(): ViewModel
     {
-//      try {   //@todo!!!
+        $view = $this->createViewModel();
 
-        /** @var \KnihovnyCz\Ziskej\ZiskejMvs $cpkZiskejMvs */
-        $cpkZiskejMvs = $this->serviceLocator->get(ZiskejMvs::class);
-        if (!$cpkZiskejMvs->isEnabled()) {
-            echo '!$cpkZiskejMvs->isEnabled()'; //@todo!!!
-        }
-
-        /** @var \KnihovnyCz\Db\Row\User $user */
-        $user = $this->getUser();
-        if (!$user) {
-            echo '!$user';  //@todo!!!
-        }
-
-        /** @var \Mzk\ZiskejApi\Api $ziskejApi */
-        $ziskejApi = $this->serviceLocator->get('Mzk\ZiskejApi\Api');
-
-        $userCard = $user->getCardByName($user->cat_username);
-        if (!$userCard->eppn) {
-            echo '!$userCard->eppn';  //@todo!!!
-        }
-
-        $reader = null;
-        $tickets = [];
-        if ($this->isLibraryInZiskej($ziskejApi, $userCard->home_library)) {
-            $reader = $ziskejApi->getReader($userCard->eppn);
-
-            if ($reader && $reader->isActive()) {
-                foreach ($ziskejApi->getTickets($userCard->eppn)->getAll() as $ticket) {
-                    $tickets[$ticket->getId()] = [
-                        'ticket' => $ticket,
-                        'record' => $this->getRecord($ticket->getDocumentId()),
-                    ];
+        try {
+            /* user */
+            /** @var \KnihovnyCz\Db\Row\User $user */
+            $user = $this->getUser();
+            if (!$user) {
+                if ($this->params()->fromQuery('redirect', true)) {
+                    $this->setFollowupUrlToReferer();
                 }
+                return $this->forwardTo('MyResearch', 'Login');
             }
-        }
+            $view->setVariable('user', $user);
 
-        return $this->createViewModel(
-            compact(
-                'userCard', 'reader', 'tickets'
-            )
-        );
+            /* user card */
+            $userCard = $user->getCardByName($user->cat_username);
+            if (!$userCard) {
+                return $view;
+            }
+            $view->setVariable('userCard', $userCard);
+            if (!$userCard->eppn) {
+                return $view;
+            }
+
+            /* ziskej mode enabled */
+            /** @var \KnihovnyCz\Ziskej\ZiskejMvs $cpkZiskejMvs */
+            $cpkZiskejMvs = $this->serviceLocator->get(ZiskejMvs::class);
+            $isZiskejModeEnabled = $cpkZiskejMvs->isEnabled();
+            $view->setVariable('isZiskejModeEnabled', $isZiskejModeEnabled);
+            if (!$isZiskejModeEnabled) {
+                return $view;
+            }
+
+            /* ziskej api */
+            /** @var \Mzk\ZiskejApi\Api $ziskejApi */
+            $ziskejApi = $this->serviceLocator->get('Mzk\ZiskejApi\Api');
+
+            /* is library in ziskej */
+            $isLibraryInZiskej = $this->isLibraryInZiskej($ziskejApi, $userCard->home_library);
+            $view->setVariable('isLibraryInZiskej', $isLibraryInZiskej);
+            if (!$isLibraryInZiskej) {
+                return $view;
+            }
+
+            /* reader */
+            $reader = $ziskejApi->getReader($userCard->eppn);
+            if (!$reader || !$reader->isActive()) {
+                return $view;
+            }
+            $view->setVariable('reader', $reader);
+
+            $tickets = [];
+            foreach ($ziskejApi->getTickets($userCard->eppn)->getAll() as $ticket) {
+                $tickets[$ticket->getId()] = [
+                    'ticket' => $ticket,
+                    'record' => $this->getRecord($ticket->getDocumentId()),
+                ];
+            }
+            $view->setVariable('tickets', $tickets);
+            return $view;
+        } catch (\Exception $e) {
+            $this->logError('Unexpected ' . get_class($e) . ': ' . $e->getMessage());
+            return $view;
+        }
     }
 
     public function ticketAction(): ViewModel
@@ -107,8 +131,12 @@ class MyResearchZiskejController extends AbstractBase
         return $record;
     }
 
-    private function isLibraryInZiskej(\Mzk\ZiskejApi\Api $ziskejApi, string $libraryCode): bool
+    private function isLibraryInZiskej(\Mzk\ZiskejApi\Api $ziskejApi, ?string $libraryCode): bool
     {
+        if (empty($libraryCode)) {
+            return false;
+        }
+
         /** @var \KnihovnyCz\ILS\Driver\MultiBackend $multiBackend */
         $multiBackend = $this->getILS()->getDriver();
 
