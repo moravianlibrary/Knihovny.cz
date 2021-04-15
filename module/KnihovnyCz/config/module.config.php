@@ -69,12 +69,14 @@ $config = [
         'factories' => [
             \KnihovnyCz\Controller\InspirationController::class => \VuFind\Controller\AbstractBaseFactory::class,
             \KnihovnyCz\Controller\PortalPageController::class => \VuFind\Controller\AbstractBaseFactory::class,
-            \KnihovnyCz\Controller\WayfController::class =>\VuFind\Controller\AbstractBaseFactory::class,
+            \KnihovnyCz\Controller\WayfController::class => \VuFind\Controller\AbstractBaseFactory::class,
+            \KnihovnyCz\Controller\LibraryCardsController::class => \VuFind\Controller\AbstractBaseFactory::class,
         ],
         'aliases' => [
             'Inspiration' => \KnihovnyCz\Controller\InspirationController::class,
             'PortalPage' => \KnihovnyCz\Controller\PortalPageController::class,
             'Wayf' => \KnihovnyCz\Controller\WayfController::class,
+            'LibraryCards' => \KnihovnyCz\Controller\LibraryCardsController::class,
         ],
     ],
     'vufind' => [
