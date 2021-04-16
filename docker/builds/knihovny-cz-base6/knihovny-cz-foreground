@@ -65,12 +65,12 @@ mkdir "${PARAM_VUFIND_SRC:-/var/www/src}/log"
 # WARNING: possible threat of exploiting the secrets here (by saving `env` output to the docker logs)
 env
 
+clear-cache
+
 # This has to be done so that the server can create caches & logs
 chgrp -R www-data "/var/www"
 chmod -R g+w "/var/www/knihovny-cz-extension/themes"
 chmod -R g+w "${PARAM_VUFIND_SRC:-/var/www/src}/log"
-
-clear-cache
 
 echo
 echo " --- Bootstrapping done! "
