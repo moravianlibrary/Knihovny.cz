@@ -29,7 +29,7 @@
 namespace KnihovnyCz\Controller;
 
 use VuFind\Controller\LibraryCardsController as LibraryCardsControllerBase;
-use \VuFind\Exception\LibraryCard as LibraryCardException;
+use VuFind\Exception\LibraryCard as LibraryCardException;
 
 /**
  * Class LibraryCardsController
@@ -42,13 +42,12 @@ use \VuFind\Exception\LibraryCard as LibraryCardException;
  */
 class LibraryCardsController extends LibraryCardsControllerBase
 {
-
     /**
      * Process the "edit library card" submission. Only update card name.
      *
      * @param \VuFind\Db\Row\User $user Logged in user
      *
-     * @return object|bool        Response object if redirect is
+     * @return object|false        Response object if redirect is
      * needed, false if form needs to be redisplayed.
      */
     protected function processEditLibraryCard($user)
@@ -73,5 +72,4 @@ class LibraryCardsController extends LibraryCardsControllerBase
         }
         return $this->redirect()->toRoute('librarycards-home');
     }
-
 }
