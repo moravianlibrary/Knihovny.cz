@@ -175,19 +175,11 @@ $config = [
             ],
             'content_toc' => [
                 'factories' => [
-                    \KnihovnyCz\Content\TOC\ObalkyKnih::class => \KnihovnyCz\Content\ObalkyKnihContentFactory::class
+                    \KnihovnyCz\Content\TOC\ObalkyKnih::class => \VuFind\Content\ObalkyKnihContentFactory::class
                 ],
                 'aliases' => [
                     'obalkyknih' => \KnihovnyCz\Content\TOC\ObalkyKnih::class
                 ]
-            ],
-            'content_covers' => [
-                'factories' => [
-                    \KnihovnyCz\Content\Covers\ObalkyKnih::class => \VuFind\Content\ObalkyKnihContentFactory::class,
-                ],
-                'aliases' => [
-                    'obalkyknih' => \KnihovnyCz\Content\Covers\ObalkyKnih::class,
-                ],
             ],
             'ajaxhandler' => [
                 'factories' => [
