@@ -41,7 +41,6 @@ class SolrMarc extends \KnihovnyCz\RecordDriver\SolrDefault
     use \VuFind\RecordDriver\IlsAwareTrait;
     use \VuFind\RecordDriver\MarcReaderTrait;
     use \VuFind\RecordDriver\MarcAdvancedTrait;
-    use MarcField996AwareTrait;
     use PatentTrait;
 
     /**
