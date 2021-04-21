@@ -41,6 +41,8 @@ RUN apt-get update && apt-get install -y \
         ssh \
         vim \
         locales \
+        nodejs \
+        npm \
         ${TMP_DEV_PKGS} \
     && apt-get clean \
     && apt-get autoremove -y
