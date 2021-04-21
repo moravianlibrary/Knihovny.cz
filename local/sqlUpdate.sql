@@ -1398,3 +1398,19 @@ SELECT (SELECT `id` FROM `config_files` WHERE `file_name` = 'citation'),
 FROM `citation_style`;
 
 UPDATE `system` SET `value` = '76' WHERE `key`='DB_VERSION';
+
+-- Issue 185 Id resolver
+DELETE FROM inst_keys WHERE key_name IN ('prefix', 'type', 'stripPrefix');
+INSERT IGNORE INTO `inst_keys` (`key_name`, `section_id`) VALUES
+('solrQueryFieldPrefix', (SELECT `id` FROM `inst_sections` WHERE `section_name` = 'IdResolver'));
+
+INSERT INTO `inst_configs` (`source_id`, `key_id`, `value`)
+SELECT `inst_sources`.`id`, (SELECT `id` FROM `inst_keys` WHERE `key_name` = "solrQueryFieldPrefix"), `inst_configs`.`value`
+FROM `inst_configs`
+         JOIN `inst_sources` ON `inst_configs`.`source_id` = `inst_sources`.`id`
+         JOIN `inst_keys` ON inst_configs.`key_id` = `inst_keys`.`id`
+WHERE ik.key_name = "admlib";
+
+UPDATE `system` SET `value` = '77' WHERE `key`='DB_VERSION';
+
+

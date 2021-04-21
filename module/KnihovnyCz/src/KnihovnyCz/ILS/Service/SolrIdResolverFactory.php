@@ -1,7 +1,8 @@
 <?php
+declare(strict_types=1);
 
 /**
- * Class MultiBackendFactory
+ * Class SolrIdResolverFactory
  *
  * PHP version 7
  *
@@ -21,12 +22,12 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  *
  * @category VuFind
- * @package  KnihovnyCz\ILS\Driver
+ * @package  KnihovnyCz\ILS\Service
  * @author   Josef Moravec <moravec@mzk.cz>
  * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://knihovny.cz Main Page
  */
-namespace KnihovnyCz\ILS\Driver;
+namespace KnihovnyCz\ILS\Service;
 
 use Interop\Container\ContainerInterface;
 use Interop\Container\Exception\ContainerException;
@@ -35,15 +36,15 @@ use Laminas\ServiceManager\Exception\ServiceNotFoundException;
 use Laminas\ServiceManager\Factory\FactoryInterface;
 
 /**
- * Factory for MultiBackend ILS driver.
+ * Class SolrIdResolverFactory
  *
  * @category VuFind
- * @package  ILS_Drivers
- * @author   Demian Katz <demian.katz@villanova.edu>
- * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
- * @link     https://vufind.org/wiki/development Wiki
+ * @package  KnihovnyCz\ILS\Service
+ * @author   Josef Moravec <moravec@mzk.cz>
+ * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
+ * @link     https://knihovny.cz Main Page
  */
-class MultiBackendFactory implements FactoryInterface
+class SolrIdResolverFactory implements FactoryInterface
 {
     /**
      * Create an object
@@ -58,21 +59,12 @@ class MultiBackendFactory implements FactoryInterface
      * @throws ServiceNotCreatedException if an exception is raised when
      * creating a service.
      * @throws ContainerException if any other error occurs
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __invoke(ContainerInterface $container, $requestedName,
         array $options = null
     ) {
-        if (!empty($options)) {
-            throw new \Exception('Unexpected options passed to factory.');
-        }
-        $tableManager = $container->get(\VuFind\Db\Table\PluginManager::class);
-        return new $requestedName(
-            $container->get(\VuFind\Config\PluginManager::class),
-            $container->get(\VuFind\Auth\ILSAuthenticator::class),
-            $container->get(\VuFind\ILS\Driver\PluginManager::class),
-            $tableManager->get(\KnihovnyCz\Db\Table\InstConfigs::class),
-            $tableManager->get(\KnihovnyCz\Db\Table\InstSources::class),
-            $container->get(\KnihovnyCz\ILS\Service\SolrIdResolver::class)
-        );
+        return new $requestedName($container->get(\VuFindSearch\Service::class));
     }
 }
