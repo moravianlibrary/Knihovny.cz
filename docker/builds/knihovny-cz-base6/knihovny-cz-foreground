@@ -31,7 +31,8 @@ for theme in /var/www/knihovny-cz-extension/themes/*/; do
     ln -s "/var/www/knihovny-cz-extension/themes/$name/" "/var/www/knihovny-cz/themes/$name"
 done
 
-php public/index.php util/cssBuilder
+# Compile CSS in themes
+grunt less
 
 # Local configs
 for config in /var/www/knihovny-cz-extension/local/*/; do
