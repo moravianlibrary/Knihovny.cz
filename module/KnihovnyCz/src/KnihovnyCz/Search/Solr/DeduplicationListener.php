@@ -21,7 +21,7 @@ declare(strict_types=1);
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *
- * @category VuFind2
+ * @category VuFind
  * @package  Search
  * @author   David Maus <maus@hab.de>
  * @author   Ere Maijala <ere.maijala@helsinki.fi>
@@ -32,16 +32,16 @@ declare(strict_types=1);
 namespace KnihovnyCz\Search\Solr;
 
 use Interop\Container\ContainerInterface;
+use Laminas\EventManager\EventInterface;
 use VuFind\Auth\Manager as AuthManager;
 use VuFind\Search\Solr\DeduplicationListener as ParentDeduplicationListener;
 use VuFindSearch\Backend\Solr\Backend;
 use VuFindSearch\ParamBag;
-use Zend\EventManager\EventInterface;
 
 /**
  * Solr merged record handling listener.
  *
- * @category VuFind2
+ * @category VuFind
  * @package  Search
  * @author   David Maus <maus@hab.de>
  * @author   Ere Maijala <ere.maijala@helsinki.fi>
