@@ -143,11 +143,11 @@ class SolrLibrary extends \KnihovnyCz\RecordDriver\SolrMarc
     {
         $urls = $this->fields['url_display_mv'] ?? [];
         $filter = function ($url) {
-            $parts = explode("|", trim($url), 2);
-            list($url, $desc) = array_map('trim', $parts);
+            $parts = explode("|", $url, 2);
+            $parts = array_map('trim', $parts);
             return [
-                'url' => $url ?? null,
-                'desc' => $desc ?? $url ?? null,
+                'url' => $parts[0] ?? null,
+                'desc' => $parts[1] ?? $parts[0] ?? null,
             ];
         };
         $result = array_map($filter, $urls);
@@ -277,7 +277,7 @@ class SolrLibrary extends \KnihovnyCz\RecordDriver\SolrMarc
         $gps = $this->fields['gps_display'] ?? '';
         $coords = [];
         if ($gps != '') {
-            list($coords['lat'], $coords['lng']) = explode(" ", $gps, 2);
+            [$coords['lat'], $coords['lng']] = explode(" ", $gps, 2);
         }
         return $coords;
     }

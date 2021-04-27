@@ -29,7 +29,7 @@
         </ul>
       </li>
     <?php endif; ?>
-
+    <li role="none"><a class="permalink-record btn-type-permalink" data-lightbox href="<?=$this->recordLink()->getActionUrl($this->driver, 'Permalink')?>" rel="nofollow"><?=$this->transEsc('permanent_link')?></a></li>
     <?php if ($this->userlist()->getMode() !== 'disabled'): ?>
       <li role="none">
         <?php if ($this->permission()->allowDisplay('feature.Favorites')): ?>
@@ -42,7 +42,6 @@
     <?php if (!empty($addThis)): ?>
       <li role="none"><a class="addThis addthis_button" href="https://www.addthis.com/bookmark.php?v=250&amp;pub=<?=urlencode($addThis)?>"><i class="fa fa-bookmark" aria-hidden="true"></i> <?=$this->transEsc('Bookmark')?></a></li>
     <?php endif; ?>
-
     <?php $cart = $this->cart(); ?>
     <?php if ($cart->isActive()): ?>
       <?php $cartId = $this->driver->getSourceIdentifier() . '|' . $this->driver->getUniqueId(); ?>

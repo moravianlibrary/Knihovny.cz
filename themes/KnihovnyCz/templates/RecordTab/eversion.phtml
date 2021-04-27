@@ -28,7 +28,7 @@
 
                 <tr>
                     <td><?=$this->transEsc($link['destination'])?></td>
-                    <?php if ($linkk['status'] === 'protected') : ?>
+                    <?php if ($link['status'] === 'protected'): ?>
                         <td>
                             <a target='_blank' data-toggle="tooltip" data-placement="top" rel='nofollow' title="<?=$this->translate('What does it mean?')?>" href='https://cs.wikipedia.org/wiki/Voln%C3%A9_d%C3%ADlo'>
                                 <span class="label label-<?=$statusClass?>"><?=$this->transEsc('link_access_status_' . $link['status'])?></span>

@@ -33,7 +33,6 @@ use Interop\Container\Exception\ContainerException;
 use Laminas\ServiceManager\Exception\ServiceNotCreatedException;
 use Laminas\ServiceManager\Exception\ServiceNotFoundException;
 use Laminas\ServiceManager\Factory\FactoryInterface;
-use VuFind\ILS\Driver\MultiBackendFactory as OrgMultiBackendFactory;
 
 /**
  * Factory for MultiBackend ILS driver.
@@ -44,7 +43,7 @@ use VuFind\ILS\Driver\MultiBackendFactory as OrgMultiBackendFactory;
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://vufind.org/wiki/development Wiki
  */
-class MultiBackendFactory extends OrgMultiBackendFactory implements FactoryInterface
+class MultiBackendFactory implements FactoryInterface
 {
     /**
      * Create an object
@@ -66,14 +65,14 @@ class MultiBackendFactory extends OrgMultiBackendFactory implements FactoryInter
         if (!empty($options)) {
             throw new \Exception('Unexpected options passed to factory.');
         }
+        $tableManager = $container->get(\VuFind\Db\Table\PluginManager::class);
         return new $requestedName(
             $container->get(\VuFind\Config\PluginManager::class),
             $container->get(\VuFind\Auth\ILSAuthenticator::class),
             $container->get(\VuFind\ILS\Driver\PluginManager::class),
-            $container->get(\VuFind\Db\Table\PluginManager::class)
-                ->get(\KnihovnyCz\Db\Table\InstConfigs::class),
-            $container->get(\VuFind\Db\Table\PluginManager::class)
-                ->get(\KnihovnyCz\Db\Table\InstSources::class)
+            $tableManager->get(\KnihovnyCz\Db\Table\InstConfigs::class),
+            $tableManager->get(\KnihovnyCz\Db\Table\InstSources::class),
+            $container->get(\KnihovnyCz\ILS\Service\SolrIdResolver::class)
         );
     }
 }

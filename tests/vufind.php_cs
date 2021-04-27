@@ -24,6 +24,7 @@ $rules = [
     'is_null' => true,
     'line_ending' => true,
     'linebreak_after_opening_tag' => true,
+    'list_syntax' => ['syntax' => 'short'],
     'lowercase_cast' => true,
     'lowercase_constants' => true,
     'lowercase_keywords' => true,

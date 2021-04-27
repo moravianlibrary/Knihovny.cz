@@ -103,7 +103,7 @@ $config = [
         'factories' => [
             \KnihovnyCz\Controller\InspirationController::class => \VuFind\Controller\AbstractBaseFactory::class,
             \KnihovnyCz\Controller\PortalPageController::class => \VuFind\Controller\AbstractBaseFactory::class,
-            \KnihovnyCz\Controller\WayfController::class =>\VuFind\Controller\AbstractBaseFactory::class,
+            \KnihovnyCz\Controller\WayfController::class => \VuFind\Controller\AbstractBaseFactory::class,
             \KnihovnyCz\Controller\ZiskejAdminController::class => \VuFind\Controller\AbstractBaseFactory::class,
             \KnihovnyCz\Controller\MyResearchZiskejController::class => \VuFind\Controller\AbstractBaseFactory::class,
         ],
@@ -111,6 +111,7 @@ $config = [
             'Inspiration' => \KnihovnyCz\Controller\InspirationController::class,
             'PortalPage' => \KnihovnyCz\Controller\PortalPageController::class,
             'Wayf' => \KnihovnyCz\Controller\WayfController::class,
+            'LibraryCards' => \KnihovnyCz\Controller\LibraryCardsController::class,
             'ZiskejAdmin' => \KnihovnyCz\Controller\ZiskejAdminController::class,
             'MyResearchZiskej' => \KnihovnyCz\Controller\MyResearchZiskejController::class,
         ],
@@ -212,19 +213,11 @@ $config = [
             ],
             'content_toc' => [
                 'factories' => [
-                    \KnihovnyCz\Content\TOC\ObalkyKnih::class => \KnihovnyCz\Content\ObalkyKnihContentFactory::class
+                    \KnihovnyCz\Content\TOC\ObalkyKnih::class => \VuFind\Content\ObalkyKnihContentFactory::class
                 ],
                 'aliases' => [
                     'obalkyknih' => \KnihovnyCz\Content\TOC\ObalkyKnih::class
                 ]
-            ],
-            'content_covers' => [
-                'factories' => [
-                    \KnihovnyCz\Content\Covers\ObalkyKnih::class => \VuFind\Content\ObalkyKnihContentFactory::class,
-                ],
-                'aliases' => [
-                    'obalkyknih' => \KnihovnyCz\Content\Covers\ObalkyKnih::class,
-                ],
             ],
             'ajaxhandler' => [
                 'factories' => [
@@ -246,6 +239,11 @@ $config = [
                     'solrfield' => \KnihovnyCz\Related\SolrField::class,
                 ],
             ],
+            'search_backend' => [
+                'factories' => [
+                    'Solr' => \KnihovnyCz\Search\Factory\SolrDefaultBackendFactory::class,
+                ],
+            ],
         ],
     ],
     'service_manager' => [
@@ -254,6 +252,7 @@ $config = [
             \KnihovnyCz\Service\CitaceProService::class => \KnihovnyCz\Service\CitaceProServiceFactory::class,
             \KnihovnyCz\Config\PluginManager::class => \KnihovnyCz\Config\PluginManagerFactory::class,
             \KnihovnyCz\Content\ObalkyKnihService::class => \VuFind\Content\ObalkyKnihServiceFactory::class,
+            \KnihovnyCz\ILS\Service\SolrIdResolver::class => \KnihovnyCz\ILS\Service\SolrIdResolverFactory::class,
             \KnihovnyCz\Service\WayfFilterGenerator::class => \KnihovnyCz\Service\WayfFilterGeneratorFactory::class,
             \Mzk\ZiskejApi\Api::class => \KnihovnyCz\ZiskejApiFactory::class,
             \KnihovnyCz\Ziskej\ZiskejEdd::class => \KnihovnyCz\Ziskej\ZiskejEddFactory::class,

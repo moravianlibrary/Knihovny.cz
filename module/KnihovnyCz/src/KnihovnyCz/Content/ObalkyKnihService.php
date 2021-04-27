@@ -64,21 +64,20 @@ class ObalkyKnihService extends \VuFind\Content\ObalkyKnihService
     }
 
     /**
-     * Get obalkyknih metadata for authority
+     * Get data from service
      *
-     * @param string $authId Authority record identifier
+     * @param array $ids Record identifiers
      *
-     * @return object|null
+     * @return \stdClass|null
+     * @throws \Exception
      */
-    public function getAuthorityData(string $authId)
+    protected function getFromService(array $ids): ?\stdClass
     {
-        $cacheKey = $this->createCacheKey(['authority_id' => $authId]);
-        $cachedData = $this->getCachedData($cacheKey);
-        if ($cachedData === null) {
-            $cachedData = $this->getAuthorityFromService($authId);
-            $this->putCachedData($cacheKey, $cachedData);
+        if (isset($ids['nbn']) && substr($ids['recordid'] ?? '', 0, 4) === 'auth') {
+            return $this->getAuthorityFromService($ids['nbn']);
+        } else {
+            return parent::getFromService($ids);
         }
-        return $cachedData;
     }
 
     /**
@@ -86,7 +85,7 @@ class ObalkyKnihService extends \VuFind\Content\ObalkyKnihService
      *
      * @param string $authId Authority record identifier
      *
-     * @return object|null
+     * @return \stdClass|null
      * @throws \Exception
      */
     protected function getAuthorityFromService(string $authId)
