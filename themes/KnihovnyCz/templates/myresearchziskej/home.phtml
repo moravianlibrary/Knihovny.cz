@@ -1,9 +1,10 @@
 <?php
+
 // Set up page title:
-$this->headTitle($this->translate('Checked Out Items'));
+$this->headTitle($this->translate('Ziskej::checked_out_items'));
 
 // Set up breadcrumbs:
-$this->layout()->breadcrumbs = '<li><a href="' . $this->url('myresearch-home') . '">' . $this->transEsc('Your Account') . '</a></li> <li class="active">' . $this->transEsc('Checked Out Items') . '</li>';
+$this->layout()->breadcrumbs = '<li><a href="' . $this->url('myresearch-home') . '">' . $this->transEsc('Your Account') . '</a></li> <li class="active">' . $this->transEsc('Ziskej::checked_out_items') . '</li>';
 ?>
 
 <a class="search-filter-toggle visible-xs" href="#myresearch-sidebar" data-toggle="offcanvas" title="Expand Sidebar">
@@ -11,7 +12,7 @@ $this->layout()->breadcrumbs = '<li><a href="' . $this->url('myresearch-home') .
 </a>
 
 <div class="<?=$this->layoutClass('mainbody')?>">
-  <h2><?=$this->transEsc('Aktuální výpůjčky ve službě Získej')?></h2>
+  <h2><?=$this->transEsc('Ziskej::checked_out_items')?></h2>
   <?=$this->flashmessages()?>
 
   <div class="panel">
@@ -26,10 +27,10 @@ $this->layout()->breadcrumbs = '<li><a href="' . $this->url('myresearch-home') .
   ?>
   <?php if ($userCard): ?>
     <?php if ($userCard->eppn): ?>
-      <h3 class="well row blickable" style="margin-bottom: 3px;">
-        <?=$this->transEsc("source_" . $userCard->home_library, null, $userCard->home_library)?>
-        <? //<img class="pull-right" height="32" src="<?= $this->logos()->getLogo($userCard->home_library)"/> //@todo?>
-      </h3>
+      <div class="well row blickable clearfix">
+        <h3 class="pull-left"><?=$this->transEsc("Source::" . $userCard->home_library) ?></h3>
+        <img class="pull-right" height="32" src="<?=$this->imageLink(sprintf('institutions/logos/%s/%s.png', $userCard->home_library, $userCard->home_library)) ?>" alt="<?=$this->transEsc("Source::" . $userCard->home_library) ?>">
+      </div>
       <?php
       /** @var bool $isZiskejModeEnabled */
       $isZiskejModeEnabled = $this->isZiskejModeEnabled;
@@ -69,7 +70,7 @@ $this->layout()->breadcrumbs = '<li><a href="' . $this->url('myresearch-home') .
                       $recordId = preg_replace("/[\.:]/", "", $record->getUniqueId() . $i);
                       ?>
                       <div id="cover_<?=$recordId?>" class="coverThumbnail">
-                        [image]
+                        [image] <?php //@todo ?>
                       </div>
                     </div>
                     <div class="media-body">
@@ -97,41 +98,41 @@ $this->layout()->breadcrumbs = '<li><a href="' . $this->url('myresearch-home') .
                             </dd>
                           <?php endif; ?>
                           <?php if (count($record->getFormats()) > 0): ?>
-                            <dt><?=$this->transEsc('ziskej_label_document_type')?>:</dt>
+                            <dt><?=$this->transEsc('Ziskej::ziskej_label_document_type')?>:</dt>
                             <dd><?=$this->record($record)->getFormatList()?></dd>
                           <?php endif; ?>
                           <?php if ($ticket->getCreatedAt()): ?>
-                            <dt><?=$this->transEsc('ziskej_label_date_order')?>:</dt>
+                            <dt><?=$this->transEsc('Ziskej::ziskej_label_date_order')?>:</dt>
                             <dd><?=$this->dateTime()->convertToDisplayDate('U', $ticket->getCreatedAt()->getTimestamp())?></dd>
                           <?php endif; ?>
                           <?php if ($ticket->getRequestedAt()): ?>
-                            <dt><?=$this->transEsc('ziskej_label_date_deliver')?>:</dt>
+                            <dt><?=$this->transEsc('Ziskej::ziskej_label_date_deliver')?>:</dt>
                             <dd><?=$this->dateTime()->convertToDisplayDate('U', $ticket->getRequestedAt()->getTimestamp())?></dd>
                           <?php endif; ?>
                           <?php if ($ticket->getReturnAt()): ?>
-                            <dt><?=$this->transEsc('ziskej_label_date_return')?>:</dt>
+                            <dt><?=$this->transEsc('Ziskej::ziskej_label_date_return')?>:</dt>
                             <dd><?=$this->dateTime()->convertToDisplayDate('U', $ticket->getReturnAt()->getTimestamp())?></dd>
                           <?php endif; ?>
-                          <dt><?=$this->transEsc('ziskej_label_order_number')?>:</dt>
+                          <dt><?=$this->transEsc('Ziskej::ziskej_label_order_number')?>:</dt>
                           <dd><?=$ticket->getHid()?></dd>
 
                           <?php if ($ticket->getStatus()): ?>
-                            <dt><?=$this->transEsc('ziskej_label_order_status')?>:</dt>
+                            <dt><?=$this->transEsc('Ziskej::ziskej_label_order_status')?>:</dt>
                             <dd>
-                      <span class="label label-<? //=$this->Order()->getStatusClass($ticket->getStatus())  //@todo!!! ?>">
-                        <?=$this->translate('ziskej_order_status_' . $ticket->getStatus())?>
-                      </span>
+                              <span class="label label-<?=$this->Ziskej()->getStatusClass($ticket->getStatus()) ?>">
+                                <?=$this->transEsc('Ziskej::ziskej_order_status_' . $ticket->getStatus())?>
+                              </span>
                             </dd>
                           <?php endif; ?>
                         </dl>
                         <div class="text-right">
                           <?php if ($ticket->getStatus() == 'created' && !empty($ticket->getPaymentUrl())): ?>
-                            <a class="btn btn-sm btn-warning" href="<?=$ticket->getPaymentUrl()?>" target="_blank" title="<?=$this->transEsc("btn_order_pay_title")?>">
-                              <i class="fa fa-shopping-cart"></i> <?=$this->transEsc("btn_order_pay")?>
+                            <a class="btn btn-sm btn-warning" href="<?=$ticket->getPaymentUrl()?>" target="_blank" title="<?=$this->transEsc("Ziskej::btn_order_pay_title")?>">
+                              <i class="fa fa-shopping-cart"></i> <?=$this->transEsc("Ziskej::btn_order_pay")?>
                             </a>
                           <?php endif; ?>
-                          <a class="btn btn-sm btn-primary" href="<?=$this->url('myresearch-ziskej-ticket', ['eppnDomain' => $userCard->getEppnDomain(), 'ticketId' => $ticket->getId()])?>" title="<?=$this->transEsc("btn_order_detail_title")?>">
-                            <i class="fa fa-search"></i> <?=$this->transEsc("btn_order_detail")?>
+                          <a class="btn btn-sm btn-primary" href="<?=$this->url('myresearch-ziskej-ticket', ['eppnDomain' => $userCard->getEppnDomain(), 'ticketId' => $ticket->getId()])?>" title="<?=$this->transEsc("Ziskej::btn_order_detail_title")?>">
+                            <i class="fa fa-search"></i> <?=$this->transEsc("Ziskej::btn_order_detail")?>
                           </a>
                         </div>
                       </div>
@@ -140,37 +141,32 @@ $this->layout()->breadcrumbs = '<li><a href="' . $this->url('myresearch-home') .
                 <?php endforeach; ?>
               </ul>
             <?php else: ?>
-              <div class="panel">
-                <div class="panel-body">
-                  <div class="alert alert-info">
-                    <?=$this->transEsc('ziskej_info_no_items')?>
-                  </div>
-                </div>
+              <div class="alert alert-info">
+                <?=$this->transEsc('Ziskej::ziskej_info_no_items')?>
               </div>
             <?php endif; ?>
           <?php else: ?>
             <div class="alert alert-danger">
-              [reader_disabled_in_ziskej]
+              <?=$this->transEsc('Ziskej::reader_disabled_in_ziskej')?>
             </div>
           <?php endif; ?>
         <?php else: ?>
           <div class="alert alert-danger">
-            [library_not_found_in_ziskej]
+            <?=$this->transEsc('Ziskej::library_not_found_in_ziskej')?>
           </div>
         <?php endif; ?>
       <?php else: ?>
         <div class="alert alert-danger">
-          [ziskej_mode_disabled]
+          <?=$this->transEsc('Ziskej::ziskej_mode_disabled')?>
         </div>
       <?php endif; ?>
     <?php else: ?>
       <div class="alert alert-danger">
-        [user_card_has_no_eppn]
+        <?=$this->transEsc('Ziskej::user_card_has_no_eppn')?>
       </div>
     <?php endif; ?>
   <?php else: ?>
-    <div class="alert alert-danger">
-      [user_card_not_found]
+    <div class="alert alert-danger"><?=$this->transEsc('Ziskej::user_card_not_found')?>
     </div>
   <?php endif; ?>
 </div>
