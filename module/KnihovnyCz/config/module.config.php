@@ -83,6 +83,20 @@ $config = [
                      ],
                  ],
              ],
+             'myresearch-ziskej-ticket' => [
+                 'type' => \Laminas\Router\Http\Segment::class,
+                 'options' => [
+                     'route' => '/MyResearchZiskej/Ticket/[:eppnDomain]/[:ticketId]',
+                     'constraints' => [
+                         'eppnDomain'     => '.*',
+                         'ticketId'     => '.*',
+                     ],
+                     'defaults' => [
+                         'controller' => 'MyResearchZiskej',
+                         'action' => 'Ticket'
+                     ],
+                 ],
+             ],
          ],
      ],
     'controllers' => [

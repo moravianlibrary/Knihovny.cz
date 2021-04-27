@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace KnihovnyCz\Controller;
 
+use KnihovnyCz\Controller\Exception\TicketNotFoundException;
 use KnihovnyCz\Db\Row\UserCard;
 use KnihovnyCz\RecordDriver\SolrLocal;
 use KnihovnyCz\Ziskej\ZiskejMvs;
@@ -60,6 +61,43 @@ class MyResearchZiskejController extends AbstractBase
         );
     }
 
+    public function ticketAction(): ViewModel
+    {
+        $eppnDomain = $this->params()->fromRoute('eppnDomain');
+        if (!$eppnDomain) {
+            throw new TicketNotFoundException('The requested order was not found');
+        }
+
+        $ticketId = $this->params()->fromRoute('ticketId');
+        if (!$ticketId) {
+            throw new TicketNotFoundException('The requested order was not found');
+        }
+
+        if (!$user = $this->getAuthManager()->isLoggedIn()) {
+            //$this->flashExceptions($this->flashMessenger());  //@todo
+            return $this->forceLogin();
+        }
+
+        $userCard = $this->getCardByEppnDomain($user, $eppnDomain);
+
+        if (!$userCard || !$userCard->eppn) {
+            throw new TicketNotFoundException('The requested order was not found');
+        }
+
+        /** @var \Mzk\ZiskejApi\Api $ziskejApi */
+        $ziskejApi = $this->serviceLocator->get('Mzk\ZiskejApi\Api');
+
+        $ticket = $ziskejApi->getTicket($userCard->eppn, $ticketId);
+        $messages = $ziskejApi->getMessages($userCard->eppn, $ticketId);
+        $record = $this->getRecord($ticket->getDocumentId());
+
+        return $this->createViewModel(
+            compact(
+                'userCard', 'ticket', 'messages', 'record'
+            )
+        );
+    }
+
     private function getRecord(string $documentId): ?SolrLocal
     {
         $recordLoader = $this->getRecordLoader();
@@ -99,9 +137,13 @@ class MyResearchZiskejController extends AbstractBase
         return null;
     }
 
-        /** @var UserCard $userCard */
-        foreach ($userCards as $userCard) {
-            if ($userCard->card_name === $cardName) {
+    private function getCardByEppnDomain(User $user, string $eppnDomain): ?UserCard
+    {
+        //@todo move to class Row\User
+
+        /** @var \KnihovnyCz\Db\Row\UserCard $userCard */
+        foreach ($user->getLibraryCards() as $userCard) {
+            if ($userCard->getEppnDomain() === $eppnDomain) {
                 return $userCard;
             }
         }
