@@ -63,16 +63,22 @@ $this->layout()->breadcrumbs = '<li><a href="' . $this->url('myresearch-home') .
                   $record = $item['record'];
                   ?>
                   <li class="media well" id="record_<?=$ticket->getHid()?>" data-ziskej="<?=$ticket->getHid()?>">
-                    <div class="media-left text-center" style="min-width: 100px;">
-                      <?php
-                      $backLink = $this->serverUrl($this->recordLink()->getUrl($record));
-                      $formats = $record->getFormats();
-                      $recordId = preg_replace("/[\.:]/", "", $record->getUniqueId() . $i);
-                      ?>
-                      <div id="cover_<?=$recordId?>" class="coverThumbnail">
-                        [image] <?php //@todo ?>
+                    <?php
+                    $coverDetails = $this->record($record)->getCoverDetails('checkedout', 'small', $this->recordLink()->getUrl($record));
+                    $cover = $coverDetails['html'];
+                    $thumbnail = false;
+                    $thumbnailAlignment = $this->record($record)->getThumbnailAlignment('account');
+                    if ($cover):
+                      ob_start(); ?>
+                      <div class="media-<?=$thumbnailAlignment ?> <?=$this->escapeHtmlAttr($coverDetails['size'])?>">
+                        <?=$cover ?>
                       </div>
-                    </div>
+                      <?php $thumbnail = ob_get_contents(); ?>
+                      <?php ob_end_clean(); ?>
+                    <?php endif; ?>
+                    <?php if ($thumbnail && $thumbnailAlignment == 'left'): ?>
+                      <?=$thumbnail ?>
+                    <?php endif ?>
                     <div class="media-body">
                       <h4 class="media-heading">
                         <?php if (is_a($record, \VuFind\RecordDriver\SolrDefault::class) && !is_a($record, \VuFind\RecordDriver\Missing::class)): ?>
@@ -137,6 +143,9 @@ $this->layout()->breadcrumbs = '<li><a href="' . $this->url('myresearch-home') .
                         </div>
                       </div>
                     </div>
+                    <?php if ($thumbnail && $thumbnailAlignment == 'right'): ?>
+                      <?=$thumbnail ?>
+                    <?php endif ?>
                   </li>
                 <?php endforeach; ?>
               </ul>
