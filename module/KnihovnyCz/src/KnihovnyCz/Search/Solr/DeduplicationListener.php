@@ -314,7 +314,7 @@ class DeduplicationListener extends ParentDeduplicationListener
         }
         $priorities = [];
         foreach ($values as $value) {
-            $prefixes = $institutionMappings[$value];
+            $prefixes = $institutionMappings[$value] ?? null;
             if ($prefixes) {
                 array_push($priorities, ...$prefixes);
             }
