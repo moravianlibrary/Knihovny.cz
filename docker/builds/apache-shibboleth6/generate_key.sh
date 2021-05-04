@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+set -e
 
 # Generate self-signed SSL/TLS certificates
 #  - https://stackoverflow.com/questions/10175812/how-to-create-a-self-signed-certificate-with-openssl
