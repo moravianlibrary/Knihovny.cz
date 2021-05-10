@@ -93,6 +93,9 @@ class SolrIdResolver
                 $idsToResolve[] = $identifier;
             }
         }
+        if (empty($idsToResolve)) {
+            return $recordsToResolve;
+        }
         $resolved = $this->convertToIdUsingSolr($idsToResolve, $config);
         $results = [];
         foreach ($recordsToResolve as $record) {

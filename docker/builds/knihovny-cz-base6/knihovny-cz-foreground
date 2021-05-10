@@ -1,4 +1,7 @@
 #!/usr/bin/env bash
+set -e
+
+EXTENSION_DIR="/var/www/knihovny-cz-extension"
 
 # Set default values to use in bootstrap scripts
 if [[ -z "$PARAM_VUFIND_SRC" ]]; then
@@ -17,35 +20,42 @@ fi;
 PARAM_VUFIND_CONFIG_ABS_DIR="${PARAM_VUFIND_SRC}/local/${PARAM_VUFIND_CONFIG_DIR}"
 export PARAM_VUFIND_CONFIG_ABS_DIR
 
-#TODO directories should be variables
 # Make links to our extensions
-# Module
-ln -s "/var/www/knihovny-cz-extension/module/KnihovnyCz/" "/var/www/knihovny-cz/module/KnihovnyCz"
-ln -s "/var/www/knihovny-cz-extension/module/KnihovnyCzApi/" "/var/www/knihovny-cz/module/KnihovnyCzApi"
-ln -s "/var/www/knihovny-cz-extension/module/KnihovnyCzConsole/" "/var/www/knihovny-cz/module/KnihovnyCzConsole"
-ln -s "/var/www/knihovny-cz-extension/module/KnihovnyCzCronApi/" "/var/www/knihovny-cz/module/KnihovnyCzCronApi"
+EXTENSION_MODULE_DIR="${EXTENSION_DIR}/module"
+VUFIND_MODULE_DIR="${PARAM_VUFIND_SRC}/module"
+for modul in KnihovnyCz KnihovnyCzApi KnihovnyCzConsole KnihovnyCzCronApi; do
+    if test ! -e "${VUFIND_MODULE_DIR}/${modul}"; then
+        ln -s "${EXTENSION_MODULE_DIR}/${modul}/" "${VUFIND_MODULE_DIR}/${modul}"
+    fi
+done
 
 # Themes
-for theme in /var/www/knihovny-cz-extension/themes/*/; do
+EXTENSION_THEME_DIR="${EXTENSION_DIR}/themes"
+VUFIND_THEME_DIR="${PARAM_VUFIND_SRC}/themes"
+for theme in ${EXTENSION_THEME_DIR}/*/; do
     name=$(basename "$theme")
-    ln -s "/var/www/knihovny-cz-extension/themes/$name/" "/var/www/knihovny-cz/themes/$name"
+    if test ! -e "${VUFIND_THEME_DIR}/${name}"; then
+        ln -s "${EXTENSION_THEME_DIR}/${name}/" "${VUFIND_THEME_DIR}/${name}"
+    fi
 done
 
 # Compile CSS in themes
 grunt less
 
 # Local configs
-for config in /var/www/knihovny-cz-extension/local/*/; do
+for config in ${EXTENSION_DIR}/local/*/; do
     name=$(basename "$config")
-    ln -s "/var/www/knihovny-cz-extension/local/$name/" "/var/www/knihovny-cz/local/$name"
+    if test ! -e "${PARAM_VUFIND_SRC}/local/$name"; then
+        ln -s "${EXTENSION_DIR}/local/$name/" "${PARAM_VUFIND_SRC}/local/$name"
+    fi
     # Make cache dirs - if they not exist, the script clear-cache executed below
     # will create them - but with root:root as owner
-    if [ ! -d "/var/www/knihovny-cz/local/$name/cache" ]; then
-      mkdir "/var/www/knihovny-cz/local/$name/cache"
+    if [ ! -d "${PARAM_VUFIND_SRC}/local/$name/cache" ]; then
+      mkdir "${PARAM_VUFIND_SRC}/local/$name/cache"
     fi
     # Make local data available to application
-    chgrp -R www-data "/var/www/knihovny-cz/local/$name/"
-    chmod -R g+w "/var/www/knihovny-cz/local/$name/"
+    chgrp -R www-data "${PARAM_VUFIND_SRC}/local/$name/"
+    chmod -R g+w "${PARAM_VUFIND_SRC}/local/$name/"
 done
 
 # Run all start files
@@ -60,7 +70,7 @@ if test -d /onstart; then
 fi
 
 # Create place for logs
-mkdir "${PARAM_VUFIND_SRC:-/var/www/src}/log"
+mkdir -p "${PARAM_VUFIND_SRC:-/var/www/src}/log"
 
 # List all environment variables
 # WARNING: possible threat of exploiting the secrets here (by saving `env` output to the docker logs)
@@ -70,7 +80,7 @@ clear-cache
 
 # This has to be done so that the server can create caches & logs
 chgrp -R www-data "/var/www"
-chmod -R g+w "/var/www/knihovny-cz-extension/themes"
+chmod -R g+w "${EXTENSION_DIR}/themes"
 chmod -R g+w "${PARAM_VUFIND_SRC:-/var/www/src}/log"
 
 echo

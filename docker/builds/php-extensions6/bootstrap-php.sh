@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+set -e
 
 main() {
     if [ "$PARAM_XDEBUG_ENABLED" == true ]; then
