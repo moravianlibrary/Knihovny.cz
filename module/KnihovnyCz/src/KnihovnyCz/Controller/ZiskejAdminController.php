@@ -89,6 +89,7 @@ class ZiskejAdminController extends AbstractBase
                     if ($ziskejReader && $ziskejReader->isActive()) {
                         /** @var \Mzk\ZiskejApi\ResponseModel\TicketsCollection $tickets */
                         $tickets = $ziskejApi->getTickets($eppn)->getAll();
+                        $data[$eppn]['tickets'] = [];
                         /** @var \Mzk\ZiskejApi\ResponseModel\Ticket $ticket */
                         foreach ($tickets as $ticket) {
                             $data[$eppn]['tickets'][$ticket->getId()]['ticket'] = $ticket;
