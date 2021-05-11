@@ -4,7 +4,8 @@ namespace KnihovnyCz;
 
 use Http\Message\Authentication\Bearer;
 use Interop\Container\ContainerInterface;
-use Lcobucci\JWT\Builder;
+use Lcobucci\JWT\Configuration;
+use Lcobucci\JWT\Signer\Ecdsa\MultibyteStringConverter;
 use Lcobucci\JWT\Signer\Ecdsa\Sha512;
 use Lcobucci\JWT\Signer\Key;
 use Monolog\Formatter\JsonFormatter;
@@ -59,19 +60,25 @@ class ZiskejApiFactory implements FactoryInterface
         ]);
 
         // generate token
-        $time = time();
-        $token = (new Builder())
+        $signer = new Sha512(new MultibyteStringConverter());
+        $privateKey = Key\LocalFileReference::file('file://' . $this->cpkZiskej->getPrivateKeyFileLocation());
+
+        $config = Configuration::forSymmetricSigner(
+            $signer,
+            $privateKey
+        );
+
+        $token = $config->builder()
             ->issuedBy('cpk')
-            ->issuedAt($time)
-            ->expiresAt($time + 3600)
+            ->issuedAt((new \DateTimeImmutable())->setTimestamp(time()))
+            ->expiresAt((new \DateTimeImmutable())->setTimestamp(time() + 3600))
             ->withClaim('app', 'cpk')
-            ->getToken(
-                new Sha512(),
-                new Key('file://' . $this->cpkZiskej->getPrivateKeyFileLocation())
-            );
+            ->getToken($signer, $privateKey);
 
         //@todo store token
 
-        return new Api(new ApiClient($guzzleClient, $this->cpkZiskej->getCurrentUrl(), new Bearer($token), $logger));
+        return new Api(
+            new ApiClient($guzzleClient, $this->cpkZiskej->getCurrentUrl(), new Bearer($token->toString()), $logger)
+        );
     }
 }
