@@ -40,11 +40,9 @@ RUN cp -rl /tmp/vufind-${PARAM_VUFIND_COMMIT}/* /var/www/knihovny-cz/ && \
 # Add local dependecies
 COPY ./composer.local.json /var/www/knihovny-cz/
 
-# We need to remove original VuFind composer.lock file to composer.local.json be taken into account
-RUN rm /var/www/knihovny-cz/composer.lock
-
 # Install composer dependencies
 RUN composer install --no-interaction -q --ignore-platform-req php
+RUN composer update --no-interaction -q --ignore-platform-req php
 
 # Copy script for content updating and run it on every start
 COPY install-portal-content.sh /onstart/010-install-portal-content.sh
