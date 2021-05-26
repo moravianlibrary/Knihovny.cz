@@ -64,7 +64,7 @@ class RecordDataFormatterFactory
         $helper->setDefaults('library', [$this, 'getDefaultLibraryCoreSpecs']);
         $helper->setDefaults('dictionary', [$this, 'getDefaultDictionaryCoreSpecs']);
         $helper->setDefaults('authority', [$this, 'getDefaultAuthorityCoreSpecs']);
-        $helper->setDefaults('ziskej'), [$this, 'getDefaultZiskejCoreSpecs']);
+        $helper->setDefaults('ziskej', [$this, 'getDefaultZiskejCoreSpecs']);
 
         return $helper;
     }
