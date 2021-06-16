@@ -36,12 +36,29 @@ namespace KnihovnyCz\RecordDriver;
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     http://github.com/moravianlibrary/Knihovny.cz Knihovny.cz
  */
-class SolrMarc extends \KnihovnyCz\RecordDriver\SolrDefault
+class SolrMarc extends SolrDefault
 {
     use \VuFind\RecordDriver\IlsAwareTrait;
     use \VuFind\RecordDriver\MarcReaderTrait;
     use \VuFind\RecordDriver\MarcAdvancedTrait;
     use PatentTrait;
+
+    /**
+     * Constructor
+     *
+     * @param \Laminas\Config\Config $mainConfig     VuFind main configuration (omit
+     * for built-in defaults)
+     * @param \Laminas\Config\Config $recordConfig   Record-specific configuration
+     * file (omit to use $mainConfig as $recordConfig)
+     * @param \Laminas\Config\Config $searchSettings Search-specific configuration
+     * file
+     */
+    public function __construct(
+        $mainConfig = null, $recordConfig = null, $searchSettings = null
+    ) {
+        parent::__construct($mainConfig, $recordConfig, $searchSettings);
+        $this->marcReaderClass = \KnihovnyCz\Marc\MarcReader::class;
+    }
 
     /**
      * ISSN from marc record
