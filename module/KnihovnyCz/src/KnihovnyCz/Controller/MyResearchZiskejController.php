@@ -113,11 +113,11 @@ class MyResearchZiskejController extends AbstractBase
 
         $ticket = $ziskejApi->getTicket($userCard->eppn, $ticketId);
         $messages = $ziskejApi->getMessages($userCard->eppn, $ticketId);
-        $record = $this->getRecord($ticket->getDocumentId());
+        $driver = $this->getRecord($ticket->getDocumentId());
 
         return $this->createViewModel(
             compact(
-                'userCard', 'ticket', 'messages', 'record'
+                'userCard', 'ticket', 'messages', 'driver'
             )
         );
     }

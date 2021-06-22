@@ -64,7 +64,7 @@
     <?php /* Display Main Details */ ?>
     <?php
     $formatter = $this->recordDataFormatter();
-    $coreFields = $formatter->getData($driver, $formatter->getDefaults('ziskej'));
+    $coreFields = $formatter->getData($this->driver, $formatter->getDefaults('ziskej'));
     ?>
     <?php if (!empty($coreFields)): ?>
       <h4 class="sr-only"><?=$this->transEsc('Bibliographic Details')?></h4>
