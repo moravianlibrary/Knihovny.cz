@@ -213,7 +213,7 @@ $this->headTitle($this->translate('Ziskej::header_order_ziskej_num') . ' ' . $ti
 
     <h3><?=$this->transEsc("Ziskej::header_order_document") ?></h3>
     <div class="well border">
-      <?php include('_ziskejticket-core.phtml'); ?>
+      <?=$this->render('_ziskejticket-core.phtml') ?>
       <div class="text-right">
         <a href="<?=$this->recordLink()->getUrl($this->driver) ?>" class="title" title="<?=$this->transEsc("Ziskej::btn_order_document_title") ?>"><?=$this->transEsc("Ziskej::btn_order_document") ?></a>
       </div>
