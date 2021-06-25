@@ -16,7 +16,7 @@
         <?php elseif ($item['availability']): ?>
           <span class="text-success"><?=!empty($item['status']) ? $this->transEsc($item['status']) : $this->transEsc('Available')?></span>
         <?php else: ?>
-          <span class="text-danger"><?=$this->transEsc($item['status'])?></span>
+          <span class="text-danger"><?=$this->transEsc('HoldingStatus::' . $item['status'])?></span>
         <?php endif; ?>
         <?php if (isset($item['item_notes'])): ?>
           <div class="item-notes">
