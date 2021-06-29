@@ -21,12 +21,3 @@ document.addEventListener('DOMContentLoaded', function runObserver() {
   const targetNode = document.querySelector('#cartItems strong');
   observer.observe(targetNode, config);
 }, false);
-
-// Cookie consent bar handling
-$(document).ready(function cookiesConsentInit() {
-  $('.cookies-consent-dismiss').click(function setCookie() {
-    window.Cookies.set('knihovnycz-cookies-consent', 1, { expires: 365 });
-    $('.cookies-consent').hide();
-  });
-});
-
