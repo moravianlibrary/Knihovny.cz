@@ -180,14 +180,9 @@ class MultiBackend extends \VuFind\ILS\Driver\MultiBackend
      */
     public function siglaToSource($sigla): ?string
     {
-        $source = null;
         $siglaMapping = $this->config['SiglaMapping'] ?? [];
-        foreach ($siglaMapping as $src => $paired_sigla) {
-            if ($sigla === $paired_sigla) {
-                return $src;
-            }
-        }
-        return $source;
+        $siglaMapping = array_flip($siglaMapping);
+        return $siglaMapping[$sigla] ?? null;
     }
 
     /**
@@ -200,6 +195,6 @@ class MultiBackend extends \VuFind\ILS\Driver\MultiBackend
     public function sourceToSigla(string $source): ?string
     {
         $siglaMapping = $this->config['SiglaMapping'] ?? [];
-        return isset($siglaMapping[$source]) ? $siglaMapping[$source] : null;
+        return $siglaMapping[$source] ?? null;
     }
 }
