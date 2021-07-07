@@ -109,6 +109,19 @@ class SolrMarcTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Test getItemIds
+     *
+     * @return void
+     */
+    public function testGetItemIds(): void
+    {
+        $filename = 'records/record1.json';
+        $fixture = $this->getJsonFixture($filename, 'KnihovnyCz');
+        $record = $this->createDriver($fixture['response']['docs'][0]);
+        $expected = ['ABA001.NKC01002931098.NKC50002953486000020', 'ABA001.NKC01002931098.NKC50002953486000010'];
+        $this->assertEquals($expected, $record->getItemIds());
+    }
+    /**
      * Create new record driver
      *
      * @param array $fieldData Field data from SOLR response
