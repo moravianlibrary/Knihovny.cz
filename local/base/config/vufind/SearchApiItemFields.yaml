@@ -1,0 +1,52 @@
+# Key is the field name that can be requested. It has the following subkeys:
+# - vufind.method: name to call (either in the SearchApiController class or the record driver)
+# - vufind.default: true if the field is displayed by default when the request does not specify fields
+# - Swagger specification fields describing the returned data.
+#
+# See http://swagger.io/specification/ for information on the Swagger-specific fields
+#
+id:
+  vufind.default: true
+  description: Item identifier
+  type: string
+availability:
+  vufind.default: true
+  description: General availability information
+  type: string
+  enum:
+    - available
+    - on-loan
+    - unavailable
+    - unknown
+availability_note:
+  vufind.default: true
+  description: Availability description
+  type: string
+duedate:
+  vufind.default: true
+  description: Due date if item is checked out
+  type: string
+queue:
+  vufind.default: true
+  description: Requests queue length
+  type: string
+opac_status:
+  vufind.default: true
+  description: Loan status
+  type: string
+location:
+  description: Location
+  type: string
+department:
+  description: Department
+  type: string
+collection:
+  description: Collection
+  type: string
+ext:
+  description: Extended information (for backwards compatibility)
+  type: object
+  properties:
+    opac_status:
+      description: Loan status
+      type: string
