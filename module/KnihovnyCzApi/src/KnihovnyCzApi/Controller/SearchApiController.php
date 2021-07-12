@@ -182,8 +182,9 @@ class SearchApiController extends \VuFindApi\Controller\SearchApiController
          * SIGLA.BIB_ID.ITEM_ID
          */
         $idParts = explode('.', $request['id']);
+        $bibId = $itemId = null;
         if (count($idParts) === 3) {
-            [$sigla, , $itemId] = $idParts;
+            [$sigla, $bibId, ] = $idParts;
         } elseif (count($idParts) === 2) {
             [$sigla, $itemId] = $idParts;
         } else {
@@ -196,8 +197,9 @@ class SearchApiController extends \VuFindApi\Controller\SearchApiController
                 [], self::STATUS_ERROR, 400, 'No library for this item'
             );
         }
-
-        $status = $driver->getStatus($source . '.' . $itemId);
+        $itemId = $itemId !== null ? $source . '.' . $itemId : null;
+        $bibId = $bibId !== null ? $source . '.' . $bibId : null;
+        $status = $driver->getStatusByItemIdOrBibId($bibId, $itemId);
 
         if (!isset($status['label'])) {
             return $this->output(

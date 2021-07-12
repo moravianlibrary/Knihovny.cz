@@ -33,6 +33,7 @@ use KnihovnyCz\Db\Table\InstSources;
 use KnihovnyCz\ILS\Service\SolrIdResolver;
 use VuFind\Auth\ILSAuthenticator;
 use VuFind\Config\PluginManager as ConfigManager;
+use VuFind\Exception\ILS as ILSException;
 use VuFind\ILS\Driver\PluginManager;
 
 /**
@@ -196,5 +197,52 @@ class MultiBackend extends \VuFind\ILS\Driver\MultiBackend
     {
         $siglaMapping = $this->config['SiglaMapping'] ?? [];
         return $siglaMapping[$source] ?? null;
+    }
+
+    /**
+     * Get Status By Item ID or Bibliographic ID
+     *
+     * This is responsible for retrieving the status information of a certain
+     * record/item
+     *
+     * @param string $id The record id to retrieve the holdings for
+     *
+     * @throws ILSException
+     * @return mixed     On success, an associative array with the following keys:
+     * id, availability (boolean), status, location, reserve, callnumber.
+     */
+
+    public function getStatusByItemIdOrBibId(?string $bibId, ?string $itemId)
+    {
+        $status = [];
+        if ($bibId !== null) {
+            $status = $this->getStatus($bibId);
+        } elseif ($itemId !== null) {
+            $status = $this->getStatusByItemId($itemId);
+        }
+        return $status;
+    }
+
+    /**
+     * Get Status
+     *
+     * This is responsible for retrieving the status information of a certain
+     * record.
+     *
+     * @param string $id The record id to retrieve the holdings for
+     *
+     * @throws ILSException
+     * @return mixed     On success, an associative array with the following keys:
+     * id, availability (boolean), status, location, reserve, callnumber.
+     */
+    public function getStatusByItemId($id)
+    {
+        $source = $this->getSource($id);
+        $driver = $this->getDriver($source);
+        if ($driver) {
+            $status = $driver->getStatusByItemId($this->getLocalId($id));
+            return $this->addIdPrefixes($status, $source);
+        }
+        return [];
     }
 }
