@@ -85,6 +85,7 @@ Date: Wed, 18 Mar 2015 11:49:40 GMT
                         <ItemIdentifierValue>356600413269</ItemIdentifierValue>
                     </ItemId>
                     <ItemOptionalFields>
+                        <ItemUseRestrictionType>Limited Circulation, Normal Loan Period</ItemUseRestrictionType>
                         <CirculationStatus>Available On Shelf</CirculationStatus>
                         <HoldQueueLength>4</HoldQueueLength>
                         <Location>
