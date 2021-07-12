@@ -26,22 +26,12 @@ duedate:
   vufind.default: true
   description: Due date if item is checked out
   type: string
-queue:
-  vufind.default: true
-  description: Requests queue length
-  type: string
 opac_status:
   vufind.default: true
   description: Loan status
   type: string
 location:
   description: Location
-  type: string
-department:
-  description: Department
-  type: string
-collection:
-  description: Collection
   type: string
 ext:
   description: Extended information (for backwards compatibility)

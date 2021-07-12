@@ -135,7 +135,6 @@ class SearchApiController extends \VuFindApi\Controller\SearchApiController
             'indexLabel' => $this->indexLabel,
             'modelPrefix' => $this->modelPrefix,
             'maxLimit' => $this->maxLimit,
-
             'defaultItemFields' => $this->defaultItemFields,
             'itemRoute' => $this->itemRoute,
             'itemFields' => $this->itemFormatter->getRecordFieldSpec(),
@@ -201,28 +200,30 @@ class SearchApiController extends \VuFindApi\Controller\SearchApiController
         $bibId = $bibId !== null ? $source . '.' . $bibId : null;
         $status = $driver->getStatusByItemIdOrBibId($bibId, $itemId);
 
-        if (!isset($status['label'])) {
+        if (!isset($status['status'])) {
             return $this->output(
                 [], self::STATUS_ERROR, 404, 'Item information not found'
             );
         }
 
         $availability = [
-            'label-success' => 'available',
-            'label-warning' => 'on-loan',
-            'label-danger' => 'unavailable',
-            'label-unknown' => 'unknown'
+            'Available On Shelf' => 'available', // XCNCIP2
+            'Available For Pickup' => 'available', // XCNCIP2
+            'Available for Pickup' => 'available', // XCNCIP2
+            'On Loan' => 'on-loan', // XCNCIP2, Aleph
+            'On Order' => 'on-loan', /// XCNCIP2, Aleph
+            'In Process' => 'on-loan', // XCNCIP2
+            'In Transit Between Library Locations' => 'on-loan', // XCNCIP2
+            'Circulation Status Undefined' => 'unknown', // XCNCIP2
+            'available' => 'available', // Aleph
         ];
 
         $response = [
             'id' => $request['id'],
-            'availability' => $availability[$status['label']],
-            'availability_note' => $status['availability'] ?? null,
+            'availability' => $availability[$status['status']] ?? 'unavailable',
+            'availability_note' => $status['status'] ?? null,
             'duedate' => $status['duedate'] ?? null,
-            'queue' => $status['queue'] ?? null,
             'location' => $status['location'] ?? null,
-            'department' => $status['department'] ?? null,
-            'collection' => $status['collection'] ?? null,
             'ext' => [
                 'opac_status' => $status['status'] ?? null,
             ],
@@ -232,8 +233,8 @@ class SearchApiController extends \VuFindApi\Controller\SearchApiController
 
         $response = array_filter(
             $response, function ($key) use ($fields) {
-            return in_array($key, $fields);
-        }, ARRAY_FILTER_USE_KEY
+                return in_array($key, $fields);
+            }, ARRAY_FILTER_USE_KEY
         );
 
         return $this->output($response, self::STATUS_OK);

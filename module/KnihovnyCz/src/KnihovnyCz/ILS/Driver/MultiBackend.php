@@ -232,12 +232,12 @@ class MultiBackend extends \VuFind\ILS\Driver\MultiBackend
     }
 
     /**
-     * Get Status
+     * Get Status By Item ID
      *
      * This is responsible for retrieving the status information of a certain
-     * record.
+     * item.
      *
-     * @param string $id The record id to retrieve the holdings for
+     * @param string $id The item id to retrieve the holdings for
      *
      * @throws ILSException
      * @return mixed     On success, an associative array with the following keys:
