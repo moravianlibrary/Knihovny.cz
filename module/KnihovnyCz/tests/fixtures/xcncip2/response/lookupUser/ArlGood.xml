@@ -140,6 +140,106 @@ Date: Wed, 18 Mar 2015 11:49:40 GMT
                 </ns1:BibliographicDescription>
             </ns1:Ext>
         </ns1:LoanedItem>
+        <ns1:RequestedItem>
+            <ns1:RequestId>
+                <ns1:AgencyId ns1:Scheme="https://www.library.sk/ncip/v2_02/schemes.scm">CBA001</ns1:AgencyId>
+                <ns1:RequestIdentifierType ns1:Scheme="https://www.library.sk/ncip/v2_02/schemes.scm">IDX</ns1:RequestIdentifierType>
+                <ns1:RequestIdentifierValue>cbvk_trx*13502426</ns1:RequestIdentifierValue>
+            </ns1:RequestId>
+            <ns1:BibliographicId>
+                <ns1:BibliographicItemId>
+                    <ns1:BibliographicItemIdentifier>cbvk_us_cat*0805981</ns1:BibliographicItemIdentifier>
+                </ns1:BibliographicItemId>
+            </ns1:BibliographicId>
+            <ns1:RequestType ns1:Scheme="https://www.library.sk/ncip/v2_02/schemes.scm">r</ns1:RequestType>
+            <ns1:RequestStatusType ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/requeststatustype/requeststatustype.scm">In Process</ns1:RequestStatusType>
+            <ns1:DatePlaced>2020-07-21T00:00:00Z</ns1:DatePlaced>
+            <ns1:PickupExpiryDate>2025-08-20T00:00:00Z</ns1:PickupExpiryDate>
+            <ns1:Title>Veselí</ns1:Title>
+            <ns1:Ext>
+                <ns1:BibliographicDescription>
+                    <ns1:Author>Třeštíková, Radka</ns1:Author>
+                    <ns1:BibliographicItemId>
+                        <ns1:BibliographicItemIdentifier>9788026712602</ns1:BibliographicItemIdentifier>
+                        <ns1:BibliographicItemIdentifierCode ns1:Scheme="https://www.library.sk/ncip/v2_02/schemes.scm">ISBN</ns1:BibliographicItemIdentifierCode>
+                    </ns1:BibliographicItemId>
+                    <ns1:Edition></ns1:Edition>
+                    <ns1:PlaceOfPublication></ns1:PlaceOfPublication>
+                    <ns1:PublicationDate></ns1:PublicationDate>
+                    <ns1:Publisher></ns1:Publisher>
+                    <ns1:Title>Veselí</ns1:Title>
+                </ns1:BibliographicDescription>
+                <ns1:HoldQueueLength>2</ns1:HoldQueueLength>
+            </ns1:Ext>
+        </ns1:RequestedItem>
+        <ns1:RequestedItem>
+            <ns1:RequestId>
+                <ns1:AgencyId ns1:Scheme="https://www.library.sk/ncip/v2_02/schemes.scm">CBA001</ns1:AgencyId>
+                <ns1:RequestIdentifierType ns1:Scheme="https://www.library.sk/ncip/v2_02/schemes.scm">IDX</ns1:RequestIdentifierType>
+                <ns1:RequestIdentifierValue>cbvk_trx*13502428</ns1:RequestIdentifierValue>
+            </ns1:RequestId>
+            <ns1:BibliographicId>
+                <ns1:BibliographicItemId>
+                    <ns1:BibliographicItemIdentifier>cbvk_us_cat*0699443</ns1:BibliographicItemIdentifier>
+                </ns1:BibliographicItemId>
+            </ns1:BibliographicId>
+            <ns1:RequestType ns1:Scheme="https://www.library.sk/ncip/v2_02/schemes.scm">r</ns1:RequestType>
+            <ns1:RequestStatusType ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/requeststatustype/requeststatustype.scm">In Process</ns1:RequestStatusType>
+            <ns1:DatePlaced>2020-07-21T00:00:00Z</ns1:DatePlaced>
+            <ns1:PickupExpiryDate>2025-08-20T00:00:00Z</ns1:PickupExpiryDate>
+            <ns1:Title>Hana</ns1:Title>
+            <ns1:Ext>
+                <ns1:BibliographicDescription>
+                    <ns1:Author>Mornštajnová, Alena</ns1:Author>
+                    <ns1:BibliographicItemId>
+                        <ns1:BibliographicItemIdentifier>9788074919404</ns1:BibliographicItemIdentifier>
+                        <ns1:BibliographicItemIdentifierCode ns1:Scheme="https://www.library.sk/ncip/v2_02/schemes.scm">ISBN</ns1:BibliographicItemIdentifierCode>
+                    </ns1:BibliographicItemId>
+                    <ns1:Edition></ns1:Edition>
+                    <ns1:PlaceOfPublication></ns1:PlaceOfPublication>
+                    <ns1:PublicationDate></ns1:PublicationDate>
+                    <ns1:Publisher></ns1:Publisher>
+                    <ns1:Title>Hana</ns1:Title>
+                </ns1:BibliographicDescription>
+                <ns1:HoldQueueLength>4</ns1:HoldQueueLength>
+            </ns1:Ext>
+        </ns1:RequestedItem>
+        <ns1:RequestedItem>
+            <ns1:RequestId>
+              <ns1:AgencyId ns1:Scheme="https://www.library.sk/ncip/v2_02/schemes.scm">CBA001</ns1:AgencyId>
+              <ns1:RequestIdentifierType ns1:Scheme="https://www.library.sk/ncip/v2_02/schemes.scm">IDX</ns1:RequestIdentifierType>
+              <ns1:RequestIdentifierValue>cbvk_trx*13502448</ns1:RequestIdentifierValue>
+            </ns1:RequestId>
+            <ns1:ItemId>
+              <ns1:ItemIdentifierType ns1:Scheme="https://www.library.sk/ncip/v2_02/schemes.scm">BARCODE</ns1:ItemIdentifierType>
+              <ns1:ItemIdentifierValue>2680443872</ns1:ItemIdentifierValue>
+            </ns1:ItemId>
+            <ns1:BibliographicId>
+                <ns1:BibliographicItemId>
+                  <ns1:BibliographicItemIdentifier>cbvk_us_cat*m0235131</ns1:BibliographicItemIdentifier>
+                </ns1:BibliographicItemId>
+            </ns1:BibliographicId>
+            <ns1:RequestType ns1:Scheme="https://www.library.sk/ncip/v2_02/schemes.scm">z</ns1:RequestType>
+            <ns1:RequestStatusType ns1:Scheme="http://www.niso.org/ncip/v1_0/imp1/schemes/requeststatustype/requeststatustype.scm">Available For Pickup</ns1:RequestStatusType>
+            <ns1:DatePlaced>2020-07-21T00:00:00Z</ns1:DatePlaced>
+            <ns1:PickupExpiryDate>2025-07-28T00:00:00Z</ns1:PickupExpiryDate>
+            <ns1:Title>Psohlavci</ns1:Title>
+            <ns1:Ext>
+                <ns1:BibliographicDescription>
+                    <ns1:Author>Jirásek, Alois</ns1:Author>
+                    <ns1:BibliographicItemId>
+                        <ns1:BibliographicItemIdentifier></ns1:BibliographicItemIdentifier>
+                        <ns1:BibliographicItemIdentifierCode ns1:Scheme="https://www.library.sk/ncip/v2_02/schemes.scm">ISBN</ns1:BibliographicItemIdentifierCode>
+                    </ns1:BibliographicItemId>
+                    <ns1:Edition></ns1:Edition>
+                    <ns1:PlaceOfPublication>Praha :</ns1:PlaceOfPublication>
+                    <ns1:PublicationDate>1982</ns1:PublicationDate>
+                    <ns1:Publisher>Albatros,</ns1:Publisher>
+                    <ns1:Title>Psohlavci</ns1:Title>
+                </ns1:BibliographicDescription>
+                <ns1:HoldQueueLength>0</ns1:HoldQueueLength>
+            </ns1:Ext>
+        </ns1:RequestedItem>
         <ns1:UserOptionalFields>
             <ns1:NameInformation>
                 <ns1:PersonalNameInformation>

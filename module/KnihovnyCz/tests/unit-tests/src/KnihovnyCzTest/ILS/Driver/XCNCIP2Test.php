@@ -29,14 +29,16 @@
 namespace KnihovnyCzTest\ILS\Driver;
 
 use InvalidArgumentException;
+use KnihovnyCz\ILS\Driver\XCNCIP2;
 use Laminas\Http\Response as HttpResponse;
+use PHPUnit\Framework\ExpectationFailedException;
 
 class XCNCIP2Test extends \VuFindTest\ILS\Driver\XCNCIP2Test
 {
     /**
      * ILS driver
      *
-     * @var \VuFind\ILS\Driver\XCNCIP2
+     * @var \KnihovnyCz\ILS\Driver\XCNCIP2
      */
     protected $driver;
 
@@ -563,19 +565,19 @@ class XCNCIP2Test extends \VuFindTest\ILS\Driver\XCNCIP2Test
                     'id' => 'KN3183000000046386',
                     'item_agency_id' => 'Agency from lookup item',
                     'patronAgencyId' => 'Test agency',
-                    'duedate' => '', // empty string until Tritius fixes dateDue to DateDue in LoanedItem
+                    'duedate' => '08-17-2025',
                     'title' => 'Led Zeppelin : MoDERN iCoNS /',
                     'item_id' => '311800245840',
-                    'renewable' => false, // RenewalNotPermitted should be empty element, need fix in Tritius
+                    'renewable' => true,
                 ],
                 [
                     'id' => 'KN3183000000046386',
                     'item_agency_id' => 'Agency from lookup item',
                     'patronAgencyId' => 'Test agency',
-                    'duedate' => '', // empty string until Tritiu fixes dateDue to DateDue in LoanedItem
+                    'duedate' => '08-17-2025',
                     'title' => 'Právo testy : testy k přijímacím zkouškám na právnické fakulty',
                     'item_id' => '311800274022',
-                    'renewable' => false, // RenewalNotPermitted should be empty element, need fix in Tritius
+                    'renewable' => false,
                 ],
             ],
         ],
@@ -590,19 +592,19 @@ class XCNCIP2Test extends \VuFindTest\ILS\Driver\XCNCIP2Test
                     'id' => 'KN3183000000046386',
                     'item_agency_id' => 'Agency from lookup item',
                     'patronAgencyId' => 'Test agency',
-                    'duedate' => '', // empty string until Tritiu fixes dateDue to DateDue in LoanedItem
+                    'duedate' => '06-15-2020',
                     'title' => 'Tajemství Hrobaříků :',
                     'item_id' => '421170125990',
-                    'renewable' => false, // RenewalNotPermitted should be empty element, need fix in Tritius
+                    'renewable' => false,
                 ],
                 [
                     'id' => 'KN3183000000046386',
                     'item_agency_id' => 'Agency from lookup item',
                     'patronAgencyId' => 'Test agency',
-                    'duedate' => '', // empty string until Tritiu fixes dateDue to DateDue in LoanedItem
+                    'duedate' => '06-15-2020',
                     'title' => 'Hrobaříci a Hrobaři /',
                     'item_id' => '421170125992',
-                    'renewable' => false, // RenewalNotPermitted should be empty element, need fix in Tritius
+                    'renewable' => false,
                 ],
             ],
         ],
@@ -981,7 +983,7 @@ class XCNCIP2Test extends \VuFindTest\ILS\Driver\XCNCIP2Test
                     'item_id' => '',
                     'bib_id' => 'cbvk_us_cat*0645161',
                     'item_agency_id' => '',
-                    'duedate' => '',
+                    'duedate' => '09-14-2020',
                     'volume' => 'Bábovky',
                     'number' => '0645161_0001',
                     'barcode' => 'Unknown barcode',
@@ -991,6 +993,7 @@ class XCNCIP2Test extends \VuFindTest\ILS\Driver\XCNCIP2Test
                     'storageRetrievalRequest' => 'auto',
                     'addStorageRetrievalRequestLink' => 'true',
                     'eresource' => '',
+                    'collection_desc' => 'Na Sadech - dospělé - beletrie'
                 ],
                 [
                     'status' => 'On Loan',
@@ -1002,7 +1005,7 @@ class XCNCIP2Test extends \VuFindTest\ILS\Driver\XCNCIP2Test
                     'item_id' => '',
                     'bib_id' => 'cbvk_us_cat*0645161',
                     'item_agency_id' => '',
-                    'duedate' => '',
+                    'duedate' => '09-01-2020',
                     'volume' => 'Bábovky',
                     'number' => '0645161_0002',
                     'barcode' => 'Unknown barcode',
@@ -1023,7 +1026,7 @@ class XCNCIP2Test extends \VuFindTest\ILS\Driver\XCNCIP2Test
                     'item_id' => '',
                     'bib_id' => 'cbvk_us_cat*0645161',
                     'item_agency_id' => '',
-                    'duedate' => '',
+                    'duedate' => '09-09-2020',
                     'volume' => 'Bábovky',
                     'number' => '0645161_0003',
                     'barcode' => 'Unknown barcode',
@@ -1044,7 +1047,7 @@ class XCNCIP2Test extends \VuFindTest\ILS\Driver\XCNCIP2Test
                     'item_id' => '',
                     'bib_id' => 'cbvk_us_cat*0645161',
                     'item_agency_id' => '',
-                    'duedate' => '',
+                    'duedate' => '09-13-2020',
                     'volume' => 'Bábovky',
                     'number' => '0645161_0004',
                     'barcode' => 'Unknown barcode',
@@ -1107,7 +1110,7 @@ class XCNCIP2Test extends \VuFindTest\ILS\Driver\XCNCIP2Test
                     'item_id' => '',
                     'bib_id' => 'cbvk_us_cat*0645161',
                     'item_agency_id' => '',
-                    'duedate' => '',
+                    'duedate' => '12-17-2017',
                     'volume' => 'Bábovky',
                     'number' => '0645161_0007',
                     'barcode' => 'Unknown barcode',
@@ -1128,7 +1131,7 @@ class XCNCIP2Test extends \VuFindTest\ILS\Driver\XCNCIP2Test
                     'item_id' => '',
                     'bib_id' => 'cbvk_us_cat*0645161',
                     'item_agency_id' => '',
-                    'duedate' => '',
+                    'duedate' => '09-01-2020',
                     'volume' => 'Bábovky',
                     'number' => '0645161_0008',
                     'barcode' => 'Unknown barcode',
@@ -1138,6 +1141,7 @@ class XCNCIP2Test extends \VuFindTest\ILS\Driver\XCNCIP2Test
                     'storageRetrievalRequest' => 'auto',
                     'addStorageRetrievalRequestLink' => 'true',
                     'eresource' => '',
+                    'collection_desc' => 'Lidická - sklad'
                 ],
                 [
                     'status' => 'On Loan',
@@ -1149,7 +1153,7 @@ class XCNCIP2Test extends \VuFindTest\ILS\Driver\XCNCIP2Test
                     'item_id' => '',
                     'bib_id' => 'cbvk_us_cat*0645161',
                     'item_agency_id' => '',
-                    'duedate' => '',
+                    'duedate' => '09-15-2020',
                     'volume' => 'Bábovky',
                     'number' => '0645161_0009',
                     'barcode' => 'Unknown barcode',
@@ -1159,6 +1163,7 @@ class XCNCIP2Test extends \VuFindTest\ILS\Driver\XCNCIP2Test
                     'storageRetrievalRequest' => 'auto',
                     'addStorageRetrievalRequestLink' => 'true',
                     'eresource' => '',
+                    'collection_desc' => 'Na Sadech - dospělé - beletrie'
                 ],
                 [
                     'status' => 'Available On Shelf',
@@ -1180,6 +1185,7 @@ class XCNCIP2Test extends \VuFindTest\ILS\Driver\XCNCIP2Test
                     'storageRetrievalRequest' => 'auto',
                     'addStorageRetrievalRequestLink' => 'true',
                     'eresource' => '',
+                    'collection_desc' => 'Na Sadech - dospělé - beletrie'
                 ],
             ],
         ],
@@ -1301,7 +1307,7 @@ class XCNCIP2Test extends \VuFindTest\ILS\Driver\XCNCIP2Test
                     'item_id' => '318300635334',
                     'bib_id' => 'KN3183000000266428',
                     'item_agency_id' => '17',
-                    'duedate' => '',
+                    'duedate' => '12-08-2019',
                     'volume' => '',
                     'number' => '',
                     'barcode' => '318300635334',
@@ -1322,7 +1328,7 @@ class XCNCIP2Test extends \VuFindTest\ILS\Driver\XCNCIP2Test
                     'item_id' => '318300643795',
                     'bib_id' => 'KN3183000000266428',
                     'item_agency_id' => '17',
-                    'duedate' => '',
+                    'duedate' => '07-26-2020',
                     'volume' => '',
                     'number' => '',
                     'barcode' => '318300643795',
@@ -1479,7 +1485,7 @@ class XCNCIP2Test extends \VuFindTest\ILS\Driver\XCNCIP2Test
                     'item_id' => '3529346',
                     'bib_id' => '2466144',
                     'item_agency_id' => 'ABG001',
-                    'duedate' => '',
+                    'duedate' => '12-29-1899',
                     'volume' => '',
                     'number' => '',
                     'barcode' => 'Unknown barcode',
@@ -1500,7 +1506,7 @@ class XCNCIP2Test extends \VuFindTest\ILS\Driver\XCNCIP2Test
                     'item_id' => '3529349',
                     'bib_id' => '2466144',
                     'item_agency_id' => 'ABG001',
-                    'duedate' => '',
+                    'duedate' => '08-20-2020',
                     'volume' => '',
                     'number' => '',
                     'barcode' => 'Unknown barcode',
@@ -1510,6 +1516,7 @@ class XCNCIP2Test extends \VuFindTest\ILS\Driver\XCNCIP2Test
                     'storageRetrievalRequest' => 'auto',
                     'addStorageRetrievalRequestLink' => 'true',
                     'eresource' => '',
+                    'collection_desc' => 'Vypujcka',
                 ],
                 [
                     'status' => 'Available on Shelf',
@@ -1531,6 +1538,7 @@ class XCNCIP2Test extends \VuFindTest\ILS\Driver\XCNCIP2Test
                     'storageRetrievalRequest' => 'auto',
                     'addStorageRetrievalRequestLink' => 'true',
                     'eresource' => '',
+                    'collection_desc' => 'Galerie A - fantasy, sci-fi a komiksy',
                 ],
                 [
                     'status' => 'In Transit Between Library Locations',
@@ -1542,12 +1550,12 @@ class XCNCIP2Test extends \VuFindTest\ILS\Driver\XCNCIP2Test
                     'item_id' => '3529372',
                     'bib_id' => '2466144',
                     'item_agency_id' => 'ABG001',
-                    'duedate' => '',
+                    'duedate' => '04-05-2020',
                     'volume' => '',
                     'number' => '',
                     'barcode' => 'Unknown barcode',
-                    'is_holdable' => true,
-                    'addLink' => true,
+                    'is_holdable' => false,
+                    'addLink' => false,
                     'holdtype' => 'Recall',
                     'storageRetrievalRequest' => 'auto',
                     'addStorageRetrievalRequestLink' => 'true',
@@ -1568,7 +1576,7 @@ class XCNCIP2Test extends \VuFindTest\ILS\Driver\XCNCIP2Test
                     'item_id' => '356600413263',
                     'bib_id' => '2354926',
                     'item_agency_id' => '',
-                    'duedate' => '',
+                    'duedate' => '07-23-2020',
                     'volume' => '',
                     'number' => '',
                     'barcode' => '356600413263',
@@ -1577,7 +1585,8 @@ class XCNCIP2Test extends \VuFindTest\ILS\Driver\XCNCIP2Test
                     'holdtype' => 'Recall',
                     'storageRetrievalRequest' => 'auto',
                     'addStorageRetrievalRequestLink' => 'true',
-                    'eresource' => '',                ],
+                    'eresource' => '',
+                ],
                 [
                     'status' => 'On Loan',
                     'location' => 'Bd - Moravské Předm., J.Masaryka dosp.',
@@ -1588,7 +1597,7 @@ class XCNCIP2Test extends \VuFindTest\ILS\Driver\XCNCIP2Test
                     'item_id' => '356600413266',
                     'bib_id' => '2354926',
                     'item_agency_id' => '',
-                    'duedate' => '',
+                    'duedate' => '08-20-2020',
                     'volume' => '',
                     'number' => '',
                     'barcode' => '356600413266',
@@ -1597,7 +1606,8 @@ class XCNCIP2Test extends \VuFindTest\ILS\Driver\XCNCIP2Test
                     'holdtype' => 'Recall',
                     'storageRetrievalRequest' => 'auto',
                     'addStorageRetrievalRequestLink' => 'true',
-                    'eresource' => '',                ],
+                    'eresource' => '',
+                ],
                 [
                     'status' => 'On Loan',
                     'location' => 'Sd - Slezské Předm. dosp.',
@@ -1608,7 +1618,7 @@ class XCNCIP2Test extends \VuFindTest\ILS\Driver\XCNCIP2Test
                     'item_id' => '356600413268',
                     'bib_id' => '2354926',
                     'item_agency_id' => '',
-                    'duedate' => '',
+                    'duedate' => '07-27-2020',
                     'volume' => '',
                     'number' => '',
                     'barcode' => '356600413268',
@@ -1617,7 +1627,8 @@ class XCNCIP2Test extends \VuFindTest\ILS\Driver\XCNCIP2Test
                     'holdtype' => 'Recall',
                     'storageRetrievalRequest' => 'auto',
                     'addStorageRetrievalRequestLink' => 'true',
-                    'eresource' => '',                ],
+                    'eresource' => '',
+                ],
                 [
                     'status' => 'Available On Shelf',
                     'location' => 'Fd - Moravské Předm., Formánkova dosp.',
@@ -1637,7 +1648,8 @@ class XCNCIP2Test extends \VuFindTest\ILS\Driver\XCNCIP2Test
                     'holdtype' => 'Hold',
                     'storageRetrievalRequest' => 'auto',
                     'addStorageRetrievalRequestLink' => 'true',
-                    'eresource' => '',                ],
+                    'eresource' => '',
+                ],
                 [
                     'status' => 'On Loan',
                     'location' => 'Md - Malšovice dosp.',
@@ -1648,7 +1660,7 @@ class XCNCIP2Test extends \VuFindTest\ILS\Driver\XCNCIP2Test
                     'item_id' => '356600413270',
                     'bib_id' => '2354926',
                     'item_agency_id' => '',
-                    'duedate' => '',
+                    'duedate' => '08-17-2020',
                     'volume' => '',
                     'number' => '',
                     'barcode' => '356600413270',
@@ -1657,7 +1669,8 @@ class XCNCIP2Test extends \VuFindTest\ILS\Driver\XCNCIP2Test
                     'holdtype' => 'Recall',
                     'storageRetrievalRequest' => 'auto',
                     'addStorageRetrievalRequestLink' => 'true',
-                    'eresource' => '',                ],
+                    'eresource' => '',
+                ],
                 [
                     'status' => 'On Loan',
                     'location' => 'Td - Ústřední půjčovna dosp.',
@@ -1668,7 +1681,7 @@ class XCNCIP2Test extends \VuFindTest\ILS\Driver\XCNCIP2Test
                     'item_id' => '356600427645',
                     'bib_id' => '2354926',
                     'item_agency_id' => '',
-                    'duedate' => '',
+                    'duedate' => '08-21-2020',
                     'volume' => '',
                     'number' => '',
                     'barcode' => '356600427645',
@@ -1677,7 +1690,8 @@ class XCNCIP2Test extends \VuFindTest\ILS\Driver\XCNCIP2Test
                     'holdtype' => 'Recall',
                     'storageRetrievalRequest' => 'auto',
                     'addStorageRetrievalRequestLink' => 'true',
-                    'eresource' => '',                ],
+                    'eresource' => '',
+                ],
             ]
         ],
         [
@@ -1697,8 +1711,8 @@ class XCNCIP2Test extends \VuFindTest\ILS\Driver\XCNCIP2Test
                     'volume' => '',
                     'number' => '918693',
                     'barcode' => 'Unknown barcode',
-                    'is_holdable' => true,
-                    'addLink' => true,
+                    'is_holdable' => false,
+                    'addLink' => false,
                     'holdtype' => 'Recall',
                     'storageRetrievalRequest' => 'auto',
                     'addStorageRetrievalRequestLink' => 'true',
@@ -1715,7 +1729,7 @@ class XCNCIP2Test extends \VuFindTest\ILS\Driver\XCNCIP2Test
                     'item_id' => '377700600764',
                     'bib_id' => '692155',
                     'item_agency_id' => '',
-                    'duedate' => '',
+                    'duedate' => '08-14-2020',
                     'volume' => '',
                     'number' => '921125',
                     'barcode' => 'Unknown barcode',
@@ -1740,8 +1754,8 @@ class XCNCIP2Test extends \VuFindTest\ILS\Driver\XCNCIP2Test
                     'volume' => '',
                     'number' => '918692',
                     'barcode' => 'Unknown barcode',
-                    'is_holdable' => true,
-                    'addLink' => true,
+                    'is_holdable' => false,
+                    'addLink' => false,
                     'holdtype' => 'Recall',
                     'storageRetrievalRequest' => 'auto',
                     'addStorageRetrievalRequestLink' => 'true',
@@ -1773,6 +1787,126 @@ class XCNCIP2Test extends \VuFindTest\ILS\Driver\XCNCIP2Test
         ],
     ];
 
+    /**
+     * Transaction history tests
+     *
+     * @var array[]
+     */
+    protected $transactionHistoryTests = [
+        [
+            'file' => [
+                'lookupUserHistory/Verbis.xml',
+                'LookupItem.xml',
+                'LookupItem.xml',
+                'LookupItem.xml',
+                'LookupItem.xml',
+                'LookupItem.xml',
+            ],
+            'result' => [
+                'count' => 5,
+                'transactions' => [
+                    [
+                        'id' => '2072',
+                        'item_agency_id' => 'Agency from lookup item',
+                        'patronAgencyId' => 'Test agency',
+                        'title' => 'Ochrana dat v informačních systémech',
+                        'item_id' => '377700220951',
+                        'barcode' => '',
+                        'dueDate' => '10-16-2015',
+                    ],
+                    [
+                        'id' => '506890',
+                        'item_agency_id' => 'Agency from lookup item',
+                        'patronAgencyId' => 'Test agency',
+                        'title' => 'Dieta pro posílení imunity',
+                        'item_id' => '377700549872',
+                        'barcode' => '',
+                        'dueDate' => '05-24-2017',
+                    ],
+                    [
+                        'id' => '15614',
+                        'item_agency_id' => 'Agency from lookup item',
+                        'patronAgencyId' => 'Test agency',
+                        'title' => 'Selected stories',
+                        'item_id' => '377700378073',
+                        'barcode' => '',
+                        'dueDate' => '03-13-2017',
+                    ],
+                    [
+                        'id' => '146989',
+                        'item_agency_id' => 'Agency from lookup item',
+                        'patronAgencyId' => 'Test agency',
+                        'title' => 'Přišel čtenář',
+                        'item_id' => '910000000031',
+                        'barcode' => '',
+                        'dueDate' => '04-02-2018',
+                    ],
+                    [
+                        'id' => '361179',
+                        'item_agency_id' => 'Agency from lookup item',
+                        'patronAgencyId' => 'Test agency',
+                        'title' => 'Automasáže',
+                        'item_id' => '377700438707',
+                        'barcode' => '',
+                        'dueDate' => '01-10-2020',
+                    ],
+                ],
+            ],
+        ],
+    ];
+
+    /**
+     * Test definition for testGetMyHolds
+     *
+     * @var array[]
+     */
+    protected $holdsTests = [
+        [
+            'file' => 'lookupUser/ArlGood.xml',
+            'result' => [
+                [
+                    'id' => 'cbvk_us_cat*0805981',
+                    'title' => 'Veselí',
+                    'item_id' => null,
+                    'create' => '07-20-2020',
+                    'expire' => '08-19-2025',
+                    'position' => null,
+                    'requestId' => 'cbvk_trx*13502426',
+                    'location' => null,
+                    'item_agency_id' => null,
+                    'canceled' => false,
+                    'available' => false,
+                ],
+                [
+                    'id' => 'cbvk_us_cat*0699443',
+                    'title' => 'Hana',
+                    'item_id' => null,
+                    'create' => '07-20-2020',
+                    'expire' => '08-19-2025',
+                    'position' => null,
+                    'requestId' => 'cbvk_trx*13502428',
+                    'location' => null,
+                    'item_agency_id' => null,
+                    'canceled' => false,
+                    'available' => false,
+                ],
+                [
+                    'id' => 'cbvk_us_cat*m0235131',
+                    'title' => 'Psohlavci',
+                    'item_id' => '2680443872',
+                    'create' => '07-20-2020',
+                    'expire' => '07-27-2025',
+                    'position' => null,
+                    'requestId' => 'cbvk_trx*13502448',
+                    'location' => null,
+                    'item_agency_id' => null,
+                    'canceled' => false,
+                    'available' => true,
+                ],
+            ],
+        ],
+    ];
+
     // No need to add more tests, upstream tests covers our needs
     protected $placeHoldTests = [];
     protected $placeStorageRetrievalRequestTests = [];
@@ -1780,7 +1914,6 @@ class XCNCIP2Test extends \VuFindTest\ILS\Driver\XCNCIP2Test
     protected $cancelStorageRetrievalTests = [];
     protected $renewMyItemsTests = [];
     protected $loginTests = [];
-    protected $holdsTests = [];
     protected $profileTests = [];
     protected $storageRetrievalTests = [];
     protected $requestTests = [];
@@ -1792,6 +1925,8 @@ class XCNCIP2Test extends \VuFindTest\ILS\Driver\XCNCIP2Test
      * @var array
      */
     protected $renewMyItemsWithDisabledRenewals = [];
+    protected $patronBlocksTests = [];
+    protected $accountBlocksTests = [];
 
     public function testGetStatuses()
     {
@@ -1834,14 +1969,143 @@ class XCNCIP2Test extends \VuFindTest\ILS\Driver\XCNCIP2Test
         $locations = $this->driver->getPickUpLocations([]);
         $this->assertEquals([
             [
-                'locationId' => 'ABG001|356',
+                'locationID' => 'ABG001|356',
                 'locationDisplay' => 'Barrandov',
             ],
             [
-                'locationId' => 'ABG001|298',
+                'locationID' => 'ABG001|298',
                 'locationDisplay' => 'Bohnice',
             ]
         ], $locations);
+    }
+
+    /**
+     * Test getMyTransactions
+     *
+     * @return void
+     */
+    public function testGetMyTransactionHistory()
+    {
+        $this->configureDriver();
+        foreach ($this->transactionHistoryTests as $test) {
+            $this->mockResponse($test['file']);
+            $transactions = $this->driver->getMyTransactionHistory([
+                'cat_username' => 'my_login',
+                'cat_password' => 'my_password',
+                'patronAgencyId' => 'Test agency',
+                'id' => '111'
+            ], ['page' => 1]);
+            $this->assertEquals(
+                $test['result'], $transactions, 'Fixture file: ' . implode(', ', (array)$test['file'])
+            );
+        }
+    }
+
+    /**
+     * Test getLookupUserHistoryRequest
+     *
+     * @return void
+     */
+    public function testGetLookupUserHistoryRequest()
+    {
+        $extras = [
+            '<ns1:Ext><ns2:HistoryDesired><ns2:Page>' .
+            '1' .
+            '</ns2:Page></ns2:HistoryDesired></ns1:Ext>',
+        ];
+        $params = ['', '', 'Patron Agency', $extras, '217'];
+        $this->configureDriver();
+        $method = new \ReflectionMethod('\KnihovnyCz\ILS\Driver\XCNCIP2', 'getLookupUserRequest');
+        $method->setAccessible(true);
+        $request = $method->invokeArgs($this->driver, $params);
+        $file = realpath(
+            __DIR__ .
+            '/../../../../../../tests/fixtures/xcncip2/request/' .
+            'lookupUserHistory/Verbis.xml'
+        );
+        if ($file === false) {
+            throw new ExpectationFailedException(
+                sprintf(
+                    "Fixture file '%s' could not be found",
+                    'lookupUserHistory/Verbis.xml'
+                )
+            );
+        }
+        $expected = file_get_contents($file);
+        $this->assertEquals($expected, $request);
+    }
+
+    /**
+     * Test parsePage method
+     *
+     * @throws \ReflectionException
+     * @return void
+     */
+    public function testParsePage()
+    {
+        $pageTests = [
+            [
+                'input' => 1,
+                'result' => '1',
+            ],
+            [
+                'input' => 5,
+                'result' => '5',
+            ],
+            [
+                'input' => '1',
+                'result' => '1',
+            ],
+            [
+                'input' => '5',
+                'result' => '5',
+            ],
+            [
+                'input' => '11.5',
+                'result' => '11',
+            ],
+            [
+                'input' => 'no_page',
+                'result' => '1',
+            ],
+            [
+                'input' => 0,
+                'result' => '1',
+            ],
+            [
+                'input' => -5,
+                'result' => '1',
+            ],
+            [
+                'input' => '0',
+                'result' => '1',
+            ],
+            [
+                'input' => '-5',
+                'result' => '1',
+            ],
+            [
+                'input' => false,
+                'result' => '1',
+            ],
+        ];
+        $this->configureDriver();
+        $method = new \ReflectionMethod('\KnihovnyCz\ILS\Driver\XCNCIP2', 'parsePage');
+        $method->setAccessible(true);
+        foreach ($pageTests as $test) {
+            $result = $method->invokeArgs($this->driver, [$test['input']]);
+            $this->assertEquals($test['result'], $result, 'Bad result for input: ' . $test['input']);
+        }
+    }
+
+    /**
+     * Test method for isPatronBlocked
+     *
+     * @return void
+     * @throws \ReflectionException
+     */
+    public function testIsPatronBlocked(): void
+    {
     }
 
     protected function loadResponse($filename)
@@ -1860,5 +2124,27 @@ class XCNCIP2Test extends \VuFindTest\ILS\Driver\XCNCIP2Test
             throw new \Exception('Could not read file ' . $file);
         }
         return HttpResponse::fromString($response);
+    }
+
+    /**
+     * Configure driver for test case
+     *
+     * @param array|null $config ILS driver configuration
+     *
+     * @return void
+     */
+    protected function configureDriver($config = null)
+    {
+        $this->driver = new XCNCIP2(new \VuFind\Date\Converter());
+        $this->driver->setConfig($config ?? [
+                'Catalog' => [
+                    'url' => 'https://test.ncip.example',
+                    'consortium' => false,
+                    'agency' => 'Test agency',
+                    'pickupLocationsFile' => 'XCNCIP2_locations.txt',
+                ],
+                'NCIP' => [],
+            ]);
+        $this->driver->init();
     }
 }

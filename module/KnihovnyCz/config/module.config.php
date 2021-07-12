@@ -169,10 +169,12 @@ $config = [
             ],
             'ils_driver' => [
                 'factories' => [
-                    \KnihovnyCz\ILS\Driver\MultiBackend::class => \KnihovnyCz\ILS\Driver\MultiBackendFactory::class
+                    \KnihovnyCz\ILS\Driver\MultiBackend::class => \KnihovnyCz\ILS\Driver\MultiBackendFactory::class,
+                    \KnihovnyCz\ILS\Driver\XCNCIP2::class => \VuFind\ILS\Driver\DriverWithDateConverterFactory::class,
                 ],
                 'aliases' => [
                     'multibackend' => \KnihovnyCz\ILS\Driver\MultiBackend::class,
+                    'xcncip2' => \KnihovnyCz\ILS\Driver\XCNCIP2::class,
                 ],
             ],
             'content_toc' => [
