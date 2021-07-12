@@ -130,7 +130,8 @@ class SolrIdResolver
         $fullQuery = new \VuFindSearch\Query\QueryGroup('OR');
         $idMappings = [];
         foreach ($ids as $id) {
-            $idForQuery = $queryFieldPrefix . '.' . $id;
+            $idForQuery = !empty($queryFieldPrefix)
+                ? $queryFieldPrefix . '.' . $id : $id;
             $idMappings[$idForQuery] = $id;
             $query = new \VuFindSearch\Query\Query($queryField . ':' . $idForQuery);
             $fullQuery->addQuery($query);

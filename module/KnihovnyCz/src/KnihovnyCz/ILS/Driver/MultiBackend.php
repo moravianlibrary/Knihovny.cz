@@ -137,6 +137,14 @@ class MultiBackend extends \VuFind\ILS\Driver\MultiBackend
      */
     public function getMyTransactionHistory($patron, $params)
     {
+        $source = $this->getSource($patron['cat_username']);
+        $driver = $this->getDriver($source);
+        $supported = $this->methodSupported(
+            $driver, 'getMyTransactionHistory', compact('patron')
+        );
+        if (!$supported) {
+            return ['success' => false, 'status' => 'driver_no_history'];
+        }
         $data = parent::getMyTransactionHistory($patron, $params);
         return $this->resolveIds($data, $patron);
     }
