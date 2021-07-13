@@ -38,7 +38,7 @@ namespace KnihovnyCz\RecordDriver;
  */
 class SolrLocal extends \KnihovnyCz\RecordDriver\SolrMarc
 {
-    use CitaceProTrait;
+    use Feature\CitaceProTrait;
 
     /**
      * Get the sigla for display

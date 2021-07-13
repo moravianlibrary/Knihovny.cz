@@ -38,10 +38,10 @@ namespace KnihovnyCz\RecordDriver;
  */
 class SolrMarc extends SolrDefault
 {
-    use \VuFind\RecordDriver\IlsAwareTrait;
-    use \VuFind\RecordDriver\MarcReaderTrait;
-    use \VuFind\RecordDriver\MarcAdvancedTrait;
-    use PatentTrait;
+    use \VuFind\RecordDriver\Feature\IlsAwareTrait;
+    use \VuFind\RecordDriver\Feature\MarcReaderTrait;
+    use \VuFind\RecordDriver\Feature\MarcAdvancedTrait;
+    use Feature\PatentTrait;
 
     /**
      * Constructor
