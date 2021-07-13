@@ -303,7 +303,15 @@ class XCNCIP2 extends \VuFind\ILS\Driver\XCNCIP2
      */
     public function getStatusByItemId($itemId)
     {
-        $itemRequest = $this->getLookupItemRequest($itemId);
+        $desiredParts = [
+            'Bibliographic Description',
+            'Circulation Status',
+            'Item Description',
+            'Item Use Restriction Type',
+            'Location',
+        ];
+
+        $itemRequest = $this->getLookupItemRequest($itemId, null, $desiredParts);
         $itemResponse = $this->sendRequest($itemRequest);
         $bibId = $itemResponse->xpath(
             'ns1:LookupItemResponse/ns1:ItemOptionalFields/' .
@@ -332,7 +340,6 @@ class XCNCIP2 extends \VuFind\ILS\Driver\XCNCIP2
             'ns1:CallNumber'
         );
         $itemCallNo = !empty($itemCallNo) ? (string)$itemCallNo[0] : null;
-
         return [
             'id' => $bibId,
             'item_id' => $itemId,
