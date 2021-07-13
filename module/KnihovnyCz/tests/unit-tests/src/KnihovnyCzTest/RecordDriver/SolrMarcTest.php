@@ -121,6 +121,7 @@ class SolrMarcTest extends \PHPUnit\Framework\TestCase
         $expected = ['ABA001.NKC01002931098.NKC50002953486000020', 'ABA001.NKC01002931098.NKC50002953486000010'];
         $this->assertEquals($expected, $record->getItemIds());
     }
+
     /**
      * Create new record driver
      *

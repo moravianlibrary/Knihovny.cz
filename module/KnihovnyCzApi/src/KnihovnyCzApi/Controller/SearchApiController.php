@@ -27,7 +27,6 @@ declare(strict_types=1);
  * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://knihovny.cz Main Page
  */
-
 namespace KnihovnyCzApi\Controller;
 
 use KnihovnyCz\ILS\Driver\MultiBackend;
@@ -160,7 +159,7 @@ class SearchApiController extends \VuFindApi\Controller\SearchApiController
         }
 
         $request = $this->getRequest()->getQuery()->toArray() + $this->getRequest()
-                ->getPost()->toArray();
+            ->getPost()->toArray();
         if (!isset($request['id'])) {
             return $this->output([], self::STATUS_ERROR, 400, 'Missing id');
         }

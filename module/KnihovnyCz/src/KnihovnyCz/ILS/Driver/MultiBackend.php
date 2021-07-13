@@ -219,7 +219,6 @@ class MultiBackend extends \VuFind\ILS\Driver\MultiBackend
      * @return mixed     On success, an associative array with the following keys:
      * id, availability (boolean), status, location, reserve, callnumber.
      */
-
     public function getStatusByItemIdOrBibId(?string $bibId, ?string $itemId)
     {
         $status = [];

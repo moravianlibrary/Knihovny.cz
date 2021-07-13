@@ -27,7 +27,6 @@ declare(strict_types=1);
  * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://knihovny.cz Main Page
  */
-
 namespace KnihovnyCzTest\ILS\Driver;
 
 use KnihovnyCz\Db\Table\InstConfigs;
@@ -46,7 +45,6 @@ use KnihovnyCz\ILS\Service\SolrIdResolver;
  */
 class MultiBackendTest extends \PHPUnit\Framework\TestCase
 {
-
     /**
      * Test siglaToSource method
      *
@@ -122,7 +120,6 @@ class MultiBackendTest extends \PHPUnit\Framework\TestCase
         $driver->init();
         $this->assertEquals(null, $driver->sourceToSigla('aaa'));
     }
-
 
     /**
      * Method to get a fresh MultiBackend Driver.
