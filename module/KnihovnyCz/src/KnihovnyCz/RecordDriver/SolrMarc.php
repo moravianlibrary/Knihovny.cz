@@ -41,7 +41,7 @@ class SolrMarc extends SolrDefault
     use \VuFind\RecordDriver\Feature\IlsAwareTrait;
     use \VuFind\RecordDriver\Feature\MarcReaderTrait;
     use \VuFind\RecordDriver\Feature\MarcAdvancedTrait;
-    use PatentTrait;
+    use Feature\PatentTrait;
 
     /**
      * Constructor

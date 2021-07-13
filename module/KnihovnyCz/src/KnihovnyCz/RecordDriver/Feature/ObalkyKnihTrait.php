@@ -1,8 +1,7 @@
 <?php
-declare(strict_types=1);
 
 /**
- * Trait CitaceProTrait
+ * Trait ObalkyKnihTrait
  *
  * PHP version 7
  *
@@ -27,12 +26,14 @@ declare(strict_types=1);
  * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://knihovny.cz Main Page
  */
-namespace KnihovnyCz\RecordDriver;
+namespace KnihovnyCz\RecordDriver\Feature;
 
-use KnihovnyCz\Service\CitaceProService;
+use VuFind\Content\ObalkyKnihService;
+use VuFindCode\ISBN;
+use VuFindCode\ISMN;
 
 /**
- * Trait CitaceProTrait
+ * Trait ObalkyKnihTrait
  *
  * @category VuFind
  * @package  KnihovnyCz\RecordDriver
@@ -40,55 +41,52 @@ use KnihovnyCz\Service\CitaceProService;
  * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://knihovny.cz Main Page
  */
-trait CitaceProTrait
+trait ObalkyKnihTrait
 {
     /**
-     * CitacePro API service
+     * ObalkyKnih.cz API client
+     *
+     * @var ObalkyKnihService
      */
-    protected CitaceProService $citacePro;
+    protected ObalkyKnihService $obalkyKnih;
 
     /**
-     * Attach CitacePro service to record driver
+     * Get TOC URL
      *
-     * @param CitaceProService $citacePro CitacePro API service
+     * @return array|null
+     */
+    public function getObalkyKnihToc(): ?array
+    {
+        $toc = null;
+        $ids = $this->getThumbnail();
+        if (!is_array($ids)) {
+            return null;
+        }
+        if (isset($ids['isbn'])) {
+            $ids['isbn'] = new ISBN($ids['isbn']);
+        }
+        if (isset($ids['ismn'])) {
+            $ids['ismn'] = new ISMN($ids['ismn']);
+        }
+        $data = $this->obalkyKnih->getData($ids);
+        if (isset($data->toc_thumbnail_url)) {
+            $toc = [
+                'url' => $data->toc_pdf_url,
+                'image' => $data->toc_thumbnail_url,
+            ];
+        }
+        return $toc;
+    }
+
+    /**
+     * Attach service for ObalkyKnih.cz
+     *
+     * @param ObalkyKnihService $obalkyService ObalkyKnih.cz API client
      *
      * @return void
      */
-    public function attachCitaceProService(CitaceProService $citacePro): void
+    public function attachObalkyKnihService(ObalkyKnihService $obalkyService): void
     {
-        $this->citacePro = $citacePro;
-    }
-
-    /**
-     * Get citation formats
-     *
-     * @return array
-     */
-    public function getCitationFormats(): array
-    {
-        return $this->citacePro->getCitationStyles();
-    }
-
-    /**
-     * Get default citation style identifier
-     *
-     * @return string
-     */
-    public function getDefaultCitationStyle(): string
-    {
-        return $this->citacePro->getDefaultCitationStyle();
-    }
-
-    /**
-     * Get citation HTML snippet
-     *
-     * @param string|null $style Style identifier
-     *
-     * @return string
-     * @throws \Exception
-     */
-    public function getCitation(?string $style = null): string
-    {
-        return $this->citacePro->getCitation($this->getUniqueID(), $style);
+        $this->obalkyKnih = $obalkyService;
     }
 }
