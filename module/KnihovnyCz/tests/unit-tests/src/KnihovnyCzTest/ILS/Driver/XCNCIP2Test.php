@@ -1907,6 +1907,24 @@ class XCNCIP2Test extends \VuFindTest\ILS\Driver\XCNCIP2Test
         ],
     ];
 
+    /**
+     * Test definition for testGetMyHolds
+     *
+     * @var array[]
+     */
+    protected $itemStatusTests = [
+        [
+            'file' => 'LookupItem.xml',
+            'result' => [
+                'id' => 'KN3183000000046386',
+                'item_id' => '123456',
+                'location' => 'Středisko Opava VF',
+                'availability' => false,
+                'status' => 'On Loan',
+                'callnumber' => 'Q',
+            ],
+        ],
+    ];
     // No need to add more tests, upstream tests covers our needs
     protected $placeHoldTests = [];
     protected $placeStorageRetrievalRequestTests = [];
@@ -1997,6 +2015,23 @@ class XCNCIP2Test extends \VuFindTest\ILS\Driver\XCNCIP2Test
             ], ['page' => 1]);
             $this->assertEquals(
                 $test['result'], $transactions, 'Fixture file: ' . implode(', ', (array)$test['file'])
+            );
+        }
+    }
+
+    /**
+     * Test getStatusByItemId
+     *
+     * @return void
+     */
+    public function testGetStatusByItemId(): void
+    {
+        $this->configureDriver();
+        foreach ($this->itemStatusTests as $test) {
+            $this->mockResponse($test['file']);
+            $status = $this->driver->getStatusByItemId('123456');
+            $this->assertEquals(
+                $test['result'], $status, 'Fixture file: ' . implode(', ', (array)$test['file'])
             );
         }
     }

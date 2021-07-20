@@ -392,3 +392,9 @@ isAvailableInZiskej:
   vufind.method: getZiskejBoolean
   description: Is document available for ILL in Získej?
   type: boolean
+itemIds:
+  vufind.method: getItemIds
+  description: Identifiers of associated items
+  type: array
+  items:
+    type: string

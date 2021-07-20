@@ -212,4 +212,14 @@ class SolrMarc extends SolrDefault
         // This is needed to overcome getSummary method defined in MarcAdvancedTrait
         return parent::getSummary();
     }
+
+    /**
+     * Get all item identifiers for this record
+     *
+     * @return array
+     */
+    public function getItemIds(): array
+    {
+        return $this->getFieldArray('996', ['t'], false);
+    }
 }

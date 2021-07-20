@@ -288,4 +288,65 @@ class XCNCIP2 extends \VuFind\ILS\Driver\XCNCIP2
         $returnPage = $returnPage < 1 ? 1 : $returnPage;
         return (string)$returnPage;
     }
+
+    /**
+     * Get Status By Item ID
+     *
+     * This is responsible for retrieving the status information of a certain
+     * item.
+     *
+     * @param string $itemId The item id to retrieve the holdings for
+     *
+     * @throws ILSException
+     * @return mixed     On success, an associative array with the following keys:
+     * id, availability (boolean), status, location, reserve, callnumber.
+     */
+    public function getStatusByItemId($itemId)
+    {
+        $desiredParts = [
+            'Bibliographic Description',
+            'Circulation Status',
+            'Item Description',
+            'Item Use Restriction Type',
+            'Location',
+        ];
+
+        $itemRequest = $this->getLookupItemRequest($itemId, null, $desiredParts);
+        $itemResponse = $this->sendRequest($itemRequest);
+        $bibId = $itemResponse->xpath(
+            'ns1:LookupItemResponse/ns1:ItemOptionalFields/' .
+            'ns1:BibliographicDescription/ns1:BibliographicItemId/' .
+            'ns1:BibliographicItemIdentifier' .
+            ' | ' .
+            'ns1:LookupItemResponse/ns1:ItemOptionalFields/' .
+            'ns1:BibliographicDescription/ns1:BibliographicRecordId/' .
+            'ns1:BibliographicRecordIdentifier'
+        );
+        $bibId = !empty($bibId) ? (string)$bibId[0] : "1";
+
+        $status = $itemResponse->xpath(
+            'ns1:LookupItemResponse/ns1:ItemOptionalFields/ns1:CirculationStatus'
+        );
+        $status = (string)($status[0] ?? '');
+
+        $locations = $itemResponse->xpath(
+            'ns1:LookupItemResponse/ns1:ItemOptionalFields/ns1:Location/' .
+            'ns1:LocationName/ns1:LocationNameInstance'
+        );
+        [$location, ] = $this->parseLocationInstance($locations);
+
+        $itemCallNo = $itemResponse->xpath(
+            'ns1:LookupItemResponse/ns1:ItemOptionalFields/ns1:ItemDescription/' .
+            'ns1:CallNumber'
+        );
+        $itemCallNo = !empty($itemCallNo) ? (string)$itemCallNo[0] : null;
+        return [
+            'id' => $bibId,
+            'item_id' => $itemId,
+            'availability' => $this->isAvailable($status),
+            'status' => $status,
+            'location' => $location,
+            'callnumber' => $itemCallNo,
+        ];
+    }
 }
