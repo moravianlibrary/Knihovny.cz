@@ -519,3 +519,32 @@ h6:hover .heading-permalink
     }
   }
 }
+
+.similar-items-container {
+  .cover-icon {
+    font-size: 2.5em;
+  }
+}
+
+@media (min-width: @screen-lg-min) {
+  .similar-items-container {
+    .similar-item {
+      &.col-lg-3 {
+        padding-left: 0;
+        padding-right: 0;
+      }
+
+      &.col-lg-9 {
+        padding-left: 0px;
+      }
+    }
+  }
+}
+
+@media (max-width: @screen-md-max) {
+  .similar-items-container {
+    .similar-item {
+      text-align: center;
+    }
+  }
+}
