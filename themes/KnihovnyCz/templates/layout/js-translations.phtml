@@ -23,7 +23,6 @@ $this->jsTranslations()->addStrings(
     'more' => 'more',
     'number_thousands_separator' => ['number_thousands_separator', null, ','],
     'sms_success' => 'sms_success',
-    'Library detail' => 'Library detail',
   ]
 );
 // Add libphonenumber.js strings
@@ -80,5 +79,15 @@ if ($this->config()->ajaxCoversEnabled()) {
     ]
   );
 }
+
+// Add translation strings specific for knihovny.cz
+$this->jsTranslations()->addStrings(
+  [
+    'Library detail' => 'Library detail',
+    'Place a Hold' => 'Place a Hold',
+    'status_unknown_message' => 'status_unknown_message',
+    'Due' => 'Due',
+  ]
+);
 
 echo $this->jsTranslations()->getJSON();
