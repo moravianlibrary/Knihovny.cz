@@ -30,13 +30,33 @@ namespace KnihovnyCz\Module\Configuration;
 $config = [
      'router' => [
          'routes' => [
-             'inpspiration' => [
+             'inspiration' => [
                  'type' => \Laminas\Router\Http\Segment::class,
                  'options' => [
                      'route' => '/Inspiration',
                      'defaults' => [
                          'controller' => 'Inspiration',
                          'action' => 'Home'
+                     ],
+                 ],
+             ],
+             'inspiration-show' => [
+                 'type' => \Laminas\Router\Http\Segment::class,
+                 'options' => [
+                     'route' => '/inspirace/[:list]',
+                     'defaults' => [
+                         'controller' => 'Inspiration',
+                         'action' => 'Show'
+                     ],
+                 ],
+             ],
+             'inspiration-home-legacy' => [
+                 'type' => \Laminas\Router\Http\Segment::class,
+                 'options' => [
+                     'route' => '/Search/Inspiration',
+                     'defaults' => [
+                         'controller' => 'Inspiration',
+                         'action' => 'HomeLegacy'
                      ],
                  ],
              ],
