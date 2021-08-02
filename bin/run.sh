@@ -161,7 +161,11 @@ env_file="${build_type}.env"
 export $(cat $env_file | xargs)
 
 # We need this to enforce docker to run git clone when the branch is updated
-LAST_COMMIT=$(last_commit ${branch})
+if [[ ! -z "$CI_COMMIT_SHA" ]]; then
+    LAST_COMMIT="$CI_COMMIT_SHA"
+else
+    LAST_COMMIT=$(last_commit ${branch})
+fi
 build_args="$build_args --build-arg PARAM_VUFIND_BRANCH=$branch --build-arg PARAM_VUFIND_COMMIT_HASH=${LAST_COMMIT} --build-arg GITLAB_DEPLOY_USER=$GITLAB_DEPLOY_USER --build-arg GITLAB_DEPLOY_PASSWORD=$GITLAB_DEPLOY_PASSWORD"
 
 if [[ ! -z  "$branch" ]]; then
@@ -199,15 +203,19 @@ if [[ $push == "true" ]]; then
     docker-compose -f "$docker_compose_file" push $service
 fi
 if [[ $push_to_private_registry == "true" ]]; then
-  REGISTRY_URL="${REGISTRY_URL:-localhost:5001}"
-  REGISTRY_USER="${REGISTRY_USER:-docker}"
-  REGISTRY_PASSWORD="${REGISTRY_PASSWORD:-docker}"
+    # CI uses $HOME/.docker/config.json
+    if [[ -z "$CI_COMMIT_SHA" ]]; then
+        REGISTRY_URL="${REGISTRY_URL:-localhost:5001}"
+        REGISTRY_USER="${REGISTRY_USER:-docker}"
+        REGISTRY_PASSWORD="${REGISTRY_PASSWORD:-docker}"
 
-  docker logout "$REGISTRY_URL"
-  echo "$REGISTRY_PASSWORD" | docker login "$REGISTRY_URL" --username "$REGISTRY_USER" --password-stdin
-  tag="$REGISTRY_URL/$IMAGE_NAME"
-  docker tag "localhost/$IMAGE_NAME" "$tag"
-  docker push "$tag"
+        docker logout "$REGISTRY_URL"
+        echo "$REGISTRY_PASSWORD" | docker login "$REGISTRY_URL" --username "$REGISTRY_USER" --password-stdin
+    fi
+
+    tag="$REGISTRY_URL/$IMAGE_NAME"
+    docker tag "localhost/$IMAGE_NAME" "$tag"
+    docker push "$tag"
 fi
 if [[ $run == "true" ]]; then
     docker-compose -f "$docker_compose_file" up $compose_args $service
