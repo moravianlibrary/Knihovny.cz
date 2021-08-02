@@ -67,11 +67,17 @@
             elm.find('td[data-type="request"]')
               .html('<a href="' + item.link + '">' + VuFind.translate('Place a Hold') + '</a>');
           }
-          if (elm.find('td[data-type="callnumber"]').text().trim()
-            === elm.find('td[data-type="callnumber_second"]').text().trim()
-          ) {
-              elm.find('td[data-type="callnumber_second"]').text('');
-          }
+          const possiblyDuplicateData = [
+            { primary: 'callnumber', secondary: 'callnumber_second' },
+            { primary: 'location', secondary: 'collection_desc' }
+          ];
+          possiblyDuplicateData.forEach(function removeDuplicates(columns) {
+            if (elm.find('td[data-type="' + columns.primary + '"]').text().trim()
+              === elm.find('td[data-type="' + columns.secondary + '"]').text().trim()
+            ) {
+                elm.find('td[data-type="' + columns.secondary + '"]').text('');
+            }
+          });
         });
       })
       .fail(function ajaxLookupFail() {
