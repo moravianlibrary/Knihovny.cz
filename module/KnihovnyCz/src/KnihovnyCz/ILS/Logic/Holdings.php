@@ -27,7 +27,6 @@ declare(strict_types=1);
  * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://knihovny.cz Main Page
  */
-
 namespace KnihovnyCz\ILS\Logic;
 
 /**
@@ -79,5 +78,4 @@ class Holdings
     {
         return $this->availability[$status] ?? self::STATUS_UNDECIDABLE;
     }
-
 }
