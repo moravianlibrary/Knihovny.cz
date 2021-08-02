@@ -71,12 +71,14 @@ $config = [
             \KnihovnyCz\Controller\PortalPageController::class => \VuFind\Controller\AbstractBaseFactory::class,
             \KnihovnyCz\Controller\WayfController::class => \VuFind\Controller\AbstractBaseFactory::class,
             \KnihovnyCz\Controller\LibraryCardsController::class => \VuFind\Controller\AbstractBaseFactory::class,
+            \KnihovnyCz\Controller\RecordController::class => \VuFind\Controller\AbstractBaseWithConfigFactory::class,
         ],
         'aliases' => [
             'Inspiration' => \KnihovnyCz\Controller\InspirationController::class,
             'PortalPage' => \KnihovnyCz\Controller\PortalPageController::class,
             'Wayf' => \KnihovnyCz\Controller\WayfController::class,
             'LibraryCards' => \KnihovnyCz\Controller\LibraryCardsController::class,
+            \VuFind\Controller\RecordController::class => \KnihovnyCz\Controller\RecordController::class,
         ],
     ],
     'vufind' => [
