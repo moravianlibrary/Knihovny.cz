@@ -127,7 +127,7 @@ class GetHolding extends \VuFind\AjaxHandler\AbstractBase
                     );
                     $item['label'] = $labels[$holdingStatus] ?? 'default';
                     if ($item['status'] !== 'On Loan') {
-                         $item['duedate'] = null;
+                        $item['duedate'] = null;
                     }
                     $status = $this->translateWithSource(
                         $source, $item['status'], 'HoldingStatus'
@@ -138,7 +138,6 @@ class GetHolding extends \VuFind\AjaxHandler\AbstractBase
                         );
                     }
                     $item['status'] = $status;
-
                 }
                 array_push($copy, $item);
             }
