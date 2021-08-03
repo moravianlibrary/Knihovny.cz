@@ -125,6 +125,12 @@ $config = [
                     'usercommentsobalkyknih' => \KnihovnyCz\RecordTab\UserCommentsObalkyKnih::class,
                     'ziskej' => \KnihovnyCz\RecordTab\Ziskej::class,
                 ],
+                'factories' => [
+                    \KnihovnyCz\RecordTab\HoldingsILS::class => \VuFind\RecordTab\HoldingsILSFactory::class,
+                ],
+                'aliases' => [
+                    \VuFind\RecordTab\HoldingsILS::class => \KnihovnyCz\RecordTab\HoldingsILS::class,
+                ],
             ],
             'contentblock' => [
                 'factories' => [
@@ -169,10 +175,12 @@ $config = [
             ],
             'ils_driver' => [
                 'factories' => [
+                    \KnihovnyCz\ILS\Driver\KohaRest1905::class => \VuFind\ILS\Driver\DriverWithDateConverterFactory::class,
                     \KnihovnyCz\ILS\Driver\MultiBackend::class => \KnihovnyCz\ILS\Driver\MultiBackendFactory::class,
                     \KnihovnyCz\ILS\Driver\XCNCIP2::class => \VuFind\ILS\Driver\DriverWithDateConverterFactory::class,
                 ],
                 'aliases' => [
+                    'koharest1905' => \KnihovnyCz\ILS\Driver\KohaRest1905::class,
                     'multibackend' => \KnihovnyCz\ILS\Driver\MultiBackend::class,
                     'xcncip2' => \KnihovnyCz\ILS\Driver\XCNCIP2::class,
                 ],
@@ -187,14 +195,16 @@ $config = [
             ],
             'ajaxhandler' => [
                 'factories' => [
-                    \KnihovnyCz\AjaxHandler\UpdateContent::class => \KnihovnyCz\AjaxHandler\UpdateContentFactory::class,
                     \KnihovnyCz\AjaxHandler\Edd::class => \KnihovnyCz\AjaxHandler\EddFactory::class,
                     \KnihovnyCz\AjaxHandler\GetCitation::class => \KnihovnyCz\AjaxHandler\GetCitationFactory::class,
+                    \KnihovnyCz\AjaxHandler\GetHolding::class => \KnihovnyCz\AjaxHandler\GetHoldingFactory::class,
+                    \KnihovnyCz\AjaxHandler\UpdateContent::class => \KnihovnyCz\AjaxHandler\UpdateContentFactory::class,
                 ],
                 'aliases' => [
-                    'updateContent' => \KnihovnyCz\AjaxHandler\UpdateContent::class,
                     'edd' => \KnihovnyCz\AjaxHandler\Edd::class,
                     'getcitation' => \KnihovnyCz\AjaxHandler\GetCitation::class,
+                    'getHolding' => \KnihovnyCz\AjaxHandler\GetHolding::class,
+                    'updateContent' => \KnihovnyCz\AjaxHandler\UpdateContent::class,
                 ],
             ],
             'related' => [
@@ -229,6 +239,7 @@ $config = [
             \Symfony\Component\Filesystem\Filesystem::class,
             \KnihovnyCz\Service\GoogleBooksLinkService::class,
             \KnihovnyCz\Service\ZboziLinkService::class,
+            \KnihovnyCz\ILS\Logic\Holdings::class,
         ]
     ],
 ];

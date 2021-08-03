@@ -213,11 +213,12 @@ class MultiBackend extends \VuFind\ILS\Driver\MultiBackend
      * This is responsible for retrieving the status information of a certain
      * record/item
      *
-     * @param string $id The record id to retrieve the holdings for
+     * @param string|null $bibId  The record id to retrieve the holdings for
+     * @param string|null $itemId The item id to retrieve the holdings for
      *
-     * @throws ILSException
      * @return mixed     On success, an associative array with the following keys:
      * id, availability (boolean), status, location, reserve, callnumber.
+     * @throws ILSException
      */
     public function getStatusByItemIdOrBibId(?string $bibId, ?string $itemId)
     {
