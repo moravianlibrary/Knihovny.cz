@@ -33,6 +33,8 @@ use KnihovnyCz\Db\Table\InstConfigs;
 use KnihovnyCz\Db\Table\InstSources;
 use KnihovnyCz\ILS\Driver\MultiBackend;
 use KnihovnyCz\ILS\Service\SolrIdResolver;
+use PHPUnit\Framework\MockObject\Rule\InvocationOrder;
+use VuFind\ILS\Driver\PluginManager as ILSPluginManager;
 
 /**
  * Class MutiBackendTest
@@ -124,8 +126,7 @@ class MultiBackendTest extends \PHPUnit\Framework\TestCase
     /**
      * Method to get a fresh MultiBackend Driver.
      *
-     * @param array  $config Driver configuration
-     * @param object $sm     Service manager (null for default mock)
+     * @param ILSPluginManager $sm Service manager (null for default mock)
      *
      * @return mixed A MultiBackend instance.
      */
@@ -143,7 +144,7 @@ class MultiBackendTest extends \PHPUnit\Framework\TestCase
                 'default_driver' => 'd1'
             ],
         ];
-        $driver->setConfig($config);
+        $driver->setConfig($config); //@phpstan-ignore-line
         $driver->init();
         return $driver;
     }
@@ -191,28 +192,13 @@ class MultiBackendTest extends \PHPUnit\Framework\TestCase
     /**
      * Get a mock ILS authenticator
      *
-     * @param bool $userSource Source id, if the authenticator should emulate a
-     * situation where a user has logged in
-     *
      * @return \VuFind\Auth\ILSAuthenticator
      */
-    protected function getMockILSAuthenticator($userSource = '')
+    protected function getMockILSAuthenticator()
     {
         $mockAuth = $this->getMockBuilder(\VuFind\Auth\ILSAuthenticator::class)
             ->disableOriginalConstructor()
             ->getMock();
-        if ($userSource) {
-            $mockAuth->expects($this->any())
-                ->method('storedCatalogLogin')
-                ->will(
-                    $this->returnValue($this->getPatron('username', $userSource))
-                );
-            $mockAuth->expects($this->any())
-                ->method('getStoredCatalogCredentials')
-                ->will(
-                    $this->returnValue($this->getPatron('username', $userSource))
-                );
-        }
         return $mockAuth;
     }
 
@@ -221,15 +207,15 @@ class MultiBackendTest extends \PHPUnit\Framework\TestCase
      * For examples of what is to be passed, see:
      * http://www.phpunit.de/manual/3.0/en/mock-objects.html
      *
-     * @param object $times  The number of times it is expected to be called.
-     * @param object $driver The driver type this SM will expect to be called with.
-     * @param mixed  $return What that get function should return.
+     * @param InvocationOrder $times  The number of times it is expected to be called.
+     * @param string          $driver The driver type this SM will expect to be called with.
+     * @param mixed           $return What that get function should return.
      *
-     * @return object The Mock Service Manager created.
+     * @return ILSPluginManager The Mock Service Manager created.
      */
     protected function getMockSM($times = null, $driver = 'Voyager', $return = null)
     {
-        $sm = $this->getMockBuilder(\VuFind\ILS\Driver\PluginManager::class)
+        $sm = $this->getMockBuilder(ILSPluginManager::class)
             ->disableOriginalConstructor()->getMock();
         $sm->expects($times ?? $this->any())
             ->method('get')
