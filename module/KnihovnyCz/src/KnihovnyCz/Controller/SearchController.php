@@ -2,7 +2,7 @@
 declare(strict_types=1);
 
 /**
- * Class RecordController
+ * Class SearchController
  *
  * PHP version 7
  *
@@ -21,7 +21,7 @@ declare(strict_types=1);
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  *
- * @category Knihovny.cz
+ * @category CPK-vufind-6
  * @package  KnihovnyCz\Controller
  * @author   Josef Moravec <moravec@mzk.cz>
  * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
@@ -33,15 +33,15 @@ use Laminas\Stdlib\RequestInterface as Request;
 use Laminas\Stdlib\ResponseInterface as Response;
 
 /**
- * Class RecordController
+ * Class SearchController
  *
- * @category Knihovny.cz
+ * @category CPK-vufind-6
  * @package  KnihovnyCz\Controller
  * @author   Josef Moravec <moravec@mzk.cz>
  * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://knihovny.cz Main Page
  */
-class RecordController extends \VuFind\Controller\RecordController
+class SearchController extends \VuFind\Controller\SearchController
 {
     /**
      * Dispatch a request
@@ -53,10 +53,15 @@ class RecordController extends \VuFind\Controller\RecordController
      */
     public function dispatch(Request $request, Response $response = null)
     {
-        $id = $this->params()->fromRoute('id');
-        if (str_starts_with($id, 'library')) {
+        $type = $this->params()->fromQuery('type0');
+        if (is_array($type) ? in_array('Libraries', $type) : $type = 'Libraries') {
+            $type = 'AllLibraries';
+            $lookfor = $this->params()->fromQuery('lookfor0');
+            $lookfor = is_array($lookfor) ? $lookfor[0] : $lookfor;
+            $limit = 20;
             return $this->redirect()->toRoute(
-                'search2record', $this->params()->fromRoute()
+                'search2-results', [],
+                ['query' => compact('type', 'lookfor', 'limit')]
             );
         }
         return parent::dispatch($request, $response);
