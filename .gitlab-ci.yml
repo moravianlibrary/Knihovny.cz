@@ -9,9 +9,9 @@ Build container image:
   stage: build
   only:
     refs:
-      - cicd-test
       - master
-      - /^issue-.*/
+      - /^issue.*/
+      - /^feat.*/
   image: docker:19.03.12
   services:
     - docker:19.03.12-dind
@@ -24,4 +24,4 @@ Build container image:
     - cd ${CI_PROJECT_DIR}
     - cp docker/deploy.env.example docker/deploy.env
     - cp docker/local.env.example docker/local.env
-    - bin/run.sh --no-run --image ${TARGET_IMAGE_NAME}:${CI_COMMIT_BRANCH}-${CI_PIPELINE_IID}-${CI_COMMIT_SHORT_SHA} --private-registry
+    - bin/run.sh --no-run --image ${TARGET_IMAGE_NAME}:${CI_COMMIT_REF_SLUG}-${CI_PIPELINE_IID}-${CI_COMMIT_SHORT_SHA} --private-registry
