@@ -185,13 +185,12 @@ $config = [
                     \KnihovnyCz\Db\Row\InstSources::class => \VuFind\Db\Row\RowGatewayFactory::class,
                     \KnihovnyCz\Db\Row\Widget::class => \VuFind\Db\Row\RowGatewayFactory::class,
                     \KnihovnyCz\Db\Row\WidgetContent::class => \VuFind\Db\Row\RowGatewayFactory::class,
+                    \KnihovnyCz\Db\Row\UserCard::class => \VuFind\Db\Row\RowGatewayFactory::class,
+                    \KnihovnyCz\Db\Row\User::class => \VuFind\Db\Row\UserFactory::class,
                 ],
                 'aliases' => [
-                    // VuFind\Db\Table\GatewayFactory search for row class by name
-                    // We do not need to customize row class for user, so we are
-                    // are aliasing back to original one. It has to be string as the
-                    // class does not exist
-                    'KnihovnyCz\Db\Row\User' => \VuFind\Db\Row\User::class,
+                    'VuFind\Db\Row\User' => \KnihovnyCz\Db\Row\User::class,
+                    'VuFind\Db\Row\UserCard' => \KnihovnyCz\Db\Row\UserCard::class,
                 ]
             ],
             'db_table' => [
@@ -266,10 +265,12 @@ $config = [
             \KnihovnyCz\Content\ObalkyKnihService::class => \VuFind\Content\ObalkyKnihServiceFactory::class,
             \KnihovnyCz\ILS\Service\SolrIdResolver::class => \KnihovnyCz\ILS\Service\SolrIdResolverFactory::class,
             \KnihovnyCz\Service\WayfFilterGenerator::class => \KnihovnyCz\Service\WayfFilterGeneratorFactory::class,
+            \VuFind\Auth\PluginManager::class => \KnihovnyCz\Auth\PluginManagerFactory::class,
         ],
         'aliases' => [
             \VuFind\Config\PluginManager::class => \KnihovnyCz\Config\PluginManager::class,
             \VuFind\Content\ObalkyKnihService::class => \KnihovnyCz\Content\ObalkyKnihService::class,
+            //'VuFind\AuthPluginManager' => 'VuFind\Auth\PluginManager',
         ],
         'invokables' => [
             \Symfony\Component\Filesystem\Filesystem::class,

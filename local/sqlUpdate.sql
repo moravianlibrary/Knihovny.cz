@@ -1483,3 +1483,8 @@ ALTER TABLE `widget` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci
 ALTER TABLE `widget_content` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 UPDATE `system` SET `value` = '79' WHERE `key`='DB_VERSION';
+
+-- Issue 211 Identities
+ALTER TABLE user ADD COLUMN edu_person_unique_id VARCHAR(255) DEFAULT NULL;
+ALTER TABLE user_card ADD COLUMN edu_person_unique_id VARCHAR(255) DEFAULT NULL;
+UPDATE `system` SET `value` = '78' WHERE `key`='DB_VERSION';
