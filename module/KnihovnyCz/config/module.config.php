@@ -83,6 +83,16 @@ $config = [
                      ],
                  ],
              ],
+             'search-legacy' => [
+                 'type' => \Laminas\Router\Http\Literal::class,
+                 'options' => [
+                     'route' => '/Search/Results/',
+                     'defaults' => [
+                         'controller' => 'Search',
+                         'action' => 'Results'
+                     ],
+                 ],
+             ],
          ],
      ],
     'controllers' => [
@@ -91,12 +101,16 @@ $config = [
             \KnihovnyCz\Controller\PortalPageController::class => \VuFind\Controller\AbstractBaseFactory::class,
             \KnihovnyCz\Controller\WayfController::class => \VuFind\Controller\AbstractBaseFactory::class,
             \KnihovnyCz\Controller\LibraryCardsController::class => \VuFind\Controller\AbstractBaseFactory::class,
+            \KnihovnyCz\Controller\RecordController::class => \VuFind\Controller\AbstractBaseWithConfigFactory::class,
+            \KnihovnyCz\Controller\SearchController::class => \VuFind\Controller\AbstractBaseFactory::class,
         ],
         'aliases' => [
             'Inspiration' => \KnihovnyCz\Controller\InspirationController::class,
             'PortalPage' => \KnihovnyCz\Controller\PortalPageController::class,
             'Wayf' => \KnihovnyCz\Controller\WayfController::class,
             'LibraryCards' => \KnihovnyCz\Controller\LibraryCardsController::class,
+            \VuFind\Controller\RecordController::class => \KnihovnyCz\Controller\RecordController::class,
+            \VuFind\Controller\SearchController::class => \KnihovnyCz\Controller\SearchController::class,
         ],
     ],
     'vufind' => [
