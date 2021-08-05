@@ -54,7 +54,7 @@ class SearchController extends \VuFind\Controller\SearchController
     public function dispatch(Request $request, Response $response = null)
     {
         $type = $this->params()->fromQuery('type0');
-        if (is_array($type) ? in_array('Libraries', $type) : $type = 'Libraries') {
+        if (is_array($type) ? in_array('Libraries', $type) : $type == 'Libraries') {
             $type = 'AllLibraries';
             $lookfor = $this->params()->fromQuery('lookfor0');
             $lookfor = is_array($lookfor) ? $lookfor[0] : $lookfor;
