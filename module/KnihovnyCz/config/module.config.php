@@ -278,4 +278,16 @@ $config = [
     ],
 ];
 
+// Key is URL, value is Controller/Action
+$staticRoutes = [
+    'Libraries/Advanced' => 'Search2/Advanced',
+    'Libraries/FacetList' => 'Search2/FacetList',
+    'Libraries/Home' => 'Search2/Home',
+    'Libraries/Results' => 'Search2/Results',
+    'Libraries/Versions' => 'Search2/Versions',
+];
+
+$routeGenerator = new \KnihovnyCz\Route\RouteGenerator();
+$routeGenerator->addStaticRoutes($config, $staticRoutes);
+
 return $config;
