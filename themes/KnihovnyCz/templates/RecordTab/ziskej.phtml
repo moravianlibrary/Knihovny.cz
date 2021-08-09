@@ -1,32 +1,103 @@
-<?php // FIXME: ziskej is under development, this will need update ?>
-<div class="row">
-    <h2><?=$this->translate('ziskej_desc_header') ?></h2>
-    <p><?=$this->translate('ziskej_desc') ?></p>
-</div>
-<div class="row">
-    <div class="col-md-6">
-        <h4><?=$this->translate('ziskej_available_header') ?></h4>
-        <ul>
-            <li><?=$this->translate('ziskej_national_lib') ?></li>
-            <li><?=$this->translate('ziskej_national_medical_lib') ?></li>
-            <li><?=$this->translate('ziskej_moravian_lib') ?></li>
-            <li><?=$this->translate('ziskej_ceska_trebova_lib') ?></li>
-        </ul>
+<?php
+/** @var \KnihovnyCz\RecordTab\Ziskej $tab */
+$tab = $this->tab;
+
+/** @var KnihovnyCz\RecordDriver\SolrLocal $driver */
+$driver = $this->driver;
+
+/** @var ?\KnihovnyCz\Db\Row\User $user */
+$user = $tab->getUser();
+
+/** @var \KnihovnyCz\Ziskej\ZiskejMvs $ziskejMvs */
+$ziskejMvs = $tab->getZiskejMvs();
+
+/** @var string[][] $deduperRecords
+ */
+$deduperRecords = $tab->getDeduperRecords();
+
+?>
+<?php if ($this->Ziskej()->isEnabled()): ?>
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h3 class="panel-title"><?=$this->translate('ziskej_desc_header') ?></h3>
     </div>
-    <div class="col-md-6 text-center" id="ziskejMinimalButton">
-        <?php if (isset($this->mvsUrl)): ?>
-            <form action="<?=$this->mvsUrl ?>" id="mvs" method="post">
-                <input type="hidden" name="source_id" value="<?=$this->escapeHtmlAttr($this->serverName) ?>">
-                <input type="hidden" name="user_id" value="<?=$this->escapeHtmlAttr($this->eppn ?? '') ?>">
-                <input type="hidden" name="doc_id" value="<?=$this->escapeHtmlAttr($this->driver->getUniqueID()) ?>">
-                <input type="hidden" name="entity_id"
-                       value="<?=$this->escapeHtmlAttr($this->entityId ?? '') ?>">
-                <?php $records = $tabs['DedupedRecords']->getRecordsInGroup(); ?>
-                <?php foreach ($records as $record): ?>
-                    <input type="hidden" name="doc_alt_ids[]" value="<?=$this->escapeHtmlAttr($record['id']) ?>">
-                <?php endforeach; ?>
-                <input id="ziskejSubmitButton" type="image" src="<?=$this->imageLink('ziskejlogo.png')?>" alt="<?=$this->translate('ziskej')?>" >
-            </form>
+    <div class="panel-body">
+      <div class="col-md-10">
+        <p><?=$this->translate('ziskej_desc') ?></p>
+        <p><?=$this->translate('ziskej_price') ?></p>
+      </div>
+      <div class="col-md-2">
+        <?php if ($ziskejMvs->getCurrentZiskejTechlibFrontUrl()): ?>
+          <form action="<?=$ziskejMvs->getCurrentZiskejTechlibFrontUrl() ?>/ticket_create" id="mvs" method="post" target="_blank">
+            <input type="hidden" name="service" value="mvs">
+            <input type="hidden" name="source_id" value="<?=$this->escapeHtmlAttr($tab->getServerName()) ?>">
+            <input type="hidden" name="user_id" value="<?=$this->escapeHtmlAttr('') ?>">
+            <input type="hidden" name="doc_id" value="<?=$this->escapeHtmlAttr($driver->getUniqueID()) ?>">
+            <input type="hidden" name="entity_id" value="<?=$this->escapeHtmlAttr($tab->getEntityId()) ?>">
+            <?php foreach ($deduperRecords as $record): ?>
+              <input type="hidden" name="doc_alt_ids[]" value="<?=$this->escapeHtmlAttr($record['id']) ?>">
+            <?php endforeach; ?>
+            <input type="image" src="<?=$this->imageLink('logo-ziskej.png') ?>" alt="<?=$this->translate('ziskej') ?>">
+          </form>
+        <?php else: ?>
+          <?php if (!empty($ziskejMvs->getZiskejTechlibUrl())): ?>
+            <a href="<?=$ziskejMvs->getZiskejTechlibUrl() ?>" target="_blank">
+              <img src="<?=$this->imageLink('logo-ziskej.png') ?>" alt="<?=$this->translate('ziskej') ?>">
+            </a>
+          <?php endif; ?>
         <?php endif; ?>
+      </div>
     </div>
-</div>
+  </div>
+
+
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h4 class="panel-title"><?=$this->translate('ziskej_users_connected_libraries') ?></h4>
+    </div>
+    <div class="panel-body">
+      <?php if ($user): ?>
+        <?php if ($tab->isZiskejActive()): ?>
+          <?php if (!empty($tab->getConnectedLibs())): ?>
+            <ul class="list-group">
+              <?php foreach ($tab->getConnectedLibs() as $libId => $data): ?>
+                <?php
+                /** @var \KnihovnyCz\Db\Row\UserCard $userCard */
+                $userCard = $data['userCard'];
+                /** @var \Mzk\ZiskejApi\ResponseModel\Reader $ziskejReader */
+                $ziskejReader = $data['ziskejReader'];
+                ?>
+                <li class="list-group-item clearfix">
+                  <?=$this->translate('source_' . $libId) ?>
+                  <span class="pull-right">
+                    <a class="btn btn-primary ziskej-order-btn" href="<?=$this->url('ziskejOrder', ['id' => $driver->getUniqueId(), 'eppnDomain' => $userCard->getEppnDomain()]) ?>">
+                      <i class="fa fa-shopping-cart"></i> <?=$this->transEsc("ziskej_btn_order") ?>
+                    </a>
+                </span>
+                </li>
+              <?php endforeach; ?>
+            </ul>
+          <?php else: ?>
+            <div class="alert alert-warning text-center">
+              <?=$this->transEsc("ziskej_alert_no_connected_libraries") ?>
+            </div>
+          <?php endif; ?>
+        <?php else: ?>
+          <div class="alert alert-warning text-center">
+            <?=$this->transEsc("ziskej_warning_api_disconnected") ?>
+          </div>
+        <?php endif; ?>
+      <?php else: ?>
+        <div class="text-center">
+          <div class="alert alert-info text-center">
+            <?=$this->transEsc("ziskej_alert_not_logged_in") ?>
+          </div>
+          <a class="btn btn-default" href="<?=$this->url('myresearch-userlogin')?>">
+            <i class="fa fa-sign-in"></i>
+            <?=$this->transEsc("Institutional Login") ?>
+          </a>
+        </div>
+      <?php endif; ?>
+    </div>
+  </div>
+<?php endif; ?>

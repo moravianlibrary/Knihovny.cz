@@ -59,6 +59,23 @@ class User extends \VuFind\Db\Row\User
     }
 
     /**
+     * @param string $eppn
+     *
+     * @return \KnihovnyCz\Db\Row\UserCard|null
+     * @throws \VuFind\Exception\LibraryCard
+     */
+    public function getCardByEppn(string $eppn): ?UserCard
+    {
+        /** @var \KnihovnyCz\Db\Row\UserCard $userCard */
+        foreach ($this->getLibraryCards() as $userCard) {
+            if ($userCard->eppn === $eppn) {
+                return $userCard;
+            }
+        }
+        return null;
+    }
+
+    /**
      * Get UserCard by eppn domain
      *
      * @param string $eppnDomain

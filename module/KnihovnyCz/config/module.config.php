@@ -97,6 +97,47 @@ $config = [
                      ],
                  ],
              ],
+             'ziskejOrder' => [
+                 'type' => \Laminas\Router\Http\Segment::class,
+                 'options' => [
+                     'route' => '/Record/[:id]/ZiskejOrder/:eppnDomain',
+                     'constraints' => [
+                         'id' => '.*',
+                         'eppnDomain' => '.*',
+                     ],
+                     'defaults' => [
+                         'controller' => 'Record',
+                         'action' => 'ZiskejOrder'
+                     ],
+                 ],
+             ],
+             'ziskejOrderPost' => [
+                 'type' => \Laminas\Router\Http\Segment::class,
+                 'options' => [
+                     'route' => '/Record/[:id]/ZiskejOrderPost',
+                     'constraints' => [
+                         'id' => '.*',
+                     ],
+                     'defaults' => [
+                         'controller' => 'Record',
+                         'action' => 'ZiskejOrderPost'
+                     ],
+                 ],
+             ],
+             'ziskejOrderFinished' => [
+                 'type' => \Laminas\Router\Http\Segment::class,
+                 'options' => [
+                     'route' => '/Ziskej/Finished/:eppnDomain/:ticketId',
+                     'constraints' => [
+                         'eppnDomain' => '.*',
+                         'ticketId' => '.*',
+                     ],
+                     'defaults' => [
+                         'controller' => 'Ziskej',
+                         'action' => 'Finished'
+                     ],
+                 ],
+             ],
          ],
      ],
     'controllers' => [
@@ -106,7 +147,9 @@ $config = [
             \KnihovnyCz\Controller\WayfController::class => \VuFind\Controller\AbstractBaseFactory::class,
             \KnihovnyCz\Controller\LibraryCardsController::class => \VuFind\Controller\AbstractBaseFactory::class,
             \KnihovnyCz\Controller\ZiskejAdminController::class => \VuFind\Controller\AbstractBaseFactory::class,
+            \KnihovnyCz\Controller\ZiskejController::class => \VuFind\Controller\AbstractBaseFactory::class,
             \KnihovnyCz\Controller\MyResearchZiskejController::class => \VuFind\Controller\AbstractBaseFactory::class,
+            \KnihovnyCz\Controller\RecordController::class => \VuFind\Controller\AbstractBaseWithConfigFactory::class
         ],
         'aliases' => [
             'Inspiration' => \KnihovnyCz\Controller\InspirationController::class,
@@ -114,7 +157,9 @@ $config = [
             'Wayf' => \KnihovnyCz\Controller\WayfController::class,
             'LibraryCards' => \KnihovnyCz\Controller\LibraryCardsController::class,
             'ZiskejAdmin' => \KnihovnyCz\Controller\ZiskejAdminController::class,
+            'Ziskej' => \KnihovnyCz\Controller\ZiskejController::class,
             'MyResearchZiskej' => \KnihovnyCz\Controller\MyResearchZiskejController::class,
+            \VuFind\Controller\RecordController::class => \KnihovnyCz\Controller\RecordController::class
         ],
     ],
     'vufind' => [
@@ -161,8 +206,17 @@ $config = [
                     'libraryservices' => \KnihovnyCz\RecordTab\LibraryServices::class,
                     'staffviewdublincore' => \KnihovnyCz\RecordTab\StaffViewDublinCore::class,
                     'usercommentsobalkyknih' => \KnihovnyCz\RecordTab\UserCommentsObalkyKnih::class,
-                    'ziskej' => \KnihovnyCz\RecordTab\Ziskej::class,
                 ],
+                'factories' => [
+                    'ziskej' => function(\Interop\Container\ContainerInterface $container) {
+                        return new \KnihovnyCz\RecordTab\Ziskej(
+                            $container->get(\VuFind\Auth\Manager::class),
+                            $container->get(\VuFind\ILSConnection::class),
+                            $container->get(\Mzk\ZiskejApi\Api::class),
+                            $container->get(\KnihovnyCz\Ziskej\ZiskejMvs::class)
+                        );
+                    },
+                ]
             ],
             'contentblock' => [
                 'factories' => [

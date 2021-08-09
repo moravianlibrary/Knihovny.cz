@@ -1,0 +1,76 @@
+<?php
+$this->layout()->searchbox = false;
+
+/** @var \KnihovnyCz\RecordDriver\SolrLocal $recordDriver */
+$recordDriver = $this->driver;
+
+/** @var bool|\KnihovnyCz\Db\Row\User $user */
+$user = $this->user;
+
+/** @var KnihovnyCz\Db\Row\UserCard $userCard */
+$userCard = $this->userCard;
+
+/** @var \Mzk\ZiskejApi\ResponseModel\Reader $ziskejReader */
+$ziskejReader = $this->ziskejReader;
+?>
+
+<?php if ($user): ?>
+  <div>
+    <h2><?=$this->transEsc("ziskej_order_title") ?></h2>
+    <form class="form" action="<?=$this->url('ziskejOrderPost', ['id' => $recordDriver->getUniqueId()]) ?>" method="post">
+        <input type="hidden" name="source_id" value="<?=$this->serverName ?>">
+        <input type="hidden" name="eppn" id="eppn" value="<?=$userCard->eppn ?>">
+        <input type="hidden" name="doc_id" value="<?=$recordDriver->getUniqueID() ?>">
+        <input type="hidden" name="entity_id" value="<?=$this->entityId ?>">
+        <?php foreach ($this->records as $record): ?>
+          <input type="hidden" name="doc_alt_ids[]" value="<?=$record['id'] ?>">
+        <?php endforeach; ?>
+        <div class="row">
+          <div class="col-xs-12 record-mvs-description"></div><?php //@todo ?>
+          <div class="col-xs-12">
+            <h3><?=$this->transEsc("ziskej_order_section_document_title") ?></h3>
+            <p>
+              <strong><?=$this->transEsc("label_fullname") ?>:</strong>
+              <br>
+              <?=$this->escapeHtml($user->firstname) ?>
+              <?=$this->escapeHtml($user->lastname) ?>
+            </p>
+
+            <div class="form-group">
+              <label for="email">Email:</label>
+              <input type="email" name="email" id="email" value="<?=!empty($ziskejReader) ? $ziskejReader->getEmail() : (!empty($user->email) ? $user->email : '') ?>" class="form-control" required>
+              <span class="help-block"><?=$this->transEsc("help_email") ?></span>
+            </div>
+
+            <div class="form-group">
+              <label for="text"><?=$this->transEsc("label_note") ?>:</label>
+              <textarea name="text" class="form-control"></textarea>
+              <span class="help-block"><?=$this->transEsc("help_note") ?></span>
+            </div>
+
+          </div>
+        </div>
+        <div class="row">
+          <div class="checkbox">
+            <label>
+              <input type="checkbox" name="is_conditions" required>
+              <?=$this->translate('checbox_is_conditions') ?>
+            </label>
+          </div>
+          <div class="checkbox">
+            <label>
+              <input type="checkbox" name="is_price" required>
+              <?=$this->translate('checbox_is_price') ?>
+            </label>
+          </div>
+          <p class="text-center">
+            <?=$this->translate('ziskej_text_info_conditions') ?>
+          </p>
+          <div class="text-center">
+            <p><strong><?=$this->translate("ziskej_price") ?></strong></p>
+            <input id="submit" type="submit" name="submit" class="btn btn-primary" value="<?=$this->transEsc("btn_order") ?>">
+          </div>
+        </div>
+      </form>
+  </div>
+<?php endif; ?>
