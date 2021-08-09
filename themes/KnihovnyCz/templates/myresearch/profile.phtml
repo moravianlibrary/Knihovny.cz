@@ -14,43 +14,7 @@
 </a>
 
 <div class="<?=$this->layoutClass('mainbody')?>">
-  <h2><?=$this->transEsc('Your Profile')?></h2>
   <?=$this->flashmessages();?>
-
-  <table class="table table-striped">
-    <?=$this->renderArray(
-      $arrTemplate, $this->user,
-      [
-        $this->transEsc('First Name') => 'firstname',
-        $this->transEsc('Last Name') => 'lastname',
-        $this->transEsc('Email') => 'email',
-      ]
-    )?>
-    <?php /* this section renders under two distinct circumstances; see if/else below: */ ?>
-    <?php if (count($this->pickup ?? []) > 1 || !empty($this->preferredLibraryDisplay)): ?>
-      <tr>
-        <th><?=$this->transEsc('Preferred Library')?>:</th>
-        <td>
-          <?php if (count($this->pickup ?? []) > 1): // case 1: set home library allowed ?>
-            <?php
-              $selected = (strlen($this->profile['home_library'] ?? '') > 0)
-                ? $this->profile['home_library'] : $this->defaultPickupLocation
-            ?>
-            <form id="profile_form" class="form-inline" method="post">
-              <select id="home_library" name="home_library" class="form-control">
-                <?php foreach ($this->pickup as $lib): ?>
-                  <option value="<?=$this->escapeHtmlAttr($lib['locationID'])?>"<?=($selected == $lib['locationID'])?' selected="selected"':''?>><?=$this->transEscWithPrefix('location_', $lib['locationDisplay'])?></option>
-                <?php endforeach; ?>
-              </select>
-              <input class="btn btn-default" type="submit" value="<?=$this->transEscAttr('Save')?>" />
-            </form>
-          <?php else: // case 2: set home library disallowed, but default provided by ILS ?>
-            <?=$this->transEscWithPrefix('location_', $this->preferredLibraryDisplay)?>
-          <?php endif; ?>
-        </td>
-      </tr>
-    <?php endif; ?>
-  </table>
 
   <div id="account-actions">
     <?php if ($this->auth()->getManager()->supportsEmailChange()): ?>
@@ -78,11 +42,18 @@
       <?=$this->context($this)->renderInContext('librarycards/selectcard.phtml', ['user' => $this->user]); ?>
     </p>
     <table class="table table-striped">
+      <?php
+        $profile = $this->profile;
+        if (!empty($this->user['email'])) {
+          $profile['email'] = $this->user['email'];
+        }
+      ?>
       <?=$this->renderArray(
-        $arrTemplate, $this->profile,
+        $arrTemplate, $profile,
         [
           $this->transEsc('First Name') => 'firstname',
           $this->transEsc('Last Name') => 'lastname',
+          $this->transEsc('Email') => 'email',
           $this->transEsc('Address') . ' 1' => 'address1',
           $this->transEsc('Address') . ' 2' => 'address2',
           $this->transEsc('Zip') => 'zip',

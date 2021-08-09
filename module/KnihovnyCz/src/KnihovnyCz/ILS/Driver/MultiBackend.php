@@ -5,7 +5,7 @@
  *
  * PHP version 7
  *
- * Copyright (C) Moravian Library 2020.
+ * Copyright (C) Moravian Library 2020-2021.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -33,6 +33,7 @@ use KnihovnyCz\Db\Table\InstSources;
 use KnihovnyCz\ILS\Service\SolrIdResolver;
 use VuFind\Auth\ILSAuthenticator;
 use VuFind\Config\PluginManager as ConfigManager;
+use VuFind\Exception\ILS as ILSException;
 use VuFind\ILS\Driver\PluginManager;
 
 /**
@@ -136,6 +137,14 @@ class MultiBackend extends \VuFind\ILS\Driver\MultiBackend
      */
     public function getMyTransactionHistory($patron, $params)
     {
+        $source = $this->getSource($patron['cat_username']);
+        $driver = $this->getDriver($source);
+        $supported = $this->methodSupported(
+            $driver, 'getMyTransactionHistory', compact('patron')
+        );
+        if (!$supported) {
+            return ['success' => false, 'status' => 'driver_no_history'];
+        }
         $data = parent::getMyTransactionHistory($patron, $params);
         return $this->resolveIds($data, $patron);
     }
@@ -174,30 +183,74 @@ class MultiBackend extends \VuFind\ILS\Driver\MultiBackend
     /**
      * Takes sigla and return library source for it
      *
-     * @param $sigla
+     * @param string $sigla SIGLA library identifier
      *
-     * @return int|string|null
+     * @return string|null
      */
-    public function siglaToSource($sigla)
+    public function siglaToSource($sigla): ?string
     {
-        $source = null;
-        foreach ($this->config['SiglaMapping'] as $source => $paired_sigla) {
-            if ($sigla === $paired_sigla)
-                return $source;
-        }
-
-        return $source;
+        $siglaMapping = $this->config['SiglaMapping'] ?? [];
+        $siglaMapping = is_array($siglaMapping) ? array_flip($siglaMapping) : [];
+        return $siglaMapping[$sigla] ?? null;
     }
 
     /**
      * Library source to sigla
      *
-     * @param string $source
+     * @param string $source Library source identifier
+     *
      * @return string|null
      */
     public function sourceToSigla(string $source): ?string
     {
-        $siglaMapping = $this->config['SiglaMapping'];
-        return isset($siglaMapping[$source]) ? $siglaMapping[$source] : null;
+        $siglaMapping = $this->config['SiglaMapping'] ?? [];
+        return is_array($siglaMapping) ? ($siglaMapping[$source] ?? null) : null;
+    }
+
+    /**
+     * Get Status By Item ID or Bibliographic ID
+     *
+     * This is responsible for retrieving the status information of a certain
+     * record/item
+     *
+     * @param string|null $bibId  The record id to retrieve the holdings for
+     * @param string|null $itemId The item id to retrieve the holdings for
+     *
+     * @return mixed     On success, an associative array with the following keys:
+     * id, availability (boolean), status, location, reserve, callnumber.
+     * @throws ILSException
+     */
+    public function getStatusByItemIdOrBibId(?string $bibId, ?string $itemId)
+    {
+        $status = [];
+        if ($bibId !== null) {
+            $status = $this->getStatus($bibId);
+        } elseif ($itemId !== null) {
+            $status = $this->getStatusByItemId($itemId);
+        }
+        return $status;
+    }
+
+    /**
+     * Get Status By Item ID
+     *
+     * This is responsible for retrieving the status information of a certain
+     * item.
+     *
+     * @param string $id The item id to retrieve the holdings for
+     *
+     * @throws ILSException
+     * @return mixed     On success, an associative array with the following keys:
+     * id, availability (boolean), status, location, reserve, callnumber.
+     */
+    public function getStatusByItemId($id)
+    {
+        $source = $this->getSource($id);
+        $driver = $this->getDriver($source);
+        if ($driver) {
+            $status = $driver->getStatusByItemId($this->getLocalId($id));
+            return $this->addIdPrefixes($status, $source);
+        }
+        return [];
     }
 }

@@ -45,10 +45,10 @@ Date: Wed, 18 Mar 2015 11:49:40 GMT
                 <ItemIdentifierType>Barcode</ItemIdentifierType>
                 <ItemIdentifierValue>421170125990</ItemIdentifierValue>
             </ItemId>
-            <dateDue>2020-06-15T23:59:59.999+02:00</dateDue>
+            <DateDue>2020-06-15T23:59:59.999+02:00</DateDue>
             <Title>Tajemství Hrobaříků :</Title>
             <Ext>
-                <RenewalNotPermitted>true</RenewalNotPermitted>
+              <RenewalNotPermitted/>
             </Ext>
         </LoanedItem>
         <LoanedItem>
@@ -56,10 +56,10 @@ Date: Wed, 18 Mar 2015 11:49:40 GMT
                 <ItemIdentifierType>Barcode</ItemIdentifierType>
                 <ItemIdentifierValue>421170125992</ItemIdentifierValue>
             </ItemId>
-            <dateDue>2020-06-15T23:59:59.999+02:00</dateDue>
+            <DateDue>2020-06-15T23:59:59.999+02:00</DateDue>
             <Title>Hrobaříci a Hrobaři /</Title>
             <Ext>
-                <RenewalNotPermitted>true</RenewalNotPermitted>
+              <RenewalNotPermitted/>
             </Ext>
         </LoanedItem>
         <UserOptionalFields>

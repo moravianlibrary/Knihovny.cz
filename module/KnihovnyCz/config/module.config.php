@@ -30,13 +30,33 @@ namespace KnihovnyCz\Module\Configuration;
 $config = [
      'router' => [
          'routes' => [
-             'inpspiration' => [
+             'inspiration' => [
                  'type' => \Laminas\Router\Http\Segment::class,
                  'options' => [
                      'route' => '/Inspiration',
                      'defaults' => [
                          'controller' => 'Inspiration',
                          'action' => 'Home'
+                     ],
+                 ],
+             ],
+             'inspiration-show' => [
+                 'type' => \Laminas\Router\Http\Segment::class,
+                 'options' => [
+                     'route' => '/inspirace/[:list]',
+                     'defaults' => [
+                         'controller' => 'Inspiration',
+                         'action' => 'Show'
+                     ],
+                 ],
+             ],
+             'inspiration-home-legacy' => [
+                 'type' => \Laminas\Router\Http\Segment::class,
+                 'options' => [
+                     'route' => '/Search/Inspiration',
+                     'defaults' => [
+                         'controller' => 'Inspiration',
+                         'action' => 'HomeLegacy'
                      ],
                  ],
              ],
@@ -60,6 +80,16 @@ $config = [
                      'defaults' => [
                          'controller' => 'Wayf',
                          'action' => 'Index',
+                     ],
+                 ],
+             ],
+             'search-legacy' => [
+                 'type' => \Laminas\Router\Http\Literal::class,
+                 'options' => [
+                     'route' => '/Search/Results/',
+                     'defaults' => [
+                         'controller' => 'Search',
+                         'action' => 'Results'
                      ],
                  ],
              ],
@@ -146,10 +176,11 @@ $config = [
             \KnihovnyCz\Controller\PortalPageController::class => \VuFind\Controller\AbstractBaseFactory::class,
             \KnihovnyCz\Controller\WayfController::class => \VuFind\Controller\AbstractBaseFactory::class,
             \KnihovnyCz\Controller\LibraryCardsController::class => \VuFind\Controller\AbstractBaseFactory::class,
-            \KnihovnyCz\Controller\ZiskejAdminController::class => \VuFind\Controller\AbstractBaseFactory::class,
-            \KnihovnyCz\Controller\ZiskejController::class => \VuFind\Controller\AbstractBaseFactory::class,
+            \KnihovnyCz\Controller\RecordController::class => \VuFind\Controller\AbstractBaseWithConfigFactory::class,
+            \KnihovnyCz\Controller\SearchController::class => \VuFind\Controller\AbstractBaseFactory::class,
             \KnihovnyCz\Controller\MyResearchZiskejController::class => \VuFind\Controller\AbstractBaseFactory::class,
-            \KnihovnyCz\Controller\RecordController::class => \VuFind\Controller\AbstractBaseWithConfigFactory::class
+            \KnihovnyCz\Controller\ZiskejController::class => \VuFind\Controller\AbstractBaseFactory::class,
+            \KnihovnyCz\Controller\ZiskejAdminController::class => \VuFind\Controller\AbstractBaseFactory::class,
         ],
         'aliases' => [
             'Inspiration' => \KnihovnyCz\Controller\InspirationController::class,
@@ -159,7 +190,8 @@ $config = [
             'ZiskejAdmin' => \KnihovnyCz\Controller\ZiskejAdminController::class,
             'Ziskej' => \KnihovnyCz\Controller\ZiskejController::class,
             'MyResearchZiskej' => \KnihovnyCz\Controller\MyResearchZiskejController::class,
-            \VuFind\Controller\RecordController::class => \KnihovnyCz\Controller\RecordController::class
+            \VuFind\Controller\RecordController::class => \KnihovnyCz\Controller\RecordController::class,
+            \VuFind\Controller\SearchController::class => \KnihovnyCz\Controller\SearchController::class,
         ],
     ],
     'vufind' => [
@@ -208,6 +240,7 @@ $config = [
                     'usercommentsobalkyknih' => \KnihovnyCz\RecordTab\UserCommentsObalkyKnih::class,
                 ],
                 'factories' => [
+                    \KnihovnyCz\RecordTab\HoldingsILS::class => \VuFind\RecordTab\HoldingsILSFactory::class,
                     'ziskej' => function(\Interop\Container\ContainerInterface $container) {
                         return new \KnihovnyCz\RecordTab\Ziskej(
                             $container->get(\VuFind\Auth\Manager::class),
@@ -216,7 +249,10 @@ $config = [
                             $container->get(\KnihovnyCz\Ziskej\ZiskejMvs::class)
                         );
                     },
-                ]
+                ],
+                'aliases' => [
+                    \VuFind\RecordTab\HoldingsILS::class => \KnihovnyCz\RecordTab\HoldingsILS::class,
+                ],
             ],
             'contentblock' => [
                 'factories' => [
@@ -260,10 +296,14 @@ $config = [
             ],
             'ils_driver' => [
                 'factories' => [
-                    \KnihovnyCz\ILS\Driver\MultiBackend::class => \KnihovnyCz\ILS\Driver\MultiBackendFactory::class
+                    \KnihovnyCz\ILS\Driver\KohaRest1905::class => \VuFind\ILS\Driver\DriverWithDateConverterFactory::class,
+                    \KnihovnyCz\ILS\Driver\MultiBackend::class => \KnihovnyCz\ILS\Driver\MultiBackendFactory::class,
+                    \KnihovnyCz\ILS\Driver\XCNCIP2::class => \VuFind\ILS\Driver\DriverWithDateConverterFactory::class,
                 ],
                 'aliases' => [
+                    'koharest1905' => \KnihovnyCz\ILS\Driver\KohaRest1905::class,
                     'multibackend' => \KnihovnyCz\ILS\Driver\MultiBackend::class,
+                    'xcncip2' => \KnihovnyCz\ILS\Driver\XCNCIP2::class,
                 ],
             ],
             'content_toc' => [
@@ -276,14 +316,16 @@ $config = [
             ],
             'ajaxhandler' => [
                 'factories' => [
-                    \KnihovnyCz\AjaxHandler\UpdateContent::class => \KnihovnyCz\AjaxHandler\UpdateContentFactory::class,
                     \KnihovnyCz\AjaxHandler\Edd::class => \KnihovnyCz\AjaxHandler\EddFactory::class,
                     \KnihovnyCz\AjaxHandler\GetCitation::class => \KnihovnyCz\AjaxHandler\GetCitationFactory::class,
+                    \KnihovnyCz\AjaxHandler\GetHolding::class => \KnihovnyCz\AjaxHandler\GetHoldingFactory::class,
+                    \KnihovnyCz\AjaxHandler\UpdateContent::class => \KnihovnyCz\AjaxHandler\UpdateContentFactory::class,
                 ],
                 'aliases' => [
-                    'updateContent' => \KnihovnyCz\AjaxHandler\UpdateContent::class,
                     'edd' => \KnihovnyCz\AjaxHandler\Edd::class,
                     'getcitation' => \KnihovnyCz\AjaxHandler\GetCitation::class,
+                    'getHolding' => \KnihovnyCz\AjaxHandler\GetHolding::class,
+                    'updateContent' => \KnihovnyCz\AjaxHandler\UpdateContent::class,
                 ],
             ],
             'related' => [
@@ -321,6 +363,7 @@ $config = [
             \Symfony\Component\Filesystem\Filesystem::class,
             \KnihovnyCz\Service\GoogleBooksLinkService::class,
             \KnihovnyCz\Service\ZboziLinkService::class,
+            \KnihovnyCz\ILS\Logic\Holdings::class,
         ]
     ],
 ];

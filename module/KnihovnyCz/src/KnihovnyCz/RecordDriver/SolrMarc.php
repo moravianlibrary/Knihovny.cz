@@ -38,10 +38,10 @@ namespace KnihovnyCz\RecordDriver;
  */
 class SolrMarc extends SolrDefault
 {
-    use \VuFind\RecordDriver\IlsAwareTrait;
-    use \VuFind\RecordDriver\MarcReaderTrait;
-    use \VuFind\RecordDriver\MarcAdvancedTrait;
-    use PatentTrait;
+    use \VuFind\RecordDriver\Feature\IlsAwareTrait;
+    use \VuFind\RecordDriver\Feature\MarcReaderTrait;
+    use \VuFind\RecordDriver\Feature\MarcAdvancedTrait;
+    use Feature\PatentTrait;
 
     /**
      * Constructor
@@ -211,5 +211,15 @@ class SolrMarc extends SolrDefault
     {
         // This is needed to overcome getSummary method defined in MarcAdvancedTrait
         return parent::getSummary();
+    }
+
+    /**
+     * Get all item identifiers for this record
+     *
+     * @return array
+     */
+    public function getItemIds(): array
+    {
+        return $this->getFieldArray('996', ['t'], false);
     }
 }

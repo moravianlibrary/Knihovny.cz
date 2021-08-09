@@ -3,6 +3,7 @@
 @import "variables";
 @import "knihovny";
 @import "format-icons";
+@import "responsive-tables";
 
 // overwrite parent theme styles
 @media (min-width: 768px) {
@@ -493,23 +494,6 @@ h6:hover .heading-permalink
   margin-bottom: 2em;
 }
 
-.cookies-consent {
-  background-color: @gray;
-  color: @label-color;
-  padding: 4px;
-
-  //cookies are shown on bottom of browser window to avoid collision with header
-  position: fixed;
-  bottom: 0px;
-  left: 0px;
-  width: 100%;
-  z-index: 1030;
-  & > a {
-    color: @label-color;
-    text-decoration: underline;
-  }
-}
-
 
 @media (min-width: @screen-md-min) {
   ul.nav-wizard {
@@ -537,4 +521,29 @@ h6:hover .heading-permalink
   .facet span.badge {
     display: none;
   }
+}
+
+#holding_items .label {
+  white-space: normal;
+}
+
+#records-in-groups-container {
+  margin-bottom: 1.4em;
+}
+
+.holdings-tab {
+  h3 {
+    img {
+      height: 1em;
+      padding-bottom: 3px;
+      padding-right: 3px;
+    }
+    small {
+      margin-left: 1em;
+    }
+  }
+}
+
+#content {
+  margin-bottom: 20px;
 }

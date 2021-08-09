@@ -21,21 +21,18 @@ Date: Wed, 18 Mar 2015 11:49:40 GMT
                 <ItemIdentifierType>Barcode</ItemIdentifierType>
                 <ItemIdentifierValue>311800245840</ItemIdentifierValue>
             </ItemId>
-            <dateDue>2025-08-17T23:59:59.999+02:00</dateDue>
+            <DateDue>2025-08-17T23:59:59.999+02:00</DateDue>
             <Title>Led Zeppelin : MoDERN iCoNS /</Title>
-            <Ext>
-                <RenewalNotPermitted>false</RenewalNotPermitted>
-            </Ext>
         </LoanedItem>
         <LoanedItem>
             <ItemId>
                 <ItemIdentifierType>Barcode</ItemIdentifierType>
                 <ItemIdentifierValue>311800274022</ItemIdentifierValue>
             </ItemId>
-            <dateDue>2025-08-17T23:59:59.999+02:00</dateDue>
+            <DateDue>2025-08-17T23:59:59.999+02:00</DateDue>
             <Title>Právo testy : testy k přijímacím zkouškám na právnické fakulty</Title>
             <Ext>
-                <RenewalNotPermitted>true</RenewalNotPermitted>
+                <RenewalNotPermitted/>
             </Ext>
         </LoanedItem>
         <RequestedItem>
@@ -87,16 +84,28 @@ Date: Wed, 18 Mar 2015 11:49:40 GMT
                     <PhysicalAddressType>Street Address</PhysicalAddressType>
                 </PhysicalAddress>
             </UserAddressInformation>
+            <UserAddressInformation>
+                <UserAddressRoleType>Notice</UserAddressRoleType>
+                <ElectronicAddress>
+                    <ElectronicAddressType>mailto</ElectronicAddressType>
+                    <ElectronicAddressData>cpk-support@mzk.cz</ElectronicAddressData>
+                </ElectronicAddress>
+            </UserAddressInformation>
             <NameInformation>
                 <PersonalNameInformation>
                     <StructuredPersonalUserName>
-                        <Prefix />
+                        <Prefix></Prefix>
                         <GivenName>Jana</GivenName>
                         <Surname>Nováková</Surname>
-                        <Suffix />
+                        <Suffix></Suffix>
                     </StructuredPersonalUserName>
                 </PersonalNameInformation>
             </NameInformation>
+            <PreviousUserId>
+                <AgencyId>HBG001</AgencyId>
+                <UserIdentifierValue>40367</UserIdentifierValue>
+                <ValidToDate>2019-11-22T19:14:54.917+01:00</ValidToDate>
+            </PreviousUserId>
             <UserPrivilege>
                 <ValidToDate>2025-07-15T23:59:59.999+02:00</ValidToDate>
             </UserPrivilege>
