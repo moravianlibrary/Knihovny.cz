@@ -22,11 +22,11 @@ $deduperRecords = $tab->getDeduperRecords();
       <h3 class="panel-title"><?=$this->translate('ziskej_desc_header') ?></h3>
     </div>
     <div class="panel-body">
-      <div class="col-md-10">
+      <div class="col-md-9">
         <p><?=$this->translate('ziskej_desc') ?></p>
         <p><?=$this->translate('ziskej_price') ?></p>
       </div>
-      <div class="col-md-2">
+      <div class="col-md-3">
         <?php if ($ziskejMvs->getCurrentZiskejTechlibFrontUrl()): ?>
           <form action="<?=$ziskejMvs->getCurrentZiskejTechlibFrontUrl() ?>/ticket_create" id="mvs" method="post" target="_blank">
             <input type="hidden" name="service" value="mvs">
