@@ -207,7 +207,7 @@ class RecordController extends \VuFind\Controller\RecordController
 
         $this->flashMessenger()->addMessage('ziskej_success_order_finished', 'success');
 
-        return $this->redirect()->toRoute('ziskejOrderFinished', [
+        return $this->redirect()->toRoute('ziskej-order-finished', [
             'eppnDomain' => $userCard->getEppnDomain(),
             'ticketId' => $ticket->getId(),
         ]);

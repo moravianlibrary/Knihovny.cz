@@ -127,7 +127,7 @@ $config = [
                      ],
                  ],
              ],
-             'ziskejOrder' => [
+             'ziskej-order' => [
                  'type' => \Laminas\Router\Http\Segment::class,
                  'options' => [
                      'route' => '/Record/[:id]/ZiskejOrder/:eppnDomain',
@@ -141,7 +141,7 @@ $config = [
                      ],
                  ],
              ],
-             'ziskejOrderPost' => [
+             'ziskej-order-post' => [
                  'type' => \Laminas\Router\Http\Segment::class,
                  'options' => [
                      'route' => '/Record/[:id]/ZiskejOrderPost',
@@ -154,7 +154,7 @@ $config = [
                      ],
                  ],
              ],
-             'ziskejOrderFinished' => [
+             'ziskej-order-finished' => [
                  'type' => \Laminas\Router\Http\Segment::class,
                  'options' => [
                      'route' => '/Ziskej/Finished/:eppnDomain/:ticketId',

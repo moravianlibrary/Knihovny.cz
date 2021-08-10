@@ -70,7 +70,7 @@ $deduperRecords = $tab->getDeduperRecords();
                 <li class="list-group-item clearfix">
                   <?=$this->translate('source_' . $libId) ?>
                   <span class="pull-right">
-                    <a class="btn btn-primary ziskej-order-btn" data-lightbox href="<?=$this->url('ziskejOrder', ['id' => $driver->getUniqueId(), 'eppnDomain' => $userCard->getEppnDomain()]) ?>">
+                    <a class="btn btn-primary ziskej-order-btn" data-lightbox href="<?=$this->url('ziskej-order', ['id' => $driver->getUniqueId(), 'eppnDomain' => $userCard->getEppnDomain()]) ?>">
                       <i class="fa fa-shopping-cart"></i> <?=$this->transEsc("ziskej_btn_order") ?>
                     </a>
                 </span>
