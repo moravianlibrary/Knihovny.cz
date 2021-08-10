@@ -35,40 +35,35 @@ $ziskejReader = $this->ziskejReader;
               <?=$this->escapeHtml($user->firstname) ?>
               <?=$this->escapeHtml($user->lastname) ?>
             </p>
-
             <div class="form-group">
               <label for="email">Email:</label>
               <input type="email" name="email" id="email" value="<?=!empty($ziskejReader) ? $ziskejReader->getEmail() : (!empty($user->email) ? $user->email : '') ?>" class="form-control" required>
               <span class="help-block"><?=$this->transEsc("help_email") ?></span>
             </div>
-
             <div class="form-group">
               <label for="text"><?=$this->transEsc("label_note") ?>:</label>
               <textarea name="text" class="form-control"></textarea>
               <span class="help-block"><?=$this->transEsc("help_note") ?></span>
             </div>
-
-          </div>
-        </div>
-        <div class="row">
-          <div class="checkbox">
-            <label>
-              <input type="checkbox" name="is_conditions" required>
-              <?=$this->translate('checbox_is_conditions') ?>
-            </label>
-          </div>
-          <div class="checkbox">
-            <label>
-              <input type="checkbox" name="is_price" required>
-              <?=$this->translate('checbox_is_price') ?>
-            </label>
-          </div>
-          <p class="text-center">
-            <?=$this->translate('ziskej_text_info_conditions') ?>
-          </p>
-          <div class="text-center">
-            <p><strong><?=$this->translate("ziskej_price") ?></strong></p>
-            <input id="submit" type="submit" name="submit" class="btn btn-primary" value="<?=$this->transEsc("btn_order") ?>">
+            <div class="checkbox">
+              <label>
+                <input type="checkbox" name="is_conditions" required>
+                <?=$this->translate('checbox_is_conditions') ?>
+              </label>
+            </div>
+            <div class="checkbox">
+              <label>
+                <input type="checkbox" name="is_price" required>
+                <?=$this->translate('checbox_is_price') ?>
+              </label>
+            </div>
+            <p class="text-center">
+              <?=$this->translate('ziskej_text_info_conditions') ?>
+            </p>
+            <div class="text-center">
+              <p><strong><?=$this->translate("ziskej_price") ?></strong></p>
+              <input id="submit" type="submit" name="submit" class="btn btn-primary" value="<?=$this->transEsc("btn_order") ?>">
+            </div>
           </div>
         </div>
       </form>
