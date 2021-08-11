@@ -163,12 +163,12 @@ class RecordController extends \VuFind\Controller\RecordController
         //@todo check email format
 
         if (!$this->params()->fromPost('is_conditions')) {
-            $this->flashMessenger()->addMessage('ziskej_error_is_conditions', 'error');
+            $this->flashMessenger()->addMessage('Ziskej::ziskej_error_is_conditions', 'error');
             return $this->redirectToRecord('', 'Ziskej');
         }
 
         if (!$this->params()->fromPost('is_price')) {
-            $this->flashMessenger()->addMessage('ziskej_error_is_price', 'error');
+            $this->flashMessenger()->addMessage('Ziskej::ziskej_error_is_price', 'error');
             return $this->redirectToRecord('', 'Ziskej');
         }
 
@@ -194,7 +194,7 @@ class RecordController extends \VuFind\Controller\RecordController
         }
 
         if (!$ziskejReader->isActive()) {
-            $this->flashMessenger()->addMessage('ziskej_error_account_not_active', 'warning');
+            $this->flashMessenger()->addMessage('Ziskej::ziskej_error_account_not_active', 'warning');
             //@todo next step
             return $this->redirectToRecord('', 'Ziskej');
         }
@@ -205,7 +205,7 @@ class RecordController extends \VuFind\Controller\RecordController
 
         $ticket = $ziskejApi->createTicket($userCard->eppn, $ticketNew);
 
-        $this->flashMessenger()->addMessage('ziskej_success_order_finished', 'success');
+        $this->flashMessenger()->addMessage('Ziskej::ziskej_success_order_finished', 'success');
 
         return $this->redirect()->toRoute('ziskej-order-finished', [
             'eppnDomain' => $userCard->getEppnDomain(),

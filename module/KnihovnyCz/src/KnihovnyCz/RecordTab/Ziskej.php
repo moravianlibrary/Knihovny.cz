@@ -78,7 +78,7 @@ class Ziskej extends \VuFind\RecordTab\AbstractBase
      */
     public function getDescription(): string
     {
-        return $this->getRecordDriver()->translate('ziskej_tab_title');
+        return $this->getRecordDriver()->translate('tab_title_ziskej');
     }
 
     /**
