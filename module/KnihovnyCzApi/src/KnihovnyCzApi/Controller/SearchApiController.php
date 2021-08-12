@@ -30,6 +30,7 @@ declare(strict_types=1);
 namespace KnihovnyCzApi\Controller;
 
 use KnihovnyCz\ILS\Driver\MultiBackend;
+use KnihovnyCz\ILS\Logic\Holdings as HoldingsLogic;
 use KnihovnyCzApi\Formatter\ItemFormatter;
 use Laminas\ServiceManager\ServiceLocatorInterface;
 use VuFindApi\Formatter\FacetFormatter;
@@ -80,6 +81,7 @@ class SearchApiController extends \VuFindApi\Controller\SearchApiController
      * @param ServiceLocatorInterface $sm Service manager
      * @param RecordFormatter         $rf Record formatter
      * @param FacetFormatter          $ff Facet formatter
+     * @param ItemFormatter           $if Item Formatter
      */
     public function __construct(ServiceLocatorInterface $sm, RecordFormatter $rf,
         FacetFormatter $ff, ItemFormatter $if
@@ -147,7 +149,7 @@ class SearchApiController extends \VuFindApi\Controller\SearchApiController
     /**
      * Record action
      *
-     * @return \Laminas\Http\Response
+     * @return \Laminas\Http\Response|bool
      */
     public function itemAction()
     {
@@ -158,9 +160,14 @@ class SearchApiController extends \VuFindApi\Controller\SearchApiController
             return $result;
         }
 
-        $request = $this->getRequest()->getQuery()->toArray() + $this->getRequest()
+        /**
+         * GET and POST parameters
+         *
+         * @var array $params
+         */
+        $params = $this->getRequest()->getQuery()->toArray() + $this->getRequest()
             ->getPost()->toArray();
-        if (!isset($request['id'])) {
+        if (!isset($params['id'])) {
             return $this->output([], self::STATUS_ERROR, 400, 'Missing id');
         }
 
@@ -179,7 +186,7 @@ class SearchApiController extends \VuFindApi\Controller\SearchApiController
          *
          * SIGLA.BIB_ID.ITEM_ID
          */
-        $idParts = explode('.', $request['id']);
+        $idParts = explode('.', $params['id']);
         $bibId = $itemId = null;
         if (count($idParts) === 3) {
             [$sigla, $bibId, ] = $idParts;
@@ -205,21 +212,21 @@ class SearchApiController extends \VuFindApi\Controller\SearchApiController
             );
         }
 
-        $availability = [
-            'Available On Shelf' => 'available', // XCNCIP2
-            'Available For Pickup' => 'available', // XCNCIP2
-            'Available for Pickup' => 'available', // XCNCIP2
-            'On Loan' => 'on-loan', // XCNCIP2, Aleph
-            'On Order' => 'on-loan', /// XCNCIP2, Aleph
-            'In Process' => 'on-loan', // XCNCIP2
-            'In Transit Between Library Locations' => 'on-loan', // XCNCIP2
-            'Circulation Status Undefined' => 'unknown', // XCNCIP2
-            'available' => 'available', // Aleph
+        $holdingsLogic = $this->serviceLocator->get(HoldingsLogic::class);
+
+        $availability = $holdingsLogic->getAvailabilityByStatus($status['status']);
+        $availabilityMapping = [
+            HoldingsLogic::STATUS_NOT_AVAILABLE => 'unavailable',
+            HoldingsLogic::STATUS_AVAILABLE => 'available',
+            HoldingsLogic::STATUS_TEMPORARY_NOT_AVAILABLE => 'on-loan',
+            HoldingsLogic::STATUS_UNKNOWN => 'unknown',
+            // It is 'unknown' for backwards compatibility:
+            HoldingsLogic::STATUS_UNDECIDABLE => 'unknown',
         ];
 
         $response = [
-            'id' => $request['id'],
-            'availability' => $availability[$status['status']] ?? 'unavailable',
+            'id' => $params['id'],
+            'availability' => $availabilityMapping[$availability] ?? 'unknown',
             'availability_note' => $status['status'] ?? null,
             'duedate' => $status['duedate'] ?? null,
             'location' => $status['location'] ?? null,
@@ -228,7 +235,7 @@ class SearchApiController extends \VuFindApi\Controller\SearchApiController
             ],
         ];
 
-        $fields = $this->getItemFieldList($request);
+        $fields = $this->getItemFieldList($params);
 
         $response = array_filter(
             $response, function ($key) use ($fields) {

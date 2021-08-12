@@ -3,6 +3,8 @@
 @import "variables";
 @import "knihovny";
 @import "format-icons";
+@import "content-pages";
+@import "responsive-tables";
 
 // overwrite parent theme styles
 @media (min-width: 768px) {
@@ -503,6 +505,10 @@ h6:hover .heading-permalink
   }
 }
 
+#holding_items .label {
+  white-space: normal;
+}
+
 #records-in-groups-container {
   margin-bottom: 1.4em;
 }
@@ -560,4 +566,8 @@ h6:hover .heading-permalink
 
 .record .media-left, .result .media-left, .record .media-right, .result .media-right {
   width: 25%;
+}
+
+#content {
+  margin-bottom: 20px;
 }

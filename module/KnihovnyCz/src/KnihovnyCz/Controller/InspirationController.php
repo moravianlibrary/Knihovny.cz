@@ -50,4 +50,32 @@ class InspirationController extends \VuFind\Controller\AbstractBase
             ->getFromConfig('content', 'Inspiration', 'content_block');
         return $this->createViewModel(compact('blocks'));
     }
+
+    /**
+     * Show action
+     *
+     * @return \Laminas\View\Model\ViewModel|\Laminas\Http\Response
+     */
+    public function homeLegacyAction()
+    {
+        return $this->redirect()->toRoute('inspiration');
+    }
+
+    /**
+     * Show action
+     *
+     * @return \Laminas\View\Model\ViewModel|\Laminas\Http\Response
+     */
+    public function showAction()
+    {
+        $list = $this->params()->fromRoute('list');
+        $lookfor = 'inspiration:' . $list;
+        $options = [
+            'query' => [
+                'lookfor'  => $lookfor,
+                'type' => 'AllFields',
+            ]
+        ];
+        return $this->redirect()->toRoute('search-results', [], $options);
+    }
 }
