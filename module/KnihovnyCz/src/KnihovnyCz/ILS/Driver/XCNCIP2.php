@@ -327,12 +327,13 @@ class XCNCIP2 extends \VuFind\ILS\Driver\XCNCIP2
         $status = $itemResponse->xpath(
             'ns1:LookupItemResponse/ns1:ItemOptionalFields/ns1:CirculationStatus'
         );
-        $status = (string)($status[0] ?? '');
+        $status = !empty($status) ? (string)$status[0] : '';
 
         $locations = $itemResponse->xpath(
             'ns1:LookupItemResponse/ns1:ItemOptionalFields/ns1:Location/' .
             'ns1:LocationName/ns1:LocationNameInstance'
         );
+        $locations = $locations ?: [];
         [$location, ] = $this->parseLocationInstance($locations);
 
         $itemCallNo = $itemResponse->xpath(
