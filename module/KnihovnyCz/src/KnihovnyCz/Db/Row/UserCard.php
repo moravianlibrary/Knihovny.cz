@@ -38,6 +38,6 @@ class UserCard extends \VuFind\Db\Row\UserCard
     public function getEppnDomain(): ?string
     {
         $eppnDomain = substr((string)strrchr((string)$this->eppn, "@"), 1);
-        return $eppnDomain ? $eppnDomain : null;
+        return $eppnDomain ?? null;
     }
 }

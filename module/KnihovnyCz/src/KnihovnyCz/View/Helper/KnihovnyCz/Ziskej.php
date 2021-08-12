@@ -42,34 +42,12 @@ class Ziskej extends AbstractHelper
 
     public function getStatusClass(string $status = null): string
     {
-        switch ($status) {
-            case 'created':
-                return 'warning';
-                break;
-            case 'paid':
-                return 'warning';
-                break;
-            case 'accepted':
-                return 'success';
-                break;
-            case 'prepared':
-                return 'success';
-                break;
-            case 'lent':
-                return 'success';
-                break;
-            case 'closed':
-                return 'default';
-                break;
-            case 'cancelled':
-                return 'default';
-                break;
-            case 'rejected':
-                return 'danger';
-                break;
-            default:
-                return 'default';
-                break;
-        }
+        return match ($status) {
+            'created', 'paid' => 'warning',
+            'accepted', 'prepared', 'lent' => 'success',
+            'rejected' => 'danger',
+            'closed', 'cancelled' => 'default',
+            default => 'default',
+        };
     }
 }

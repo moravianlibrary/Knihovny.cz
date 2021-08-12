@@ -149,17 +149,14 @@ abstract class Ziskej
 
     /**
      * Get current techlib front url
+     *
      * @return string|null
      */
     public function getCurrentZiskejTechlibFrontUrl(): ?string
     {
-        $array = $this->config->get('ZiskejTechlibFrontUrl')->toArray();
+        $modeUrls = $this->config->get('ZiskejTechlibFrontUrl')->toArray();
 
-        if (!isset($array[$this->getCurrentMode()])) {
-            return null;
-        }
-
-        return $array[$this->getCurrentMode()];
+        return $modeUrls[$this->getCurrentMode()] ?? null;
     }
 
 }
