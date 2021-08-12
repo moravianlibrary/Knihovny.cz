@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
 [ -n "$DEBUG" ] && set -x
+[ -n "$BUILD_DEBUG" ] && set -x
 set -e
 
 function print_usage {
@@ -59,7 +60,7 @@ https_port="443"
 image_name="knihovny_cz"
 version="latest"
 detached=false
-service=vufind
+service=vufind6
 container_name=""
 push_to_private_registry="false"
 # extract options and their arguments into variables.
@@ -183,6 +184,12 @@ export IMAGE_NAME="${image_name}"
 export IMAGE_VERSION="${version}"
 export CONTAINER_NAME="${container_name}"
 export PARAM_VUFIND_CONFIG_DIR=${PARAM_VUFIND_CONFIG_DIR:-knihovny.cz}
+
+# take parameters from Gitlab CI
+#if [ ! -z "${CI}" ]; then
+#  export GITLAB_DEPLOY_USER=${CI_DEPLOY_USER}
+#  export GITLAB_DEPLOY_PASSWORD=${CI_DEPLOY_PASSWORD}
+#fi
 
 cp "../composer.local.json" "./builds/knihovny-cz-base6/"
 

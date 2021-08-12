@@ -4,6 +4,12 @@
 
   $this->layout()->breadcrumbs = '<li class="active">Error</li>';
 ?>
+<?php if ($this->exception instanceof \VuFind\Exception\RecordMissing): ?>
+<h2><?=$this->translate('Record not found')?></h2>
+<div class="alert alert-warning">
+  <p><?=$this->translate('Requested record was not found');?></p>
+</div>
+<?php else: ?>
 <div class="alert alert-danger">
   <p><?=$this->transEsc('An error has occurred')?></p>
   <p><?=$this->transEsc($this->message)?></p>
@@ -47,3 +53,4 @@
     <pre><?=$this->escapeHtml(var_export($this->request->getParams(), true))?></pre>
   <?php endif; ?>
 <?php endif ?>
+<?php endif; ?>

@@ -1,6 +1,11 @@
 <?php
-  $formats = $this->driver->getFormats();
-  $format = end($formats);
-  $formatClass = $this->record($this->driver)->getFormatClass($format);
+  $formatClass = 'format-other';
+  if ($this->driver) {
+    $formats = $this->driver->getFormats();
+    $format = end($formats);
+    $formatClass = $this->record($this->driver)->getFormatClass($format);
+  } elseif ($this->format) {
+    $formatClass = 'format-' . preg_replace('/[^a-z]/', '', strtolower($this->format));
+  }
 ?>
 <i class="cover-icon <?=$formatClass?>"></i>

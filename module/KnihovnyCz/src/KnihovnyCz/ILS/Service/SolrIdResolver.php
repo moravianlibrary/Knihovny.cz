@@ -30,6 +30,7 @@ declare(strict_types=1);
  */
 namespace KnihovnyCz\ILS\Service;
 
+use VuFindSearch\Command\SearchCommand;
 use VuFindSearch\Service as SearchService;
 
 /**
@@ -136,9 +137,8 @@ class SolrIdResolver
             $query = new \VuFindSearch\Query\Query($queryField . ':' . $idForQuery);
             $fullQuery->addQuery($query);
         }
-        $searchResults = $this->searchService->search(
-            'Solr', $fullQuery, 0, sizeof($ids), $params
-        );
+        $command = new SearchCommand('Solr', $fullQuery, 0, sizeof($ids), $params);
+        $searchResults = $this->searchService->invoke($command)->getResult();
         foreach ($searchResults->getRecords() as $record) {
             $fields = $record->getRawData();
             $fieldVals = $fields[$queryField] ?? [];
