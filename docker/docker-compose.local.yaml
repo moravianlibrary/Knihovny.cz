@@ -1,6 +1,6 @@
 version: '2.2'
 services:
-    vufind:
+    vufind6:
         image: "localhost/${IMAGE_NAME:-knihovny-cz-local}"
         extends:
             file: docker-compose.yaml

@@ -30,6 +30,7 @@ namespace KnihovnyCz\AjaxHandler;
 
 use Laminas\Mvc\Controller\Plugin\Params;
 use VuFind\Session\Settings as SessionSettings;
+use VuFindSearch\Command\SearchCommand;
 use VuFindSearch\Service as SearchService;
 
 /**
@@ -90,7 +91,8 @@ class Edd extends \VuFind\AjaxHandler\AbstractBase
         $params = new \VuFindSearch\ParamBag(
             ['fq' => $fq, 'fl' => 'id, sigla_display, record_format', 'hl' => false ]
         );
-        $result = $this->searchService->search('Solr', $query, 0, 10, $params);
+        $command = new SearchCommand('Solr', $query, 0, 10, $params);
+        $result = $this->searchService->invoke($command)->getResult();
         $records = $result->getRecords();
         $results = [];
         foreach ($records as $record) {
