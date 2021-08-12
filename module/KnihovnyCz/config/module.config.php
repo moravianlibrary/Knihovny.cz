@@ -280,6 +280,13 @@ $config = [
     ],
 ];
 
+// Define record view routes -- route name => [controller, route]
+$recordRoutes = [
+    'search2record' => ['Search2Record', 'LibraryRecord'],
+    'search2collection' => ['Search2Collection', 'LibraryCollection'],
+    'search2collectionrecord' => ['Search2Record', 'LibraryRecord'],
+];
+
 // Key is URL, value is Controller/Action
 $staticRoutes = [
     'Libraries/Advanced' => 'Search2/Advanced',
@@ -290,6 +297,7 @@ $staticRoutes = [
 ];
 
 $routeGenerator = new \KnihovnyCz\Route\RouteGenerator();
+$routeGenerator->addRecordRoutes($config, $recordRoutes);
 $routeGenerator->addStaticRoutes($config, $staticRoutes);
 
 return $config;

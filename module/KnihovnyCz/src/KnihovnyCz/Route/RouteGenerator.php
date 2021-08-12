@@ -38,8 +38,73 @@ namespace KnihovnyCz\Route;
  * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://knihovny.cz Main Page
  */
-class RouteGenerator
+class RouteGenerator extends \VuFind\Route\RouteGenerator
 {
+    /**
+     * Add record route to the configuration.
+     *
+     * @param array  $config     Configuration array to update
+     * @param string $routeBase  Base name to use for routes
+     * @param string $controller Controller to point routes toward
+     * @param string $route      Route URL part
+     *
+     * @return void
+     */
+    protected function addRecordRouteKnihovnyCz(
+        array & $config, string $routeBase, string $controller, string $route
+    ): void {
+        // catch-all "tab" route:
+        $config['router']['routes'][$routeBase] = [
+            'type'    => 'Laminas\Router\Http\Segment',
+            'options' => [
+                'route'    => '/' . $route . '/[:id[/[:tab]]]',
+                'constraints' => [
+                    'controller' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                    'action'     => '[a-zA-Z][a-zA-Z0-9_-]*',
+                ],
+                'defaults' => [
+                    'controller' => $controller,
+                    'action'     => 'Home',
+                ]
+            ]
+        ];
+        // special non-tab actions that each need their own route:
+        foreach ($this->nonTabRecordActions as $action) {
+            $config['router']['routes'][$routeBase . '-' . strtolower($action)] = [
+                'type'    => 'Laminas\Router\Http\Segment',
+                'options' => [
+                    'route'    => '/' . $route . '/[:id]/' . $action,
+                    'constraints' => [
+                        'controller' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                        'action'     => '[a-zA-Z][a-zA-Z0-9_-]*',
+                    ],
+                    'defaults' => [
+                        'controller' => $controller,
+                        'action'     => $action,
+                    ]
+                ]
+            ];
+        }
+    }
+
+    /**
+     * Add record routes to the configuration.
+     *
+     * @param array $config Configuration array to update
+     * @param array $routes Associative array (route base name => controller) of
+     * routes to add.
+     *
+     * @return void
+     */
+    public function addRecordRoutes(& $config, $routes)
+    {
+        foreach ($routes as $routeBase => $routeData) {
+            $this->addRecordRouteKnihovnyCz(
+                $config, $routeBase, $routeData[0], $routeData[1]
+            );
+        }
+    }
+
     /**
      * Add a simple static route to the configuration.
      *
@@ -49,8 +114,9 @@ class RouteGenerator
      *
      * @return void
      */
-    public function addStaticRoute(& $config, $route, $url)
-    {
+    protected function addStaticRouteKnihovnyCz(
+        array & $config, string $route, string $url
+    ): void {
         [$controller, $action] = explode('/', $route);
         $routeName = str_replace('/', '-', strtolower($route));
         $config['router']['routes'][$routeName] = [
@@ -76,7 +142,7 @@ class RouteGenerator
     public function addStaticRoutes(& $config, $routes)
     {
         foreach ($routes as $name => $route) {
-            $this->addStaticRoute($config, $route, $name);
+            $this->addStaticRouteKnihovnyCz($config, $route, $name);
         }
     }
 }

@@ -35,7 +35,7 @@ function initialize(libraries) {
     let contentString = '<div id="content" class="marker-info">' +
       '<div class="marker-title">' + library.title + '</div>' +
       '<div class="marker-subtitle">' + library.address[0] + '</div>' +
-      '<div class="marker-link"><strong><a href="/Search2Record/' + library.id +
+      '<div class="marker-link"><strong><a href="/LibraryRecord/' + library.id +
       '">' + VuFind.translate('Library detail') + '</a></strong>' +
     '</div>';
     info[i] = new google.maps.InfoWindow({ content: contentString });
