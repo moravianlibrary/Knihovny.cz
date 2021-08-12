@@ -27,6 +27,8 @@
  */
 namespace KnihovnyCz\RecordDriver;
 
+use VuFindSearch\Command\SearchCommand;
+
 /**
  * Knihovny.cz solr authority record driver
  *
@@ -138,9 +140,8 @@ class SolrAuthority extends \KnihovnyCz\RecordDriver\SolrMarc
         $safeValue = addcslashes($value, '"');
         $query = new \VuFindSearch\Query\Query($field . ':"' . $safeValue . '"');
         $params = new \VuFindSearch\ParamBag(['hl' => ['false']]);
-        return $this->searchService
-            ->search($this->sourceIdentifier, $query, 0, 0, $params)
-            ->getTotal();
+        $command = new SearchCommand($this->sourceIdentifier, $query, 0, 0, $params);
+        return $this->searchService->invoke($command)->getResult()->getTotal();
     }
 
     /**
