@@ -89,7 +89,8 @@ class LibrariesApiLookfor
                 return $this->getLookfor($query);
             }, $queryGroup->getQueries()
         );
-        return '(' . implode(" $operator ", $queries) . ')';
+        $queryPrefix = $queryGroup->isNegated() ? 'NOT' : '';
+        return $queryPrefix . '(' . implode(" $operator ", $queries) . ')';
     }
 
     /**
@@ -105,6 +106,7 @@ class LibrariesApiLookfor
             'Name' => ['name_search_txt', 'name_alt_search_txt_mv'],
             'Town' => ['town_search_txt', 'address_search_txt_mv'],
             'Sigla' => ['sigla_search_txt'],
+            'People' => ['responsibility_search_txt_mv'],
         ];
         $queryString = $string = $query->getString() ?? '';
         $fieldMapping = $queryFieldsMapping[$query->getHandler()] ?? [];
