@@ -60,9 +60,9 @@ class GetObalkyKnihCoverWithoutSolr extends AbstractBase
     /**
      * PHP renderer
      *
-     * @var PhpRenderer
+     * @var ?PhpRenderer
      */
-    protected PhpRenderer $renderer;
+    protected ?PhpRenderer $renderer;
 
     /**
      * If true we will render a fallback html template in case no image could be
@@ -79,11 +79,11 @@ class GetObalkyKnihCoverWithoutSolr extends AbstractBase
      * @param ObalkyKnih       $coverHandler            Cover handler (plugin)
      * @param PhpRenderer|null $renderer                PHP renderer (only required
      * if $userCoverFallbacksOnFail is set to true)
-     * @param false            $useCoverFallbacksOnFail If true we will render a
+     * @param bool             $useCoverFallbacksOnFail If true we will render a
      * fallback html template in case no image could be loaded
      */
     public function __construct(SessionSettings $ss, ObalkyKnih $coverHandler,
-        ?PhpRenderer $renderer = null, $useCoverFallbacksOnFail = false
+        ?PhpRenderer $renderer = null, bool $useCoverFallbacksOnFail = false
     ) {
         $this->sessionSettings = $ss;
         $this->coverHandler = $coverHandler;
