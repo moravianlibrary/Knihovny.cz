@@ -48,12 +48,6 @@ use Mzk\ZiskejApi\RequestModel\Ticket;
  */
 class RecordController extends \VuFind\Controller\RecordController
 {
-
-    public function __construct(ServiceLocatorInterface $sm, Config $config)
-    {
-        parent::__construct($sm, $config);
-    }
-
     /**
      * Dispatch a request
      *
