@@ -22,7 +22,6 @@ class MyResearchZiskejController extends AbstractBase
         $view = $this->createViewModel();
 
         try {
-            /* user */
             /** @var \KnihovnyCz\Db\Row\User $user */
             $user = $this->getUser();
             if (!$user) {
@@ -33,7 +32,6 @@ class MyResearchZiskejController extends AbstractBase
             }
             $view->setVariable('user', $user);
 
-            /* user card */
             $userCard = $user->getCardByName($user->cat_username);
             if (!$userCard) {
                 return $view;
@@ -43,7 +41,6 @@ class MyResearchZiskejController extends AbstractBase
                 return $view;
             }
 
-            /* ziskej mode enabled */
             /** @var \KnihovnyCz\Ziskej\ZiskejMvs $cpkZiskejMvs */
             $cpkZiskejMvs = $this->serviceLocator->get(ZiskejMvs::class);
             $isZiskejModeEnabled = $cpkZiskejMvs->isEnabled();
@@ -52,7 +49,6 @@ class MyResearchZiskejController extends AbstractBase
                 return $view;
             }
 
-            /* ziskej api */
             /** @var \Mzk\ZiskejApi\Api $ziskejApi */
             $ziskejApi = $this->serviceLocator->get('Mzk\ZiskejApi\Api');
 
@@ -63,7 +59,6 @@ class MyResearchZiskejController extends AbstractBase
                 return $view;
             }
 
-            /* reader */
             $reader = $ziskejApi->getReader($userCard->eppn);
             if (!$reader || !$reader->isActive()) {
                 return $view;
