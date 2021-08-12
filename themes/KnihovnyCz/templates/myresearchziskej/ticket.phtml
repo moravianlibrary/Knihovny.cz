@@ -22,7 +22,7 @@ $this->headTitle($this->translate('Ziskej::header_order_ziskej_num') . ' ' . $ti
 
       <div class="pull-left" style="margin-top: 23px; padding-left: 1em;">
         <span class="label label-<?//= $this->Order()->getStatusClass($ticket->getStatus()) ?>" style="font-size: 18px;">
-          <?=$this->translate('Ziskej::ziskej_order_status_' . $ticket->getStatus()) ?>
+          <?=$this->translate('Ziskej::order_status_' . $ticket->getStatus()) ?>
         </span>
       </div>
 
@@ -53,7 +53,7 @@ $this->headTitle($this->translate('Ziskej::header_order_ziskej_num') . ' ' . $ti
           <?php else: ?>
             <span class="text-icon text-muted"><i class="fa fa-times"></i></span>
           <?php endif; ?>
-          <?=$this->transEsc("Ziskej::ziskej_order_status_created") ?>
+          <?=$this->transEsc("Ziskej::order_status_created") ?>
           <?php if (isset($historyArray['created'])): ?>
             <small><?=$historyArray['created'] ?></small>
           <?php endif; ?>
@@ -64,7 +64,7 @@ $this->headTitle($this->translate('Ziskej::header_order_ziskej_num') . ' ' . $ti
           <?php else: ?>
             <span class="text-icon text-muted"><i class="fa fa-times"></i></span>
           <?php endif; ?>
-          <?=$this->transEsc("Ziskej::ziskej_order_status_paid") ?>
+          <?=$this->transEsc("Ziskej::order_status_paid") ?>
           <?php if (isset($historyArray['paid'])): ?>
             <small><?=$historyArray['paid'] ?></small>
           <?php endif; ?>
@@ -76,7 +76,7 @@ $this->headTitle($this->translate('Ziskej::header_order_ziskej_num') . ' ' . $ti
             <?php else: ?>
               <span class="text-icon text-muted"><i class="fa fa-times"></i></span>
             <?php endif; ?>
-            <?=$this->transEsc("Ziskej::ziskej_order_status_accepted") ?>
+            <?=$this->transEsc("Ziskej::order_status_accepted") ?>
             <?php if (isset($historyArray['accepted'])): ?>
               <small><?=$historyArray['accepted'] ?></small>
             <?php endif; ?>
@@ -87,7 +87,7 @@ $this->headTitle($this->translate('Ziskej::header_order_ziskej_num') . ' ' . $ti
             <?php else: ?>
               <span class="text-icon text-muted"><i class="fa fa-times"></i></span>
             <?php endif; ?>
-            <?=$this->transEsc("Ziskej::ziskej_order_status_prepared") ?>
+            <?=$this->transEsc("Ziskej::order_status_prepared") ?>
             <?php if (isset($historyArray['prepared'])): ?>
               <small><?=$historyArray['prepared'] ?></small>
             <?php endif; ?>
@@ -98,7 +98,7 @@ $this->headTitle($this->translate('Ziskej::header_order_ziskej_num') . ' ' . $ti
             <?php else: ?>
               <span class="text-icon text-muted"><i class="fa fa-times"></i></span>
             <?php endif; ?>
-            <?=$this->transEsc("Ziskej::ziskej_order_status_lent") ?>
+            <?=$this->transEsc("Ziskej::order_status_lent") ?>
             <?php if (isset($historyArray['lent'])): ?>
               <small><?=$historyArray['lent'] ?></small>
             <?php endif; ?>
@@ -109,7 +109,7 @@ $this->headTitle($this->translate('Ziskej::header_order_ziskej_num') . ' ' . $ti
             <?php else: ?>
               <span class="text-icon text-muted"><i class="fa fa-times"></i></span>
             <?php endif; ?>
-            <?=$this->transEsc("Ziskej::ziskej_order_status_closed") ?>
+            <?=$this->transEsc("Ziskej::order_status_closed") ?>
             <?php if (isset($historyArray['closed'])): ?>
               <small><?=$historyArray['closed'] ?></small>
             <?php endif; ?>
@@ -122,7 +122,7 @@ $this->headTitle($this->translate('Ziskej::header_order_ziskej_num') . ' ' . $ti
             <?php else: ?>
               <span class="text-icon text-muted"><i class="fa fa-times"></i></span>
             <?php endif; ?>
-            <?=$this->transEsc("Ziskej::ziskej_order_status_cancelled") ?>
+            <?=$this->transEsc("Ziskej::order_status_cancelled") ?>
             <?php if (isset($historyArray['cancelled'])): ?>
               <small><?=$historyArray['cancelled'] ?></small>
             <?php endif; ?>
@@ -135,7 +135,7 @@ $this->headTitle($this->translate('Ziskej::header_order_ziskej_num') . ' ' . $ti
             <?php else: ?>
               <span class="text-icon text-muted"><i class="fa fa-times"></i></span>
             <?php endif; ?>
-            <?=$this->transEsc("Ziskej::ziskej_order_status_rejected") ?>
+            <?=$this->transEsc("Ziskej::order_status_rejected") ?>
             <?php if (isset($historyArray['rejected'])): ?>
               <small><?=$historyArray['rejected'] ?></small>
             <?php endif; ?>
@@ -193,18 +193,18 @@ $this->headTitle($this->translate('Ziskej::header_order_ziskej_num') . ' ' . $ti
         <?php endif; ?>
 
         <?php if (!empty($ticket->getReturnAt())): ?>
-          <dt><?=$this->transEsc('Ziskej::ziskej_label_date_return') ?>:</dt>
+          <dt><?=$this->transEsc('Ziskej::label_date_return') ?>:</dt>
           <dd><?=$this->dateTime()->convertToDisplayDate('U', $ticket->getReturnAt()->getTimestamp()) ?></dd>
         <?php endif; ?>
 
         <? /*
-        <dt><?=$this->transEsc('ziskej_label_order_status') ?>:</dt>
+        <dt><?=$this->transEsc('label_order_status') ?>:</dt>
         <dd>
           <span class="label label-<?= \Mzk\ZiskejApi\Object\TicketStatuses::getStatus($ticket->getStatus()) ?>">
-            <?=$this->translate('Ziskej::ziskej_order_status_' . $ticket->getStatus()) ?>
+            <?=$this->translate('Ziskej::order_status_' . $ticket->getStatus()) ?>
           </span>
           <?php if (!$ticket->isOpen()): ?>
-            (<?=$this->transEsc('ziskej_order_status_not_open') ?>)
+            (<?=$this->transEsc('order_status_not_open') ?>)
           <?php endif; ?>
         </dd>
         */ ?>

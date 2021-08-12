@@ -102,7 +102,7 @@ class ZiskejAdminController extends AbstractBase
             $view->setVariable('data', $data);
         } catch (\Exception $ex) {
             $this->flashMessenger()->addMessage($ex->getMessage(), 'warning');
-            //$this->flashMessenger()->addMessage('ziskej_warning_api_disconnected', 'warning');    //@todo zapnout na produkci
+            //$this->flashMessenger()->addMessage('warning_api_disconnected', 'warning');    //@todo zapnout na produkci
         }
 
         return $view;

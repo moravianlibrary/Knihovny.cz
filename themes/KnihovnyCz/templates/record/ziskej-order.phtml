@@ -16,7 +16,7 @@ $ziskejReader = $this->ziskejReader;
 
 <?php if ($user): ?>
   <div>
-    <h2><?=$this->transEsc("Ziskej::ziskej_order_title") ?></h2>
+    <h2><?=$this->transEsc("Ziskej::order_title") ?></h2>
     <form class="form" data-lightbox-ignore action="<?=$this->url('ziskej-order-post', ['id' => $recordDriver->getUniqueId()]) ?>" method="post">
         <input type="hidden" name="source_id" value="<?=$this->serverName ?>">
         <input type="hidden" name="eppn" id="eppn" value="<?=$userCard->eppn ?>">
@@ -27,7 +27,7 @@ $ziskejReader = $this->ziskejReader;
         <?php endforeach; ?>
         <div class="row">
           <div class="col-xs-12">
-            <h3><?=$this->transEsc("Ziskej::ziskej_order_section_document_title") ?></h3>
+            <h3><?=$this->transEsc("Ziskej::order_section_document_title") ?></h3>
             <p>
               <strong><?=$this->transEsc("Ziskej::label_fullname") ?>:</strong>
               <br>
@@ -57,10 +57,10 @@ $ziskejReader = $this->ziskejReader;
               </label>
             </div>
             <p class="text-center">
-              <?=$this->translate('Ziskej::ziskej_text_info_conditions') ?>
+              <?=$this->translate('Ziskej::text_info_conditions') ?>
             </p>
             <div class="text-center">
-              <p><strong><?=$this->translate("Ziskej::ziskej_price") ?></strong></p>
+              <p><strong><?=$this->translate("Ziskej::service_price") ?></strong></p>
               <input id="submit" type="submit" name="submit" class="btn btn-primary" value="<?=$this->transEsc("Ziskej::btn_order") ?>">
             </div>
           </div>
