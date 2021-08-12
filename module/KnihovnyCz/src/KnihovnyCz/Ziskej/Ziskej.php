@@ -62,8 +62,8 @@ abstract class Ziskej
      */
     public function getUrls(): array
     {
-        return !empty($this->configZiskej['modes'])
-            ? $this->configZiskej['modes']->toArray()
+        return !empty($this->configZiskej['mode_urls'])
+            ? $this->configZiskej['mode_urls']->toArray()
             : [];
     }
 

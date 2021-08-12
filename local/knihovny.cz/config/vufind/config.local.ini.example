@@ -68,11 +68,14 @@ type = File
 relative_path = ../../../base/config/vufind/config.ini
 
 [Ziskej]
-techlib_url =
-default_mode_mvs =
-default_mode_edd =
-modes["disabled"] =
-modes["prod"] =
-modes["test"] =
-modes["demo"] =
-modes["dev"] =
+techlib_url = "https://ziskej.techlib.cz"
+default_mode_mvs = "test"
+default_mode_edd = "disabled"
+mode_urls["disabled"] = ""
+mode_urls["prod"] = "https://ziskej.techlib.cz:9080/api/v1"
+mode_urls["test"] = "https://ziskej-test.techlib.cz:9080/api/v1"
+mode_urls["demo"] = "https://ziskej-demo.techlib.cz:9080/api/v1"
+mode_urls["dev"] = "https://ziskej-dev.techlib.cz:9080/api/v1"
+
+[Certs]
+ziskej = "/var/www/cert-cpk-ziskej-api.key"
