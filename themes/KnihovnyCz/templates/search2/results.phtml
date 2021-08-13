@@ -1,5 +1,12 @@
 <?php
   $resultsCount = $this->results->getResultTotal();
+  $filterList = $this->results->getParams()->getFilterList();
+  $filters = [];
+  foreach($filterList as $filterSetting) {
+    foreach($filterSetting as $filter) {
+      $filters[] = $filter['field'] . ':"' . $filter['value'] . '"';
+    }
+  }
   if ($resultsCount != 0) {
     $apiKey = $this->config()->get('config')->GoogleMaps->apikey;
     $this->headScript()->appendFile('library-map.js');
@@ -7,11 +14,13 @@
     $this->headScript()->appendFile('https://maps.googleapis.com/maps/api/js?key=' . $this->escapeUrl($apiKey) . '&amp;callback=initMap');
 
     $query = $this->results->getParams()->getQuery();
+    $lookfor = $this->librariesApiLookfor($query);
+    $handler = ($query instanceof VuFindSearch\Query\Query) ? $query->getHandler() : 'AllLibraries';
     $urlParams = [
-      'type' => $query->getHandler(),
-      'lookfor' => $query->getString(),
+      'type' => $handler,
+      'lookfor' => $lookfor,
       'field' => ['id', 'title', 'address', 'coordinates'],
-      'filter' => $this->results->getParams()->getFilterSettings(),
+      'filter' => $filters,
       'limit' => 1000,
     ];
     $url = '/api/v1/index2/search?' . http_build_query($urlParams);
