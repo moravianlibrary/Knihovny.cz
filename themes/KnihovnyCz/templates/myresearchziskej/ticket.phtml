@@ -1,10 +1,14 @@
-<?php $this->layout()->searchbox = false; ?>
 <?php
-/** @var \Mzk\ZiskejApi\ResponseModel\Ticket $ticket */
-$ticket = $this->ticket;
+$this->layout()->searchbox = false;
 
 /** @var \VuFind\Db\Row\UserCard $userCard */
 $userCard = $this->userCard;
+
+/** @var \Mzk\ZiskejApi\ResponseModel\Ticket $ticket */
+$ticket = $this->ticket;
+
+/** @var \Mzk\ZiskejApi\ResponseModel\MessageCollection $messages */
+$messages = $this->messages;
 ?>
 <?php
 // Set up page title:
@@ -21,7 +25,7 @@ $this->headTitle($this->translate('Ziskej::header_order_ziskej_num') . ' ' . $ti
       </h2>
 
       <div class="pull-left" style="margin-top: 23px; padding-left: 1em;">
-        <span class="label label-<?//= $this->Order()->getStatusClass($ticket->getStatus()) ?>" style="font-size: 18px;">
+        <span class="label label-<?php //= $this->Order()->getStatusClass($ticket->getStatus()) ?>" style="font-size: 18px;">
           <?=$this->translate('Ziskej::order_status_' . $ticket->getStatus()) ?>
         </span>
       </div>
@@ -30,11 +34,10 @@ $this->headTitle($this->translate('Ziskej::header_order_ziskej_num') . ' ' . $ti
 
     <?=$this->flashmessages() ?>
 
-    <?
+    <?php
     $status = $ticket->getStatus();
     $histories = $ticket->getStatusHistory();
     $historyArray = [];
-    /** @var \Mzk\ZiskejApi\ResponseModel\Status $history */
     foreach ($histories as $history) {
       $historyArray[$history->getName()] = $this->dateTime()->convertToDisplayDate('U', $history->getCreatedAt()->getTimestamp());
     }
@@ -197,7 +200,7 @@ $this->headTitle($this->translate('Ziskej::header_order_ziskej_num') . ' ' . $ti
           <dd><?=$this->dateTime()->convertToDisplayDate('U', $ticket->getReturnAt()->getTimestamp()) ?></dd>
         <?php endif; ?>
 
-        <? /*
+        <?php /*
         <dt><?=$this->transEsc('label_order_status') ?>:</dt>
         <dd>
           <span class="label label-<?= \Mzk\ZiskejApi\Object\TicketStatuses::getStatus($ticket->getStatus()) ?>">
@@ -227,10 +230,9 @@ $this->headTitle($this->translate('Ziskej::header_order_ziskej_num') . ' ' . $ti
         <?php endif; ?>
       </h3>
       <div class="well border">
-        <?php if (is_countable($this->messages) && count($this->messages)): ?>
-          <?
-          /** @var \Mzk\ZiskejApi\ResponseModel\Message $message */
-          foreach ($this->messages as $message): ?>
+        <?php if (count($messages->getAll())): ?>
+          <?php
+          foreach ($messages->getAll() as $message): ?>
             <ul class="media-list">
               <li class="media">
                 <div class="media-body">
