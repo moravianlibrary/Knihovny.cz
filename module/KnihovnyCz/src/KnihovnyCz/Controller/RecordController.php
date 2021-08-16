@@ -29,8 +29,6 @@ declare(strict_types=1);
  */
 namespace KnihovnyCz\Controller;
 
-use Laminas\Config\Config;
-use Laminas\ServiceManager\ServiceLocatorInterface;
 use Laminas\Stdlib\RequestInterface as Request;
 use Laminas\Stdlib\ResponseInterface as Response;
 use Laminas\View\Model\ViewModel;
@@ -91,9 +89,6 @@ class RecordController extends \VuFind\Controller\RecordController
         $ziskejApi = $this->serviceLocator->get('Mzk\ZiskejApi\Api');
 
         $eppnDomain = $this->params()->fromRoute('eppnDomain');
-        if (!$eppnDomain) {
-            exit('no eppn domain'); //@todo
-        }
 
         $userCard = $user->getCardByEppnDomain($eppnDomain);
         if (!$userCard) {
@@ -119,15 +114,15 @@ class RecordController extends \VuFind\Controller\RecordController
     /**
      * Ziskej order sended
      *
-     * @return \Laminas\Http\Response|mixed
+     * @return \Laminas\Stdlib\ResponseInterface
      *
+     * @throws \Http\Client\Exception
      * @throws \Mzk\ZiskejApi\Exception\ApiException
      * @throws \Mzk\ZiskejApi\Exception\ApiInputException
      * @throws \Mzk\ZiskejApi\Exception\ApiResponseException
      * @throws \VuFind\Exception\LibraryCard
-     * @throws \Http\Client\Exception
      */
-    public function ziskejOrderPostAction()
+    public function ziskejOrderPostAction(): Response
     {
         //@todo try/catch
 

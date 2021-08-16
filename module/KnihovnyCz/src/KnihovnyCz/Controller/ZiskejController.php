@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace KnihovnyCz\Controller;
 
-use KnihovnyCz\Controller\Exception\TicketNotFoundException;
 use VuFind\Controller\AbstractBase;
 use VuFind\Exception\LibraryCard;
 
@@ -13,25 +12,18 @@ class ZiskejController extends AbstractBase
     /**
      * Ziskej order finished page
      *
-     * @return \Laminas\View\Model\ViewModel|mixed|void
+     * @return \Laminas\View\Model\ViewModel|mixed
      *
      * @throws \Http\Client\Exception
-     * @throws \KnihovnyCz\Controller\Exception\TicketNotFoundException
      * @throws \Mzk\ZiskejApi\Exception\ApiResponseException
      * @throws \VuFind\Exception\LibraryCard
      */
-    public function finishedAction(){
+    public function finishedAction()
+    {
         //@todo try/catch
 
         $eppnDomain = $this->params()->fromRoute('eppnDomain');
-        if (!$eppnDomain) {
-            throw new TicketNotFoundException('The requested order was not found');
-        }
-
         $ticketId = $this->params()->fromRoute('ticketId');
-        if (!$ticketId) {
-            throw new TicketNotFoundException('The requested order was not found');
-        }
 
         /** @var \KnihovnyCz\Db\Row\User $user */
         $user = $this->getUser();

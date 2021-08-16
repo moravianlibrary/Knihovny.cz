@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace KnihovnyCz\Controller;
 
-use KnihovnyCz\Controller\Exception\TicketNotFoundException;
 use KnihovnyCz\RecordDriver\SolrLocal;
 use KnihovnyCz\Ziskej\ZiskejMvs;
 use Laminas\Http\Response;
@@ -94,20 +93,13 @@ class MyResearchZiskejController extends AbstractBase
      * @return \Laminas\View\Model\ViewModel
      *
      * @throws \Http\Client\Exception
-     * @throws \KnihovnyCz\Controller\Exception\TicketNotFoundException
      * @throws \Mzk\ZiskejApi\Exception\ApiResponseException
+     * @throws \VuFind\Exception\LibraryCard
      */
     public function ticketAction(): ViewModel
     {
         $eppnDomain = $this->params()->fromRoute('eppnDomain');
-        if (!$eppnDomain) {
-            throw new TicketNotFoundException('The requested order was not found 1');
-        }
-
         $ticketId = $this->params()->fromRoute('ticketId');
-        if (!$ticketId) {
-            throw new TicketNotFoundException('The requested order was not found 2');
-        }
 
         $user = $this->getAuthManager()->isLoggedIn();
         if (!$user) {
@@ -140,20 +132,13 @@ class MyResearchZiskejController extends AbstractBase
      * @return \Laminas\Http\Response
      *
      * @throws \Http\Client\Exception
-     * @throws \KnihovnyCz\Controller\Exception\TicketNotFoundException
      * @throws \Mzk\ZiskejApi\Exception\ApiResponseException
+     * @throws \VuFind\Exception\LibraryCard
      */
     public function ticketCancelAction(): Response
     {
         $eppnDomain = $this->params()->fromRoute('eppnDomain');
-        if (!$eppnDomain) {
-            throw new TicketNotFoundException('The requested order was not found');
-        }
-
         $ticketId = $this->params()->fromRoute('ticketId');
-        if (!$ticketId) {
-            throw new TicketNotFoundException('The requested order was not found');
-        }
 
         $user = $this->getAuthManager()->isLoggedIn();
         if (!$user) {
@@ -186,21 +171,13 @@ class MyResearchZiskejController extends AbstractBase
      * @return \Laminas\Http\Response
      *
      * @throws \Http\Client\Exception
-     * @throws \KnihovnyCz\Controller\Exception\TicketNotFoundException
      * @throws \Mzk\ZiskejApi\Exception\ApiResponseException
      * @throws \VuFind\Exception\LibraryCard
      */
     public function ticketMessageAction(): Response
     {
         $eppnDomain = $this->params()->fromRoute('eppnDomain');
-        if (!$eppnDomain) {
-            throw new TicketNotFoundException('The requested order was not found');
-        }
-
         $ticketId = $this->params()->fromRoute('ticketId');
-        if (!$ticketId) {
-            throw new TicketNotFoundException('The requested order was not found');
-        }
 
         if (!$this->getRequest()->isPost()) {
             return $this->redirect()->toRoute('myresearch-ziskej-ticket', [

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace KnihovnyCz\Controller;
 
-use KnihovnyCz\Controller\Exception\TicketNotFoundException;
 use KnihovnyCz\Ziskej\ZiskejMvs;
 use KnihovnyCz\Ziskej\ZiskejEdd;
 use VuFind\Controller\AbstractBase;
@@ -14,11 +13,12 @@ class ZiskejAdminController extends AbstractBase
 
     /**
      * @return \Laminas\Http\Response|\Laminas\View\Model\ViewModel
+     *
      * @throws \Http\Client\Exception
+     * @throws \VuFind\Exception\LibraryCard
      */
     public function homeAction()
     {
-        /** @var \Laminas\View\Model\ViewModel $view */
         $view = $this->createViewModel();
 
         /** @var \KnihovnyCz\Ziskej\ZiskejMvs $cpkZiskejMvs */
