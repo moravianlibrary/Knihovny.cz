@@ -9,6 +9,9 @@ $ticket = $this->ticket;
 
 /** @var \Mzk\ZiskejApi\ResponseModel\MessageCollection $messages */
 $messages = $this->messages;
+
+/** @var \KnihovnyCz\View\Helper\KnihovnyCz\Ziskej $viewHelperZiskej */
+$viewHelperZiskej = $this->Ziskej();
 ?>
 <?php
 // Set up page title:
@@ -24,8 +27,8 @@ $this->headTitle($this->translate('Ziskej::header_order_ziskej_num') . ' ' . $ti
         <?=$this->transEsc('Ziskej::header_order_ziskej_num') . ' ' . $ticket->getHid() ?>
       </h2>
 
-      <div class="pull-left" style="margin-top: 23px; padding-left: 1em;">
-        <span class="label label-<?php //= $this->Order()->getStatusClass($ticket->getStatus()) ?>" style="font-size: 18px;">
+      <div class="pull-left h2-label">
+        <span class="label label-<?=$viewHelperZiskej->getStatusClass($ticket->getStatus()) ?>">
           <?=$this->translate('Ziskej::order_status_' . $ticket->getStatus()) ?>
         </span>
       </div>
@@ -153,7 +156,7 @@ $this->headTitle($this->translate('Ziskej::header_order_ziskej_num') . ' ' . $ti
       </div>
     <?php endif; ?>
 
-    <div class="text-center well border" style="margin-bottom: 1em;">
+    <div class="text-center well border mb-1">
       <?php if (in_array($ticket->getStatus(), ['created'])): ?>
         <a class="btn btn-primary" href="<?=$ticket->getPaymentUrl() ?>?lang=<?=$this->layout()->userLang ?>" title="<?=$this->transEsc("Ziskej::btn_order_pay_title") ?>">
           <i class="fa fa-shopping-cart"></i> <?=$this->transEsc("Ziskej::btn_order_pay") ?>
