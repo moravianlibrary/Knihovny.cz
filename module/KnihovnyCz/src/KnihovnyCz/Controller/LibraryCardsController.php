@@ -42,6 +42,24 @@ use VuFind\Exception\LibraryCard as LibraryCardException;
  */
 class LibraryCardsController extends LibraryCardsControllerBase
 {
+
+    /**
+     * Creates a confirmation box to delete or not delete the current list
+     *
+     * @return mixed
+     */
+    public function deleteCardAction()
+    {
+        try {
+            parent::deleteCardAction();
+        } catch (\Exception $ex) {
+            // Display error message instead of error page
+            $this->flashMessenger()->addMessage($ex->getMessage(), 'error');
+            // Redirect to MyResearch library cards
+            return $this->redirect()->toRoute('librarycards-home');
+        }
+    }
+
     /**
      * Process the "edit library card" submission. Only update card name.
      *
