@@ -20,7 +20,7 @@ $this->layout()->searchbox = false;
         <select name="ziskejMvsMode" class="form-control" id="selectZiskejMvs">
           <?php foreach ($this->Ziskej()->getModes() as $mode): ?>
             <option value="<?=$this->escapeHtmlAttr($mode) ?>" <?php if ($mode == $this->Ziskej()->getCurrentMode()): ?>selected="selected"<?php endif; ?>>
-              <?=$this->translate(sprintf('mode_%s', $mode)) ?>
+              <?=$this->translate(sprintf('Ziskej::mode_%s', $mode)) ?>
             </option>
           <?php endforeach; ?>
         </select>
@@ -30,7 +30,7 @@ $this->layout()->searchbox = false;
         <select name="ziskejEddMode" class="form-control" id="selectZiskejEdd">
           <?php foreach ($this->ZiskejEdd()->getModes() as $mode): ?>
             <option value="<?=$this->escapeHtmlAttr($mode) ?>" <?php if ($mode == $this->ZiskejEdd()->getCurrentMode()): ?>selected="selected"<?php endif; ?>>
-              <?= $this->translate(sprintf('mode_%s', $mode)) ?>
+              <?= $this->translate(sprintf('Ziskej::mode_%s', $mode)) ?>
             </option>
           <?php endforeach; ?>
         </select>
