@@ -36,6 +36,7 @@ use Laminas\Stdlib\ResponseInterface as Response;
 use Laminas\View\Model\ViewModel;
 use Mzk\ZiskejApi\RequestModel\Reader;
 use Mzk\ZiskejApi\RequestModel\Ticket;
+use VuFind\Exception\LibraryCard;
 
 /**
  * Class RecordController
@@ -96,7 +97,7 @@ class RecordController extends \VuFind\Controller\RecordController
 
         $userCard = $user->getCardByEppnDomain($eppnDomain);
         if (!$userCard) {
-            exit('no user card');   //@todo if no userCard
+            throw new LibraryCard('Library Card Not Found');
         }
 
         $ziskejReader = $ziskejApi->getReader($userCard->eppn);

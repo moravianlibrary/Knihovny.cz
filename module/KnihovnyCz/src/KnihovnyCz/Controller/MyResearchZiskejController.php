@@ -5,14 +5,13 @@ declare(strict_types=1);
 namespace KnihovnyCz\Controller;
 
 use KnihovnyCz\Controller\Exception\TicketNotFoundException;
-use KnihovnyCz\Db\Row\UserCard;
 use KnihovnyCz\RecordDriver\SolrLocal;
 use KnihovnyCz\Ziskej\ZiskejMvs;
 use Laminas\Http\Response;
 use Laminas\View\Model\ViewModel;
 use Mzk\ZiskejApi\RequestModel\Message;
 use VuFind\Controller\AbstractBase;
-use KnihovnyCz\Db\Row\User;
+use VuFind\Exception\LibraryCard;
 use VuFind\Log\LoggerAwareTrait;
 
 class MyResearchZiskejController extends AbstractBase
@@ -102,12 +101,12 @@ class MyResearchZiskejController extends AbstractBase
     {
         $eppnDomain = $this->params()->fromRoute('eppnDomain');
         if (!$eppnDomain) {
-            throw new TicketNotFoundException('The requested order was not found');
+            throw new TicketNotFoundException('The requested order was not found 1');
         }
 
         $ticketId = $this->params()->fromRoute('ticketId');
         if (!$ticketId) {
-            throw new TicketNotFoundException('The requested order was not found');
+            throw new TicketNotFoundException('The requested order was not found 2');
         }
 
         $user = $this->getAuthManager()->isLoggedIn();
@@ -118,7 +117,7 @@ class MyResearchZiskejController extends AbstractBase
 
         $userCard = $user->getCardByEppnDomain($eppnDomain);
         if (!$userCard || !$userCard->eppn) {
-            throw new TicketNotFoundException('The requested order was not found');
+            throw new LibraryCard('Library Card Not Found');
         }
 
         /** @var \Mzk\ZiskejApi\Api $ziskejApi */
@@ -136,6 +135,8 @@ class MyResearchZiskejController extends AbstractBase
     }
 
     /**
+     * Cancel Ziskej ticket
+     *
      * @return \Laminas\Http\Response
      *
      * @throws \Http\Client\Exception
@@ -162,7 +163,7 @@ class MyResearchZiskejController extends AbstractBase
 
         $userCard = $user->getCardByEppnDomain($eppnDomain);
         if (!$userCard || !$userCard->eppn) {
-            throw new TicketNotFoundException('The requested order was not found');
+            throw new LibraryCard('Library Card Not Found');
         }
 
         /** @var \Mzk\ZiskejApi\Api $ziskejApi */
@@ -179,10 +180,18 @@ class MyResearchZiskejController extends AbstractBase
         return $this->redirect()->toRoute('myresearch-ziskej-ticket', ['eppnDomain' => $eppnDomain, 'ticketId' => $ticketId]);
     }
 
+    /**
+     * Send form: Create new message
+     *
+     * @return \Laminas\Http\Response
+     *
+     * @throws \Http\Client\Exception
+     * @throws \KnihovnyCz\Controller\Exception\TicketNotFoundException
+     * @throws \Mzk\ZiskejApi\Exception\ApiResponseException
+     * @throws \VuFind\Exception\LibraryCard
+     */
     public function ticketMessageAction(): Response
     {
-        //@todo if method != POST
-
         $eppnDomain = $this->params()->fromRoute('eppnDomain');
         if (!$eppnDomain) {
             throw new TicketNotFoundException('The requested order was not found');
@@ -191,6 +200,13 @@ class MyResearchZiskejController extends AbstractBase
         $ticketId = $this->params()->fromRoute('ticketId');
         if (!$ticketId) {
             throw new TicketNotFoundException('The requested order was not found');
+        }
+
+        if (!$this->getRequest()->isPost()) {
+            return $this->redirect()->toRoute('myresearch-ziskej-ticket', [
+                'eppnDomain' => $eppnDomain,
+                'ticketId' => $ticketId,
+            ]);
         }
 
         /** @var \KnihovnyCz\Db\Row\User $user */
@@ -203,7 +219,7 @@ class MyResearchZiskejController extends AbstractBase
         /** @var \KnihovnyCz\Db\Row\UserCard $userCard */
         $userCard = $user->getCardByEppnDomain($eppnDomain);
         if (!$userCard || !$userCard->eppn) {
-            throw new TicketNotFoundException('The requested order was not found');
+            throw new LibraryCard('Library Card Not Found');
         }
 
         $ticketMessage = $this->params()->fromPost('ticketMessage');
@@ -234,6 +250,13 @@ class MyResearchZiskejController extends AbstractBase
         ]);
     }
 
+    /**
+     * @param string $documentId
+     *
+     * @return \KnihovnyCz\RecordDriver\SolrLocal|null
+     *
+     * @throws \Exception
+     */
     private function getRecord(string $documentId): ?SolrLocal
     {
         $recordLoader = $this->getRecordLoader();
@@ -243,6 +266,15 @@ class MyResearchZiskejController extends AbstractBase
         return $record;
     }
 
+    /**
+     * @param \Mzk\ZiskejApi\Api $ziskejApi
+     * @param string|null        $libraryCode
+     *
+     * @return bool
+     *
+     * @throws \Http\Client\Exception
+     * @throws \Mzk\ZiskejApi\Exception\ApiResponseException
+     */
     private function isLibraryInZiskej(\Mzk\ZiskejApi\Api $ziskejApi, ?string $libraryCode): bool
     {
         if (empty($libraryCode)) {

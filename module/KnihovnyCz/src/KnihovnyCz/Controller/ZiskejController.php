@@ -6,6 +6,7 @@ namespace KnihovnyCz\Controller;
 
 use KnihovnyCz\Controller\Exception\TicketNotFoundException;
 use VuFind\Controller\AbstractBase;
+use VuFind\Exception\LibraryCard;
 
 class ZiskejController extends AbstractBase
 {
@@ -40,12 +41,8 @@ class ZiskejController extends AbstractBase
 
         /** @var \KnihovnyCz\Db\Row\UserCard $userCard */
         $userCard = $user->getCardByEppnDomain($eppnDomain);
-        if (!$userCard) {
-            exit('no user card');   //@todo if no userCard
-        }
-
-        if (!$userCard->eppn) {
-            //@todo
+        if (!$userCard || $userCard->eppn) {
+            throw new LibraryCard('Library Card Not Found');
         }
 
         /** @var \Mzk\ZiskejApi\Api $ziskejApi */
