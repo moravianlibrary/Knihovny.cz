@@ -18,6 +18,13 @@ class MyResearchZiskejController extends AbstractBase
 {
     use LoggerAwareTrait;
 
+    /**
+     * Ziskej tickets page
+     *
+     * @return \Laminas\View\Model\ViewModel
+     *
+     * @throws \Http\Client\Exception
+     */
     public function homeAction(): ViewModel
     {
         $view = $this->createViewModel();
@@ -81,6 +88,15 @@ class MyResearchZiskejController extends AbstractBase
         }
     }
 
+    /**
+     * Ziskej ticket detail
+     *
+     * @return \Laminas\View\Model\ViewModel
+     *
+     * @throws \Http\Client\Exception
+     * @throws \KnihovnyCz\Controller\Exception\TicketNotFoundException
+     * @throws \Mzk\ZiskejApi\Exception\ApiResponseException
+     */
     public function ticketAction(): ViewModel
     {
         $eppnDomain = $this->params()->fromRoute('eppnDomain');
@@ -93,13 +109,13 @@ class MyResearchZiskejController extends AbstractBase
             throw new TicketNotFoundException('The requested order was not found');
         }
 
-        if (!$user = $this->getAuthManager()->isLoggedIn()) {
+        $user = $this->getAuthManager()->isLoggedIn();
+        if (!$user) {
             //$this->flashExceptions($this->flashMessenger());  //@todo
             return $this->forceLogin();
         }
 
         $userCard = $user->getCardByEppnDomain($eppnDomain);
-
         if (!$userCard || !$userCard->eppn) {
             throw new TicketNotFoundException('The requested order was not found');
         }
@@ -161,6 +177,8 @@ class MyResearchZiskejController extends AbstractBase
 
         return $this->redirect()->toRoute('myresearch-ziskej-ticket', ['eppnDomain' => $eppnDomain, 'ticketId' => $ticketId]);
     }
+
+    //@todo Send form: Create new message
 
     private function getRecord(string $documentId): ?SolrLocal
     {
