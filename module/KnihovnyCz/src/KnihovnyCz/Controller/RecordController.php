@@ -79,7 +79,7 @@ class RecordController extends \VuFind\Controller\RecordController
     {
         //@todo try/catch
 
-        /** @var bool|\KnihovnyCz\Db\Row\User $user */
+        /** @var \KnihovnyCz\Db\Row\User $user */
         $user = $this->getUser();
         if (!$user) {
             return $this->forceLogin();

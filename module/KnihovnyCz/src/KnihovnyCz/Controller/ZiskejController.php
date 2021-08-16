@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace KnihovnyCz\Controller;
 
-use VuFind\Controller\AbstractBase;
 use VuFind\Exception\LibraryCard;
 
 class ZiskejController extends AbstractBase

@@ -6,7 +6,6 @@ namespace KnihovnyCz\Controller;
 
 use KnihovnyCz\Ziskej\ZiskejMvs;
 use KnihovnyCz\Ziskej\ZiskejEdd;
-use VuFind\Controller\AbstractBase;
 
 class ZiskejAdminController extends AbstractBase
 {

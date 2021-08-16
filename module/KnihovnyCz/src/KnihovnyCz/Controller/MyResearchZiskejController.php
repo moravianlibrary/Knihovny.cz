@@ -9,7 +9,6 @@ use KnihovnyCz\Ziskej\ZiskejMvs;
 use Laminas\Http\Response;
 use Laminas\View\Model\ViewModel;
 use Mzk\ZiskejApi\RequestModel\Message;
-use VuFind\Controller\AbstractBase;
 use VuFind\Exception\LibraryCard;
 use VuFind\Log\LoggerAwareTrait;
 
@@ -29,7 +28,6 @@ class MyResearchZiskejController extends AbstractBase
         $view = $this->createViewModel();
 
         try {
-            /** @var \KnihovnyCz\Db\Row\User $user */
             $user = $this->getUser();
             if (!$user) {
                 if ($this->params()->fromQuery('redirect', true)) {
@@ -101,7 +99,7 @@ class MyResearchZiskejController extends AbstractBase
         $eppnDomain = $this->params()->fromRoute('eppnDomain');
         $ticketId = $this->params()->fromRoute('ticketId');
 
-        $user = $this->getAuthManager()->isLoggedIn();
+        $user = $this->getUser();
         if (!$user) {
             //$this->flashExceptions($this->flashMessenger());  //@todo
             return $this->forceLogin();
@@ -140,7 +138,7 @@ class MyResearchZiskejController extends AbstractBase
         $eppnDomain = $this->params()->fromRoute('eppnDomain');
         $ticketId = $this->params()->fromRoute('ticketId');
 
-        $user = $this->getAuthManager()->isLoggedIn();
+        $user = $this->getUser();
         if (!$user) {
             //$this->flashExceptions($this->flashMessenger());  //@todo
             return $this->forceLogin();
@@ -186,14 +184,12 @@ class MyResearchZiskejController extends AbstractBase
             ]);
         }
 
-        /** @var \KnihovnyCz\Db\Row\User $user */
-        $user = $this->getAuthManager()->isLoggedIn();
+        $user = $this->getUser();
         if (!$user) {
             //$this->flashExceptions($this->flashMessenger());  //@todo
             return $this->forceLogin();
         }
 
-        /** @var \KnihovnyCz\Db\Row\UserCard $userCard */
         $userCard = $user->getCardByEppnDomain($eppnDomain);
         if (!$userCard || !$userCard->eppn) {
             throw new LibraryCard('Library Card Not Found');
