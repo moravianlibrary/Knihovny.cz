@@ -551,3 +551,34 @@ h6:hover .heading-permalink
 #content {
   margin-bottom: 20px;
 }
+
+/* Info bar for ziskej */
+.bar-ziskej {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 2030;
+  background: #fc6501;
+  color: white;
+  padding: 7px;
+  text-align: center;
+  font-size: 85%;
+  border-top: 1px solid #cccccc;
+
+  em {
+    text-transform: uppercase;
+    font-style: normal;
+  }
+
+  a {
+    color: #ffffff;
+    text-decoration: underline;
+  }
+}
+
+body.ziskej-mode-test,
+body.ziskej-mode-demo,
+body.ziskej-mode-dev {
+  padding-bottom: 33px;
+}
