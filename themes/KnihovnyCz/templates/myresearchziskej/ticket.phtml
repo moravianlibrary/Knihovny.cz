@@ -261,7 +261,7 @@ $this->headTitle($this->translate('Ziskej::header_order_ziskej_num') . ' ' . $ti
         <div>
           <hr>
           <h4><?=$this->transEsc("Ziskej::header_order_new_message") ?></h4>
-          <form method="post" action="/MyResearch/ZiskejTicketCreateMessageForm/<?=$userCard->getEppnDomain() ?>/<?=$ticket->getId() ?>">
+          <form method="post" action="<?=$this->url('myresearch-ziskej-message-post', ['eppnDomain' => $userCard->getEppnDomain(), 'ticketId' => $ticket->getId()]) ?>">
             <div class="form-group">
               <label for="ticketMessage"><?=$this->transEsc("Ziskej::label_ticketMessage") ?>:</label>
               <textarea name="ticketMessage" id="ticketMessage" class="form-control" rows="3" required></textarea>

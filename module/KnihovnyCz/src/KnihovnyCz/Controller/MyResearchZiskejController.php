@@ -10,6 +10,7 @@ use KnihovnyCz\RecordDriver\SolrLocal;
 use KnihovnyCz\Ziskej\ZiskejMvs;
 use Laminas\Http\Response;
 use Laminas\View\Model\ViewModel;
+use Mzk\ZiskejApi\RequestModel\Message;
 use VuFind\Controller\AbstractBase;
 use KnihovnyCz\Db\Row\User;
 use VuFind\Log\LoggerAwareTrait;
@@ -178,7 +179,60 @@ class MyResearchZiskejController extends AbstractBase
         return $this->redirect()->toRoute('myresearch-ziskej-ticket', ['eppnDomain' => $eppnDomain, 'ticketId' => $ticketId]);
     }
 
-    //@todo Send form: Create new message
+    public function ticketMessageAction(): Response
+    {
+        //@todo if method != POST
+
+        $eppnDomain = $this->params()->fromRoute('eppnDomain');
+        if (!$eppnDomain) {
+            throw new TicketNotFoundException('The requested order was not found');
+        }
+
+        $ticketId = $this->params()->fromRoute('ticketId');
+        if (!$ticketId) {
+            throw new TicketNotFoundException('The requested order was not found');
+        }
+
+        /** @var \KnihovnyCz\Db\Row\User $user */
+        $user = $this->getAuthManager()->isLoggedIn();
+        if (!$user) {
+            //$this->flashExceptions($this->flashMessenger());  //@todo
+            return $this->forceLogin();
+        }
+
+        /** @var \KnihovnyCz\Db\Row\UserCard $userCard */
+        $userCard = $user->getCardByEppnDomain($eppnDomain);
+        if (!$userCard || !$userCard->eppn) {
+            throw new TicketNotFoundException('The requested order was not found');
+        }
+
+        $ticketMessage = $this->params()->fromPost('ticketMessage');
+        if (empty($ticketMessage)) {
+            $this->flashMessenger()->addMessage('Ziskej::message_ziskej_message_required_ticketMessage', 'error');
+
+            return $this->redirect()->toRoute('myresearch-ziskej-ticket', [
+                'eppnDomain' => $eppnDomain,
+                'ticketId' => $ticketId,
+            ]);
+        }
+
+        /** @var \Mzk\ZiskejApi\Api $ziskejApi */
+        $ziskejApi = $this->serviceLocator->get('Mzk\ZiskejApi\Api');
+
+        $message = new Message($ticketMessage);
+
+        $creaded = $ziskejApi->createMessage($userCard->eppn, $ticketId, $message);
+        if ($creaded) {
+            $this->flashMessenger()->addMessage('Ziskej::message_ziskej_message_send_success', 'success');
+        } else {
+            $this->flashMessenger()->addMessage('Ziskej::message_ziskej_message_send_fail', 'error');
+        }
+
+        return $this->redirect()->toRoute('myresearch-ziskej-ticket', [
+            'eppnDomain' => $eppnDomain,
+            'ticketId' => $ticketId,
+        ]);
+    }
 
     private function getRecord(string $documentId): ?SolrLocal
     {

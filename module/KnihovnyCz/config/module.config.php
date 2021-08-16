@@ -141,6 +141,20 @@ $config = [
                      ],
                  ],
              ],
+             'myresearch-ziskej-message-post' => [
+                 'type' => \Laminas\Router\Http\Segment::class,
+                 'options' => [
+                     'route' => '/MyResearchZiskej/Ticket/[:eppnDomain]/[:ticketId]/Message',
+                     'constraints' => [
+                         'eppnDomain'     => '.*',
+                         'ticketId'     => '.*',
+                     ],
+                     'defaults' => [
+                         'controller' => 'MyResearchZiskej',
+                         'action' => 'TicketMessage'
+                     ],
+                 ],
+             ],
              'ziskej-order' => [
                  'type' => \Laminas\Router\Http\Segment::class,
                  'options' => [
