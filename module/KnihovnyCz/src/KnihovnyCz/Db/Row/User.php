@@ -47,6 +47,33 @@ class User extends Base
     }
 
     /**
+     * Activate a library card for the given username
+     *
+     * @param int $id Library card ID
+     *
+     * @return void
+     * @throws \VuFind\Exception\LibraryCard
+     */
+    public function activateLibraryCard($id)
+    {
+        if (!$this->libraryCardsEnabled()) {
+            throw new \VuFind\Exception\LibraryCard('Library Cards Disabled');
+        }
+        $userCard = $this->getDbTable('UserCard');
+        $row = $userCard->select(['id' => $id, 'user_id' => $this->id])->current();
+
+        if (!empty($row)) {
+            $this->username = $row->edu_person_unique_id;
+            $this->cat_username = $row->cat_username;
+            $this->cat_password = $row->cat_password;
+            $this->cat_pass_enc = $row->cat_pass_enc;
+            $this->home_library = $row->home_library;
+            $this->edu_person_unique_id = $row->edu_person_unique_id;
+            $this->save();
+        }
+    }
+
+    /**
      * Verify that the current card information exists in user's library cards
      * (if enabled) and is up to date.
      *

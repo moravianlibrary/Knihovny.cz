@@ -66,6 +66,7 @@ class User extends \VuFind\Db\Table\User
             $row = $this->createRow();
             $row->edu_person_unique_id = $eduPersonUniqueId;
             $row->created = date('Y-m-d H:i:s');
+            $row->username = null;
             // Failing to initialize this here can cause Laminas\Db errors in
             // the VuFind\Auth\Shibboleth and VuFind\Auth\ILS integration tests.
             $row->user_provided_email = 0;
