@@ -44,6 +44,36 @@ class User extends \VuFind\Db\Table\User
     use \VuFind\Db\Table\ExpirationTrait;
 
     /**
+     * Retrieve a user object from the database based on eduPersonUniqueId
+     * or create new one.
+     *
+     * @param string $id ID.
+     *
+     * @return UserRow
+     */
+    public function getByEduPersonUniqueId($eduPersonUniqueId)
+    {
+        $callback = function ($select) use ($eduPersonUniqueId) {
+            $select->join(
+                ['uc' => 'user_card'], 'user.id = uc.user_id',
+                []
+            );
+            $select->where->equalTo('uc.edu_person_unique_id', $eduPersonUniqueId)
+                ->OR->equalTo('user.edu_person_unique_id', $eduPersonUniqueId);
+        };
+        $row = $this->select($callback)->current();
+        if (empty($row)) {
+            $row = $this->createRow();
+            $row->edu_person_unique_id = $eduPersonUniqueId;
+            $row->created = date('Y-m-d H:i:s');
+            // Failing to initialize this here can cause Laminas\Db errors in
+            // the VuFind\Auth\Shibboleth and VuFind\Auth\ILS integration tests.
+            $row->user_provided_email = 0;
+        }
+        return $row;
+    }
+
+    /**
      * Update the select statement to find records to delete.
      *
      * @param Select $select  Select clause
