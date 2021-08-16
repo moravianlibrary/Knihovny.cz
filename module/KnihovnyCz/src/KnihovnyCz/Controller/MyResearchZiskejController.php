@@ -8,6 +8,7 @@ use KnihovnyCz\Controller\Exception\TicketNotFoundException;
 use KnihovnyCz\Db\Row\UserCard;
 use KnihovnyCz\RecordDriver\SolrLocal;
 use KnihovnyCz\Ziskej\ZiskejMvs;
+use Laminas\Http\Response;
 use Laminas\View\Model\ViewModel;
 use VuFind\Controller\AbstractBase;
 use KnihovnyCz\Db\Row\User;
@@ -115,6 +116,50 @@ class MyResearchZiskejController extends AbstractBase
                 'userCard', 'ticket', 'messages', 'driver'
             )
         );
+    }
+
+    /**
+     * @return \Laminas\Http\Response
+     *
+     * @throws \Http\Client\Exception
+     * @throws \KnihovnyCz\Controller\Exception\TicketNotFoundException
+     * @throws \Mzk\ZiskejApi\Exception\ApiResponseException
+     */
+    public function ticketCancelAction(): Response
+    {
+        $eppnDomain = $this->params()->fromRoute('eppnDomain');
+        if (!$eppnDomain) {
+            throw new TicketNotFoundException('The requested order was not found');
+        }
+
+        $ticketId = $this->params()->fromRoute('ticketId');
+        if (!$ticketId) {
+            throw new TicketNotFoundException('The requested order was not found');
+        }
+
+        $user = $this->getAuthManager()->isLoggedIn();
+        if (!$user) {
+            //$this->flashExceptions($this->flashMessenger());  //@todo
+            return $this->forceLogin();
+        }
+
+        $userCard = $user->getCardByEppnDomain($eppnDomain);
+        if (!$userCard || !$userCard->eppn) {
+            throw new TicketNotFoundException('The requested order was not found');
+        }
+
+        /** @var \Mzk\ZiskejApi\Api $ziskejApi */
+        $ziskejApi = $this->serviceLocator->get('Mzk\ZiskejApi\Api');
+
+        $deleted = $ziskejApi->cancelTicket($userCard->eppn, $ticketId);
+
+        if ($deleted) {
+            $this->flashMessenger()->addMessage('Ziskej::message_ziskej_order_cancel_success', 'success');
+        } else {
+            $this->flashMessenger()->addMessage('Ziskej::message_ziskej_order_cancel_fail', 'error');
+        }
+
+        return $this->redirect()->toRoute('myresearch-ziskej-ticket', ['eppnDomain' => $eppnDomain, 'ticketId' => $ticketId]);
     }
 
     private function getRecord(string $documentId): ?SolrLocal

@@ -163,9 +163,7 @@ $this->headTitle($this->translate('Ziskej::header_order_ziskej_num') . ' ' . $ti
         </a>
       <?php endif; ?>
       <?php if (in_array($ticket->getStatus(), ['created', 'paid'])): ?>
-        <a class="btn btn-info" href="/MyResearch/ZiskejTicketCancel/<?=$userCard->getEppnDomain() ?>/<?=$ticket->getId() ?>"
-           title="<?=$this->transEsc("Ziskej::btn_order_cancel_title") ?>"
-           onclick="return confirm('<?= sprintf("Opravdu chcete stornovat objednávku číslo %s?", $ticket->getHid()) ?>')">
+        <a class="btn btn-info" href="<?=$this->url('myresearch-ziskej-ticket-cancel', ['eppnDomain' => $userCard->getEppnDomain(), 'ticketId' => $ticket->getId()]) ?>" title="<?=$this->transEsc("Ziskej::btn_order_cancel_title") ?>" onclick="return confirm('<?=$this->translate('Ziskej::btn_order_cancel_confirm', ['%orderId' => $ticket->getHid()]); ?>')">
           <i class="fa fa-times"></i> <?=$this->transEsc("Ziskej::btn_order_cancel") ?>
         </a>
       <?php endif; ?>
