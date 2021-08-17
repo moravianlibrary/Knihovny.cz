@@ -4,14 +4,18 @@ stages:
 variables:
   REGISTRY_URL: registry.app.knihovny.cz
   TARGET_IMAGE_NAME: moravianlibrary/vufind
+  BUILD_DEBUG: 'true'
+
+  GITLAB_DEPLOY_USER: "gitlab+deploy-token-1"
+  GITLAB_DEPLOY_PASSWORD: "-5gxZ_xpbpQoH2ZqUoE4"
 
 Build container image:
   stage: build
   only:
     refs:
-      - cicd-test
       - master
-      - /^issue-.*/
+      - /^issue.*/
+      - /^feat.*/
   image: docker:19.03.12
   services:
     - docker:19.03.12-dind
@@ -24,4 +28,11 @@ Build container image:
     - cd ${CI_PROJECT_DIR}
     - cp docker/deploy.env.example docker/deploy.env
     - cp docker/local.env.example docker/local.env
-    - bin/run.sh --no-run --image ${TARGET_IMAGE_NAME}:${CI_COMMIT_BRANCH}-${CI_PIPELINE_IID}-${CI_COMMIT_SHORT_SHA} --private-registry
+#    - bin/run.sh --no-run --image localhost/vufind:build --private-registry
+    # build the image
+    - bin/run.sh --no-run -t deploy --service vufind6 --branch ${CI_COMMIT_REF}
+    # upload image to the registry
+    - docker tag moravianlibrary/knihovny_cz:latest ${REGISTRY_URL}/${TARGET_IMAGE_NAME}:build
+    - docker push ${REGISTRY_URL}/${TARGET_IMAGE_NAME}:build
+    - docker tag moravianlibrary/knihovny_cz:latest ${REGISTRY_URL}/${TARGET_IMAGE_NAME}:${CI_COMMIT_REF_SLUG}-${CI_PIPELINE_IID}-${CI_COMMIT_SHORT_SHA}
+    - docker push ${REGISTRY_URL}/${TARGET_IMAGE_NAME}:${CI_COMMIT_REF_SLUG}-${CI_PIPELINE_IID}-${CI_COMMIT_SHORT_SHA}

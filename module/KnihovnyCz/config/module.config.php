@@ -233,11 +233,13 @@ $config = [
                     \KnihovnyCz\AjaxHandler\GetCitation::class => \KnihovnyCz\AjaxHandler\GetCitationFactory::class,
                     \KnihovnyCz\AjaxHandler\GetHolding::class => \KnihovnyCz\AjaxHandler\GetHoldingFactory::class,
                     \KnihovnyCz\AjaxHandler\UpdateContent::class => \KnihovnyCz\AjaxHandler\UpdateContentFactory::class,
+                    \KnihovnyCz\AjaxHandler\GetObalkyKnihCoverWithoutSolr::class => \KnihovnyCz\AjaxHandler\GetObalkyKnihCoverWithoutSolrFactory::class,
                 ],
                 'aliases' => [
                     'edd' => \KnihovnyCz\AjaxHandler\Edd::class,
                     'getcitation' => \KnihovnyCz\AjaxHandler\GetCitation::class,
                     'getHolding' => \KnihovnyCz\AjaxHandler\GetHolding::class,
+                    'getObalkyKnihCoverWithoutSolr' => \KnihovnyCz\AjaxHandler\GetObalkyKnihCoverWithoutSolr::class,
                     'updateContent' => \KnihovnyCz\AjaxHandler\UpdateContent::class,
                 ],
             ],
@@ -277,5 +279,25 @@ $config = [
         ]
     ],
 ];
+
+// Define record view routes -- route name => [controller, route]
+$recordRoutes = [
+    'search2record' => ['Search2Record', 'LibraryRecord'],
+    'search2collection' => ['Search2Collection', 'LibraryCollection'],
+    'search2collectionrecord' => ['Search2Record', 'LibraryRecord'],
+];
+
+// Key is URL, value is Controller/Action
+$staticRoutes = [
+    'Libraries/Advanced' => 'Search2/Advanced',
+    'Libraries/FacetList' => 'Search2/FacetList',
+    'Libraries/Home' => 'Search2/Home',
+    'Libraries/Results' => 'Search2/Results',
+    'Libraries/Versions' => 'Search2/Versions',
+];
+
+$routeGenerator = new \KnihovnyCz\Route\RouteGenerator();
+$routeGenerator->addRecordRoutes($config, $recordRoutes);
+$routeGenerator->addStaticRoutes($config, $staticRoutes);
 
 return $config;

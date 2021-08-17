@@ -132,10 +132,12 @@ JS;
 <?php endif; ?>
 
 <?php if (!empty($holdings['electronic_holdings'])): ?>
-    <?=$this->context($this)->renderInContext(
+  <?=
+    $this->context($this)->renderInContext(
         'RecordTab/holdingsils/electronic.phtml',
         ['holdings' => $holdings['electronic_holdings']]
-    );?>
+    );
+  ?>
 <?php endif; ?>
 
 <?php if (!empty($holdings['holdings'] ?? [])): ?>
