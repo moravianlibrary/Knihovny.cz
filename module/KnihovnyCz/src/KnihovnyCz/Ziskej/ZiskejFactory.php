@@ -8,17 +8,18 @@ use Laminas\ServiceManager\Factory\FactoryInterface;
 /**
  * Factory for instantiating objects
  */
-class ZiskejMvsFactory implements FactoryInterface
+class ZiskejFactory implements FactoryInterface
 {
     /**
      * Create service
+     *
      * @param \Interop\Container\ContainerInterface $container
      * @param string                                $requestedName
      * @param array|null                            $options
      *
-     * @return \KnihovnyCz\Ziskej\ZiskejMvs
+     * @return \KnihovnyCz\Ziskej\Ziskej
      */
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): ZiskejMvs
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): Ziskej
     {
         /** @var \Laminas\Config\Config $config */
         $config = $container->get('VuFind\Config')->get('config');
@@ -26,6 +27,6 @@ class ZiskejMvsFactory implements FactoryInterface
         /** @var \VuFind\Cookie\CookieManager $cookieManager */
         $cookieManager = $container->get('VuFind\CookieManager');
 
-        return new \KnihovnyCz\Ziskej\ZiskejMvs($config, $cookieManager);
+        return new $requestedName($config, $cookieManager);
     }
 }

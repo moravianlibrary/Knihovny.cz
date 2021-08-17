@@ -380,8 +380,8 @@ $config = [
             \KnihovnyCz\ILS\Service\SolrIdResolver::class => \KnihovnyCz\ILS\Service\SolrIdResolverFactory::class,
             \KnihovnyCz\Service\WayfFilterGenerator::class => \KnihovnyCz\Service\WayfFilterGeneratorFactory::class,
             \Mzk\ZiskejApi\Api::class => \KnihovnyCz\ZiskejApiFactory::class,
-            \KnihovnyCz\Ziskej\ZiskejEdd::class => \KnihovnyCz\Ziskej\ZiskejEddFactory::class,
-            \KnihovnyCz\Ziskej\ZiskejMvs::class => \KnihovnyCz\Ziskej\ZiskejMvsFactory::class,
+            \KnihovnyCz\Ziskej\ZiskejEdd::class => \KnihovnyCz\Ziskej\ZiskejFactory::class,
+            \KnihovnyCz\Ziskej\ZiskejMvs::class => \KnihovnyCz\Ziskej\ZiskejFactory::class,
         ],
         'aliases' => [
             \VuFind\Config\PluginManager::class => \KnihovnyCz\Config\PluginManager::class,
