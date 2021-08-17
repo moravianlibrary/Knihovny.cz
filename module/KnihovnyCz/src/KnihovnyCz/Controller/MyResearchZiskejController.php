@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace KnihovnyCz\Controller;
 
-use KnihovnyCz\RecordDriver\SolrLocal;
+use KnihovnyCz\RecordDriver\SolrDefault;
 use KnihovnyCz\Ziskej\ZiskejMvs;
 use Laminas\Http\Response;
 use Laminas\View\Model\ViewModel;
@@ -226,17 +226,15 @@ class MyResearchZiskejController extends AbstractBase
     /**
      * @param string $documentId
      *
-     * @return \KnihovnyCz\RecordDriver\SolrLocal|null
+     * @return \KnihovnyCz\RecordDriver\SolrDefault|null
      *
      * @throws \Exception
      */
-    private function getRecord(string $documentId): ?SolrLocal
+    private function getRecord(string $documentId): ?SolrDefault
     {
         $recordLoader = $this->getRecordLoader();
 
-        /** @var SolrLocal|null $record */
-        $record = $recordLoader->load($documentId);
-        return $record;
+        return $recordLoader->load($documentId);
     }
 
     /**
