@@ -42,7 +42,6 @@ class SolrDefault extends \VuFind\RecordDriver\SolrDefault
 {
     use Feature\BuyLinksTrait;
     use Feature\ObalkyKnihTrait;
-    use ZiskejTrait;
 
     /**
      * These Solr fields should be used for snippets if available (listed in order
