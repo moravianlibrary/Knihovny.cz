@@ -18,14 +18,9 @@ use Laminas\ServiceManager\Factory\FactoryInterface;
 
 class ZiskejApiFactory implements FactoryInterface
 {
-
-    /**
-     * @var \KnihovnyCz\Ziskej\ZiskejMvs
-     */
-    private $cpkZiskej;
-
     /**
      * Create Ziskej Api service
+     *
      * @param \Interop\Container\ContainerInterface $container
      * @param string                                $requestedName
      * @param array|null                            $options
@@ -35,7 +30,7 @@ class ZiskejApiFactory implements FactoryInterface
      */
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null): Api
     {
-        $this->cpkZiskej = $container->get(\KnihovnyCz\Ziskej\ZiskejMvs::class);
+        $cpkZiskej = $container->get(\KnihovnyCz\Ziskej\ZiskejMvs::class);
 
         $config = $container->get('VuFind\Config')->get('config');
 
@@ -61,7 +56,7 @@ class ZiskejApiFactory implements FactoryInterface
 
         // generate token
         $signer = new Sha512(new MultibyteStringConverter());
-        $privateKey = Key\LocalFileReference::file('file://' . $this->cpkZiskej->getPrivateKeyFileLocation());
+        $privateKey = Key\LocalFileReference::file('file://' . $cpkZiskej->getPrivateKeyFileLocation());
 
         $config = Configuration::forSymmetricSigner(
             $signer,
@@ -78,7 +73,7 @@ class ZiskejApiFactory implements FactoryInterface
         //@todo store token
 
         return new Api(
-            new ApiClient($guzzleClient, $this->cpkZiskej->getCurrentUrl(), new Bearer($token->toString()), $logger)
+            new ApiClient($guzzleClient, $cpkZiskej->getCurrentUrl(), new Bearer($token->toString()), $logger)
         );
     }
 }

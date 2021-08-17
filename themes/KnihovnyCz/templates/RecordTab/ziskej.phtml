@@ -11,10 +11,8 @@ $user = $tab->getUser();
 /** @var \KnihovnyCz\Ziskej\ZiskejMvs $ziskejMvs */
 $ziskejMvs = $tab->getZiskejMvs();
 
-/** @var string[][] $deduperRecords
- */
-$deduperRecords = $tab->getDeduperRecords();
-
+/** @var string[][] $deduperRecords */
+$dedupedRecords = $tab->getDedupedRecords();
 ?>
 <?php if ($this->Ziskej()->isEnabled()): ?>
   <div class="panel panel-default">
@@ -34,7 +32,7 @@ $deduperRecords = $tab->getDeduperRecords();
             <input type="hidden" name="user_id" value="<?=$this->escapeHtmlAttr('') ?>">
             <input type="hidden" name="doc_id" value="<?=$this->escapeHtmlAttr($driver->getUniqueID()) ?>">
             <input type="hidden" name="entity_id" value="<?=$this->escapeHtmlAttr($tab->getEntityId()) ?>">
-            <?php foreach ($deduperRecords as $record): ?>
+            <?php foreach ($dedupedRecords as $record): ?>
               <input type="hidden" name="doc_alt_ids[]" value="<?=$this->escapeHtmlAttr($record['id']) ?>">
             <?php endforeach; ?>
             <input type="image" src="<?=$this->imageLink('logo-ziskej.png') ?>" alt="<?=$this->translate('Ziskej::service_name') ?>">

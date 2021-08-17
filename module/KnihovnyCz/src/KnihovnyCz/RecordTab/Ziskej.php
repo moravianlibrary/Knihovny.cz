@@ -165,7 +165,7 @@ class Ziskej extends \VuFind\RecordTab\AbstractBase
     /**
      * @return string[][]
      */
-    public function getDeduperRecords(): array
+    public function getDedupedRecords(): array
     {
         return $this->driver->tryMethod('getDeduplicatedRecords', [], []);
     }

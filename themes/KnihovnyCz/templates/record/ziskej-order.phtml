@@ -35,7 +35,7 @@ $ziskejReader = $this->ziskejReader;
               <?=$this->escapeHtml($user->lastname) ?>
             </p>
             <div class="form-group">
-              <label for="email">Email:</label>
+              <label for="email"><?=$this->transEsc("Ziskej::label_email") ?>:</label>
               <input type="email" name="email" id="email" value="<?=!empty($ziskejReader) ? $ziskejReader->getEmail() : (!empty($user->email) ? $user->email : '') ?>" class="form-control" required>
               <span class="help-block"><?=$this->transEsc("Ziskej::help_email") ?></span>
             </div>

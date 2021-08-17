@@ -35,7 +35,10 @@ class Ziskej extends AbstractHelper
         return $this->cpkZiskej->getCurrentMode() === \KnihovnyCz\Ziskej\ZiskejMvs::MODE_PRODUCTION;
     }
 
-    public function getModes()
+    /**
+     * @return string[]
+     */
+    public function getModes(): array
     {
         return $this->cpkZiskej->getModes();
     }

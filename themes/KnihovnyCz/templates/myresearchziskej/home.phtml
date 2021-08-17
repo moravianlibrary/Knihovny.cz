@@ -94,7 +94,7 @@ $this->layout()->breadcrumbs = '<li><a href="' . $this->url('myresearch-home') .
                       </h4>
                       <div>
                         <dl class="dl-horizontal dl-left">
-                          <? $listAuthor = $record->getPrimaryAuthor() ?>
+                          <?php $listAuthor = $record->getPrimaryAuthor() ?>
                           <?php if (!empty($listAuthor)): ?>
                             <dt><?=$this->transEsc('by')?>:</dt>
                             <dd>
@@ -175,7 +175,8 @@ $this->layout()->breadcrumbs = '<li><a href="' . $this->url('myresearch-home') .
       </div>
     <?php endif; ?>
   <?php else: ?>
-    <div class="alert alert-danger"><?=$this->transEsc('Ziskej::user_card_not_found')?>
+    <div class="alert alert-danger">
+      <?=$this->transEsc('Ziskej::user_card_not_found')?>
     </div>
   <?php endif; ?>
 </div>
