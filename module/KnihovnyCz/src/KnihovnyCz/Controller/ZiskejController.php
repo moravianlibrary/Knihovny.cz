@@ -32,7 +32,7 @@ class ZiskejController extends AbstractBase
 
         /** @var \KnihovnyCz\Db\Row\UserCard $userCard */
         $userCard = $user->getCardByEppnDomain($eppnDomain);
-        if (!$userCard || $userCard->eppn) {
+        if (!$userCard || !$userCard->eppn) {
             throw new LibraryCard('Library Card Not Found');
         }
 
