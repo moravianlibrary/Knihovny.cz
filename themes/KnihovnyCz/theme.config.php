@@ -16,10 +16,14 @@ return [
                 return new KnihovnyCz\View\Helper\KnihovnyCz\ZiskejEdd($dependency);
             },
         ],
+        'invokables' => [
+            \KnihovnyCz\View\Helper\KnihovnyCz\LibrariesApiLookfor::class,
+        ],
         'aliases' => [
             'recordDataFormatter' => 'VuFind\View\Helper\Root\RecordDataFormatter',
             'Ziskej' => KnihovnyCz\View\Helper\KnihovnyCz\Ziskej::class,
             'ZiskejEdd' => KnihovnyCz\View\Helper\KnihovnyCz\ZiskejEdd::class,
+            'librariesApiLookfor' => \KnihovnyCz\View\Helper\KnihovnyCz\LibrariesApiLookfor::class
         ],
     ],
     'favicon' => 'icon-knihovny.png',

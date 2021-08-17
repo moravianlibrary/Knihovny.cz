@@ -119,7 +119,8 @@ class DeduplicationListener extends ParentDeduplicationListener
      */
     protected function fetchLocalRecords($event)
     {
-        $params = $event->getParam('params');
+        $command = $event->getParam('command');
+        $params = $command->getSearchParameters();
         $sourcePriority = $this->determineRecordPriority($params);
 
         $idList = [];
@@ -129,7 +130,7 @@ class DeduplicationListener extends ParentDeduplicationListener
          *
          * @var \VuFindSearch\Backend\Solr\Response\Json\RecordCollection
          */
-        $result = $event->getTarget();
+        $result = $command->getResult();
         foreach ($result->getRecords() as $record) {
             $fields = $record->getRawData();
 
