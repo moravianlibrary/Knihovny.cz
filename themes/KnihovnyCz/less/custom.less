@@ -108,62 +108,31 @@ header {
   background-color: #fff;
   box-shadow: 0 1px 5px #ccc;
   margin-bottom: 20px;
+  padding: 10px 0;
 }
 
 // navbar
 @media (min-width: 768px) {
   .navbar-nav > li > a {
-    padding-top: 28px;
-    padding-bottom: 24px;
+    padding-top: 18px;
+    padding-bottom: 14px;
   }
 }
 
 // navbar logo
 .navbar-brand {
   padding: 0;
-  overflow: hidden;
-  width: 230px;
-  height: 73px;
+  margin: 0;
+  width: 250px;
   display: block;
   position: relative;
-
-  .knihovny-logo {
-    position: absolute;
-    top: 0;
-    left: 0;
-    margin-top: -75px;
-    font-size: 220px;
-    width: 230px;
-  }
-
-  .knihovny-logo:before {
-    font-family: 'knihovny';
-    speak: none;
-    font-style: normal;
-    font-weight: normal;
-    font-variant: normal;
-    text-transform: none;
-    line-height: 1;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    content: "\e601";
-  }
-
-  .slogan {
-    position: absolute;
-    top: 45px;
-    left: 63px;
-    color: #a4a4a4;
-    font-size: 15px;
-  }
 }
 
-.navbar-brand:hover {
-  .slogan {
-    color: #666666;
+@media (max-width: 767px) {
+  .navbar-brand {
+    margin: 0 10px;
   }
 }
-
 
 // FOOTER
 footer {
