@@ -1410,4 +1410,6 @@ WHERE ik.key_name = "admlib";
 
 UPDATE `system` SET `value` = '77' WHERE `key`='DB_VERSION';
 
+UPDATE user SET username = SUBSTRING_INDEX(username, ';', 1);
 
+UPDATE `system` SET `value` = '78' WHERE `key`='DB_VERSION';
