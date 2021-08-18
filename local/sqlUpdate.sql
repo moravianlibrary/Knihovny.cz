@@ -1410,6 +1410,10 @@ WHERE ik.key_name = "admlib";
 
 UPDATE `system` SET `value` = '77' WHERE `key`='DB_VERSION';
 
+UPDATE user SET username = SUBSTRING_INDEX(username, ';', 1);
+
+UPDATE `system` SET `value` = '78' WHERE `key`='DB_VERSION';
+
 -- Convert to utf8mb4
 DROP TABLE email_delayer;
 DROP TABLE email_types;
@@ -1478,4 +1482,4 @@ ALTER TABLE `inst_sources` ADD UNIQUE KEY `source` (`source`(190));
 ALTER TABLE `inst_sources` DROP KEY `driver`;
 ALTER TABLE `inst_sources` ADD KEY `driver` (`driver`(190));
 
-UPDATE `system` SET `value` = '78' WHERE `key`='DB_VERSION';
+UPDATE `system` SET `value` = '79' WHERE `key`='DB_VERSION';
