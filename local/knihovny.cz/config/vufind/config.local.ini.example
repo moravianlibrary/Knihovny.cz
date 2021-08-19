@@ -35,6 +35,9 @@ logout          = /Shibboleth.sso/Logout
 username        = eduPersonPrincipalName
 cat_username    = userLibraryId
 email           = mail
+firstname       = givenName
+lastname        = sn
+edu_person_unique_id = eduPersonUniqueId
 allow_configuration_override = true
 
 [Database]
