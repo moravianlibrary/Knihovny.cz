@@ -146,6 +146,13 @@
             <?php endif; ?>
           <?php endif; ?>
 
+          <?php if ($monographicSeries = $this->driver->getMonographicSeries()): ?>
+            <div class="monographic-series">
+              <?=$this->translate('From monographic series')?>:
+              <?=$this->record($this->driver)->renderTemplate('data-monographic-series.phtml', ['data' => $monographicSeries])?>
+            </div>
+          <?php endif; ?>
+
           <div class="result-formats">
             <?=$this->record($this->driver)->getFormatList() ?>
 
