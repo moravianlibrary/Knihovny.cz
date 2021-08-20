@@ -51,6 +51,13 @@
                 </p>
               <?php endif; ?>
 
+              <?php if ($publishedIn = $this->driver->tryMethod('getField773')): ?>
+                <div class="published-in">
+                  <?=$this->translate('In')?>:
+                  <?=$this->record($this->driver)->renderTemplate('data-7xx-field.phtml', ['data' => $publishedIn])?>
+                </div>
+              <?php endif; ?>
+
               <?php $journalTitle = $this->driver->getContainerTitle(); $summDate = $this->driver->getPublicationDates(); ?>
               <?php if (!empty($journalTitle)): ?>
                 <?=$this->transEsc('Published in')?>
