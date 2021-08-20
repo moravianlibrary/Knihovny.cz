@@ -58,15 +58,13 @@ class User extends \VuFind\Db\Table\User
                 ['uc' => 'user_card'], 'user.id = uc.user_id',
                 []
             );
-            $select->where->equalTo('uc.edu_person_unique_id', $eduPersonUniqueId)
-                ->OR->equalTo('user.edu_person_unique_id', $eduPersonUniqueId);
+            $select->where->equalTo('uc.edu_person_unique_id', $eduPersonUniqueId);
         };
         $row = $this->select($callback)->current();
         if (empty($row)) {
             $row = $this->createRow();
-            $row->edu_person_unique_id = $eduPersonUniqueId;
             $row->created = date('Y-m-d H:i:s');
-            $row->username = null;
+            $row->username = $eduPersonUniqueId;
             // Failing to initialize this here can cause Laminas\Db errors in
             // the VuFind\Auth\Shibboleth and VuFind\Auth\ILS integration tests.
             $row->user_provided_email = 0;

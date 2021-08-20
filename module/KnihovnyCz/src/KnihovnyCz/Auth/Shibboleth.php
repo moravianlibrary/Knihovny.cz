@@ -57,7 +57,6 @@ class Shibboleth extends Base
         \Laminas\Http\PhpEnvironment\Request $request
     ) {
         parent::__construct($sessionManager, $configurationLoader, $request);
-        $this->attribsToCheck[] = 'edu_person_unique_id';
     }
 
     /**
@@ -101,14 +100,6 @@ class Shibboleth extends Base
             }
         }
         $user = $this->getUserTable()->getByEduPersonUniqueId($eduPersonUniqueId);
-        if ($user->username == null) {
-            $username = $this->getAttribute($request, $shib['username']);
-            $user->username = $username ?? $eduPersonUniqueId;
-        }
-
-        // Variable to hold catalog password (handled separately from other
-        // attributes since we need to use saveCredentials method to store it):
-        $catPassword = null;
 
         // Has the user configured attributes to use for populating the user table?
         foreach ($this->attribsToCheck as $attribute) {
@@ -120,33 +111,18 @@ class Shibboleth extends Base
                     && !empty($value)
                 ) {
                     $user->cat_username = $shib['prefix'] . '.' . $value;
-                } elseif ($attribute == 'cat_password') {
-                    $catPassword = $value;
                 } else {
                     $user->$attribute = $value ?? '';
                 }
             }
         }
 
-        // Save credentials if applicable. Note that we want to allow empty
-        // passwords (see https://github.com/vufind-org/vufind/pull/532), but
-        // we also want to be careful not to replace a non-blank password with a
-        // blank one in case the auth mechanism fails to provide a password on
-        // an occasion after the user has manually stored one. (For discussion,
-        // see https://github.com/vufind-org/vufind/pull/612). Note that in the
-        // (unlikely) scenario that a password can actually change from non-blank
-        // to blank, additional work may need to be done here.
-        if (!empty($user->cat_username)) {
-            $user->saveCredentials(
-                $user->cat_username,
-                empty($catPassword) ? $user->getCatPassword() : $catPassword
-            );
-        }
-
         $this->storeShibbolethSession($request);
 
         // Save and return the user object:
         $user->save();
+        // create library card
+        $this->connectLibraryCard($request, $user, true);
         return $user;
     }
 
@@ -157,6 +133,7 @@ class Shibboleth extends Base
      * containing account credentials.
      * @param \VuFind\Db\Row\User                  $connectingUser Connect newly
      * created library card to this user.
+     * @param boolean                              $update         Update UserCard
      *
      * @return void
      */
@@ -164,26 +141,36 @@ class Shibboleth extends Base
     {
         $entityId = $this->getCurrentEntityId($request);
         $shib = $this->getConfigurationLoader()->getConfiguration($entityId);
-        $username = $this->getAttribute($request, $shib['cat_username']);
-        if (!$username) {
-            throw new \VuFind\Exception\LibraryCard('Missing username');
+        $eduPersonUniqueId = $this->getAttribute($request, $shib['edu_person_unique_id']);
+        $card = $this->getUserCardTable()->getByEduPersonUniqueId($eduPersonUniqueId);
+        if ($card->user_id != null && $card->user_id != $connectingUser->id) {
+            throw new \VuFind\Exception\LibraryCard(
+                'Username is already in use in another library card'
+            );
         }
+        $username = $this->getAttribute($request, $shib['cat_username']);
         $prefix = $shib['prefix'] ?? '';
         if (!empty($prefix)) {
             $username = $shib['prefix'] . '.' . $username;
         }
-        $password = $shib['cat_password'] ?? null;
-        $cardId = $connectingUser->saveLibraryCard(
-            null, $prefix,
-            $username, $password
-        );
-        if (isset($shib['edu_person_unique_id'])) {
-            $eduPersonUniqueId = $this->getAttribute($request,
-                $shib['edu_person_unique_id']);
-            $card = $connectingUser->getLibraryCard($cardId);
-            $card->edu_person_unique_id = $eduPersonUniqueId;
-            $card->save();
-        }
+        $card->user_id = $connectingUser->id;
+        $card->cat_username = $username;
+        $card->card_name = $prefix;
+        $card->home_library = $prefix;
+        $card->eppn = $this->getAttribute($request, $shib['eppn']);
+        $card->edu_person_unique_id = $this->getAttribute($request,
+            $shib['edu_person_unique_id']);
+        $card->save();
+    }
+
+    /**
+     * Get access to the user table.
+     *
+     * @return \VuFind\Db\Table\UserCard
+     */
+    public function getUserCardTable()
+    {
+        return $this->getDbTableManager()->get('UserCard');
     }
 
 }
