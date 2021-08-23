@@ -22,10 +22,10 @@ document.addEventListener('DOMContentLoaded', function runObserver() {
   observer.observe(targetNode, config);
 }, false);
 
-jQuery(document).ready(function ($) {
+jQuery(document).ready(function jQueryReady($) {
 
   // Scroll to target by data attribute
-  $('*[data-scrollto-target]').on('click', function () {
+  $('*[data-scrollto-target]').on('click', function scrollToTarget() {
     const target = $(this).data('scrollto-target');
     const interval = typeof $(this).data('scrollto-interval') === 'number'
       ? $(this).data('scrollto-interval')
@@ -35,4 +35,4 @@ jQuery(document).ready(function ($) {
     }, interval);
   });
 
-})
+});
