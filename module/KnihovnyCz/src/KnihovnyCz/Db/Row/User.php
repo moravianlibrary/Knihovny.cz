@@ -73,6 +73,21 @@ class User extends Base
     }
 
     /**
+     * Save
+     *
+     * @return int
+     */
+    public function save()
+    {
+        // modification for GDPR - do not store last name, first name and email
+        // in database
+        $this->firstname = '';
+        $this->lastname = '';
+        $this->email = '';
+        return parent::save();
+    }
+
+    /**
      * Verify that the current card information exists in user's library cards
      * (if enabled) and is up to date.
      *

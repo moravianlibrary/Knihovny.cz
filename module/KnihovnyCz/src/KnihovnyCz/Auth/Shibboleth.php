@@ -141,6 +141,16 @@ class Shibboleth extends Base
 
         $this->storeShibbolethSession($request);
 
+        // modification for GDPR - do not store last name, first name and email
+        // in database
+        $userInfo = [];
+        $userInfo['firstname'] = $user->firstname;
+        $userInfo['lastname'] = $user->lastname;
+        $userInfo['email'] = $user->email;
+        $session = new \Laminas\Session\Container('Account',
+            $this->sessionManager);
+        $session->userInfo = $userInfo;
+
         // Save and return the user object:
         $user->save();
         // create library card

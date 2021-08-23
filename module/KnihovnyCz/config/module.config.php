@@ -268,11 +268,12 @@ $config = [
             \KnihovnyCz\ILS\Service\SolrIdResolver::class => \KnihovnyCz\ILS\Service\SolrIdResolverFactory::class,
             \KnihovnyCz\Service\WayfFilterGenerator::class => \KnihovnyCz\Service\WayfFilterGeneratorFactory::class,
             \VuFind\Auth\PluginManager::class => \KnihovnyCz\Auth\PluginManagerFactory::class,
+            \KnihovnyCz\Auth\Manager::class => \VuFind\Auth\ManagerFactory::class,
         ],
         'aliases' => [
             \VuFind\Config\PluginManager::class => \KnihovnyCz\Config\PluginManager::class,
             \VuFind\Content\ObalkyKnihService::class => \KnihovnyCz\Content\ObalkyKnihService::class,
-            //'VuFind\AuthPluginManager' => 'VuFind\Auth\PluginManager',
+            \VuFind\Auth\Manager::class => \KnihovnyCz\Auth\Manager::class,
         ],
         'invokables' => [
             \Symfony\Component\Filesystem\Filesystem::class,
