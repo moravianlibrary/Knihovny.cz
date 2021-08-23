@@ -30,6 +30,8 @@ namespace KnihovnyCz\Auth;
 
 use \VuFind\Auth\Shibboleth as Base;
 use \VuFind\Auth\Shibboleth\ConfigurationLoaderInterface;
+use \VuFind\Exception\Auth as AuthException;
+
 /**
  * Shibboleth authentication module.
  *
