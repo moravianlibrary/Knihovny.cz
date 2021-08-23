@@ -24,7 +24,7 @@
  * @package  Authentication
  * @author   Vaclav Rosecky <vaclav.rosecky@mzk.cz>
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
- * @link https://vufind.org Main Page
+ * @link     https://vufind.org Main Page
  */
 namespace KnihovnyCz\Auth;
 
@@ -37,7 +37,7 @@ use \VuFind\Auth\Shibboleth\ConfigurationLoaderInterface;
  * @package  Authentication
  * @author   Vaclav Rosecky <vaclav.rosecky@mzk.cz>
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
- * @link https://vufind.org Main Page
+ * @link     https://vufind.org Main Page
  */
 class Shibboleth extends Base
 {
@@ -78,7 +78,7 @@ class Shibboleth extends Base
     {
         parent::setConfig($config);
         $this->checkDuplicateInstitutions = $this->config->Shibboleth
-                ->check_duplicate_institutions ?? true;
+            ->check_duplicate_institutions ?? true;
     }
 
     /**
@@ -97,7 +97,10 @@ class Shibboleth extends Base
         // Check if username is set.
         $entityId = $this->getCurrentEntityId($request);
         $shib = $this->getConfigurationLoader()->getConfiguration($entityId);
-        $eduPersonUniqueId = $this->getAttribute($request, $shib['edu_person_unique_id']);
+        $eduPersonUniqueId = $this->getAttribute(
+            $request,
+            $shib['edu_person_unique_id']
+        );
         if (empty($eduPersonUniqueId)) {
             $details = ($this->useHeaders) ? $request->getHeaders()->toArray()
                 : $request->getServer()->toArray();
@@ -147,8 +150,10 @@ class Shibboleth extends Base
         $userInfo['firstname'] = $user->firstname;
         $userInfo['lastname'] = $user->lastname;
         $userInfo['email'] = $user->email;
-        $session = new \Laminas\Session\Container('Account',
-            $this->sessionManager);
+        $session = new \Laminas\Session\Container(
+            'Account',
+            $this->sessionManager
+        );
         $session->userInfo = $userInfo;
 
         // Save and return the user object:
@@ -172,8 +177,10 @@ class Shibboleth extends Base
     {
         $entityId = $this->getCurrentEntityId($request);
         $shib = $this->getConfigurationLoader()->getConfiguration($entityId);
-        $eduPersonUniqueId = $this->getAttribute($request,
-            $shib['edu_person_unique_id']);
+        $eduPersonUniqueId = $this->getAttribute(
+            $request,
+            $shib['edu_person_unique_id']
+        );
         $card = $this->getUserCardTable()
             ->getByEduPersonUniqueId($eduPersonUniqueId);
         // Is library card already connected to another user?
@@ -190,10 +197,13 @@ class Shibboleth extends Base
         // check for duplicity - only one library card for institution
         if ($this->checkDuplicateInstitutions) {
             foreach ($connectingUser->getLibraryCards() as $libCard) {
-                $institution = explode('.',
-                    $libCard->cat_username)[0];
-                if ($institution == $prefix &&
-                    $eduPersonUniqueId != $libCard->edu_person_unique_id) {
+                $institution = explode(
+                    '.',
+                    $libCard->cat_username
+                )[0];
+                if ($institution == $prefix
+                    && $eduPersonUniqueId != $libCard->edu_person_unique_id
+                ) {
                     throw new \VuFind\Exception\LibraryCard(
                         'Another library card with the same institution is '
                         . 'already connected to your account'

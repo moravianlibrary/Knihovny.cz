@@ -24,7 +24,7 @@
  * @package  Authentication
  * @author   Vaclav Rosecky <vaclav.rosecky@mzk.cz>
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
- * @link https://vufind.org Main Page
+ * @link     https://vufind.org Main Page
  */
 namespace KnihovnyCz\Auth;
 
@@ -36,11 +36,16 @@ use \VuFind\Auth\Manager as Base;
  * @package  Authentication
  * @author   Vaclav Rosecky <vaclav.rosecky@mzk.cz>
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
- * @link https://vufind.org Main Page
+ * @link     https://vufind.org Main Page
  */
 class Manager extends Base
 {
 
+    /**
+     * Checks whether the user is logged in.
+     *
+     * @return UserRow|false Object if user is logged in, false otherwise.
+     */
     public function isLoggedIn()
     {
         // modification for GDPR - do not store last name, first name and email

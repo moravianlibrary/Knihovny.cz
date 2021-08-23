@@ -46,8 +46,7 @@ class UserCard extends \VuFind\Db\Table\UserCard
      * Retrieve a user card object from the database based on eduPersonUniqueId
      * or create new one.
      *
-     * @param string $id ID.
-     * @param boolean $create create new user card
+     * @param string $eduPersonUniqueId eduPersonUniqueId
      *
      * @return UserRow
      */

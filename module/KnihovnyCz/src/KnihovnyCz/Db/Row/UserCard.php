@@ -24,7 +24,7 @@
  * @package  KnihovnyCz\Db\Row
  * @author   Vaclav Rosecky <vaclav.rosecky@mzk.cz>
  * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
- * @link https://knihovny.cz Main Page
+ * @link     https://knihovny.cz Main Page
  */
 namespace KnihovnyCz\Db\Row;
 

@@ -47,7 +47,7 @@ class User extends \VuFind\Db\Table\User
      * Retrieve a user object from the database based on eduPersonUniqueId
      * or create new one.
      *
-     * @param string $id ID.
+     * @param string $eduPersonUniqueId eduPersonUniqueId
      *
      * @return UserRow
      */
