@@ -43,6 +43,14 @@ class Shibboleth extends Base
 {
 
     /**
+     * Check for duplicities in library cards - only one library card for
+     * institution
+     *
+     * @var bool
+     */
+    protected $checkDuplicateInstitutions = true;
+
+    /**
      * Constructor
      *
      * @param \Laminas\Session\ManagerInterface    $sessionManager      Session
@@ -57,6 +65,20 @@ class Shibboleth extends Base
         \Laminas\Http\PhpEnvironment\Request $request
     ) {
         parent::__construct($sessionManager, $configurationLoader, $request);
+    }
+
+    /**
+     * Set configuration.
+     *
+     * @param \Laminas\Config\Config $config Configuration to set
+     *
+     * @return void
+     */
+    public function setConfig($config)
+    {
+        parent::setConfig($config);
+        $this->checkDuplicateInstitutions = $this->config->Shibboleth
+                ->check_duplicate_institutions ?? true;
     }
 
     /**
@@ -122,7 +144,7 @@ class Shibboleth extends Base
         // Save and return the user object:
         $user->save();
         // create library card
-        $this->connectLibraryCard($request, $user, true);
+        $this->connectLibraryCard($request, $user);
         return $user;
     }
 
@@ -133,7 +155,6 @@ class Shibboleth extends Base
      * containing account credentials.
      * @param \VuFind\Db\Row\User                  $connectingUser Connect newly
      * created library card to this user.
-     * @param boolean                              $update         Update UserCard
      *
      * @return void
      */
@@ -141,9 +162,12 @@ class Shibboleth extends Base
     {
         $entityId = $this->getCurrentEntityId($request);
         $shib = $this->getConfigurationLoader()->getConfiguration($entityId);
-        $eduPersonUniqueId = $this->getAttribute($request, $shib['edu_person_unique_id']);
-        $card = $this->getUserCardTable()->getByEduPersonUniqueId($eduPersonUniqueId);
-        if ($card->user_id != null && $card->user_id != $connectingUser->id) {
+        $eduPersonUniqueId = $this->getAttribute($request,
+            $shib['edu_person_unique_id']);
+        $card = $this->getUserCardTable()
+            ->getByEduPersonUniqueId($eduPersonUniqueId);
+        // Is library card already connected to another user?
+        if ($card != null && $card->user_id != $connectingUser->id) {
             throw new \VuFind\Exception\LibraryCard(
                 'Username is already in use in another library card'
             );
@@ -153,13 +177,33 @@ class Shibboleth extends Base
         if (!empty($prefix)) {
             $username = $shib['prefix'] . '.' . $username;
         }
-        $card->user_id = $connectingUser->id;
+        // check for duplicity - only one library card for institution
+        if ($this->checkDuplicateInstitutions) {
+            foreach ($connectingUser->getLibraryCards() as $libCard) {
+                $institution = explode('.',
+                    $libCard->cat_username)[0];
+                if ($institution == $prefix &&
+                    $eduPersonUniqueId != $libCard->edu_person_unique_id) {
+                    throw new \VuFind\Exception\LibraryCard(
+                        'Another library card with the same institution is '
+                        . 'already connected to your account'
+                    );
+                }
+            }
+        }
+        if ($card == null) {
+            $card = $this->getUserCardTable()->createRow();
+            $card->created = date('Y-m-d H:i:s');
+            $card->user_id = $connectingUser->id;
+            $card->edu_person_unique_id = $eduPersonUniqueId;
+            $card->card_name = $prefix;
+            $card->home_library = $prefix;
+        }
+        // update library card
         $card->cat_username = $username;
-        $card->card_name = $prefix;
-        $card->home_library = $prefix;
-        $card->eppn = $this->getAttribute($request, $shib['eppn']);
-        $card->edu_person_unique_id = $this->getAttribute($request,
-            $shib['edu_person_unique_id']);
+        if (isset($shib['eppn'])) {
+            $card->eppn = $this->getAttribute($request, $shib['eppn']);
+        }
         $card->save();
     }
 

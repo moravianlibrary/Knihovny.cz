@@ -57,12 +57,6 @@ class UserCard extends \VuFind\Db\Table\UserCard
             $select->where->equalTo('edu_person_unique_id', $eduPersonUniqueId);
         };
         $row = $this->select($callback)->current();
-        if (empty($row)) {
-            $row = $this->createRow();
-            $row->created = date('Y-m-d H:i:s');
-            $row->edu_person_unique_id = $eduPersonUniqueId;
-            $row->user_id = null;
-        }
         return $row;
     }
 

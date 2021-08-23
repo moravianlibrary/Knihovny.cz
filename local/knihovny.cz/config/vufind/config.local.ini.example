@@ -39,6 +39,8 @@ firstname       = givenName
 lastname        = sn
 edu_person_unique_id = eduPersonUniqueId
 allow_configuration_override = true
+; Check for duplicate institutions when connecting library card
+;check_duplicate_institutions = false
 
 [Database]
 database        = mysql://user:pw@localhost/dbName
