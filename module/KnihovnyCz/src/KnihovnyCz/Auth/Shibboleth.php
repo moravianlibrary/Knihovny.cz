@@ -134,10 +134,8 @@ class Shibboleth extends Base
                 $value = $this->getAttribute($request, $shib[$attribute]);
                 if ($attribute == 'email') {
                     $user->updateEmail($value);
-                } elseif ($attribute == 'cat_username' && isset($shib['prefix'])
-                    && !empty($value)
-                ) {
-                    $user->cat_username = $shib['prefix'] . '.' . $value;
+                } elseif ($attribute == 'cat_username' && isset($shib['prefix'])) {
+                    $user->cat_username = $shib['prefix'] . '.' . ($value ?? '');
                 } else {
                     $user->$attribute = $value ?? '';
                 }
