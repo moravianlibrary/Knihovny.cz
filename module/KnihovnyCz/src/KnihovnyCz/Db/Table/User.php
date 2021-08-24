@@ -104,12 +104,15 @@ class User extends \VuFind\Db\Table\User
     }
 
     /**
-     * This method basically replaces all occurrences of $from->id (UserRow id) in tables
-     * comments, user_resource, user_list & search with $into->id in user_id column.
+     * This method basically replaces all occurrences of $from->id (UserRow id)
+     * in tables comments, user_resource, user_list, user_card and search with
+     * $into->id in user_id column.
      *
-     * @param UserRow $from
-     * @param UserRow $into
-     * @throws AuthException
+     * @param UserRow $from from
+     * @param UserRow $into into
+     *
+     * @throws Exception
+     *
      * @return void
      */
     public function merge(UserRow $from, UserRow $into)
@@ -124,8 +127,8 @@ class User extends \VuFind\Db\Table\User
             $prefix = explode('.', $intoCard->cat_username)[0];
             if (isset($institutions[$prefix])) {
                 $fromCard = $institutions[$prefix];
-                if ($fromCard->edu_person_unique_id
-                    == $intoCard->edu_person_unique_id) {
+                if ($fromCard->edu_person_unique_id== $intoCard->edu_person_unique_id
+                ) {
                     $fromCard->remove();
                 } else {
                     throw new \Exception('Could not connect users');
@@ -146,12 +149,16 @@ class User extends \VuFind\Db\Table\User
 
         foreach ($tables as $table) {
             $update = new Update($table);
-            $update->set([
+            $update->set(
+                [
                 'user_id' => $into->id
-            ]);
-            $update->where([
+                ]
+            );
+            $update->where(
+                [
                 'user_id' => $from->id
-            ]);
+                ]
+            );
             $statement = $this->sql->prepareStatementForSqlObject($update);
             $result = $statement->execute();
         }

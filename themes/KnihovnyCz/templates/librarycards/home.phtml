@@ -18,26 +18,21 @@
       <caption class="sr-only"><?=$this->transEsc('Library Cards')?></caption>
     <tr>
       <th><?=$this->transEsc('Library Card Name')?></th>
-      <?php if ($this->multipleTargets): ?>
-      <th><?=$this->transEsc('login_target')?></th>
-      <?php endif; ?>
       <th><?=$this->transEsc('Username')?></th>
       <th>&nbsp;</th>
     </tr>
     <?php foreach ($this->libraryCards as $record): ?>
       <tr>
-        <td><?=$this->escapeHtml($record['card_name'])?></td>
+        <td><?=$this->transEsc('Source::' . $record['card_name'])?></td>
         <?php $username = $record['cat_username']; if ($this->multipleTargets): ?>
           <?php $target = ''; ?>
           <?php if (strstr($username, '.')): ?>
             <?php [$target, $username] = explode('.', $username, 2); ?>
           <?php endif; ?>
-          <td><?=$target ? $this->transEsc("source_$target", null, $target) : '&nbsp;' ?></td>
         <?php endif; ?>
         <td><?=$this->escapeHtml($username)?></td>
         <td>
           <div class="btn-group">
-            <a class="btn btn-link" href="<?=$this->url('editLibraryCard') . $this->escapeHtmlAttr($record['id']) ?>" title="<?=$this->transEscAttr('Edit Library Card')?>"><i class="fa fa-edit" aria-hidden="true"></i> <?=$this->transEsc('Edit')?></a>
             <?php if ($delete): ?>
               <a class="btn btn-link dropdown-toggle" data-toggle="dropdown" href="<?=$this->url('librarycards-deletecard') ?>?cardID=<?=urlencode($record['id'])?>">
                 <i class="fa fa-trash-o" aria-hidden="true"></i> <?=$this->transEsc('Delete')?>

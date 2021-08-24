@@ -70,24 +70,10 @@ class LibraryCardsController extends LibraryCardsControllerBase
      */
     protected function processEditLibraryCard($user)
     {
-        try {
-            $id = $this->params()->fromRoute(
-                'id',
-                $this->params()->fromQuery('id')
-            );
-            if ($id == null) {
-                throw new LibraryCardException('Library card id is missing');
-            }
-            $card = $user->getLibraryCard($id);
-            if (!$card) {
-                throw new LibraryCardException('Library card not found');
-            }
-            $cardName = $this->params()->fromPost('card_name', '');
-            $card->card_name = $cardName;
-            $card->save();
-        } catch (LibraryCardException $ex) {
-            $this->flashMessenger()->addErrorMessage($ex->getMessage());
-        }
+        $this->flashMessenger()->addErrorMessage(
+            "Editation of library cards is not supported"
+        );
         return $this->redirect()->toRoute('librarycards-home');
     }
+
 }
