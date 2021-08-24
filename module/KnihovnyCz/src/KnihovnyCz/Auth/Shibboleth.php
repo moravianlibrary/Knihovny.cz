@@ -188,11 +188,12 @@ class Shibboleth extends Base
         }
         $card = $this->getUserCardTable()
             ->getByEduPersonUniqueId($eduPersonUniqueId);
-        // Is library card already connected to another user?
+        // Is library card already connected to another user? If so, merge the
+        // two users.
         if ($card != null && $card->user_id != $connectingUser->id) {
-            throw new \VuFind\Exception\LibraryCard(
-                'Username is already in use in another library card'
-            );
+            $user = $this->getUserTable()->getById($card->user_id);
+            $this->getUserTable()->merge($user, $connectingUser);
+            $card->user_id = $connectingUser->id;
         }
         $username = $this->getAttribute($request, $shib['cat_username']);
         $prefix = $shib['prefix'] ?? '';

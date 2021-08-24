@@ -29,6 +29,8 @@
 namespace KnihovnyCz\Db\Table;
 
 use Laminas\Db\Sql\Select;
+use Laminas\Db\Sql\Update;
+use KnihovnyCz\Db\Row\User as UserRow;
 
 /**
  * Class User
@@ -36,6 +38,8 @@ use Laminas\Db\Sql\Select;
  * @category VuFind
  * @package  KnihovnyCz\Db\Table
  * @author   Josef Moravec <moravec@mzk.cz>
+ * @author   Jiří Kozlovský <mail@jkozlovsky.cz>
+ * @author   Václav Rosecký <vaclav.rosecky@mzk.cz>
  * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://knihovny.cz Main Page
  */
@@ -98,4 +102,62 @@ class User extends \VuFind\Db\Table\User
             $where->and->lessThanOrEqualTo('id', $idTo);
         }
     }
+
+    /**
+     * This method basically replaces all occurrences of $from->id (UserRow id) in tables
+     * comments, user_resource, user_list & search with $into->id in user_id column.
+     *
+     * @param UserRow $from
+     * @param UserRow $into
+     * @throws AuthException
+     * @return void
+     */
+    public function merge(UserRow $from, UserRow $into)
+    {
+        // TODO: do it in transaction
+        $institutions = [];
+        foreach ($from->getLibraryCards() as $fromCard) {
+            $prefix = explode('.', $fromCard->cat_username)[0];
+            $institutions[$prefix] = $fromCard;
+        }
+        foreach ($into->getLibraryCards() as $intoCard) {
+            $prefix = explode('.', $intoCard->cat_username)[0];
+            if (isset($institutions[$prefix])) {
+                $fromCard = $institutions[$prefix];
+                if ($fromCard->edu_person_unique_id
+                    == $intoCard->edu_person_unique_id) {
+                    $fromCard->remove();
+                } else {
+                    throw new \Exception('Could not connect users');
+                }
+            }
+        }
+
+        /**
+         * Table names which contain user_id as a relation to user.id foreign key
+         */
+        $tables = [
+            "user_card",
+            "comments",
+            "user_resource",
+            "user_list",
+            "search"
+        ];
+
+        foreach ($tables as $table) {
+            $update = new Update($table);
+            $update->set([
+                'user_id' => $into->id
+            ]);
+            $update->where([
+                'user_id' => $from->id
+            ]);
+            $statement = $this->sql->prepareStatementForSqlObject($update);
+            $result = $statement->execute();
+        }
+
+        // Perform User deletion
+        $from->delete();
+    }
+
 }
