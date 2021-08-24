@@ -21,3 +21,13 @@ document.addEventListener('DOMContentLoaded', function runObserver() {
   const targetNode = document.querySelector('#cartItems strong');
   observer.observe(targetNode, config);
 }, false);
+
+jQuery(document).ready(function jQueryReady($) {
+
+  // Remove truncated class
+  $('.btn-show-full-text').on('click', function showFullDescription() {
+    $('.btn-show-full-text').addClass('display-none');
+    $('.text-last').removeClass('display-none');
+  });
+
+});
