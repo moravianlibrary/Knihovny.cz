@@ -183,6 +183,11 @@ class Shibboleth extends Base
             $request,
             $shib['edu_person_unique_id']
         );
+        if (empty($eduPersonUniqueId)) {
+            throw new \VuFind\Exception\LibraryCard(
+                'Missing eduPersonUniqueId attribute'
+            );
+        }
         $card = $this->getUserCardTable()
             ->getByEduPersonUniqueId($eduPersonUniqueId);
         // Is library card already connected to another user?
