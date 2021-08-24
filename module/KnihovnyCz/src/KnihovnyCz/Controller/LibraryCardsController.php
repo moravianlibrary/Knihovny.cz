@@ -51,7 +51,7 @@ class LibraryCardsController extends LibraryCardsControllerBase
     public function deleteCardAction()
     {
         try {
-            parent::deleteCardAction();
+            return parent::deleteCardAction();
         } catch (\Exception $ex) {
             // Display error message instead of error page
             $this->flashMessenger()->addMessage($ex->getMessage(), 'error');
