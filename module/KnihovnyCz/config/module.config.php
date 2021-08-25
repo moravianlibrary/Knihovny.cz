@@ -243,6 +243,7 @@ $config = [
                     \KnihovnyCz\AjaxHandler\GetHolding::class => \KnihovnyCz\AjaxHandler\GetHoldingFactory::class,
                     \KnihovnyCz\AjaxHandler\UpdateContent::class => \KnihovnyCz\AjaxHandler\UpdateContentFactory::class,
                     \KnihovnyCz\AjaxHandler\GetObalkyKnihCoverWithoutSolr::class => \KnihovnyCz\AjaxHandler\GetObalkyKnihCoverWithoutSolrFactory::class,
+                    \KnihovnyCz\AjaxHandler\GetACSuggestions::class => \KnihovnyCz\AjaxHandler\GetACSuggestionsFactory::class,
                 ],
                 'aliases' => [
                     'edd' => \KnihovnyCz\AjaxHandler\Edd::class,
@@ -250,6 +251,7 @@ $config = [
                     'getHolding' => \KnihovnyCz\AjaxHandler\GetHolding::class,
                     'getObalkyKnihCoverWithoutSolr' => \KnihovnyCz\AjaxHandler\GetObalkyKnihCoverWithoutSolr::class,
                     'updateContent' => \KnihovnyCz\AjaxHandler\UpdateContent::class,
+                    'getACSuggestions' => \KnihovnyCz\AjaxHandler\GetACSuggestions::class,
                 ],
             ],
             'related' => [
@@ -265,6 +267,14 @@ $config = [
                     'Solr' => \KnihovnyCz\Search\Factory\SolrDefaultBackendFactory::class,
                 ],
             ],
+            'autocomplete' => [
+                'factories' => [
+                    \KnihovnyCz\Autocomplete\SolrPrefix::class => \VuFind\Autocomplete\SolrFactory::class,
+                ],
+                'aliases' => [
+                    'solrprefix' => \KnihovnyCz\Autocomplete\SolrPrefix::class,
+                ]
+            ],
         ],
     ],
     'service_manager' => [
@@ -276,11 +286,13 @@ $config = [
             \KnihovnyCz\ILS\Service\SolrIdResolver::class => \KnihovnyCz\ILS\Service\SolrIdResolverFactory::class,
             \KnihovnyCz\Service\WayfFilterGenerator::class => \KnihovnyCz\Service\WayfFilterGeneratorFactory::class,
             \KnihovnyCz\Auth\Manager::class => \VuFind\Auth\ManagerFactory::class,
+            \KnihovnyCz\Autocomplete\Suggester::class => \VuFind\Autocomplete\SuggesterFactory::class,
         ],
         'aliases' => [
             \VuFind\Config\PluginManager::class => \KnihovnyCz\Config\PluginManager::class,
             \VuFind\Content\ObalkyKnihService::class => \KnihovnyCz\Content\ObalkyKnihService::class,
             \VuFind\Auth\Manager::class => \KnihovnyCz\Auth\Manager::class,
+            \VuFind\Autocomplete\Suggester::class => \KnihovnyCz\Autocomplete\Suggester::class,
         ],
         'invokables' => [
             \Symfony\Component\Filesystem\Filesystem::class,
