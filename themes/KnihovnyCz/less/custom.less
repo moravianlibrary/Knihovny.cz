@@ -48,6 +48,12 @@ a {
   text-decoration: none;
 }
 
+form {
+  label {
+    white-space: nowrap;
+  }
+}
+
 .nav > li > a:hover,
 .nav > li > a:focus {
   outline: none;
@@ -176,13 +182,29 @@ footer {
   }
 }
 
-// search header
-.search-header {
-  display: block;
-}
-
+// search results form
 .search-stats {
   text-align: center;
+}
+
+@media (min-width: 768px) {
+  .search-header {
+    display: block;
+  }
+
+  .search-stats {
+    flex-grow: 0;
+  }
+
+  .search-controls {
+    text-align: right;
+    display: flex;
+    justify-content: flex-end;
+
+    .search-sort {
+      margin-left: auto;
+    }
+  }
 }
 
 // search results
