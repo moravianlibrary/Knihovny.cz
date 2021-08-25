@@ -64,5 +64,8 @@ non_proxy_host[] = cache.obalkyknih.cz
 [Session]
 type = File
 
+[Mail]
+sms = disabled
+
 [Parent_Config]
 relative_path = ../../../base/config/vufind/config.ini
