@@ -21,3 +21,18 @@ document.addEventListener('DOMContentLoaded', function runObserver() {
   const targetNode = document.querySelector('#cartItems strong');
   observer.observe(targetNode, config);
 }, false);
+
+jQuery(document).ready(function jQueryReady($) {
+
+  // Scroll to target by data attribute
+  $('*[data-scrollto-target]').on('click', function scrollToTarget() {
+    const target = $(this).data('scrollto-target');
+    const interval = typeof $(this).data('scrollto-interval') === 'number'
+      ? $(this).data('scrollto-interval')
+      : 500;
+    $('html,body').animate({
+      scrollTop: $(target).offset().top
+    }, interval);
+  });
+
+});
