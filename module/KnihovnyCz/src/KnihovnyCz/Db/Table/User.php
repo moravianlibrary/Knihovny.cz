@@ -117,7 +117,8 @@ class User extends \VuFind\Db\Table\User
      */
     public function merge(UserRow $from, UserRow $into)
     {
-        // TODO: do it in transaction
+        // do it in transaction
+        $this->getDbConnection()->beginTransaction();
         $institutions = [];
         foreach ($from->getLibraryCards() as $fromCard) {
             $prefix = explode('.', $fromCard->cat_username)[0];
@@ -127,11 +128,14 @@ class User extends \VuFind\Db\Table\User
             $prefix = explode('.', $intoCard->cat_username)[0];
             if (isset($institutions[$prefix])) {
                 $fromCard = $institutions[$prefix];
-                if ($fromCard->edu_person_unique_id== $intoCard->edu_person_unique_id
+                if ($fromCard->edu_person_unique_id == $intoCard->edu_person_unique_id
                 ) {
                     $fromCard->remove();
                 } else {
-                    throw new \Exception('Could not connect users');
+                    $this->getDbConnection()->rollback();
+                    throw new \VuFind\Exception\LibraryCard('Could not connect '
+                        . 'users with different library cards from the '
+                        . 'same institution');
                 }
             }
         }
@@ -159,12 +163,22 @@ class User extends \VuFind\Db\Table\User
                 'user_id' => $from->id
                 ]
             );
-            $statement = $this->sql->prepareStatementForSqlObject($update);
-            $result = $statement->execute();
+            $this->sql->prepareStatementForSqlObject($update)->execute();
         }
 
         // Perform User deletion
         $from->delete();
+        $this->getDbConnection()->commit();
+    }
+
+    /**
+     * Returns database connection.
+     *
+     * @return \Laminas\Db\Adapter\Driver\ConnectionInterface $conn
+     */
+    protected function getDbConnection()
+    {
+        return $this->getAdapter()->driver->getConnection();
     }
 
 }
