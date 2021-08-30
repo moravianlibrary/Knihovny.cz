@@ -24,8 +24,4 @@
 endif; ?>
 
 <?php $this->layout()->srmessage = $showingResults; ?>
-<?php if ($qtime = $this->results->getQuerySpeed()): ?>
-  <?=$showingResults; ?><span class="search-query-time"></span>
-<?php else: ?>
-  <?=$showingResults; ?>
-<?php endif; ?>
+<?=$showingResults; ?>
