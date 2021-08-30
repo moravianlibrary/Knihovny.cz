@@ -13,10 +13,7 @@ class SplitText extends AbstractHelper
 
     public function __invoke(string $string = '', int $length = 0): self
     {
-        if (strlen($string) < $length) {
-            $length = strlen($string);
-        }
-
+        $length = min(strlen($string), $length);
         $strpos = strpos($string, ' ', $length);
 
         if ($strpos <= $length) {

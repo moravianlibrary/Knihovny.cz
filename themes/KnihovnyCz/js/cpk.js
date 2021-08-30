@@ -26,8 +26,8 @@ jQuery(document).ready(function jQueryReady($) {
 
   // Remove truncated class
   $('.btn-show-full-text').on('click', function showFullDescription() {
-    $('.btn-show-full-text').addClass('display-none');
-    $('.text-last').removeClass('display-none');
+    $('.btn-show-full-text').addClass('hidden');
+    $('.text-last').removeClass('hidden');
   });
 
 });

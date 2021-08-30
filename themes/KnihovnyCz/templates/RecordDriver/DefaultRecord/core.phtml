@@ -52,11 +52,11 @@
 
     <?php $summary = $this->driver->getSummary(); $summary = isset($summary[0]) ? $this->escapeHtml($summary[0]) : false; ?>
     <?php if ($summary): ?>
-      <?php $splitText = $this->SplitText($summary, 360); ?>
+      <?php $splitText = $this->splitText($summary, 360); ?>
       <p>
         <span class="text-first"><?=$splitText->first()?></span>
         <?php if($splitText->last()): ?>
-          <span class="text-last display-none"><?=$splitText->last()?></span>
+          <span class="text-last hidden"><?=$splitText->last()?></span>
           <a class="btn-show-full-text">…<?=$this->transEsc('Full description')?></a>
         <?php endif; ?>
       </p>
