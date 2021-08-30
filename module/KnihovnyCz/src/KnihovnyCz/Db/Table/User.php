@@ -128,14 +128,16 @@ class User extends \VuFind\Db\Table\User
             $prefix = explode('.', $intoCard->cat_username)[0];
             if (isset($institutions[$prefix])) {
                 $fromCard = $institutions[$prefix];
-                if ($fromCard->edu_person_unique_id == $intoCard->edu_person_unique_id
+                if ($fromCard->edu_person_unique_id== $intoCard->edu_person_unique_id
                 ) {
                     $fromCard->remove();
                 } else {
                     $this->getDbConnection()->rollback();
-                    throw new \VuFind\Exception\LibraryCard('Could not connect '
+                    throw new \VuFind\Exception\LibraryCard(
+                        'Could not connect '
                         . 'users with different library cards from the '
-                        . 'same institution');
+                        . 'same institution'
+                    );
                 }
             }
         }
