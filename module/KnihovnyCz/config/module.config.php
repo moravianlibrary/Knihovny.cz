@@ -189,8 +189,8 @@ $config = [
                     \KnihovnyCz\Db\Row\User::class => \VuFind\Db\Row\UserFactory::class,
                 ],
                 'aliases' => [
-                    'VuFind\Db\Row\User' => \KnihovnyCz\Db\Row\User::class,
-                    'VuFind\Db\Row\UserCard' => \KnihovnyCz\Db\Row\UserCard::class,
+                    \VuFind\Db\Row\User::class => \KnihovnyCz\Db\Row\User::class,
+                    \VuFind\Db\Row\UserCard::class => \KnihovnyCz\Db\Row\UserCard::class,
                 ]
             ],
             'db_table' => [
