@@ -57,7 +57,7 @@
         <span class="text-first"><?=$splitText->first()?></span>
         <?php if($splitText->last()): ?>
           <span class="text-last hidden"><?=$splitText->last()?></span>
-          <a class="btn-show-full-text">…<?=$this->transEsc('Full description')?></a>
+          <span class="btn-show-full-text">… <a><?=$this->transEsc('full_description')?></a></span>
         <?php endif; ?>
       </p>
     <?php endif; ?>
