@@ -111,7 +111,7 @@ class User extends \VuFind\Db\Table\User
      * @param UserRow $from from
      * @param UserRow $into into
      *
-     * @throws Exception
+     * @throws \Exception
      *
      * @return void
      */

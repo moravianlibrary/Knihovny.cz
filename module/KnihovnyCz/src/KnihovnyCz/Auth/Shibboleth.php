@@ -236,7 +236,7 @@ class Shibboleth extends Base
     /**
      * Get access to the user table.
      *
-     * @return \VuFind\Db\Table\UserCard
+     * @return \KnihovnyCz\Db\Table\UserCard
      */
     public function getUserCardTable()
     {

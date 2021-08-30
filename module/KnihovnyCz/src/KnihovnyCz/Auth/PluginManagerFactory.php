@@ -28,6 +28,8 @@
 namespace KnihovnyCz\Auth;
 
 use Interop\Container\ContainerInterface;
+use Laminas\ServiceManager\Exception\ServiceNotCreatedException;
+use Laminas\ServiceManager\Exception\ServiceNotFoundException;
 /**
  * Auth handler plugin manager
  *

@@ -48,7 +48,7 @@ class UserCard extends \VuFind\Db\Table\UserCard
      *
      * @param string $eduPersonUniqueId eduPersonUniqueId
      *
-     * @return UserRow
+     * @return \KnihovnyCz\Db\Row\User
      */
     public function getByEduPersonUniqueId($eduPersonUniqueId)
     {

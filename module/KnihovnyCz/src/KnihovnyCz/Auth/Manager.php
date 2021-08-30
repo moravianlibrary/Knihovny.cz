@@ -29,6 +29,7 @@
 namespace KnihovnyCz\Auth;
 
 use \VuFind\Auth\Manager as Base;
+use \VuFind\Db\Row\User;
 /**
  * Wrapper class for handling logged-in user in session.
  *
@@ -44,7 +45,8 @@ class Manager extends Base
     /**
      * Checks whether the user is logged in.
      *
-     * @return UserRow|false Object if user is logged in, false otherwise.
+     * @return \KnihovnyCz\Db\Row\User|false Object if user is logged in, false
+     * otherwise.
      */
     public function isLoggedIn()
     {
