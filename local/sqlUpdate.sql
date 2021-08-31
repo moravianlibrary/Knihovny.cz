@@ -1485,6 +1485,22 @@ ALTER TABLE `widget_content` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_un
 UPDATE `system` SET `value` = '79' WHERE `key`='DB_VERSION';
 
 -- Issue 211 Identities
+-- eppn is replaced by edu_person_unique_id
+ALTER TABLE user_card DROP KEY user_card_eppn_uq;
 ALTER TABLE user_card ADD COLUMN edu_person_unique_id VARCHAR(255) DEFAULT NULL;
-ALTER TABLE user_card ADD COLUMN eppn VARCHAR(255) DEFAULT NULL;
+-- migration for IdPs with Aleph - edu_person_unique_id is different from eppn
+UPDATE user_card
+SET edu_person_unique_id = CONCAT(SUBSTR(cat_username, POSITION('.' IN cat_username) + 1), SUBSTR(eppn, POSITION('@' IN eppn)))
+WHERE cat_username LIKE 'kkpc.%'
+  OR cat_username LIKE 'knav.%'
+  OR cat_username LIKE 'nkp.%'
+  OR cat_username LIKE 'ntk.%'
+  OR cat_username LIKE 'svkhk.%'
+  OR cat_username LIKE 'svkos.%'
+  OR cat_username LIKE 'svkpk.%'
+  OR cat_username LIKE 'uzei.%'
+  OR cat_username LIKE 'vkol.%';
+-- migration for other IdPs - attribute edu_person_unique_id is same as eppn
+UPDATE user_card SET edu_person_unique_id = eppn WHERE edu_person_unique_id IS NULL;
+CREATE UNIQUE INDEX user_card_edu_person_unique_id_uq ON user_card(edu_person_unique_id);
 UPDATE `system` SET `value` = '78' WHERE `key`='DB_VERSION';
