@@ -35,4 +35,10 @@ jQuery(document).ready(function jQueryReady($) {
     }, interval);
   });
 
+  // Remove truncated class
+  $('.btn-show-full-text').on('click', function showFullDescription() {
+    $('.btn-show-full-text').addClass('hidden');
+    $('.text-last').removeClass('hidden');
+  });    
+
 });
