@@ -115,6 +115,14 @@ $config = [
     ],
     'vufind' => [
         'plugin_managers' => [
+            'auth' => [
+                'factories' => [
+                    \KnihovnyCz\Auth\Shibboleth::class => \VuFind\Auth\ShibbolethFactory::class,
+                ],
+                'aliases' => [
+                    \VuFind\Auth\Shibboleth::class => \KnihovnyCz\Auth\Shibboleth::class,
+                ],
+            ],
             'recorddriver' =>  [
                 'factories' => [
                     \KnihovnyCz\RecordDriver\SolrAuthority::class => \KnihovnyCz\RecordDriver\SolrDefaultFactory::class,
@@ -185,13 +193,12 @@ $config = [
                     \KnihovnyCz\Db\Row\InstSources::class => \VuFind\Db\Row\RowGatewayFactory::class,
                     \KnihovnyCz\Db\Row\Widget::class => \VuFind\Db\Row\RowGatewayFactory::class,
                     \KnihovnyCz\Db\Row\WidgetContent::class => \VuFind\Db\Row\RowGatewayFactory::class,
+                    \KnihovnyCz\Db\Row\User::class => \VuFind\Db\Row\UserFactory::class,
+                    \KnihovnyCz\Db\Row\UserCard::class => \VuFind\Db\Row\RowGatewayFactory::class,
                 ],
                 'aliases' => [
-                    // VuFind\Db\Table\GatewayFactory search for row class by name
-                    // We do not need to customize row class for user, so we are
-                    // are aliasing back to original one. It has to be string as the
-                    // class does not exist
-                    'KnihovnyCz\Db\Row\User' => \VuFind\Db\Row\User::class,
+                    \VuFind\Db\Row\User::class => \KnihovnyCz\Db\Row\User::class,
+                    \VuFind\Db\Row\UserCard::class => \KnihovnyCz\Db\Row\UserCard::class,
                 ]
             ],
             'db_table' => [
@@ -200,11 +207,13 @@ $config = [
                     \KnihovnyCz\Db\Table\InstConfigs::class => \VuFind\Db\Table\GatewayFactory::class,
                     \KnihovnyCz\Db\Table\InstSources::class => \VuFind\Db\Table\GatewayFactory::class,
                     \KnihovnyCz\Db\Table\User::class => \VuFind\Db\Table\UserFactory::class,
+                    \KnihovnyCz\Db\Table\UserCard::class => \VuFind\Db\Table\GatewayFactory::class,
                     \KnihovnyCz\Db\Table\Widget::class => \VuFind\Db\Table\GatewayFactory::class,
                     \KnihovnyCz\Db\Table\WidgetContent::class => \VuFind\Db\Table\GatewayFactory::class,
                 ],
                 'aliases' => [
                     \VuFind\Db\Table\User::class => \KnihovnyCz\Db\Table\User::class,
+                    \VuFind\Db\Table\UserCard::class => \KnihovnyCz\Db\Table\UserCard::class,
                 ],
             ],
             'ils_driver' => [
@@ -266,10 +275,12 @@ $config = [
             \KnihovnyCz\Content\ObalkyKnihService::class => \VuFind\Content\ObalkyKnihServiceFactory::class,
             \KnihovnyCz\ILS\Service\SolrIdResolver::class => \KnihovnyCz\ILS\Service\SolrIdResolverFactory::class,
             \KnihovnyCz\Service\WayfFilterGenerator::class => \KnihovnyCz\Service\WayfFilterGeneratorFactory::class,
+            \KnihovnyCz\Auth\Manager::class => \VuFind\Auth\ManagerFactory::class,
         ],
         'aliases' => [
             \VuFind\Config\PluginManager::class => \KnihovnyCz\Config\PluginManager::class,
             \VuFind\Content\ObalkyKnihService::class => \KnihovnyCz\Content\ObalkyKnihService::class,
+            \VuFind\Auth\Manager::class => \KnihovnyCz\Auth\Manager::class,
         ],
         'invokables' => [
             \Symfony\Component\Filesystem\Filesystem::class,
