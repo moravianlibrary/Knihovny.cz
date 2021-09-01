@@ -42,6 +42,24 @@ use VuFind\Exception\LibraryCard as LibraryCardException;
  */
 class LibraryCardsController extends LibraryCardsControllerBase
 {
+
+    /**
+     * Creates a confirmation box to delete or not delete the current list
+     *
+     * @return mixed
+     */
+    public function deleteCardAction()
+    {
+        try {
+            return parent::deleteCardAction();
+        } catch (\Exception $ex) {
+            // Display error message instead of error page
+            $this->flashMessenger()->addMessage($ex->getMessage(), 'error');
+            // Redirect to MyResearch library cards
+            return $this->redirect()->toRoute('librarycards-home');
+        }
+    }
+
     /**
      * Process the "edit library card" submission. Only update card name.
      *
@@ -52,24 +70,10 @@ class LibraryCardsController extends LibraryCardsControllerBase
      */
     protected function processEditLibraryCard($user)
     {
-        try {
-            $id = $this->params()->fromRoute(
-                'id',
-                $this->params()->fromQuery('id')
-            );
-            if ($id == null) {
-                throw new LibraryCardException('Library card id is missing');
-            }
-            $card = $user->getLibraryCard($id);
-            if (!$card) {
-                throw new LibraryCardException('Library card not found');
-            }
-            $cardName = $this->params()->fromPost('card_name', '');
-            $card->card_name = $cardName;
-            $card->save();
-        } catch (LibraryCardException $ex) {
-            $this->flashMessenger()->addErrorMessage($ex->getMessage());
-        }
+        $this->flashMessenger()->addErrorMessage(
+            "Editation of library cards is not supported"
+        );
         return $this->redirect()->toRoute('librarycards-home');
     }
+
 }
