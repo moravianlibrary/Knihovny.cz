@@ -11,11 +11,10 @@ variables:
 
 Build container image:
   stage: build
-  only:
-    refs:
-      - master
-      - /^issue.*/
-      - /^feat.*/
+  rules:
+    - if:
+          ( $CI_PIPELINE_SOURCE == "push" ) &&
+          ( $CI_COMMIT_BRANCH =~ /^ci/ )
   image: docker:19.03.12
   services:
     - docker:19.03.12-dind
