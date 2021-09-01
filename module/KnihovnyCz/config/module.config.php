@@ -115,6 +115,14 @@ $config = [
     ],
     'vufind' => [
         'plugin_managers' => [
+            'auth' => [
+                'factories' => [
+                    \KnihovnyCz\Auth\Shibboleth::class => \VuFind\Auth\ShibbolethFactory::class,
+                ],
+                'aliases' => [
+                    \VuFind\Auth\Shibboleth::class => \KnihovnyCz\Auth\Shibboleth::class,
+                ],
+            ],
             'recorddriver' =>  [
                 'factories' => [
                     \KnihovnyCz\RecordDriver\SolrAuthority::class => \KnihovnyCz\RecordDriver\SolrDefaultFactory::class,
@@ -185,8 +193,8 @@ $config = [
                     \KnihovnyCz\Db\Row\InstSources::class => \VuFind\Db\Row\RowGatewayFactory::class,
                     \KnihovnyCz\Db\Row\Widget::class => \VuFind\Db\Row\RowGatewayFactory::class,
                     \KnihovnyCz\Db\Row\WidgetContent::class => \VuFind\Db\Row\RowGatewayFactory::class,
-                    \KnihovnyCz\Db\Row\UserCard::class => \VuFind\Db\Row\RowGatewayFactory::class,
                     \KnihovnyCz\Db\Row\User::class => \VuFind\Db\Row\UserFactory::class,
+                    \KnihovnyCz\Db\Row\UserCard::class => \VuFind\Db\Row\RowGatewayFactory::class,
                 ],
                 'aliases' => [
                     \VuFind\Db\Row\User::class => \KnihovnyCz\Db\Row\User::class,
@@ -267,7 +275,6 @@ $config = [
             \KnihovnyCz\Content\ObalkyKnihService::class => \VuFind\Content\ObalkyKnihServiceFactory::class,
             \KnihovnyCz\ILS\Service\SolrIdResolver::class => \KnihovnyCz\ILS\Service\SolrIdResolverFactory::class,
             \KnihovnyCz\Service\WayfFilterGenerator::class => \KnihovnyCz\Service\WayfFilterGeneratorFactory::class,
-            \VuFind\Auth\PluginManager::class => \KnihovnyCz\Auth\PluginManagerFactory::class,
             \KnihovnyCz\Auth\Manager::class => \VuFind\Auth\ManagerFactory::class,
         ],
         'aliases' => [

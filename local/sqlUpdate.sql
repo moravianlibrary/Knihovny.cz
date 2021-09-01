@@ -1488,7 +1488,7 @@ UPDATE `system` SET `value` = '79' WHERE `key`='DB_VERSION';
 -- eppn is replaced by edu_person_unique_id
 ALTER TABLE user_card DROP KEY user_card_eppn_uq;
 ALTER TABLE user_card ADD COLUMN edu_person_unique_id VARCHAR(255) DEFAULT NULL;
--- migration for IdPs with Aleph - edu_person_unique_id is different from eppn
+-- migration for IdPs with Aleph and Koha - edu_person_unique_id is different from eppn
 UPDATE user_card
 SET edu_person_unique_id = CONCAT(SUBSTR(cat_username, POSITION('.' IN cat_username) + 1), SUBSTR(eppn, POSITION('@' IN eppn)))
 WHERE cat_username LIKE 'kkpc.%'
@@ -1499,7 +1499,11 @@ WHERE cat_username LIKE 'kkpc.%'
   OR cat_username LIKE 'svkos.%'
   OR cat_username LIKE 'svkpk.%'
   OR cat_username LIKE 'uzei.%'
-  OR cat_username LIKE 'vkol.%';
+  OR cat_username LIKE 'vkol.%'
+  OR cat_username LIKE 'cvgz.%'
+  OR cat_username LIKE 'tre.%'
+  OR cat_username LIKE 'vkta.%'
+  OR cat_username LIKE 'mkuo.%';
 -- migration for other IdPs - attribute edu_person_unique_id is same as eppn
 UPDATE user_card SET edu_person_unique_id = eppn WHERE edu_person_unique_id IS NULL;
 CREATE UNIQUE INDEX user_card_edu_person_unique_id_uq ON user_card(edu_person_unique_id);

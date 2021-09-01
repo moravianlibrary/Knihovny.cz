@@ -52,6 +52,11 @@ class Manager extends Base
     {
         // modification for GDPR - do not store last name, first name and email
         // in database
+        /**
+         * Logged in user
+         *
+         * @var \KnihovnyCz\Db\Row\User|false
+         */
         $user = parent::isLoggedIn();
         if ($user && isset($this->session->userInfo)) {
             $userInfo = $this->session->userInfo;

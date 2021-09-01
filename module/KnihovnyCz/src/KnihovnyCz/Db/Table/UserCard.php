@@ -31,7 +31,7 @@ namespace KnihovnyCz\Db\Table;
 use Laminas\Db\Sql\Select;
 
 /**
- * Class User
+ * Class UserCard
  *
  * @category VuFind
  * @package  KnihovnyCz\Db\Table
@@ -48,7 +48,7 @@ class UserCard extends \VuFind\Db\Table\UserCard
      *
      * @param string $eduPersonUniqueId eduPersonUniqueId
      *
-     * @return \KnihovnyCz\Db\Row\User
+     * @return \VuFind\Db\Row\UserCard
      */
     public function getByEduPersonUniqueId($eduPersonUniqueId)
     {
