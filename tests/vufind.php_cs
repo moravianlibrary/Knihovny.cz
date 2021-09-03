@@ -26,11 +26,11 @@ $rules = [
     'linebreak_after_opening_tag' => true,
     'list_syntax' => ['syntax' => 'short'],
     'lowercase_cast' => true,
-    'lowercase_constants' => true,
+    'constant_case' => true,
     'lowercase_keywords' => true,
     'magic_constant_casing' => true,
     'method_argument_space' => true,
-    'method_separation' => true,
+    'class_attributes_separation' => true,
     'native_function_casing' => true,
     'no_blank_lines_after_class_opening' => true,
     'no_blank_lines_after_phpdoc' => true,
@@ -39,7 +39,7 @@ $rules = [
     'no_empty_comment' => true,
     'no_empty_phpdoc' => true,
     'no_empty_statement' => true,
-    'no_extra_consecutive_blank_lines' => true,
+    'no_extra_blank_lines' => true,
     'no_leading_import_slash' => true,
     'no_leading_namespace_whitespace' => true,
     'no_mixed_echo_print' => true,
@@ -81,7 +81,8 @@ if (!is_dir($cacheDir)) {
     mkdir($cacheDir);
 }
 
-return PhpCsFixer\Config::create()
+$config = new  PhpCsFixer\Config();
+return $config
     ->setCacheFile($cacheDir . '/.code.cache')
     ->setRiskyAllowed(true)
     ->setRules($rules)
