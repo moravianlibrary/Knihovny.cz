@@ -1,0 +1,47 @@
+FROM docker.io/php:8.0-apache-bullseye
+#FROM docker.io/php:7.4-apache-bullseye
+
+
+LABEL maintainer="mzk.cz"
+
+## Configure Apache
+#RUN a2enmod rewrite \
+#    && sed -i 's!/var/www/html!/var/www/public!g' /etc/apache2/sites-available/000-default.conf \
+#    && mv /var/www/html /var/www/public
+
+# add apache2 extensions
+RUN \
+    apt update && \
+    apt install -y libapache2-mod-shib && \
+    apt clean
+
+## Install libraries and extension
+RUN apt install -y git zlib1g-dev libzip-dev libicu-dev libonig-dev \
+    && docker-php-ext-install zip \
+    && docker-php-ext-configure intl \
+    && docker-php-ext-install intl \
+    && docker-php-ext-install mbstring
+## more libraries!
+
+# RUN docker-php-ext-install apcu  ## this is deprecated in PHP 8.0
+RUN docker-php-ext-install  opcache
+RUN \
+    apt install -y libpng-dev && \
+    docker-php-ext-install gd
+## RUN docker-php-ext-install ldap ## this is not needed in VUFind
+RUN docker-php-ext-install mysqli pdo_mysql
+RUN \
+    apt install -y libxml2-dev libxslt1-dev && \
+   docker-php-ext-install soap xml xsl
+RUN  \
+   pecl install xdebug \
+    && docker-php-ext-enable xdebug
+RUN \
+    pecl install redis \
+    && docker-php-ext-enable redis
+
+ADD docker/etc /etc
+ADD docker/bin/container-entrypoint.sh /container-entrypoint.sh
+RUN chmod ugo+x /container-entrypoint.sh
+
+ENTRYPOINT [ "/container-entrypoint.sh" ]

@@ -1,0 +1,54 @@
+FROM alpine AS vufind
+ARG PARAM_VUFIND_COMMIT_ID
+
+RUN apk add --no-cache curl unzip
+RUN echo "PARAM_VUFIND_COMMIT_ID=$PARAM_VUFIND_COMMIT_ID"
+# Take a vufind source at given state
+RUN curl "https://github.com/vufind-org/vufind/archive/${PARAM_VUFIND_COMMIT_ID}.zip" -L -o /tmp/vufind.zip
+RUN mkdir -p /src/vufind
+RUN \
+      unzip -q /tmp/vufind.zip -d /src/vufind && \
+      ( cd /src/vufind/vufind-${PARAM_VUFIND_COMMIT_ID}/ && \
+      tar cf - . ) | ( cd /src/vufind ; tar xf - )
+
+
+# delete compose.lock
+#RUN rm /src/vufind/composer.lock
+
+
+FROM localhost/knihovny-php:latest AS composer
+
+## Install Composer
+RUN curl -sS https://getcomposer.org/installer \
+  | php -- --install-dir=/usr/local/bin --filename=composer
+
+
+COPY --from=vufind --chown=1000:1000 /src/vufind/composer.json /var/www/composer.json
+COPY --chown=1000:1000 composer.local.json /var/www/composer.local.json
+WORKDIR /var/www
+RUN \
+    mkdir /var/www/.composer  &&  \
+    chown 1000:1000 /var/www/.composer /var/www
+USER 1000
+RUN env COMPOSER_HOME=/var/www/.composer \
+          /usr/local/bin/composer install --no-interaction
+
+
+
+FROM localhost/knihovny-php:latest
+
+RUN a2enmod rewrite shib remoteip
+RUN \
+    apt install libapache2-mod-rpaf -y && \
+    a2enmod rpaf
+
+COPY --from=vufind --chown=1000:1000 /src/vufind /var/www/knihovny-cz/
+COPY --from=composer /usr/local/bin/composer /usr/bin/composer
+
+
+USER 1000
+RUN cd /var/www/knihovny-cz && composer install --no-interaction -q
+
+USER root
+ENTRYPOINT [ "/container-entrypoint.sh" ]
+CMD ["help"]
