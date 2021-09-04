@@ -9,6 +9,20 @@ variables:
   GITLAB_DEPLOY_USER: "gitlab+deploy-token-1"
   GITLAB_DEPLOY_PASSWORD: "-5gxZ_xpbpQoH2ZqUoE4"
 
+Build new container:
+  stage: build
+  rules:
+    - if: ( $CI_MERGE_REQUEST_IID == "233")
+  image: docker:19.03.12
+  services:
+    - docker:19.03.12-dind
+  before_script:
+    - apk update
+    - apk add make bash
+  script:
+    - cd ${CI_PROJECT_DIR}
+    - make -C build
+
 Build container image:
   stage: build
   rules:

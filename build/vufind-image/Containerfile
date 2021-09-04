@@ -11,27 +11,30 @@ RUN \
       ( cd /src/vufind/vufind-${PARAM_VUFIND_COMMIT_ID}/ && \
       tar cf - . ) | ( cd /src/vufind ; tar xf - )
 
-
-# delete compose.lock
-#RUN rm /src/vufind/composer.lock
-
-
 FROM localhost/knihovny-php:latest AS composer
 
 ## Install Composer
 RUN curl -sS https://getcomposer.org/installer \
   | php -- --install-dir=/usr/local/bin --filename=composer
+RUN \
+    apt update && \
+    apt install unzip -y
 
 
 COPY --from=vufind --chown=1000:1000 /src/vufind/composer.json /var/www/composer.json
+COPY --from=vufind --chown=1000:1000 /src/vufind/build.xml /var/www/build.xml
+#COPY --from=vufind --chown=1000:1000 /src/vufind/composer.lock /var/www/composer.lock
 COPY --chown=1000:1000 composer.local.json /var/www/composer.local.json
-WORKDIR /var/www
+
 RUN \
     mkdir /var/www/.composer  &&  \
     chown 1000:1000 /var/www/.composer /var/www
 USER 1000
-RUN env COMPOSER_HOME=/var/www/.composer \
-          /usr/local/bin/composer install --no-interaction
+ARG COMPOSER_NO_INTERACTION=1
+ARG COMPOSER_HOME=/var/www/.composer
+WORKDIR /var/www
+#RUN /usr/local/bin/composer check-platform-reqs
+RUN /usr/local/bin/composer --no-dev --no-scripts install
 
 
 
