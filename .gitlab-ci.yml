@@ -5,23 +5,24 @@ variables:
   REGISTRY_URL: registry.app.knihovny.cz
   TARGET_IMAGE_NAME: moravianlibrary/vufind
   BUILD_DEBUG: 'true'
+  #DOCKER_BUILDKIT: 1
 
-  GITLAB_DEPLOY_USER: "gitlab+deploy-token-1"
-  GITLAB_DEPLOY_PASSWORD: "-5gxZ_xpbpQoH2ZqUoE4"
-
-Build new container:
+Build multistage image:
   stage: build
   rules:
     - if: ( $CI_MERGE_REQUEST_IID == "233")
-  image: docker:19.03.12
+  image: docker:20.10-git
   services:
-    - docker:19.03.12-dind
+    - docker:20.10-dind
   before_script:
     - apk update
     - apk add make bash
+    - mkdir -p $HOME/.docker
+    - cp ${REGISTRY_AUTH_FILE} $HOME/.docker/config.json
   script:
     - cd ${CI_PROJECT_DIR}
-    - make -C build
+    - make -C build IMAGE_NAME=${REGISTRY_URL}/knihovny-cz/vufind:build
+    - docker push ${REGISTRY_URL}/knihovny-cz/vufind:build
 
 Build container image:
   stage: build

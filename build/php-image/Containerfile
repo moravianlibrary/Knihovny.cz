@@ -1,8 +1,9 @@
 FROM docker.io/php:8.0-apache-bullseye
 #FROM docker.io/php:7.4-apache-bullseye
-
+ARG ADD_EXTRA_PACKAGES=""
 
 LABEL maintainer="mzk.cz"
+USER root
 
 ## Configure Apache
 #RUN a2enmod rewrite \
@@ -22,6 +23,32 @@ RUN apt install -y git zlib1g-dev libzip-dev libicu-dev libonig-dev \
     && docker-php-ext-install intl \
     && docker-php-ext-install mbstring
 ## more libraries!
+
+# add basic productivity tools
+RUN apt update && apt-get install -y \
+        bash-completion \
+        coreutils \
+        curl \
+        dnsutils \
+        git \
+        htop \
+        iputils-ping \
+        iputils-tracepath \
+        libapache2-mod-rpaf \
+        libapache2-mod-shib \
+        mc \
+        mlocate \
+        default-mysql-client \
+        net-tools \
+        ssh \
+        vim \
+        locales \
+        nodejs \
+        npm \
+        ${ADD_EXTRA_PACKAGES} \
+    && apt-get clean \
+    && apt-get autoremove -y
+
 
 # RUN docker-php-ext-install apcu  ## this is deprecated in PHP 8.0
 RUN docker-php-ext-install  opcache
@@ -43,5 +70,9 @@ RUN \
 ADD docker/etc /etc
 ADD docker/bin/container-entrypoint.sh /container-entrypoint.sh
 RUN chmod ugo+x /container-entrypoint.sh
+
+RUN \
+  groupadd --gid 1000 vufind && \
+  useradd --create-home --shell /bin/bash --uid 1000 --gid 1000 vufind
 
 ENTRYPOINT [ "/container-entrypoint.sh" ]

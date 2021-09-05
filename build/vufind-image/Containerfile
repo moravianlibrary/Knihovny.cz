@@ -1,4 +1,5 @@
-FROM alpine AS vufind
+########### download upstream vufind
+FROM docker.io/alpine:latest AS vufind-src
 ARG PARAM_VUFIND_COMMIT_ID
 
 RUN apk add --no-cache curl unzip
@@ -6,51 +7,108 @@ RUN echo "PARAM_VUFIND_COMMIT_ID=$PARAM_VUFIND_COMMIT_ID"
 # Take a vufind source at given state
 RUN curl "https://github.com/vufind-org/vufind/archive/${PARAM_VUFIND_COMMIT_ID}.zip" -L -o /tmp/vufind.zip
 RUN mkdir -p /src/vufind
+# unzip and remove top directory
 RUN \
       unzip -q /tmp/vufind.zip -d /src/vufind && \
       ( cd /src/vufind/vufind-${PARAM_VUFIND_COMMIT_ID}/ && \
       tar cf - . ) | ( cd /src/vufind ; tar xf - )
 
-FROM localhost/knihovny-php:latest AS composer
+########### install PHP libraries
+FROM localhost/knihovny-php:latest AS libraries
+
+ARG COMPOSER_NO_INTERACTION=1
+ARG COMPOSER_HOME=/tmp/composer-cache
+ARG VUFIND_ROOT=/var/www/knihovny-cz
+ARG VUFIND_EXTENSIONS_ROOT=/var/www/knihovny-cz-extra
+#ARG NODE_PATH=/var/www/node_modules
+ARG NPM_CONFIG_PREFIX=/opt/npm
 
 ## Install Composer
 RUN curl -sS https://getcomposer.org/installer \
-  | php -- --install-dir=/usr/local/bin --filename=composer
+  | php -- --install-dir=/usr/local/bin --filename=composer \
+
 RUN \
     apt update && \
     apt install unzip -y
 
-
-COPY --from=vufind --chown=1000:1000 /src/vufind/composer.json /var/www/composer.json
-COPY --from=vufind --chown=1000:1000 /src/vufind/build.xml /var/www/build.xml
+# Prepare vufind build directories
+COPY --from=vufind-src  /src/vufind/composer.json ${VUFIND_ROOT}/composer.json
+COPY --from=vufind-src /src/vufind/build.xml ${VUFIND_ROOT}/build.xml
 #COPY --from=vufind --chown=1000:1000 /src/vufind/composer.lock /var/www/composer.lock
-COPY --chown=1000:1000 composer.local.json /var/www/composer.local.json
+COPY composer.local.json ${VUFIND_ROOT}/composer.local.json
+RUN chown vufind:vufind -R ${VUFIND_ROOT}
 
 RUN \
-    mkdir /var/www/.composer  &&  \
-    chown 1000:1000 /var/www/.composer /var/www
+    mkdir -p ${COMPOSER_HOME} &&  \
+    chown vufind:vufind -Rv ${COMPOSER_HOME} ${VUFIND_ROOT}
+
+RUN \
+    mkdir ${VUFIND_ROOT}/node_modules && chown vufind:vufind -R ${VUFIND_ROOT}
+RUN \
+    mkdir ${NPM_CONFIG_PREFIX} && chown vufind:vufind -R ${NPM_CONFIG_PREFIX}
 USER 1000
-ARG COMPOSER_NO_INTERACTION=1
-ARG COMPOSER_HOME=/var/www/.composer
-WORKDIR /var/www
+
+WORKDIR ${VUFIND_ROOT}
 #RUN /usr/local/bin/composer check-platform-reqs
 RUN /usr/local/bin/composer --no-dev --no-scripts install
 
 
 
+# Add node_modules
+USER vufind
+WORKDIR ${VUFIND_ROOT}
+
+RUN npm install -g grunt-cli
+RUN npm install
+
+########### final image
 FROM localhost/knihovny-php:latest
+ARG VUFIND_ROOT=/var/www/knihovny-cz/
+ARG VUFIND_EXTENSIONS_ROOT=/var/www/knihovny-cz-extra
 
 RUN a2enmod rewrite shib remoteip
 RUN \
     apt install libapache2-mod-rpaf -y && \
     a2enmod rpaf
 
-COPY --from=vufind --chown=1000:1000 /src/vufind /var/www/knihovny-cz/
-COPY --from=composer /usr/local/bin/composer /usr/bin/composer
+COPY --from=libraries /usr/local/bin/composer /usr/bin/composer
+
+# copy vufind source
+COPY --from=vufind-src  /src/vufind/ ${VUFIND_ROOT}
+# copy vufind PHP modules
+COPY --from=libraries  ${VUFIND_ROOT}/vendor/ ${VUFIND_ROOT}/vendor/
+# copy vufind node modules
+COPY --from=libraries  ${VUFIND_ROOT}/node_modules/ ${VUFIND_ROOT}/node_modules/
+
+# copy local extensions
+ADD ./local ${VUFIND_EXTENSIONS_ROOT}/local
+ADD ./module ${VUFIND_EXTENSIONS_ROOT}/module
+ADD ./themes  ${VUFIND_EXTENSIONS_ROOT}/themes
+RUN \
+    ln -sv ${VUFIND_EXTENSIONS_ROOT}/local/{base,irel,kiv,knihovny.cz,mus,tech,templates} ${VUFIND_ROOT}/local && \
+    ln -sv ${VUFIND_EXTENSIONS_ROOT}/module/* ${VUFIND_ROOT}/module &&  \
+    ln -sv ${VUFIND_EXTENSIONS_ROOT}/themes/* ${VUFIND_ROOT}/themes && \
+    echo "OK" \
+
+RUN chown vufind:vufind -R ${VUFIND_ROOT} ${VUFIND_EXTENSIONS_ROOT}
+
+# add random scripts
+COPY  build/scripts/install-portal-content.sh /onstart/010-install-portal-content.sh
+COPY  build/scripts/clear-cache.sh /usr/local/bin/clear-cache
+RUN \
+  chmod 0755 \
+        /onstart/010-install-portal-content.sh \
+        /usr/local/bin/clear-cache
 
 
-USER 1000
-RUN cd /var/www/knihovny-cz && composer install --no-interaction -q
+
+#USER vufind
+#WORKDIR ${VUFIND_ROOT}
+# TODO: add node_modules ?
+
+# ignores
+# COPY phpunit.xml /var/www/knihovny-cz/
+
 
 USER root
 ENTRYPOINT [ "/container-entrypoint.sh" ]
