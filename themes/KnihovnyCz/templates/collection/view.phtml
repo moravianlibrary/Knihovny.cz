@@ -42,6 +42,8 @@
     <?=$this->flashmessages()?>
     <?=$this->record($this->driver)->getCollectionMetadata()?>
 
+    <?=$this->render('record/deduplicated-records.phtml'); ?>
+
     <?php if (count($this->tabs) > 0): ?>
       <a name="tabnav"></a>
       <div class="record-tabs">

@@ -102,8 +102,6 @@ JS;
 
 ?>
 
-<?=$this->render('record/deduplicated-records.phtml'); ?>
-
 <?=$this->context($this)->renderInContext('librarycards/selectcard.phtml', ['user' => $this->auth()->isLoggedIn()]); ?>
 
 <?php if (!empty($holdings['blocks'])):?>
