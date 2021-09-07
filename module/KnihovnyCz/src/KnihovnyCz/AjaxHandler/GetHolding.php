@@ -126,9 +126,6 @@ class GetHolding extends \VuFind\AjaxHandler\AbstractBase
                         $item['status']
                     );
                     $item['label'] = $labels[$holdingStatus] ?? 'default';
-                    if ($item['status'] !== 'On Loan') {
-                        $item['duedate'] = null;
-                    }
                     $status = $this->translateWithSource(
                         $source, $item['status'], 'HoldingStatus'
                     );
