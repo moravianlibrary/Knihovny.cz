@@ -54,8 +54,20 @@
       <a href="<?=$this->url('librarycards-connectcardlogin') ?>" class="btn btn-link"><i class="fa fa-edit" aria-hidden="true"></i> <?=$this->transEsc('Add a Library Card using login')?></a>
     <?php endif;?>
   </div>
+
 </div>
 
 <div class="<?=$this->layoutClass('sidebar')?>">
   <?=$this->context($this)->renderInContext("myresearch/menu.phtml", ['active' => 'librarycards'])?>
+</div>
+
+<div class="btn-group pull-right">
+  <a class="btn btn-link dropdown-toggle" data-toggle="dropdown" href="<?=$this->url('myresearch-deleteuser') ?>">
+    <i class="fa fa-trash-o" aria-hidden="true"></i> <?=$this->transEsc('delete-user-account')?>
+  </a>
+  <ul class="dropdown-menu">
+    <pre><?=$this->translate('delete-user-account-confirm')?></pre>
+    <li><a href="<?=$this->url('myresearch-deleteuser') ?>?confirm=1" data-clear-account-cache><?=$this->transEsc('confirm_dialog_yes') ?></a></li>
+    <li><a href="#"><?=$this->transEsc('confirm_dialog_no')?></a></li>
+  </ul>
 </div>

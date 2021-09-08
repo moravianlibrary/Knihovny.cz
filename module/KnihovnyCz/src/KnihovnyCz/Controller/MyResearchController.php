@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Class LibraryCardsController
+ * Class MyResearchController
  *
  * PHP version 7
  *
@@ -28,10 +28,10 @@
  */
 namespace KnihovnyCz\Controller;
 
-use VuFind\Controller\LibraryCardsController as LibraryCardsControllerBase;
+use VuFind\Controller\MyResearchController as MyResearchControllerBase;
 
 /**
- * Class LibraryCardsController
+ * Class MyResearchController
  *
  * @category VuFind
  * @package  KnihovnyCz\Controllers
@@ -39,37 +39,33 @@ use VuFind\Controller\LibraryCardsController as LibraryCardsControllerBase;
  * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://knihovny.cz Main Page
  */
-class LibraryCardsController extends LibraryCardsControllerBase
+class MyResearchController extends MyResearchControllerBase
 {
     /**
-     * Creates a confirmation box to delete or not delete the current list
+     * Delete user account if it is confirmed
      *
-     * @return mixed
+     * @return mixed|\Zend\Http\Response|\Zend\Http\Response
      */
-    public function deleteCardAction()
+    public function deleteUserAction()
     {
-        try {
-            return parent::deleteCardAction();
-        } catch (\Exception $ex) {
-            // Display error message instead of error page
-            $this->flashMessenger()->addMessage($ex->getMessage(), 'error');
-            // Redirect to MyResearch library cards
-            return $this->redirect()->toRoute('librarycards-home');
+        // Stop now if the user does not have valid catalog credentials available:
+        if (!$user = $this->getAuthManager()->isLoggedIn()) {
+            $this->flashExceptions($this->flashMessenger());
+            return $this->forceLogin();
         }
-    }
 
-    /**
-     * Process the "edit library card" submission. Only update card name.
-     *
-     * @param \VuFind\Db\Row\User $user Logged in user
-     *
-     * @return object|false        Response object if redirect is
-     * needed, false if form needs to be redisplayed.
-     */
-    protected function processEditLibraryCard($user)
-    {
+        $confirm = $this->params()->fromPost(
+            'confirm', $this->params()
+                ->fromQuery('confirm')
+        );
+
+        if ($confirm) {
+            $user->delete();
+            return $this->logoutAction();
+        }
+
         $this->flashMessenger()->addErrorMessage(
-            "Editation of library cards is not supported"
+            $this->translate('delete-user-account-not-confirmed')
         );
         return $this->redirect()->toRoute('librarycards-home');
     }

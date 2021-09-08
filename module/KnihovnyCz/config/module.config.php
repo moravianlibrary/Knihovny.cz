@@ -101,6 +101,7 @@ $config = [
             \KnihovnyCz\Controller\PortalPageController::class => \VuFind\Controller\AbstractBaseFactory::class,
             \KnihovnyCz\Controller\WayfController::class => \VuFind\Controller\AbstractBaseFactory::class,
             \KnihovnyCz\Controller\LibraryCardsController::class => \VuFind\Controller\AbstractBaseFactory::class,
+            \KnihovnyCz\Controller\MyResearchController::class => \VuFind\Controller\AbstractBaseFactory::class,
             \KnihovnyCz\Controller\RecordController::class => \VuFind\Controller\AbstractBaseWithConfigFactory::class,
             \KnihovnyCz\Controller\SearchController::class => \VuFind\Controller\AbstractBaseFactory::class,
         ],
@@ -109,6 +110,7 @@ $config = [
             'PortalPage' => \KnihovnyCz\Controller\PortalPageController::class,
             'Wayf' => \KnihovnyCz\Controller\WayfController::class,
             'LibraryCards' => \KnihovnyCz\Controller\LibraryCardsController::class,
+            'MyResearch' => \KnihovnyCz\Controller\MyResearchController::class,
             \VuFind\Controller\RecordController::class => \KnihovnyCz\Controller\RecordController::class,
             \VuFind\Controller\SearchController::class => \KnihovnyCz\Controller\SearchController::class,
         ],
@@ -317,6 +319,7 @@ $staticRoutes = [
     'Libraries/Home' => 'Search2/Home',
     'Libraries/Results' => 'Search2/Results',
     'Libraries/Versions' => 'Search2/Versions',
+    'MyResearch/DeleteUser' => 'MyResearch/DeleteUser',
 ];
 
 $routeGenerator = new \KnihovnyCz\Route\RouteGenerator();
