@@ -1,6 +1,7 @@
 @import "font-lato";
 @import "bootstrap";
 @import "variables";
+@import "autocomplete";
 @import "knihovny";
 @import "format-icons";
 @import "content-pages";
@@ -85,7 +86,7 @@ fieldset, .fieldset {
       }
     }
 
-    .iconlabel{
+    .iconlabel {
       padding-top: 0.2em;
     }
   }
@@ -334,8 +335,7 @@ h2:hover .heading-permalink,
 h3:hover .heading-permalink,
 h4:hover .heading-permalink,
 h5:hover .heading-permalink,
-h6:hover .heading-permalink
-{
+h6:hover .heading-permalink {
   visibility: visible;
 }
 
@@ -478,7 +478,11 @@ h6:hover .heading-permalink
   font-size: inherit;
 }
 
-.btn-type-cite::before { content: "\f27b"; } // .fa-commenting-o
+.btn-type-cite::before {
+  content: "\f27b";
+}
+
+// .fa-commenting-o
 
 #citation-container {
   margin-bottom: 2em;
@@ -509,6 +513,7 @@ h6:hover .heading-permalink
       padding-bottom: 3px;
       padding-right: 3px;
     }
+
     small {
       margin-left: 1em;
     }
@@ -564,3 +569,20 @@ h6:hover .heading-permalink
 .mr-05 {
   margin-right: 5px;
 }
+
+//// autocomplete results
+//.autocomplete-results {
+//  display: table !important;
+//
+//  .ac-section-divider {
+//    display: none;
+//  }
+//
+//  .ac-section-header {
+//    float: none;
+//    margin: 0;
+//    padding: .5rem;
+//  }
+//
+
+//}
