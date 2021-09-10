@@ -71,6 +71,10 @@ ADD docker/etc /etc
 ADD docker/bin/container-entrypoint.sh /container-entrypoint.sh
 RUN chmod ugo+x /container-entrypoint.sh
 
+ADD https://github.com/a8m/envsubst/releases/download/v1.2.0/envsubst-Linux-x86_64 /usr/bin/envsubst.a8m
+RUN \
+    chmod a+x /usr/bin/envsubst.a8m
+
 RUN \
   groupadd --gid 1000 vufind && \
   useradd --create-home --shell /bin/bash --uid 1000 --gid 1000 vufind
