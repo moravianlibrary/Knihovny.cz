@@ -28,6 +28,7 @@
  */
 namespace KnihovnyCz\Controller;
 
+use Laminas\View\Model\ViewModel;
 use VuFind\Controller\LibraryCardsController as LibraryCardsControllerBase;
 
 /**
@@ -41,6 +42,22 @@ use VuFind\Controller\LibraryCardsController as LibraryCardsControllerBase;
  */
 class LibraryCardsController extends LibraryCardsControllerBase
 {
+    /**
+     * Send user's library cards to the view
+     *
+     * @return mixed
+     */
+    public function homeAction()
+    {
+        $model = parent::homeAction();
+        if ($model instanceof ViewModel) {
+            $model->setVariable(
+                'csrfHash', $this->getAuthManager()->getCsrfHash(false)
+            );
+        }
+        return $model;
+    }
+
     /**
      * Creates a confirmation box to delete or not delete the current list
      *

@@ -54,12 +54,10 @@ class MyResearchController extends MyResearchControllerBase
             return $this->forceLogin();
         }
 
-        $confirm = $this->params()->fromPost(
-            'confirm', $this->params()
-                ->fromQuery('confirm')
-        );
+        $confirm = $this->params()->fromPost('confirm', false);
+        $csrf = $this->params()->fromPost('csrf', null);
 
-        if ($confirm) {
+        if ($confirm && $this->getAuthManager()->isValidCsrfHash($csrf)) {
             $user->delete();
             return $this->logoutAction();
         }

@@ -28,8 +28,9 @@
  */
 namespace KnihovnyCz\Auth;
 
-use \VuFind\Auth\Manager as Base;
-use \VuFind\Db\Row\User;
+use VuFind\Auth\Manager as Base;
+use VuFind\Db\Row\User;
+
 /**
  * Wrapper class for handling logged-in user in session.
  *
@@ -41,7 +42,6 @@ use \VuFind\Db\Row\User;
  */
 class Manager extends Base
 {
-
     /**
      * Checks whether the user is logged in.
      *
@@ -67,4 +67,16 @@ class Manager extends Base
         return $user;
     }
 
+    /**
+     * Does the provided token match the one generated?
+     *
+     * @param string $value   value to check
+     * @param mixed  $context context
+     *
+     * @return bool
+     */
+    public function isValidCsrfHash($value, $context = null)
+    {
+        return $this->csrf->isValid($value, $context);
+    }
 }

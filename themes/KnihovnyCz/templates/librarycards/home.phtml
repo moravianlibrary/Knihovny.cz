@@ -67,7 +67,13 @@
   </a>
   <ul class="dropdown-menu">
     <pre><?=$this->translate('delete-user-account-confirm')?></pre>
-    <li><a href="<?=$this->url('myresearch-deleteuser') ?>?confirm=1" data-clear-account-cache><?=$this->transEsc('confirm_dialog_yes') ?></a></li>
-    <li><a href="#"><?=$this->transEsc('confirm_dialog_no')?></a></li>
+    <li>
+      <form action="<?=$this->url('myresearch-deleteuser') ?>" method="post">
+        <input type='hidden' name='csrf' value="<?=$this->escapeHtml($this->csrfHash)?>"/>
+        <input type='hidden' name='confirm' value='1'/>
+        <button type='submit' class="btn btn-link"><?=$this->transEscAttr('confirm_dialog_yes') ?></button>
+      </form>
+    </li>
+    <button type='submit' class="btn btn-link"><?=$this->transEscAttr('confirm_dialog_no') ?></button>
   </ul>
 </div>
