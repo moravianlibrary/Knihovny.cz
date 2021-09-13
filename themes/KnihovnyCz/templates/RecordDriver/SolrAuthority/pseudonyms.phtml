@@ -1,7 +1,7 @@
 <?php foreach ($data as $author => $authRecordId):
   $escapedName = $this->escapeHtmlAttr($author); ?>
   <div>
-    <a title="<?=$this->translate('Show person')?> <?=$escapedName?>" href="<?=$this->recordLink()->getUrl($authRecordId)?>"><i class="fa fa-user-circle-o"></i></a>
+    <a title="<?=$this->translate('Show person')?> <?=$escapedName?>" href="<?=$this->escapeHtmlAttr($this->recordLinker()->getUrl($authRecordId))?>"><i class="fa fa-user-circle-o"></i></a>
     <a title="<?=$this->translate('Show publications by')?> <?=$escapedName?>" href="<?=$this->record($this->driver)->getLink('author', $author)?>"><?=$escapedName?></a>
   </div>
 <?php endforeach;
