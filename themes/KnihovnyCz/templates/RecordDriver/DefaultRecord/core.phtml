@@ -59,9 +59,9 @@
     <?php if ($summary): ?>
       <?php $splitText = $this->splitText($summary, 360); ?>
       <p>
-        <span class="text-first"><?=$splitText->first()?></span>
-        <?php if($splitText->last()): ?>
-          <span class="text-last hidden"><?=$splitText->last()?></span>
+        <span class="text-first"><?=$this->escapeHtml($splitText->first())?></span>
+        <?php if ($splitText->last()): ?>
+          <span class="text-last hidden"><?=$this->escapeHtml($splitText->last())?></span>
           <span class="btn-show-full-text">… <a><?=$this->transEsc('full_description')?></a></span>
         <?php endif; ?>
       </p>
