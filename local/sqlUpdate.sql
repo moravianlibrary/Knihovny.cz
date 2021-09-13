@@ -1508,3 +1508,11 @@ WHERE cat_username LIKE 'kkpc.%'
 UPDATE user_card SET edu_person_unique_id = eppn WHERE edu_person_unique_id IS NULL;
 CREATE UNIQUE INDEX user_card_edu_person_unique_id_uq ON user_card(edu_person_unique_id);
 UPDATE `system` SET `value` = '78' WHERE `key`='DB_VERSION';
+
+-- Issue 308 - support for history in Aleph
+INSERT INTO inst_sections(id, section_name) VALUES(20, 'TransactionHistory');
+INSERT INTO inst_keys (id, key_name, section_id) VALUES (83, 'enabled', 20);
+INSERT INTO inst_configs(source_id, key_id, value, timestamp)
+  SELECT source.id, 83, 'true', NOW()
+  FROM inst_sources source
+  WHERE driver = 'aleph';
