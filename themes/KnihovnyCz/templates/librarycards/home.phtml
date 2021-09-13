@@ -63,10 +63,10 @@
 
 <div class="btn-group pull-right">
   <a class="btn btn-link dropdown-toggle" data-toggle="dropdown" href="<?=$this->url('myresearch-deleteuser') ?>">
-    <i class="fa fa-trash-o" aria-hidden="true"></i> <?=$this->transEsc('delete-user-account')?>
+    <i class="fa fa-trash-o" aria-hidden="true"></i> <?=$this->transEsc('delete_user_account')?>
   </a>
   <ul class="dropdown-menu">
-    <pre><?=$this->translate('delete-user-account-confirm')?></pre>
+    <pre><?=$this->translate('delete_user_account_confirm')?></pre>
     <li>
       <form action="<?=$this->url('myresearch-deleteuser') ?>" method="post">
         <input type='hidden' name='csrf' value="<?=$this->escapeHtml($this->csrfHash)?>"/>

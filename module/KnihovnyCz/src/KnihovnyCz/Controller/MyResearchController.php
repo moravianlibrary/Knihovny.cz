@@ -44,7 +44,7 @@ class MyResearchController extends MyResearchControllerBase
     /**
      * Delete user account if it is confirmed
      *
-     * @return mixed|\Zend\Http\Response|\Zend\Http\Response
+     * @return mixed|\Laminas\Http\Response
      */
     public function deleteUserAction()
     {
@@ -63,7 +63,7 @@ class MyResearchController extends MyResearchControllerBase
         }
 
         $this->flashMessenger()->addErrorMessage(
-            $this->translate('delete-user-account-not-confirmed')
+            $this->translate('delete_user_account_not_confirmed')
         );
         return $this->redirect()->toRoute('librarycards-home');
     }
