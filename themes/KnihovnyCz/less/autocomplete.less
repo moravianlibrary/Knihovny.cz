@@ -33,8 +33,11 @@
       color: #ffffff;
     }
 
-    &.loading {
+    &.loading,
+    &.loading:hover {
       background-color: @autocomplete-item-bg;
+      color: @autocomplete-active-bg;
+      cursor: text;
     }
 
     &.selected {
