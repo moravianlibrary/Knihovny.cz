@@ -101,6 +101,7 @@ $config = [
             \KnihovnyCz\Controller\PortalPageController::class => \VuFind\Controller\AbstractBaseFactory::class,
             \KnihovnyCz\Controller\WayfController::class => \VuFind\Controller\AbstractBaseFactory::class,
             \KnihovnyCz\Controller\LibraryCardsController::class => \VuFind\Controller\AbstractBaseFactory::class,
+            \KnihovnyCz\Controller\MyResearchController::class => \VuFind\Controller\AbstractBaseFactory::class,
             \KnihovnyCz\Controller\RecordController::class => \VuFind\Controller\AbstractBaseWithConfigFactory::class,
             \KnihovnyCz\Controller\SearchController::class => \VuFind\Controller\AbstractBaseFactory::class,
         ],
@@ -109,12 +110,21 @@ $config = [
             'PortalPage' => \KnihovnyCz\Controller\PortalPageController::class,
             'Wayf' => \KnihovnyCz\Controller\WayfController::class,
             'LibraryCards' => \KnihovnyCz\Controller\LibraryCardsController::class,
+            'MyResearch' => \KnihovnyCz\Controller\MyResearchController::class,
             \VuFind\Controller\RecordController::class => \KnihovnyCz\Controller\RecordController::class,
             \VuFind\Controller\SearchController::class => \KnihovnyCz\Controller\SearchController::class,
         ],
     ],
     'vufind' => [
         'plugin_managers' => [
+            'auth' => [
+                'factories' => [
+                    \KnihovnyCz\Auth\Shibboleth::class => \VuFind\Auth\ShibbolethFactory::class,
+                ],
+                'aliases' => [
+                    \VuFind\Auth\Shibboleth::class => \KnihovnyCz\Auth\Shibboleth::class,
+                ],
+            ],
             'recorddriver' =>  [
                 'factories' => [
                     \KnihovnyCz\RecordDriver\SolrAuthority::class => \KnihovnyCz\RecordDriver\SolrDefaultFactory::class,
@@ -185,13 +195,12 @@ $config = [
                     \KnihovnyCz\Db\Row\InstSources::class => \VuFind\Db\Row\RowGatewayFactory::class,
                     \KnihovnyCz\Db\Row\Widget::class => \VuFind\Db\Row\RowGatewayFactory::class,
                     \KnihovnyCz\Db\Row\WidgetContent::class => \VuFind\Db\Row\RowGatewayFactory::class,
+                    \KnihovnyCz\Db\Row\User::class => \VuFind\Db\Row\UserFactory::class,
+                    \KnihovnyCz\Db\Row\UserCard::class => \VuFind\Db\Row\RowGatewayFactory::class,
                 ],
                 'aliases' => [
-                    // VuFind\Db\Table\GatewayFactory search for row class by name
-                    // We do not need to customize row class for user, so we are
-                    // are aliasing back to original one. It has to be string as the
-                    // class does not exist
-                    'KnihovnyCz\Db\Row\User' => \VuFind\Db\Row\User::class,
+                    \VuFind\Db\Row\User::class => \KnihovnyCz\Db\Row\User::class,
+                    \VuFind\Db\Row\UserCard::class => \KnihovnyCz\Db\Row\UserCard::class,
                 ]
             ],
             'db_table' => [
@@ -200,11 +209,13 @@ $config = [
                     \KnihovnyCz\Db\Table\InstConfigs::class => \VuFind\Db\Table\GatewayFactory::class,
                     \KnihovnyCz\Db\Table\InstSources::class => \VuFind\Db\Table\GatewayFactory::class,
                     \KnihovnyCz\Db\Table\User::class => \VuFind\Db\Table\UserFactory::class,
+                    \KnihovnyCz\Db\Table\UserCard::class => \VuFind\Db\Table\GatewayFactory::class,
                     \KnihovnyCz\Db\Table\Widget::class => \VuFind\Db\Table\GatewayFactory::class,
                     \KnihovnyCz\Db\Table\WidgetContent::class => \VuFind\Db\Table\GatewayFactory::class,
                 ],
                 'aliases' => [
                     \VuFind\Db\Table\User::class => \KnihovnyCz\Db\Table\User::class,
+                    \VuFind\Db\Table\UserCard::class => \KnihovnyCz\Db\Table\UserCard::class,
                 ],
             ],
             'ils_driver' => [
@@ -234,6 +245,7 @@ $config = [
                     \KnihovnyCz\AjaxHandler\GetHolding::class => \KnihovnyCz\AjaxHandler\GetHoldingFactory::class,
                     \KnihovnyCz\AjaxHandler\UpdateContent::class => \KnihovnyCz\AjaxHandler\UpdateContentFactory::class,
                     \KnihovnyCz\AjaxHandler\GetObalkyKnihCoverWithoutSolr::class => \KnihovnyCz\AjaxHandler\GetObalkyKnihCoverWithoutSolrFactory::class,
+                    \KnihovnyCz\AjaxHandler\GetACSuggestions::class => \KnihovnyCz\AjaxHandler\GetACSuggestionsFactory::class,
                 ],
                 'aliases' => [
                     'edd' => \KnihovnyCz\AjaxHandler\Edd::class,
@@ -241,6 +253,7 @@ $config = [
                     'getHolding' => \KnihovnyCz\AjaxHandler\GetHolding::class,
                     'getObalkyKnihCoverWithoutSolr' => \KnihovnyCz\AjaxHandler\GetObalkyKnihCoverWithoutSolr::class,
                     'updateContent' => \KnihovnyCz\AjaxHandler\UpdateContent::class,
+                    'getACSuggestions' => \KnihovnyCz\AjaxHandler\GetACSuggestions::class,
                 ],
             ],
             'related' => [
@@ -256,6 +269,14 @@ $config = [
                     'Solr' => \KnihovnyCz\Search\Factory\SolrDefaultBackendFactory::class,
                 ],
             ],
+            'autocomplete' => [
+                'factories' => [
+                    \KnihovnyCz\Autocomplete\SolrPrefix::class => \VuFind\Autocomplete\SolrFactory::class,
+                ],
+                'aliases' => [
+                    'solrprefix' => \KnihovnyCz\Autocomplete\SolrPrefix::class,
+                ]
+            ],
         ],
     ],
     'service_manager' => [
@@ -266,10 +287,14 @@ $config = [
             \KnihovnyCz\Content\ObalkyKnihService::class => \VuFind\Content\ObalkyKnihServiceFactory::class,
             \KnihovnyCz\ILS\Service\SolrIdResolver::class => \KnihovnyCz\ILS\Service\SolrIdResolverFactory::class,
             \KnihovnyCz\Service\WayfFilterGenerator::class => \KnihovnyCz\Service\WayfFilterGeneratorFactory::class,
+            \KnihovnyCz\Auth\Manager::class => \VuFind\Auth\ManagerFactory::class,
+            \KnihovnyCz\Autocomplete\Suggester::class => \VuFind\Autocomplete\SuggesterFactory::class,
         ],
         'aliases' => [
             \VuFind\Config\PluginManager::class => \KnihovnyCz\Config\PluginManager::class,
             \VuFind\Content\ObalkyKnihService::class => \KnihovnyCz\Content\ObalkyKnihService::class,
+            \VuFind\Auth\Manager::class => \KnihovnyCz\Auth\Manager::class,
+            \VuFind\Autocomplete\Suggester::class => \KnihovnyCz\Autocomplete\Suggester::class,
         ],
         'invokables' => [
             \Symfony\Component\Filesystem\Filesystem::class,
@@ -294,6 +319,7 @@ $staticRoutes = [
     'Libraries/Home' => 'Search2/Home',
     'Libraries/Results' => 'Search2/Results',
     'Libraries/Versions' => 'Search2/Versions',
+    'MyResearch/DeleteUser' => 'MyResearch/DeleteUser',
 ];
 
 $routeGenerator = new \KnihovnyCz\Route\RouteGenerator();

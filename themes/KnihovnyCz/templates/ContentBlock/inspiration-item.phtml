@@ -1,5 +1,5 @@
 <?php
-$coverDetails = $this->record($this->item)->getCoverDetails('result-list', 'medium', $this->recordLink()->getUrl($this->item));
+$coverDetails = $this->record($this->item)->getCoverDetails('result-list', 'medium', $this->recordLinker()->getUrl($this->item));
 $cover = $coverDetails['html'];
 $thumbnail = false;
 $thumbnailAlignment = $this->record($this->item)->getThumbnailAlignment('result');
@@ -12,7 +12,7 @@ if ($cover):
   <?php ob_end_clean(); ?>
 <?php endif; ?>
 
-<?php $itemUrl = $this->recordLink()->getUrl($this->item); ?>
+<?php $itemUrl = $this->recordLinker()->getUrl($this->item); ?>
 <div class='list-group-item clearfix'>
   <div class='row'>
     <?php
@@ -33,7 +33,7 @@ if ($cover):
 
     <div class='col-xs-9 col-sm-10 col-md-9 content'>
       <div class='col-xs-12 content'>
-        <a href='<?=$itemUrl ?>'>
+        <a href='<?=$this->escapeHtmlAttr($itemUrl) ?>'>
         <h4 class='list-group-item-heading'>
           <?=$this->item->getTitle() ?>
         </h4>

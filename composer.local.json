@@ -11,7 +11,9 @@
         "moravianlibrary/ziskej-api-php-client": "^2.1",
         "lcobucci/jwt": "^3.3",
         "cpliakas/git-wrapper": "^3.0",
-        "symfony/filesystem": "^4.4"
+        "symfony/filesystem": "^4.4",
+        "phpstan/phpstan": "^0.12.82",
+        "friendsofphp/php-cs-fixer": "^2.18.4"
     },
     "scripts": {
          "phing-install-dependencies": "phing installswaggerui"

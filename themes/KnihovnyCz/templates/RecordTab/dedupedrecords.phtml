@@ -6,7 +6,7 @@
 <?php if(!empty($records)): ?>
   <?php foreach ($records as $record): ?>
     <li>
-      <a class="hover-overlay" href="<?=$this->recordLink()->getUrl($record['id'])?>">
+      <a class="hover-overlay" href="<?=$this->escapeHtmlAttr($this->recordLinker()->getUrl($record['id']))?>">
         <?=$this->transEsc('Source::' . $record['source'])?>
       </a>
     </li>

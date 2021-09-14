@@ -1,5 +1,5 @@
 <span class="input-group-btn">
-  <a href="<?=$this->recordLink()->getUrl("Search2|library.$this->libraryId")?>" class="btn btn-light" target="_blank" title="<?=$this->translate('Information about library')?>">
+  <a href='<?=$this->escapeHtmlAttr($this->recordLinker()->getUrl("Search2|library.$this->libraryId"))?>' class="btn btn-light" target="_blank" title="<?=$this->translate('Information about library')?>">
     <i class="fa fa-info-circle"></i> <?=$this->translate('Information about library')?>
   </a>
 </span>

@@ -10,7 +10,7 @@
         'institutions/logos/' . $record['source'] . '/' . $record['source']
         . $logosPostfix . '.png'
       );
-      $recordUrl = $this->recordLink()->getUrl($record['id']);
+      $recordUrl = $this->recordLinker()->getUrl($record['id']);
       $data[] = [
         'id' => $record['id'],
         'image' => $imageSrc,

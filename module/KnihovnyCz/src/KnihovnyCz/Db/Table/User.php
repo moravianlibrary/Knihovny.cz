@@ -29,6 +29,8 @@
 namespace KnihovnyCz\Db\Table;
 
 use Laminas\Db\Sql\Select;
+use Laminas\Db\Sql\Update;
+use KnihovnyCz\Db\Row\User as UserRow;
 
 /**
  * Class User
@@ -36,12 +38,43 @@ use Laminas\Db\Sql\Select;
  * @category VuFind
  * @package  KnihovnyCz\Db\Table
  * @author   Josef Moravec <moravec@mzk.cz>
+ * @author   Jiří Kozlovský <mail@jkozlovsky.cz>
+ * @author   Václav Rosecký <vaclav.rosecky@mzk.cz>
  * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://knihovny.cz Main Page
  */
 class User extends \VuFind\Db\Table\User
 {
     use \VuFind\Db\Table\ExpirationTrait;
+
+    /**
+     * Retrieve a user object from the database based on eduPersonUniqueId
+     * or create new one.
+     *
+     * @param string $eduPersonUniqueId eduPersonUniqueId
+     *
+     * @return UserRow
+     */
+    public function getByEduPersonUniqueId($eduPersonUniqueId)
+    {
+        $callback = function ($select) use ($eduPersonUniqueId) {
+            $select->join(
+                ['uc' => 'user_card'], 'user.id = uc.user_id',
+                []
+            );
+            $select->where->equalTo('uc.edu_person_unique_id', $eduPersonUniqueId);
+        };
+        $row = $this->select($callback)->current();
+        if (empty($row)) {
+            $row = $this->createRow();
+            $row->created = date('Y-m-d H:i:s');
+            $row->username = $eduPersonUniqueId;
+            // Failing to initialize this here can cause Laminas\Db errors in
+            // the VuFind\Auth\Shibboleth and VuFind\Auth\ILS integration tests.
+            $row->user_provided_email = 0;
+        }
+        return $row;
+    }
 
     /**
      * Update the select statement to find records to delete.
@@ -69,4 +102,85 @@ class User extends \VuFind\Db\Table\User
             $where->and->lessThanOrEqualTo('id', $idTo);
         }
     }
+
+    /**
+     * This method basically replaces all occurrences of $from->id (UserRow id)
+     * in tables comments, user_resource, user_list, user_card and search with
+     * $into->id in user_id column.
+     *
+     * @param UserRow $from from
+     * @param UserRow $into into
+     *
+     * @throws \Exception
+     *
+     * @return void
+     */
+    public function merge(UserRow $from, UserRow $into)
+    {
+        // do it in transaction
+        $this->getDbConnection()->beginTransaction();
+        $institutions = [];
+        foreach ($from->getLibraryCards() as $fromCard) {
+            $prefix = explode('.', $fromCard->cat_username)[0];
+            $institutions[$prefix] = $fromCard;
+        }
+        foreach ($into->getLibraryCards() as $intoCard) {
+            $prefix = explode('.', $intoCard->cat_username)[0];
+            if (isset($institutions[$prefix])) {
+                $fromCard = $institutions[$prefix];
+                if ($fromCard->edu_person_unique_id== $intoCard->edu_person_unique_id
+                ) {
+                    $fromCard->remove();
+                } else {
+                    $this->getDbConnection()->rollback();
+                    throw new \VuFind\Exception\LibraryCard(
+                        'Could not connect '
+                        . 'users with different library cards from the '
+                        . 'same institution'
+                    );
+                }
+            }
+        }
+
+        /**
+         * Table names which contain user_id as a relation to user.id foreign key
+         */
+        $tables = [
+            "user_card",
+            "comments",
+            "user_resource",
+            "user_list",
+            "search"
+        ];
+
+        foreach ($tables as $table) {
+            $update = new Update($table);
+            $update->set(
+                [
+                'user_id' => $into->id
+                ]
+            );
+            $update->where(
+                [
+                'user_id' => $from->id
+                ]
+            );
+            $this->sql->prepareStatementForSqlObject($update)->execute();
+        }
+
+        // Perform User deletion
+        $from->delete();
+        $this->getDbConnection()->commit();
+    }
+
+    /**
+     * Returns database connection.
+     *
+     * @return \Laminas\Db\Adapter\Driver\ConnectionInterface $conn
+     */
+    protected function getDbConnection()
+    {
+        return $this->getAdapter()->driver->getConnection();
+    }
+
 }
