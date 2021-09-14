@@ -138,7 +138,7 @@ forms:
 
     help:
       pre: feedback_help_pre
-    #  post: feedback_help_post
+      post: feedback_help_post
 
     fields:
       - name: subject
