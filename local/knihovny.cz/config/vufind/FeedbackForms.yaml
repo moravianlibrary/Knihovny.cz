@@ -125,6 +125,7 @@ forms:
     enabled: true
     useCaptcha: true
     reportReferrer: true
+    reportUserAgent: true
     recipient:
       name: CPK
       email: cpk-support@mzk.cz
