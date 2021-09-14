@@ -41,6 +41,7 @@ use VuFind\Exception\RecordMissing as RecordMissingException;
 class SolrDefault extends \VuFind\RecordDriver\SolrDefault
 {
     use Feature\BuyLinksTrait;
+
     use Feature\ObalkyKnihTrait;
 
     /**

@@ -28,9 +28,9 @@
  */
 namespace KnihovnyCz\Auth;
 
-use \VuFind\Auth\Shibboleth as Base;
-use \VuFind\Auth\Shibboleth\ConfigurationLoaderInterface;
-use \VuFind\Exception\Auth as AuthException;
+use VuFind\Auth\Shibboleth as Base;
+use VuFind\Auth\Shibboleth\ConfigurationLoaderInterface;
+use VuFind\Exception\Auth as AuthException;
 
 /**
  * Shibboleth authentication module.
@@ -43,7 +43,6 @@ use \VuFind\Exception\Auth as AuthException;
  */
 class Shibboleth extends Base
 {
-
     /**
      * Check for duplicities in library cards - only one library card for
      * institution
@@ -242,5 +241,4 @@ class Shibboleth extends Base
     {
         return $this->getDbTableManager()->get('UserCard');
     }
-
 }

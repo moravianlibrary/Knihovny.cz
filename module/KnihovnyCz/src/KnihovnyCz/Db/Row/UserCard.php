@@ -26,10 +26,9 @@
  * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://knihovny.cz Main Page
  */
-
 namespace KnihovnyCz\Db\Row;
 
-use \VuFind\Db\Row\UserCard as Base;
+use VuFind\Db\Row\UserCard as Base;
 
 /**
  * Class UserCard
@@ -42,5 +41,4 @@ use \VuFind\Db\Row\UserCard as Base;
  */
 class UserCard extends Base
 {
-
 }

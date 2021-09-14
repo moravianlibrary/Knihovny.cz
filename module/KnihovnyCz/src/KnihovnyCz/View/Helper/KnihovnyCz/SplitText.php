@@ -42,6 +42,7 @@ use Laminas\View\Helper\AbstractHelper;
 class SplitText extends AbstractHelper
 {
     private ?string $_first;
+
     private ?string $_last;
 
     /**

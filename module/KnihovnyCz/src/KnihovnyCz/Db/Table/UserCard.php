@@ -28,8 +28,6 @@
  */
 namespace KnihovnyCz\Db\Table;
 
-use Laminas\Db\Sql\Select;
-
 /**
  * Class UserCard
  *
@@ -41,7 +39,6 @@ use Laminas\Db\Sql\Select;
  */
 class UserCard extends \VuFind\Db\Table\UserCard
 {
-
     /**
      * Retrieve a user card object from the database based on eduPersonUniqueId
      * or create new one.
@@ -58,5 +55,4 @@ class UserCard extends \VuFind\Db\Table\UserCard
         $row = $this->select($callback)->current();
         return $row;
     }
-
 }

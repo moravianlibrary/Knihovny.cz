@@ -28,9 +28,9 @@
  */
 namespace KnihovnyCz\Db\Table;
 
+use KnihovnyCz\Db\Row\User as UserRow;
 use Laminas\Db\Sql\Select;
 use Laminas\Db\Sql\Update;
-use KnihovnyCz\Db\Row\User as UserRow;
 
 /**
  * Class User
@@ -128,7 +128,7 @@ class User extends \VuFind\Db\Table\User
             $prefix = explode('.', $intoCard->cat_username)[0];
             if (isset($institutions[$prefix])) {
                 $fromCard = $institutions[$prefix];
-                if ($fromCard->edu_person_unique_id== $intoCard->edu_person_unique_id
+                if ($fromCard->edu_person_unique_id == $intoCard->edu_person_unique_id
                 ) {
                     $fromCard->remove();
                 } else {
@@ -182,5 +182,4 @@ class User extends \VuFind\Db\Table\User
     {
         return $this->getAdapter()->driver->getConnection();
     }
-
 }
