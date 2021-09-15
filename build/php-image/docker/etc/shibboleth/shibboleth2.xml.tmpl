@@ -14,7 +14,9 @@
     </InProcess>
 
     <!-- Only one listener can be defined, to connect in process modules to shibd. -->
-    <UnixListener address="shibd.sock"/>
+    <!-- <UnixListener address="shibd.sock"/> -->
+    <TCPListener address="127.0.0.1" port="1600" acl="127.0.0.1"/>
+
 
     <!-- This set of components stores sessions and other persistent data in daemon memory. -->
     <StorageService type="Memory" id="mem" cleanupInterval="900"/>
