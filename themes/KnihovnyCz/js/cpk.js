@@ -101,3 +101,57 @@ function setupAutocomplete() {
     searchbox.autocomplete().clearCache();
   });
 }
+
+function setupOpenUrl() {
+  $('.openurl').each(function() {
+    var element = this;
+    var ajaxCall = {
+      dataType: "json",
+      url: "/AJAX/JSON?method=sfx&" + $(element).data('openurl'),
+      method: "GET",
+      success: function sfx(json){
+        $(element).empty();
+        links = json.data;
+        header = 'Fulltext is available for users of these institutions';
+        if (links.length == 0) {
+          header = 'Fulltext not found';
+        } else if (links.default) {
+          header = 'Fulltext is free';
+        } else if (links.length == 1) {
+          header = 'Fulltext is available for users of this institution';
+        }
+        $(element).append($('<div>', {
+          class : 'records-in-libraries-title',
+            html  : $('<strong>', { text : VuFind.translate(header) }),
+        }));
+        list = $('<ul>', {
+          class : 'list-unstyled'
+        });
+        $.each(json.data, function(key, value) {
+          link = $('<a>', {
+            text  : value.label,
+            title : value.label,
+            href  : value.url
+          });
+          li = $('<li>');
+          link.appendTo(li);
+          li.appendTo(list);
+        });
+        list.appendTo(element);
+      }
+    };
+    var lazy = $(element).data('lazy');
+    if (lazy) {
+      $(element).click(function(){
+        $(element).empty().append(VuFind.spinner('fa-3x fa-fw'));
+        $.ajax(ajaxCall);
+      });
+    } else {
+      $.ajax(ajaxCall);
+    }
+  });
+}
+
+jQuery(document).ready(function openUrl($) {
+  setupOpenUrl();
+});

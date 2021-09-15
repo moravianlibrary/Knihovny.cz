@@ -356,6 +356,7 @@ $config = [
                     \KnihovnyCz\AjaxHandler\UpdateContent::class => \KnihovnyCz\AjaxHandler\UpdateContentFactory::class,
                     \KnihovnyCz\AjaxHandler\GetObalkyKnihCoverWithoutSolr::class => \KnihovnyCz\AjaxHandler\GetObalkyKnihCoverWithoutSolrFactory::class,
                     \KnihovnyCz\AjaxHandler\GetACSuggestions::class => \KnihovnyCz\AjaxHandler\GetACSuggestionsFactory::class,
+                    \KnihovnyCz\AjaxHandler\Sfx::class => \KnihovnyCz\AjaxHandler\SfxFactory::class,
                 ],
                 'aliases' => [
                     'edd' => \KnihovnyCz\AjaxHandler\Edd::class,
@@ -364,6 +365,7 @@ $config = [
                     'getObalkyKnihCoverWithoutSolr' => \KnihovnyCz\AjaxHandler\GetObalkyKnihCoverWithoutSolr::class,
                     'updateContent' => \KnihovnyCz\AjaxHandler\UpdateContent::class,
                     'getACSuggestions' => \KnihovnyCz\AjaxHandler\GetACSuggestions::class,
+                    'sfx' => \KnihovnyCz\AjaxHandler\Sfx::class,
                 ],
             ],
             'related' => [
