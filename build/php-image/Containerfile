@@ -69,7 +69,8 @@ RUN \
 
 ADD docker/etc /etc
 ADD docker/bin/container-entrypoint.sh /container-entrypoint.sh
-RUN chmod ugo+x /container-entrypoint.sh
+ADD docker/initscripts/bootstrap-shibboleth2.sh /onstart.d/000-bootstrap-shibboleth2.sh
+RUN chmod ugo+x /container-entrypoint.sh /onstart.d/*.sh
 
 ADD https://github.com/a8m/envsubst/releases/download/v1.2.0/envsubst-Linux-x86_64 /usr/bin/envsubst.a8m
 RUN \

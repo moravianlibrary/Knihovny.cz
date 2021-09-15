@@ -25,7 +25,7 @@
     <!-- To customize behavior, map hostnames and path components to applicationId and other settings. -->
     <RequestMapper type="Native">
         <RequestMap applicationId="default">
-            <Host name="${PARAM_VUFIND_HOST}" port="%{PARAM_VUFIND_SSL_PORT}"/>
+            <Host name="${PARAM_VUFIND_HOST}" port="${PARAM_VUFIND_SSL_PORT}"/>
         </RequestMap>
     </RequestMapper>
 
@@ -201,7 +201,7 @@
         </AttributeExtractor>
 
         <!-- Simple file-based resolver for using a single keypair. -->
-        <CredentialResolver type="File" key="${PARAM_SSL_DIR}/${PARAM_SHIB_KEY_OUT}" certificate="${PARAM_SSL_DIR}/${PARAM_SHIB_CRT_OUT}"/>
+        <CredentialResolver type="File" key="${PARAM_SHIB_KEY_PATH}" certificate="${PARAM_SHIB_CERT_PATH}"/>
 
     </ApplicationDefaults>
 
