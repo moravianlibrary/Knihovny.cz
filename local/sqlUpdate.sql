@@ -1410,4 +1410,101 @@ WHERE ik.key_name = "admlib";
 
 UPDATE `system` SET `value` = '77' WHERE `key`='DB_VERSION';
 
+UPDATE user SET username = SUBSTRING_INDEX(username, ';', 1);
 
+UPDATE `system` SET `value` = '78' WHERE `key`='DB_VERSION';
+
+-- Convert to utf8mb4
+DROP TABLE email_delayer;
+DROP TABLE email_types;
+DROP TABLE libraries_geolocations;
+DROP TABLE notifications;
+DROP TABLE notification_types;
+DROP TABLE user_stats;
+DROP TABLE user_stats_fields;
+
+ALTER TABLE `resource` DROP KEY `record_id`;
+ALTER TABLE `resource` ADD KEY `record_id` (`record_id`(190));
+ALTER TABLE `search` DROP KEY `notification_base_url_idx`;
+ALTER TABLE `search` ADD KEY `notification_base_url` (`notification_base_url`(190));
+ALTER TABLE `external_session` DROP KEY `external_session_id`;
+ALTER TABLE `external_session` ADD KEY `external_session_id` (`external_session_id`(190));
+ALTER TABLE `user` DROP KEY `username`;
+ALTER TABLE `user` ADD UNIQUE KEY `username` (`username`(190));
+ALTER TABLE `user` DROP KEY `cat_id`;
+ALTER TABLE `user` ADD UNIQUE KEY `cat_id` (`cat_id`(190));
+ALTER TABLE `record` DROP KEY `record_id_source`;
+ALTER TABLE `record` ADD UNIQUE KEY `record_id_source` (`record_id`(140), `source`);
+ALTER TABLE `auth_hash` DROP KEY `hash_type`;
+ALTER TABLE `auth_hash` ADD UNIQUE KEY `hash_type` (`hash`(140), `type`);
+ALTER TABLE `config_files` DROP KEY `name`;
+ALTER TABLE `config_files` ADD KEY `name` (`file_name`(190));
+ALTER TABLE `config_sections` DROP KEY `section_name`;
+ALTER TABLE `config_sections` ADD KEY `section_name` (`section_name`(190));
+ALTER TABLE `inst_keys` DROP KEY `key_name_section_id`;
+ALTER TABLE `inst_keys` ADD UNIQUE KEY `key_name_section_id` (`key_name`(180), `section_id`);
+ALTER TABLE `inst_sections` DROP KEY `section_name`;
+ALTER TABLE `inst_sections` ADD KEY `section_name` (`section_name`(190));
+ALTER TABLE `inst_sources` DROP KEY `source`;
+ALTER TABLE `inst_sources` ADD UNIQUE KEY `source` (`source`(190));
+ALTER TABLE `inst_sources` DROP KEY `driver`;
+ALTER TABLE `inst_sources` ADD KEY `driver` (`driver`(190));
+
+ALTER TABLE `auth_hash` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+ALTER TABLE `change_tracker` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+ALTER TABLE `citation_style` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+ALTER TABLE `comments` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+ALTER TABLE `config` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+ALTER TABLE `config_files` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+ALTER TABLE `config_items` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+ALTER TABLE `config_sections` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+ALTER TABLE `external_session` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_bin;
+ALTER TABLE `inst_configs` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+ALTER TABLE `inst_keys` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+ALTER TABLE `inst_sections` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+ALTER TABLE `inst_sources` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+ALTER TABLE `login` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+ALTER TABLE `modal_specific_contents` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+ALTER TABLE `oai_resumption` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+ALTER TABLE `record` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+ALTER TABLE `resource` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+ALTER TABLE `resource_tags` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+ALTER TABLE `search` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+ALTER TABLE `session` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+ALTER TABLE `shortlinks` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_bin;
+ALTER TABLE `system` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+ALTER TABLE `tags` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_bin;
+ALTER TABLE `user` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+ALTER TABLE `user_card` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+ALTER TABLE `user_list` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+ALTER TABLE `user_resource` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+ALTER TABLE `user_settings` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+ALTER TABLE `widget` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+ALTER TABLE `widget_content` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+UPDATE `system` SET `value` = '79' WHERE `key`='DB_VERSION';
+
+-- Issue 211 Identities
+-- eppn is replaced by edu_person_unique_id
+ALTER TABLE user_card DROP KEY user_card_eppn_uq;
+ALTER TABLE user_card ADD COLUMN edu_person_unique_id VARCHAR(255) DEFAULT NULL;
+-- migration for IdPs with Aleph and Koha - edu_person_unique_id is different from eppn
+UPDATE user_card
+SET edu_person_unique_id = CONCAT(SUBSTR(cat_username, POSITION('.' IN cat_username) + 1), SUBSTR(eppn, POSITION('@' IN eppn)))
+WHERE cat_username LIKE 'kkpc.%'
+  OR cat_username LIKE 'knav.%'
+  OR cat_username LIKE 'nkp.%'
+  OR cat_username LIKE 'ntk.%'
+  OR cat_username LIKE 'svkhk.%'
+  OR cat_username LIKE 'svkos.%'
+  OR cat_username LIKE 'svkpk.%'
+  OR cat_username LIKE 'uzei.%'
+  OR cat_username LIKE 'vkol.%'
+  OR cat_username LIKE 'cvgz.%'
+  OR cat_username LIKE 'tre.%'
+  OR cat_username LIKE 'vkta.%'
+  OR cat_username LIKE 'mkuo.%';
+-- migration for other IdPs - attribute edu_person_unique_id is same as eppn
+UPDATE user_card SET edu_person_unique_id = eppn WHERE edu_person_unique_id IS NULL;
+CREATE UNIQUE INDEX user_card_edu_person_unique_id_uq ON user_card(edu_person_unique_id);
+UPDATE `system` SET `value` = '78' WHERE `key`='DB_VERSION';

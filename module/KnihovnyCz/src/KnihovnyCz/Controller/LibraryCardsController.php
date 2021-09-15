@@ -28,8 +28,8 @@
  */
 namespace KnihovnyCz\Controller;
 
+use Laminas\View\Model\ViewModel;
 use VuFind\Controller\LibraryCardsController as LibraryCardsControllerBase;
-use VuFind\Exception\LibraryCard as LibraryCardException;
 
 /**
  * Class LibraryCardsController
@@ -43,6 +43,39 @@ use VuFind\Exception\LibraryCard as LibraryCardException;
 class LibraryCardsController extends LibraryCardsControllerBase
 {
     /**
+     * Send user's library cards to the view
+     *
+     * @return mixed
+     */
+    public function homeAction()
+    {
+        $model = parent::homeAction();
+        if ($model instanceof ViewModel) {
+            $model->setVariable(
+                'csrfHash', $this->getAuthManager()->getCsrfHash(false)
+            );
+        }
+        return $model;
+    }
+
+    /**
+     * Creates a confirmation box to delete or not delete the current list
+     *
+     * @return mixed
+     */
+    public function deleteCardAction()
+    {
+        try {
+            return parent::deleteCardAction();
+        } catch (\Exception $ex) {
+            // Display error message instead of error page
+            $this->flashMessenger()->addMessage($ex->getMessage(), 'error');
+            // Redirect to MyResearch library cards
+            return $this->redirect()->toRoute('librarycards-home');
+        }
+    }
+
+    /**
      * Process the "edit library card" submission. Only update card name.
      *
      * @param \VuFind\Db\Row\User $user Logged in user
@@ -52,24 +85,9 @@ class LibraryCardsController extends LibraryCardsControllerBase
      */
     protected function processEditLibraryCard($user)
     {
-        try {
-            $id = $this->params()->fromRoute(
-                'id',
-                $this->params()->fromQuery('id')
-            );
-            if ($id == null) {
-                throw new LibraryCardException('Library card id is missing');
-            }
-            $card = $user->getLibraryCard($id);
-            if (!$card) {
-                throw new LibraryCardException('Library card not found');
-            }
-            $cardName = $this->params()->fromPost('card_name', '');
-            $card->card_name = $cardName;
-            $card->save();
-        } catch (LibraryCardException $ex) {
-            $this->flashMessenger()->addErrorMessage($ex->getMessage());
-        }
+        $this->flashMessenger()->addErrorMessage(
+            "Editation of library cards is not supported"
+        );
         return $this->redirect()->toRoute('librarycards-home');
     }
 }

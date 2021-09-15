@@ -2,7 +2,7 @@
   $recordId = $this->driver->getUniqueID();
   $logosPostfix = '_small';
   $data = [];
-  $records = $this->driver->getDeduplicatedRecords();
+  $records = $this->driver->tryMethod('getDeduplicatedRecords') ?? [];
   $recordsCount = count($records);
   if (!empty($records)) {
     foreach ($records as $record) {
@@ -10,7 +10,7 @@
         'institutions/logos/' . $record['source'] . '/' . $record['source']
         . $logosPostfix . '.png'
       );
-      $recordUrl = $this->recordLink()->getUrl($record['id']);
+      $recordUrl = $this->recordLinker()->getUrl($record['id']);
       $data[] = [
         'id' => $record['id'],
         'image' => $imageSrc,
@@ -21,29 +21,38 @@
     }
   }
   ?>
+<div class="well panel-select-institution">
   <?php if ($recordsCount > 1): ?>
-    <h3><strong><?=$this->translate('Select institution');?>:</strong></h3>
-    <div class='row' id='records-in-groups-container'>
-      <div class='col-xs-12 col-lg-9'>
-        <select id="institutions" style="width: 100%; height: 2em;"></select>
-      </div>
-      <?php if ($libraryId = $this->driver->getOwningLibraryId()): ?>
-        <div class='col-xs-12 col-lg-3 information'>
+    <h3><?=$this->translate('Select institution');?>:</h3>
+    <div id="records-in-groups-container">
+      <div class="input-group input-group-lg">
+        <select id="institutions" class="form-control" style="width: 100%"></select>
+        <?php if ($libraryId = $this->driver->getOwningLibraryId()): ?>
           <?=$this->render('library-detail-link.phtml', ['libraryId' => $libraryId])?>
-        </div>
-      <?php endif; ?>
-  </div>
-
+        <?php endif; ?>
+      </div>
+    </div>
   <?php elseif ($recordsCount === 1): ?>
-    <h3><strong><?=$this->translate('Institution');?>:</strong></h3>
-    <h3>
-      <img src="<?=$data[0]['image']?>" class="logo"><?=$data[0]['text']?>
+    <h3><?=$this->translate('Institution');?>:</h3>
+    <div class="input-group input-group-lg">
+      <span class="select2 select2-container select2-container--bootstrap3">
+          <span class="select2-selection select2-selection--single select2-text" role="combobox" aria-haspopup="true" aria-expanded="false" tabindex="0" aria-disabled="false" aria-labelledby="select2-institutions-container">
+            <span class="select2-selection__rendered" id="select2-institutions-container" role="textbox" aria-readonly="true" title="<?=$data[0]['text']?>">
+              <span class="institutions-selector">
+                <span class="image">
+                  <img src="<?=$data[0]['image']?>">
+                </span>
+                <span class="text"><?=$data[0]['text']?></span>
+              </span>
+            </span>
+          </span>
+      </span>
       <?php if ($libraryId = $this->driver->getOwningLibraryId()): ?>
-        <small><?=$this->render('library-detail-link.phtml', ['libraryId' => $libraryId])?></small>
+        <?=$this->render('library-detail-link.phtml', ['libraryId' => $libraryId])?>
       <?php endif; ?>
-    </h3>
+    </div>
   <?php endif; ?>
-
+</div>
 
 <?php
 if ($recordsCount > 1) {
@@ -51,13 +60,14 @@ if ($recordsCount > 1) {
   $select2 = <<<JS
 var options = $dataJson;
 function template(option) {
-  return $('<span class="institutions-selector"><img src="' + option.image + '">' + option.text + '</span>');
+  return $('<span class="institutions-selector"><span class="image"><img src="' + option.image + '"></span><span class="text">' + option.text + '</span></span>');
 }
 
 jQuery(document).ready(function($) {
   $('#institutions').select2({
     language: "cs",
     data: options,
+    theme: 'bootstrap3',
     templateResult: template,
 		templateSelection: template
   });

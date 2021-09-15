@@ -1,9 +1,9 @@
 #!/bin/bash
 
-phpstan analyse
+vendor/bin/phpstan analyse
 
-php-cs-fixer fix --config=tests/vufind.php_cs --dry-run -vvv
-php-cs-fixer fix --config=tests/vufind_templates.php_cs --dry-run -vvv
+vendor/bin/php-cs-fixer fix --config=tests/vufind.php_cs --dry-run -vvv
+vendor/bin/php-cs-fixer fix --config=tests/vufind_templates.php_cs --dry-run -vvv
 
 eslint -c tests/.eslintrc.js themes/KnihovnyCz/js/*.js
 jshint --config=tests/jshint.json --exclude=themes/*/js/lib ./themes

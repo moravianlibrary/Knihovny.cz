@@ -18,12 +18,14 @@ return [
         ],
         'invokables' => [
             \KnihovnyCz\View\Helper\KnihovnyCz\LibrariesApiLookfor::class,
+            \KnihovnyCz\View\Helper\KnihovnyCz\SplitText::class,
         ],
         'aliases' => [
             'recordDataFormatter' => 'VuFind\View\Helper\Root\RecordDataFormatter',
             'Ziskej' => KnihovnyCz\View\Helper\KnihovnyCz\Ziskej::class,
             'ZiskejEdd' => KnihovnyCz\View\Helper\KnihovnyCz\ZiskejEdd::class,
-            'librariesApiLookfor' => \KnihovnyCz\View\Helper\KnihovnyCz\LibrariesApiLookfor::class
+            'librariesApiLookfor' => \KnihovnyCz\View\Helper\KnihovnyCz\LibrariesApiLookfor::class,
+            'splitText' => \KnihovnyCz\View\Helper\KnihovnyCz\SplitText::class,
         ],
     ],
     'favicon' => 'icon-knihovny.png',

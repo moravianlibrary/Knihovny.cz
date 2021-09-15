@@ -35,7 +35,12 @@ logout          = /Shibboleth.sso/Logout
 username        = eduPersonPrincipalName
 cat_username    = userLibraryId
 email           = mail
+firstname       = givenName
+lastname        = sn
+edu_person_unique_id = eduPersonUniqueId
 allow_configuration_override = true
+; Check for duplicate institutions when connecting library card
+;check_duplicate_institutions = false
 
 [Database]
 database        = mysql://user:pw@localhost/dbName
@@ -63,6 +68,9 @@ non_proxy_host[] = cache.obalkyknih.cz
 
 [Session]
 type = File
+
+[Mail]
+sms = disabled
 
 [Parent_Config]
 relative_path = ../../../base/config/vufind/config.ini

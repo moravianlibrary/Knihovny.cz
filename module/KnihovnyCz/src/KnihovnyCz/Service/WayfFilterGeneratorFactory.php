@@ -67,7 +67,7 @@ class WayfFilterGeneratorFactory implements FactoryInterface
     ) {
         $config = $container
             ->get(\VuFind\Config\PluginManager::class)
-            ->get('shibboleth');
+            ->get('Shibboleth');
         return new $requestedName($config);
     }
 }

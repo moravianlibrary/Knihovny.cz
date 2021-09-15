@@ -21,6 +21,7 @@ FILENAME="${DIRNAME}/../docker/builds/knihovny-cz-base6/Dockerfile"
 repository="vufind-org/vufind"
 branch="dev"
 dryrun=false
+commit_message_file=".commit"
 
 while true ; do
     case "$1" in
@@ -49,6 +50,9 @@ if [ "$REMOTE_VERSION" == "$OUR_VERSION" ]; then
   exit 0;
 fi;
 echo "Is available update to version $REMOTE_VERSION. Your current version is $OUR_VERSION."
+echo "Update base VuFind" > $commit_message_file
+echo "" >> $commit_message_file
+echo "See changes here: https://github.com/vufind-org/vufind/compare/$OUR_VERSION...$REMOTE_VERSION" >> $commit_message_file
 
 if [ "$dryrun" == "true" ]; then
   echo "Running in testing mode. Exiting without making any changes"
@@ -62,5 +66,7 @@ merge_directory themes/KnihovnyCz/templates themes/bootstrap3/templates $OUR_VER
 merge_directory themes/KnihovnyCz/templates/searchapi themes/root/templates/searchapi $OUR_VERSION $REMOTE_VERSION ${repository}
 
 echo "Version was updated."
+echo "Please commit with command: "
+echo "git commit -eF .commit"
 
 exit 0;

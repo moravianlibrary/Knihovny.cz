@@ -1925,25 +1925,38 @@ class XCNCIP2Test extends \VuFindTest\ILS\Driver\XCNCIP2Test
             ],
         ],
     ];
+
     // No need to add more tests, upstream tests covers our needs
     protected $placeHoldTests = [];
+
     protected $placeStorageRetrievalRequestTests = [];
+
     protected $cancelHoldsTests = [];
+
     protected $cancelStorageRetrievalTests = [];
+
     protected $renewMyItemsTests = [];
+
     protected $loginTests = [];
+
     protected $profileTests = [];
+
     protected $storageRetrievalTests = [];
+
     protected $requestTests = [];
+
     /**
      * @var array
      */
     protected $notRenewableTransactionsTests = [];
+
     /**
      * @var array
      */
     protected $renewMyItemsWithDisabledRenewals = [];
+
     protected $patronBlocksTests = [];
+
     protected $accountBlocksTests = [];
 
     public function testGetStatuses()
