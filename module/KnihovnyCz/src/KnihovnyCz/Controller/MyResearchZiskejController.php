@@ -37,7 +37,7 @@ class MyResearchZiskejController extends AbstractBase
             }
             $view->setVariable('user', $user);
 
-            $userCard = $user->getCardByName($user->cat_username);
+            $userCard = $user->getCardByCatName($user->cat_username);
             if (!$userCard) {
                 return $view;
             }
