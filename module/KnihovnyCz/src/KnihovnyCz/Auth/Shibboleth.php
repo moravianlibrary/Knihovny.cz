@@ -140,6 +140,9 @@ class Shibboleth extends Base
                 }
             }
         }
+        if (isset($shib['prefix'])) {
+            $user->home_library = $shib['prefix'];
+        }
 
         $this->storeShibbolethSession($request);
 
