@@ -171,7 +171,7 @@ class RecordController extends \VuFind\Controller\RecordController
             $user->firstname,
             $user->lastname,
             $email,
-            $multibackend->sourceToSigla($user->home_library),
+            $multibackend->sourceToSigla($userCard->home_library),
             true,
             true,
             $userCard->cat_username
