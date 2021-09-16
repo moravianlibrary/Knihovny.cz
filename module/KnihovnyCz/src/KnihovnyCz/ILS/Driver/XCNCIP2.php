@@ -28,6 +28,7 @@
  */
 namespace KnihovnyCz\ILS\Driver;
 
+use VuFind\Date\DateException;
 use VuFind\Exception\ILS as ILSException;
 
 /**
@@ -115,6 +116,38 @@ class XCNCIP2 extends \VuFind\ILS\Driver\XCNCIP2
         // If it work, we keep it hardcoded. If not, we should use 'Estimate' for
         // some of ILSs
         return 'Hold';
+    }
+
+    /**
+     * Get Holding
+     *
+     * This is responsible for retrieving the holding information of a certain
+     * record.
+     *
+     * @param string $id      The record id to retrieve the holdings for
+     * @param array  $patron  Patron data
+     * @param array  $options Extra options (not currently used)
+     *
+     * @throws DateException
+     * @throws ILSException
+     * @return array         On success, an associative array with the following
+     * keys: id, availability (boolean), status, location, reserve, callnumber,
+     * duedate, number, barcode.
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    public function getHolding($id, array $patron = null, array $options = [])
+    {
+        $holdings = parent::getHolding($id, $patron, $options);
+        $holdings = array_map(
+            function ($holding) {
+                if ($holding['status'] !== 'On Loan') {
+                    $holding['duedate'] =  null;
+                }
+                return $holding;
+            }, $holdings
+        );
+        return $holdings;
     }
 
     /**
