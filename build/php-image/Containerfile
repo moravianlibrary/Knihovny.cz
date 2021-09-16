@@ -67,6 +67,8 @@ RUN \
     pecl install redis \
     && docker-php-ext-enable redis
 
+RUN a2enmod headers rewrite
+
 ADD docker/etc /etc
 ADD docker/bin/container-entrypoint.sh /container-entrypoint.sh
 ADD docker/initscripts/bootstrap-shibboleth2.sh /onstart.d/000-bootstrap-shibboleth2.sh

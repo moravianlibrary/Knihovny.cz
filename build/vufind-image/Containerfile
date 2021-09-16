@@ -19,7 +19,7 @@ FROM localhost/knihovny-php:latest AS libraries
 ARG COMPOSER_NO_INTERACTION=1
 ARG COMPOSER_HOME=/tmp/composer-cache
 ARG VUFIND_ROOT=/var/www/knihovny-cz
-ARG VUFIND_EXTENSIONS_ROOT=/var/www/knihovny-cz-extra
+ARG VUFIND_EXTENSIONS_ROOT=/var/www/knihovny-cz-extension
 #ARG NODE_PATH=/var/www/node_modules
 ARG NPM_CONFIG_PREFIX=/opt/npm
 
@@ -85,10 +85,13 @@ ADD ./local ${VUFIND_EXTENSIONS_ROOT}/local
 ADD ./module ${VUFIND_EXTENSIONS_ROOT}/module
 ADD ./themes  ${VUFIND_EXTENSIONS_ROOT}/themes
 RUN \
-    ln -sv ${VUFIND_EXTENSIONS_ROOT}/local/{base,irel,kiv,knihovny.cz,mus,tech,templates} ${VUFIND_ROOT}/local && \
+    for i in base irel kiv knihovny.cz mus tech templates; do \
+        ln -svf ${VUFIND_EXTENSIONS_ROOT}/local/$i ${VUFIND_ROOT}/local/$i ; \
+    done
+RUN \
     ln -sv ${VUFIND_EXTENSIONS_ROOT}/module/* ${VUFIND_ROOT}/module &&  \
     ln -sv ${VUFIND_EXTENSIONS_ROOT}/themes/* ${VUFIND_ROOT}/themes && \
-    echo "OK" \
+    echo "OK"
 
 RUN chown vufind:vufind -R ${VUFIND_ROOT} ${VUFIND_EXTENSIONS_ROOT}
 
