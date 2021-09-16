@@ -2,7 +2,7 @@
   $recordId = $this->driver->getUniqueID();
   $logosPostfix = '_small';
   $data = [];
-  $records = $this->driver->getDeduplicatedRecords();
+  $records = $this->driver->tryMethod('getDeduplicatedRecords') ?? [];
   $recordsCount = count($records);
   if (!empty($records)) {
     foreach ($records as $record) {
