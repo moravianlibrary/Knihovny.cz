@@ -7,6 +7,7 @@ USAGE: $0 [params]
 
 Available params
   -b|--branch    Branch of original VuFind repository (https://github.com/vufind-org/vufind), defaults to "dev"
+  -g|--debug     Show debug messages
   -d|--dry-run   Only prints information about available update
   -h|--help      Print usage
 
@@ -33,6 +34,10 @@ while true ; do
             esac ;;
          --dry-run|-d)
             dryrun=true
+            shift
+            ;;
+         --debug|-g)
+            debug=true
             shift
             ;;
          --help|-h)
