@@ -1,3 +1,6 @@
+/* exported setupAutocomplete */
+/* global VuFind, extractClassParams */
+
 // We only need to observe change of type childList
 const config = { attributes: false, childList: true, subtree: false };
 
@@ -39,7 +42,7 @@ jQuery(document).ready(function jQueryReady($) {
   $('.btn-show-full-text').on('click', function showFullDescription() {
     $('.btn-show-full-text').addClass('hidden');
     $('.text-last').removeClass('hidden');
-  });    
+  });
 
 });
 
@@ -71,9 +74,9 @@ function setupAutocomplete() {
       var searcher = extractClassParams(input);
       var hiddenFilters = [];
       $('#searchForm').find('input[name="hiddenFilters[]"]').each(
-          function hiddenFiltersEach() {
-        hiddenFilters.push($(this).val());
-      });
+        function hiddenFiltersEach() {
+          hiddenFilters.push($(this).val());
+        });
       $.fn.autocomplete.ajax({
         url: VuFind.path + '/AJAX/JSON',
         data: {
@@ -90,7 +93,7 @@ function setupAutocomplete() {
       });
     }
   });
-  $('#searchForm_lookfor').on("ac:select", function onSelect(event, item, eventType) {
+  $('#searchForm_lookfor').on("ac:select", function onSelect(event, item) {
     $('#searchForm_type').val(item.type);
   });
   // Update autocomplete on type change
