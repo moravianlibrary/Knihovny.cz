@@ -19,7 +19,7 @@
         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3 similar-item">
           <a href="<?=$this->escapeHtmlAttr($url)?>" title='<?=$this->escapeHtml($data->title)?> (<?=$this->transEscWithPrefix("Format::", $format)?>)' tabindex='-1'>
               <div class="ajaxcoverobalkyknih">
-                <div class="spinner"><i class="fa fa-spinner fa-spin"></i> <?=$this->translate('Loading')?>...</div>
+                <div class="spinner"><?=$this->icon('spinner') . $this->translate('Loading')?>...</div>
                 <div class="cover-container">
                   <img <?=$dataAttrs?>  data-coversize="small" class="recordcover ajax" alt="<?=$alt ?>" />
                 </div>

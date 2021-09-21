@@ -104,7 +104,7 @@ function loadPage(url, page, records) {
 function initMap(url) {
   let map = $(
     '<div class="row">' +
-    '<div id="map-loader" class="col-xs-12 text-center"><i class="fa fa-spinner fa-spin fa-3x fa-fw"></i></div>' +
+    '<div id="map-loader" class="col-xs-12 text-center">' + VuFind.spinner('fa-3x fa-fw') + '</div>' +
     '<div id="map" class="hidden"></div>' +
     '</div>'
   );
