@@ -149,6 +149,7 @@ footer {
   h3 {
     font-size: 1.3em;
     font-weight: normal;
+    margin-top: @padding-large-vertical;
   }
 
   p {
@@ -163,8 +164,15 @@ footer {
     color: #ffffff;
   }
 
+  .linkbar {
+    .row {
+      border-bottom: 1px dotted #545454;
+      padding: @padding-large-vertical 0;
+    }
+  }
+
   .infobar {
-    padding-bottom: 21px;
+    padding: @padding-large-vertical 0;
 
     .logo {
       max-width: 130px;
