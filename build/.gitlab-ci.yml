@@ -1,0 +1,98 @@
+
+variables:
+  DEPLOY_JOB_IMAGE: "docker.app.knihovny.cz/ci-builds/kustomize:latest"
+  TARGET_REGISTRY_URL: registry.app.knihovny.cz
+  TARGET_IMAGE_NAME: knihovny-cz/vufind:build
+  CACHE_REGISTRY_URL: docker.app.knihovny.cz
+  BUILD_DEBUG: 'true'
+
+Test the code:
+  stage: test
+  rules:
+    - if:  # run tests on main
+        ( $CI_PIPELINE_SOURCE == "push" )  &&
+        ( ( $CI_COMMIT_BRANCH == "master" ) || ( $CI_COMMIT_BRANCH == "main" ) || ( $CI_COMMIT_BRANCH =~ /^devel/ )  )
+    - if:  # run tests on MR
+        ( $CI_PIPELINE_SOURCE == "merge_request_event" )
+  script:
+    - echo "Add your tests here"
+
+Build multistage image:
+  stage: build
+  rules:
+    - if:
+        ( $CI_PIPELINE_SOURCE == "merge_request_event" ) &&
+        ( $CI_MERGE_REQUEST_IID == "233")
+  image: docker:20.10-git
+  services:
+    - docker:20.10-dind
+  before_script:
+    - apk update
+    - apk add make bash
+    - mkdir -p $HOME/.docker
+    - cp ${REGISTRY_AUTH_FILE} $HOME/.docker/config.json
+  script:
+    - cd ${CI_PROJECT_DIR}
+    # pull cache layers
+    - docker pull ${CACHE_REGISTRY_URL}/${TARGET_IMAGE_NAME}
+    # build it
+    - make -C build IMAGE_NAME=${TARGET_REGISTRY_URL}/${TARGET_IMAGE_NAME}
+    # rebuild
+    - docker push ${TARGET_REGISTRY_URL}/${TARGET_IMAGE_NAME}
+
+.deploy_image:
+  stage: deploy
+  image: "${DEPLOY_JOB_IMAGE}"
+  needs:
+    - Build multistage image
+
+  variables:
+    APP_IMAGE_NAME: docker.app.knihovny.cz/knihovny-cz/vufind
+    APP_IMAGE_TAG: build
+    GIT_STRATEGY: none # no need to checkout the image
+
+  script:
+    - echo "Deploying ${APP_IMAGE_NAME}:${APP_IMAGE_TAG}"
+    - mkdir ${HOME}/.ssh; install -m 0600 ${K8S_DEPLOY_KEY} ${HOME}/.ssh/id_rsa
+    - ssh-keyscan gitlab.mzk.cz >> ${HOME}/.ssh/known_hosts
+    - git clone git@gitlab.mzk.cz:knihovny.cz/deploy/vufind.git deployment
+    - cd deployment/${DEPLOY_REPO_DIR};
+    - git checkout ${DEPLOY_REPO_BRANCH}
+
+    #- kustomize edit set image registration=${APP_IMAGE_NAME}:${APP_IMAGE_TAG}
+    # provide commit-id
+    - echo -n ${CI_COMMIT_SHORT_SHA} > config/commit-id.txt
+    # owerwrite annotation to force deploy
+    - envsubst < patch-version.yml.template > patch-version.yml
+    - git config user.name "${GITLAB_USER_NAME} by Gitlab Robot"
+    - git config user.email "${GITLAB_USER_EMAIL}"
+    - |
+        cat >> ${TMP_DIR}/commit-message <<EOF
+        ${CI_COMMIT_SHORT_SHA}: ${CI_COMMIT_TITLE}
+        * Upgrade image version to ${APP_IMAGE_TAG}
+        * commit: ${CI_PROJECT_URL}/-/commit/${CI_COMMIT_SHORT_SHA}
+        * CI job: ${CI_JOB_URL}
+        EOF
+    - git add .
+    - |
+        git commit --file ${TMP_DIR}/commit-message
+    - git push
+
+Deploy devel image:
+  extends: .deploy_image
+  rules:
+   - if:
+        ( $CI_PIPELINE_SOURCE == "merge_request_event" ) &&
+        ( $CI_MERGE_REQUEST_IID == "233")
+  environment:
+    name: devel
+  variables:
+    DEPLOY_REPO_BRANCH: devel
+    DEPLOY_REPO_DIR: devel
+
+Debug CI:
+  stage: test
+  rules:
+    - if: $CI_COMMIT_MESSAGE =~ /\#cidebug/
+  script:
+    - export
