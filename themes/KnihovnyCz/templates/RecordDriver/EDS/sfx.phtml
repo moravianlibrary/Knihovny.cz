@@ -1,16 +1,24 @@
 <?php
-/*
- *  We need to find out if we're supposed to display an OpenURL link ($openUrlActive),
- *  but even if we don't plan to display the link, we still want to get the $openUrl
- *  value for use in generating a COinS (Z3988) tag -- see bottom of file.
- */
 $openUrl = $this->driver->getOpenUrl();
+$accessUrl = $this->driver->getAccessUrl();
 ?>
-
-<span class="openurl" data-lazy="<?=($this->lazy)?'true':'false'?>" data-openurl="<?=$this->escapeHtml($openUrl)?>">
-  <?php if($this->lazy): ?>
-    <?=$this->transEsc("Check fulltext availability")?>
-  <?php else: ?>
-    <?=$this->icon('spinner')?>
-  <?php endif; ?>
-</span>
+<?php if($accessUrl != null): ?>
+  <div class="records-in-libraries-title">
+    <strong><?=$this->transEsc('Fulltext is free')?></strong>
+    <ul class="list-unstyled">
+      <li>
+        <a href="<?=$this->escapeHtml($accessUrl)?>" title="<?=$this->translate('Fulltext')?>"><?=$this->transEsc('Fulltext')?></a>
+      </li>
+    </ul>
+  </div>
+<?php else: ?>
+  <span class="openurl" data-lazy="<?=($this->lazy)?'true':'false'?>" data-openurl="<?=$this->escapeHtml($openUrl)?>">
+    <?php if($this->lazy): ?>
+      <button type="button" class="btn btn-success">
+        <strong><?=$this->transEsc("Check fulltext availability")?></strong>
+      </button>
+    <?php else: ?>
+      <?=$this->icon('spinner')?>
+    <?php endif; ?>
+  </span>
+<?php endif; ?>

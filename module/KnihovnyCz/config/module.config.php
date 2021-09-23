@@ -244,6 +244,7 @@ $config = [
                     \KnihovnyCz\RecordDriver\SolrMarc::class => \KnihovnyCz\RecordDriver\SolrDefaultFactory::class,
                     \KnihovnyCz\RecordDriver\SolrLocal::class => \KnihovnyCz\RecordDriver\SolrLocalFactory::class,
                     \KnihovnyCz\RecordDriver\Search2Library::class => \KnihovnyCz\RecordDriver\SolrLibraryFactory::class,
+                    \KnihovnyCz\RecordDriver\EDS::class => \VuFind\RecordDriver\NameBasedConfigFactory::class,
                 ],
                 'aliases' => [
                     'solrauthority' => \KnihovnyCz\RecordDriver\SolrAuthority::class,
@@ -254,6 +255,7 @@ $config = [
                     \VuFind\RecordDriver\SolrMarc::class => \KnihovnyCz\RecordDriver\SolrMarc::class,
                     'solrlocal' => \KnihovnyCz\RecordDriver\SolrLocal::class,
                     'search2library' => \KnihovnyCz\RecordDriver\Search2Library::class,
+                    'eds' => \KnihovnyCz\RecordDriver\EDS::class,
                 ],
                 'delegators' => [
                     \KnihovnyCz\RecordDriver\SolrMarc::class => [
