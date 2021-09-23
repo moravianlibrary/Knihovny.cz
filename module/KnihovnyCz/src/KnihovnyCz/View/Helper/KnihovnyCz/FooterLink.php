@@ -53,7 +53,7 @@ class FooterLink extends AbstractHelper
     public function __invoke(string $page): string
     {
         return $this->getView()->render(
-            'footer-link.phtml',
+            'Helpers/footer-link.phtml',
             [
                 'page' => $page,
                 'title' => 'link_' . $page,
