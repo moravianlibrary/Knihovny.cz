@@ -80,7 +80,7 @@ class Sfx extends AbstractBase implements \VuFindHttp\HttpServiceAwareInterface,
         $free = $this->callSfx($default, $query);
         if ($free) {
             $results['default'] = [
-                'label' => $this->translate('Free text'),
+                'label' => $this->translate('Fulltext'),
                 'url'   => $free,
             ];
         } else {

@@ -103,7 +103,7 @@ function setupAutocomplete() {
 }
 
 function setupOpenUrl() {
-  $('.openurl').each(function() {
+  $('.openurl').each(function onEachOpenUrl() {
     var element = this;
     var ajaxCall = {
       dataType: "json",
@@ -111,29 +111,29 @@ function setupOpenUrl() {
       method: "GET",
       success: function sfx(json){
         $(element).empty();
-        links = json.data;
-        header = 'Fulltext is available for users of these institutions';
-        if (links.length == 0) {
+        let links = json.data;
+        let header = 'Fulltext is available for users of these institutions';
+        if (links.length === 0) {
           header = 'Fulltext not found';
         } else if (links.default) {
           header = 'Fulltext is free';
-        } else if (links.length == 1) {
+        } else if (links.length === 1) {
           header = 'Fulltext is available for users of this institution';
         }
         $(element).append($('<div>', {
-          class : 'records-in-libraries-title',
-            html  : $('<strong>', { text : VuFind.translate(header) }),
+          class: 'records-in-libraries-title',
+          html: $('<strong>', { text: VuFind.translate(header) }),
         }));
-        list = $('<ul>', {
-          class : 'list-unstyled'
+        let list = $('<ul>', {
+          class: 'list-unstyled'
         });
-        $.each(json.data, function(key, value) {
-          link = $('<a>', {
-            text  : value.label,
-            title : value.label,
-            href  : value.url
+        $.each(json.data, function onEachLink(key, value) {
+          let link = $('<a>', {
+            text: value.label,
+            title: value.label,
+            href: value.url
           });
-          li = $('<li>');
+          let li = $('<li>');
           link.appendTo(li);
           li.appendTo(list);
         });
@@ -142,7 +142,7 @@ function setupOpenUrl() {
     };
     var lazy = $(element).data('lazy');
     if (lazy) {
-      $(element).click(function(){
+      $(element).click(function onClick() {
         $(element).empty().append(VuFind.spinner('fa-3x fa-fw'));
         $.ajax(ajaxCall);
       });
@@ -152,6 +152,6 @@ function setupOpenUrl() {
   });
 }
 
-jQuery(document).ready(function openUrl($) {
+jQuery(document).ready(function openUrl() {
   setupOpenUrl();
 });
