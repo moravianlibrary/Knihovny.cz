@@ -21,11 +21,11 @@ ARG COMPOSER_HOME=/tmp/composer-cache
 ARG VUFIND_ROOT=/var/www/knihovny-cz
 ARG VUFIND_EXTENSIONS_ROOT=/var/www/knihovny-cz-extension
 #ARG NODE_PATH=/var/www/node_modules
-ARG NPM_CONFIG_PREFIX=/opt/npm
+#ARG NPM_CONFIG_PREFIX=/opt/npm
 
 ## Install Composer
 RUN curl -sS https://getcomposer.org/installer \
-  | php -- --install-dir=/usr/local/bin --filename=composer \
+  | php -- --install-dir=/usr/local/bin --filename=composer
 
 RUN \
     apt update && \
@@ -36,6 +36,7 @@ COPY --from=vufind-src  /src/vufind/composer.json ${VUFIND_ROOT}/composer.json
 COPY --from=vufind-src /src/vufind/build.xml ${VUFIND_ROOT}/build.xml
 #COPY --from=vufind --chown=1000:1000 /src/vufind/composer.lock /var/www/composer.lock
 COPY composer.local.json ${VUFIND_ROOT}/composer.local.json
+
 RUN chown vufind:vufind -R ${VUFIND_ROOT}
 
 RUN \
@@ -44,22 +45,28 @@ RUN \
 
 RUN \
     mkdir ${VUFIND_ROOT}/node_modules && chown vufind:vufind -R ${VUFIND_ROOT}
-RUN \
-    mkdir ${NPM_CONFIG_PREFIX} && chown vufind:vufind -R ${NPM_CONFIG_PREFIX}
+#RUN \
+#    mkdir ${NPM_CONFIG_PREFIX} && chown vufind:vufind -R ${NPM_CONFIG_PREFIX}
 USER 1000
 
 WORKDIR ${VUFIND_ROOT}
 #RUN /usr/local/bin/composer check-platform-reqs
 RUN /usr/local/bin/composer --no-dev --no-scripts install
 
-
-
 # Add node_modules
 USER vufind
 WORKDIR ${VUFIND_ROOT}
 
+USER root
 RUN npm install -g grunt-cli
+
+# prepare Grunt
+COPY --from=vufind-src /src/vufind/Grunt* /src/vufind/package.json ${VUFIND_ROOT}/
+RUN chown vufind:vufind -R ${VUFIND_ROOT}
+
+USER vufind
 RUN npm install
+RUN grunt less
 
 ########### final image
 FROM localhost/knihovny-php:latest
@@ -102,7 +109,6 @@ RUN \
   chmod 0755 \
         /onstart/010-install-portal-content.sh \
         /usr/local/bin/clear-cache
-
 
 
 #USER vufind
