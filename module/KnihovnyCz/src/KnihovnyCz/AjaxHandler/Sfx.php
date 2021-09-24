@@ -111,6 +111,7 @@ class Sfx extends AbstractBase implements \VuFindHttp\HttpServiceAwareInterface,
     {
         $query = [
             'sfx.response_type' => 'simplexml',
+            'svc.fulltext' => 'yes',
         ];
         foreach ($params->fromQuery() as $key => $value) {
             if ($key == 'method' || $key == 'sfx_institute') {
