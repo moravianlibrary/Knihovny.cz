@@ -55,7 +55,7 @@ class UserCard extends Base
 {
     public function getEppnDomain(): ?string
     {
-        $eppnDomain = substr((string)strrchr((string)$this->eppn, "@"), 1);
-        return $eppnDomain ?? null;
+        $array = explode('@', $this->eppn);
+        return end($array) ?? null;
     }
 }

@@ -101,7 +101,6 @@ class MyResearchZiskejController extends AbstractBase
 
         $user = $this->getUser();
         if (!$user) {
-            //$this->flashExceptions($this->flashMessenger());  //@todo
             return $this->forceLogin();
         }
 

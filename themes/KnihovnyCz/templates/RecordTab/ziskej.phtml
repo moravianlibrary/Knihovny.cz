@@ -6,7 +6,7 @@ $tab = $this->tab;
 $driver = $this->driver;
 
 /** @var ?\KnihovnyCz\Db\Row\User $user */
-$user = $tab->getUser();
+$user = $this->auth()->isLoggedIn();
 
 /** @var \KnihovnyCz\Ziskej\ZiskejMvs $ziskejMvs */
 $ziskejMvs = $tab->getZiskejMvs();

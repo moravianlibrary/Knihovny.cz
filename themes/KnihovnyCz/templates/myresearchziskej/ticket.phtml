@@ -121,7 +121,7 @@ $this->headTitle($this->translate('Ziskej::header_order_ziskej_num') . ' ' . $ti
             <?php endif; ?>
           </li>
         <?php endif; ?>
-        <?php if (in_array($ticket->getStatus(), ['cancelled'])) : ?>
+        <?php if ($ticket->getStatus() == 'cancelled') : ?>
           <li class="part col-md-2">
             <?php if (isset($historyArray['cancelled'])): ?>
               <span class="text-icon text-success"><i class="fa fa-check"></i></span>
@@ -134,7 +134,7 @@ $this->headTitle($this->translate('Ziskej::header_order_ziskej_num') . ' ' . $ti
             <?php endif; ?>
           </li>
         <?php endif; ?>
-        <?php if (in_array($ticket->getStatus(), ['rejected'])) : ?>
+        <?php if ($ticket->getStatus() == 'rejected') : ?>
           <li class="part col-md-2">
             <?php if (isset($historyArray['rejected'])): ?>
               <span class="text-icon text-success"><i class="fa fa-check"></i></span>
@@ -150,14 +150,14 @@ $this->headTitle($this->translate('Ziskej::header_order_ziskej_num') . ' ' . $ti
       </ul>
     </div>
 
-    <?php if (in_array($ticket->getStatus(), ['created'])): ?>
+    <?php if ($ticket->getStatus() == 'created'): ?>
       <div class="alert alert-warning">
         <?=$this->translate('Ziskej::message_ziskej_message_wait_payment') ?>
       </div>
     <?php endif; ?>
 
     <div class="text-center well border mb-1">
-      <?php if (in_array($ticket->getStatus(), ['created'])): ?>
+      <?php if ($ticket->getStatus() == 'created'): ?>
         <a class="btn btn-primary" href="<?=$ticket->getPaymentUrl() ?>?lang=<?=$this->layout()->userLang ?>" title="<?=$this->transEsc("Ziskej::btn_order_pay_title") ?>">
           <i class="fa fa-shopping-cart"></i> <?=$this->transEsc("Ziskej::btn_order_pay") ?>
         </a>
@@ -167,7 +167,7 @@ $this->headTitle($this->translate('Ziskej::header_order_ziskej_num') . ' ' . $ti
           <i class="fa fa-times"></i> <?=$this->transEsc("Ziskej::btn_order_cancel") ?>
         </a>
       <?php endif; ?>
-      <?php if (in_array($ticket->getStatus(), ['cancelled'])): ?>
+      <?php if ($ticket->getStatus() == 'cancelled'): ?>
         <div class="alert alert-info"><?=$this->transEsc("Ziskej::msg_order_canceled") ?></div>
       <?php endif; ?>
       <a class="btn btn-default" href="https://ziskej-info.techlib.cz/reklamace" target="_blank" title="<?=$this->transEsc("Ziskej::btn_order_complaint_title") ?>">
@@ -200,18 +200,6 @@ $this->headTitle($this->translate('Ziskej::header_order_ziskej_num') . ' ' . $ti
           <dt><?=$this->transEsc('Ziskej::label_date_return') ?>:</dt>
           <dd><?=$this->dateTime()->convertToDisplayDate('U', $ticket->getReturnAt()->getTimestamp()) ?></dd>
         <?php endif; ?>
-
-        <?php /*
-        <dt><?=$this->transEsc('label_order_status') ?>:</dt>
-        <dd>
-          <span class="label label-<?= \Mzk\ZiskejApi\Object\TicketStatuses::getStatus($ticket->getStatus()) ?>">
-            <?=$this->translate('Ziskej::order_status_' . $ticket->getStatus()) ?>
-          </span>
-          <?php if (!$ticket->isOpen()): ?>
-            (<?=$this->transEsc('order_status_not_open') ?>)
-          <?php endif; ?>
-        </dd>
-        */ ?>
       </dl>
     </div>
 

@@ -22,7 +22,7 @@
  *
  * @category VuFind
  * @package  KnihovnyCz\RecordTab
- * @author   Josef Moravec <moravec@mzk.cz>
+ * @author   Robert Sipek <sipek@mzk.cz>
  * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://knihovny.cz Main Page
  */
@@ -33,7 +33,7 @@ namespace KnihovnyCz\RecordTab;
  *
  * @category VuFind
  * @package  KnihovnyCz\RecordTab
- * @author   Josef Moravec <moravec@mzk.cz>
+ * @author   Robert Sipek <sipek@mzk.cz>
  * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://knihovny.cz Main Page
  */
@@ -95,6 +95,8 @@ class Ziskej extends \VuFind\RecordTab\AbstractBase
     }
 
     /**
+     * Get the logged-in user or false
+     *
      * @return \KnihovnyCz\Db\Row\User|null
      */
     public function getUser(): ?\KnihovnyCz\Db\Row\User
@@ -103,6 +105,8 @@ class Ziskej extends \VuFind\RecordTab\AbstractBase
     }
 
     /**
+     * Get ZiskejMvs class
+     *
      * @return \KnihovnyCz\Ziskej\ZiskejMvs
      */
     public function getZiskejMvs(): \KnihovnyCz\Ziskej\ZiskejMvs
@@ -111,6 +115,8 @@ class Ziskej extends \VuFind\RecordTab\AbstractBase
     }
 
     /**
+     * Return if ziskej is active
+     *
      * @return bool
      */
     public function isZiskejActive(): bool
@@ -119,6 +125,8 @@ class Ziskej extends \VuFind\RecordTab\AbstractBase
     }
 
     /**
+     * Get libraries connected in Ziskej
+     *
      * @return string[][]
      *
      * @throws \Http\Client\Exception
@@ -147,6 +155,8 @@ class Ziskej extends \VuFind\RecordTab\AbstractBase
     }
 
     /**
+     * Get server name
+     *
      * @return string|null
      */
     public function getServerName(): ?string
@@ -155,6 +165,8 @@ class Ziskej extends \VuFind\RecordTab\AbstractBase
     }
 
     /**
+     * Get entity id
+     *
      * @return string|null
      */
     public function getEntityId(): ?string
@@ -163,6 +175,8 @@ class Ziskej extends \VuFind\RecordTab\AbstractBase
     }
 
     /**
+     * Get deduplicated records
+     *
      * @return string[][]
      */
     public function getDedupedRecords(): array
@@ -171,6 +185,8 @@ class Ziskej extends \VuFind\RecordTab\AbstractBase
     }
 
     /**
+     * Get ids of active libraries in Ziskej
+     *
      * @return string[][]
      *
      * @throws \Http\Client\Exception
