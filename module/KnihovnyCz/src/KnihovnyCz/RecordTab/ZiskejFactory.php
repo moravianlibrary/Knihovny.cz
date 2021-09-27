@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Ziskej Edd View Helper
+ * Class ZiskejFactory
  *
  * PHP version 7
  *
@@ -26,12 +26,13 @@
  * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://knihovny.cz Main Page
  */
-namespace KnihovnyCz\View\Helper\KnihovnyCz;
+namespace KnihovnyCz\RecordTab;
 
-use Laminas\View\Helper\AbstractHelper;
+use Interop\Container\ContainerInterface;
+use Laminas\ServiceManager\Factory\FactoryInterface;
 
 /**
- * Ziskej Edd View Helper
+ * Class ZiskejFactory
  *
  * @category VuFind
  * @package  KnihovnyCz\RecordTab
@@ -39,55 +40,27 @@ use Laminas\View\Helper\AbstractHelper;
  * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://knihovny.cz Main Page
  */
-class ZiskejEdd extends AbstractHelper
+class ZiskejFactory implements FactoryInterface
 {
     /**
-     * @var \KnihovnyCz\Ziskej\ZiskejEdd
-     */
-    private $cpkZiskejEdd;
-
-    public function __construct(\KnihovnyCz\Ziskej\ZiskejEdd $cpkZiskej)
-    {
-        $this->cpkZiskejEdd = $cpkZiskej;
-    }
-
-    /**
-     * Return if Ziskej is enabled
+     * Create an object
      *
-     * @return bool
-     */
-    public function isEnabled(): bool
-    {
-        return $this->cpkZiskejEdd->isEnabled();
-    }
-
-    /**
-     * Get current Ziskej mode
+     * @param \Interop\Container\ContainerInterface $container
+     * @param string                                $requestedName
+     * @param array|null                            $options
      *
-     * @return string
+     * @return \KnihovnyCz\RecordTab\Ziskej
      */
-    public function getCurrentMode(): string
-    {
-        return $this->cpkZiskejEdd->getCurrentMode();
-    }
-
-    /**
-     * Return if Ziskej is in production mode
-     *
-     * @return bool
-     */
-    public function isProduction(): bool
-    {
-        return $this->cpkZiskejEdd->getCurrentMode() === \KnihovnyCz\Ziskej\ZiskejEdd::MODE_PRODUCTION;
-    }
-
-    /**
-     * Get available Ziskej modes
-     *
-     * @return string[]
-     */
-    public function getModes()
-    {
-        return $this->cpkZiskejEdd->getModes();
+    public function __invoke(
+        ContainerInterface $container,
+        $requestedName,
+        array $options = null
+    ): Ziskej {
+        return new $requestedName(
+            $container->get(\VuFind\Auth\Manager::class),
+            $container->get(\VuFind\ILSConnection::class),
+            $container->get(\Mzk\ZiskejApi\Api::class),
+            $container->get(\KnihovnyCz\Ziskej\ZiskejMvs::class)
+        );
     }
 }

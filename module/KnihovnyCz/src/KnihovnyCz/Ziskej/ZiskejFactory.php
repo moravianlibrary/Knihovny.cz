@@ -1,5 +1,4 @@
 <?php
-
 namespace KnihovnyCz\Ziskej;
 
 use Interop\Container\ContainerInterface;

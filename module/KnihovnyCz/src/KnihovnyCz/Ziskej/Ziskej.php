@@ -1,9 +1,8 @@
 <?php
-
 namespace KnihovnyCz\Ziskej;
 
-use VuFind\Cookie\CookieManager;
 use Laminas\Config\Config;
+use VuFind\Cookie\CookieManager;
 
 /**
  * KnihovnyCz Ziskej Class
@@ -13,6 +12,7 @@ abstract class Ziskej
     protected $cookieName = '';
 
     public const MODE_DISABLED = 'disabled';
+
     public const MODE_PRODUCTION = 'prod';
 
     /**
@@ -48,6 +48,7 @@ abstract class Ziskej
 
     /**
      * Get if ziskej is enabled on cpk
+     *
      * @return bool
      */
     public function isEnabled(): bool
@@ -80,7 +81,7 @@ abstract class Ziskej
     /**
      * Check if mode exists
      *
-     * @param string $mode
+     * @param  string $mode
      * @return bool
      */
     public function isMode(string $mode): bool
@@ -140,6 +141,7 @@ abstract class Ziskej
 
     /**
      * Get techlib url
+     *
      * @return string|null
      */
     public function getZiskejTechlibUrl(): ?string
@@ -158,5 +160,4 @@ abstract class Ziskej
 
         return $modeUrls[$this->getCurrentMode()] ?? null;
     }
-
 }

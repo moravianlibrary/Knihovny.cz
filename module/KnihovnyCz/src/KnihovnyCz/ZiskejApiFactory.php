@@ -1,9 +1,10 @@
-<?php declare(strict_types = 1);
-
+<?php
+declare(strict_types = 1);
 namespace KnihovnyCz;
 
 use Http\Message\Authentication\Bearer;
 use Interop\Container\ContainerInterface;
+use Laminas\ServiceManager\Factory\FactoryInterface;
 use Lcobucci\JWT\Configuration;
 use Lcobucci\JWT\Signer\Ecdsa\MultibyteStringConverter;
 use Lcobucci\JWT\Signer\Ecdsa\Sha512;
@@ -14,7 +15,6 @@ use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 use Mzk\ZiskejApi\Api;
 use Mzk\ZiskejApi\ApiClient;
-use Laminas\ServiceManager\Factory\FactoryInterface;
 
 class ZiskejApiFactory implements FactoryInterface
 {
@@ -50,9 +50,11 @@ class ZiskejApiFactory implements FactoryInterface
             $logger->pushHandler($handlerSocket);
         }
 
-        $guzzleClient = \Http\Adapter\Guzzle6\Client::createWithConfig([
-            'connect_timeout' => 10,
-        ]);
+        $guzzleClient = \Http\Adapter\Guzzle6\Client::createWithConfig(
+            [
+                'connect_timeout' => 10,
+            ]
+        );
 
         // generate token
         $signer = new Sha512(new MultibyteStringConverter());

@@ -279,17 +279,11 @@ $config = [
                 ],
                 'factories' => [
                     \KnihovnyCz\RecordTab\HoldingsILS::class => \VuFind\RecordTab\HoldingsILSFactory::class,
-                    'ziskej' => function(\Interop\Container\ContainerInterface $container) {
-                        return new \KnihovnyCz\RecordTab\Ziskej(
-                            $container->get(\VuFind\Auth\Manager::class),
-                            $container->get(\VuFind\ILSConnection::class),
-                            $container->get(\Mzk\ZiskejApi\Api::class),
-                            $container->get(\KnihovnyCz\Ziskej\ZiskejMvs::class)
-                        );
-                    },
+                    \KnihovnyCz\RecordTab\Ziskej::class => \KnihovnyCz\RecordTab\ZiskejFactory::class,
                 ],
                 'aliases' => [
                     \VuFind\RecordTab\HoldingsILS::class => \KnihovnyCz\RecordTab\HoldingsILS::class,
+                    'ziskej' => \KnihovnyCz\RecordTab\Ziskej::class,
                 ],
             ],
             'contentblock' => [

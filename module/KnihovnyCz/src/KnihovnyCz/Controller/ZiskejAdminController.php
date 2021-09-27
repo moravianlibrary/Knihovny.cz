@@ -1,15 +1,13 @@
 <?php
 
 declare(strict_types=1);
-
 namespace KnihovnyCz\Controller;
 
-use KnihovnyCz\Ziskej\ZiskejMvs;
 use KnihovnyCz\Ziskej\ZiskejEdd;
+use KnihovnyCz\Ziskej\ZiskejMvs;
 
 class ZiskejAdminController extends AbstractBase
 {
-
     /**
      * @return \Laminas\Http\Response|\Laminas\View\Model\ViewModel
      *

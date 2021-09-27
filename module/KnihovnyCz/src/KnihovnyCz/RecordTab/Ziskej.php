@@ -206,5 +206,4 @@ class Ziskej extends \VuFind\RecordTab\AbstractBase
         }
         return $ziskejLibsIds;
     }
-
 }
