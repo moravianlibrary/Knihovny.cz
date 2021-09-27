@@ -1,6 +1,6 @@
 <?php
 declare(strict_types = 1);
-namespace KnihovnyCz;
+namespace KnihovnyCz\Ziskej;
 
 use Http\Message\Authentication\Bearer;
 use Interop\Container\ContainerInterface;
