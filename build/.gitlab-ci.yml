@@ -8,6 +8,7 @@ variables:
 
 Test the code:
   stage: test
+  image: ${CACHE_REGISTRY_URL}/mirrors/alpine:latest
   rules:
     - if:  # run tests on main
         ( $CI_PIPELINE_SOURCE == "push" )  &&
@@ -23,9 +24,9 @@ Build multistage image:
     - if:
         ( $CI_PIPELINE_SOURCE == "merge_request_event" ) &&
         ( $CI_MERGE_REQUEST_IID == "233")
-  image: docker:20.10-git
+  image: ${CACHE_REGISTRY_URL}/mirrors/docker:20.10-git
   services:
-    - docker:20.10-dind
+    - ${CACHE_REGISTRY_URL}/mirrors/docker:20.10-dind
   before_script:
     - apk update
     - apk add make bash
