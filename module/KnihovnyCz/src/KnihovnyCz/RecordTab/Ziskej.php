@@ -95,16 +95,6 @@ class Ziskej extends \VuFind\RecordTab\AbstractBase
     }
 
     /**
-     * Get the logged-in user or false
-     *
-     * @return \KnihovnyCz\Db\Row\User|null
-     */
-    public function getUser(): ?\KnihovnyCz\Db\Row\User
-    {
-        return $this->authManager->isLoggedIn() ?: null;
-    }
-
-    /**
      * Get ZiskejMvs class
      *
      * @return \KnihovnyCz\Ziskej\ZiskejMvs
@@ -127,7 +117,7 @@ class Ziskej extends \VuFind\RecordTab\AbstractBase
     /**
      * Get libraries connected in Ziskej
      *
-     * @return string[][]
+     * @return array[]
      *
      * @throws \Http\Client\Exception
      * @throws \Mzk\ZiskejApi\Exception\ApiResponseException
@@ -137,8 +127,7 @@ class Ziskej extends \VuFind\RecordTab\AbstractBase
     {
         $connectedLibs = [];
 
-        $user = $this->getUser();
-
+        $user = $this->authManager->isLoggedIn();
         if ($user) {
             /** @var \VuFind\Db\Row\UserCard $userCard */
             foreach ($user->getLibraryCards() as $userCard) {
