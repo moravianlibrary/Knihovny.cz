@@ -61,12 +61,13 @@ USER root
 RUN npm install -g grunt-cli
 
 # prepare Grunt
-COPY --from=vufind-src /src/vufind/Grunt* /src/vufind/package.json ${VUFIND_ROOT}/
+#COPY --from=vufind-src /src/vufind/Grunt* /src/vufind/package.json ${VUFIND_ROOT}/
+COPY --from=vufind-src /src/vufind/*  ${VUFIND_ROOT}/
 RUN chown vufind:vufind -R ${VUFIND_ROOT}
 
 USER vufind
 RUN npm install
-RUN grunt less
+RUN grunt less -v
 
 ########### final image
 FROM localhost/knihovny-php:latest
@@ -81,11 +82,13 @@ RUN \
 COPY --from=libraries /usr/local/bin/composer /usr/bin/composer
 
 # copy vufind source
-COPY --from=vufind-src  /src/vufind/ ${VUFIND_ROOT}
+#COPY --from=vufind-src  /src/vufind/ ${VUFIND_ROOT}/
 # copy vufind PHP modules
-COPY --from=libraries  ${VUFIND_ROOT}/vendor/ ${VUFIND_ROOT}/vendor/
+#COPY --from=libraries  ${VUFIND_ROOT}/vendor/ ${VUFIND_ROOT}/vendor/
 # copy vufind node modules
-COPY --from=libraries  ${VUFIND_ROOT}/node_modules/ ${VUFIND_ROOT}/node_modules/
+#COPY --from=libraries  ${VUFIND_ROOT}/node_modules/ ${VUFIND_ROOT}/node_modules/
+#
+COPY --from=libraries /${VUFIND_ROOT}/ /${VUFIND_ROOT}/
 
 # copy local extensions
 ADD ./local ${VUFIND_EXTENSIONS_ROOT}/local
