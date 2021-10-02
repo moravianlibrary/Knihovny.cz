@@ -66,8 +66,6 @@ COPY --from=vufind-src /src/vufind/*  ${VUFIND_ROOT}/
 RUN chown vufind:vufind -R ${VUFIND_ROOT}
 
 USER vufind
-RUN npm install
-RUN grunt less -v
 
 ########### final image
 FROM localhost/knihovny-php:latest
@@ -102,6 +100,14 @@ RUN \
     ln -sv ${VUFIND_EXTENSIONS_ROOT}/module/* ${VUFIND_ROOT}/module &&  \
     ln -sv ${VUFIND_EXTENSIONS_ROOT}/themes/* ${VUFIND_ROOT}/themes && \
     echo "OK"
+
+#FIXME: All needed npm modules and grunt are installed into production container - we do not want this
+#There are two solutions - Commit compiled css into repository, or, install grunt and other dependencies
+#Together with VuFind and Knihovny.cz source code and generate the css file there
+RUN npm install -g grunt-cli
+WORKDIR ${VUFIND_ROOT}
+RUN npm install
+RUN grunt less -v
 
 RUN chown vufind:vufind -R ${VUFIND_ROOT} ${VUFIND_EXTENSIONS_ROOT}
 
