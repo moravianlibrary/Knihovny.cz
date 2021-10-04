@@ -39,7 +39,7 @@ Build multistage image:
     # build it
     - make -C build IMAGE_NAME=${TARGET_REGISTRY_URL}/${TARGET_IMAGE_NAME} PARAM_VUFIND_COMMIT_ID=${VUFIND_COMMIT_ID}
     # rebuild
-    - docker push ${TARGET_REGISTRY_URL}/${TARGET_IMAGE_NAME}
+    - docker push --quiet ${TARGET_REGISTRY_URL}/${TARGET_IMAGE_NAME}
 
 .deploy_image:
   stage: deploy
