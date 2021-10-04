@@ -1,6 +1,6 @@
 .PHONY: image
 
-PARAM_VUFIND_COMMIT_ID = "da392b009322a02965106205fc8bfe597a4d7fc4"
+PARAM_VUFIND_COMMIT_ID = "undefined"
 
 image:
 	make -C php-image

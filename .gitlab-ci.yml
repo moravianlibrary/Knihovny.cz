@@ -1,3 +1,7 @@
+
+variables:
+  VUFIND_COMMIT_ID: da392b009322a02965106205fc8bfe597a4d7fc4
+
 include:
   - local: build/.gitlab-ci.yml
 
@@ -5,35 +9,3 @@ stages:
   - test
   - build
   - deploy
-
-Build container image:
-  variables:
-    REGISTRY_URL: registry.app.knihovny.cz
-    TARGET_IMAGE_NAME: knihovny-cz/vufind
-    BUILD_DEBUG: 'true'
-
-  stage: build
-  rules:
-    - if:
-        ( $CI_PIPELINE_SOURCE == "push" ) &&
-        ( $CI_COMMIT_BRANCH =~ /^ci/ )
-  image: docker:19.03.12
-  services:
-    - docker:19.03.12-dind
-  before_script:
-    - apk update
-    - apk add bash docker-compose
-    - mkdir -p $HOME/.docker
-    - cp ${REGISTRY_AUTH_FILE} $HOME/.docker/config.json
-  script:
-    - cd ${CI_PROJECT_DIR}
-    - cp docker/deploy.env.example docker/deploy.env
-    - cp docker/local.env.example docker/local.env
-    #    - bin/run.sh --no-run --image localhost/vufind:build --private-registry
-    # build the image
-    - bin/run.sh --no-run -t deploy --service vufind6 --branch ${CI_COMMIT_REF}
-    # upload image to the registry
-    - docker tag moravianlibrary/knihovny_cz:latest ${REGISTRY_URL}/${TARGET_IMAGE_NAME}:build
-    - docker push ${REGISTRY_URL}/${TARGET_IMAGE_NAME}:build
-    - docker tag moravianlibrary/knihovny_cz:latest ${REGISTRY_URL}/${TARGET_IMAGE_NAME}:${CI_COMMIT_REF_SLUG}-${CI_PIPELINE_IID}-${CI_COMMIT_SHORT_SHA}
-    - docker push ${REGISTRY_URL}/${TARGET_IMAGE_NAME}:${CI_COMMIT_REF_SLUG}-${CI_PIPELINE_IID}-${CI_COMMIT_SHORT_SHA}

@@ -37,7 +37,7 @@ Build multistage image:
     # pull cache layers
     - docker pull ${CACHE_REGISTRY_URL}/${TARGET_IMAGE_NAME}
     # build it
-    - make -C build IMAGE_NAME=${TARGET_REGISTRY_URL}/${TARGET_IMAGE_NAME}
+    - make -C build IMAGE_NAME=${TARGET_REGISTRY_URL}/${TARGET_IMAGE_NAME} PARAM_VUFIND_COMMIT_ID=${VUFIND_COMMIT_ID}
     # rebuild
     - docker push ${TARGET_REGISTRY_URL}/${TARGET_IMAGE_NAME}
 
