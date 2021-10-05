@@ -44,8 +44,8 @@ COPY ./composer.local.json /var/www/knihovny-cz/
 RUN rm /var/www/knihovny-cz/composer.lock
 
 # Install composer dependencies
-RUN composer install --no-interaction -q
-RUN composer update --no-interaction -q
+RUN composer install --no-interaction -q --ignore-platform-req php
+RUN composer update --no-interaction -q --ignore-platform-req php
 
 # Copy script for content updating and run it on every start
 COPY install-portal-content.sh /onstart/010-install-portal-content.sh
