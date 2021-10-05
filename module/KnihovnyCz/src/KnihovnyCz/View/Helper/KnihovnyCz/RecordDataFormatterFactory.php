@@ -304,24 +304,11 @@ class RecordDataFormatterFactory
         $spec->setTemplateLine(
             'Published', 'getPublicationDetails', 'data-publicationDetails.phtml'
         );
-        //$spec->setTemplateLine('field773', 'getField773', 'data-7xx-field.phtml');
-        //$spec->setTemplateLine('field770', 'getField770', 'data-7xx-field.phtml');
-        //$spec->setTemplateLine('field772', 'getField772', 'data-7xx-field.phtml');
-        //$spec->setTemplateLine('field777', 'getField777', 'data-7xx-field.phtml');
-        //$spec->setTemplateLine('field780', 'getField780', 'data-7xx-field.phtml');
-        //$spec->setTemplateLine('field785', 'getField785', 'data-7xx-field.phtml');
         $spec->setLine(
             'Edition', 'getEdition', null,
             ['prefix' => '<span property="bookEdition">', 'suffix' => '</span>']
         );
         $spec->setTemplateLine('Series', 'getSeries', 'data-series.phtml');
-        /*$spec->setTemplateLine(
-            'Subjects', 'getAllSubjectHeadings', 'data-allSubjectHeadings.phtml'
-        );
-        $spec->setTemplateLine(
-            'child_records', 'getChildRecordCount', 'data-childRecords.phtml',
-            ['allowZero' => false]
-        );*/
         $spec->setLine('Published', 'getDateSpan');
         $spec->setLine('Item Description', 'getGeneralNotes');
         $spec->setLine('Physical Description', 'getPhysicalDescriptions');
