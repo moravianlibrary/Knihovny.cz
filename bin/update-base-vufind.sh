@@ -75,8 +75,6 @@ fi
 sed -i "s/ENV PARAM_VUFIND_COMMIT=\"\(.*\)\"/ENV PARAM_VUFIND_COMMIT=\"${REMOTE_VERSION}\"/g" "${FILENAME}"
 sed -i "s/\(\s*\)VUFIND_COMMIT_ID: \(.*\)/\1VUFIND_COMMIT_ID: ${REMOTE_VERSION}/g" "${CI_FILENAME}"
 
-exit 0;
-
 merge_directory local/base/config/vufind config/vufind $OUR_VERSION $REMOTE_VERSION ${repository}
 merge_directory themes/KnihovnyCz/templates themes/bootstrap3/templates $OUR_VERSION $REMOTE_VERSION ${repository}
 merge_directory themes/KnihovnyCz/templates/searchapi themes/root/templates/searchapi $OUR_VERSION $REMOTE_VERSION ${repository}
