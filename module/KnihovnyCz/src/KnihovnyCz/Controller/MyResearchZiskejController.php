@@ -107,10 +107,12 @@ class MyResearchZiskejController extends AbstractBase
 
             $tickets = [];
             foreach ($ziskejApi->getTickets($userCard->eppn)->getAll() as $ticket) {
-                $tickets[$ticket->getId()] = [
-                    'ticket' => $ticket,
-                    'record' => $this->getRecord($ticket->getDocumentId()),
-                ];
+                if ($ticket->getDocumentId() !== null) {
+                    $tickets[$ticket->getId()] = [
+                        'ticket' => $ticket,
+                        'record' => $this->getRecord($ticket->getDocumentId()),
+                    ];
+                }
             }
             $view->setVariable('tickets', $tickets);
             return $view;
@@ -149,7 +151,14 @@ class MyResearchZiskejController extends AbstractBase
 
         $ticket = $ziskejApi->getTicket($userCard->eppn, $ticketId);
         $messages = $ziskejApi->getMessages($userCard->eppn, $ticketId);
-        $driver = $this->getRecord($ticket->getDocumentId());
+
+        $driver = null;
+        if ($ticket) {
+            $documentId = $ticket->getDocumentId();
+            if ($documentId) {
+                $driver = $this->getRecord($documentId);
+            }
+        }
 
         return $this->createViewModel(
             compact(
@@ -266,11 +275,11 @@ class MyResearchZiskejController extends AbstractBase
     /**
      * @param string $documentId
      *
-     * @return \KnihovnyCz\RecordDriver\SolrDefault|null
+     * @return \KnihovnyCz\RecordDriver\SolrDefault
      *
      * @throws \Exception
      */
-    private function getRecord(string $documentId): ?SolrDefault
+    private function getRecord(string $documentId): SolrDefault
     {
         $recordLoader = $this->getRecordLoader();
 
