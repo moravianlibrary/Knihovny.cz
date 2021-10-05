@@ -335,11 +335,13 @@ $config = [
                     \KnihovnyCz\ILS\Driver\KohaRest1905::class => \VuFind\ILS\Driver\DriverWithDateConverterFactory::class,
                     \KnihovnyCz\ILS\Driver\MultiBackend::class => \KnihovnyCz\ILS\Driver\MultiBackendFactory::class,
                     \KnihovnyCz\ILS\Driver\XCNCIP2::class => \VuFind\ILS\Driver\DriverWithDateConverterFactory::class,
+                    \KnihovnyCz\ILS\Driver\Aleph::class => \VuFind\ILS\Driver\AlephFactory::class,
                 ],
                 'aliases' => [
                     'koharest1905' => \KnihovnyCz\ILS\Driver\KohaRest1905::class,
                     'multibackend' => \KnihovnyCz\ILS\Driver\MultiBackend::class,
                     'xcncip2' => \KnihovnyCz\ILS\Driver\XCNCIP2::class,
+                    'aleph' => \KnihovnyCz\ILS\Driver\Aleph::class,
                 ],
             ],
             'content_toc' => [
