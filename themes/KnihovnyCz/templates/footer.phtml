@@ -1,6 +1,46 @@
 <footer class="hidden-print">
   <div class="linkbar">
     <div class="container">
+      <div class="row">
+        <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
+          <h3><?=$this->translate('footer_heading_1') ?></h3>
+          <ul class="list-unstyled">
+            <li><?=$this->footerLink('o-portalu') ?></li>
+            <li><?=$this->footerLink('zapojene-knihovny-a-zdroje') ?></li>
+            <li><?=$this->footerLink('ochrana-osobnich-udaju') ?></li>
+          </ul>
+        </div>
+        <?php if($this->layout()->userLang === 'cs'): ?>
+          <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
+            <h3><?=$this->translate('footer_heading_2') ?></h3>
+            <ul class="list-unstyled">
+              <li><?=$this->footerLink('sluzby-knihoven') ?></li>
+              <li><?=$this->footerLink('projekty-knihoven') ?></li>
+              <li><?=$this->footerLink('brany-a-rozcestniky') ?></li>
+            </ul>
+          </div>
+        <?php endif; ?>
+        <?php if($this->layout()->userLang === 'cs'): ?>
+          <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
+            <h3><?=$this->translate('footer_heading_3') ?></h3>
+            <ul class="list-unstyled">
+              <li><?=$this->footerLink('jak-se-zapojit') ?></li>
+              <li><?=$this->footerLink('nastroje-a-materialy') ?></li>
+              <li><?=$this->footerLink('graficke-podklady') ?></li>
+            </ul>
+          </div>
+        <?php endif; ?>
+        <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3">
+          <h3><?=$this->translate('footer_heading_4') ?></h3>
+          <ul class="list-unstyled">
+            <li><a data-lightbox href="<?=$this->url('feedback-home') ?>"><?=$this->transEsc("Feedback")?></a></li>
+            <?php if($this->layout()->userLang === 'cs'): ?>
+              <li><?=$this->footerLink('faq') ?></li>
+            <?php endif; ?>
+            <li><?=$this->footerLink('napoveda') ?></li>
+          </ul>
+        </div>
+      </div>
     </div>
   </div>
   <div class="infobar">

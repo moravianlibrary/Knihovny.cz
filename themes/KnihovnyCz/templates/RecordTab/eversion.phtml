@@ -16,10 +16,10 @@
         <tbody>
         <?php $links = $this->driver->getLinks(); if (!empty($links)): ?>
             <?php foreach ($links as $link):
-                if ($link['status'] === 'online') {
+                if ($link['status'] === 'online' || $link['status'] === 'dnnt') {
                     $statusClass = 'success';
-                } elseif ($link['status'] === 'unknown') {
-                    $statusClass = 'warning';
+                } elseif ($link['status'] === 'unknown' || $link['status'] === 'na') {
+                    $statusClass = 'default';
                 } else {
                     $statusClass = 'danger';
                 }

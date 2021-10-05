@@ -131,7 +131,7 @@ class Shibboleth extends Base
         foreach ($this->attribsToCheck as $attribute) {
             if (isset($shib[$attribute])) {
                 $value = $this->getAttribute($request, $shib[$attribute]);
-                if ($attribute == 'email') {
+                if ($attribute == 'email' && $value != null) {
                     $user->updateEmail($value);
                 } elseif ($attribute == 'cat_username' && isset($shib['prefix'])) {
                     $user->cat_username = $shib['prefix'] . '.' . ($value ?? '');
@@ -139,6 +139,9 @@ class Shibboleth extends Base
                     $user->$attribute = $value ?? '';
                 }
             }
+        }
+        if (isset($shib['prefix'])) {
+            $user->home_library = $shib['prefix'];
         }
 
         $this->storeShibbolethSession($request);

@@ -17,10 +17,12 @@ return [
             },
         ],
         'invokables' => [
+            \KnihovnyCz\View\Helper\KnihovnyCz\FooterLink::class,
             \KnihovnyCz\View\Helper\KnihovnyCz\LibrariesApiLookfor::class,
             \KnihovnyCz\View\Helper\KnihovnyCz\SplitText::class,
         ],
         'aliases' => [
+            'footerLink' => \KnihovnyCz\View\Helper\KnihovnyCz\FooterLink::class,
             'recordDataFormatter' => 'VuFind\View\Helper\Root\RecordDataFormatter',
             'Ziskej' => KnihovnyCz\View\Helper\KnihovnyCz\Ziskej::class,
             'ZiskejEdd' => KnihovnyCz\View\Helper\KnihovnyCz\ZiskejEdd::class,

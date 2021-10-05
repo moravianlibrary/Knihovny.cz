@@ -7,6 +7,7 @@ USAGE: $0 [params]
 
 Available params
   -b|--branch    Branch of original VuFind repository (https://github.com/vufind-org/vufind), defaults to "dev"
+  -g|--debug     Show debug messages
   -d|--dry-run   Only prints information about available update
   -h|--help      Print usage
 
@@ -16,6 +17,7 @@ EOF
 DIRNAME=$(dirname "$0");
 .  "${DIRNAME}/inc/functions.sh"
 FILENAME="${DIRNAME}/../docker/builds/knihovny-cz-base6/Dockerfile"
+CI_FILENAME="${DIRNAME}/../.gitlab-ci.yml"
 
 # Set deafults
 repository="vufind-org/vufind"
@@ -35,6 +37,10 @@ while true ; do
             dryrun=true
             shift
             ;;
+         --debug|-g)
+            debug=true
+            shift
+            ;;
          --help|-h)
             print_usage;
             exit 0;;
@@ -44,6 +50,13 @@ done
 
 REMOTE_VERSION=$(last_commit $branch $repository)
 OUR_VERSION=$(grep "ENV PARAM_VUFIND_COMMIT" "${FILENAME}" | sed 's/ENV PARAM_VUFIND_COMMIT="\(.*\)"/\1/g')
+OUR_CI_VERSION=$(grep "VUFIND_COMMIT_ID" "${CI_FILENAME}" | sed 's/\s*VUFIND_COMMIT_ID: \(.*\)/\1/g')
+if [ "$OUR_VERSION" != "$OUR_CI_VERSION" ]; then
+  echo "Local build version ($OUR_VERSION) and CI build version ($OUR_CI_VERSION) are not equal. Please make manual adjustment"
+  echo "Local build version is defined in file $FILENAME"
+  echo "Local build version is defined in file $CI_FILENAME"
+  exit 1;
+fi;
 
 if [ "$REMOTE_VERSION" == "$OUR_VERSION" ]; then
   echo "Remote and local versions are same. No update needed."
@@ -60,6 +73,7 @@ if [ "$dryrun" == "true" ]; then
 fi
 
 sed -i "s/ENV PARAM_VUFIND_COMMIT=\"\(.*\)\"/ENV PARAM_VUFIND_COMMIT=\"${REMOTE_VERSION}\"/g" "${FILENAME}"
+sed -i "s/\(\s*\)VUFIND_COMMIT_ID: \(.*\)/\1VUFIND_COMMIT_ID: ${REMOTE_VERSION}/g" "${CI_FILENAME}"
 
 merge_directory local/base/config/vufind config/vufind $OUR_VERSION $REMOTE_VERSION ${repository}
 merge_directory themes/KnihovnyCz/templates themes/bootstrap3/templates $OUR_VERSION $REMOTE_VERSION ${repository}
