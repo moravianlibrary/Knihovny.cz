@@ -15,7 +15,7 @@
         <?php endif; ?>
         <li><button id="ribbon-print" class="toolbar-btn btn-type-print" type="submit" name="print" value="1" title="<?=$this->transEscAttr('bookbag_print_selected')?>"<?php if ($this->formAttr): ?> form="<?=$this->escapeHtmlAttr($this->formAttr) ?>"<?php endif; ?>><?=$this->transEsc('Print')?></button></li>
         <?php if ($this->userlist()->getMode() !== 'disabled'): ?>
-          <li><button id="ribbon-save" class="toolbar-btn btn-type-save" type="submit" name="saveCart" value="1" title="<?=$this->transEscAttr('bookbag_save_selected')?>"<?php if ($this->formAttr): ?> form="<?=$this->escapeHtmlAttr($this->formAttr) ?>"<?php endif; ?>><?=$this->transEsc('Save')?></button></li>
+          <li><button id="ribbon-save" class="toolbar-btn btn-type-save" type="submit" name="saveCart" value="1" title="<?=$this->transEscAttr('bookbag_save_selected')?>"<?php if ($this->formAttr): ?> form="<?=$this->escapeHtmlAttr($this->formAttr) ?>"<?php endif; ?>><?=$this->transEsc('Add to favorites')?></button></li>
         <?php endif; ?>
       <?php endif; ?>
       <?php if (isset($this->showCartControls) && $this->showCartControls): ?>
