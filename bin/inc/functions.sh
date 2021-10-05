@@ -13,9 +13,13 @@ function last_commit {
     echo $sha
 }
 
+function echo_debug {
+  [[ "$debug" ]] && echo "$1"
+}
+
 function merge_directory
 {
-    echo merge_directory $1 $2 $3 $4 $5
+    echo_debug "merge_directory $1 $2 $3 $4 $5"
     local localDir=$1
     local localDirLength=${#localDir}
     local coreDir=$2
@@ -45,11 +49,11 @@ function merge_directory
             diff3 -m "$current" "$oldOriginalFile" "$updatedOriginalFile" > "$mergedFile"
             if [ $? == 1 ]
             then
-              echo "CONFLICT: $current"
+              echo -e "\e[1;31mCONFLICT: $current\e[0m"
             fi
             cp $mergedFile $current
           else
-            echo "Skipping $current; no equivalent in core code."
+            echo_debug "Skipping $current; no equivalent in core code."
           fi
         fi
     done
