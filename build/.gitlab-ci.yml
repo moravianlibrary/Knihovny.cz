@@ -24,6 +24,9 @@ Build multistage image:
     - if:
         ( $CI_PIPELINE_SOURCE == "merge_request_event" ) &&
         ( $CI_MERGE_REQUEST_IID == "233")
+    - if:  # run build on main, or devel
+        ( $CI_PIPELINE_SOURCE == "push" )  &&
+        ( ( $CI_COMMIT_BRANCH == "master" ) || ( $CI_COMMIT_BRANCH == "main" ) || ( $CI_COMMIT_BRANCH =~ /^devel/ )  )
   image: ${CACHE_REGISTRY_URL}/mirrors/docker:20.10-git
   services:
     - ${CACHE_REGISTRY_URL}/mirrors/docker:20.10-dind
@@ -82,7 +85,10 @@ Build multistage image:
 Deploy devel image:
   extends: .deploy_image
   rules:
-   - if:
+    - if:  # run deploy on main, or devel
+        ( $CI_PIPELINE_SOURCE == "push" )  &&
+        ( ( $CI_COMMIT_BRANCH == "master" ) || ( $CI_COMMIT_BRANCH == "main" ) )
+    - if:
         ( $CI_PIPELINE_SOURCE == "merge_request_event" ) &&
         ( $CI_MERGE_REQUEST_IID == "233")
   environment:
