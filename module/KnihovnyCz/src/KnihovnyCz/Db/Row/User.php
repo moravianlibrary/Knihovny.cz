@@ -67,17 +67,19 @@ class User extends Base
     /**
      * Get UserCard by card name
      *
-     * @param string $catUsername
+     * @param string|null $catUsername
      *
      * @return \KnihovnyCz\Db\Row\UserCard|null
      * @throws \VuFind\Exception\LibraryCard
      */
-    public function getCardByCatName(string $catUsername): ?UserCard
+    public function getCardByCatName(?string $catUsername): ?UserCard
     {
-        /** @var \KnihovnyCz\Db\Row\UserCard $userCard */
-        foreach ($this->getLibraryCards() as $userCard) {
-            if ($userCard->cat_username === $catUsername) {
-                return $userCard;
+        if ($catUsername !== null && $catUsername !== '') {
+            /** @var \KnihovnyCz\Db\Row\UserCard $userCard */
+            foreach ($this->getLibraryCards() as $userCard) {
+                if ($userCard->cat_username === $catUsername) {
+                    return $userCard;
+                }
             }
         }
 

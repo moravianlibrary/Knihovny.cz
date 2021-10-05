@@ -58,7 +58,7 @@ class ZiskejFactory implements FactoryInterface
     ): Ziskej {
         return new $requestedName(
             $container->get(\VuFind\Auth\Manager::class),
-            $container->get(\VuFind\ILSConnection::class),
+            $container->get(\VuFind\ILS\Connection::class),
             $container->get(\Mzk\ZiskejApi\Api::class),
             $container->get(\KnihovnyCz\Ziskej\ZiskejMvs::class)
         );

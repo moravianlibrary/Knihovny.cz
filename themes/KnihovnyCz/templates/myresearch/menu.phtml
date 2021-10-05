@@ -23,12 +23,12 @@
       <i class="fa fa-fw fa-history" aria-hidden="true"></i> <?=$this->transEsc('Loan History')?>
     </a>
   <?php endif; ?>
-  <? if ($this->Ziskej()->isEnabled()): ?>
+  <?php if ($this->Ziskej()->isEnabled()): ?>
     <a href="<?=$this->url('myresearch-ziskej-home')?>" class="flex ziskej<?=$this->active == 'ziskej' ? ' active' : ''?>">
       <span class="flex-col"><i class="fa fa-fw fa-file-text" aria-hidden="true"></i>&nbsp;<?=$this->transEsc('Ziskej::service_name')?></span>
       <span class="ziskej-status status hidden"><i class="fa fa-spin fa-spinner" aria-hidden="true"></i></span>
     </a>
-  <? endif; ?>
+  <?php endif; ?>
   <?php if ($ilsOnline && $this->ils()->checkCapability('getMyHolds', $capabilityParams)): ?>
     <a href="<?=$this->url('holds-list')?>" class="flex<?=$this->active == 'holds' ? ' active' : ''?>">
       <span class="flex-col"><i class="fa fa-fw fa-flag" aria-hidden="true"></i>&nbsp;<?=$this->transEsc('Holds and Recalls')?></span>

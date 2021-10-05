@@ -41,7 +41,7 @@ class Ziskej extends \VuFind\RecordTab\AbstractBase
 {
     private \VuFind\Auth\Manager $authManager;
 
-    private \Vufind\Ils\Connection $ilsDriver;
+    private \Vufind\ILS\Connection $ilsDriver;
 
     private \Mzk\ZiskejApi\Api $ziskejApi;
 
@@ -51,13 +51,13 @@ class Ziskej extends \VuFind\RecordTab\AbstractBase
 
     /**
      * @param \VuFind\Auth\Manager         $authManager
-     * @param \Vufind\Ils\Connection       $ilsDriver
+     * @param \Vufind\ILS\Connection       $ilsDriver
      * @param \Mzk\ZiskejApi\Api           $ziskejApi
      * @param \KnihovnyCz\Ziskej\ZiskejMvs $ziskejMvs
      */
     public function __construct(
         \VuFind\Auth\Manager $authManager,
-        \Vufind\Ils\Connection $ilsDriver,
+        \Vufind\ILS\Connection $ilsDriver,
         \Mzk\ZiskejApi\Api $ziskejApi,
         \KnihovnyCz\Ziskej\ZiskejMvs $ziskejMvs
     ) {

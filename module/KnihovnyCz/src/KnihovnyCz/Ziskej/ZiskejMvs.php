@@ -6,7 +6,13 @@ namespace KnihovnyCz\Ziskej;
  */
 class ZiskejMvs extends Ziskej
 {
-    protected $cookieName = 'ziskejMvs';
+    /**
+     * @var string
+     */
+    protected string $cookieName = 'ziskejMvs';
 
-    protected $configDefaultModeName = 'default_mode_mvs';
+    /**
+     * @var string
+     */
+    protected string $configDefaultModeName = 'default_mode_mvs';
 }

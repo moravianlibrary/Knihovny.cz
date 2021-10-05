@@ -9,31 +9,39 @@ use VuFind\Cookie\CookieManager;
  */
 abstract class Ziskej
 {
-    protected $cookieName = '';
-
     public const MODE_DISABLED = 'disabled';
 
     public const MODE_PRODUCTION = 'prod';
 
     /**
-     * @var Config
+     * @var string
      */
-    private $config;
-
-    /**
-     * @var Config
-     */
-    private $configZiskej;
-
-    /**
-     * @var CookieManager
-     */
-    private $cookieManager;
+    protected string $cookieName = '';
 
     /**
      * @var string
      */
-    private $defaultMode;
+    protected string $configDefaultModeName = '';
+
+    /**
+     * @var Config
+     */
+    private Config $config;
+
+    /**
+     * @var Config
+     */
+    private Config $configZiskej;
+
+    /**
+     * @var CookieManager
+     */
+    private CookieManager $cookieManager;
+
+    /**
+     * @var string
+     */
+    private string $defaultMode;
 
     public function __construct(
         Config $config,
