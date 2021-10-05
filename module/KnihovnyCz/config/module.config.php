@@ -289,6 +289,7 @@ $config = [
             \KnihovnyCz\Service\WayfFilterGenerator::class => \KnihovnyCz\Service\WayfFilterGeneratorFactory::class,
             \KnihovnyCz\Auth\Manager::class => \VuFind\Auth\ManagerFactory::class,
             \KnihovnyCz\Autocomplete\Suggester::class => \VuFind\Autocomplete\SuggesterFactory::class,
+            'VuFindHttp\HttpService' => \KnihovnyCz\Service\HttpServiceFactory::class,
         ],
         'aliases' => [
             \VuFind\Config\PluginManager::class => \KnihovnyCz\Config\PluginManager::class,

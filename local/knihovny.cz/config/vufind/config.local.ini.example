@@ -59,12 +59,14 @@ RequestHelpRecipients = "cpk-support@mzk.cz"
 ReportBugRecipients   = "cpk-support@mzk.cz"
 
 [Proxy]
-type = curl
-host = your.proxy.server
-port = 8000
-username = username
-password = password
-non_proxy_host[] = cache.obalkyknih.cz
+host = cpk-front.mzk.cz
+port = 3128
+auth = basic
+user = vufind
+pass = ***
+
+[Http]
+adapter = 'Laminas\Http\Client\Adapter\Default'
 
 [Session]
 type = File
