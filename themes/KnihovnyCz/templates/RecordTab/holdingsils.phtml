@@ -49,25 +49,26 @@
             elm.find('td div[data-type="availability"]').html('<span class="availability">'
              + htmlEncode(item.availability_status) + '</span>');
           }
-          if (item.hasOwnProperty('status') && item.status) {
-            if (item.label !== '') {
-              elm.find('td[data-type="status"]').html(
-                '<span class="status label label-' + item.label + '">'
-                + item.status + '</span>'
-              );
-            } else {
-              elm.find('td[data-type="status"]').html(
-                '<span class="status">' + item.status + '</span>'
-              );
-            }
-            if (item.hasOwnProperty('duedate') && item.duedate ) {
-              elm.find('td[data-type="status"]').append(
-                ' ' + VuFind.translate('Due') + ' ' + item.duedate
-              );
-            }
-          } else {
-            elm.find('td[data-type="status"]').html(statusUnknownHtml);
+
+          /* status */
+          let status = '';
+          if (item.hasOwnProperty('duedate') && item.duedate) {
+            status = VuFind.translate('holding_due_date') + ' ' + item.duedate;
           }
+          if (item.hasOwnProperty('status') && item.status) {
+            status += (status == '') ? item.status : '; ' + item.status;
+          }
+          if (item.hasOwnProperty('label') && item.label) {
+            elm.find('td[data-type="status"]').html(
+              '<span class="status label label-' + item.label + '">'
+              + htmlEncode(status) + '</span>'
+            );
+          } else {
+            elm.find('td[data-type="status"]').html(
+              '<span class="status">' + htmlEncode(status) + '</span>'
+            );
+          }
+
           if (item.hasOwnProperty('location') && item.location) {
             elm.find('td[data-type="location"]').text(item.location);
           }

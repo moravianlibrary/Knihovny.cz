@@ -110,7 +110,7 @@ class Aleph extends AlephBase
                 );
             }
             $requested = false;
-            $duedate = '';
+            $duedate = null;
             $addLink = false;
             $status = (string)$item->{'status'};
             if (in_array($status, $this->available_statuses)) {
@@ -123,17 +123,12 @@ class Aleph extends AlephBase
                 $hold_request = $item->xpath('info[@type="HoldRequest"]/@allowed');
                 $addLink = ($hold_request[0] == 'Y');
             }
-            $matches = [];
-            $dueDateWithStatusRegEx
-                = "/([0-9]*\\/[a-zA-Z0-9]*\\/[0-9]*);([a-zA-Z ]*)/";
+            $statuses = explode(';', $status, 2);
             $dueDateRegEx = "/([0-9]*\\/[a-zA-Z0-9]*\\/[0-9]*)/";
-            if (preg_match($dueDateWithStatusRegEx, $status, $matches)) {
+            $matches = [];
+            if (preg_match($dueDateRegEx, $statuses[0], $matches)) {
                 $duedate = $this->parseDate($matches[1]);
-                $requested = (trim($matches[2]) == "Requested");
-            } elseif (preg_match($dueDateRegEx, $status, $matches)) {
-                $duedate = $this->parseDate($matches[1]);
-            } else {
-                $duedate = null;
+                $status = (count($statuses) > 1) ? $statuses[1] : null;
             }
             $item_id = $item->attributes()->href;
             $item_id = substr($item_id, strrpos($item_id, '/') + 1);
@@ -143,7 +138,7 @@ class Aleph extends AlephBase
                 'item_id'             => $item_id,
                 'availability'        => $availability,
                 'availability_status' => (string)$z30->{'z30-item-status'},
-                'status'              => (string)$item->{'status'},
+                'status'              => $status,
                 'location'            => (string)$z30->{'z30-sub-library'},
                 'reserve'             => 'N',
                 'callnumber'          => (string)$z30->{'z30-call-no'},
