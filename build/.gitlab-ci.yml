@@ -5,6 +5,7 @@ variables:
   TARGET_IMAGE_NAME: knihovny-cz/vufind:build
   CACHE_REGISTRY_URL: docker.app.knihovny.cz
   BUILD_DEBUG: 'true'
+  BUILD_THIS_MR: '263'
 
 Test the code:
   stage: test
@@ -23,7 +24,7 @@ Build multistage image:
   rules:
     - if:
         ( $CI_PIPELINE_SOURCE == "merge_request_event" ) &&
-        ( $CI_MERGE_REQUEST_IID == "233")
+        ( $CI_MERGE_REQUEST_IID == $BUILD_THIS_MR )
     - if:  # run build on main, or devel
         ( $CI_PIPELINE_SOURCE == "push" )  &&
         ( ( $CI_COMMIT_BRANCH == "master" ) || ( $CI_COMMIT_BRANCH == "main" ) || ( $CI_COMMIT_BRANCH =~ /^devel/ )  )
@@ -90,7 +91,7 @@ Deploy devel image:
         ( ( $CI_COMMIT_BRANCH == "master" ) || ( $CI_COMMIT_BRANCH == "main" ) )
     - if:
         ( $CI_PIPELINE_SOURCE == "merge_request_event" ) &&
-        ( $CI_MERGE_REQUEST_IID == "233")
+        ( $CI_MERGE_REQUEST_IID == $BUILD_THIS_MR )
   environment:
     name: devel
   variables:
