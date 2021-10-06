@@ -147,6 +147,7 @@ JS;
     <?php foreach ($this->captcha()->js() as $jsInclude):?>
       <?=$this->inlineScript(\Laminas\View\Helper\HeadScript::FILE, $jsInclude, 'SET')?>
     <?php endforeach; ?>
+    
     <?=$this->footScript() ?>
     <?=$this->render('ziskej-bar.phtml') ?>
   </body>
