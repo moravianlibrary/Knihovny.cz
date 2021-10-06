@@ -45,6 +45,10 @@
           } else {
             return;
           }
+          if (item.hasOwnProperty('availability_status') && item.availability_status) {
+            elm.find('td div[data-type="availability"]').html('<span class="availability">'
+             + htmlEncode(item.availability_status) + '</span>');
+          }
           if (item.hasOwnProperty('status') && item.status) {
             if (item.label !== '') {
               elm.find('td[data-type="status"]').html(
