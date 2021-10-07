@@ -24,7 +24,7 @@
  * @package  KnihovnyCz\ILS\Driver
  * @author   Vaclav Rosecky <vaclav.rosecky@mzk.cz>
  * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
- * @link https://knihovny.cz Main Page
+ * @link     https://knihovny.cz Main Page
  */
 namespace KnihovnyCz\ILS\Driver;
 
@@ -41,7 +41,6 @@ use VuFind\ILS\Driver\Aleph as AlephBase;
  */
 class Aleph extends AlephBase
 {
-
     /**
      * Get Holding
      *
@@ -52,12 +51,9 @@ class Aleph extends AlephBase
      * @param array  $patron  Patron data
      * @param array  $options Extra options (not currently used)
      *
-     * @throws DateException
-     * @throws ILSException
      * @return array         On success, an associative array with the following
      * keys: id, availability (boolean), status, location, reserve, callnumber,
      * duedate, number, barcode.
-     *
      */
     public function getHolding($id, array $patron = null, array $options = [])
     {
@@ -161,5 +157,4 @@ class Aleph extends AlephBase
         }
         return $holding;
     }
-
 }
