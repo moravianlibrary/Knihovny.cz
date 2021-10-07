@@ -51,7 +51,7 @@ USER 1000
 
 WORKDIR ${VUFIND_ROOT}
 #RUN /usr/local/bin/composer check-platform-reqs
-RUN /usr/local/bin/composer --no-dev --no-scripts install
+RUN /usr/local/bin/composer install --no-dev --no-scripts --ignore-platform-req php
 
 # Add node_modules
 USER vufind

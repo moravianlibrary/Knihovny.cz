@@ -13,4 +13,6 @@ services:
                 PARAM_VUFIND_BRANCH: ""
                 GITLAB_DEPLOY_USER: ""
                 GITLAB_DEPLOY_PASSWORD: ""
+        volumes:
+          - "./data/devel/:/data/"
         network_mode: bridge

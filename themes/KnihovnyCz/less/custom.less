@@ -49,6 +49,10 @@ a {
   text-decoration: none;
 }
 
+input[type="image"] {
+  max-width: 100%;
+}
+
 fieldset, .fieldset {
   margin-top: 1rem;
 }
@@ -524,6 +528,25 @@ h6:hover .heading-permalink {
   margin-bottom: 2em;
 }
 
+
+@media (min-width: @screen-md-min) {
+  ul.nav-wizard {
+    list-style: none;
+
+    .part {
+      text-align: center;
+
+      small {
+        display: block;
+      }
+
+      .text-icon {
+        display: block;
+      }
+    }
+  }
+}
+
 .jstree-facet li span.main {
   white-space: normal;
 }
@@ -596,6 +619,50 @@ h6:hover .heading-permalink {
 
 #content {
   margin-bottom: 20px;
+}
+
+/* Info bar for ziskej */
+.bar-ziskej {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 2030;
+  background: #fc6501;
+  color: white;
+  padding: 7px;
+  text-align: center;
+  font-size: 85%;
+  border-top: 1px solid #cccccc;
+
+  em {
+    text-transform: uppercase;
+    font-style: normal;
+  }
+
+  a {
+    color: #ffffff;
+    text-decoration: underline;
+  }
+}
+
+body.ziskej-mode-test,
+body.ziskej-mode-demo,
+body.ziskej-mode-dev {
+  padding-bottom: 33px;
+}
+
+.h2-label {
+  margin-top: 23px;
+  padding-left: 1em;
+
+  .label {
+    font-size: 18px;
+  }
+}
+
+.mb-1 {
+  margin-bottom: 1em;
 }
 
 .mr-05 {

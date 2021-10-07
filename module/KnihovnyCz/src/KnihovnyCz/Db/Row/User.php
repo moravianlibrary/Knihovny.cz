@@ -38,9 +38,91 @@ use VuFind\Db\Row\User as Base;
  * @author   Vaclav Rosecky <vaclav.rosecky@mzk.cz>
  * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://knihovny.cz Main Page
+ *
+ * @property int     $id
+ * @property ?string $username
+ * @property string  $password
+ * @property ?string $pass_hash
+ * @property string  $firstname
+ * @property string  $lastname
+ * @property string  $email
+ * @property ?string $email_verified
+ * @property int     $user_provided_email
+ * @property ?string $cat_id
+ * @property ?string $cat_username
+ * @property ?string $cat_password
+ * @property ?string $cat_pass_enc
+ * @property string  $college
+ * @property string  $major
+ * @property string  $home_library
+ * @property string  $created
+ * @property string  $verify_hash
+ * @property string  $last_login
+ * @property ?string $auth_method
+ * @property string  $pending_email
+ * @property string  $last_language
  */
 class User extends Base
 {
+    /**
+     * Get UserCard by card name
+     *
+     * @param string|null $catUsername
+     *
+     * @return \KnihovnyCz\Db\Row\UserCard|null
+     * @throws \VuFind\Exception\LibraryCard
+     */
+    public function getCardByCatName(?string $catUsername): ?UserCard
+    {
+        if ($catUsername !== null && $catUsername !== '') {
+            /** @var \KnihovnyCz\Db\Row\UserCard $userCard */
+            foreach ($this->getLibraryCards() as $userCard) {
+                if ($userCard->cat_username === $catUsername) {
+                    return $userCard;
+                }
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * @param string $eppn
+     *
+     * @return \KnihovnyCz\Db\Row\UserCard|null
+     * @throws \VuFind\Exception\LibraryCard
+     */
+    public function getCardByEppn(string $eppn): ?UserCard
+    {
+        /** @var \KnihovnyCz\Db\Row\UserCard $userCard */
+        foreach ($this->getLibraryCards() as $userCard) {
+            if ($userCard->eppn === $eppn) {
+                return $userCard;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Get UserCard by eppn domain
+     *
+     * @param string $eppnDomain
+     *
+     * @return \KnihovnyCz\Db\Row\UserCard|null
+     * @throws \VuFind\Exception\LibraryCard
+     */
+    public function getCardByEppnDomain(string $eppnDomain): ?UserCard
+    {
+        /** @var \KnihovnyCz\Db\Row\UserCard $userCard */
+        foreach ($this->getLibraryCards() as $userCard) {
+            if ($userCard->getEppnDomain() === $eppnDomain) {
+                return $userCard;
+            }
+        }
+
+        return null;
+    }
+
     /**
      * Delete library card
      *

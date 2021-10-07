@@ -93,6 +93,109 @@ $config = [
                      ],
                  ],
              ],
+             'ziskej-admin' => [
+                 'type' => \Laminas\Router\Http\Segment::class,
+                 'options' => [
+                     'route' => '/ziskej',
+                     'defaults' => [
+                         'controller' => 'ZiskejAdmin',
+                         'action' => 'Home'
+                     ],
+                 ],
+             ],
+             'myresearch-ziskej-home' => [
+                 'type' => \Laminas\Router\Http\Segment::class,
+                 'options' => [
+                     'route' => '/MyResearch/Ziskej',
+                     'defaults' => [
+                         'controller' => 'MyResearchZiskej',
+                         'action' => 'Home'
+                     ],
+                 ],
+             ],
+             'myresearch-ziskej-ticket' => [
+                 'type' => \Laminas\Router\Http\Segment::class,
+                 'options' => [
+                     'route' => '/MyResearch/ZiskejTicket/[:eppnDomain]/[:ticketId]',
+                     'constraints' => [
+                         'eppnDomain'     => '.*',
+                         'ticketId'     => '.*',
+                     ],
+                     'defaults' => [
+                         'controller' => 'MyResearchZiskej',
+                         'action' => 'Ticket'
+                     ],
+                 ],
+             ],
+             'myresearch-ziskej-ticket-cancel' => [
+                 'type' => \Laminas\Router\Http\Segment::class,
+                 'options' => [
+                     'route' => '/MyResearch/ZiskejTicket/[:eppnDomain]/[:ticketId]/Cancel',
+                     'constraints' => [
+                         'eppnDomain'     => '.*',
+                         'ticketId'     => '.*',
+                     ],
+                     'defaults' => [
+                         'controller' => 'MyResearchZiskej',
+                         'action' => 'TicketCancel'
+                     ],
+                 ],
+             ],
+             'myresearch-ziskej-message-post' => [
+                 'type' => \Laminas\Router\Http\Segment::class,
+                 'options' => [
+                     'route' => '/MyResearch/ZiskejTicket/[:eppnDomain]/[:ticketId]/Message',
+                     'constraints' => [
+                         'eppnDomain'     => '.*',
+                         'ticketId'     => '.*',
+                     ],
+                     'defaults' => [
+                         'controller' => 'MyResearchZiskej',
+                         'action' => 'TicketMessage'
+                     ],
+                 ],
+             ],
+             'ziskej-order' => [
+                 'type' => \Laminas\Router\Http\Segment::class,
+                 'options' => [
+                     'route' => '/Record/[:id]/ZiskejOrder/:eppnDomain',
+                     'constraints' => [
+                         'id' => '.*',
+                         'eppnDomain' => '.*',
+                     ],
+                     'defaults' => [
+                         'controller' => 'Record',
+                         'action' => 'ZiskejOrder'
+                     ],
+                 ],
+             ],
+             'ziskej-order-post' => [
+                 'type' => \Laminas\Router\Http\Segment::class,
+                 'options' => [
+                     'route' => '/Record/[:id]/ZiskejOrderPost',
+                     'constraints' => [
+                         'id' => '.*',
+                     ],
+                     'defaults' => [
+                         'controller' => 'Record',
+                         'action' => 'ZiskejOrderPost'
+                     ],
+                 ],
+             ],
+             'ziskej-order-finished' => [
+                 'type' => \Laminas\Router\Http\Segment::class,
+                 'options' => [
+                     'route' => '/Ziskej/Finished/:eppnDomain/:ticketId',
+                     'constraints' => [
+                         'eppnDomain' => '.*',
+                         'ticketId' => '.*',
+                     ],
+                     'defaults' => [
+                         'controller' => 'Ziskej',
+                         'action' => 'Finished'
+                     ],
+                 ],
+             ],
          ],
      ],
     'controllers' => [
@@ -104,12 +207,18 @@ $config = [
             \KnihovnyCz\Controller\MyResearchController::class => \VuFind\Controller\AbstractBaseFactory::class,
             \KnihovnyCz\Controller\RecordController::class => \VuFind\Controller\AbstractBaseWithConfigFactory::class,
             \KnihovnyCz\Controller\SearchController::class => \VuFind\Controller\AbstractBaseFactory::class,
+            \KnihovnyCz\Controller\MyResearchZiskejController::class => \VuFind\Controller\AbstractBaseFactory::class,
+            \KnihovnyCz\Controller\ZiskejController::class => \VuFind\Controller\AbstractBaseFactory::class,
+            \KnihovnyCz\Controller\ZiskejAdminController::class => \VuFind\Controller\AbstractBaseFactory::class,
         ],
         'aliases' => [
             'Inspiration' => \KnihovnyCz\Controller\InspirationController::class,
             'PortalPage' => \KnihovnyCz\Controller\PortalPageController::class,
             'Wayf' => \KnihovnyCz\Controller\WayfController::class,
             'LibraryCards' => \KnihovnyCz\Controller\LibraryCardsController::class,
+            'ZiskejAdmin' => \KnihovnyCz\Controller\ZiskejAdminController::class,
+            'Ziskej' => \KnihovnyCz\Controller\ZiskejController::class,
+            'MyResearchZiskej' => \KnihovnyCz\Controller\MyResearchZiskejController::class,
             'MyResearch' => \KnihovnyCz\Controller\MyResearchController::class,
             \VuFind\Controller\RecordController::class => \KnihovnyCz\Controller\RecordController::class,
             \VuFind\Controller\SearchController::class => \KnihovnyCz\Controller\SearchController::class,
@@ -167,13 +276,14 @@ $config = [
                     'libraryservices' => \KnihovnyCz\RecordTab\LibraryServices::class,
                     'staffviewdublincore' => \KnihovnyCz\RecordTab\StaffViewDublinCore::class,
                     'usercommentsobalkyknih' => \KnihovnyCz\RecordTab\UserCommentsObalkyKnih::class,
-                    'ziskej' => \KnihovnyCz\RecordTab\Ziskej::class,
                 ],
                 'factories' => [
                     \KnihovnyCz\RecordTab\HoldingsILS::class => \VuFind\RecordTab\HoldingsILSFactory::class,
+                    \KnihovnyCz\RecordTab\Ziskej::class => \KnihovnyCz\RecordTab\ZiskejFactory::class,
                 ],
                 'aliases' => [
                     \VuFind\RecordTab\HoldingsILS::class => \KnihovnyCz\RecordTab\HoldingsILS::class,
+                    'ziskej' => \KnihovnyCz\RecordTab\Ziskej::class,
                 ],
             ],
             'contentblock' => [
@@ -287,6 +397,9 @@ $config = [
             \KnihovnyCz\Content\ObalkyKnihService::class => \VuFind\Content\ObalkyKnihServiceFactory::class,
             \KnihovnyCz\ILS\Service\SolrIdResolver::class => \KnihovnyCz\ILS\Service\SolrIdResolverFactory::class,
             \KnihovnyCz\Service\WayfFilterGenerator::class => \KnihovnyCz\Service\WayfFilterGeneratorFactory::class,
+            \Mzk\ZiskejApi\Api::class => \KnihovnyCz\Ziskej\ZiskejApiFactory::class,
+            \KnihovnyCz\Ziskej\ZiskejEdd::class => \KnihovnyCz\Ziskej\ZiskejFactory::class,
+            \KnihovnyCz\Ziskej\ZiskejMvs::class => \KnihovnyCz\Ziskej\ZiskejFactory::class,
             \KnihovnyCz\Auth\Manager::class => \VuFind\Auth\ManagerFactory::class,
             \KnihovnyCz\Autocomplete\Suggester::class => \VuFind\Autocomplete\SuggesterFactory::class,
             'VuFindHttp\HttpService' => \KnihovnyCz\Service\HttpServiceFactory::class,
