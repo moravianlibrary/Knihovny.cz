@@ -46,8 +46,7 @@
             return;
           }
           if (item.hasOwnProperty('availability_status') && item.availability_status) {
-            elm.find('td div[data-type="availability"]').html('<span class="availability">'
-             + htmlEncode(item.availability_status) + '</span>');
+            elm.find('td[data-type="availability"] > div > span').text(item.availability_status);
           }
 
           /* status */
