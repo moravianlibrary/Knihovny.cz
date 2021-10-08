@@ -49,8 +49,8 @@ class ZiskejApiFactory implements FactoryInterface
             $handlerSocket->setFormatter($formaterJson);
             $logger->pushHandler($handlerSocket);
         }
-
-        $guzzleClient = \Http\Adapter\Guzzle6\Client::createWithConfig(
+        $httpService = $container->get(\KnihovnyCz\Service\GuzzleHttpService::class);
+        $guzzleClient = $httpService->createClient(
             [
                 'connect_timeout' => 10,
             ]
