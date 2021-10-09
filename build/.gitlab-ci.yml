@@ -5,7 +5,7 @@ variables:
   TARGET_IMAGE_NAME: knihovny-cz/vufind:build
   CACHE_REGISTRY_URL: docker.app.knihovny.cz
   BUILD_DEBUG: 'true'
-  BUILD_THIS_MR: '263'
+  BUILD_THIS_MR: '265'
 
 Test the code:
   stage: test
