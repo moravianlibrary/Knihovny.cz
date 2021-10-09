@@ -1,4 +1,4 @@
-FROM docker.io/php:8.0-apache-bullseye
+FROM docker.io/php:8.0-fpm-bullseye
 #FROM docker.io/php:7.4-apache-bullseye
 ARG ADD_EXTRA_PACKAGES=""
 
@@ -13,7 +13,8 @@ USER root
 # add apache2 extensions
 RUN \
     apt update && \
-    apt install -y libapache2-mod-shib && \
+    apt install -y apache2 --no-install-recommends && \
+    apt install -y libapache2-mod-shib --no-install-recommends && \
     apt clean
 
 ## Install libraries and extension
@@ -25,7 +26,7 @@ RUN apt install -y git zlib1g-dev libzip-dev libicu-dev libonig-dev \
 ## more libraries!
 
 # add basic productivity tools
-RUN apt update && apt-get install -y \
+RUN apt update && apt-get install -y --no-install-recommends \
         bash-completion \
         coreutils \
         curl \
@@ -40,7 +41,7 @@ RUN apt update && apt-get install -y \
         mlocate \
         default-mysql-client \
         net-tools \
-        ssh \
+        openssh-client \
         vim \
         locales \
         nodejs \

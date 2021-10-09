@@ -33,9 +33,11 @@ if [ "$1" = "shibd" -o "$1" = "shibboleth" ]; then
     exec shibd -f -F
 elif [ "$1" = "apache" ]; then
     exec apache2-foreground
+elif [ "$1" = "php-fpm" -o "$1" = "php" ]; then
+    exec php-fpm
 elif [ "$1" = "sh" ]; then
     exec bash
 else
-    echo "Wrong agument given. Only apache or shibboleth is possible."
+    echo "Wrong agument given. Only apache, shibboleth or php is possible."
     exit 1
 fi
