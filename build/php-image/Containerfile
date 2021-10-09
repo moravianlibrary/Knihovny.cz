@@ -72,6 +72,7 @@ RUN a2enmod headers rewrite
 
 ADD docker/etc /etc
 ADD docker/bin/container-entrypoint.sh /container-entrypoint.sh
+ADD docker/php/status-page.conf /usr/local/etc/php-fpm.d/status-page.conf
 ADD docker/initscripts/bootstrap-shibboleth2.sh /onstart.d/000-bootstrap-shibboleth2.sh
 RUN chmod ugo+x /container-entrypoint.sh /onstart.d/*.sh
 
