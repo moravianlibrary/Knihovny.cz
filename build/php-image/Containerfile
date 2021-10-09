@@ -46,7 +46,7 @@ RUN apt update && apt-get install -y --no-install-recommends \
         locales \
         nodejs \
         npm \
-        ${ADD_EXTRA_PACKAGES} \
+        ${ADD_EXTRA_PACKAGES}  \
     && apt-get clean \
     && apt-get autoremove -y
 
@@ -68,12 +68,13 @@ RUN \
     pecl install redis \
     && docker-php-ext-enable redis
 
-RUN a2enmod headers rewrite
+RUN a2enmod headers rewrite proxy proxy_fcgi
 
 ADD docker/etc /etc
 ADD docker/bin/container-entrypoint.sh /container-entrypoint.sh
-ADD docker/php/status-page.conf /usr/local/etc/php-fpm.d/status-page.conf
+ADD docker/php/*.conf /usr/local/etc/php-fpm.d/
 ADD docker/initscripts/bootstrap-shibboleth2.sh /onstart.d/000-bootstrap-shibboleth2.sh
+ADD docker/initscripts/bootstrap-php-fpm-backend.sh /onstart.d/000-bootstrap-php-fpm-backend.sh
 RUN chmod ugo+x /container-entrypoint.sh /onstart.d/*.sh
 
 ADD https://github.com/a8m/envsubst/releases/download/v1.2.0/envsubst-Linux-x86_64 /usr/bin/envsubst.a8m
