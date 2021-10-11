@@ -1,6 +1,10 @@
 .PHONY: image
 
-PARAM_VUFIND_COMMIT_ID = "undefined"
+# get VUFIND_COMMIT_ID from .gitlab-ci.yml
+# 
+SRC_ROOT := $(abspath ..)
+CI_FILENAME := ${SRC_ROOT}/.gitlab-ci.yml
+PARAM_VUFIND_COMMIT_ID = $(shell grep "VUFIND_COMMIT_ID" "${CI_FILENAME}" | sed 's/\s*VUFIND_COMMIT_ID: \(.*\)/\1/g' )
 
 image:
 	make -C php-image

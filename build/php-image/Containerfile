@@ -1,4 +1,4 @@
-FROM docker.io/php:8.0-apache-bullseye
+FROM docker.io/php:8.0-fpm-bullseye
 #FROM docker.io/php:7.4-apache-bullseye
 ARG ADD_EXTRA_PACKAGES=""
 
@@ -13,7 +13,8 @@ USER root
 # add apache2 extensions
 RUN \
     apt update && \
-    apt install -y libapache2-mod-shib && \
+    apt install -y apache2 --no-install-recommends && \
+    apt install -y libapache2-mod-shib --no-install-recommends && \
     apt clean
 
 ## Install libraries and extension
@@ -25,7 +26,7 @@ RUN apt install -y git zlib1g-dev libzip-dev libicu-dev libonig-dev \
 ## more libraries!
 
 # add basic productivity tools
-RUN apt update && apt-get install -y \
+RUN apt update && apt-get install -y --no-install-recommends \
         bash-completion \
         coreutils \
         curl \
@@ -40,12 +41,12 @@ RUN apt update && apt-get install -y \
         mlocate \
         default-mysql-client \
         net-tools \
-        ssh \
+        openssh-client \
         vim \
         locales \
         nodejs \
         npm \
-        ${ADD_EXTRA_PACKAGES} \
+        ${ADD_EXTRA_PACKAGES}  \
     && apt-get clean \
     && apt-get autoremove -y
 
@@ -67,11 +68,13 @@ RUN \
     pecl install redis \
     && docker-php-ext-enable redis
 
-RUN a2enmod headers rewrite
+RUN a2enmod headers rewrite proxy proxy_fcgi
 
 ADD docker/etc /etc
 ADD docker/bin/container-entrypoint.sh /container-entrypoint.sh
+ADD docker/php/*.conf /usr/local/etc/php-fpm.d/
 ADD docker/initscripts/bootstrap-shibboleth2.sh /onstart.d/000-bootstrap-shibboleth2.sh
+ADD docker/initscripts/bootstrap-php-fpm-backend.sh /onstart.d/000-bootstrap-php-fpm-backend.sh
 RUN chmod ugo+x /container-entrypoint.sh /onstart.d/*.sh
 
 ADD https://github.com/a8m/envsubst/releases/download/v1.2.0/envsubst-Linux-x86_64 /usr/bin/envsubst.a8m

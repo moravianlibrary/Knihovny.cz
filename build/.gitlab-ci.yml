@@ -2,9 +2,11 @@
 variables:
   DEPLOY_JOB_IMAGE: "docker.app.knihovny.cz/ci-builds/kustomize:latest"
   TARGET_REGISTRY_URL: registry.app.knihovny.cz
-  TARGET_IMAGE_NAME: knihovny-cz/vufind:build
+  TARGET_IMAGE_NAME: knihovny-cz/vufind
+  TARGET_IMAGE_TAG: build
   CACHE_REGISTRY_URL: docker.app.knihovny.cz
   BUILD_DEBUG: 'true'
+  BUILD_THIS_MR: '265'
 
 Test the code:
   stage: test
@@ -23,7 +25,7 @@ Build multistage image:
   rules:
     - if:
         ( $CI_PIPELINE_SOURCE == "merge_request_event" ) &&
-        ( $CI_MERGE_REQUEST_IID == "233")
+        ( $CI_MERGE_REQUEST_IID == $BUILD_THIS_MR )
     - if:  # run build on main, or devel
         ( $CI_PIPELINE_SOURCE == "push" )  &&
         ( ( $CI_COMMIT_BRANCH == "master" ) || ( $CI_COMMIT_BRANCH == "main" ) || ( $CI_COMMIT_BRANCH =~ /^devel/ )  )
@@ -38,11 +40,27 @@ Build multistage image:
   script:
     - cd ${CI_PROJECT_DIR}
     # pull cache layers
-    - docker pull ${CACHE_REGISTRY_URL}/${TARGET_IMAGE_NAME}
+    - docker pull ${CACHE_REGISTRY_URL}/${TARGET_IMAGE_NAME}:build
     # build it
-    - make -C build IMAGE_NAME=${TARGET_REGISTRY_URL}/${TARGET_IMAGE_NAME} PARAM_VUFIND_COMMIT_ID=${VUFIND_COMMIT_ID}
-    # rebuild
-    - docker push --quiet ${TARGET_REGISTRY_URL}/${TARGET_IMAGE_NAME}
+    - make -C build IMAGE_NAME=${TARGET_REGISTRY_URL}/${TARGET_IMAGE_NAME}:build PARAM_VUFIND_COMMIT_ID=${VUFIND_COMMIT_ID}
+    # push build image
+    - docker push --quiet ${TARGET_REGISTRY_URL}/${TARGET_IMAGE_NAME}:build
+    # push MR
+    - |
+        if [ "$CI_PIPELINE_SOURCE" == "merge_request_event" ]; then
+            echo ${TARGET_REGISTRY_URL}/${TARGET_IMAGE_NAME}:mr-${CI_MERGE_REQUEST_IID}
+            docker tag ${TARGET_REGISTRY_URL}/${TARGET_IMAGE_NAME}:build ${TARGET_REGISTRY_URL}/${TARGET_IMAGE_NAME}:mr-${CI_MERGE_REQUEST_IID}
+            docker push --quiet ${TARGET_REGISTRY_URL}/${TARGET_IMAGE_NAME}:mr-${CI_MERGE_REQUEST_IID}
+        fi
+    # push master
+    - |
+        if [ "$CI_PIPELINE_SOURCE" == "push" ]; then
+           if [ "$CI_COMMIT_BRANCH" == "master" -o [ "$CI_COMMIT_BRANCH" == "main"]; then
+            echo ${TARGET_REGISTRY_URL}/${TARGET_IMAGE_NAME}:branch-${CI_COMMIT_BRANCH}
+            docker tag ${TARGET_REGISTRY_URL}/${TARGET_IMAGE_NAME}:build ${TARGET_REGISTRY_URL}/${TARGET_IMAGE_NAME}:branch-${CI_COMMIT_BRANCH}
+            docker push --quiet ${TARGET_REGISTRY_URL}/${TARGET_IMAGE_NAME}:branch-${CI_COMMIT_BRANCH}
+           fi
+        fi
 
 .deploy_image:
   stage: deploy
@@ -90,7 +108,7 @@ Deploy devel image:
         ( ( $CI_COMMIT_BRANCH == "master" ) || ( $CI_COMMIT_BRANCH == "main" ) )
     - if:
         ( $CI_PIPELINE_SOURCE == "merge_request_event" ) &&
-        ( $CI_MERGE_REQUEST_IID == "233")
+        ( $CI_MERGE_REQUEST_IID == $BUILD_THIS_MR )
   environment:
     name: devel
   variables:
