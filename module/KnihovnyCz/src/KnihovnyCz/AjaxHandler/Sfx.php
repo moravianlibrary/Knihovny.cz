@@ -28,7 +28,10 @@ declare(strict_types=1);
  */
 namespace KnihovnyCz\AjaxHandler;
 
+use GuzzleHttp\Promise\Utils;
+use GuzzleHttp\Psr7\Request;
 use Laminas\Mvc\Controller\Plugin\Params;
+use Psr\Http\Message\ResponseInterface;
 use VuFind\AjaxHandler\AbstractBase;
 
 /**
@@ -40,11 +43,9 @@ use VuFind\AjaxHandler\AbstractBase;
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://vufind.org/wiki/development Wiki
  */
-class Sfx extends AbstractBase implements \VuFindHttp\HttpServiceAwareInterface,
-    \VuFind\I18n\Translator\TranslatorAwareInterface
+class Sfx extends AbstractBase
+    implements \VuFind\I18n\Translator\TranslatorAwareInterface
 {
-    use \VuFindHttp\HttpServiceAwareTrait;
-
     use \VuFind\I18n\Translator\TranslatorAwareTrait;
 
     /**
@@ -55,13 +56,23 @@ class Sfx extends AbstractBase implements \VuFindHttp\HttpServiceAwareInterface,
     protected $config;
 
     /**
+     * Configuration
+     *
+     * @var \KnihovnyCz\Service\GuzzleHttpService
+     */
+    protected $httpService;
+
+    /**
      * Constructor
      *
      * @param \Laminas\Config\Config $config Configuration
+     * @param \KnihovnyCz\Service\GuzzleHttpService $httpService HTTP service
      */
-    public function __construct(\Laminas\Config\Config $config)
-    {
+    public function __construct(\Laminas\Config\Config $config,
+        \KnihovnyCz\Service\GuzzleHttpService $httpService
+    ) {
         $this->config = $config;
+        $this->httpService = $httpService;
     }
 
     /**
@@ -77,18 +88,25 @@ class Sfx extends AbstractBase implements \VuFindHttp\HttpServiceAwareInterface,
         $query = $this->getSfxQuery($params);
         $servers = $this->config->Sfx->toArray();
         $default = $servers['default'];
-        $free = $this->callSfx($default, $query);
+        $promise = $this->callSfx($default, $query);
+        $response = $promise->wait();
+        $free = $this->parseResponse($response);
         if ($free) {
             $results['default'] = [
                 'label' => $this->translate('Fulltext'),
                 'url'   => $free,
             ];
         } else {
+            $promises = [];
             foreach ($servers as $code => $sfxUrl) {
                 if ($code == 'default') {
                     continue;
                 }
-                $link = $this->callSfx($sfxUrl, $query);
+                $promises[$code] = $this->callSfx($sfxUrl, $query);
+            }
+            Utils::all($promises);
+            foreach ($promises as $code => $promise) {
+                $link = $this->parseResponse($promise->wait());
                 if ($link) {
                     $results[$code] = [
                         'label' => $this->translate(['Source', $code]),
@@ -134,15 +152,31 @@ class Sfx extends AbstractBase implements \VuFindHttp\HttpServiceAwareInterface,
      * @param string $sfxUrl SFX url
      * @param array  $query  query parameters
      *
-     * @return false|string
+     * @return \Http\Promise\Promise promise
      */
     protected function callSfx($sfxUrl, $query)
     {
-        $client = $this->httpService->createClient($sfxUrl);
-        $parameters = $query + $this->extractParameters($sfxUrl);
-        $client->setParameterGet($parameters);
-        $response = $client->send();
-        $xml = simplexml_load_string($response->getBody());
+        $sfxParams = [];
+        $queryPart = (string)parse_url($sfxUrl, PHP_URL_QUERY) ?? '';
+        parse_str($queryPart, $sfxParams);
+        $params = http_build_query($sfxParams + $query);
+        $newUrl = strtok($sfxUrl, '?') . '?' . $params;
+        $client = $this->httpService->createClient();
+        $request = new Request('GET', $newUrl);
+        return $client->sendAsyncRequest($request);
+    }
+
+    /**
+     * Parse SFX response and return link to fulltext or false.
+     *
+     * @param ResponseInterface $response SFX response
+     *
+     * @return string|false fulltext link or false if not found
+     */
+    protected function parseResponse($response)
+    {
+        $body = $response->getBody();
+        $xml = simplexml_load_string($response->getBody()->getContents());
         if (!$xml) {
             return false;
         }
