@@ -6,7 +6,7 @@ variables:
   TARGET_IMAGE_TAG: build
   CACHE_REGISTRY_URL: docker.app.knihovny.cz
   BUILD_DEBUG: 'true'
-  BUILD_THIS_MR: '265'
+  BUILD_THIS_MR: '267'
 
 Test the code:
   stage: test

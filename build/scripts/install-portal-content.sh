@@ -1,9 +1,11 @@
 #!/bin/bash
 set -e
 
-KEY="/secrets/gitlab-deploy-key"
+echo "==== Installing portal pages ==="
 
-if [ ! -f "/secrets/gitlab-deploy-key" ]; then
+KEY="/etc/secrets/gitlab-deploy-key"
+
+if [ ! -f "${KEY}" ]; then
   echo "Missing $KEY"
   exit 1
 fi
