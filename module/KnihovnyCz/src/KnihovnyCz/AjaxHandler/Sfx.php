@@ -85,16 +85,22 @@ class Sfx extends AbstractBase
     public function handleRequest(Params $params)
     {
         $results = [];
-        $query = $this->getSfxQuery($params);
+        $queryParams = $this->getSfxQuery($params);
+        $apiQueryParams = $queryParams + [
+            'sfx.response_type' => 'simplexml',
+            'svc.fulltext' => 'yes',
+        ];
         $servers = $this->config->Sfx->toArray();
         $default = $servers['default'];
-        $promise = $this->callSfx($default, $query);
+        $promise = $this->callSfx($default, $apiQueryParams);
         $response = $promise->wait();
-        $free = $this->parseResponse($response);
-        if ($free) {
+        $links = $this->parseResponse($response);
+        if (!empty($links)) {
+            $link = (count($links) == 1)? $links[0] :
+                $this->getSfxUrl($default, $queryParams);
             $results['default'] = [
                 'label' => $this->translate('Fulltext'),
-                'url'   => $free,
+                'url'   => $link,
             ];
         } else {
             $promises = [];
@@ -102,12 +108,14 @@ class Sfx extends AbstractBase
                 if ($code == 'default') {
                     continue;
                 }
-                $promises[$code] = $this->callSfx($sfxUrl, $query);
+                $promises[$code] = $this->callSfx($sfxUrl, $apiQueryParams);
             }
             Utils::all($promises);
             foreach ($promises as $code => $promise) {
-                $link = $this->parseResponse($promise->wait());
-                if ($link) {
+                $links = $this->parseResponse($promise->wait());
+                if (!empty($links)) {
+                    $link = (count($links) == 1)? $links[0] :
+                        $this->getSfxUrl($servers[$code], $queryParams);
                     $results[$code] = [
                         'label' => $this->translate(['Source', $code]),
                         'url'   => $link,
@@ -127,10 +135,6 @@ class Sfx extends AbstractBase
      */
     protected function getSfxQuery(Params $params)
     {
-        $query = [
-            'sfx.response_type' => 'simplexml',
-            'svc.fulltext' => 'yes',
-        ];
         foreach ($params->fromQuery() as $key => $value) {
             if ($key == 'method' || $key == 'sfx_institute') {
                 continue;
@@ -149,21 +153,33 @@ class Sfx extends AbstractBase
     /**
      * Call SFX server and return links to fulltext.
      *
-     * @param string $sfxUrl SFX url
+     * @param string $sfxUrl SFX base URL
      * @param array  $query  query parameters
      *
      * @return \Http\Promise\Promise promise
      */
     protected function callSfx($sfxUrl, $query)
     {
+        $client = $this->httpService->createClient();
+        $request = new Request('GET', $this->getSfxUrl($sfxUrl, $query));
+        return $client->sendAsyncRequest($request);
+    }
+
+    /**
+     * Call SFX server and return links to fulltext.
+     *
+     * @param string $sfxUrl SFX base URL
+     * @param array  $query  query parameters
+     *
+     * @return string URL
+     */
+    protected function getSfxUrl($sfxUrl, $query)
+    {
         $sfxParams = [];
         $queryPart = (string)parse_url($sfxUrl, PHP_URL_QUERY) ?? '';
         parse_str($queryPart, $sfxParams);
         $params = http_build_query($sfxParams + $query);
-        $newUrl = strtok($sfxUrl, '?') . '?' . $params;
-        $client = $this->httpService->createClient();
-        $request = new Request('GET', $newUrl);
-        return $client->sendAsyncRequest($request);
+        return strtok($sfxUrl, '?') . '?' . $params;
     }
 
     /**
@@ -171,21 +187,22 @@ class Sfx extends AbstractBase
      *
      * @param ResponseInterface $response SFX response
      *
-     * @return string|false fulltext link or false if not found
+     * @return array fulltext links
      */
     protected function parseResponse($response)
     {
+        $results = [];
         $body = $response->getBody();
         $xml = simplexml_load_string($response->getBody()->getContents());
         if (!$xml) {
-            return false;
+            return $results;
         }
         foreach ($xml->targets->target as $target) {
             if ($target->service_type == 'getFullTxt') {
-                return (string)$target->target_url;
+                $results[] = (string)$target->target_url;
             }
         }
-        return false;
+        return $results;
     }
 
     /**
