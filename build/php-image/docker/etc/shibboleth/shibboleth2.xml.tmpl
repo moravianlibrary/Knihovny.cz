@@ -7,6 +7,9 @@
 
     <!-- The OutOfProcess section contains properties affecting the shibd daemon. -->
     <OutOfProcess logger="shibd.logger">
+        <Extensions>
+            <Library path="memcache-store.so" fatal="true"/>
+        </Extensions>
     </OutOfProcess>
 
     <!-- The InProcess section conrains settings affecting web server modules/filters. -->
@@ -18,10 +21,23 @@
     <TCPListener address="127.0.0.1" port="1600" acl="127.0.0.1"/>
 
 
-    <!-- This set of components stores sessions and other persistent data in daemon memory. -->
-    <StorageService type="Memory" id="mem" cleanupInterval="900"/>
-    <SessionCache type="StorageService" StorageService="mem" cacheTimeout="3600" inprocTimeout="900" cleanupInterval="900"/>
-    <ReplayCache StorageService="mem"/>
+    <!-- This set of components stores sessions and other persistent data in memcached memory. -->
+    <!-- This uses memcache store. -->
+    <StorageService type="MEMCACHE" id="memcache" prefix="shibd:">
+        <Hosts>${MEMCACHED_SERVICE}</Hosts>
+    </StorageService>
+
+    <StorageService type="MEMCACHE" id="memcache-ctx" prefix="shibd:" buildMap="1">
+        <Hosts>${MEMCACHED_SERVICE}</Hosts>
+    </StorageService>
+
+    <SessionCache type="StorageService" StorageService="memcache-ctx" StorageServiceLite="memcache"
+                    cacheTimeout="3600" inprocTimeout="900" cleanupInterval="900"/>
+
+    <ReplayCache StorageService="memcache"/>
+
+    <ArtifactMap StorageService="memcache" artifactTTL="180"/>
+
     <ArtifactMap artifactTTL="180"/>
 
     <!-- To customize behavior, map hostnames and path components to applicationId and other settings. -->
