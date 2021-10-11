@@ -12,7 +12,7 @@ $accessUrl = $this->driver->getAccessUrl();
     </ul>
   </div>
 <?php else: ?>
-  <span class="openurl" data-lazy="<?=($this->lazy)?'true':'false'?>" data-openurl="<?=$this->escapeHtml($openUrl)?>">
+  <span class="openurl" data-lazy="<?=($this->lazy)?'true':'false'?>" data-dropdown="<?=($this->dropdown)?'true':'false'?>" data-openurl="<?=$this->escapeHtml($openUrl)?>">
     <?php if($this->lazy): ?>
       <button type="button" class="btn btn-success">
         <strong><?=$this->transEsc("Check fulltext availability")?></strong>

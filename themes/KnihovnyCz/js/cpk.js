@@ -111,6 +111,7 @@ function setupOpenUrl() {
       method: "GET",
       success: function sfx(json){
         $(element).empty();
+        $(element).unbind('click');
         let links = json.data;
         let header = 'Fulltext is available for users of these institutions';
         if (links.length === 0) {
@@ -127,7 +128,27 @@ function setupOpenUrl() {
         let list = $('<ul>', {
           class: 'list-unstyled'
         });
-        $.each(json.data, function onEachLink(key, value) {
+        let dropDownMenu = null;
+        let dropDownList = null;
+        let dropdown = $(element).data('dropdown');
+        if (dropdown && Object.keys(links).length > 3) {
+          dropDownMenu = $('<div>', {class: 'dropdown'});
+          let button = $('<span>', {
+            type: 'button',
+            class: 'btn btn-default dropdown-toggle sshow-next-link',
+            'data-toggle': 'dropdown',
+            'aria-expanded': false,
+            html: htmlEncode(VuFind.translate('Show next links'))
+              + "<span class='caret'/>"
+          });
+          button.appendTo(dropDownMenu);
+          dropDownList = $('<ul>', {
+            class: 'dropdown-menu',
+          });
+          dropDownList.appendTo(dropDownMenu);
+        }
+        let index = 0;
+        $.each(links, function onEachLink(key, value) {
           let link = $('<a>', {
             text: value.label,
             title: value.label,
@@ -135,9 +156,13 @@ function setupOpenUrl() {
           });
           let li = $('<li>');
           link.appendTo(li);
-          li.appendTo(list);
+          index++;
+          li.appendTo((dropDownList == null || index < 3) ? list : dropDownList);
         });
         list.appendTo(element);
+        if (dropDownMenu != null) {
+          dropDownMenu.appendTo(element);
+        }
       }
     };
     var lazy = $(element).data('lazy');
