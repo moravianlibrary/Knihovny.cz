@@ -37,5 +37,5 @@ git checkout $PARAM_PORTAL_PAGES_BRANCH
 
 chown -R www-data:www-data /git/portal-pages
 
-cp -r /git/portal-pages/data/* /var/www/knihovny-cz-extension/themes/KnihovnyCz/
+cp -r /git/portal-pages/data/* /var/www/knihovny-cz/themes/KnihovnyCz/
 
