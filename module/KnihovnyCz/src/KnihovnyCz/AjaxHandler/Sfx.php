@@ -84,19 +84,24 @@ class Sfx extends AbstractBase
      */
     public function handleRequest(Params $params)
     {
-        $results = [];
+        $directLinking = $this->config->Sfx->direct_linking ?? true;
         $queryParams = $this->getSfxQuery($params);
         $apiQueryParams = $queryParams + [
             'sfx.response_type' => 'simplexml',
             'svc.fulltext' => 'yes',
         ];
-        $servers = $this->config->Sfx->toArray();
-        $default = $servers['default'];
-        $promise = $this->callSfx($default, $apiQueryParams);
-        $response = $promise->wait();
-        $links = $this->parseResponse($response);
-        if (!empty($links)) {
-            $link = (count($links) == 1)? $links[0] :
+        $servers = $this->config->SfxServers->toArray();
+        $results = [];
+        $defaultLinks = [];
+        $default = $servers['default'] ?? null;
+        if ($default != null) {
+            $promise = $this->callSfx($default, $apiQueryParams);
+            $response = $promise->wait();
+            $defaultLinks = $this->parseResponse($response);
+        }
+        if (!empty($defaultLinks)) {
+            $directLink = ($directLinking && count($defaultLinks) == 1);
+            $link = ($directLink)? $defaultLinks[0] :
                 $this->getSfxUrl($default, $queryParams);
             $results['default'] = [
                 'label' => $this->translate('Fulltext'),
@@ -114,7 +119,8 @@ class Sfx extends AbstractBase
             foreach ($promises as $code => $promise) {
                 $links = $this->parseResponse($promise->wait());
                 if (!empty($links)) {
-                    $link = (count($links) == 1)? $links[0] :
+                    $directLink = ($directLinking && count($links) == 1);
+                    $link = ($directLink)? $links[0] :
                         $this->getSfxUrl($servers[$code], $queryParams);
                     $results[$code] = [
                         'label' => $this->translate(['Source', $code]),
@@ -135,6 +141,7 @@ class Sfx extends AbstractBase
      */
     protected function getSfxQuery(Params $params)
     {
+        $query = [];
         foreach ($params->fromQuery() as $key => $value) {
             if ($key == 'method' || $key == 'sfx_institute') {
                 continue;
@@ -191,12 +198,12 @@ class Sfx extends AbstractBase
      */
     protected function parseResponse($response)
     {
-        $results = [];
         $body = $response->getBody();
         $xml = simplexml_load_string($response->getBody()->getContents());
         if (!$xml) {
-            return $results;
+            return [];
         }
+        $results = [];
         foreach ($xml->targets->target as $target) {
             if ($target->service_type == 'getFullTxt') {
                 $results[] = (string)$target->target_url;
