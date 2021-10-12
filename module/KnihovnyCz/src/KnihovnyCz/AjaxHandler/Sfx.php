@@ -30,6 +30,7 @@ namespace KnihovnyCz\AjaxHandler;
 
 use GuzzleHttp\Promise\Utils;
 use GuzzleHttp\Psr7\Request;
+use GuzzleHttp\Psr7\Query;
 use Laminas\Mvc\Controller\Plugin\Params;
 use Psr\Http\Message\ResponseInterface;
 use VuFind\AjaxHandler\AbstractBase;
@@ -182,9 +183,8 @@ class Sfx extends AbstractBase
      */
     protected function getSfxUrl($sfxUrl, $query)
     {
-        $sfxParams = [];
         $queryPart = (string)parse_url($sfxUrl, PHP_URL_QUERY) ?? '';
-        parse_str($queryPart, $sfxParams);
+        $sfxParams = Query::parse($queryPart);
         $params = http_build_query($sfxParams + $query);
         return strtok($sfxUrl, '?') . '?' . $params;
     }
