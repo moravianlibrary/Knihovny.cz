@@ -45,9 +45,11 @@ use VuFind\AjaxHandler\AbstractBase;
  * @link     https://vufind.org/wiki/development Wiki
  */
 class Sfx extends AbstractBase
-    implements \VuFind\I18n\Translator\TranslatorAwareInterface
+    implements \VuFind\I18n\Translator\TranslatorAwareInterface,
+    \Laminas\Log\LoggerAwareInterface
 {
     use \VuFind\I18n\Translator\TranslatorAwareTrait;
+    use \VuFind\Log\LoggerAwareTrait;
 
     /**
      * Configuration
@@ -118,7 +120,14 @@ class Sfx extends AbstractBase
             }
             Utils::all($promises);
             foreach ($promises as $code => $promise) {
-                $links = $this->parseResponse($promise->wait());
+                $links = [];
+                try {
+                    $links = $this->parseResponse($promise->wait());
+                } catch (\Exception $ex) {
+                    $url = $this->getSfxUrl($servers[$code], $apiQueryParams);
+                    $this->getLogger()->warn(
+                        'Exception thrown when calling SFX', [$url, $ex]);
+                }
                 if (!empty($links)) {
                     $directLink = ($directLinking && count($links) == 1);
                     $link = ($directLink) ? $links[0] :
@@ -169,7 +178,9 @@ class Sfx extends AbstractBase
     protected function callSfx($sfxUrl, $query)
     {
         $client = $this->httpService->createClient();
-        $request = new Request('GET', $this->getSfxUrl($sfxUrl, $query));
+        $url = $this->getSfxUrl($sfxUrl, $query);
+        $this->getLogger()->notice("Calling SFX: " . $url);
+        $request = new Request('GET', $url);
         return $client->sendAsyncRequest($request);
     }
 
