@@ -11,7 +11,7 @@ echo === Configuring memcache ===
 if [ "${MEMCACHED_SERVICE}" = "" ]; then
   export MEMCACHED_SERVICE=127.0.0.1:11211
 fi
-echo Memcached is "$MEMCACHED_SERVICE" 
+echo Memcached is "$MEMCACHED_SERVICE"
 
 echo === Starting onstart files ===
 # Run all start files
@@ -44,6 +44,10 @@ elif [ "$1" = "php-fpm" -o "$1" = "php" ]; then
     exec php-fpm
 elif [ "$1" = "sh" ]; then
     exec bash
+elif [ "$1" = "sleep" ]; then
+    # sleep for a few days
+     sleep 365d
+     exit 0
 else
     echo "Wrong agument given. Only apache, shibboleth or php is possible."
     exit 1
