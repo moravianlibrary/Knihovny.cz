@@ -1,4 +1,31 @@
 <?php
+declare(strict_types=1);
+/**
+ * Class ZiskejApiFactory
+ *
+ * PHP version 7
+ *
+ * Copyright (C) Moravian Library 2021.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2,
+ * as published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+ *
+ * @category Knihovny.cz
+ * @package  KnihovnyCz\Ziskej
+ * @author   Robert Šípek <sipek@mzk.cz>
+ * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
+ * @link     https://knihovny.cz Main Page
+ */
 namespace KnihovnyCz\Ziskej;
 
 use Laminas\Config\Config;
@@ -6,6 +33,12 @@ use VuFind\Cookie\CookieManager;
 
 /**
  * KnihovnyCz Ziskej Class
+ *
+ * @category Knihovny.cz
+ * @package  KnihovnyCz\Ziskej
+ * @author   Robert Šípek <sipek@mzk.cz>
+ * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
+ * @link     https://knihovny.cz Main Page
  */
 abstract class Ziskej
 {
@@ -14,44 +47,63 @@ abstract class Ziskej
     public const MODE_PRODUCTION = 'prod';
 
     /**
+     * Cookie name
+     *
      * @var string
      */
     protected string $cookieName = '';
 
     /**
+     * Default mode name
+     *
      * @var string
      */
     protected string $configDefaultModeName = '';
 
     /**
+     * Main configuration
+     *
      * @var Config
      */
-    private Config $config;
+    private Config $_config;
 
     /**
+     * Ziskej configuration
+     *
      * @var Config
      */
-    private Config $configZiskej;
+    private Config $_configZiskej;
 
     /**
+     * Cookie manager
+     *
      * @var CookieManager
      */
-    private CookieManager $cookieManager;
+    private CookieManager $_cookieManager;
 
     /**
+     * Default execution mode
+     *
      * @var string
      */
-    private string $defaultMode;
+    private string $_defaultMode;
 
+    /**
+     * Constructor
+     *
+     * @param Config        $config        Main configuration
+     * @param CookieManager $cookieManager Cookie manager
+     */
     public function __construct(
         Config $config,
         CookieManager $cookieManager
     ) {
-        $this->config = $config;
-        $this->configZiskej = $this->config->get('Ziskej');
-        $this->cookieManager = $cookieManager;
+        $this->_config = $config;
+        $this->_configZiskej = $this->_config->get('Ziskej');
+        $this->_cookieManager = $cookieManager;
 
-        $this->defaultMode = $this->configZiskej[$this->configDefaultModeName] ?: self::MODE_DISABLED;
+        $this->_defaultMode= $this->_configZiskej[$this->configDefaultModeName]
+            ?: self::MODE_DISABLED;
     }
 
     /**
@@ -71,8 +123,8 @@ abstract class Ziskej
      */
     public function getUrls(): array
     {
-        return !empty($this->configZiskej['mode_urls'])
-            ? $this->configZiskej['mode_urls']->toArray()
+        return !empty($this->_configZiskej['mode_urls'])
+            ? $this->_configZiskej['mode_urls']->toArray()
             : [];
     }
 
@@ -89,7 +141,8 @@ abstract class Ziskej
     /**
      * Check if mode exists
      *
-     * @param  string $mode
+     * @param string $mode Execution mode
+     *
      * @return bool
      */
     public function isMode(string $mode): bool
@@ -104,15 +157,17 @@ abstract class Ziskej
      */
     public function getCurrentMode(): string
     {
-        return !empty($this->cookieManager->get($this->cookieName))
-            ? $this->cookieManager->get($this->cookieName)
-            : $this->defaultMode;
+        return !empty($this->_cookieManager->get($this->cookieName))
+            ? $this->_cookieManager->get($this->cookieName)
+            : $this->_defaultMode;
     }
 
     /**
      * Set mode to cookie
      *
-     * @param string $mode
+     * @param string $mode Execution mode
+     *
+     * @return void
      */
     public function setMode(string $mode): void
     {
@@ -138,7 +193,7 @@ abstract class Ziskej
      */
     public function getPrivateKeyFileLocation(): string
     {
-        $keyFile = $this->config->get('Certs')['ziskej'];
+        $keyFile = $this->_config->get('Certs')['ziskej'];
 
         if (!$keyFile || !is_readable($keyFile)) {
             throw new \Exception('Certificate file to generate token not found');
@@ -154,7 +209,7 @@ abstract class Ziskej
      */
     public function getZiskejTechlibUrl(): ?string
     {
-        return $this->configZiskej['techlib_url'];
+        return $this->_configZiskej['techlib_url'];
     }
 
     /**
@@ -164,7 +219,7 @@ abstract class Ziskej
      */
     public function getCurrentZiskejTechlibFrontUrl(): ?string
     {
-        $modeUrls = $this->config->get('ZiskejTechlibFrontUrl')->toArray();
+        $modeUrls = $this->_config->get('ZiskejTechlibFrontUrl')->toArray();
 
         return $modeUrls[$this->getCurrentMode()] ?? null;
     }

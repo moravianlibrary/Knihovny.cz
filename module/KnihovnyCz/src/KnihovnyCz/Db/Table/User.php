@@ -128,8 +128,9 @@ class User extends \VuFind\Db\Table\User
             $prefix = explode('.', $intoCard->cat_username)[0];
             if (isset($institutions[$prefix])) {
                 $fromCard = $institutions[$prefix];
-                if ($fromCard->edu_person_unique_id == $intoCard->edu_person_unique_id
-                ) {
+                $srcEpui = $fromCard->edu_person_unique_id;
+                $targetEpui = $intoCard->edu_person_unique_id;
+                if ($srcEpui == $targetEpui) {
                     $fromCard->remove();
                 } else {
                     $this->getDbConnection()->rollback();

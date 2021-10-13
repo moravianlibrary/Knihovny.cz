@@ -28,11 +28,9 @@
  */
 namespace KnihovnyCz\Service;
 
-use Http\Adapter\Guzzle6\Client;
-use Psr\Http\Message\RequestInterface;
-use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Handler\CurlHandler;
-use GuzzleHttp\Middleware;
+use GuzzleHttp\HandlerStack;
+use Http\Adapter\Guzzle6\Client;
 
 /**
  * Class GuzzleHttpService
@@ -45,7 +43,6 @@ use GuzzleHttp\Middleware;
  */
 class GuzzleHttpService
 {
-
     /**
      * Configuration
      *
@@ -97,5 +94,4 @@ class GuzzleHttpService
             };
         };
     }
-
 }

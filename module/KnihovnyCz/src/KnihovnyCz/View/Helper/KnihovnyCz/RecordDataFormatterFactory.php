@@ -274,6 +274,7 @@ class RecordDataFormatterFactory
 
     /**
      * Get default specs for detailed view of document in Ziskej service
+     *
      * @return array
      */
     public function getDefaultZiskejCoreSpecs()

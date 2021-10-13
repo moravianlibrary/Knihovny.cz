@@ -79,13 +79,21 @@ class RecordController extends \VuFind\Controller\RecordController
     {
         //@todo try/catch
 
-        /** @var \KnihovnyCz\Db\Row\User $user */
+        /**
+         * User
+         *
+         * @var \KnihovnyCz\Db\Row\User $user
+         */
         $user = $this->getUser();
         if (!$user) {
             return $this->forceLogin();
         }
 
-        /** @var \Mzk\ZiskejApi\Api $ziskejApi */
+        /**
+         * Ziskej API connector
+         *
+         * @var \Mzk\ZiskejApi\Api $ziskejApi
+         */
         $ziskejApi = $this->serviceLocator->get('Mzk\ZiskejApi\Api');
 
         $eppnDomain = $this->params()->fromRoute('eppnDomain');
@@ -104,8 +112,8 @@ class RecordController extends \VuFind\Controller\RecordController
         $view->ziskejReader = $ziskejReader;
         $view->serverName = $this->getRequest()->getServer()->SERVER_NAME;
         $view->entityId = $this->getRequest()->getServer('Shib-Identity-Provider');
-
-        $dedupedRecord = $this->driver->tryMethod('getDeduplicatedRecords', [], []);   // must be placed after create view model
+        // getDeduplicatedRecords has to be placed after create view model:
+        $dedupedRecord = $this->driver->tryMethod('getDeduplicatedRecords', [], []);
         $view->records = $dedupedRecord;
 
         return $view;
@@ -130,22 +138,38 @@ class RecordController extends \VuFind\Controller\RecordController
             return $this->redirectToRecord('', 'Ziskej');
         }
 
-        /** @var \KnihovnyCz\Db\Row\User $user */
+        /**
+         * User
+         *
+         * @var \KnihovnyCz\Db\Row\User $user
+         */
         $user = $this->getUser();
         if (!$user) {
             return $this->forceLogin();
         }
 
-        /** @var \Mzk\ZiskejApi\Api $ziskejApi */
+        /**
+         * Ziskej API connector
+         *
+         * @var \Mzk\ZiskejApi\Api $ziskejApi
+         */
         $ziskejApi = $this->serviceLocator->get('Mzk\ZiskejApi\Api');
 
-        /** @var string $eppn */
+        /**
+         * EduPersonPrincipalName shibboleth attribute
+         *
+         * @var string $eppn
+         */
         $eppn = $this->params()->fromPost('eppn');
         if (!$eppn) {
             //@todo
         }
 
-        /** @var string $email */
+        /**
+         * Email address
+         *
+         * @var string $email
+         */
         $email = $this->params()->fromPost('email');
         if (!$email) {
             //@todo
@@ -153,7 +177,9 @@ class RecordController extends \VuFind\Controller\RecordController
         //@todo check email format
 
         if (!$this->params()->fromPost('is_conditions')) {
-            $this->flashMessenger()->addMessage('Ziskej::error_is_conditions', 'error');
+            $this->flashMessenger()->addMessage(
+                'Ziskej::error_is_conditions', 'error'
+            );
             return $this->redirectToRecord('', 'Ziskej');
         }
 
@@ -162,7 +188,11 @@ class RecordController extends \VuFind\Controller\RecordController
             return $this->redirectToRecord('', 'Ziskej');
         }
 
-        /** @var \KnihovnyCz\ILS\Driver\MultiBackend $multibackend */
+        /**
+         * Multibackend ILS driver
+         *
+         * @var \KnihovnyCz\ILS\Driver\MultiBackend $multibackend
+         */
         $multibackend = $this->getILS()->getDriver();
 
         $userCard = $user->getCardByEppn($eppn);
@@ -177,14 +207,16 @@ class RecordController extends \VuFind\Controller\RecordController
             $userCard->cat_username
         );
 
+        $saveFunction = 'createReader';
         if ($ziskejApi->getReader($userCard->eppn)) {
-            $ziskejReader = $ziskejApi->updateReader($userCard->eppn, $responseReader);
-        } else {
-            $ziskejReader = $ziskejApi->createReader($userCard->eppn, $responseReader);
+            $saveFunction = 'updateReader';
         }
+        $ziskejReader = $ziskejApi->$saveFunction($userCard->eppn, $responseReader);
 
         if (!$ziskejReader->isActive()) {
-            $this->flashMessenger()->addMessage('Ziskej::error_account_not_active', 'warning');
+            $this->flashMessenger()->addMessage(
+                'Ziskej::error_account_not_active', 'warning'
+            );
             //@todo next step
             return $this->redirectToRecord('', 'Ziskej');
         }
@@ -195,7 +227,9 @@ class RecordController extends \VuFind\Controller\RecordController
 
         $ticket = $ziskejApi->createTicket($userCard->eppn, $ticketNew);
 
-        $this->flashMessenger()->addMessage('Ziskej::success_order_finished', 'success');
+        $this->flashMessenger()->addMessage(
+            'Ziskej::success_order_finished', 'success'
+        );
 
         return $this->redirect()->toRoute(
             'ziskej-order-finished', [

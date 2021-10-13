@@ -364,11 +364,12 @@ class SolrDefault extends \VuFind\RecordDriver\SolrDefault
         $ziskejBooleanLocal = $this->fields['ziskej_boolean'] ?? null;
 
         $parent = $this->getParentRecord();
-        $ziskejBooleanParent = !is_null($parent) ? ($parent->fields['ziskej_boolean'] ?? null) : null;
+        $ziskejBooleanParent
+            = null !== $parent ? ($parent->fields['ziskej_boolean'] ?? null) : null;
 
-        return !is_null($ziskejBooleanParent)
+        return null !== $ziskejBooleanParent
             ? $ziskejBooleanParent
-            : (!is_null($ziskejBooleanLocal) ? $ziskejBooleanLocal : false);
+            : (null !== $ziskejBooleanLocal ? $ziskejBooleanLocal : false);
     }
 
     /**

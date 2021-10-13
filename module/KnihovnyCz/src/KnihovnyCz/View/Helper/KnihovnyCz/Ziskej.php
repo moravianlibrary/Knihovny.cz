@@ -41,18 +41,21 @@ use Laminas\View\Helper\AbstractHelper;
  */
 class Ziskej extends AbstractHelper
 {
-
     /**
+     * Ziskej ILL model
+     *
      * @var \KnihovnyCz\Ziskej\ZiskejMvs
      */
-    private $cpkZiskej;
+    private $_cpkZiskej;
 
     /**
-     * @param \KnihovnyCz\Ziskej\ZiskejMvs $cpkZiskej
+     * Constructor
+     *
+     * @param \KnihovnyCz\Ziskej\ZiskejMvs $cpkZiskej Ziskej ILL model
      */
     public function __construct(\KnihovnyCz\Ziskej\ZiskejMvs $cpkZiskej)
     {
-        $this->cpkZiskej = $cpkZiskej;
+        $this->_cpkZiskej = $cpkZiskej;
     }
 
     /**
@@ -62,7 +65,7 @@ class Ziskej extends AbstractHelper
      */
     public function isEnabled(): bool
     {
-        return $this->cpkZiskej->isEnabled();
+        return $this->_cpkZiskej->isEnabled();
     }
 
     /**
@@ -72,7 +75,7 @@ class Ziskej extends AbstractHelper
      */
     public function getCurrentMode(): string
     {
-        return $this->cpkZiskej->getCurrentMode();
+        return $this->_cpkZiskej->getCurrentMode();
     }
 
     /**
@@ -82,7 +85,8 @@ class Ziskej extends AbstractHelper
      */
     public function isProduction(): bool
     {
-        return $this->cpkZiskej->getCurrentMode() === \KnihovnyCz\Ziskej\ZiskejMvs::MODE_PRODUCTION;
+        return $this->_cpkZiskej->getCurrentMode()
+            === \KnihovnyCz\Ziskej\ZiskejMvs::MODE_PRODUCTION;
     }
 
     /**
@@ -92,13 +96,13 @@ class Ziskej extends AbstractHelper
      */
     public function getModes(): array
     {
-        return $this->cpkZiskej->getModes();
+        return $this->_cpkZiskej->getModes();
     }
 
     /**
      * Get html class attribute
      *
-     * @param string|null $status
+     * @param string|null $status Ziskej ticket status
      *
      * @return string
      */

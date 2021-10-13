@@ -39,21 +39,23 @@ namespace KnihovnyCz\RecordTab;
  */
 class Ziskej extends \VuFind\RecordTab\AbstractBase
 {
-    private \VuFind\Auth\Manager $authManager;
+    private \VuFind\Auth\Manager $_authManager;
 
-    private \Vufind\ILS\Connection $ilsDriver;
+    private \Vufind\ILS\Connection $_ilsDriver;
 
-    private \Mzk\ZiskejApi\Api $ziskejApi;
+    private \Mzk\ZiskejApi\Api $_ziskejApi;
 
-    private \KnihovnyCz\Ziskej\ZiskejMvs $ziskejMvs;
+    private \KnihovnyCz\Ziskej\ZiskejMvs $_ziskejMvs;
 
-    private bool $isZiskejActive = false;
+    private bool $_isZiskejActive = false;
 
     /**
-     * @param \VuFind\Auth\Manager         $authManager
-     * @param \Vufind\ILS\Connection       $ilsDriver
-     * @param \Mzk\ZiskejApi\Api           $ziskejApi
-     * @param \KnihovnyCz\Ziskej\ZiskejMvs $ziskejMvs
+     * Constructor
+     *
+     * @param \VuFind\Auth\Manager         $authManager Authentication manager
+     * @param \Vufind\ILS\Connection       $ilsDriver   ILS driver
+     * @param \Mzk\ZiskejApi\Api           $ziskejApi   Ziskej API connector
+     * @param \KnihovnyCz\Ziskej\ZiskejMvs $ziskejMvs   Ziskej ILL model
      */
     public function __construct(
         \VuFind\Auth\Manager $authManager,
@@ -61,12 +63,12 @@ class Ziskej extends \VuFind\RecordTab\AbstractBase
         \Mzk\ZiskejApi\Api $ziskejApi,
         \KnihovnyCz\Ziskej\ZiskejMvs $ziskejMvs
     ) {
-        $this->authManager = $authManager;
-        $this->ilsDriver = $ilsDriver;
-        $this->ziskejApi = $ziskejApi;
-        $this->ziskejMvs = $ziskejMvs;
+        $this->_authManager = $authManager;
+        $this->_ilsDriver = $ilsDriver;
+        $this->_ziskejApi = $ziskejApi;
+        $this->_ziskejMvs = $ziskejMvs;
 
-        $this->isZiskejActive = $ziskejMvs->isEnabled();
+        $this->_isZiskejActive = $ziskejMvs->isEnabled();
     }
 
     /**
@@ -101,7 +103,7 @@ class Ziskej extends \VuFind\RecordTab\AbstractBase
      */
     public function getZiskejMvs(): \KnihovnyCz\Ziskej\ZiskejMvs
     {
-        return $this->ziskejMvs;
+        return $this->_ziskejMvs;
     }
 
     /**
@@ -111,7 +113,7 @@ class Ziskej extends \VuFind\RecordTab\AbstractBase
      */
     public function isZiskejActive(): bool
     {
-        return $this->isZiskejActive;
+        return $this->_isZiskejActive;
     }
 
     /**
@@ -127,14 +129,20 @@ class Ziskej extends \VuFind\RecordTab\AbstractBase
     {
         $connectedLibs = [];
 
-        $user = $this->authManager->isLoggedIn();
+        $user = $this->_authManager->isLoggedIn();
         if ($user) {
-            /** @var \VuFind\Db\Row\UserCard $userCard */
+            /**
+             * User library card
+             *
+             * @var \VuFind\Db\Row\UserCard $userCard
+             */
             foreach ($user->getLibraryCards() as $userCard) {
-                if (!empty($userCard->home_library) && !empty($userCard->eppn)) {
-                    if (in_array($userCard->home_library, $this->getZiskejLibsIds())) {
-                        $connectedLibs[$userCard->home_library]['userCard'] = $userCard;
-                        $connectedLibs[$userCard->home_library]['ziskejReader'] = $this->ziskejApi->getReader($userCard->eppn);
+                $homeLibrary = $userCard->home_library ?? null;
+                if (!empty($homeLibrary) && !empty($userCard->eppn)) {
+                    if (in_array($homeLibrary, $this->getZiskejLibsIds())) {
+                        $connectedLibs[$homeLibrary]['userCard'] = $userCard;
+                        $connectedLibs[$homeLibrary]['ziskejReader']
+                            = $this->_ziskejApi->getReader($userCard->eppn);
                     }
                 }
             }
@@ -185,10 +193,10 @@ class Ziskej extends \VuFind\RecordTab\AbstractBase
     {
         $ziskejLibsIds = [];
 
-        $ziskejLibs = $this->ziskejApi->getLibrariesActive()->getAll();
+        $ziskejLibs = $this->_ziskejApi->getLibrariesActive()->getAll();
 
         foreach ($ziskejLibs as $ziskejLib) {
-            $id = $this->ilsDriver->siglaToSource($ziskejLib->getSigla());
+            $id = $this->_ilsDriver->siglaToSource($ziskejLib->getSigla());
             if (!empty($id)) {
                 $ziskejLibsIds[] = $id;
             }
