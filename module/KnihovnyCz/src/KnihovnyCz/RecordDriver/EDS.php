@@ -27,6 +27,8 @@
  */
 namespace KnihovnyCz\RecordDriver;
 
+use VuFind\View\Helper\Root\RecordLinker;
+
 /**
  * Knihovny.cz EDS record driver
  *
@@ -38,7 +40,6 @@ namespace KnihovnyCz\RecordDriver;
  */
 class EDS extends \VuFind\RecordDriver\EDS
 {
-
     /**
      * Get access url
      *
@@ -55,4 +56,43 @@ class EDS extends \VuFind\RecordDriver\EDS
         return filter_var($url, FILTER_VALIDATE_URL);
     }
 
+    /**
+     * Get fulltext links
+     *
+     * @param RecordLinker $linker Record linker helper (optional; may be used to
+     *                             inject record URLs into XML when appropriate).
+     *
+     * @return array
+     */
+    public function getFullTextLinks($linker)
+    {
+        $links = [];
+        $accessUrl = $this->getAccessUrl();
+        if ($accessUrl != null) {
+            $links['Fulltext'] = $accessUrl;
+        }
+        // Linked Full Text
+        if (($link = $this->getLinkedFullTextLink()) != null) {
+            $links['Linked Full Text'] = $link;
+        } elseif ($this->hasLinkedFullTextAvailable()) {
+            $links['Linked Full Text'] = $linker->getTabUrl($this, 'LinkedText');
+        }
+        // PDF Full Text
+        if (($link = $this->getPdfLink()) != null) {
+            $links['PDF Full Text'] = $link;
+        } elseif ($this->hasPdfAvailable()) {
+            $links['PDF Full Text'] = $linker->getTabUrl($this, 'PDF');
+        }
+        // ePub Full Text
+        if (($link = $this->getEpubLink()) != null) {
+            $links['ePub Full Text'] = $link;
+        } elseif ($this->hasEpubAvailable()) {
+            $links['ePub Full Text'] = $linker->getTabUrl($this, 'Epub');
+        }
+        // HTML Full Text
+        if ($this->hasHTMLFullTextAvailable()) {
+            $links['HTML Full Text'] = $linker->getUrl($this) . '#html';
+        }
+        return $links;
+    }
 }

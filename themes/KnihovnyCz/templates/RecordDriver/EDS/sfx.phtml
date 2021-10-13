@@ -1,15 +1,17 @@
 <?php
 $openUrl = $this->driver->getOpenUrl();
-$accessUrl = $this->driver->getAccessUrl();
+$fullTextLinks = $this->driver->getFullTextLinks($this->recordLinker());
 ?>
-<?php if($accessUrl != null): ?>
+<?php if(!empty($fullTextLinks)): ?>
   <div class="records-in-libraries-title">
     <strong><?=$this->transEsc('Fulltext is free')?></strong>
-    <ul class="list-unstyled">
-      <li>
-        <a href="<?=$this->escapeHtml($accessUrl)?>" title="<?=$this->translate('Fulltext')?>"><?=$this->transEsc('Fulltext')?></a>
-      </li>
-    </ul>
+    <?php foreach($fullTextLinks as $label => $url): ?>
+      <ul class="list-unstyled">
+        <li>
+          <a href="<?=$this->escapeHtml($url)?>" title="<?=$this->translate($label)?>"><?=$this->transEsc($label)?></a>
+        </li>
+      </ul>
+    <?php endforeach; ?>
   </div>
 <?php else: ?>
   <div class='dedupInformation'>
