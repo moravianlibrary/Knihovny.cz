@@ -12,13 +12,15 @@ $accessUrl = $this->driver->getAccessUrl();
     </ul>
   </div>
 <?php else: ?>
-  <span class="openurl" data-lazy="<?=($this->lazy)?'true':'false'?>" data-dropdown="<?=($this->dropdown)?'true':'false'?>" data-openurl="<?=$this->escapeHtml($openUrl)?>">
-    <?php if($this->lazy): ?>
-      <button type="button" class="btn btn-success">
-        <strong><?=$this->transEsc("Check fulltext availability")?></strong>
-      </button>
-    <?php else: ?>
-      <?=$this->icon('spinner')?>
-    <?php endif; ?>
-  </span>
+  <div class='dedupInformation'>
+    <span class="openurl" data-lazy="<?=($this->lazy)?'true':'false'?>" data-dropdown="<?=($this->dropdown)?'true':'false'?>" data-openurl="<?=$this->escapeHtml($openUrl)?>">
+      <?php if($this->lazy): ?>
+        <button type="button" class="btn btn-primary">
+          <strong><?=$this->transEsc("Check fulltext availability")?></strong>
+        </button>
+      <?php else: ?>
+        <?=$this->icon('spinner')?>
+      <?php endif; ?>
+    </span>
+  </div>
 <?php endif; ?>

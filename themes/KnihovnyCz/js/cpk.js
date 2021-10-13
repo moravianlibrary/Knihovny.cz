@@ -133,17 +133,17 @@ function setupOpenUrl() {
         let dropdown = $(element).data('dropdown');
         if (dropdown && Object.keys(links).length > 3) {
           dropDownMenu = $('<div>', {class: 'dropdown'});
-          let button = $('<span>', {
+          let button = $('<a>', {
             type: 'button',
-            class: 'btn btn-default dropdown-toggle sshow-next-link',
+            class: 'dropdown-toggle',
             'data-toggle': 'dropdown',
             'aria-expanded': false,
-            html: htmlEncode(VuFind.translate('Show next links'))
-              + "<span class='caret'/>"
+            html: '<strong>' + htmlEncode(VuFind.translate('Show next links'))
+              + "<strong/><span class='caret'/>",
           });
           button.appendTo(dropDownMenu);
           dropDownList = $('<ul>', {
-            class: 'dropdown-menu',
+            class: 'dropdown-menu dropdown-menu-right',
           });
           dropDownList.appendTo(dropDownMenu);
         }
@@ -154,7 +154,9 @@ function setupOpenUrl() {
             title: value.label,
             href: value.url
           });
-          let li = $('<li>');
+          let li = $('<li>', {
+            class: 'otherSource',
+          });
           link.appendTo(li);
           index++;
           li.appendTo((dropDownList == null || index < 3) ? list : dropDownList);

@@ -29,8 +29,8 @@ declare(strict_types=1);
 namespace KnihovnyCz\AjaxHandler;
 
 use GuzzleHttp\Promise\Utils;
-use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Query;
+use GuzzleHttp\Psr7\Request;
 use Laminas\Mvc\Controller\Plugin\Params;
 use Psr\Http\Message\ResponseInterface;
 use VuFind\AjaxHandler\AbstractBase;
@@ -66,7 +66,7 @@ class Sfx extends AbstractBase
     /**
      * Constructor
      *
-     * @param \Laminas\Config\Config $config Configuration
+     * @param \Laminas\Config\Config                $config      Configuration
      * @param \KnihovnyCz\Service\GuzzleHttpService $httpService HTTP service
      */
     public function __construct(\Laminas\Config\Config $config,
@@ -102,7 +102,7 @@ class Sfx extends AbstractBase
         }
         if (!empty($defaultLinks)) {
             $directLink = ($directLinking && count($defaultLinks) == 1);
-            $link = ($directLink)? $defaultLinks[0] :
+            $link = ($directLink) ? $defaultLinks[0] :
                 $this->getSfxUrl($default, $queryParams);
             $results['default'] = [
                 'label' => $this->translate('Fulltext'),
@@ -121,7 +121,7 @@ class Sfx extends AbstractBase
                 $links = $this->parseResponse($promise->wait());
                 if (!empty($links)) {
                     $directLink = ($directLinking && count($links) == 1);
-                    $link = ($directLink)? $links[0] :
+                    $link = ($directLink) ? $links[0] :
                         $this->getSfxUrl($servers[$code], $queryParams);
                     $results[$code] = [
                         'label' => $this->translate(['Source', $code]),
