@@ -53,6 +53,11 @@ use VuFind\Db\Row\UserCard as Base;
  */
 class UserCard extends Base
 {
+    /**
+     * Get EduPersonPrincipalName scope
+     *
+     * @return string|null
+     */
     public function getEppnDomain(): ?string
     {
         $array = explode('@', $this->eppn ?? '');

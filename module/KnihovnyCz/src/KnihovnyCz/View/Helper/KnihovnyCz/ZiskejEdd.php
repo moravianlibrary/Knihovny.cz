@@ -42,13 +42,20 @@ use Laminas\View\Helper\AbstractHelper;
 class ZiskejEdd extends AbstractHelper
 {
     /**
+     * Ziskej electronic copy model
+     *
      * @var \KnihovnyCz\Ziskej\ZiskejEdd
      */
-    private $cpkZiskejEdd;
+    private $_cpkZiskejEdd;
 
+    /**
+     * Constructor
+     *
+     * @param \KnihovnyCz\Ziskej\ZiskejEdd $cpkZiskej Ziskej electronic copy model
+     */
     public function __construct(\KnihovnyCz\Ziskej\ZiskejEdd $cpkZiskej)
     {
-        $this->cpkZiskejEdd = $cpkZiskej;
+        $this->_cpkZiskejEdd = $cpkZiskej;
     }
 
     /**
@@ -58,7 +65,7 @@ class ZiskejEdd extends AbstractHelper
      */
     public function isEnabled(): bool
     {
-        return $this->cpkZiskejEdd->isEnabled();
+        return $this->_cpkZiskejEdd->isEnabled();
     }
 
     /**
@@ -68,7 +75,7 @@ class ZiskejEdd extends AbstractHelper
      */
     public function getCurrentMode(): string
     {
-        return $this->cpkZiskejEdd->getCurrentMode();
+        return $this->_cpkZiskejEdd->getCurrentMode();
     }
 
     /**
@@ -78,7 +85,8 @@ class ZiskejEdd extends AbstractHelper
      */
     public function isProduction(): bool
     {
-        return $this->cpkZiskejEdd->getCurrentMode() === \KnihovnyCz\Ziskej\ZiskejEdd::MODE_PRODUCTION;
+        return $this->_cpkZiskejEdd->getCurrentMode()
+            === \KnihovnyCz\Ziskej\ZiskejEdd::MODE_PRODUCTION;
     }
 
     /**
@@ -88,6 +96,6 @@ class ZiskejEdd extends AbstractHelper
      */
     public function getModes()
     {
-        return $this->cpkZiskejEdd->getModes();
+        return $this->_cpkZiskejEdd->getModes();
     }
 }

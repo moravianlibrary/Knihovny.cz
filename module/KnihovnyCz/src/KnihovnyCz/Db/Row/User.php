@@ -67,7 +67,7 @@ class User extends Base
     /**
      * Get UserCard by card name
      *
-     * @param string|null $catUsername
+     * @param string|null $catUsername Catalog user name (login)
      *
      * @return \KnihovnyCz\Db\Row\UserCard|null
      * @throws \VuFind\Exception\LibraryCard
@@ -75,7 +75,11 @@ class User extends Base
     public function getCardByCatName(?string $catUsername): ?UserCard
     {
         if ($catUsername !== null && $catUsername !== '') {
-            /** @var \KnihovnyCz\Db\Row\UserCard $userCard */
+            /**
+             * User library card
+             *
+             * @var \KnihovnyCz\Db\Row\UserCard $userCard
+             */
             foreach ($this->getLibraryCards() as $userCard) {
                 if ($userCard->cat_username === $catUsername) {
                     return $userCard;
@@ -87,14 +91,20 @@ class User extends Base
     }
 
     /**
-     * @param string $eppn
+     * Get library card using EduPersonPrincipalName
+     *
+     * @param string $eppn EduPersonPrincipalName
      *
      * @return \KnihovnyCz\Db\Row\UserCard|null
      * @throws \VuFind\Exception\LibraryCard
      */
     public function getCardByEppn(string $eppn): ?UserCard
     {
-        /** @var \KnihovnyCz\Db\Row\UserCard $userCard */
+        /**
+         * User library card
+         *
+         * @var \KnihovnyCz\Db\Row\UserCard $userCard
+         */
         foreach ($this->getLibraryCards() as $userCard) {
             if ($userCard->eppn === $eppn) {
                 return $userCard;
@@ -106,14 +116,18 @@ class User extends Base
     /**
      * Get UserCard by eppn domain
      *
-     * @param string $eppnDomain
+     * @param string $eppnDomain EduPersonPrincipalName scope
      *
      * @return \KnihovnyCz\Db\Row\UserCard|null
      * @throws \VuFind\Exception\LibraryCard
      */
     public function getCardByEppnDomain(string $eppnDomain): ?UserCard
     {
-        /** @var \KnihovnyCz\Db\Row\UserCard $userCard */
+        /**
+         * User library card
+         *
+         * @var \KnihovnyCz\Db\Row\UserCard $userCard
+         */
         foreach ($this->getLibraryCards() as $userCard) {
             if ($userCard->getEppnDomain() === $eppnDomain) {
                 return $userCard;

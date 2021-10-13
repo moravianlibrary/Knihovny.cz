@@ -81,7 +81,11 @@ class MyResearchZiskejController extends AbstractBase
                 return $view;
             }
 
-            /** @var \KnihovnyCz\Ziskej\ZiskejMvs $cpkZiskejMvs */
+            /**
+             * Ziskej ILL model
+             *
+             * @var \KnihovnyCz\Ziskej\ZiskejMvs $cpkZiskejMvs
+             */
             $cpkZiskejMvs = $this->serviceLocator->get(ZiskejMvs::class);
             $isZiskejModeEnabled = $cpkZiskejMvs->isEnabled();
             $view->setVariable('isZiskejModeEnabled', $isZiskejModeEnabled);
@@ -89,11 +93,16 @@ class MyResearchZiskejController extends AbstractBase
                 return $view;
             }
 
-            /** @var \Mzk\ZiskejApi\Api $ziskejApi */
+            /**
+             * Ziskej API connector
+             *
+             * @var \Mzk\ZiskejApi\Api $ziskejApi
+             */
             $ziskejApi = $this->serviceLocator->get('Mzk\ZiskejApi\Api');
 
-            /* is library in ziskej */
-            $isLibraryInZiskej = $this->isLibraryInZiskej($ziskejApi, $userCard->home_library);
+            $isLibraryInZiskej = $this->_isLibraryInZiskej(
+                $ziskejApi, $userCard->home_library
+            );
             $view->setVariable('isLibraryInZiskej', $isLibraryInZiskej);
             if (!$isLibraryInZiskej) {
                 return $view;
@@ -110,7 +119,7 @@ class MyResearchZiskejController extends AbstractBase
                 if ($ticket->getDocumentId() !== null) {
                     $tickets[$ticket->getId()] = [
                         'ticket' => $ticket,
-                        'record' => $this->getRecord($ticket->getDocumentId()),
+                        'record' => $this->_getRecord($ticket->getDocumentId()),
                     ];
                 }
             }
@@ -146,7 +155,11 @@ class MyResearchZiskejController extends AbstractBase
             throw new LibraryCard('Library Card Not Found');
         }
 
-        /** @var \Mzk\ZiskejApi\Api $ziskejApi */
+        /**
+         * Ziskej API connector
+         *
+         * @var \Mzk\ZiskejApi\Api $ziskejApi
+         */
         $ziskejApi = $this->serviceLocator->get('Mzk\ZiskejApi\Api');
 
         $ticket = $ziskejApi->getTicket($userCard->eppn, $ticketId);
@@ -156,7 +169,7 @@ class MyResearchZiskejController extends AbstractBase
         if ($ticket) {
             $documentId = $ticket->getDocumentId();
             if ($documentId) {
-                $driver = $this->getRecord($documentId);
+                $driver = $this->_getRecord($documentId);
             }
         }
 
@@ -192,18 +205,29 @@ class MyResearchZiskejController extends AbstractBase
             throw new LibraryCard('Library Card Not Found');
         }
 
-        /** @var \Mzk\ZiskejApi\Api $ziskejApi */
+        /**
+         * Ziskej API connector
+         *
+         * @var \Mzk\ZiskejApi\Api $ziskejApi
+         */
         $ziskejApi = $this->serviceLocator->get('Mzk\ZiskejApi\Api');
 
         $deleted = $ziskejApi->cancelTicket($userCard->eppn, $ticketId);
 
         if ($deleted) {
-            $this->flashMessenger()->addMessage('Ziskej::message_ziskej_order_cancel_success', 'success');
+            $this->flashMessenger()->addMessage(
+                'Ziskej::message_ziskej_order_cancel_success', 'success'
+            );
         } else {
-            $this->flashMessenger()->addMessage('Ziskej::message_ziskej_order_cancel_fail', 'error');
+            $this->flashMessenger()->addMessage(
+                'Ziskej::message_ziskej_order_cancel_fail', 'error'
+            );
         }
 
-        return $this->redirect()->toRoute('myresearch-ziskej-ticket', ['eppnDomain' => $eppnDomain, 'ticketId' => $ticketId]);
+        return $this->redirect()->toRoute(
+            'myresearch-ziskej-ticket',
+            ['eppnDomain' => $eppnDomain, 'ticketId' => $ticketId]
+        );
     }
 
     /**
@@ -242,7 +266,9 @@ class MyResearchZiskejController extends AbstractBase
 
         $ticketMessage = $this->params()->fromPost('ticketMessage');
         if (empty($ticketMessage)) {
-            $this->flashMessenger()->addMessage('Ziskej::message_ziskej_message_required_ticketMessage', 'error');
+            $this->flashMessenger()->addMessage(
+                'Ziskej::message_ziskej_message_required_ticketMessage', 'error'
+            );
 
             return $this->redirect()->toRoute(
                 'myresearch-ziskej-ticket', [
@@ -252,16 +278,24 @@ class MyResearchZiskejController extends AbstractBase
             );
         }
 
-        /** @var \Mzk\ZiskejApi\Api $ziskejApi */
+        /**
+         * Ziskej API connector
+         *
+         * @var \Mzk\ZiskejApi\Api $ziskejApi
+         */
         $ziskejApi = $this->serviceLocator->get('Mzk\ZiskejApi\Api');
 
         $message = new Message($ticketMessage);
 
         $creaded = $ziskejApi->createMessage($userCard->eppn, $ticketId, $message);
         if ($creaded) {
-            $this->flashMessenger()->addMessage('Ziskej::message_ziskej_message_send_success', 'success');
+            $this->flashMessenger()->addMessage(
+                'Ziskej::message_ziskej_message_send_success', 'success'
+            );
         } else {
-            $this->flashMessenger()->addMessage('Ziskej::message_ziskej_message_send_fail', 'error');
+            $this->flashMessenger()->addMessage(
+                'Ziskej::message_ziskej_message_send_fail', 'error'
+            );
         }
 
         return $this->redirect()->toRoute(
@@ -273,13 +307,15 @@ class MyResearchZiskejController extends AbstractBase
     }
 
     /**
-     * @param string $documentId
+     * Get record from backend
+     *
+     * @param string $documentId Record identifier
      *
      * @return \KnihovnyCz\RecordDriver\SolrDefault
      *
      * @throws \Exception
      */
-    private function getRecord(string $documentId): SolrDefault
+    private function _getRecord(string $documentId): SolrDefault
     {
         $recordLoader = $this->getRecordLoader();
 
@@ -287,21 +323,28 @@ class MyResearchZiskejController extends AbstractBase
     }
 
     /**
-     * @param \Mzk\ZiskejApi\Api $ziskejApi
-     * @param string|null        $libraryCode
+     * Verify if library is active in Ziskej ILL system
+     *
+     * @param \Mzk\ZiskejApi\Api $ziskejApi   Ziskej API connector
+     * @param string|null        $libraryCode Library code
      *
      * @return bool
      *
      * @throws \Http\Client\Exception
      * @throws \Mzk\ZiskejApi\Exception\ApiResponseException
      */
-    private function isLibraryInZiskej(\Mzk\ZiskejApi\Api $ziskejApi, ?string $libraryCode): bool
-    {
+    private function _isLibraryInZiskej(
+        \Mzk\ZiskejApi\Api $ziskejApi, ?string $libraryCode
+    ): bool {
         if (empty($libraryCode)) {
             return false;
         }
 
-        /** @var \KnihovnyCz\ILS\Driver\MultiBackend $multiBackend */
+        /**
+         * Multibackend ILS driver
+         *
+         * @var \KnihovnyCz\ILS\Driver\MultiBackend $multiBackend
+         */
         $multiBackend = $this->getILS()->getDriver();
 
         $sigla = $multiBackend->sourceToSigla($libraryCode);

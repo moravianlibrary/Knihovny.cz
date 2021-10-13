@@ -45,9 +45,9 @@ class ZiskejFactory implements FactoryInterface
     /**
      * Create an object
      *
-     * @param \Interop\Container\ContainerInterface $container
-     * @param string                                $requestedName
-     * @param array|null                            $options
+     * @param ContainerInterface $container     DI container
+     * @param string             $requestedName Service name
+     * @param array|null         $options       Service options
      *
      * @return \KnihovnyCz\RecordTab\Ziskej
      */
