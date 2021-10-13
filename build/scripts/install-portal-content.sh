@@ -9,6 +9,9 @@ if [ ! -f "${KEY}" ]; then
   echo "Missing $KEY"
   exit 1
 fi
+mkdir /tmp/deploy-key/
+cp ${KEY} /tmp/deploy-key/deploy-key
+KEY=/tmp/deploy-key/deploy-key
 
 mkdir -p /git
 cd /git
@@ -24,10 +27,12 @@ if ! grep "$(ssh-keyscan $HOST 2>/dev/null)" ~/.ssh/known_hosts > /dev/null; the
     ssh-keyscan $HOST >> ~/.ssh/known_hosts
 fi
 
+# FIXME:
 mkdir -p /var/www/.ssh
 cp ~/.ssh/known_hosts /var/www/.ssh/
 chown -R www-data:www-data /var/www/.ssh
 chown www-data "$KEY"
+chmod 0400 "$KEY"
 
 if test ! -e "portal-pages"; then
     git clone --depth 1 --no-single-branch "git@$HOST:knihovny.cz/portal-pages.git" -c core.sshCommand="ssh -i $KEY"
