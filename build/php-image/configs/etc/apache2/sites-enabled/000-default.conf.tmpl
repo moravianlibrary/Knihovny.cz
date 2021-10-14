@@ -5,6 +5,7 @@
 
     Header unset Strict-Transport-Security
     Header always set Strict-Transport-Security "max-age=0;includeSubDomains"
+    Header always set X-HostName "${HOSTNAME}"
 
     AllowEncodedSlashes On
 
