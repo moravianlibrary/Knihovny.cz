@@ -103,6 +103,21 @@ class XCNCIP2 extends \VuFind\ILS\Driver\XCNCIP2
     }
 
     /**
+     * Get Hold Type
+     *
+     * @param string $status Status string from CirculationStatus NCIP element
+     *
+     * @return string Hold type: 'Hold', 'Recall', 'Estimate', 'Loan' are some of
+     * possible values
+     */
+    protected function getHoldType(string $status)
+    {
+        // If it work, we keep it hardcoded. If not, we should use 'Estimate' for
+        // some of ILSs
+        return 'Hold';
+    }
+
+    /**
      * Get Patron Loan History
      *
      * This is responsible for retrieving all historic transactions for a specific
