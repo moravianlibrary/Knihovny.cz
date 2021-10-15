@@ -251,17 +251,10 @@ class DeduplicationListener extends ParentDeduplicationListener
     public function getSourcesFromLibraryCards()
     {
         $user = $this->authManager->isLoggedIn();
-        if (!$user || !$user->libraryCardsEnabled()) {
+        if (!$user) {
             return [];
         }
-        $myLibs = [];
-        foreach ($user->getLibraryCards() as $libCard) {
-            $ids = explode('.', $libCard['cat_username'] ?? '', 2);
-            if (count($ids) == 2) {
-                $myLibs[] = $ids[0];
-            }
-        }
-        return array_unique($myLibs);
+        return $user->getLibraryPrefixes();
     }
 
     /**
