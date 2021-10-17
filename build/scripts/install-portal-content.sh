@@ -23,9 +23,9 @@ mkdir -p ~/.ssh
 touch ~/.ssh/known_hosts
 
 # Add host into known_hosts if not present
-if ! grep "$(ssh-keyscan $HOST 2>/dev/null)" ~/.ssh/known_hosts > /dev/null; then
-    ssh-keyscan $HOST >> ~/.ssh/known_hosts
-fi
+#if ! grep "$(ssh-keyscan $HOST 2>/dev/null)" ~/.ssh/known_hosts > /dev/null; then
+ssh-keyscan $HOST >> ~/.ssh/known_hosts
+#fi
 
 # FIXME:
 mkdir -p /var/www/.ssh
