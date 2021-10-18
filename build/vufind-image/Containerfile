@@ -15,16 +15,17 @@ RUN \
 
 ########## Grunt task image
 FROM docker.io/alpine:latest AS themes
+ARG THEMES_BUILD_DIR=/vufind-build-themes
 RUN apk add --no-cache nodejs npm git \
     && npm install -g grunt-cli
-COPY --from=vufind-src /src/vufind/themes /vufind-build-css/themes
-COPY --from=vufind-src /src/vufind/package.json /vufind-build-css/
-COPY --from=vufind-src /src/vufind/Gruntfile.js /vufind-build-css/
+COPY --from=vufind-src /src/vufind/themes ${THEMES_BUILD_DIR}/themes
+COPY --from=vufind-src /src/vufind/package.json ${THEMES_BUILD_DIR}/
+COPY --from=vufind-src /src/vufind/Gruntfile.js ${THEMES_BUILD_DIR}/
 
-COPY ./themes /vufind-build-css/themes
-WORKDIR /vufind-build-css/
-RUN ls -al /vufind-build-css/
+COPY ./themes ${THEMES_BUILD_DIR}/themes
+WORKDIR ${THEMES_BUILD_DIR}/
 RUN npm install && grunt less -v
+RUN rm ${THEMES_BUILD_DIR}/themes/root/css/.htaccess
 
 ########### install PHP libraries
 FROM localhost/knihovny-php:latest AS libraries
@@ -67,7 +68,7 @@ COPY --from=vufind-src /src/vufind/* /${VUFIND_ROOT}/
 COPY --from=libraries /${VUFIND_ROOT}/vendor /${VUFIND_ROOT}/vendor
 COPY ./local /${VUFIND_ROOT}/local
 COPY ./module ${VUFIND_ROOT}/module
-COPY --from=themes /vufind-build-css/themes ${VUFIND_ROOT}/themes
+COPY --from=themes /vufind-build-themes/themes ${VUFIND_ROOT}/themes
 
 RUN chown vufind:vufind -R ${VUFIND_ROOT}
 
