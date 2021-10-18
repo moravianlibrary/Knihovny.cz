@@ -64,7 +64,12 @@ FROM localhost/knihovny-php:latest
 ARG VUFIND_ROOT=/var/www/knihovny-cz/
 
 # Assemble production code from 'compiled' pieces
-COPY --from=vufind-src /src/vufind/* /${VUFIND_ROOT}/
+COPY --from=vufind-src /src/vufind/config /${VUFIND_ROOT}/config
+COPY --from=vufind-src /src/vufind/languages /${VUFIND_ROOT}/languages
+COPY --from=vufind-src /src/vufind/module /${VUFIND_ROOT}/module
+COPY --from=vufind-src /src/vufind/public /${VUFIND_ROOT}/public
+COPY --from=vufind-src /src/vufind/tests /${VUFIND_ROOT}/tests
+COPY --from=vufind-src /src/vufind/util /${VUFIND_ROOT}/util
 COPY --from=libraries /${VUFIND_ROOT}/vendor /${VUFIND_ROOT}/vendor
 COPY ./local /${VUFIND_ROOT}/local
 COPY ./module ${VUFIND_ROOT}/module
