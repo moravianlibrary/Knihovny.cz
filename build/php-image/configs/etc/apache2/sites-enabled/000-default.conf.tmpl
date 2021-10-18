@@ -23,7 +23,7 @@
    AliasMatch ^/themes/([0-9a-zA-Z-_]*)/(css|images|js|assets)/(.*)$ /var/www/knihovny-cz/themes/$$1/$$2/$$3
    <Directory ~ "^/var/www/knihovny-cz/themes/([0-9a-zA-Z-_]*)/(css|images|js|assets)/">
       require all granted
-      AllowOverride All
+      AllowOverride None
    </Directory>
 
    <Proxy "fcgi://${PHP_FPM_BACKEND}:9000/">
