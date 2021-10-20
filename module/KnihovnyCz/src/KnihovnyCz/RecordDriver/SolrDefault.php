@@ -76,6 +76,13 @@ class SolrDefault extends \VuFind\RecordDriver\SolrDefault
     protected $libraryIdMappings;
 
     /**
+     * Auth Manager
+     *
+     * @var \VuFind\Auth\Manager
+     */
+    protected $authManager;
+
+    /**
      * Get the publishers of the record.
      *
      * @return array
@@ -468,7 +475,7 @@ class SolrDefault extends \VuFind\RecordDriver\SolrDefault
         if ($parent === null) {
             return [];
         }
-        return array_map(
+        $results = array_map(
             function ($localId) {
                 [$source] = explode('.', $localId);
                 return [
@@ -477,6 +484,21 @@ class SolrDefault extends \VuFind\RecordDriver\SolrDefault
                 ];
             }, (array)$parent->tryMethod('getChildrenIds')
         );
+        $user = $this->authManager->isLoggedIn();
+        if ($user) {
+            $prefixes = $user->getLibraryPrefixes();
+            array_unshift($prefixes, $this->getSourceId());
+            usort(
+                $results, function ($a, $b) use ($prefixes) {
+                    $a = array_search($a['source'], $prefixes);
+                    $a = ($a !== false) ? $a : PHP_INT_MAX;
+                    $b = array_search($b['source'], $prefixes);
+                    $b = ($b !== false) ? $b : PHP_INT_MAX;
+                    return $a - $b;
+                }
+            );
+        }
+        return $results;
     }
 
     /**
@@ -501,6 +523,18 @@ class SolrDefault extends \VuFind\RecordDriver\SolrDefault
     public function attachLibraryIdMappings(\Laminas\Config\Config $mappings)
     {
         $this->libraryIdMappings = $mappings;
+    }
+
+    /**
+     * Attach auth manager
+     *
+     * @param \VuFind\Auth\Manager $authManager Auth manager
+     *
+     * @return void
+     */
+    public function attachAuthManager($authManager)
+    {
+        $this->authManager = $authManager;
     }
 
     /**

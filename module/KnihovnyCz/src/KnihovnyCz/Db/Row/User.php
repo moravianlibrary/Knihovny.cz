@@ -219,6 +219,26 @@ class User extends Base
     }
 
     /**
+     * Get library prefixes from connected library cards
+     *
+     * @return array
+     */
+    public function getLibraryPrefixes()
+    {
+        if (!$this->libraryCardsEnabled()) {
+            return [];
+        }
+        $myLibs = [];
+        foreach ($this->getLibraryCards() as $libCard) {
+            $ids = explode('.', $libCard['cat_username'] ?? '', 2);
+            if (count($ids) == 2) {
+                $myLibs[] = $ids[0];
+            }
+        }
+        return array_unique($myLibs);
+    }
+
+    /**
      * Verify that the current card information exists in user's library cards
      * (if enabled) and is up to date.
      *
