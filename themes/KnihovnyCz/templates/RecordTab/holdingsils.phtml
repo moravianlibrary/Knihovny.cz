@@ -5,6 +5,7 @@
     $source = $this->driver->getSourceId();
     $offlineMode = $this->ils()->getOfflineMode();
     $holdings = $this->driver->getOfflineHoldings();
+    $filters = $holdings['filters'] ?? [];
     // Set page title.
     $this->headTitle($this->translate('Holdings') . ': ' . $this->driver->getBreadcrumb());
 
@@ -98,6 +99,14 @@
       });
   };
   _ajaxStatus({$recordIdJson});
+
+  var _filterHoldings = function _filterHoldings(key, value) {
+    var rows = $('#holding_items>tbody>tr');
+    rows.each(function filterRow() {
+      var show = (value == 'ALL') || $(this).data(key) == value;
+      (show)? $(this).show() : $(this).hide();
+    });
+  };
 JS;
 
 ?>
@@ -138,6 +147,25 @@ JS;
   ?>
 <?php endif; ?>
 
+
+<?php foreach($filters as $filter => $values): if (!empty($values)): ?>
+  <div class="col-md-5">
+    <label for="<?=$this->escapeHtml($filter)?>"><?=$this->transEsc($filter . '_filter')?>: </label>
+    <select name="<?=$this->escapeHtml($filter)?>" class='holding_filter'>
+      <option value="ALL"><?=$this->transEsc('All')?></option>
+      <?php foreach ($values as $value): ?>
+        <option value="<?=$this->escapeHtml($value)?>">
+          <?php if(!empty($value)):?>
+            <?=$this->escapeHtml($value)?>
+          <?php else:?>
+            <?=$this->transEsc('no_filter_value')?>
+          <?php endif;?>
+        </option>
+      <?php endforeach; ?>
+    </select>
+  </div>
+<?php endif; endforeach; ?>
+
 <?php if (!empty($holdings['holdings'] ?? [])): ?>
   <table class="table table-striped responsive-table" id="holding_items">
     <thead>
@@ -169,6 +197,20 @@ JS;
 
 <?=$this->inlineScript(\Laminas\View\Helper\HeadScript::SCRIPT, $loadJs, 'SET')?>
 <noscript><?=$this->transEsc('Please enable JavaScript.')?></noscript>
+<script>
+  $('select.holding_filter').each(function addListener() {
+    $(this).on('change', function onChange() {
+      var key = $(this).attr('name');
+      $('select.holding_filter').each(function switchOtherSelect() {
+        if ($(this).attr('name') !== key) {
+          $(this).val('ALL');
+        }
+      });
+      var value = $(this).find(":selected").attr('value');
+      _filterHoldings(key, value);
+    });
+  });
+</script>
 
 <?php if (!empty($holdings['total']) && $paginator = $this->tab->getPaginator($holdings['total'], $holdings['page'], $holdings['itemLimit'])): ?>
     <?=$this->paginationControl($paginator, 'Sliding', 'Helpers/pagination.phtml', ['page' => $holdings['page']])?>

@@ -76,6 +76,10 @@ class SolrLocal extends \KnihovnyCz\RecordDriver\SolrMarc
     public function getOfflineHoldings()
     {
         $items = [];
+        $filters = [
+            'year' => [],
+            'volume' => [],
+        ];
         $f996 = $this->fields['mappings996_display_mv'] ?? [];
         foreach ($f996 as $line) {
             [
@@ -89,6 +93,16 @@ class SolrLocal extends \KnihovnyCz\RecordDriver\SolrMarc
                 'description', 'notes', 'year', 'volume', 'issue', 'status',
                 'collection_desc', 'agency_id', 'copy_number'
             );
+            $filters['year'][] = $year;
+            $filters['volume'][] = $volume;
+        }
+        foreach ($filters as $key => &$values) {
+            $values = array_unique($values);
+            if (count($values) > 1) {
+                sort($values);
+            } else {
+                $values = [];
+            }
         }
         return empty($items) ? [] :
             [
@@ -98,6 +112,7 @@ class SolrLocal extends \KnihovnyCz\RecordDriver\SolrMarc
                         'items' => $items
                     ]
                 ],
+                'filters' => $filters,
             ];
     }
 

@@ -83,6 +83,16 @@ class SolrLocalTest extends \PHPUnit\Framework\TestCase
                     'items' => $expectedItems,
                 ],
             ],
+            'filters' => [
+               'year' => [
+                   '',
+                   '1943'
+               ],
+               'volume' => [
+                   '',
+                   'XXIII'
+               ],
+            ],
         ];
         $filename = 'records/offlineHoldings.json';
         $fixture = $this->getJsonFixture($filename, 'KnihovnyCz');

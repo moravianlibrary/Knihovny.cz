@@ -6,7 +6,9 @@
 <tr vocab="http://schema.org/" typeof="Offer"
   id="holding_item_<?=$this->escapeHtml($holding['item_id'])?>"
   data-item-id="<?=$this->escapeHtml($holding['item_id'])?>"
-  data-copy-number="<?=$this->escapeHtml($holding['copy_number'])?>">
+  data-copy-number="<?=$this->escapeHtml($holding['copy_number'])?>"
+  data-volume="<?=$this->escapeHtml($holding['volume'])?>"
+  data-year="<?=$this->escapeHtml($holding['year'])?>">
   <td data-title="<?=$this->transEsc("Availability")?>">
     <div data-type="availability" class="jt" title="<?=$this->transEsc('Availability')?>">
       <?php
