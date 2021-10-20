@@ -7,9 +7,11 @@ USER root
 # add apache2 extensions
 RUN apt-get update && \
     apt-get install -y apache2  && \
-    apt-get install -y libapache2-mod-shib libapache2-mod-rpaf --no-install-recommends && \
+    apt-get install -y libapache2-mod-shib --no-install-recommends && \
     apt-get clean
-RUN a2enmod headers remoteip rewrite rpaf shib proxy proxy_fcgi
+RUN a2enmod headers remoteip rewrite shib proxy proxy_fcgi
+# disable default MPM modul
+RUN a2dismod mpm_event && a2enmod mpm_prefork
 
 ## Install libraries and extension
 RUN apt-get install -y libpng-tools libpng16-16 libxslt1.1 libzip4 && \
@@ -46,11 +48,11 @@ RUN apt-get update && \
     apt-get autoremove -y && \
     apt-get clean
 
-ADD docker/etc /etc
-ADD docker/bin/container-entrypoint.sh /container-entrypoint.sh
-ADD docker/php/*.conf /usr/local/etc/php-fpm.d/
-ADD docker/initscripts/bootstrap-shibboleth2.sh /onstart.d/000-bootstrap-shibboleth2.sh
-ADD docker/initscripts/bootstrap-php-fpm-backend.sh /onstart.d/000-bootstrap-php-fpm-backend.sh
+ADD configs/etc /etc
+ADD configs/bin/container-entrypoint.sh /container-entrypoint.sh
+ADD configs/php/*.conf /usr/local/etc/php-fpm.d/
+ADD configs/initscripts/bootstrap-shibboleth2.sh /onstart.d/000-bootstrap-shibboleth2.sh
+ADD configs/initscripts/bootstrap-php-fpm-backend.sh /onstart.d/000-bootstrap-php-fpm-backend.sh
 RUN chmod ugo+x /container-entrypoint.sh /onstart.d/*.sh
 
 ADD https://github.com/a8m/envsubst/releases/download/v1.2.0/envsubst-Linux-x86_64 /usr/bin/envsubst.a8m

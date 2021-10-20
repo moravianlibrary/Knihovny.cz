@@ -1,10 +1,11 @@
 <VirtualHost *:80>
     UseCanonicalName On
     ServerAdmin webmaster@localhost
-    ServerName localhost
+    ServerName ${PARAM_VUFIND_URL}
 
     Header unset Strict-Transport-Security
     Header always set Strict-Transport-Security "max-age=0;includeSubDomains"
+    Header always set X-HostName "${HOSTNAME}"
 
     AllowEncodedSlashes On
 
@@ -19,17 +20,17 @@
     </Location>
 
    DocumentRoot /var/www/knihovny-cz/public/
-   AliasMatch ^/themes/([0-9a-zA-Z-_]*)/(css|images|js|assets)/(.*)$ /var/www/knihovny-cz/themes/$1/$2/$3
+   AliasMatch ^/themes/([0-9a-zA-Z-_]*)/(css|images|js|assets)/(.*)$ /var/www/knihovny-cz/themes/$$1/$$2/$$3
    <Directory ~ "^/var/www/knihovny-cz/themes/([0-9a-zA-Z-_]*)/(css|images|js|assets)/">
       require all granted
-      AllowOverride All
+      AllowOverride None
    </Directory>
 
-   <Proxy "fcgi://PHP-FPM-BACKEND:9000/">
+   <Proxy "fcgi://${PHP_FPM_BACKEND}:9000/">
       ProxySet enablereuse=Off max=100 timeout=10 retry=1
    </Proxy>
 
-   ProxyPass "/index.php" "fcgi://PHP-FPM-BACKEND:9000/var/www/knihovny-cz/public/index.php"
+   ProxyPass "/index.php" "fcgi://${PHP_FPM_BACKEND}:9000/var/www/knihovny-cz/public/index.php"
 
    <Directory /var/www/knihovny-cz/public/>
         Require all granted
@@ -37,7 +38,7 @@
 
         # Shibboleth handler
         RewriteCond %{REQUEST_URI} ^/Shibboleth.*$
-        RewriteRule .* - [L] # this is the last rule
+        RewriteRule .* - [PT,L] # this is the last rule
 
         #RewriteCond %{REQUEST_FILENAME} -s [OR]
         #RewriteCond %{REQUEST_FILENAME} -l [OR]
