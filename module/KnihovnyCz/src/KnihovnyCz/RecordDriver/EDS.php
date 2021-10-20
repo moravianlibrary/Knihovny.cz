@@ -43,7 +43,7 @@ class EDS extends \VuFind\RecordDriver\EDS
     /**
      * Get access url
      *
-     * @return string
+     * @return string|null
      */
     public function getAccessUrl()
     {
@@ -53,7 +53,8 @@ class EDS extends \VuFind\RecordDriver\EDS
         }
         $item = current($items);
         $url = strip_tags(html_entity_decode($item['Data']));
-        return filter_var($url, FILTER_VALIDATE_URL);
+        $result = filter_var($url, FILTER_VALIDATE_URL);
+        return ($result) ? $result : null;
     }
 
     /**

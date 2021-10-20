@@ -126,12 +126,10 @@ class Sfx extends AbstractBase
                     $links = $this->parseResponse($promise->wait());
                 } catch (\Exception $ex) {
                     $url = $this->getSfxUrl($servers[$code], $apiQueryParams);
-                    if ($this->getLogger() != null) {
-                        $this->getLogger()->warn(
-                            'Exception thrown when calling SFX',
-                            [$url, $ex]
-                        );
-                    }
+                    $this->logWarning(
+                        'Exception thrown when calling SFX',
+                        [$url, $ex]
+                    );
                 }
                 if (!empty($links)) {
                     $directLink = ($directLinking && count($links) == 1);
@@ -184,9 +182,7 @@ class Sfx extends AbstractBase
     {
         $client = $this->httpService->createClient();
         $url = $this->getSfxUrl($sfxUrl, $query);
-        if ($this->getLogger() != null) {
-            $this->getLogger()->notice("Calling SFX: " . $url);
-        }
+        $this->logWarning("Calling SFX: " . $url);
         $request = new Request('GET', $url);
         return $client->sendAsyncRequest($request);
     }

@@ -1,5 +1,5 @@
 /* exported setupAutocomplete */
-/* global VuFind, extractClassParams */
+/* global VuFind, extractClassParams, htmlEncode */
 
 // We only need to observe change of type childList
 const config = { attributes: false, childList: true, subtree: false };
