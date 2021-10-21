@@ -107,6 +107,20 @@
       (show)? $(this).show() : $(this).hide();
     });
   };
+
+  $('select.holding_filter').each(function addListener() {
+    $(this).on('change', function onChange() {
+      var key = $(this).attr('name');
+      $('select.holding_filter').each(function switchOtherSelect() {
+        if ($(this).attr('name') !== key) {
+          $(this).val('ALL');
+        }
+      });
+      var value = $(this).find(":selected").attr('value');
+      _filterHoldings(key, value);
+    });
+  });
+
 JS;
 
 ?>
@@ -197,20 +211,6 @@ JS;
 
 <?=$this->inlineScript(\Laminas\View\Helper\HeadScript::SCRIPT, $loadJs, 'SET')?>
 <noscript><?=$this->transEsc('Please enable JavaScript.')?></noscript>
-<script>
-  $('select.holding_filter').each(function addListener() {
-    $(this).on('change', function onChange() {
-      var key = $(this).attr('name');
-      $('select.holding_filter').each(function switchOtherSelect() {
-        if ($(this).attr('name') !== key) {
-          $(this).val('ALL');
-        }
-      });
-      var value = $(this).find(":selected").attr('value');
-      _filterHoldings(key, value);
-    });
-  });
-</script>
 
 <?php if (!empty($holdings['total']) && $paginator = $this->tab->getPaginator($holdings['total'], $holdings['page'], $holdings['itemLimit'])): ?>
     <?=$this->paginationControl($paginator, 'Sliding', 'Helpers/pagination.phtml', ['page' => $holdings['page']])?>
