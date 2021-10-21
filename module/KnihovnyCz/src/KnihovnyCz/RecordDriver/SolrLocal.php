@@ -93,13 +93,24 @@ class SolrLocal extends \KnihovnyCz\RecordDriver\SolrMarc
                 'description', 'notes', 'year', 'volume', 'issue', 'status',
                 'collection_desc', 'agency_id', 'copy_number'
             );
-            $filters['year'][] = $year;
-            $filters['volume'][] = $volume;
+            $filters['year'][$year] = $this->extractYear($year);
+            $filters['volume'][$volume] = $this->extractVolume($volume);
         }
         foreach ($filters as $key => &$values) {
-            $values = array_unique($values);
             if (count($values) > 1) {
-                sort($values);
+                $reverse = ($key == 'year') ? 1 : -1;
+                uasort(
+                    $values, function ($a, $b) use ($reverse) {
+                        if (is_int($a) && is_int($b)) {
+                            return $reverse * ($b <=> $a);
+                        } elseif (is_int($a)) {
+                            return -1;
+                        } elseif (is_int($b)) {
+                            return 1;
+                        }
+                        return strcmp($a, $b);
+                    }
+                );
             } else {
                 $values = [];
             }
@@ -124,5 +135,38 @@ class SolrLocal extends \KnihovnyCz\RecordDriver\SolrMarc
     public function hasOfflineHoldings()
     {
         return !empty($this->fields['mappings996_display_mv']);
+    }
+
+    /**
+     * Try to extract year from 996|y in holdings
+     *
+     * @param string $year year
+     *
+     * @return string|int  year or original value as string if extraction fails
+     */
+    protected function extractYear($year)
+    {
+        $matches = [];
+        if (preg_match('/([0-9]{4})/', $year, $matches) == 1) {
+            return intval($matches[1]);
+        }
+        return $year;
+    }
+
+    /**
+     * Try to extract volume from 996|v in hodings
+     *
+     * @param string $volume volume
+     *
+     * @return string|int    volume or original value as string if extraction
+     * fails
+     */
+    protected function extractVolume($volume)
+    {
+        $matches = [];
+        if (preg_match('/([0-9]+)/', $volume, $matches) == 1) {
+            return intval($matches[1]);
+        }
+        return $volume;
     }
 }

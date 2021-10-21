@@ -153,10 +153,10 @@ JS;
     <label for="<?=$this->escapeHtml($filter)?>"><?=$this->transEsc($filter . '_filter')?>: </label>
     <select name="<?=$this->escapeHtml($filter)?>" class='holding_filter'>
       <option value="ALL"><?=$this->transEsc('All')?></option>
-      <?php foreach ($values as $value): ?>
-        <option value="<?=$this->escapeHtml($value)?>">
-          <?php if(!empty($value)):?>
-            <?=$this->escapeHtml($value)?>
+      <?php foreach ($values as $key => $value): ?>
+        <option value="<?=$this->escapeHtml($key)?>">
+          <?php if(!empty($key)):?>
+            <?=$this->escapeHtml($key)?>
           <?php else:?>
             <?=$this->transEsc('no_filter_value')?>
           <?php endif;?>

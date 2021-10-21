@@ -85,12 +85,12 @@ class SolrLocalTest extends \PHPUnit\Framework\TestCase
             ],
             'filters' => [
                'year' => [
-                   '',
-                   '1943'
+                   '' => '',
+                   '1943' => '1943',
                ],
                'volume' => [
-                   '',
-                   'XXIII'
+                   '' => '',
+                   'XXIII' => 'XXIII',
                ],
             ],
         ];
