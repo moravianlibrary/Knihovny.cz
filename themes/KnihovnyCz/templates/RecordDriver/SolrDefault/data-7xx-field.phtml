@@ -1,8 +1,8 @@
 <?php
 $id = urlencode($this->driver->getUniqueID());
+$anchor = '';
 foreach ($data as $field) {
   if (!empty($field['t']) || !empty($field['g']) || !empty($field['x'])) {
-    $anchor = '';
     if (!empty($field['t'])) {
       $anchor .= $field['t'];
     }
@@ -22,25 +22,17 @@ foreach ($data as $field) {
       $anchor .= '. -- ' . $field['g'];
     }
   }
-
+  $linkTemplate = '/Search/Results?join=AND&bool0[]=AND&lookfor0[]="%s"&type0[]=isn&bool1[]=NOT&lookfor1[]="%s"&type1[]=id&sort=title&view=list';
   if (!empty($field['x']) || !empty($field['z']) || !empty($field['t'])) {
+    $link = '';
     if (!empty($field['x'])) {
-      $link = '/Search/Results?join=AND&bool0[]=AND&lookfor0[]="' . $field['x']
-        . '"&type0[]=isn&bool1[]=NOT&lookfor1[]="' . $id
-        . '"&type1[]=id&sort=title&view=list';
-    } else {
-      if (!empty($field['z'])) {
-        $link = '/Search/Results?join=AND&bool0[]=AND&lookfor0[]="' . $field['z']
-          . '"&type0[]=isn&bool1[]=NOT&lookfor1[]="' . $id
-          . '"&type1[]=id&sort=title&view=list';
-      } else {
-        if (!empty($field['t'])) {
-          $link = '/Search/Results?join=AND&bool0[]=AND&lookfor0[]="' . $field['t']
-            . '"&type0[]=AllFields&bool1[]=NOT&lookfor1[]="' . $id
-            . '"&type1[]=id&sort=title&view=list';
-        }
-      }
-    }?>
+      $link = sprintf($linkTemplate, $field['x'], $id);
+    } elseif (!empty($field['z'])) {
+      $link = sprintf($linkTemplate, $field['z'], $id);
+    } elseif (!empty($field['t'])) {
+      $link = sprintf($linkTemplate, $field['t'], $id);
+    }
+    ?>
     <a href='<?=$link?>' title="<?=$anchor?>"><?=$anchor?></a><br />
 <?php
   } else {
