@@ -27,7 +27,7 @@
       $totalDue = 0;
       foreach ($this->fines as $record) {
           if (empty($record['title'])) {
-              $title = $this->transEsc('not_applicable');
+              $title = '';
           } elseif (!is_object($record['driver'] ?? null)) {
               $title = $this->escapeHtml(trim($record['title'], '/:'));
           } else {
