@@ -28,8 +28,10 @@
       foreach ($this->fines as $record) {
           if (empty($record['title'])) {
               $title = '';
-          } elseif (!is_object($record['driver'] ?? null)) {
-              $title = $this->escapeHtml(trim($record['title'], '/:'));
+          } elseif (!is_object($record['driver'] ?? null)
+            || is_a($record['driver'], \VuFind\RecordDriver\Missing::class)
+          ) {
+              $title = '';
           } else {
               $title = '<a href="'
                   . $this->escapeHtmlAttr($this->recordLinker()->getUrl($record['driver']))
