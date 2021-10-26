@@ -86,7 +86,7 @@
       })
       .always(function ajaxLookupFinal() {
         $('.status-loader').remove();
-        ['request','collection_desc', 'callnumber_second', 'description', 'callnumber'].forEach(function hideTableColumn(column) {
+        ['availability', 'status', 'request','collection_desc', 'callnumber_second', 'description', 'callnumber'].forEach(function hideTableColumn(column) {
           if ($('td[data-type="' + column + '"]').text().trim() === '') {
             $('th[data-type="' + column + '"], td[data-type="' + column + '"]').hide();
           }

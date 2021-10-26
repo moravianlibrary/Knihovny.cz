@@ -9,9 +9,8 @@
   data-copy-number="<?=$this->escapeHtml($holding['copy_number'])?>"
   data-volume="<?=$this->escapeHtml($holding['volume'])?>"
   data-year="<?=$this->escapeHtml($holding['year'])?>">
-  <td data-title="<?=$this->transEsc("Availability")?>">
-    <div data-type="availability" class="jt" title="<?=$this->transEsc('Availability')?>">
-      <?php
+  <td data-title="<?=$this->transEsc("Availability")?>" data-type="availability">
+    <?php
       $status = $availability = $holding['status'] ?? '';
       if (!empty($availability)) {
         $text = 'HoldingStatus::' . $source . '_' . $availability;
@@ -21,9 +20,8 @@
           $status = $this->transEsc($text, [], $availability);
         }
       }
-      ?>
-      <span class="availability"><?=$status?></span>
-    </div>
+    ?>
+    <div><?=$status?></div>
   <td data-type="status" data-title="<?=$this->transEsc("Status")?>">
   </td>
   <td data-type="request">

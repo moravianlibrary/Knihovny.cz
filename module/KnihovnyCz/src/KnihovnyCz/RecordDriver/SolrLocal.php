@@ -85,13 +85,14 @@ class SolrLocal extends \KnihovnyCz\RecordDriver\SolrMarc
             [
                 $itemId, $callnumber, $location, $callnumber_second,
                 $description, $notes, $year, $volume, $issue, $status,
-                $collection_desc, $agency_id, $sequenceNo, $copy_number
+                $collection_desc, $agency_id, $sequenceNo, $copy_number,
+                $catalog_link
             ] = str_getcsv($line);
             $item_id = $agency_id . $itemId . $sequenceNo;
             $items[] = compact(
                 'item_id', 'callnumber', 'location', 'callnumber_second',
                 'description', 'notes', 'year', 'volume', 'issue', 'status',
-                'collection_desc', 'agency_id', 'copy_number'
+                'collection_desc', 'agency_id', 'copy_number', 'catalog_link'
             );
             $filters['year'][$year] = $this->extractYear($year);
             $filters['volume'][$volume] = $this->extractVolume($volume);
