@@ -81,6 +81,7 @@ class SolrLocal extends \KnihovnyCz\RecordDriver\SolrMarc
             'volume' => [],
         ];
         $f996 = $this->fields['mappings996_display_mv'] ?? [];
+        $isCaslin = str_starts_with($this->getUniqueID(), 'caslin');
         foreach ($f996 as $line) {
             [
                 $itemId, $callnumber, $location, $callnumber_second,
@@ -89,6 +90,11 @@ class SolrLocal extends \KnihovnyCz\RecordDriver\SolrMarc
                 $catalog_link
             ] = str_getcsv($line);
             $item_id = $agency_id . $itemId . $sequenceNo;
+            if ($isCaslin) {
+                // for better determination of items on fronted we concatenate
+                // sigla (location) and copy number
+                $copy_number = $location . '|' . $copy_number;
+            }
             $items[] = compact(
                 'item_id', 'callnumber', 'location', 'callnumber_second',
                 'description', 'notes', 'year', 'volume', 'issue', 'status',
