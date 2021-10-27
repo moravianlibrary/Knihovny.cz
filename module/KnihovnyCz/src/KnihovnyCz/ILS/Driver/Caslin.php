@@ -126,7 +126,7 @@ class Caslin extends AbstractBase implements \Laminas\Log\LoggerAwareInterface,
         foreach ($holdings as $holding) {
             $sigla = $holding['location'];
             $status = empty($holding['catalog_link'])
-                ? $holding['copy_number']
+                ? ''
                 : sprintf(
                     '<a href="%s" target="_blank">%s</a>',
                     $holding['catalog_link'],
