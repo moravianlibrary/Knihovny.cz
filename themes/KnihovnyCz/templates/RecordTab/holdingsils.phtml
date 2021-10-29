@@ -10,8 +10,23 @@
     $this->headTitle($this->translate('Holdings') . ': ' . $this->driver->getBreadcrumb());
 
     $recordIdJson = json_encode($this->driver->getUniqueID(), JSON_HEX_QUOT);
+    $isCaslin = (int) str_starts_with($this->driver->getUniqueID(), 'caslin');
     $loadJs = <<<JS
   const statusUnknownHtml = '<span class="label label-default">' + VuFind.translate('status_unknown_message') + '</span>';
+  const isCaslin = $isCaslin;
+  function updateHoldingsTable() {
+    $('.status-loader').remove();
+    ['availability', 'request','collection_desc', 'callnumber_second', 'description', 'callnumber'].forEach(function hideTableColumn(column) {
+      if ($('td[data-type="' + column + '"]').text().trim() === '') {
+        $('th[data-type="' + column + '"], td[data-type="' + column + '"]').hide();
+      }
+    });
+    $('td[data-type="status"]').each(function removeEmpty() {
+      if ($(this).text().trim() === '') {
+        $(this).html(statusUnknownHtml);
+      }
+    });
+  }
   var _ajaxStatus = function _ajaxStatus(id) {
     $.ajax({
       url: VuFind.path + '/AJAX/JSON?method=getHolding',
@@ -80,25 +95,18 @@
             }
           });
         });
+        updateHoldingsTable();
       })
       .fail(function ajaxLookupFail() {
         $('#holding_items').find('td[data-type="status"]').html(statusUnknownHtml);
-      })
-      .always(function ajaxLookupFinal() {
-        $('.status-loader').remove();
-        ['availability', 'request','collection_desc', 'callnumber_second', 'description', 'callnumber'].forEach(function hideTableColumn(column) {
-          if ($('td[data-type="' + column + '"]').text().trim() === '') {
-            $('th[data-type="' + column + '"], td[data-type="' + column + '"]').hide();
-          }
-        });
-        $('td[data-type="status"]').each(function removeEmpty() {
-          if ($(this).text().trim() === '') {
-              $(this).html(statusUnknownHtml);
-          }
-        })
+        updateHoldingsTable();
       });
   };
-  _ajaxStatus({$recordIdJson});
+  if (isCaslin) {
+    updateHoldingsTable();
+  } else {
+    _ajaxStatus({$recordIdJson});
+  }
 
   var _filterHoldings = function _filterHoldings(key, value) {
     var rows = $('#holding_items>tbody>tr');

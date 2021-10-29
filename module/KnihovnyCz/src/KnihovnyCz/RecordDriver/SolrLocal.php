@@ -91,9 +91,7 @@ class SolrLocal extends \KnihovnyCz\RecordDriver\SolrMarc
             ] = str_getcsv($line);
             $item_id = $agency_id . $itemId . $sequenceNo;
             if ($isCaslin) {
-                // for better determination of items on fronted we concatenate
-                // sigla (location) and copy number
-                $copy_number = $location . '|' . $copy_number;
+                $location = $this->translateWithPrefix('Sigla::', $location);
             }
             $items[] = compact(
                 'item_id', 'callnumber', 'location', 'callnumber_second',

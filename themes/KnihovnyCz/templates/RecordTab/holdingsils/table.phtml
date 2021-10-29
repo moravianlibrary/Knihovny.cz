@@ -4,26 +4,33 @@
   $checkILLRequest = $holding['checkILLRequest'] ?? false;
 ?>
 <tr vocab="http://schema.org/" typeof="Offer"
-  id="holding_item_<?=$this->escapeHtml($holding['item_id'])?>"
+  id="holding_item_<?=$this->escapeHtml($holding['item_id'] ?? $holding['copy_number'])?>"
   data-item-id="<?=$this->escapeHtml($holding['item_id'])?>"
   data-copy-number="<?=$this->escapeHtml($holding['copy_number'])?>"
   data-volume="<?=$this->escapeHtml($holding['volume'])?>"
   data-year="<?=$this->escapeHtml($holding['year'])?>">
   <td data-title="<?=$this->transEsc("Availability")?>" data-type="availability">
     <?php
-      $status = $availability = $holding['status'] ?? '';
+      $availabilityStatus = $availability = $holding['status'] ?? '';
       if (!empty($availability)) {
         $text = 'HoldingStatus::' . $source . '_' . $availability;
-        $status = $this->transEsc($text, [], $text);
-        if ($status == $text) {
+        $availabilityStatus = $this->transEsc($text, [], $text);
+        if ($availabilityStatus == $text) {
           $text = 'HoldingStatus::' . $availability;
-          $status = $this->transEsc($text, [], $availability);
+          $availabilityStatus = $this->transEsc($text, [], $availability);
         }
       }
     ?>
-    <div><?=$status?></div>
+    <div><?=$availabilityStatus?></div>
   </td>
   <td data-type="status" data-title="<?=$this->transEsc("Status")?>">
+    <?php
+      $status = '';
+      if (!empty($holding['catalog_link'])) {
+        $status = sprintf('<a href="%s" target="_blank">%s</a>', $holding['catalog_link'], $this->translate('caslin_tab_link'));
+      }
+    ?>
+    <div><?=$status?></div>
   </td>
   <td data-type="request">
     <div class='status-loader'><?=$this->icon('spinner', 'fa-fw') . $this->translate('Loading') ?>...</div>
