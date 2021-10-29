@@ -1,8 +1,3 @@
-<?php
-  $check = $holding['check'] ?? false;
-  $checkStorageRetrievalRequest = $holding['checkStorageRetrievalRequest'] ?? false;
-  $checkILLRequest = $holding['checkILLRequest'] ?? false;
-?>
 <tr vocab="http://schema.org/" typeof="Offer"
   id="holding_item_<?=$this->escapeHtml($holding['item_id'] ?? $holding['copy_number'])?>"
   data-item-id="<?=$this->escapeHtml($holding['item_id'])?>"
