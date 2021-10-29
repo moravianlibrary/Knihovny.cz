@@ -31,7 +31,7 @@
           } elseif (!is_object($record['driver'] ?? null)
             || is_a($record['driver'], \VuFind\RecordDriver\Missing::class)
           ) {
-              $title = '';
+              $title = $this->escapeHtml(trim($record['title'], '/:'));
           } else {
               $title = '<a href="'
                   . $this->escapeHtmlAttr($this->recordLinker()->getUrl($record['driver']))
