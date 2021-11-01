@@ -1,0 +1,30 @@
+<?php
+    // Set up page title:
+    $this->headTitle($this->translate('My Fines'));
+
+    // Set up breadcrumbs:
+    $this->layout()->breadcrumbs = '<li><a href="' . $this->url('myresearch-home') . '">' . $this->transEsc('Your Account') . '</a></li> <li class="active">' . $this->transEsc('Fines') . '</li>';
+?>
+
+<a class="search-filter-toggle visible-xs" href="#myresearch-sidebar" data-toggle="offcanvas" title="Expand Sidebar">
+  <?=$this->transEsc('Your Account') ?>
+</a>
+
+<div class="<?=$this->layoutClass('mainbody')?>">
+  <h2><?=$this->transEsc('Your Fines')?></h2>
+    <?=$this->flashmessages()?>
+
+    <?=$this->context($this)->renderInContext('librarycards/listcards.phtml', [
+        'user' => $this->auth()->isLoggedIn(),
+        'action' => '/MyResearch/FinesAjax',
+    ]);
+    ?>
+
+</div>
+
+
+<div class="<?=$this->layoutClass('sidebar')?>" id="myresearch-sidebar">
+  <?=$this->context($this)->renderInContext("myresearch/menu.phtml", ['active' => 'fines'])?>
+</div>
+
+<?=$this->render('myresearch/notify-account-status.phtml', ['method' => 'fines', 'accountStatus' => $this->accountStatus]); ?>

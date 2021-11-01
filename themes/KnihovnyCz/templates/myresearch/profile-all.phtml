@@ -1,0 +1,31 @@
+<?php
+    // Set up page title:
+    $this->headTitle($this->translate('My Profile'));
+
+    // Set up breadcrumbs:
+    $this->layout()->breadcrumbs = '<li><a href="' . $this->url('myresearch-home') . '">' . $this->transEsc('Your Account') . '</a></li> <li class="active">' . $this->transEsc('Profile') . '</li>';
+
+?>
+
+<a class="search-filter-toggle visible-xs" href="#myresearch-sidebar" data-toggle="offcanvas" title="Expand Sidebar">
+  <?=$this->transEsc('Your Account') ?>
+</a>
+
+<div class="<?=$this->layoutClass('mainbody')?>">
+  <?=$this->flashmessages();?>
+
+  <h3><?=$this->transEsc('Library Catalog Profile')?></h3>
+  <p>
+    <?=$this->context($this)->renderInContext('librarycards/listcards.phtml', [
+      'user' => $this->auth()->isLoggedIn(),
+      'action' => '/MyResearch/ProfileAjax',
+      ]);
+    ?>
+  </p>
+</div>
+
+<div class="<?=$this->layoutClass('sidebar')?>" id="myresearch-sidebar">
+  <?=$this->context($this)->renderInContext("myresearch/menu.phtml", ['active' => 'profile'])?>
+</div>
+
+<?=$this->render('myresearch/notify-account-status.phtml', ['method' => 'fines', 'accountStatus' => $this->accountStatus]); ?>
