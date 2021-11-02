@@ -28,6 +28,7 @@
  */
 namespace KnihovnyCz\Controller;
 
+use KnihovnyCz\Session\NullSessionManager;
 use VuFind\Controller\MyResearchController as MyResearchControllerBase;
 
 /**
@@ -90,6 +91,7 @@ class MyResearchController extends MyResearchControllerBase
     public function finesAjaxAction()
     {
         try {
+            $this->disableSession();
             $view = parent::finesAction();
         } catch (\Exception $ex) {
             $view = $this->createViewModel(
@@ -130,6 +132,7 @@ class MyResearchController extends MyResearchControllerBase
     public function profileAjaxAction()
     {
         try {
+            $this->disableSession();
             $view = parent::profileAction();
         } catch (\Exception $ex) {
             $view = $this->createViewModel(
@@ -171,5 +174,15 @@ class MyResearchController extends MyResearchControllerBase
             }
         }
         return $patron;
+    }
+
+    /**
+     * Disable session use in flash manager.
+     *
+     * @return void
+     */
+    protected function disableSession()
+    {
+        $this->flashMessenger()->setSessionManager(new NullSessionManager());
     }
 }
