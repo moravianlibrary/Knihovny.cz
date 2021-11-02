@@ -1,0 +1,33 @@
+<?php
+    // Set up page title:
+    $this->headTitle($this->translate('Checked Out Items'));
+
+    // Set up breadcrumbs:
+    $this->layout()->breadcrumbs = '<li><a href="' . $this->url('myresearch-home') . '">' . $this->transEsc('Your Account') . '</a></li> <li class="active">' . $this->transEsc('Checked Out Items') . '</li>';
+
+    // Check if "Renew All" button can be displayed:
+    $renewAll = !$this->ilsPaging || !$paginator;
+?>
+
+<a class="search-filter-toggle visible-xs" href="#myresearch-sidebar" data-toggle="offcanvas" title="Expand Sidebar">
+  <?=$this->transEsc('Your Account') ?>
+</a>
+
+<div class="<?=$this->layoutClass('mainbody')?>">
+  <?=$this->flashmessages();?>
+
+  <h3><?=$this->transEsc('Your Checked Out Items')?></h3>
+  <p>
+    <?=$this->context($this)->renderInContext('librarycards/listcards.phtml', [
+        'user' => $this->auth()->isLoggedIn(),
+        'action' => $this->url('myresearch-checkedoutajax'),
+    ]);
+    ?>
+  </p>
+</div>
+
+<div class="<?=$this->layoutClass('sidebar')?>" id="myresearch-sidebar">
+  <?=$this->context($this)->renderInContext("myresearch/menu.phtml", ['active' => 'checkedout'])?>
+</div>
+
+<?=$this->render('myresearch/notify-account-status.phtml', ['method' => 'checkedOut', 'accountStatus' => $this->accountStatus]); ?>

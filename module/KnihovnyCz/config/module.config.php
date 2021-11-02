@@ -451,6 +451,7 @@ $staticRoutes = [
     'MyResearch/DeleteUser' => 'MyResearch/DeleteUser',
     'MyResearch/FinesAjax' => 'MyResearch/FinesAjax',
     'MyResearch/ProfileAjax' => 'MyResearch/ProfileAjax',
+    'MyResearch/CheckedoutAjax' => 'MyResearch/CheckedoutAjax',
 ];
 
 $routeGenerator = new \KnihovnyCz\Route\RouteGenerator();
