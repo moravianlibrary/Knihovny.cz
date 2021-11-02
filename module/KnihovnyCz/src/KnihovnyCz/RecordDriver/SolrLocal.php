@@ -81,17 +81,22 @@ class SolrLocal extends \KnihovnyCz\RecordDriver\SolrMarc
             'volume' => [],
         ];
         $f996 = $this->fields['mappings996_display_mv'] ?? [];
+        $isCaslin = str_starts_with($this->getUniqueID(), 'caslin');
         foreach ($f996 as $line) {
             [
                 $itemId, $callnumber, $location, $callnumber_second,
                 $description, $notes, $year, $volume, $issue, $status,
-                $collection_desc, $agency_id, $sequenceNo, $copy_number
+                $collection_desc, $agency_id, $sequenceNo, $copy_number,
+                $catalog_link
             ] = str_getcsv($line);
             $item_id = $agency_id . $itemId . $sequenceNo;
+            if ($isCaslin) {
+                $location = $this->translateWithPrefix('Sigla::', $location);
+            }
             $items[] = compact(
                 'item_id', 'callnumber', 'location', 'callnumber_second',
                 'description', 'notes', 'year', 'volume', 'issue', 'status',
-                'collection_desc', 'agency_id', 'copy_number'
+                'collection_desc', 'agency_id', 'copy_number', 'catalog_link'
             );
             $filters['year'][$year] = $this->extractYear($year);
             $filters['volume'][$volume] = $this->extractVolume($volume);
