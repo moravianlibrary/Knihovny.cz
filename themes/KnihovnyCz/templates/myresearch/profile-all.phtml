@@ -18,7 +18,7 @@
   <p>
     <?=$this->context($this)->renderInContext('librarycards/listcards.phtml', [
       'user' => $this->auth()->isLoggedIn(),
-      'action' => '/MyResearch/ProfileAjax',
+      'action' => $this->url('myresearch-profileajax'),
       ]);
     ?>
   </p>
