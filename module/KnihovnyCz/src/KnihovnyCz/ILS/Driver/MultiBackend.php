@@ -144,7 +144,7 @@ class MultiBackend extends \VuFind\ILS\Driver\MultiBackend
     {
         $source = $this->getSource($patron['cat_username']);
         $driver = $this->getDriver($source);
-        $supported = $this->methodSupported(
+        $supported = $this->driverSupportsMethod(
             $driver, 'getMyTransactionHistory', compact('patron')
         );
         if (!$supported) {

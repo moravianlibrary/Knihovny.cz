@@ -837,11 +837,11 @@ class KohaRest1905 extends AbstractBase implements \Laminas\Log\LoggerAwareInter
                 ? $this->translate($this->finesMappings[$entry['account_type']])
                 : $entry['description'];
             $fines[] = [
-                'amount' => $entry['amount'] * 100,
+                'amount' => $entry['amount'] * -100,
                 'checkout' => $this->normalizeDate($entry['date']),
                 'fine' =>  $fineDescription,
                 'title' => $entry['description'],
-                'balance' => $entry['amount_outstanding'] * 100,
+                'balance' => $entry['amount_outstanding'] * -100,
                 'createdate' => $entry['date'],
                 'duedate' => '',
                 'item_id' => $entry['item_id'],

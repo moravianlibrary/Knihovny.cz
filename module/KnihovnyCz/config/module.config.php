@@ -439,6 +439,8 @@ $staticRoutes = [
     'Libraries/Results' => 'Search2/Results',
     'Libraries/Versions' => 'Search2/Versions',
     'MyResearch/DeleteUser' => 'MyResearch/DeleteUser',
+    'MyResearch/FinesAjax' => 'MyResearch/FinesAjax',
+    'MyResearch/ProfileAjax' => 'MyResearch/ProfileAjax',
 ];
 
 $routeGenerator = new \KnihovnyCz\Route\RouteGenerator();

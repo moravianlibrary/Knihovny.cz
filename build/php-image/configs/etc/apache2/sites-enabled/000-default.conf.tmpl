@@ -5,7 +5,7 @@
 
     Header unset Strict-Transport-Security
     Header always set Strict-Transport-Security "max-age=0;includeSubDomains"
-    Header always set X-HostName "${HOSTNAME}"
+    Header always set X-Served-By "${HOSTNAME}"
 
     AllowEncodedSlashes On
 
@@ -26,11 +26,17 @@
       AllowOverride None
    </Directory>
 
-   <Proxy "fcgi://${PHP_FPM_BACKEND}:9000/">
-      ProxySet enablereuse=Off max=100 timeout=10 retry=1
+   <Proxy "fcgi://${PHP_FPM_BACKEND}:9000/"> # APP worker
+      ProxySet enablereuse=Off max=100 timeout=15 retry=1
    </Proxy>
 
-   ProxyPass "/index.php" "fcgi://${PHP_FPM_BACKEND}:9000/var/www/knihovny-cz/public/index.php"
+   <Proxy "fcgi://${PHP_FPM_BACKEND}:9100/"> # API worker
+      ProxySet enablereuse=Off max=100 timeout=50 retry=1
+   </Proxy>
+
+
+   ProxyPass "/app" "fcgi://${PHP_FPM_BACKEND}:9000/var/www/knihovny-cz/public/index.php"
+   ProxyPass "/ajax" "fcgi://${PHP_FPM_BACKEND}:9100/var/www/knihovny-cz/public/index.php"
 
    <Directory /var/www/knihovny-cz/public/>
         Require all granted
@@ -43,12 +49,14 @@
         #RewriteCond %{REQUEST_FILENAME} -s [OR]
         #RewriteCond %{REQUEST_FILENAME} -l [OR]
         #RewriteCond %{REQUEST_FILENAME} -d
-        # RewriteRule ^.*$ - [NC,L]
-        RewriteRule ^.*$ /index.php  [PT,L]
+
+        # sen
+        RewriteRule ^AJAX/JSON /ajax  [PT,L,E=worker:ajax]
+        RewriteRule ^. /app  [PT,L,E=worker:main]
    </Directory>
 
     ErrorLog /dev/stderr
     LogFormat "%h %l %u %t \"%r\" %>s %b" common
-    LogFormat "{ \"time\":\"%{sec}t\", \"timeserved\": %{ms}T, \"remoteIP\":\"%a\", \"host\":\"%V\", \"requestPath\":\"%U\", \"query\":\"%q\", \"method\":\"%m\", \"status\":\"%>s\", \"userAgent\":\"%{User-agent}i\", \"referer\":\"%{Referer}i\" }" json
+    LogFormat "{ \"time\":\"%{sec}t\", \"timeserved\": %{ms}T, \"remoteIP\":\"%a\", \"host\":\"%V\", \"requestPath\":\"%U\", \"query\":\"%q\", \"method\":\"%m\", \"status\":\"%>s\", \"userAgent\":\"%{User-agent}i\", \"referer\":\"%{Referer}i\", \"worker\": \"%{worker}e\" }" json
     CustomLog /dev/stdout json
 </VirtualHost>

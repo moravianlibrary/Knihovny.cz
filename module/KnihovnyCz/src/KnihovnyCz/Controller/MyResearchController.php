@@ -28,6 +28,7 @@
  */
 namespace KnihovnyCz\Controller;
 
+use KnihovnyCz\Session\NullSessionManager;
 use VuFind\Controller\MyResearchController as MyResearchControllerBase;
 
 /**
@@ -41,6 +42,8 @@ use VuFind\Controller\MyResearchController as MyResearchControllerBase;
  */
 class MyResearchController extends MyResearchControllerBase
 {
+    use \VuFind\Controller\AjaxResponseTrait;
+
     /**
      * Delete user account if it is confirmed
      *
@@ -66,5 +69,120 @@ class MyResearchController extends MyResearchControllerBase
             $this->translate('delete_user_account_not_confirmed')
         );
         return $this->redirect()->toRoute('librarycards-home');
+    }
+
+    /**
+     * Send list of fines to view
+     *
+     * @return mixed
+     */
+    public function finesAction()
+    {
+        $view = $this->createViewModel();
+        $view->setTemplate('myresearch/fines-all');
+        return $view;
+    }
+
+    /**
+     * Send list of fines to view as HTML for rendering in AJAX
+     *
+     * @return mixed
+     */
+    public function finesAjaxAction()
+    {
+        try {
+            $this->disableSession();
+            $view = parent::finesAction();
+        } catch (\Exception $ex) {
+            $view = $this->createViewModel(
+                [
+                'error' => 'ils_offline_home_message'
+                ]
+            );
+        }
+        if (!($view instanceof \Laminas\View\Model\ViewModel)) {
+            $view = $this->createViewModel(
+                [
+                'error' => 'ils_offline_home_message'
+                ]
+            );
+        }
+        $view->setTemplate('myresearch/fines-ajax');
+        $result = $this->getViewRenderer()->render($view);
+        return $this->getAjaxResponse('text/html', $result, null);
+    }
+
+    /**
+     * Gather user profile data
+     *
+     * @return mixed
+     */
+    public function profileAction()
+    {
+        $view = $this->createViewModel();
+        $view->setTemplate('myresearch/profile-all');
+        return $view;
+    }
+
+    /**
+     * Send user profile data as HTML for rendering in AJAX
+     *
+     * @return mixed
+     */
+    public function profileAjaxAction()
+    {
+        try {
+            $this->disableSession();
+            $view = parent::profileAction();
+        } catch (\Exception $ex) {
+            $view = $this->createViewModel(
+                [
+                'error' => 'ils_offline_home_message'
+                ]
+            );
+        }
+        if (!($view instanceof \Laminas\View\Model\ViewModel)) {
+            $view = $this->createViewModel(
+                [
+                'error' => 'ils_offline_home_message'
+                ]
+            );
+        }
+        $view->setTemplate('myresearch/profile-ajax');
+        $result = $this->getViewRenderer()->render($view);
+        return $this->getAjaxResponse('text/html', $result, null);
+    }
+
+    /**
+     * Does the user have catalog credentials available?  Returns associative array
+     * of patron data if so, otherwise forwards to appropriate login prompt and
+     * returns false. If there is an ILS exception, a flash message is added and
+     * a newly created ViewModel is returned.
+     *
+     * @return bool|array|ViewModel
+     */
+    protected function catalogLogin()
+    {
+        $patron = parent::catalogLogin();
+        $cardId = $this->getRequest()->getQuery('cardId');
+        if (is_array($patron) && $cardId != null) {
+            $card = $this->getAuthManager()->isLoggedIn()->getLibraryCard($cardId);
+            if ($card != null) {
+                $patron['id'] = $card['cat_username'];
+                $patron['cat_username'] = $card['cat_username'];
+                $patron['cat_password'] = $card['cat_password'];
+            }
+        }
+        return $patron;
+    }
+
+    /**
+     * Disable session use in flash manager.
+     *
+     * @return void
+     */
+    protected function disableSession()
+    {
+        $this->flashMessenger()->setSessionManager(new NullSessionManager());
     }
 }

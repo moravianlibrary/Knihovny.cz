@@ -1,0 +1,39 @@
+<?php
+    // Template for use by the renderArray helper:
+    $arrTemplate = '<tr><th>%%LABEL%%:</th><td> %%VALUE%%</td></tr>';
+?>
+<?php if (isset($this->error)):?>
+    <?=$this->transEsc($this->error)?>
+<?php elseif (is_array($this->profile)): ?>
+  <?=$this->flashmessages();?>
+  <table class="table table-striped">
+    <?php
+        $profile = $this->profile;
+        if (!empty($this->user['email'])) {
+            $profile['email'] = $this->user['email'];
+        }
+    ?>
+    <?=
+        $this->renderArray(
+            $arrTemplate,
+            $this->profile,
+            [
+                $this->transEsc('First Name') => 'firstname',
+                $this->transEsc('Last Name') => 'lastname',
+                $this->transEsc('Email') => 'email',
+                $this->transEsc('Address') . ' 1' => 'address1',
+                $this->transEsc('Address') . ' 2' => 'address2',
+                $this->transEsc('Zip') => 'zip',
+                $this->transEsc('City') => 'city',
+                $this->transEsc('Country') => 'country',
+                $this->transEsc('Phone Number') => 'phone',
+                $this->transEsc('Mobile Number') => 'mobile_phone',
+                $this->transEsc('Group') => 'group',
+                $this->transEsc('patron_account_expires') => 'expiration_date'
+            ]
+        );
+    ?>
+  </table>
+<?php elseif ('ils-none' !== $this->ils()->getOfflineMode() && $this->patronLoginView && !empty($this->patronLoginView->getTemplate())): ?>
+    <?=$this->partial($this->patronLoginView);?>
+<?php endif; ?>
