@@ -7,6 +7,40 @@
 
     // Check if "Renew All" button can be displayed:
     $renewAll = !$this->ilsPaging || !$paginator;
+
+    $loadJs = <<<JS
+  function loadCheckedOut(element) {
+    loadCovers();
+    // Checkbox select all
+    $(element).find('.checkbox-select-all').on('change', function selectAllCheckboxes() {
+      var form = this.form ? $(this.form) : $(this).closest('form');
+      if (this.checked) {
+        form.find('.checkbox-select-item:not(:checked)').trigger('click');
+      } else {
+        form.find('.checkbox-select-item:checked').trigger('click');
+      }
+      $('[form="' + form.attr('id') + '"]').prop('checked', this.checked);
+      form.find('.checkbox-select-all').prop('checked', this.checked);
+      $('.checkbox-select-all[form="' + form.attr('id') + '"]').prop('checked', this.checked);
+    });
+    $(element).find("form").submit(function onSubmit(event) {
+      event.preventDefault();
+      var button = $(document.activeElement);
+      var form = $(this);
+      var url = $(element).data('action');
+      var data = form.serialize() + '&' + button.attr('id') + '=' + button.val();
+      $.ajax({
+        type: "POST",
+        url: url,
+        data: data,
+        success: function onSuccess(content) {
+          $(element).html(content);
+          loadCheckedOut(element);
+        }
+      });
+    });
+  };
+JS;
 ?>
 
 <a class="search-filter-toggle visible-xs" href="#myresearch-sidebar" data-toggle="offcanvas" title="Expand Sidebar">
@@ -21,6 +55,7 @@
     <?=$this->context($this)->renderInContext('librarycards/listcards.phtml', [
         'user' => $this->auth()->isLoggedIn(),
         'action' => $this->url('myresearch-checkedoutajax'),
+        'callback' => 'loadCheckedOut',
     ]);
     ?>
   </p>
@@ -31,3 +66,6 @@
 </div>
 
 <?=$this->render('myresearch/notify-account-status.phtml', ['method' => 'checkedOut', 'accountStatus' => $this->accountStatus]); ?>
+
+<?=$this->inlineScript(\Laminas\View\Helper\HeadScript::SCRIPT, $loadJs, 'SET')?>
+<noscript><?=$this->transEsc('Please enable JavaScript.')?></noscript>

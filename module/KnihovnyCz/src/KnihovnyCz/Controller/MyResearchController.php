@@ -99,11 +99,8 @@ class MyResearchController extends MyResearchControllerBase
             $this->disableSession();
             $view = parent::finesAction();
         } catch (\Exception $ex) {
-            $view = $this->createViewModel(
-                [
-                'error' => 'ils_offline_home_message'
-                ]
-            );
+            $view = $this->createViewModel();
+            $this->flashMessenger()->addErrorMessage($ex->getMessage());
         }
         if (!($view instanceof \Laminas\View\Model\ViewModel)) {
             $view = $this->createViewModel(
@@ -144,11 +141,8 @@ class MyResearchController extends MyResearchControllerBase
             $this->disableSession();
             $view = parent::profileAction();
         } catch (\Exception $ex) {
-            $view = $this->createViewModel(
-                [
-                'error' => 'ils_offline_home_message'
-                ]
-            );
+            $view = $this->createViewModel();
+            $this->flashMessenger()->addErrorMessage($ex->getMessage());
         }
         if (!($view instanceof \Laminas\View\Model\ViewModel)) {
             $view = $this->createViewModel(
@@ -184,12 +178,11 @@ class MyResearchController extends MyResearchControllerBase
         try {
             $this->disableSession();
             $view = parent::checkedoutAction();
+            // disable sorting
+            $view->sortList = false;
         } catch (\Exception $ex) {
-            $view = $this->createViewModel(
-                [
-                    'error' => 'ils_offline_home_message'
-                ]
-            );
+            $view = $this->createViewModel();
+            $this->flashMessenger()->addErrorMessage($ex->getMessage());
         }
         if (!($view instanceof \Laminas\View\Model\ViewModel)) {
             $view = $this->createViewModel(
@@ -199,6 +192,7 @@ class MyResearchController extends MyResearchControllerBase
             );
         }
         $view->setTemplate('myresearch/checkedout-ajax');
+        $view->cardId = $this->getCardId();
         $result = $this->getViewRenderer()->render($view);
         return $this->getAjaxResponse('text/html', $result, null);
     }
@@ -217,7 +211,7 @@ class MyResearchController extends MyResearchControllerBase
         if ($user == false) {
             return $this->forceLogin();
         }
-        $cardId = $this->getRequest()->getQuery('cardId');
+        $cardId = $this->getCardId();
         if ($cardId != null) {
             $card = $user->getLibraryCard($cardId);
             if ($card != null) {
@@ -231,6 +225,17 @@ class MyResearchController extends MyResearchControllerBase
             $user->getCatPassword()
         );
         return $patron;
+    }
+
+    /**
+     * Return card id to use
+     *
+     * @return string|null
+     */
+    protected function getCardId()
+    {
+        return $this->getRequest()->getQuery('cardId',
+            $this->getRequest()->getPost('cardId'));
     }
 
     /**

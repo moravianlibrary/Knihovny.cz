@@ -1,3 +1,8 @@
+<?php
+    // Check if "Renew All" button can be displayed:
+    $renewAll = !$this->ilsPaging || !$paginator;
+?>
+<?=$this->flashmessages()?>
 <?php if (isset($this->error)):?>
   <?=$this->transEsc($this->error)?>
 <?php elseif (!empty($this->transactions)): ?>
@@ -23,6 +28,7 @@
   <?php if ($this->renewForm): ?>
     <form name="renewals" method="post" id="renewals" data-clear-account-cache="checkedOut" data-disable-on-submit>
       <input type="hidden" value="<?=$this->escapeHtmlAttr($this->auth()->getManager()->getCsrfHash())?>" name="csrf"/>
+      <input type="hidden" value="<?=$this->escapeHtmlAttr($this->cardId)?>" name="cardId"/>
       <div class="toolbar">
         <div class="checkbox">
           <label>
