@@ -13,6 +13,12 @@ if [ "${MEMCACHED_SERVICE}" = "" ]; then
 fi
 echo Memcached is "$MEMCACHED_SERVICE"
 
+echo === Configuring CACHE_DIR ===
+if [ -d "${VUFIND_CACHE_DIR}"  ]; then
+  chown www-data.www-data ${VUFIND_CACHE_DIR}
+fi
+
+
 echo === Starting onstart files ===
 # Run all start files
 if test -d /onstart.d; then

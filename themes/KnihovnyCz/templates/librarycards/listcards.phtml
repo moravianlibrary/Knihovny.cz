@@ -1,0 +1,31 @@
+<?php
+    $loadJs = <<<JS
+  function loadMyAccount() {
+    $('.library-card-ajax').each(function onEachLibraryCard() {
+      var element = this;
+      var ajaxCall = {
+        dataType: "html",
+        url: $(element).data('action') + "?cardId=" + $(element).data('card-id'),
+        method: "GET",
+        success: function show(content) {
+          $(element).html(content);
+          loadCovers();
+        }
+      };
+      $.ajax(ajaxCall);
+  })}
+  loadMyAccount();
+JS;
+
+?>
+<?php if ($this->user): ?>
+  <?php foreach ($this->user->getLibraryCards() as $card): ?>
+    <h3><?=$this->transEsc('Source::' . $card->home_library) ?></h3>
+    <span class='library-card-ajax' data-card-id='<?=$card->id?>' data-action='<?=$action?>'>
+      <?=$this->icon('spinner')?>
+    </span>
+  <?php endforeach; ?>
+<?php endif; ?>
+
+<?=$this->inlineScript(\Laminas\View\Helper\HeadScript::SCRIPT, $loadJs, 'SET')?>
+<noscript><?=$this->transEsc('Please enable JavaScript.')?></noscript>
