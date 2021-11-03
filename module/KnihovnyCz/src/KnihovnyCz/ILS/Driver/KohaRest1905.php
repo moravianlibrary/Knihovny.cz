@@ -835,9 +835,14 @@ class KohaRest1905 extends AbstractBase implements \Laminas\Log\LoggerAwareInter
 
         foreach ($result['data']['outstanding_debits']['lines'] as $entry) {
             $fineDescription = (isset($this->finesMappings[$entry['account_type']]))
-                ? $this->translateMessage($this->finesMappings[$entry['account_type']])
+                ? $this->translateMessage(
+                    $this->finesMappings[$entry['account_type']]
+                )
                 : $entry['description'];
-            $fineDescription = ($fineDescription === $entry['description'])
+            $fineDescription = (
+                    $fineDescription === $entry['description']
+                    || empty($entry['description'])
+                )
                 ? $fineDescription
                 : $fineDescription . ' (' . $entry['description'] . ')';
             $fines[] = [
