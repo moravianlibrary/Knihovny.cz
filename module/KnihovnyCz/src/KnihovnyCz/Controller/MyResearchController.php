@@ -198,6 +198,47 @@ class MyResearchController extends MyResearchControllerBase
     }
 
     /**
+     * Send list of historic loans to view
+     *
+     * @return mixed
+     */
+    public function historicloansAction()
+    {
+        $view = $this->createViewModel();
+        $view->setTemplate('myresearch/historicloans-all');
+        return $view;
+    }
+
+    /**
+     * Send list of historic loans to view
+     *
+     * @return mixed
+     */
+    public function historicloansAjaxAction()
+    {
+        try {
+            $this->disableSession();
+            $view = parent::historicloansAction();
+            // disable sorting
+            $view->sortList = false;
+        } catch (\Exception $ex) {
+            $view = $this->createViewModel();
+            $this->flashMessenger()->addErrorMessage($ex->getMessage());
+        }
+        if (!($view instanceof \Laminas\View\Model\ViewModel)) {
+            $view = $this->createViewModel(
+                [
+                    'error' => 'ils_offline_home_message'
+                ]
+            );
+        }
+        $view->setTemplate('myresearch/historicloans-ajax');
+        $view->cardId = $this->getCardId();
+        $result = $this->getViewRenderer()->render($view);
+        return $this->getAjaxResponse('text/html', $result, null);
+    }
+
+    /**
      * Does the user have catalog credentials available?  Returns associative array
      * of patron data if so, otherwise forwards to appropriate login prompt and
      * returns false. If there is an ILS exception, a flash message is added and
