@@ -172,8 +172,28 @@ class MultiBackend extends \VuFind\ILS\Driver\MultiBackend
      */
     public function getMyHolds($patron)
     {
-        $data = parent::getMyHolds($patron);
+        $holds = parent::getMyHolds($patron);
+        $srrs = parent::getMyStorageRetrievalRequests($patron);
+        $data = array_merge($holds, $srrs);
         return $this->resolveIds($data, $patron);
+    }
+
+    /**
+     * Helper method to determine whether or not a certain method can be
+     * called on this driver.  Required method for any smart drivers.
+     *
+     * @param string $method The name of the called method.
+     * @param array  $params Array of passed parameters.
+     *
+     * @return bool True if the method can be called with the given parameters,
+     * false otherwise.
+     */
+    public function supportsMethod($method, $params)
+    {
+        if ($method == 'placeStorageRetrievalRequest') {
+            return false;
+        }
+        return parent::supportsMethod($method, $params);
     }
 
     /**
