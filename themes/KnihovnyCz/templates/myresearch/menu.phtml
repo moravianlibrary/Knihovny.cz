@@ -2,6 +2,9 @@
   $user = $this->auth()->isLoggedIn();
   $patron = $user ? $this->auth()->getILSPatron() : false;
   $capabilityParams = $patron ? ['patron' => $patron] : [];
+  if ($user) {
+    $capabilityParams['user'] = $user;
+  }
   $ilsOnline = ('ils-none' !== $this->ils()->getOfflineMode());
 ?>
 <button class="close-offcanvas btn btn-link" data-toggle="offcanvas"><?=$this->transEsc('navigate_back') ?></button>

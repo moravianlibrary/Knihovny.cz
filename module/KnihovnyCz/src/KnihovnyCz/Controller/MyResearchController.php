@@ -275,8 +275,10 @@ class MyResearchController extends MyResearchControllerBase
      */
     protected function getCardId()
     {
-        return $this->getRequest()->getQuery('cardId',
-            $this->getRequest()->getPost('cardId'));
+        return $this->getRequest()->getQuery(
+            'cardId',
+            $this->getRequest()->getPost('cardId')
+        );
     }
 
     /**
