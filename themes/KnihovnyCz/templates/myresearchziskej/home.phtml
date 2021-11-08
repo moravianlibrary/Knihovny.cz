@@ -42,7 +42,7 @@ $this->layout()->breadcrumbs = '<li><a href="' . $this->url('myresearch-home') .
             <br>
             <i class="fa fa-fw fa-envelope text-muted"></i> <?=$reader->getEmail()?>
           </div>
-          <?php if (count($this->tickets)): ?>
+          <?php if (is_countable($this->tickets) && count($this->tickets)): ?>
             <ul class="media-list">
               <?php
               $i = 0;
