@@ -163,6 +163,10 @@ class MyResearchController extends MyResearchControllerBase
      */
     public function checkedoutAction()
     {
+        // Force login:
+        if (!$this->getUser()) {
+            return $this->forceLogin();
+        }
         $view = $this->createViewModel();
         $view->setTemplate('myresearch/checkedout-all');
         return $view;
@@ -204,6 +208,10 @@ class MyResearchController extends MyResearchControllerBase
      */
     public function historicloansAction()
     {
+        // Force login:
+        if (!$this->getUser()) {
+            return $this->forceLogin();
+        }
         $view = $this->createViewModel();
         $view->setTemplate('myresearch/historicloans-all');
         return $view;
