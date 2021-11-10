@@ -46,26 +46,27 @@
             return;
           }
           if (item.hasOwnProperty('availability_status') && item.availability_status) {
-            elm.find('td[data-type="availability"] > div > span').text(item.availability_status);
+            elm.find('td[data-type="availability"] > div').text(item.availability_status);
           }
 
-          /* status */
-          let status = '';
-          if (item.hasOwnProperty('duedate') && item.duedate) {
-            status = VuFind.translate('holding_due_date') + ' ' + item.duedate;
-          }
           if (item.hasOwnProperty('status') && item.status) {
-            status += (status == '') ? item.status : '; ' + item.status;
-          }
-          if (item.hasOwnProperty('label') && item.label) {
-            elm.find('td[data-type="status"]').html(
-              '<span class="status label label-' + item.label + '">'
-              + htmlEncode(status) + '</span>'
-            );
+            if (item.label !== '') {
+              elm.find('td[data-type="status"]').html(
+                '<span class="status label label-' + item.label + '">'
+                + htmlEncode(item.status) + '</span>'
+              );
+            } else {
+              elm.find('td[data-type="status"]').html(
+                '<span class="status">' + htmlEncode(item.status) + '</span>'
+              );
+            }
+            if (item.hasOwnProperty('duedate') && item.duedate ) {
+              elm.find('td[data-type="status"]').append(
+                ' ' + VuFind.translate('Due') + ' ' + htmlEncode(item.duedate)
+              );
+            }
           } else {
-            elm.find('td[data-type="status"]').html(
-              '<span class="status">' + htmlEncode(status) + '</span>'
-            );
+            elm.find('td[data-type="status"]').html(statusUnknownHtml);
           }
 
           if (item.hasOwnProperty('location') && item.location) {

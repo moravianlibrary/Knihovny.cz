@@ -28,6 +28,8 @@
  */
 namespace KnihovnyCz\ILS\Driver;
 
+use VuFind\I18n\Translator\TranslatorAwareInterface;
+use VuFind\I18n\Translator\TranslatorAwareTrait;
 use VuFind\ILS\Driver\Aleph as AlephBase;
 
 /**
@@ -39,8 +41,10 @@ use VuFind\ILS\Driver\Aleph as AlephBase;
  * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://knihovny.cz Main Page
  */
-class Aleph extends AlephBase
+class Aleph extends AlephBase implements TranslatorAwareInterface
 {
+    use TranslatorAwareTrait;
+
     /**
      * Get Holding
      *
@@ -129,16 +133,21 @@ class Aleph extends AlephBase
             $item_id = $item->attributes()->href;
             $item_id = substr($item_id, strrpos($item_id, '/') + 1);
             $note    = (string)$z30->{'z30-note-opac'};
+            $fullStatus = !empty($duedate) ? $this->translate('holding_due_date') . ' ' . $duedate : '';
+            if (empty($fullStatus)) {
+                $fullStatus = $status;
+            } else {
+                $fullStatus = empty($status) ? $fullStatus : implode(" ; ", [$fullStatus, $status]);
+            }
             $holding[] = [
                 'id'                  => $id,
                 'item_id'             => $item_id,
                 'availability'        => $availability,
                 'availability_status' => (string)$z30->{'z30-item-status'},
-                'status'              => $status,
+                'status'              => $fullStatus,
                 'location'            => (string)$z30->{'z30-sub-library'},
                 'reserve'             => 'N',
                 'callnumber'          => (string)$z30->{'z30-call-no'},
-                'duedate'             => (string)$duedate,
                 'number'              => (string)$z30->{'z30-inventory-number'},
                 'barcode'             => (string)$z30->{'z30-barcode'},
                 'description'         => (string)$z30->{'z30-description'},
