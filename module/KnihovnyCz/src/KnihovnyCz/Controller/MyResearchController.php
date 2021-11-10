@@ -242,6 +242,10 @@ class MyResearchController extends MyResearchControllerBase
         }
         $view->setTemplate('myresearch/historicloans-ajax');
         $view->cardId = $this->getCardId();
+        if (!isset($view->params)) {
+            $view->params = [];
+        }
+        $view->params += ['cardId' => $this->getCardId()] ;
         $result = $this->getViewRenderer()->render($view);
         return $this->getAjaxResponse('text/html', $result, null);
     }
