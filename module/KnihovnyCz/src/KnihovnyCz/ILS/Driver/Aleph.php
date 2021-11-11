@@ -45,6 +45,14 @@ class Aleph extends AlephBase implements TranslatorAwareInterface
 {
     use TranslatorAwareTrait;
 
+    const DATE_FORMATS = [
+        '/^[0-9]{8}$/' => 'Ynd',
+        '/^[0-9]+\/[A-Za-z]{3}\/[0-9]{4}$/' => 'd/M/Y',
+        '/^[0-9]+\/[A-Za-z]{3}\/[0-9]{2}$/' => 'd/M/y',
+        '/^[0-9]+\/[0-9]+\/[0-9]{4}$/' => 'd/m/Y',
+        '/^[0-9]+\/[0-9]+\/[0-9]{2}$/' => 'd/m/y',
+    ];
+
     /**
      * Get Holding
      *
@@ -165,5 +173,23 @@ class Aleph extends AlephBase implements TranslatorAwareInterface
             ];
         }
         return $holding;
+    }
+
+    /**
+     * Parse a date.
+     *
+     * @param string $date Date to parse
+     *
+     * @return string
+     */
+    public function parseDate($date)
+    {
+        foreach (self::DATE_FORMATS as $regex => $format) {
+            if (preg_match($regex, $date) === 1) {
+                return $this->dateConverter
+                    ->convertToDisplayDate($format, $date);
+            }
+        }
+        throw new \Exception("Invalid date: $date");
     }
 }
