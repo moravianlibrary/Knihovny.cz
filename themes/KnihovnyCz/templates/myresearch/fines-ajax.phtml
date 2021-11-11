@@ -11,8 +11,10 @@
     $totalDue = 0;
     foreach ($this->fines as $record) {
         if (empty($record['title'])) {
-            $title = $this->transEsc('not_applicable');
-        } elseif (!is_object($record['driver'] ?? null)) {
+            $title = '';
+        } elseif (!is_object($record['driver'] ?? null)
+            || is_a($record['driver'], \VuFind\RecordDriver\Missing::class)
+        ) {
             $title = $this->escapeHtml(trim($record['title'], '/:'));
         } else {
             $title = '<a href="'

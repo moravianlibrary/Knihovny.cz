@@ -101,13 +101,14 @@ class KohaRest1905 extends AbstractBase implements \Laminas\Log\LoggerAwareInter
      * @var array
      */
     protected $finesMappings = [
-        "L" => "Book Replacement Charge",
-        "N" => "Card Replacement Charge",
-        "OVERDUE" => "Reminder Charge",
-        "A" => "Renewal Fee",
-        "Res" => "Reservation Charge",
-        "Rent" => "Rental",
-        "M" => "Other",
+        "A" => "koha_charge_renewal",
+        "L" => "koha_charge_book_replacement",
+        "M" => "koha_charge_other",
+        "N" => "koha_charge_card_replacement",
+        "OVERDUE" => "koha_charge_reminder",
+        "Rent" => "koha_charge_rental",
+        "Rep" => "koha_charge_book_replacement",
+        "Res" => "koha_charge_reservation",
     ];
 
     /**
@@ -834,16 +835,21 @@ class KohaRest1905 extends AbstractBase implements \Laminas\Log\LoggerAwareInter
 
         foreach ($result['data']['outstanding_debits']['lines'] as $entry) {
             $fineDescription = (isset($this->finesMappings[$entry['account_type']]))
-                ? $this->translate($this->finesMappings[$entry['account_type']])
+                ? $this->translateMessage(
+                    $this->finesMappings[$entry['account_type']]
+                )
                 : $entry['description'];
+            $fineDescription = (
+                    $fineDescription === $entry['description']
+                    || empty($entry['description'])
+                )
+                ? $fineDescription
+                : $fineDescription . ' (' . $entry['description'] . ')';
             $fines[] = [
                 'amount' => $entry['amount'] * -100,
-                'checkout' => $this->normalizeDate($entry['date']),
                 'fine' =>  $fineDescription,
-                'title' => $entry['description'],
                 'balance' => $entry['amount_outstanding'] * -100,
-                'createdate' => $entry['date'],
-                'duedate' => '',
+                'createdate' => $this->normalizeDate($entry['date']),
                 'item_id' => $entry['item_id'],
             ];
         }

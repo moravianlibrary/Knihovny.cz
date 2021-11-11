@@ -1,4 +1,3 @@
-
 variables:
   DEPLOY_JOB_IMAGE: "docker.app.knihovny.cz/ci-builds/kustomize:latest"
   TARGET_REGISTRY_URL: registry.app.knihovny.cz
@@ -6,7 +5,7 @@ variables:
   TARGET_IMAGE_TAG: build
   CACHE_REGISTRY_URL: docker.app.knihovny.cz
   BUILD_DEBUG: 'true'
-  BUILD_THIS_MR: '287'
+  BUILD_THIS_MR: '295'
 
 Test the code:
   stage: test

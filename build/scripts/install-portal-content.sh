@@ -9,7 +9,7 @@ if [ ! -f "${KEY}" ]; then
   echo "Missing $KEY"
   exit 1
 fi
-mkdir /tmp/deploy-key/
+mkdir -p /tmp/deploy-key/
 cp ${KEY} /tmp/deploy-key/deploy-key
 KEY=/tmp/deploy-key/deploy-key
 
