@@ -28,6 +28,8 @@
  */
 namespace KnihovnyCz\ILS\Driver;
 
+use VuFind\Date\DateException;
+use VuFind\Exception\ILS as ILSException;
 use VuFind\I18n\Translator\TranslatorAwareInterface;
 use VuFind\I18n\Translator\TranslatorAwareTrait;
 use VuFind\ILS\Driver\Aleph as AlephBase;
@@ -173,6 +175,107 @@ class Aleph extends AlephBase implements TranslatorAwareInterface
             ];
         }
         return $holding;
+    }
+
+    /**
+     * Get Patron Transactions
+     *
+     * This is responsible for retrieving all transactions (i.e. checked out items)
+     * by a specific patron.
+     *
+     * @param array   $user    The patron array from patronLogin
+     * @param array   $params  Parameters
+     * @param boolean $history History
+     *
+     * @throws DateException
+     * @throws ILSException
+     * @return array        Array of the patron's transactions on success.
+     */
+    public function getMyTransactions($user, $params = [], $history = false)
+    {
+        $userId = $user['id'];
+
+        $alephParams = [];
+        if ($history) {
+            $alephParams['type'] = 'history';
+        }
+
+        // total count without details is fast
+        $totalCount = count(
+            $this->doRestDLFRequest(
+                ['patron', $userId, 'circulationActions', 'loans'],
+                $alephParams
+            )->xpath('//loan')
+        );
+
+        // with full details and paging
+        $pageSize = $params['limit'] ?? 50;
+        $itemsNoKey = $history && !isset($params['page']) ? 'no_loans'
+            : 'noItems';
+        $alephParams += [
+            'view' => 'full',
+            'startPos' => 1 + (isset($params['page'])
+                ? ($params['page'] - 1) * $pageSize : 0),
+            $itemsNoKey => $pageSize,
+        ];
+
+        $xml = $this->doRestDLFRequest(
+            ['patron', $userId, 'circulationActions', 'loans'],
+            $alephParams
+        );
+
+        $transList = [];
+        foreach ($xml->xpath('//loan') as $item) {
+            $z36 = ($history) ? $item->z36h : $item->z36;
+            $prefix = ($history) ? 'z36h-' : 'z36-';
+            $z13 = $item->z13;
+            $z30 = $item->z30;
+            $group = $item->xpath('@href');
+            $group = substr(strrchr($group[0], "/"), 1);
+            $renew = $item->xpath('@renew');
+
+            $location = (string)$z36->{$prefix . 'pickup_location'};
+            $reqnum = (string)$z36->{$prefix . 'doc-number'}
+                . (string)$z36->{$prefix . 'item-sequence'}
+                . (string)$z36->{$prefix . 'sequence'};
+
+            $due = (string)$z36->{$prefix . 'due-date'};
+            $title = (string)$z13->{'z13-title'};
+            $author = (string)$z13->{'z13-author'};
+            $isbn = (string)$z13->{'z13-isbn-issn'};
+            $barcode = (string)$z30->{'z30-barcode'};
+            // Secondary, Aleph-specific identifier that may be useful for
+            // local customizations
+            $adm_id = (string)$z30->{'z30-doc-number'};
+
+            $transaction = [
+                'id' => $this->barcodeToID($barcode),
+                'adm_id'   => $adm_id,
+                'item_id' => $group,
+                'location' => $location,
+                'title' => $title,
+                'author' => $author,
+                'isbn' => $isbn,
+                'reqnum' => $reqnum,
+                'barcode' => $barcode,
+                'duedate' => $this->parseDate($due),
+                'renewable' => $renew[0] == "Y",
+            ];
+            if ($history) {
+                $issued = (string)$z36->{$prefix . 'loan-date'};
+                $returned = (string)$z36->{$prefix . 'returned-date'};
+                $transaction['checkoutDate'] = $this->parseDate($issued);
+                $transaction['returnDate'] = $this->parseDate($returned);
+            }
+            $transList[] = $transaction;
+        }
+
+        $key = ($history) ? 'transactions' : 'records';
+
+        return [
+            'count' => $totalCount,
+            $key => $transList
+        ];
     }
 
     /**
