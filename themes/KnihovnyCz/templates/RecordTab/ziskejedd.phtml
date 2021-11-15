@@ -1,0 +1,71 @@
+<?php
+/**
+ * @var \KnihovnyCz\RecordTab\ZiskejEdd $tab
+ */
+$tab = $this->tab;
+
+/**
+ * @var \KnihovnyCz\RecordDriver\SolrLocal $driver
+ */
+$driver = $this->driver;
+
+/**
+ * @var \KnihovnyCz\View\Helper\KnihovnyCz\ZiskejEdd $ziskejEddViewHelper
+ */
+$ziskejEddViewHelper = $this->ZiskejEdd();
+
+/**
+ * @var \KnihovnyCz\Ziskej\ZiskejEdd $ziskejEdd
+ */
+$ziskejEdd = $tab->getZiskejEdd();
+
+/**
+ * @var string[][] $deduperRecords
+ */
+$dedupedRecords = $tab->getDedupedRecords();
+?>
+<?php if ($ziskejEddViewHelper->isEnabled()): ?>
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h3 class="panel-title"><?=$this->translate('ziskej_edd_desc_header') ?></h3>
+    </div>
+    <div class="panel-body">
+      <div class="col-md-10">
+        <p><?=$this->translate('ziskej_edd_desc') ?></p>
+        <?php if (!empty($ziskejEdd->getCurrentZiskejTechlibFrontUrl())): ?>
+          <form action="<?=$ziskejEdd->getCurrentZiskejTechlibFrontUrl() ?>/ticket_create" id="ziskejEddLogo" method="post" target="_blank">
+            <input type="hidden" name="service" value="edd">
+            <input type="hidden" name="source_id" value="<?=$this->escapeHtmlAttr($tab->getServerName()) ?>">
+            <input type="hidden" name="doc_id" value="<?=$this->escapeHtmlAttr($driver->getUniqueID()) ?>">
+            <input type="hidden" name="entity_id" value="<?=$this->escapeHtmlAttr($tab->getEntityId()) ?>">
+            <?php foreach ($dedupedRecords as $record): ?>
+              <input type="hidden" name="doc_alt_ids[]" value="<?=$this->escapeHtmlAttr($record['id']) ?>">
+            <?php endforeach; ?>
+            <button class="btn btn-primary" type="submit"><?=$this->translate('ziskej_edd_button') ?></button>
+          </form>
+        <?php endif; ?>
+      </div>
+      <div class="col-md-2">
+        <?php if (!empty($ziskejEdd->getCurrentZiskejTechlibFrontUrl())): ?>
+          <form action="<?=$ziskejEdd->getCurrentZiskejTechlibFrontUrl() ?>/ticket_create" id="ziskejEddButton" method="post" target="_blank">
+            <input type="hidden" name="service" value="edd">
+            <input type="hidden" name="source_id" value="<?=$this->escapeHtmlAttr($tab->getServerName()) ?>">
+            <input type="hidden" name="doc_id" value="<?=$this->escapeHtmlAttr($this->driver->getUniqueID()) ?>">
+            <input type="hidden" name="entity_id" value="<?=$this->escapeHtmlAttr($tab->getEntityId()) ?>">
+            <?php foreach ($dedupedRecords as $record): ?>
+              <input type="hidden" name="doc_alt_ids[]" value="<?=$this->escapeHtmlAttr($record['id']) ?>">
+            <?php endforeach; ?>
+            <input type="image" src="<?=$this->imageLink('logo-ziskej.png') ?>" alt="<?=$this->translate('ziskej') ?>">
+          </form>
+        <?php else: ?>
+          <?php if (!empty($ziskejEdd->getZiskejTechlibUrl())): ?>
+            <a href="<?=$ziskejEdd->getZiskejTechlibUrl() ?>" target="_blank">
+              <img src="<?=$this->imageLink('logo-ziskej.png') ?>" alt="<?=$this->translate('ziskej') ?>">
+            </a>
+          <?php endif; ?>
+        <?php endif; ?>
+      </div>
+    </div>
+  </div>
+
+<?php endif; ?>

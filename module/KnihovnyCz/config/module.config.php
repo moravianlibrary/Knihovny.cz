@@ -282,10 +282,12 @@ $config = [
                 'factories' => [
                     \KnihovnyCz\RecordTab\HoldingsILS::class => \VuFind\RecordTab\HoldingsILSFactory::class,
                     \KnihovnyCz\RecordTab\Ziskej::class => \KnihovnyCz\RecordTab\ZiskejFactory::class,
+                    \KnihovnyCz\RecordTab\ZiskejEdd::class => \KnihovnyCz\RecordTab\ZiskejEddFactory::class,
                 ],
                 'aliases' => [
                     \VuFind\RecordTab\HoldingsILS::class => \KnihovnyCz\RecordTab\HoldingsILS::class,
                     'ziskej' => \KnihovnyCz\RecordTab\Ziskej::class,
+                    'ziskejEdd' => \KnihovnyCz\RecordTab\ZiskejEdd::class,
                 ],
             ],
             'contentblock' => [
