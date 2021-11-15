@@ -50,6 +50,9 @@ class ZiskejFactory implements FactoryInterface
      * @param array|null         $options       Service options
      *
      * @return \KnihovnyCz\RecordTab\Ziskej
+     *
+     * @throws \Psr\Container\ContainerExceptionInterface
+     * @throws \Psr\Container\NotFoundExceptionInterface
      */
     public function __invoke(
         ContainerInterface $container,

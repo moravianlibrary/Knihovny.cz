@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Class Ziskej
+ * Record tab Ziskej
  *
  * PHP version 7
  *
@@ -29,7 +29,7 @@
 namespace KnihovnyCz\RecordTab;
 
 /**
- * Class Ziskej
+ * Record tab Ziskej
  *
  * @category VuFind
  * @package  KnihovnyCz\RecordTab
