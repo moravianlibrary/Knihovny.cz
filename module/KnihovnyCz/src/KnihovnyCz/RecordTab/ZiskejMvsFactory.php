@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Class ZiskejFactory
+ * Class ZiskejMvsFactory
  *
  * PHP version 7
  *
@@ -32,7 +32,7 @@ use Interop\Container\ContainerInterface;
 use Laminas\ServiceManager\Factory\FactoryInterface;
 
 /**
- * Class ZiskejFactory
+ * Class ZiskejMvsFactory
  *
  * @category VuFind
  * @package  KnihovnyCz\RecordTab
@@ -40,7 +40,7 @@ use Laminas\ServiceManager\Factory\FactoryInterface;
  * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://knihovny.cz Main Page
  */
-class ZiskejFactory implements FactoryInterface
+class ZiskejMvsFactory implements FactoryInterface
 {
     /**
      * Create an object
@@ -49,7 +49,7 @@ class ZiskejFactory implements FactoryInterface
      * @param string             $requestedName Service name
      * @param array|null         $options       Service options
      *
-     * @return \KnihovnyCz\RecordTab\Ziskej
+     * @return \KnihovnyCz\RecordTab\ZiskejMvs
      *
      * @throws \Psr\Container\ContainerExceptionInterface
      * @throws \Psr\Container\NotFoundExceptionInterface
@@ -58,7 +58,7 @@ class ZiskejFactory implements FactoryInterface
         ContainerInterface $container,
         $requestedName,
         array $options = null
-    ): Ziskej {
+    ): ZiskejMvs {
         return new $requestedName(
             $container->get(\VuFind\Auth\Manager::class),
             $container->get(\VuFind\ILS\Connection::class),

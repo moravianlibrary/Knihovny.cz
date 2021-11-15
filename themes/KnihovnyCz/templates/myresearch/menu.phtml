@@ -18,7 +18,7 @@
       <i class="fa fa-fw fa-history" aria-hidden="true"></i> <?=$this->transEsc('Loan History')?>
     </a>
   <?php endif; ?>
-  <?php if ($this->Ziskej()->isEnabled()): ?>
+  <?php if ($this->ZiskejMvs()->isEnabled()): ?>
     <a href="<?=$this->url('myresearch-ziskej-home')?>" class="flex ziskej<?=$this->active == 'ziskej' ? ' active' : ''?>">
       <span class="flex-col"><i class="fa fa-fw fa-file-text" aria-hidden="true"></i>&nbsp;<?=$this->transEsc('Ziskej::service_name')?></span>
       <span class="ziskej-status status hidden"><i class="fa fa-spin fa-spinner" aria-hidden="true"></i></span>
