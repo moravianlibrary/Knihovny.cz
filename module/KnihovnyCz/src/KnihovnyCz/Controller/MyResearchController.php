@@ -30,6 +30,7 @@ namespace KnihovnyCz\Controller;
 
 use KnihovnyCz\Session\NullSessionManager;
 use VuFind\Controller\MyResearchController as MyResearchControllerBase;
+use VuFind\Exception\Auth as AuthException;
 
 /**
  * Class MyResearchController
@@ -192,5 +193,24 @@ class MyResearchController extends MyResearchControllerBase
     protected function disableSession()
     {
         $this->flashMessenger()->setSessionManager(new NullSessionManager());
+    }
+
+    /**
+     * Process an authentication error.
+     *
+     * @param AuthException $e Exception to process.
+     *
+     * @return void
+     */
+    protected function processAuthenticationException(AuthException $e)
+    {
+        if ($e->getMessage() == 'Missing configuration for IdP.') {
+            $this->flashMessenger()->addMessage(
+                'You must be logged in first',
+                'error'
+            );
+            return;
+        }
+        parent::processAuthenticationException();
     }
 }
