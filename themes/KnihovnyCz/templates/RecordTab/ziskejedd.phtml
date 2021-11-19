@@ -50,7 +50,7 @@ $dedupedRecords = $tab->getDedupedRecords();
           <form action="<?=$ziskejEdd->getCurrentZiskejTechlibFrontUrl() ?>/ticket_create" id="ziskejEddButton" method="post" target="_blank">
             <input type="hidden" name="service" value="edd">
             <input type="hidden" name="source_id" value="<?=$this->escapeHtmlAttr($tab->getServerName()) ?>">
-            <input type="hidden" name="doc_id" value="<?=$this->escapeHtmlAttr($this->driver->getUniqueID()) ?>">
+            <input type="hidden" name="doc_id" value="<?=$this->escapeHtmlAttr($driver->getUniqueID()) ?>">
             <input type="hidden" name="entity_id" value="<?=$this->escapeHtmlAttr($tab->getEntityId()) ?>">
             <?php foreach ($dedupedRecords as $record): ?>
               <input type="hidden" name="doc_alt_ids[]" value="<?=$this->escapeHtmlAttr($record['id']) ?>">
