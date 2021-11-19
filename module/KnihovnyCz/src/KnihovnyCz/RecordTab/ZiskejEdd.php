@@ -39,19 +39,19 @@ namespace KnihovnyCz\RecordTab;
  */
 class ZiskejEdd extends \VuFind\RecordTab\AbstractBase
 {
-    private \KnihovnyCz\Ziskej\ZiskejEdd $ziskejEdd;
+    private \KnihovnyCz\Ziskej\ZiskejEdd $_ziskejEdd;
 
     private bool $_isZiskejActive = false;
 
     /**
      * Constructor
      *
-     * @param \KnihovnyCz\Ziskej\ZiskejEdd $ziskejEdd   Ziskej ILL model
+     * @param \KnihovnyCz\Ziskej\ZiskejEdd $ziskejEdd Ziskej ILL model
      */
     public function __construct(
         \KnihovnyCz\Ziskej\ZiskejEdd $ziskejEdd
     ) {
-        $this->ziskejEdd = $ziskejEdd;
+        $this->_ziskejEdd = $ziskejEdd;
 
         $this->_isZiskejActive = $ziskejEdd->isEnabled();
     }
@@ -88,7 +88,7 @@ class ZiskejEdd extends \VuFind\RecordTab\AbstractBase
      */
     public function getZiskejEdd(): \KnihovnyCz\Ziskej\ZiskejEdd
     {
-        return $this->ziskejEdd;
+        return $this->_ziskejEdd;
     }
 
     /**
