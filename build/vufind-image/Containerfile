@@ -69,7 +69,7 @@ COPY --from=vufind-src /src/vufind/public ${VUFIND_ROOT}/public
 COPY --from=vufind-src /src/vufind/tests ${VUFIND_ROOT}/tests
 COPY --from=vufind-src /src/vufind/util ${VUFIND_ROOT}/util
 COPY --from=libraries ${VUFIND_ROOT}/vendor ${VUFIND_ROOT}/vendor
-COPY --from=libraries ${VUFIND_ROOT}/public/swagger-ui ${VUFIND_ROOT}/public/swagger-ui
+COPY --from=libraries ${VUFIND_ROOT}/public/swagger-ui/*.js  ${VUFIND_ROOT}/public/swagger-ui/*.css ${VUFIND_ROOT}/public/swagger-ui/*.html  ${VUFIND_ROOT}/public/swagger-ui/*.png ${VUFIND_ROOT}/public/swagger-ui/
 COPY ./local ${VUFIND_ROOT}/local
 COPY ./module ${VUFIND_ROOT}/module
 COPY --from=themes /vufind-build-themes/themes ${VUFIND_ROOT}/themes
