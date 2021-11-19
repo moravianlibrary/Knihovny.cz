@@ -27,11 +27,11 @@ $dedupedRecords = $tab->getDedupedRecords();
 <?php if ($ziskejEddViewHelper->isEnabled()): ?>
   <div class="panel panel-default">
     <div class="panel-heading">
-      <h3 class="panel-title"><?=$this->translate('ziskej_edd_desc_header') ?></h3>
+      <h3 class="panel-title"><?=$this->translate('Ziskej::ziskej_edd_desc_header') ?></h3>
     </div>
     <div class="panel-body">
       <div class="col-md-10">
-        <p><?=$this->translate('ziskej_edd_desc') ?></p>
+        <p><?=$this->translate('Ziskej::ziskej_edd_desc') ?></p>
         <?php if (!empty($ziskejEdd->getCurrentZiskejTechlibFrontUrl())): ?>
           <form action="<?=$ziskejEdd->getCurrentZiskejTechlibFrontUrl() ?>/ticket_create" id="ziskejEddLogo" method="post" target="_blank">
             <input type="hidden" name="service" value="edd">
@@ -41,7 +41,7 @@ $dedupedRecords = $tab->getDedupedRecords();
             <?php foreach ($dedupedRecords as $record): ?>
               <input type="hidden" name="doc_alt_ids[]" value="<?=$this->escapeHtmlAttr($record['id']) ?>">
             <?php endforeach; ?>
-            <button class="btn btn-primary" type="submit"><?=$this->translate('ziskej_edd_button') ?></button>
+            <button class="btn btn-primary" type="submit"><?=$this->translate('Ziskej::ziskej_edd_button') ?></button>
           </form>
         <?php endif; ?>
       </div>
@@ -55,12 +55,12 @@ $dedupedRecords = $tab->getDedupedRecords();
             <?php foreach ($dedupedRecords as $record): ?>
               <input type="hidden" name="doc_alt_ids[]" value="<?=$this->escapeHtmlAttr($record['id']) ?>">
             <?php endforeach; ?>
-            <input type="image" src="<?=$this->imageLink('logo-ziskej.png') ?>" alt="<?=$this->translate('ziskej') ?>">
+            <input type="image" src="<?=$this->imageLink('logo-ziskej.png') ?>" alt="<?=$this->translate('Ziskej::ziskej_edd') ?>">
           </form>
         <?php else: ?>
           <?php if (!empty($ziskejEdd->getZiskejTechlibUrl())): ?>
             <a href="<?=$ziskejEdd->getZiskejTechlibUrl() ?>" target="_blank">
-              <img src="<?=$this->imageLink('logo-ziskej.png') ?>" alt="<?=$this->translate('ziskej') ?>">
+              <img src="<?=$this->imageLink('logo-ziskej.png') ?>" alt="<?=$this->translate('Ziskej::ziskej_edd') ?>">
             </a>
           <?php endif; ?>
         <?php endif; ?>
