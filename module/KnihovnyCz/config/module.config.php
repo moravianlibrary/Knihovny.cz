@@ -210,6 +210,7 @@ $config = [
             \KnihovnyCz\Controller\MyResearchZiskejController::class => \VuFind\Controller\AbstractBaseFactory::class,
             \KnihovnyCz\Controller\ZiskejController::class => \VuFind\Controller\AbstractBaseFactory::class,
             \KnihovnyCz\Controller\ZiskejAdminController::class => \VuFind\Controller\AbstractBaseFactory::class,
+            \KnihovnyCz\Controller\HoldsController::class => \VuFind\Controller\HoldsControllerFactory::class,
         ],
         'aliases' => [
             'Inspiration' => \KnihovnyCz\Controller\InspirationController::class,
@@ -222,6 +223,7 @@ $config = [
             'MyResearch' => \KnihovnyCz\Controller\MyResearchController::class,
             \VuFind\Controller\RecordController::class => \KnihovnyCz\Controller\RecordController::class,
             \VuFind\Controller\SearchController::class => \KnihovnyCz\Controller\SearchController::class,
+            \VuFind\Controller\HoldsController::class => \KnihovnyCz\Controller\HoldsController::class,
         ],
     ],
     'vufind' => [
@@ -455,6 +457,7 @@ $staticRoutes = [
     'MyResearch/ProfileAjax' => 'MyResearch/ProfileAjax',
     'MyResearch/CheckedoutAjax' => 'MyResearch/CheckedoutAjax',
     'MyResearch/HistoricloansAjax' => 'MyResearch/HistoricloansAjax',
+    'Holds/ListAjax' => 'Holds/ListAjax',
 ];
 
 $routeGenerator = new \KnihovnyCz\Route\RouteGenerator();
