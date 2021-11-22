@@ -39,7 +39,7 @@ use Laminas\View\Helper\AbstractHelper;
  * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://knihovny.cz Main Page
  */
-class Ziskej extends AbstractHelper
+class ZiskejMvs extends AbstractHelper
 {
     /**
      * Ziskej ILL model

@@ -380,6 +380,24 @@ class SolrDefault extends \VuFind\RecordDriver\SolrDefault
     }
 
     /**
+     * If record is available in ZiskejEDD service
+     *
+     * @return bool
+     */
+    public function getEddBoolean(): bool
+    {
+        $eddBooleanLocal = $this->fields['edd_boolean'] ?? null;
+
+        $parent = $this->getParentRecord();
+        $eddBooleanParent
+            = null !== $parent ? ($parent->fields['edd_boolean'] ?? null) : null;
+
+        return null !== $eddBooleanParent
+            ? $eddBooleanParent
+            : (null !== $eddBooleanLocal ? $eddBooleanLocal : false);
+    }
+
+    /**
      * Return an array of associative URL arrays with one or more of the following
      * keys:
      * - desc: URL description text to display (optional)

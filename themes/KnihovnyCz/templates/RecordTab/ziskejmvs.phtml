@@ -1,20 +1,33 @@
 <?php
-/** @var \KnihovnyCz\RecordTab\Ziskej $tab */
+/**
+ * @var \KnihovnyCz\RecordTab\ZiskejMvs $tab
+ */
 $tab = $this->tab;
 
-/** @var KnihovnyCz\RecordDriver\SolrLocal $driver */
+/**
+ * @var KnihovnyCz\RecordDriver\SolrLocal $driver
+ */
 $driver = $this->driver;
 
-/** @var ?\KnihovnyCz\Db\Row\User $user */
+/**
+ * @var \KnihovnyCz\View\Helper\KnihovnyCz\ZiskejMvs $ziskejViewHelper
+ */
+$ziskejViewHelper = $this->ziskejMvs();
+
+/**
+ * @var ?\KnihovnyCz\Db\Row\User $user
+ */
 $user = $this->auth()->isLoggedIn();
 
 /** @var \KnihovnyCz\Ziskej\ZiskejMvs $ziskejMvs */
 $ziskejMvs = $tab->getZiskejMvs();
 
-/** @var string[][] $deduperRecords */
+/**
+ * @var string[][] $deduperRecords
+ */
 $dedupedRecords = $tab->getDedupedRecords();
 ?>
-<?php if ($this->Ziskej()->isEnabled()): ?>
+<?php if ($ziskejViewHelper->isEnabled()): ?>
   <div class="panel panel-default">
     <div class="panel-heading">
       <h3 class="panel-title"><?=$this->translate('Ziskej::service_header') ?></h3>
