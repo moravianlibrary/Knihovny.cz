@@ -78,6 +78,10 @@ class MyResearchController extends MyResearchControllerBase
      */
     public function finesAction()
     {
+        // Force login:
+        if (!$this->getUser()) {
+            return $this->forceLogin();
+        }
         $view = $this->createViewModel();
         $view->setTemplate('myresearch/fines-all');
         return $view;
@@ -119,6 +123,10 @@ class MyResearchController extends MyResearchControllerBase
      */
     public function profileAction()
     {
+        // Force login:
+        if (!$this->getUser()) {
+            return $this->forceLogin();
+        }
         $view = $this->createViewModel();
         $view->setTemplate('myresearch/profile-all');
         return $view;
