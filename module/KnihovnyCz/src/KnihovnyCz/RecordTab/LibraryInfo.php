@@ -46,7 +46,7 @@ class LibraryInfo extends \VuFind\RecordTab\AbstractBase
      */
     public function getDescription()
     {
-        return 'Additional Information';
+        return 'Additional information';
     }
 
     /**
