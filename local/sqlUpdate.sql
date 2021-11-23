@@ -1093,16 +1093,6 @@ INSERT INTO `config` (`id`, `file_id`, `section_id`, `item_id`, `array_key`, `va
 (14,	1,	3,	2,	NULL,	'doctypes_widget_musical_scores;doctypes_widget_musical_scores_description;pr-format-musicalscores;0/MUSICAL_SCORES/',	70,	1);
 
 --
--- Aktualizace tabulky inst_configs
---
-ALTER TABLE `inst_configs`
-    COMMENT='Konfigurace knihoven',
-    CHANGE `source` `source` varchar(10) COLLATE 'utf8_general_ci' NOT NULL DEFAULT '' COMMENT 'Knihovna (source)' AFTER `id`,
-    CHANGE `section` `section` varchar(64) COLLATE 'utf8_general_ci' NOT NULL COMMENT 'Sekce' AFTER `source`,
-    CHANGE `key` `key` varchar(64) COLLATE 'utf8_general_ci' NOT NULL COMMENT 'Klíč' AFTER `section`,
-    CHANGE `value` `value` mediumtext COLLATE 'utf8_general_ci' NOT NULL COMMENT 'Hodnota' AFTER `key`;
-
---
 -- Komentáře k tabulce citation_styles
 --
 ALTER TABLE `citation_style`
@@ -1119,151 +1109,6 @@ DROP TABLE `frontend`;
 DROP TABLE `infobox`;
 DROP TABLE `inspirations`;
 DROP TABLE `portal_pages`;
-
---
--- Vytvoření a naplnění sources
---
-DROP TABLE IF EXISTS `inst_sources`;
-CREATE TABLE `inst_sources` (
-    `id` int(11) NOT NULL AUTO_INCREMENT,
-    `source` varchar(191) COLLATE utf8_general_ci NOT NULL COMMENT 'Knihovna (source)',
-    PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci COMMENT='Knihovny';
-
-INSERT INTO inst_sources (source) SELECT DISTINCT source FROM inst_configs;
-ALTER TABLE `inst_configs` ADD `source_id` int NOT NULL COMMENT 'Knihovna (source)' AFTER `source`;
-UPDATE inst_configs c JOIN inst_sources s ON c.source = s.source SET c.source_id = s.id;
-
-ALTER TABLE `inst_configs`
-    ADD FOREIGN KEY (`source_id`) REFERENCES `inst_sources` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
-
-ALTER TABLE `inst_configs` DROP `source`;
-
---
--- Vytvoření a naplnění sections
---
-DROP TABLE IF EXISTS `inst_sections`;
-CREATE TABLE `inst_sections` (
-    `id` int(11) NOT NULL AUTO_INCREMENT,
-    `section_name` varchar(191) NOT NULL COMMENT 'Název sekce',
-    PRIMARY KEY (`id`),
-    KEY `section_name` (`section_name`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Knihovny - sekce';
-UPDATE `system` SET `value` = '69' WHERE `key`='DB_VERSION';
-
-INSERT INTO inst_sections (section_name) SELECT DISTINCT section FROM inst_configs;
-ALTER TABLE `inst_configs` ADD `section_id` int NOT NULL COMMENT 'Sekce' AFTER `section`;
-UPDATE inst_configs c JOIN inst_sections s ON c.section = s.section_name SET c.section_id = s.id;
-
-ALTER TABLE `inst_configs` DROP `section`;
-
---
--- Vytvoření a naplnění items
---
-DROP TABLE IF EXISTS `inst_keys`;
-CREATE TABLE `inst_keys` (
-    `id` int(11) NOT NULL AUTO_INCREMENT,
-    `key_name` varchar(191) NOT NULL COMMENT 'Název položky',
-    `section_id` int(11) NOT NULL COMMENT 'Sekce',
-    PRIMARY KEY (`id`),
-    KEY `key_name` (`key_name`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Knihovny - položky konfigurace';
-
-INSERT INTO inst_keys (key_name) SELECT DISTINCT `key` FROM inst_configs;
-ALTER TABLE `inst_configs` ADD `key_id` int NOT NULL COMMENT 'Položka' AFTER `key`;
-UPDATE inst_configs c JOIN inst_keys k ON c.`key` = k.key_name SET c.key_id = k.id;
-
-ALTER TABLE `inst_configs`
-    ADD FOREIGN KEY (`key_id`) REFERENCES `inst_keys` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
-
-ALTER TABLE `inst_configs` DROP `key`;
-
-DELETE FROM `inst_keys` WHERE (`key_name` = 'authMethod');
-DELETE FROM `inst_keys` WHERE (`key_name` = 'cannotUseLUIS');
-DELETE FROM `inst_keys` WHERE (`key_name` = 'contactPerson');
-DELETE FROM `inst_keys` WHERE (`key_name` = 'debug');
-DELETE FROM `inst_keys` WHERE (`key_name` = 'requester');
-DELETE FROM `inst_keys` WHERE (`key_name` = 'tokenEndpoint');
-DELETE FROM `inst_keys` WHERE (`key_name` = 'ttl');
-DELETE FROM `inst_keys` WHERE (`key_name` = 'type');
-
--- rename dlfport to dlfurl and create it from host and port
-UPDATE inst_configs c
-    JOIN inst_keys k ON c.key_id = k.id
-    SET c.value = CONCAT(
-        (SELECT ic.value
-         FROM (SELECT * FROM inst_configs) AS ic
-                  JOIN inst_keys ik ON ic.key_id = ik.id
-         WHERE ik.key_name = 'host' AND ic.source_id = c.source_id
-        ), ':', c.value)
-WHERE k.key_name = 'dlfport';
-UPDATE `inst_keys` SET `key_name` = 'dlfurl' WHERE `key_name` = 'dlfport';
-
--- Create reference from keys to sections
-UPDATE  inst_keys k JOIN inst_configs c ON k.id = c.key_id SET k.section_id = c.section_id;
-
-ALTER TABLE `inst_keys`
-    ADD FOREIGN KEY (`section_id`) REFERENCES `inst_sections` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-ALTER TABLE `inst_configs` DROP `section_id`;
-
--- Create templates for inst_configs
-INSERT INTO `inst_sources` (`id`, `source`) VALUES
-('!aleph'),
-('!koha'),
-('!ncip');
-
-INSERT INTO `inst_configs` (`source_id`, `key_id`, `value`) VALUES
-((SELECT id FROM inst_sources WHERE source = '!aleph'),	2,	'Aleph.common.ini'),
-((SELECT id FROM inst_sources WHERE source = '!aleph'),	4,	'_API_HOST'),
-((SELECT id FROM inst_sources WHERE source = '!aleph'),	5,	'_DLF_API_URL'),
-((SELECT id FROM inst_sources WHERE source = '!aleph'),	7,	''),
-((SELECT id FROM inst_sources WHERE source = '!aleph'),	8,	'1'),
-((SELECT id FROM inst_sources WHERE source = '!aleph'),	9,	'_RANDOM_KEY'),
-((SELECT id FROM inst_sources WHERE source = '!aleph'),	10,	'_BIBBASE'),
-((SELECT id FROM inst_sources WHERE source = '!aleph'),	11,	'_ADMBASE'),
-((SELECT id FROM inst_sources WHERE source = '!aleph'),	12,	'_ADMBASE'),
-((SELECT id FROM inst_sources WHERE source = '!aleph'),	13,	''),
-((SELECT id FROM inst_sources WHERE source = '!aleph'),	14,	''),
-((SELECT id FROM inst_sources WHERE source = '!aleph'),	15,	'On Shelf,Na místě'),
-((SELECT id FROM inst_sources WHERE source = '!aleph'),	16,	''),
-((SELECT id FROM inst_sources WHERE source = '!aleph'),	17,	''),
-((SELECT id FROM inst_sources WHERE source = '!aleph'),	18,	''),
-((SELECT id FROM inst_sources WHERE source = '!aleph'),	19,	'_LOGO_URL'),
-((SELECT id FROM inst_sources WHERE source = '!aleph'),	20,	'_SOURCE'),
-((SELECT id FROM inst_sources WHERE source = '!aleph'),	21,	'_SOURCE'),
-((SELECT id FROM inst_sources WHERE source = '!aleph'),	22,	'15'),
-((SELECT id FROM inst_sources WHERE source = '!aleph'),	23,	''),
-((SELECT id FROM inst_sources WHERE source = '!aleph'),	24,	'z304-address-5'),
-((SELECT id FROM inst_sources WHERE source = '!aleph'),	25,	'z304-address-1'),
-((SELECT id FROM inst_sources WHERE source = '!aleph'),	26,	'z304-address-2'),
-((SELECT id FROM inst_sources WHERE source = '!aleph'),	27,	'z304-address-3'),
-((SELECT id FROM inst_sources WHERE source = '!aleph'),	28,	'z304-zip'),
-((SELECT id FROM inst_sources WHERE source = '!aleph'),	29,	'z304-email-address'),
-((SELECT id FROM inst_sources WHERE source = '!aleph'),	30,	'z304-telephone-1'),
-((SELECT id FROM inst_sources WHERE source = '!aleph'),	31,	'z305-bor-status'),
-((SELECT id FROM inst_sources WHERE source = '!aleph'),	32,	'z305-expiry-date'),
-((SELECT id FROM inst_sources WHERE source = '!aleph'),	36,	'10'),
-((SELECT id FROM inst_sources WHERE source = '!koha'),	4,	'_API_HOST'),
-((SELECT id FROM inst_sources WHERE source = '!koha'),	20,	'_SOURCE'),
-((SELECT id FROM inst_sources WHERE source = '!koha'),	21,	'_SOURCE'),
-((SELECT id FROM inst_sources WHERE source = '!koha'),	46,	'_CLIENT_ID'),
-((SELECT id FROM inst_sources WHERE source = '!koha'),	47,	'_CLIENT_SECRET'),
-((SELECT id FROM inst_sources WHERE source = '!koha'),	48,	'client_credentials'),
-((SELECT id FROM inst_sources WHERE source = '!koha'),	52,	'_MAIN_BRANCH'),
-((SELECT id FROM inst_sources WHERE source = '!ncip'),	19,	'_LOGO_URL'),
-((SELECT id FROM inst_sources WHERE source = '!ncip'),	20,	'_SOURCE'),
-((SELECT id FROM inst_sources WHERE source = '!ncip'),	21,	'_SOURCE'),
-((SELECT id FROM inst_sources WHERE source = '!ncip'),	33,	'_NCIP_URL'),
-((SELECT id FROM inst_sources WHERE source = '!ncip'),	34,	''),
-((SELECT id FROM inst_sources WHERE source = '!ncip'),	35,	'_SIGLA'),
-((SELECT id FROM inst_sources WHERE source = '!ncip'),	36,	'10'),
-((SELECT id FROM inst_sources WHERE source = '!ncip'),	37,	'0'),
-((SELECT id FROM inst_sources WHERE source = '!ncip'),	38,	'10'),
-((SELECT id FROM inst_sources WHERE source = '!ncip'),	39,	''),
-((SELECT id FROM inst_sources WHERE source = '!ncip'),	40,	''),
-((SELECT id FROM inst_sources WHERE source = '!ncip'),	42,	'0'),
-((SELECT id FROM inst_sources WHERE source = '!ncip'),	43,	'Arl,Clavius,DaVinci,Tritius,Verbis'),
-((SELECT id FROM inst_sources WHERE source = '!ncip'),	44,	'0');
 
 UPDATE `system` SET `value` = '69' WHERE `key`='DB_VERSION';
 
@@ -1288,7 +1133,6 @@ VALUES (
 
 UPDATE `system` SET `value` = '70' WHERE `key`='DB_VERSION';
 
-
 /* Add table for record cache */
 CREATE TABLE `record` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -1307,6 +1151,7 @@ UPDATE `system` SET `value` = '71' WHERE `key`='DB_VERSION';
 ALTER TABLE `resource_tags` CHANGE COLUMN `resource_id` `resource_id` int(11) DEFAULT NULL;
 
 UPDATE `system` SET `value` = '72' WHERE `key`='DB_VERSION';
+
 /* Update table shortlinks */
 ALTER TABLE `shortlinks` ADD COLUMN `hash` varchar(32) AFTER `path`;
 ALTER TABLE `shortlinks` ADD UNIQUE KEY `shortlinks_hash_IDX` USING HASH (`hash`);
@@ -1314,74 +1159,6 @@ ALTER TABLE `shortlinks` ADD UNIQUE KEY `shortlinks_hash_IDX` USING HASH (`hash`
 UPDATE `system` SET `value` = '73' WHERE `key`='DB_VERSION';
 
 UPDATE `system` SET `value` = '74' WHERE `key`='DB_VERSION';
-
--- Aleph - section for IdResolver
-INSERT INTO inst_sections(id, section_name) VALUES (12, 'IdResolver');
-
--- Aleph MZK - IdResolver configuration
-INSERT INTO inst_keys(id, key_name, aleph, ncip, koha, `default`, section_id) VALUES (66, 'type', true, false, false, 'solr', 12);
-INSERT INTO inst_keys(id, key_name, aleph, ncip, koha, `default`, section_id) VALUES (67, 'solrQueryField', true, false, false, 'barcodes', 12);
-INSERT INTO inst_keys(id, key_name, aleph, ncip, koha, `default`, section_id) VALUES (68, 'itemIdentifier', true, false, false, 'barcode', 12);
-INSERT INTO inst_keys(id, key_name, aleph, ncip, koha, `default`, section_id) VALUES (69, 'stripPrefix', true, false, false, 'true', 12);
-INSERT INTO inst_keys(id, key_name, aleph, ncip, koha, `default`, section_id) VALUES (70, 'prefix', true, false, false, '', 12);
-
--- Aleph migration - dlfport
-INSERT INTO inst_configs(source_id, key_id, value, timestamp)
-  SELECT src.id source_id, 6 key_id, SUBSTRING_INDEX(ic.value, ':', -1) value, NOW() timestamp
-  FROM inst_sources src
-    JOIN inst_configs ic ON ic.source_id = src.id AND ic.key_id = 5
-  WHERE src.id IN (4, 9, 10, 12, 40, 41, 43, 47, 49, 50, 54, 56)
-        AND SUBSTRING_INDEX(ic.value, ':', -1) REGEXP '[0-9]+'
-        AND NOT EXISTS(SELECT 1 FROM inst_configs ic2 WHERE ic2.key_id = 6 AND ic2.source_id = src.id);
-
--- Aleph migration - dlfurl
-UPDATE inst_configs ic SET value = SUBSTRING(REPLACE(value, 'https://', ''), 1, POSITION(':' IN REPLACE(value, 'https://', '')) - 1)
-WHERE ic.source_id IN (4, 9, 10, 12, 40, 41, 43, 47, 49, 50, 54, 56)
-      AND ic.key_id = 5
-      AND ic.value NOT REGEXP '^([a-z]\.)+$';
-
--- Aleph migration - sublibadm
-INSERT INTO inst_configs(source_id, key_id, value, timestamp)
-  SELECT src.id source_id, 63 key_id, '' value, NOW() timestamp
-  FROM inst_sources src
-  WHERE src.id IN (4, 9, 10, 12, 40, 41, 43, 47, 49, 50, 54, 56)
-        AND NOT EXISTS(SELECT 1 FROM inst_configs ic2 WHERE ic2.key_id = 63 AND ic2.source_id = src.id);
-
--- Aleph migration - host
-UPDATE inst_configs ic
-SET value = REPLACE(value, 'https://', '')
-WHERE ic.source_id IN (4, 9, 10, 12, 40, 41, 43, 47, 49, 50, 54, 56);
-
--- Aleph migration - debug
-INSERT INTO inst_configs(source_id, key_id, value, timestamp)
-SELECT src.id source_id, 62 key_id, 'true' value, NOW() timestamp
-FROM inst_sources src
-WHERE src.id IN (4, 9, 10, 12, 40, 41, 43, 47, 49, 50, 54, 56)
-  AND NOT EXISTS(SELECT 1 FROM inst_configs ic2 WHERE ic2.key_id = 52 AND ic2.source_id = src.id);
-
--- Aleph migration - delete empty wwwuser and wwwpasswd
-DELETE FROM inst_configs
-WHERE source_id IN (4, 9, 10, 12, 40, 41, 43, 47, 49, 50, 54, 56)
-  AND TRIM(value) = ''
-  AND key_id IN (13, 14);
-
--- Aleph migration - dlfbaseurl
-INSERT INTO inst_configs(source_id, key_id, value, timestamp)
-SELECT src.id source_id, 64 key_id, CONCAT('https://', ic1.value, ':', ic2.value, '/rest-dlf/') value, NOW() timestamp
-FROM inst_sources src
-  JOIN inst_configs ic1 ON ic1.source_id = src.id AND ic1.key_id = 5
-  JOIN inst_configs ic2 ON ic2.source_id = src.id AND ic2.key_id = 6
-WHERE src.id IN (4, 9, 10, 12, 40, 41, 43, 47, 49, 50, 54, 56)
-  AND NOT EXISTS(SELECT 1 FROM inst_configs ic WHERE ic.key_id = 64 AND ic.source_id = src.id);
-
--- Aleph migration - empty AddressMappings in Aleph.ini
-DELETE FROM inst_configs
-WHERE key_id IN (SELECT ik.id FROM inst_keys ik WHERE ik.section_id = 6)
-      AND value = '';
-
--- Aleph migration - delete wwwuser and wwwpasswd from Aleph template
-DELETE FROM inst_configs
-WHERE source_id = 64 AND key_id IN (13, 14);
 
 UPDATE `system` SET `value` = '75' WHERE `key`='DB_VERSION';
 
@@ -1395,18 +1172,6 @@ SELECT (SELECT `id` FROM `config_files` WHERE `file_name` = 'citation'),
 FROM `citation_style`;
 
 UPDATE `system` SET `value` = '76' WHERE `key`='DB_VERSION';
-
--- Issue 185 Id resolver
-DELETE FROM inst_keys WHERE key_name IN ('prefix', 'type', 'stripPrefix');
-INSERT IGNORE INTO `inst_keys` (`key_name`, `section_id`) VALUES
-('solrQueryFieldPrefix', (SELECT `id` FROM `inst_sections` WHERE `section_name` = 'IdResolver'));
-
-INSERT INTO `inst_configs` (`source_id`, `key_id`, `value`)
-SELECT `inst_sources`.`id`, (SELECT `id` FROM `inst_keys` WHERE `key_name` = "solrQueryFieldPrefix"), `inst_configs`.`value`
-FROM `inst_configs`
-         JOIN `inst_sources` ON `inst_configs`.`source_id` = `inst_sources`.`id`
-         JOIN `inst_keys` ON inst_configs.`key_id` = `inst_keys`.`id`
-WHERE ik.key_name = "admlib";
 
 UPDATE `system` SET `value` = '77' WHERE `key`='DB_VERSION';
 
@@ -1507,6 +1272,7 @@ WHERE cat_username LIKE 'kkpc.%'
 -- migration for other IdPs - attribute edu_person_unique_id is same as eppn
 UPDATE user_card SET edu_person_unique_id = eppn WHERE edu_person_unique_id IS NULL;
 CREATE UNIQUE INDEX user_card_edu_person_unique_id_uq ON user_card(edu_person_unique_id);
+
 UPDATE `system` SET `value` = '78' WHERE `key`='DB_VERSION';
 
 --
