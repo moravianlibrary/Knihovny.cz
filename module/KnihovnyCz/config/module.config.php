@@ -226,6 +226,14 @@ $config = [
             \VuFind\Controller\HoldsController::class => \KnihovnyCz\Controller\HoldsController::class,
         ],
     ],
+    'controller_plugins' => [
+        'factories' => [
+            'KnihovnyCz\Controller\Plugin\Holds' => 'VuFind\Controller\Plugin\AbstractRequestBaseFactory',
+        ],
+        'aliases' => [
+            'holds' => 'KnihovnyCz\Controller\Plugin\Holds',
+        ],
+    ],
     'vufind' => [
         'plugin_managers' => [
             'auth' => [
