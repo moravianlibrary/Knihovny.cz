@@ -1508,3 +1508,16 @@ WHERE cat_username LIKE 'kkpc.%'
 UPDATE user_card SET edu_person_unique_id = eppn WHERE edu_person_unique_id IS NULL;
 CREATE UNIQUE INDEX user_card_edu_person_unique_id_uq ON user_card(edu_person_unique_id);
 UPDATE `system` SET `value` = '78' WHERE `key`='DB_VERSION';
+
+--
+-- Vytvoření tabulky pro CSRF tokeny
+--
+DROP TABLE IF EXISTS `csrf_token`;
+CREATE TABLE `csrf_token` (
+    `id` int(11) NOT NULL AUTO_INCREMENT,
+    `session_id` varchar(128) NOT NULL COMMENT 'Session id',
+    `token` varchar(128) NOT NULL COMMENT 'Token value',
+    `created` datetime NOT NULL,
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='CSRF tokens';
+UPDATE `system` SET `value` = '79' WHERE `key`='DB_VERSION';
