@@ -7,7 +7,7 @@
  *
  * PHP version 7
  *
- * Copyright (C) Villanova University 2007.
+ * Copyright (C) Moravian Library 2021.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -47,7 +47,11 @@ use VuFind\ILS\Connection as ConnectionBase;
  */
 class Connection extends ConnectionBase
 {
-    const METHODS = [
+    /**
+     * Methods to check for each library card
+     *
+     */
+    const CHECKED_METHODS = [
         'getMyTransactionHistory'
     ];
 
@@ -104,7 +108,8 @@ class Connection extends ConnectionBase
      */
     protected function getCapabilityParams($method, $params)
     {
-        if (!(isset($params['user']) && in_array($method, SELF::METHODS))) {
+        if (!(isset($params['user']) && in_array($method,
+                SELF::CHECKED_METHODS))) {
             return [ $params ];
         }
         $user = $params['user'];
