@@ -45,6 +45,8 @@ class MyResearchController extends MyResearchControllerBase
 {
     use \VuFind\Controller\AjaxResponseTrait;
 
+    use \KnihovnyCz\Controller\CatalogLoginTrait;
+
     /**
      * Delete user account if it is confirmed
      *
@@ -245,52 +247,9 @@ class MyResearchController extends MyResearchControllerBase
         if (!isset($view->params)) {
             $view->params = [];
         }
-        $view->params += ['cardId' => $this->getCardId()] ;
+        $view->params += ['cardId' => $this->getCardId()];
         $result = $this->getViewRenderer()->render($view);
         return $this->getAjaxResponse('text/html', $result, null);
-    }
-
-    /**
-     * Does the user have catalog credentials available?  Returns associative array
-     * of patron data if so, otherwise forwards to appropriate login prompt and
-     * returns false. If there is an ILS exception, a flash message is added and
-     * a newly created ViewModel is returned.
-     *
-     * @return bool|array|ViewModel
-     */
-    protected function catalogLogin()
-    {
-        $user = $this->getAuthManager()->isLoggedIn();
-        if ($user == false) {
-            return $this->forceLogin();
-        }
-        $cardId = $this->getCardId();
-        if ($cardId != null) {
-            $card = $user->getLibraryCard($cardId);
-            if ($card != null) {
-                $user->cat_username = $card->cat_username;
-                $user->cat_password = $card->cat_password;
-            }
-        }
-        $catalog = $this->getILS();
-        $patron = $catalog->patronLogin(
-            $user->cat_username,
-            $user->getCatPassword()
-        );
-        return $patron;
-    }
-
-    /**
-     * Return card id to use
-     *
-     * @return string|null
-     */
-    protected function getCardId()
-    {
-        return $this->getRequest()->getQuery(
-            'cardId',
-            $this->getRequest()->getPost('cardId')
-        );
     }
 
     /**

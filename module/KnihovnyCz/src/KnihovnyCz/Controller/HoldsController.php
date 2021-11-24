@@ -5,7 +5,7 @@
  *
  * PHP version 7
  *
- * Copyright (C) Moravian Library 2020.
+ * Copyright (C) Moravian Library 2021.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -43,6 +43,8 @@ use VuFind\Controller\HoldsController as HoldsControllerBase;
 class HoldsController extends HoldsControllerBase
 {
     use \VuFind\Controller\AjaxResponseTrait;
+
+    use \KnihovnyCz\Controller\CatalogLoginTrait;
 
     /**
      * Send list of holds to view
