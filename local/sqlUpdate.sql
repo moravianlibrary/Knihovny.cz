@@ -315,12 +315,12 @@ CREATE TABLE `record` (
 
 UPDATE `system` SET `value` = '104' WHERE `key`='DB_VERSION';
 
-/* Update table resource_tags */
+/* Update table resource_tags (VuFind 7.1) */
 ALTER TABLE `resource_tags` CHANGE COLUMN `resource_id` `resource_id` int(11) DEFAULT NULL;
 
 UPDATE `system` SET `value` = '105' WHERE `key`='DB_VERSION';
 
-/* Update table shortlinks */
+/* Update table shortlinks (VuFind 7.0) */
 ALTER TABLE `shortlinks` ADD COLUMN `hash` varchar(32) AFTER `path`;
 ALTER TABLE `shortlinks` ADD UNIQUE KEY `shortlinks_hash_IDX` USING HASH (`hash`);
 
