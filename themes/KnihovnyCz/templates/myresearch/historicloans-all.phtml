@@ -10,14 +10,15 @@ $loadJs = <<<JS
     loadCovers();
     $(element).find("ul.pagination>li>a").click(function onClick(event){
       event.preventDefault();
-      $(element).empty().append(VuFind.spinner('fa-3x fa-fw'));
+      hideLibraryCardContent(element);
       link = $(this).attr('href');
       $.ajax({
         type: "GET",
         url: link,
         success: function onSuccess(content) {
-          $(element).html(content);
-          loadHistoricLoans(element);
+          showLibraryCardContent(element, content, function onComplete() {
+            loadHistoricLoans(element);
+          });
         }
       });
     });

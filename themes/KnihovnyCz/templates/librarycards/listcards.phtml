@@ -3,30 +3,54 @@
   function loadMyAccount() {
     $('.library-card-ajax').each(function onEachLibraryCard() {
       var element = this;
+      hideLibraryCardContent(element);
       var callback = $(element).data('callback');
       var ajaxCall = {
         dataType: "html",
         url: $(element).data('action') + "?cardId=" + $(element).data('card-id'),
         method: "GET",
         success: function show(content) {
-          $(element).html(content);
-          if (callback != '') {
-            window[callback](element);
-          }
+          showLibraryCardContent(element, content, function onComplete() {
+            if (callback != '') {
+              window[callback](element);
+            }
+          });
         }
       };
       $.ajax(ajaxCall);
   })}
   loadMyAccount();
+
+  function showLibraryCardContent(element, content, callback) {
+    $(element).hide(500, function onComplete() {
+      $(element).html(content).show(500);
+      if (callback != null) {
+        callback();
+      }
+    });
+  }
+
+  function hideLibraryCardContent(element) {
+    $(element).hide(500, function onComplete() {
+      $(element).html(VuFind.spinner()).show(0);
+    });
+  }
+
 JS;
 
 ?>
 <?php if ($this->user): ?>
   <?php foreach ($this->user->getLibraryCards() as $card): ?>
-    <h3><?=$this->transEsc('Source::' . $card->home_library) ?></h3>
+    <?php
+    $institution = $card->home_library;
+    $imageLink = sprintf('institutions/logos/%s/%s_small.png', $institution, $institution);
+    ?>
+    <div class="well row blickable clearfix">
+      <h3 class="pull-left"><?=$this->transEsc('Source::' . $institution) ?></h3>
+      <img class="pull-right" height="32" src="<?=$this->imageLink($imageLink)?>" alt="<?=$this->transEsc("Source::" . $institution) ?>">
+    </div>
     <span class='library-card-ajax' data-card-id='<?=$card->id?>'
           data-action='<?=$action?>' data-callback='<?=$this->callback?>'>
-      <?=$this->icon('spinner')?>
     </span>
   <?php endforeach; ?>
 <?php endif; ?>

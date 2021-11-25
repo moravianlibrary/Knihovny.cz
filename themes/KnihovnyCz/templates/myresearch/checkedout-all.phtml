@@ -25,6 +25,7 @@
     });
     $(element).find("form").submit(function onSubmit(event) {
       event.preventDefault();
+      hideLibraryCardContent(element);
       var button = $(document.activeElement);
       var form = $(this);
       var url = $(element).data('action');
@@ -35,8 +36,9 @@
         url: url,
         data: data,
         success: function onSuccess(content) {
-          $(element).html(content);
-          loadCheckedOut(element);
+          showLibraryCardContent(element, content, function onComplete() {
+            loadCheckedOut(element);
+          });
         }
       });
     });
