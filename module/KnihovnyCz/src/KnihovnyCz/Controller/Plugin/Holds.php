@@ -41,6 +41,101 @@ use VuFind\Controller\Plugin\Holds as HoldsBase;
 class Holds extends HoldsBase
 {
     /**
+     * Process cancellation requests.
+     *
+     * @param \VuFind\ILS\Connection $catalog ILS connection object
+     * @param array                  $patron  Current logged in patron
+     *
+     * @return array                          The result of the cancellation, an
+     * associative array keyed by item ID (empty if no cancellations performed)
+     */
+    public function cancelHolds($catalog, $patron)
+    {
+        // Retrieve the flashMessenger helper:
+        $flashMsg = $this->getController()->flashMessenger();
+        $params = $this->getController()->params();
+
+        // Pick IDs to cancel based on which button was pressed:
+        $all = $params->fromPost('cancelAll');
+        $selected = $params->fromPost('cancelSelected');
+        if (!empty($all)) {
+            $details = $params->fromPost('cancelAllIDS');
+        } elseif (!empty($selected)) {
+            // Include cancelSelectedIDS for backwards-compatibility:
+            $details = $params->fromPost('selectedIDS')
+                ?? $params->fromPost('cancelSelectedIDS');
+        } else {
+            // No button pushed -- no action needed
+            return [];
+        }
+
+        if (!empty($details)) {
+            // Confirm?
+            if ($params->fromPost('confirm') === "0") {
+                if ($params->fromPost('cancelAll') !== null) {
+                    return $this->getController()->confirm(
+                        'hold_cancel_all',
+                        $this->getController()->url()->fromRoute('holds-list'),
+                        $this->getController()->url()->fromRoute('holds-list'),
+                        'confirm_hold_cancel_all_text',
+                        [
+                            'cancelAll' => 1,
+                            'cancelAllIDS' => $params->fromPost('cancelAllIDS')
+                        ]
+                    );
+                } else {
+                    return $this->getController()->confirm(
+                        'hold_cancel_selected',
+                        $this->getController()->url()->fromRoute('holds-list'),
+                        $this->getController()->url()->fromRoute('holds-list'),
+                        'confirm_hold_cancel_selected_text',
+                        [
+                            'cancelSelected' => 1,
+                            'cancelSelectedIDS' =>
+                                $params->fromPost('cancelSelectedIDS')
+                        ]
+                    );
+                }
+            }
+
+            // Add Patron Data to Submitted Data
+            $cancelResults = $catalog->cancelHolds(
+                ['details' => $details, 'patron' => $patron]
+            );
+            if ($cancelResults == false) {
+                $flashMsg->addMessage('hold_cancel_fail', 'error');
+            } else {
+                $failed = 0;
+                foreach ($cancelResults['items'] ?? [] as $item) {
+                    if (!$item['success']) {
+                        ++$failed;
+                    }
+                }
+                if ($failed) {
+                    $msg = $this->getController()
+                        ->translate(
+                            'hold_cancel_fail_items',
+                            ['%%count%%' => $failed]
+                        );
+                    $flashMsg->addErrorMessage($msg);
+                }
+                if ($cancelResults['count'] > 0) {
+                    $msg = $this->getController()
+                        ->translate(
+                            'hold_cancel_success_items',
+                            ['%%count%%' => $cancelResults['count']]
+                        );
+                    $flashMsg->addSuccessMessage($msg);
+                }
+                return $cancelResults;
+            }
+        } else {
+            $flashMsg->addMessage('hold_empty_selection', 'error');
+        }
+        return [];
+    }
+
+    /**
      * Add an ID to the validation array.
      *
      * @param string $id ID to remember
@@ -50,7 +145,6 @@ class Holds extends HoldsBase
     public function rememberValidId($id)
     {
         // Do nothing, we rely only on CSRF token for input validation
-
     }
 
     /**
