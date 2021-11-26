@@ -28,7 +28,8 @@
       var button = $(document.activeElement);
       var form = $(this);
       var url = $(element).data('action');
-      var data = form.serialize() + '&' + button.attr('id') + '=' + button.val();
+      var data = form.serialize() + '&' + button.attr('id') + '=' + button.val()
+        + '&cardId=' + ''; // $(element).data('card-id');
       $.ajax({
         type: "POST",
         url: url,
