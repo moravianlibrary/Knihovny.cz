@@ -149,6 +149,10 @@
               <strong><?=$this->transEsc('hold_expires') ?>:</strong> <?=$this->escapeHtml($ilsDetails['expire']) ?>
             <?php endif; ?>
             <br />
+            <?php if (!empty($ilsDetails['status'])): ?>
+              <strong><?=$this->transEsc('hold_status') ?>:</strong> <?=$this->escapeHtml($ilsDetails['status']) ?>
+            <?php endif; ?>
+            <br />
 
             <?php if (isset($ilsDetails['available']) && $ilsDetails['available'] == true): ?>
               <div class="text-success">
