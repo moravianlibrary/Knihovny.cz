@@ -30,6 +30,7 @@ namespace KnihovnyCz\Controller;
 
 use KnihovnyCz\Session\NullSessionManager;
 use VuFind\Controller\MyResearchController as MyResearchControllerBase;
+use VuFind\Exception\Auth as AuthException;
 
 /**
  * Class MyResearchController
@@ -78,6 +79,10 @@ class MyResearchController extends MyResearchControllerBase
      */
     public function finesAction()
     {
+        // Force login:
+        if (!$this->getUser()) {
+            return $this->forceLogin();
+        }
         $view = $this->createViewModel();
         $view->setTemplate('myresearch/fines-all');
         return $view;
@@ -94,11 +99,8 @@ class MyResearchController extends MyResearchControllerBase
             $this->disableSession();
             $view = parent::finesAction();
         } catch (\Exception $ex) {
-            $view = $this->createViewModel(
-                [
-                'error' => 'ils_offline_home_message'
-                ]
-            );
+            $view = $this->createViewModel();
+            $this->flashMessenger()->addErrorMessage($ex->getMessage());
         }
         if (!($view instanceof \Laminas\View\Model\ViewModel)) {
             $view = $this->createViewModel(
@@ -119,6 +121,10 @@ class MyResearchController extends MyResearchControllerBase
      */
     public function profileAction()
     {
+        // Force login:
+        if (!$this->getUser()) {
+            return $this->forceLogin();
+        }
         $view = $this->createViewModel();
         $view->setTemplate('myresearch/profile-all');
         return $view;
@@ -135,11 +141,8 @@ class MyResearchController extends MyResearchControllerBase
             $this->disableSession();
             $view = parent::profileAction();
         } catch (\Exception $ex) {
-            $view = $this->createViewModel(
-                [
-                'error' => 'ils_offline_home_message'
-                ]
-            );
+            $view = $this->createViewModel();
+            $this->flashMessenger()->addErrorMessage($ex->getMessage());
         }
         if (!($view instanceof \Laminas\View\Model\ViewModel)) {
             $view = $this->createViewModel(
@@ -154,6 +157,100 @@ class MyResearchController extends MyResearchControllerBase
     }
 
     /**
+     * Send list of checked out books to view
+     *
+     * @return mixed
+     */
+    public function checkedoutAction()
+    {
+        // Force login:
+        if (!$this->getUser()) {
+            return $this->forceLogin();
+        }
+        $view = $this->createViewModel();
+        $view->setTemplate('myresearch/checkedout-all');
+        return $view;
+    }
+
+    /**
+     * Send user profile data as HTML for rendering in AJAX
+     *
+     * @return mixed
+     */
+    public function checkedoutAjaxAction()
+    {
+        try {
+            $this->disableSession();
+            $view = parent::checkedoutAction();
+            // disable sorting
+            $view->sortList = false;
+        } catch (\Exception $ex) {
+            $view = $this->createViewModel();
+            $this->flashMessenger()->addErrorMessage($ex->getMessage());
+        }
+        if (!($view instanceof \Laminas\View\Model\ViewModel)) {
+            $view = $this->createViewModel(
+                [
+                    'error' => 'ils_offline_home_message'
+                ]
+            );
+        }
+        $view->setTemplate('myresearch/checkedout-ajax');
+        $view->cardId = $this->getCardId();
+        $result = $this->getViewRenderer()->render($view);
+        return $this->getAjaxResponse('text/html', $result, null);
+    }
+
+    /**
+     * Send list of historic loans to view
+     *
+     * @return mixed
+     */
+    public function historicloansAction()
+    {
+        // Force login:
+        if (!$this->getUser()) {
+            return $this->forceLogin();
+        }
+        $view = $this->createViewModel();
+        $view->setTemplate('myresearch/historicloans-all');
+        return $view;
+    }
+
+    /**
+     * Send list of historic loans to view
+     *
+     * @return mixed
+     */
+    public function historicloansAjaxAction()
+    {
+        try {
+            $this->disableSession();
+            $view = parent::historicloansAction();
+            // disable sorting
+            $view->sortList = false;
+        } catch (\Exception $ex) {
+            $view = $this->createViewModel();
+            $this->flashMessenger()->addErrorMessage($ex->getMessage());
+        }
+        if (!($view instanceof \Laminas\View\Model\ViewModel)) {
+            $view = $this->createViewModel(
+                [
+                    'error' => 'ils_offline_home_message'
+                ]
+            );
+        }
+        $view->setTemplate('myresearch/historicloans-ajax');
+        $view->cardId = $this->getCardId();
+        if (!isset($view->params)) {
+            $view->params = [];
+        }
+        $view->params += ['cardId' => $this->getCardId()] ;
+        $result = $this->getViewRenderer()->render($view);
+        return $this->getAjaxResponse('text/html', $result, null);
+    }
+
+    /**
      * Does the user have catalog credentials available?  Returns associative array
      * of patron data if so, otherwise forwards to appropriate login prompt and
      * returns false. If there is an ILS exception, a flash message is added and
@@ -163,17 +260,37 @@ class MyResearchController extends MyResearchControllerBase
      */
     protected function catalogLogin()
     {
-        $patron = parent::catalogLogin();
-        $cardId = $this->getRequest()->getQuery('cardId');
-        if (is_array($patron) && $cardId != null) {
-            $card = $this->getAuthManager()->isLoggedIn()->getLibraryCard($cardId);
+        $user = $this->getAuthManager()->isLoggedIn();
+        if ($user == false) {
+            return $this->forceLogin();
+        }
+        $cardId = $this->getCardId();
+        if ($cardId != null) {
+            $card = $user->getLibraryCard($cardId);
             if ($card != null) {
-                $patron['id'] = $card['cat_username'];
-                $patron['cat_username'] = $card['cat_username'];
-                $patron['cat_password'] = $card['cat_password'];
+                $user->cat_username = $card->cat_username;
+                $user->cat_password = $card->cat_password;
             }
         }
+        $catalog = $this->getILS();
+        $patron = $catalog->patronLogin(
+            $user->cat_username,
+            $user->getCatPassword()
+        );
         return $patron;
+    }
+
+    /**
+     * Return card id to use
+     *
+     * @return string|null
+     */
+    protected function getCardId()
+    {
+        return $this->getRequest()->getQuery(
+            'cardId',
+            $this->getRequest()->getPost('cardId')
+        );
     }
 
     /**
@@ -184,5 +301,24 @@ class MyResearchController extends MyResearchControllerBase
     protected function disableSession()
     {
         $this->flashMessenger()->setSessionManager(new NullSessionManager());
+    }
+
+    /**
+     * Process an authentication error.
+     *
+     * @param AuthException $e Exception to process.
+     *
+     * @return void
+     */
+    protected function processAuthenticationException(AuthException $e)
+    {
+        if ($e->getMessage() == 'Missing configuration for IdP.') {
+            $this->flashMessenger()->addMessage(
+                'You must be logged in first',
+                'error'
+            );
+            return;
+        }
+        parent::processAuthenticationException();
     }
 }

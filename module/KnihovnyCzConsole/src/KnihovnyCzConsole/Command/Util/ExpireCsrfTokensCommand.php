@@ -1,11 +1,11 @@
 <?php
 
 /**
- * Class LibraryInfo
+ * Class ExpireCsrfTokensCommand
  *
  * PHP version 7
  *
- * Copyright (C) Moravian Library 2019.
+ * Copyright (C) Moravian Library 2021.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -21,41 +21,43 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  *
  * @category VuFind
- * @package  KnihovnyCz\RecordTab
- * @author   Josef Moravec <moravec@mzk.cz>
+ * @package  KnihovnyCzConsole
+ * @author   Vaclav Rosecky <vaclav.rosecky@mzk.cz>
  * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://knihovny.cz Main Page
  */
-namespace KnihovnyCz\RecordTab;
+namespace KnihovnyCzConsole\Command\Util;
 
 /**
- * Class LibraryInfo
+ * Class ExpireCsrfTokensCommand
  *
  * @category VuFind
- * @package  KnihovnyCz\RecordTab
- * @author   Josef Moravec <moravec@mzk.cz>
+ * @package  KnihovnyCzConsole
+ * @author   Vaclav Rosecky <vaclav.rosecky@mzk.cz>
  * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://knihovny.cz Main Page
  */
-class LibraryInfo extends \VuFind\RecordTab\AbstractBase
+class ExpireCsrfTokensCommand extends
+    \VuFindConsole\Command\Util\AbstractExpireCommand
 {
     /**
-     * Get the on-screen description for this tab.
+     * Help description for the command.
      *
-     * @return string
+     * @var string
      */
-    public function getDescription()
-    {
-        return 'Additional information';
-    }
+    protected $commandDescription = 'Expired CSRF tokens cleanup';
 
     /**
-     * Is this tab visible?
+     * Label to use for rows in help messages.
      *
-     * @return bool
+     * @var string
      */
-    public function isVisible()
-    {
-        return $this->getRecordDriver()->tryMethod('hasAdditionalInfo');
-    }
+    protected $rowLabel = 'csrf tokens';
+
+    /**
+     * The name of the command (the part after "public/index.php")
+     *
+     * @var string
+     */
+    protected static $defaultName = 'util/expire_csrf_tokens';
 }

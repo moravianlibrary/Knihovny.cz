@@ -281,11 +281,13 @@ $config = [
                 ],
                 'factories' => [
                     \KnihovnyCz\RecordTab\HoldingsILS::class => \VuFind\RecordTab\HoldingsILSFactory::class,
-                    \KnihovnyCz\RecordTab\Ziskej::class => \KnihovnyCz\RecordTab\ZiskejFactory::class,
+                    \KnihovnyCz\RecordTab\ZiskejMvs::class => \KnihovnyCz\RecordTab\ZiskejMvsFactory::class,
+                    \KnihovnyCz\RecordTab\ZiskejEdd::class => \KnihovnyCz\RecordTab\ZiskejEddFactory::class,
                 ],
                 'aliases' => [
                     \VuFind\RecordTab\HoldingsILS::class => \KnihovnyCz\RecordTab\HoldingsILS::class,
-                    'ziskej' => \KnihovnyCz\RecordTab\Ziskej::class,
+                    'ziskejMvs' => \KnihovnyCz\RecordTab\ZiskejMvs::class,
+                    'ziskejEdd' => \KnihovnyCz\RecordTab\ZiskejEdd::class,
                 ],
             ],
             'contentblock' => [
@@ -309,6 +311,7 @@ $config = [
                     \KnihovnyCz\Db\Row\WidgetContent::class => \VuFind\Db\Row\RowGatewayFactory::class,
                     \KnihovnyCz\Db\Row\User::class => \VuFind\Db\Row\UserFactory::class,
                     \KnihovnyCz\Db\Row\UserCard::class => \VuFind\Db\Row\RowGatewayFactory::class,
+                    \KnihovnyCz\Db\Row\CsrfToken::class => \VuFind\Db\Row\RowGatewayFactory::class,
                 ],
                 'aliases' => [
                     \VuFind\Db\Row\User::class => \KnihovnyCz\Db\Row\User::class,
@@ -324,6 +327,7 @@ $config = [
                     \KnihovnyCz\Db\Table\UserCard::class => \VuFind\Db\Table\GatewayFactory::class,
                     \KnihovnyCz\Db\Table\Widget::class => \VuFind\Db\Table\GatewayFactory::class,
                     \KnihovnyCz\Db\Table\WidgetContent::class => \VuFind\Db\Table\GatewayFactory::class,
+                    \KnihovnyCz\Db\Table\CsrfToken::class => \VuFind\Db\Table\GatewayFactory::class,
                 ],
                 'aliases' => [
                     \VuFind\Db\Table\User::class => \KnihovnyCz\Db\Table\User::class,
@@ -335,11 +339,13 @@ $config = [
                     \KnihovnyCz\ILS\Driver\KohaRest1905::class => \VuFind\ILS\Driver\DriverWithDateConverterFactory::class,
                     \KnihovnyCz\ILS\Driver\MultiBackend::class => \KnihovnyCz\ILS\Driver\MultiBackendFactory::class,
                     \KnihovnyCz\ILS\Driver\XCNCIP2::class => \VuFind\ILS\Driver\DriverWithDateConverterFactory::class,
+                    \KnihovnyCz\ILS\Driver\Aleph::class => \VuFind\ILS\Driver\AlephFactory::class,
                 ],
                 'aliases' => [
                     'koharest1905' => \KnihovnyCz\ILS\Driver\KohaRest1905::class,
                     'multibackend' => \KnihovnyCz\ILS\Driver\MultiBackend::class,
                     'xcncip2' => \KnihovnyCz\ILS\Driver\XCNCIP2::class,
+                    'aleph' => \KnihovnyCz\ILS\Driver\Aleph::class,
                 ],
             ],
             'content_toc' => [
@@ -408,12 +414,18 @@ $config = [
             \KnihovnyCz\Autocomplete\Suggester::class => \VuFind\Autocomplete\SuggesterFactory::class,
             'VuFindHttp\HttpService' => \KnihovnyCz\Service\HttpServiceFactory::class,
             \KnihovnyCz\Service\GuzzleHttpService::class => \KnihovnyCz\Service\GuzzleHttpServiceFactory::class,
+            \KnihovnyCz\Validator\DatabaseCsrf::class => \KnihovnyCz\Validator\DatabaseCsrfFactory::class,
+            \KnihovnyCz\ILS\Connection::class => \VuFind\ILS\ConnectionFactory::class,
         ],
         'aliases' => [
             \VuFind\Config\PluginManager::class => \KnihovnyCz\Config\PluginManager::class,
             \VuFind\Content\ObalkyKnihService::class => \KnihovnyCz\Content\ObalkyKnihService::class,
             \VuFind\Auth\Manager::class => \KnihovnyCz\Auth\Manager::class,
             \VuFind\Autocomplete\Suggester::class => \KnihovnyCz\Autocomplete\Suggester::class,
+            'Laminas\Validator\Csrf' => \KnihovnyCz\Validator\DatabaseCsrf::class,
+            'VuFind\Validator\Csrf' => \KnihovnyCz\Validator\DatabaseCsrf::class,
+            \VuFind\Validator\CsrfInterface::class => \KnihovnyCz\Validator\DatabaseCsrf::class,
+            \VuFind\ILS\Connection::class => \KnihovnyCz\ILS\Connection::class,
         ],
         'invokables' => [
             \Symfony\Component\Filesystem\Filesystem::class,
@@ -441,6 +453,8 @@ $staticRoutes = [
     'MyResearch/DeleteUser' => 'MyResearch/DeleteUser',
     'MyResearch/FinesAjax' => 'MyResearch/FinesAjax',
     'MyResearch/ProfileAjax' => 'MyResearch/ProfileAjax',
+    'MyResearch/CheckedoutAjax' => 'MyResearch/CheckedoutAjax',
+    'MyResearch/HistoricloansAjax' => 'MyResearch/HistoricloansAjax',
 ];
 
 $routeGenerator = new \KnihovnyCz\Route\RouteGenerator();

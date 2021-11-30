@@ -1,11 +1,11 @@
 <?php
 
 /**
- * Class LibraryInfo
+ * Class CsrfToken
  *
  * PHP version 7
  *
- * Copyright (C) Moravian Library 2019.
+ * Copyright (C) Moravian Library 2021.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -21,41 +21,36 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  *
  * @category VuFind
- * @package  KnihovnyCz\RecordTab
- * @author   Josef Moravec <moravec@mzk.cz>
+ * @package  KnihovnyCz\Db\Row
+ * @author   Vaclav Rosecky <vaclav.rosecky@mzk.cz>
  * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://knihovny.cz Main Page
  */
-namespace KnihovnyCz\RecordTab;
+namespace KnihovnyCz\Db\Row;
 
 /**
- * Class LibraryInfo
+ * Class CsrfToken
  *
  * @category VuFind
- * @package  KnihovnyCz\RecordTab
- * @author   Josef Moravec <moravec@mzk.cz>
+ * @package  KnihovnyCz\Db\Row
+ * @author   Vaclav Rosecky <vaclav.rosecky@mzk.cz>
  * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://knihovny.cz Main Page
  */
-class LibraryInfo extends \VuFind\RecordTab\AbstractBase
+class CsrfToken extends \VuFind\Db\Row\RowGateway
+    implements \VuFind\Db\Table\DbTableAwareInterface
 {
-    /**
-     * Get the on-screen description for this tab.
-     *
-     * @return string
-     */
-    public function getDescription()
-    {
-        return 'Additional information';
-    }
+    use \VuFind\Db\Table\DbTableAwareTrait;
 
     /**
-     * Is this tab visible?
+     * Constructor
      *
-     * @return bool
+     * @param \Laminas\Db\Adapter\Adapter $adapter Database adapter
+     *
+     * @return void
      */
-    public function isVisible()
+    public function __construct(\Laminas\Db\Adapter\Adapter $adapter)
     {
-        return $this->getRecordDriver()->tryMethod('hasAdditionalInfo');
+        parent::__construct('id', 'csrf_token', $adapter);
     }
 }

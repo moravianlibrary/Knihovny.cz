@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Class LibraryInfo
+ * Class ZiskejFactory
  *
  * PHP version 7
  *
@@ -22,40 +22,45 @@
  *
  * @category VuFind
  * @package  KnihovnyCz\RecordTab
- * @author   Josef Moravec <moravec@mzk.cz>
+ * @author   Robert Sipek <sipek@mzk.cz>
  * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://knihovny.cz Main Page
  */
 namespace KnihovnyCz\RecordTab;
 
+use Interop\Container\ContainerInterface;
+use Laminas\ServiceManager\Factory\FactoryInterface;
+
 /**
- * Class LibraryInfo
+ * Class ZiskejEddFactory
  *
  * @category VuFind
  * @package  KnihovnyCz\RecordTab
- * @author   Josef Moravec <moravec@mzk.cz>
+ * @author   Robert Sipek <sipek@mzk.cz>
  * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://knihovny.cz Main Page
  */
-class LibraryInfo extends \VuFind\RecordTab\AbstractBase
+class ZiskejEddFactory implements FactoryInterface
 {
     /**
-     * Get the on-screen description for this tab.
+     * Create an object
      *
-     * @return string
-     */
-    public function getDescription()
-    {
-        return 'Additional information';
-    }
-
-    /**
-     * Is this tab visible?
+     * @param ContainerInterface $container     DI container
+     * @param string             $requestedName Service name
+     * @param array|null         $options       Service options
      *
-     * @return bool
+     * @return \KnihovnyCz\RecordTab\ZiskejEdd
+     *
+     * @throws \Psr\Container\ContainerExceptionInterface
+     * @throws \Psr\Container\NotFoundExceptionInterface
      */
-    public function isVisible()
-    {
-        return $this->getRecordDriver()->tryMethod('hasAdditionalInfo');
+    public function __invoke(
+        ContainerInterface $container,
+        $requestedName,
+        array $options = null
+    ): ZiskejEdd {
+        return new $requestedName(
+            $container->get(\KnihovnyCz\Ziskej\ZiskejEdd::class)
+        );
     }
 }

@@ -116,7 +116,7 @@ $this->layout()->breadcrumbs = '<li><a href="' . $this->url('myresearch-home') .
                         <?php if ($ticket->getStatus()): ?>
                           <dt><?=$this->transEsc('Ziskej::label_order_status')?>:</dt>
                           <dd>
-                            <span class="label label-<?=$this->Ziskej()->getStatusClass($ticket->getStatus()) ?>">
+                            <span class="label label-<?=$this->ziskejMvs()->getStatusClass($ticket->getStatus()) ?>">
                               <?=$this->transEsc('Ziskej::order_status_' . $ticket->getStatus())?>
                             </span>
                           </dd>

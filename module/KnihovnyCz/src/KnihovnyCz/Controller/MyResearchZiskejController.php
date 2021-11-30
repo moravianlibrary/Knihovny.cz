@@ -65,10 +65,7 @@ class MyResearchZiskejController extends AbstractBase
         try {
             $user = $this->getUser();
             if (!$user) {
-                if ($this->params()->fromQuery('redirect', true)) {
-                    $this->setFollowupUrlToReferer();
-                }
-                return $this->forwardTo('MyResearch', 'Login');
+                return $this->forceLogin();
             }
             $view->setVariable('user', $user);
 
