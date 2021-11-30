@@ -29,6 +29,7 @@
 namespace KnihovnyCz\Controller;
 
 use KnihovnyCz\Session\NullSessionManager;
+use Laminas\View\Model\ViewModel;
 use VuFind\Controller\HoldsController as HoldsControllerBase;
 
 /**
@@ -69,22 +70,24 @@ class HoldsController extends HoldsControllerBase
      */
     public function listAjaxAction()
     {
+        $this->initAjax();
+        $view = null;
         try {
-            $this->disableSession();
             $view = parent::listAction();
         } catch (\Exception $ex) {
-            $view = $this->createViewModel(
-                [
-                    'error' => 'ils_offline_home_message'
-                ]
+            $this->flashMessenger()->addErrorMessage($ex->getMessage());
+        }
+        $error = ($view == null || !($view instanceof ViewModel));
+        // active operation failed -> redirect to show checked out items
+        if ($this->getRequest()->isPost() && $error) {
+            $url = $this->url()->fromRoute('holds-listajax');
+            return $this->flashRedirect()->toUrl(
+                $url . '?cardId='
+                . $this->getCardId()
             );
         }
-        if (!($view instanceof \Laminas\View\Model\ViewModel)) {
-            $view = $this->createViewModel(
-                [
-                    'error' => 'ils_offline_home_message'
-                ]
-            );
+        if ($view == null) {
+            $view = new ViewModel();
         }
         $view->setTemplate('holds/list-ajax');
         $result = $this->getViewRenderer()->render($view);
@@ -96,8 +99,9 @@ class HoldsController extends HoldsControllerBase
      *
      * @return void
      */
-    protected function disableSession()
+    protected function initAjax()
     {
         $this->flashMessenger()->setSessionManager(new NullSessionManager());
+        $this->flashRedirect()->restore();
     }
 }

@@ -229,9 +229,11 @@ $config = [
     'controller_plugins' => [
         'factories' => [
             'KnihovnyCz\Controller\Plugin\Holds' => 'VuFind\Controller\Plugin\AbstractRequestBaseFactory',
+            'KnihovnyCz\Controller\Plugin\FlashRedirect' => 'VuFind\Controller\Plugin\AbstractRequestBaseFactory',
         ],
         'aliases' => [
             'holds' => 'KnihovnyCz\Controller\Plugin\Holds',
+            'flashRedirect' => 'KnihovnyCz\Controller\Plugin\FlashRedirect',
         ],
     ],
     'vufind' => [

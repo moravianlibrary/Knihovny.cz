@@ -28,7 +28,6 @@
   <?php if ($this->renewForm): ?>
     <form name="renewals" method="post" id="renewals" data-clear-account-cache="checkedOut" data-disable-on-submit>
       <input type="hidden" value="<?=$this->escapeHtmlAttr($this->auth()->getManager()->getCsrfHash())?>" name="csrf"/>
-      <input type="hidden" value="<?=$this->escapeHtmlAttr($this->cardId)?>" name="cardId"/>
       <div class="toolbar">
         <div class="checkbox">
           <label>

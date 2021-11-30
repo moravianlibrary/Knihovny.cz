@@ -29,6 +29,7 @@
 namespace KnihovnyCz\Controller;
 
 use KnihovnyCz\Session\NullSessionManager;
+use Laminas\View\Model\ViewModel;
 use VuFind\Controller\MyResearchController as MyResearchControllerBase;
 use VuFind\Exception\Auth as AuthException;
 
@@ -98,13 +99,13 @@ class MyResearchController extends MyResearchControllerBase
     public function finesAjaxAction()
     {
         try {
-            $this->disableSession();
+            $this->initAjax();
             $view = parent::finesAction();
         } catch (\Exception $ex) {
             $view = $this->createViewModel();
             $this->flashMessenger()->addErrorMessage($ex->getMessage());
         }
-        if (!($view instanceof \Laminas\View\Model\ViewModel)) {
+        if (!($view instanceof ViewModel)) {
             $view = $this->createViewModel(
                 [
                 'error' => 'ils_offline_home_message'
@@ -140,7 +141,7 @@ class MyResearchController extends MyResearchControllerBase
     public function profileAjaxAction()
     {
         try {
-            $this->disableSession();
+            $this->initAjax();
             $view = parent::profileAction();
         } catch (\Exception $ex) {
             $view = $this->createViewModel();
@@ -181,24 +182,29 @@ class MyResearchController extends MyResearchControllerBase
      */
     public function checkedoutAjaxAction()
     {
+        $this->initAjax();
+        $view = null;
         try {
-            $this->disableSession();
             $view = parent::checkedoutAction();
-            // disable sorting
-            $view->sortList = false;
         } catch (\Exception $ex) {
-            $view = $this->createViewModel();
             $this->flashMessenger()->addErrorMessage($ex->getMessage());
         }
-        if (!($view instanceof \Laminas\View\Model\ViewModel)) {
-            $view = $this->createViewModel(
-                [
-                    'error' => 'ils_offline_home_message'
-                ]
+        $error = ($view == null || !($view instanceof ViewModel));
+        // active operation failed -> redirect to show checked out items
+        if ($this->getRequest()->isPost() && $error) {
+            $url = $this->url()->fromRoute('myresearch-checkedoutajax');
+            return $this->flashRedirect()->toUrl(
+                $url . '?cardId='
+                . $this->getCardId()
             );
         }
-        $view->setTemplate('myresearch/checkedout-ajax');
+        if ($view == null) {
+            $view = new ViewModel();
+        }
+        // disable sorting
+        $view->sortList = false;
         $view->cardId = $this->getCardId();
+        $view->setTemplate('myresearch/checkedout-ajax');
         $result = $this->getViewRenderer()->render($view);
         return $this->getAjaxResponse('text/html', $result, null);
     }
@@ -227,7 +233,7 @@ class MyResearchController extends MyResearchControllerBase
     public function historicloansAjaxAction()
     {
         try {
-            $this->disableSession();
+            $this->initAjax();
             $view = parent::historicloansAction();
             // disable sorting
             $view->sortList = false;
@@ -253,13 +259,15 @@ class MyResearchController extends MyResearchControllerBase
     }
 
     /**
-     * Disable session use in flash manager.
+     * Disable session use in flash manager and restore flash messages from
+     * parameters in URL.
      *
      * @return void
      */
-    protected function disableSession()
+    protected function initAjax()
     {
         $this->flashMessenger()->setSessionManager(new NullSessionManager());
+        $this->flashRedirect()->restore();
     }
 
     /**
