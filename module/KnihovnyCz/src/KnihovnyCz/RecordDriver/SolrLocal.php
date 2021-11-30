@@ -89,7 +89,7 @@ class SolrLocal extends \KnihovnyCz\RecordDriver\SolrMarc
                 $collection_desc, $agency_id, $sequenceNo, $copy_number,
                 $catalog_link
             ] = str_getcsv($line);
-            $item_id = $agency_id . $itemId . $sequenceNo;
+            $item_id = $itemId . $sequenceNo;
             if ($isCaslin) {
                 $location = $this->translateWithPrefix('Sigla::', $location);
             }
