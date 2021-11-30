@@ -28,7 +28,6 @@
  */
 namespace KnihovnyCz\Controller;
 
-use KnihovnyCz\Session\NullSessionManager;
 use Laminas\View\Model\ViewModel;
 use VuFind\Controller\MyResearchController as MyResearchControllerBase;
 use VuFind\Exception\Auth as AuthException;
@@ -99,7 +98,7 @@ class MyResearchController extends MyResearchControllerBase
     public function finesAjaxAction()
     {
         try {
-            $this->initAjax();
+            $this->flashRedirect()->restore();
             $view = parent::finesAction();
         } catch (\Exception $ex) {
             $view = $this->createViewModel();
@@ -141,7 +140,7 @@ class MyResearchController extends MyResearchControllerBase
     public function profileAjaxAction()
     {
         try {
-            $this->initAjax();
+            $this->flashRedirect()->restore();
             $view = parent::profileAction();
         } catch (\Exception $ex) {
             $view = $this->createViewModel();
@@ -182,7 +181,7 @@ class MyResearchController extends MyResearchControllerBase
      */
     public function checkedoutAjaxAction()
     {
-        $this->initAjax();
+        $this->flashRedirect()->restore();
         $view = null;
         try {
             $view = parent::checkedoutAction();
@@ -233,7 +232,7 @@ class MyResearchController extends MyResearchControllerBase
     public function historicloansAjaxAction()
     {
         try {
-            $this->initAjax();
+            $this->flashRedirect()->restore();
             $view = parent::historicloansAction();
             // disable sorting
             $view->sortList = false;
@@ -256,18 +255,6 @@ class MyResearchController extends MyResearchControllerBase
         $view->params += ['cardId' => $this->getCardId()];
         $result = $this->getViewRenderer()->render($view);
         return $this->getAjaxResponse('text/html', $result, null);
-    }
-
-    /**
-     * Disable session use in flash manager and restore flash messages from
-     * parameters in URL.
-     *
-     * @return void
-     */
-    protected function initAjax()
-    {
-        $this->flashMessenger()->setSessionManager(new NullSessionManager());
-        $this->flashRedirect()->restore();
     }
 
     /**

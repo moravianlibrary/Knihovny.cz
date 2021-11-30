@@ -28,6 +28,7 @@
 namespace KnihovnyCz\Controller\Plugin;
 
 use GuzzleHttp\Psr7\Query;
+use KnihovnyCz\Session\NullSessionManager;
 use Laminas\Http\Response;
 use Laminas\Mvc\Plugin\FlashMessenger\FlashMessenger;
 use VuFind\Controller\Plugin\AbstractRequestBase;
@@ -61,6 +62,7 @@ class FlashRedirect extends AbstractRequestBase
     public function restore()
     {
         $flashMessenger = $this->getController()->flashMessenger();
+        $flashMessenger->setSessionManager(new NullSessionManager());
         foreach (self::NAMESPACES as $namespace) {
             $messages = $this->getController()
                 ->params()->fromQuery('flash_' . $namespace);

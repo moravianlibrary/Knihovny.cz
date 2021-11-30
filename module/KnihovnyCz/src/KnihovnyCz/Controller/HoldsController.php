@@ -28,7 +28,6 @@
  */
 namespace KnihovnyCz\Controller;
 
-use KnihovnyCz\Session\NullSessionManager;
 use Laminas\View\Model\ViewModel;
 use VuFind\Controller\HoldsController as HoldsControllerBase;
 
@@ -70,7 +69,7 @@ class HoldsController extends HoldsControllerBase
      */
     public function listAjaxAction()
     {
-        $this->initAjax();
+        $this->flashRedirect()->restore();
         $view = null;
         try {
             $view = parent::listAction();
@@ -92,16 +91,5 @@ class HoldsController extends HoldsControllerBase
         $view->setTemplate('holds/list-ajax');
         $result = $this->getViewRenderer()->render($view);
         return $this->getAjaxResponse('text/html', $result, null);
-    }
-
-    /**
-     * Disable session use in flash manager.
-     *
-     * @return void
-     */
-    protected function initAjax()
-    {
-        $this->flashMessenger()->setSessionManager(new NullSessionManager());
-        $this->flashRedirect()->restore();
     }
 }
