@@ -468,6 +468,7 @@ $staticRoutes = [
     'MyResearch/CheckedoutAjax' => 'MyResearch/CheckedoutAjax',
     'MyResearch/HistoricloansAjax' => 'MyResearch/HistoricloansAjax',
     'Holds/ListAjax' => 'Holds/ListAjax',
+    'MyResearchZiskej/ListAjax' => 'MyResearchZiskej/ListAjax',
 ];
 
 $routeGenerator = new \KnihovnyCz\Route\RouteGenerator();
