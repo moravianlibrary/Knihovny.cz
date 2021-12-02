@@ -236,19 +236,11 @@
               <?php $i = 0; ?>
               <?php foreach (array_slice($dedupData, 0, $maxInstitutionsShown) as $source => $current): ?>
                 <?php $i++; ?>
-                <?php if ($i === 1): ?>
-                  <li class="currentSource">
-                    <a href="<?=$this->escapeHtmlAttr($this->recordLinker()->getUrl($this->driver))?>">
-                      <?=$this->transEsc("Source::$source", [], $source)?>
-                    </a>
-                  </li>
-                <?php else: ?>
-                  <li class="otherSource">
-                    <a href="<?=$this->escapeHtmlAttr($this->recordLinker()->getUrl($current['id']))?>">
-                      <?=$this->transEsc("Source::$source", [], $source)?>
-                    </a>
-                  </li>
-                <?php endif; ?>
+                <li class="<?=($i === 1)? 'currentSource' : 'otherSource'?>">
+                  <a href="<?=$this->escapeHtmlAttr($this->recordLinker()->getUrl($current['id']))?>">
+                    <?=$this->transEsc("Source::$source", [], $source)?>
+                  </a>
+                </li>
               <?php endforeach; ?>
             </ul>
 

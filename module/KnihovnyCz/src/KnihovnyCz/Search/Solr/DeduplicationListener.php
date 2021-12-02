@@ -138,8 +138,6 @@ class DeduplicationListener extends ParentDeduplicationListener
                 continue;
             }
             $localIds = $fields['local_ids_str_mv'];
-            $dedupId = $localIds[0];
-            $priority = self::UNDEF_PRIORITY;
             $undefPriority = self::UNDEF_PRIORITY;
             // Find the document that matches the source priority best:
             $dedupData = [];
@@ -151,17 +149,11 @@ class DeduplicationListener extends ParentDeduplicationListener
                 } else {
                     $localPriority = ++$undefPriority;
                 }
-                if (isset($localPriority) && $localPriority < $priority) {
-                    $dedupId = $localId;
-                    $priority = $localPriority;
-                }
                 $dedupData[$source] = [
                     'id' => $localId,
                     'priority' => $localPriority ?? 99999
                 ];
             }
-            $fields['dedup_id'] = $dedupId;
-            $idList[] = $dedupId;
 
             // Sort dedupData by priority:
             uasort(
@@ -171,7 +163,10 @@ class DeduplicationListener extends ParentDeduplicationListener
                 }
             );
             $fields['dedup_data'] = $dedupData;
+            $dedupId = reset($dedupData)['id'];
+            $fields['dedup_id'] = $dedupId;
             $record->setRawData($fields);
+            $idList[] = $dedupId;
         }
         if (empty($idList)) {
             return;
