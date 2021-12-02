@@ -7,6 +7,7 @@
   <td data-type="availability" data-title="<?=$this->transEsc("Availability")?>">
     <div class="jt" title="<?=$this->transEsc('Availability')?>">
       <?php
+      $availabilityStatus = '';
       $status = $availability = $holding['status'] ?? '';
       if (!empty($availability)) {
         $text = 'HoldingStatus::' . $source . '_' . $availability;
