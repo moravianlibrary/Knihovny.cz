@@ -174,8 +174,8 @@ class ZiskejAdminController extends AbstractBase
                          *
                          * @var Ticket $ticket
                          */
-                        $ticketId = $ticket->getId();
                         foreach ($tickets as $ticket) {
+                            $ticketId = $ticket->getId();
                             $data[$eppn]['tickets'][$ticketId]['ticket'] = $ticket;
                             $data[$eppn]['tickets'][$ticketId]['messages']
                                 = $ziskejApi->getMessages($eppn, $ticket->getId())
