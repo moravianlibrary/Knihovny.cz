@@ -9,7 +9,7 @@
     // Set page title.
     $this->headTitle($this->translate('Holdings') . ': ' . $this->driver->getBreadcrumb());
 
-    $showRequestLink = (int)$user?->activateCardByPrefix($source);
+    $showRequestLink = ($user) ? (int)$user->activateCardByPrefix($source) : 0;
 
     $recordIdJson = json_encode($this->driver->getUniqueID(), JSON_HEX_QUOT);
     $isCaslin = (int)str_starts_with($this->driver->getUniqueID(), 'caslin');
