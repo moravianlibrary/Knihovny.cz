@@ -1,7 +1,17 @@
 <?php
     // Set page title.
     $this->headTitle($this->driver->getBreadcrumb());
-    ?>
+    $user = $this->auth()->isLoggedIn();
+?>
+
+<?php if ($user): ?>
+<?=
+  $this->context($this)->renderInContext(
+    'RecordTab/availabilityalert.phtml',
+    ['mainMessage' => 'eversion_no_physical_copies', 'class' => 'hidden',]
+  );
+?>
+<?php endif; ?>
 
 <div class='field856'>
     <table class='table table-striped' id='e-version-table'>
@@ -45,3 +55,14 @@
         </tbody>
     </table>
 </div>
+<?php
+$js = <<<JS
+  $(document).ready(function eversionTabReady() {
+    if ($('li.record-tab.holdings').length === 0) {
+        $('div.alert.hidden').removeClass('hidden');
+    }
+  })
+JS;
+?>
+<?=$this->inlineScript(\Laminas\View\Helper\HeadScript::SCRIPT, $js, 'SET'); ?>
+

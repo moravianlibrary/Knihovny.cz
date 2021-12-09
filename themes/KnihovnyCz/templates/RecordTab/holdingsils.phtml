@@ -9,11 +9,14 @@
     // Set page title.
     $this->headTitle($this->translate('Holdings') . ': ' . $this->driver->getBreadcrumb());
 
+    $showRequestLink = (int)$user?->activateCardByPrefix($source);
+
     $recordIdJson = json_encode($this->driver->getUniqueID(), JSON_HEX_QUOT);
     $isCaslin = (int)str_starts_with($this->driver->getUniqueID(), 'caslin');
     $loadJs = <<<JS
   const statusUnknownHtml = '<span class="label label-default">' + VuFind.translate('status_unknown_message') + '</span>';
   const isCaslin = $isCaslin;
+  const showRequestLink = $showRequestLink;
   function updateHoldingsTable() {
     $('.status-loader').remove();
     ['availability', 'request','collection_desc', 'callnumber_second', 'description', 'callnumber'].forEach(function hideTableColumn(column) {
@@ -84,7 +87,7 @@
           if (item.hasOwnProperty('callnumber') && item.callnumber) {
             elm.find('td[data-type="callnumber"]').text(item.callnumber);
           }
-          if (item.link) {
+          if (item.link && showRequestLink) {
             elm.find('td[data-type="request"]')
               .html('<a href="' + item.link + '">' + VuFind.translate('Place a Hold') + '</a>');
           }
@@ -138,8 +141,6 @@ JS;
 
 ?>
 
-<?=$this->context($this)->renderInContext('librarycards/selectcard.phtml', ['user' => $this->auth()->isLoggedIn()]); ?>
-
 <?php if (!empty($holdings['blocks'])):?>
   <div id="account-block-msg" class="alert alert-danger">
     <?=$this->transEsc('account_block_options_missing', ['%%details%%' => implode('; ', $holdings['blocks'])]) ?>
@@ -152,12 +153,20 @@ JS;
     <?php if ($account->loginEnabled() && $offlineMode != 'ils-offline'): ?>
         <?php if (!$user): ?>
       <div class="alert alert-info">
-        <a href="<?=$this->escapeHtmlAttr($this->recordLinker()->getTabUrl($this->driver, 'Holdings', ['login' => 'true', 'catalogLogin' => 'true']))?>" data-lightbox><?=$this->transEsc("hold_login")?></a>
+        <?php $loginUrl = $this->escapeHtmlAttr($this->recordLinker()->getTabUrl($this->driver, 'Holdings', ['login' => 'true', 'catalogLogin' => 'true'])); ?>
+        <?=$this->translate("hold_login", ['%%url%%' => $loginUrl, '%%attributes%%' => 'data-lightbox'])?>
       </div>
         <?php elseif (!$user->cat_username): ?>
       <div class="alert alert-info">
         <?=$this->translate("hold_profile_html", ['%%url%%' => $this->escapeHtmlAttr($this->recordLinker()->getTabUrl($this->driver, 'Holdings', ['catalogLogin' => 'true']))])?>
       </div>
+        <?php elseif (!$showRequestLink): ?>
+          <?=
+            $this->context($this)->renderInContext(
+              'RecordTab/availabilityalert.phtml',
+              ['mainMessage' => 'hold_current_library_not_connected',]
+            );
+        ?>
         <?php endif; ?>
     <?php endif; ?>
 <?php endif; ?>
@@ -173,7 +182,6 @@ JS;
     );
   ?>
 <?php endif; ?>
-
 
 <?php foreach($filters as $filter => $values): if (!empty($values)): ?>
   <div class="col-md-5">
