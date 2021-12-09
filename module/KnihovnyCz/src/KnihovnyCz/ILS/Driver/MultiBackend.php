@@ -31,6 +31,7 @@ namespace KnihovnyCz\ILS\Driver;
 use KnihovnyCz\Db\Table\InstConfigs;
 use KnihovnyCz\Db\Table\InstSources;
 use KnihovnyCz\ILS\Service\SolrIdResolver;
+use phpDocumentor\Reflection\Types\ClassString;
 use VuFind\Auth\ILSAuthenticator;
 use VuFind\Config\PluginManager as ConfigManager;
 use VuFind\Exception\ILS as ILSException;
@@ -193,6 +194,9 @@ class MultiBackend extends \VuFind\ILS\Driver\MultiBackend
         if ($method == 'placeStorageRetrievalRequest') {
             return false;
         }
+        if ($method == 'getDriverName') {
+            return true;
+        }
         return parent::supportsMethod($method, $params);
     }
 
@@ -284,5 +288,18 @@ class MultiBackend extends \VuFind\ILS\Driver\MultiBackend
             return $this->addIdPrefixes($status, $source);
         }
         return [];
+    }
+
+    /**
+     * Get short driver name
+     *
+     * @param string $recordId
+     *
+     * @return string
+     */
+    public function getDriverName(string $recordId): string
+    {
+        $source = $this->getSource($recordId);
+        return (new \ReflectionClass($this->getDriver($source)))->getShortName();
     }
 }
