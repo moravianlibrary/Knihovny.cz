@@ -31,7 +31,6 @@ namespace KnihovnyCz\ILS\Driver;
 use KnihovnyCz\Db\Table\InstConfigs;
 use KnihovnyCz\Db\Table\InstSources;
 use KnihovnyCz\ILS\Service\SolrIdResolver;
-use phpDocumentor\Reflection\Types\ClassString;
 use VuFind\Auth\ILSAuthenticator;
 use VuFind\Config\PluginManager as ConfigManager;
 use VuFind\Exception\ILS as ILSException;
