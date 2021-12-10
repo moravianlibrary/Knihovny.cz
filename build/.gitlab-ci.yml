@@ -124,6 +124,7 @@ Deploy devel image:
         ( $CI_MERGE_REQUEST_IID == $BUILD_THIS_MR )
   environment:
     name: devel
+    url: $DEVEL_ENVIRONMENT_URL
   variables:
     DEPLOY_REPO_BRANCH: devel
     DEPLOY_REPO_DIR: devel
