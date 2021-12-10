@@ -31,3 +31,12 @@ Environment variables:
 * add shibboleth configs
 * add apache configs
 
+# Gitlab CI builds
+
+Required variables:
+
+| Variable name | type | value |
+|-----|-----|---|
+| REGISTRY_AUTH_FILE | file | file containing container registry login |
+| DEVEL_ENVIRONMENT_URL | var | URL of the `devel` environment |
+
