@@ -1,6 +1,7 @@
 <?php
   // Set up some convenience variables:
   $id = $this->driver->getUniqueId();
+  $selectorId = $this->escapeElementId($id);
   $source = $this->driver->getSourceIdentifier();
   if (isset($this->list) && is_object($this->list)) {
     $list_id = $this->list->id;
@@ -196,7 +197,7 @@
             <?=$this->transEsc('Delete') ?>
           </a>
           <ul class="dropdown-menu" role="menu" aria-labelledby="<?=$dLabel ?>">
-            <li><a id="confirm_delete_item_<?=$this->escapeHtmlAttr($id);?>" title="<?=$this->transEscAttr('confirm_delete_brief')?>"><?=$this->transEsc('confirm_dialog_yes')?></a></li>
+            <li><a id="confirm_delete_item_<?=$this->escapeHtmlAttr($selectorId);?>" title="<?=$this->transEscAttr('confirm_delete_brief')?>"><?=$this->transEsc('confirm_dialog_yes')?></a></li>
             <li><a><?=$this->transEsc('confirm_dialog_no')?></a></li>
           </ul>
         </div>
@@ -210,9 +211,10 @@
   </div>
   <?php
     $escId = $this->escapeJs($id);
+    $escSelectorId = $this->escapeJs($selectorId);
     $escSource = $this->escapeJs($source);
     $script = <<<JS
-$('#confirm_delete_item_${escId}').click(function(e) {
+$('#confirm_delete_item_${escSelectorId}').click(function(e) {
     e.preventDefault();
     $.post('${deleteUrl}', {
                 'delete':'${escId}',

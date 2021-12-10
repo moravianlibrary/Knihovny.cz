@@ -20,6 +20,7 @@ return [
             \KnihovnyCz\View\Helper\KnihovnyCz\FooterLink::class,
             \KnihovnyCz\View\Helper\KnihovnyCz\LibrariesApiLookfor::class,
             \KnihovnyCz\View\Helper\KnihovnyCz\SplitText::class,
+            \KnihovnyCz\View\Helper\KnihovnyCz\EscapeElementId::class,
         ],
         'aliases' => [
             'footerLink' => \KnihovnyCz\View\Helper\KnihovnyCz\FooterLink::class,
@@ -28,6 +29,7 @@ return [
             'ziskejEdd' => KnihovnyCz\View\Helper\KnihovnyCz\ZiskejEdd::class,
             'librariesApiLookfor' => \KnihovnyCz\View\Helper\KnihovnyCz\LibrariesApiLookfor::class,
             'splitText' => \KnihovnyCz\View\Helper\KnihovnyCz\SplitText::class,
+            'escapeElementId' => \KnihovnyCz\View\Helper\KnihovnyCz\EscapeElementId::class,
         ],
     ],
     'favicon' => 'icon-knihovny.png',
