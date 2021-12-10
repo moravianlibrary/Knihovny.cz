@@ -193,6 +193,9 @@ class MultiBackend extends \VuFind\ILS\Driver\MultiBackend
         if ($method == 'placeStorageRetrievalRequest') {
             return false;
         }
+        if ($method == 'getDriverName') {
+            return true;
+        }
         return parent::supportsMethod($method, $params);
     }
 
@@ -284,5 +287,18 @@ class MultiBackend extends \VuFind\ILS\Driver\MultiBackend
             return $this->addIdPrefixes($status, $source);
         }
         return [];
+    }
+
+    /**
+     * Get short driver name
+     *
+     * @param string $recordId
+     *
+     * @return string
+     */
+    public function getDriverName(string $recordId): string
+    {
+        $source = $this->getSource($recordId);
+        return (new \ReflectionClass($this->getDriver($source)))->getShortName();
     }
 }
