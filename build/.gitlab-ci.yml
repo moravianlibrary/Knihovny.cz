@@ -116,6 +116,25 @@ Build image:
         git commit --file ${TMP_DIR}/commit-message
     - git push
 
+Deploy devel image:
+  extends: .deploy_image
+  variables:
+    APP_IMAGE_TAG: 'mr-${CI_MERGE_REQUEST_IID}'
+    DEPLOY_REPO_BRANCH: devel
+    DEPLOY_REPO_DIR: devel
+  rules:
+    - if:  # deploy on issue- or feat-
+        ( $CI_PIPELINE_SOURCE == "merge_request_event" ) &&
+        ( ( $CI_MERGE_REQUEST_SOURCE_BRANCH_NAME =~ /^issue-/ ) ||
+          ( $CI_MERGE_REQUEST_SOURCE_BRANCH_NAME =~ /^feat-/ ) ||
+          ( $CI_MERGE_REQUEST_SOURCE_BRANCH_NAME =~ /^feat\// ) ||
+          ( $CI_MERGE_REQUEST_SOURCE_BRANCH_NAME =~ /^fix\// )
+        )
+  environment:
+    name: devel
+    url: $DEVEL_ENVIRONMENT_URL
+
+
 Deploy release image:
   extends: .deploy_image
   variables:
