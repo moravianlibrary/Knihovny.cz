@@ -133,7 +133,7 @@ Deploy release image:
 Deploy master image:
   extends: .deploy_image
   variables:
-    APP_IMAGE_TAG: 'branch-${CI_COMMIT_BRANCH}
+    APP_IMAGE_TAG: 'branch-${CI_COMMIT_BRANCH}'
     DEPLOY_REPO_BRANCH: devel
     DEPLOY_REPO_DIR: devel
 
