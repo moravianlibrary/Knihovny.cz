@@ -82,7 +82,7 @@ Build image:
   stage: deploy
   image: "${DEPLOY_JOB_IMAGE}"
   needs:
-    - Build multistage image
+    - Build image
 
   variables:
     APP_IMAGE_NAME: docker.app.knihovny.cz/knihovny-cz/vufind
