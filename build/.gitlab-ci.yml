@@ -106,7 +106,7 @@ Build image:
     - git config user.email "${GITLAB_USER_EMAIL}"
     - |
         cat >> ${TMP_DIR}/commit-message <<EOF
-        ${CI_COMMIT_SHORT_SHA}: ${CI_COMMIT_TITLE}
+        ${CI_COMMIT_SHORT_SHA}(${APP_IMAGE_TAG}): ${CI_COMMIT_TITLE}
         * Upgrade image version to ${APP_IMAGE_TAG}
         * commit: ${CI_PROJECT_URL}/-/commit/${CI_COMMIT_SHORT_SHA}
         * CI job: ${CI_JOB_URL}
