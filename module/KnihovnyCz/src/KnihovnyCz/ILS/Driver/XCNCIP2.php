@@ -48,7 +48,8 @@ class XCNCIP2 extends \VuFind\ILS\Driver\XCNCIP2
      * @var string[]
      */
     // 'r' and 'z' are specific for ARL, would be better to make them to fix it
-    protected $holdRequestTypes = ['hold', 'recall', 'r', 'z'];
+    // 'loan' is for Verbis
+    protected $holdRequestTypes = ['hold', 'recall', 'r', 'z', 'loan'];
 
     /**
      * Lowercased circulation statuses we consider not be holdable
