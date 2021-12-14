@@ -228,6 +228,16 @@ class MyResearchController extends MyResearchControllerBase
         }
         if ($view == null) {
             $view = new ViewModel();
+        } elseif (isset($view->transactions)) {
+            foreach ($view->transactions as $resource) {
+                $ilsDetails = $resource->getExtraDetail('ils_details');
+                if (isset($ilsDetails['duedate'])
+                    && $this->isExpired($ilsDetails['duedate'])
+                ) {
+                    $ilsDetails['dueStatus'] = 'overdue';
+                    $resource->setExtraDetail('ils_details', $ilsDetails);
+                }
+            }
         }
         // disable sorting
         $view->sortList = false;
