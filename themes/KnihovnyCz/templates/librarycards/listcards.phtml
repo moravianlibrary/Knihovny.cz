@@ -23,6 +23,7 @@
 
   function showLibraryCardContent(element, content, callback) {
     $(element).hide(500, function onComplete() {
+      $(element).parent('.panel-body').find('.loading-overlay').fadeOut();
       $(element).html(content).show(500);
       if (callback != null) {
         callback();
