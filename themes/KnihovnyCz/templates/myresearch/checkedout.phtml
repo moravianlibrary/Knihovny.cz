@@ -206,7 +206,9 @@
     <?php if ($this->renewForm): ?></form><?php endif; ?>
     <?=$paginator ? $this->paginationControl($paginator, 'Sliding', 'Helpers/pagination.phtml', compact('params')) : ''?>
   <?php else: ?>
-    <?=$this->transEsc('You do not have any items checked out')?>.
+    <div class="alert alert-info">
+      <?=$this->transEsc('You do not have any items checked out')?>.
+    </div>
   <?php endif; ?>
 </div>
 

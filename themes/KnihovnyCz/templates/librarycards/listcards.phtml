@@ -40,19 +40,32 @@ JS;
 
 ?>
 <?php if ($this->user): ?>
-  <?php foreach ($this->user->getLibraryCards() as $card): ?>
-    <?php
-    $institution = $card->home_library;
-    $imageLink = sprintf('institutions/logos/%s/%s_small.png', $institution, $institution);
-    ?>
-    <div class="well row blickable clearfix">
-      <h3 class="pull-left"><?=$this->transEsc('Source::' . $institution) ?></h3>
-      <img class="pull-right" height="32" src="<?=$this->imageLink($imageLink)?>" alt="<?=$this->transEsc("Source::" . $institution) ?>">
-    </div>
-    <span class='library-card-ajax' data-card-id='<?=$card->id?>'
-          data-action='<?=$action?>' data-callback='<?=$this->callback?>'>
-    </span>
-  <?php endforeach; ?>
+  <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+    <?php $i = 1; ?>
+    <?php foreach ($this->user->getLibraryCards() as $card): ?>
+      <?php
+      $institution = $card->home_library;
+      $imageLink = sprintf('institutions/logos/%s/%s_small.png', $institution, $institution);
+      ?>
+      <div class="panel panel-default">
+        <div class="panel-heading panel-heading-with-img bg-white clearfix pointer" role="tab" data-toggle="collapse" data-target="#card_<?=$i ?>">
+          <h3 class="panel-title pull-left">
+            <?=$this->transEsc('Source::' . $institution) ?>
+          </h3>
+          <img class="pull-right" height="30" src="<?=$this->imageLink($imageLink)?>" alt="<?=$this->transEsc("Source::" . $institution) ?>">
+        </div>
+
+        <div id="card_<?=$i ?>" class="panel-collapse collapse in" role="tabpanel">
+          <div class="panel-body">
+            <div class='library-card-ajax' data-card-id='<?=$card->id?>' data-action='<?=$action?>' data-callback='<?=$this->callback?>'>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    <?php $i++ ?>
+    <?php endforeach; ?>
+  </div>
 <?php endif; ?>
 
 <?=$this->inlineScript(\Laminas\View\Helper\HeadScript::SCRIPT, $loadJs, 'SET')?>
