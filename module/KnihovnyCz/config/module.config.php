@@ -428,6 +428,7 @@ $config = [
             \KnihovnyCz\Service\GuzzleHttpService::class => \KnihovnyCz\Service\GuzzleHttpServiceFactory::class,
             \KnihovnyCz\Validator\DatabaseCsrf::class => \KnihovnyCz\Validator\DatabaseCsrfFactory::class,
             \KnihovnyCz\ILS\Connection::class => \VuFind\ILS\ConnectionFactory::class,
+            \KnihovnyCz\Date\Converter::class => \VuFind\Service\DateConverterFactory::class,
         ],
         'aliases' => [
             \VuFind\Config\PluginManager::class => \KnihovnyCz\Config\PluginManager::class,
@@ -438,6 +439,7 @@ $config = [
             'VuFind\Validator\Csrf' => \KnihovnyCz\Validator\DatabaseCsrf::class,
             \VuFind\Validator\CsrfInterface::class => \KnihovnyCz\Validator\DatabaseCsrf::class,
             \VuFind\ILS\Connection::class => \KnihovnyCz\ILS\Connection::class,
+            \Vufind\Date\Converter::class => \KnihovnyCz\Date\Converter::class,
         ],
         'invokables' => [
             \Symfony\Component\Filesystem\Filesystem::class,

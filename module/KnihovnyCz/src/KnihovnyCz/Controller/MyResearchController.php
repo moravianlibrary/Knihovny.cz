@@ -28,6 +28,7 @@
  */
 namespace KnihovnyCz\Controller;
 
+use Laminas\ServiceManager\ServiceLocatorInterface;
 use Laminas\View\Model\ViewModel;
 use VuFind\Controller\MyResearchController as MyResearchControllerBase;
 use VuFind\Exception\Auth as AuthException;
@@ -46,6 +47,24 @@ class MyResearchController extends MyResearchControllerBase
     use \VuFind\Controller\AjaxResponseTrait;
 
     use \KnihovnyCz\Controller\CatalogLoginTrait;
+
+    /**
+     * Date converter object
+     *
+     * @var \KnihovnyCz\Date\Converter
+     */
+    protected $dateConverter = null;
+
+    /**
+     * Constructor
+     *
+     * @param ServiceLocatorInterface $sm Service locator
+     */
+    public function __construct(ServiceLocatorInterface $sm)
+    {
+        parent::__construct($sm);
+        $this->dateConverter = $sm->get(\KnihovnyCz\Date\Converter::class);
+    }
 
     /**
      * Delete user account if it is confirmed
@@ -146,10 +165,20 @@ class MyResearchController extends MyResearchControllerBase
             $view = $this->createViewModel();
             $this->flashMessenger()->addErrorMessage($ex->getMessage());
         }
-        if (!($view instanceof \Laminas\View\Model\ViewModel)) {
+        if ($view instanceof \Laminas\View\Model\ViewModel) {
+            $profile = $view->profile;
+            if (isset($view->profile)
+                && isset($view->profile['expiration_date'])
+                && $this->isExpired($view->profile['expiration_date'])
+            ) {
+                $this->flashMessenger()->addErrorMessage(
+                    'library_card_expirated_warning'
+                );
+            }
+        } else {
             $view = $this->createViewModel(
                 [
-                'error' => 'ils_offline_home_message'
+                    'error' => 'ils_offline_home_message'
                 ]
             );
         }
@@ -274,5 +303,20 @@ class MyResearchController extends MyResearchControllerBase
             return;
         }
         parent::processAuthenticationException();
+    }
+
+    /**
+     * Return if the date is in the past, used for checking expired checked
+     * out items or registrations.
+     *
+     * @param $date Expiration date
+     *
+     * @return bool is expired
+     */
+    protected function isExpired($date)
+    {
+        $expire = $this->dateConverter->parseDisplayDate($date);
+        $dateDiff = $expire->diff(new \DateTime());
+        return $dateDiff->invert == 0 && $dateDiff->days > 0;
     }
 }
