@@ -24,5 +24,7 @@
     <?php endif; ?>
   <?php endforeach; ?>
 <?php else: ?>
-  <?=$this->transEsc('Table of Contents unavailable')?>.
+  <div class="alert alert-info">
+    <?=$this->transEsc('Table of Contents unavailable')?>.
+  </div>
 <?php endif; ?>

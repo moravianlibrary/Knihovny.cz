@@ -28,5 +28,7 @@
     <?php endforeach; ?>
   <?php endforeach; ?>
 <?php else: ?>
-  <?=$this->transEsc('No reviews were found for this record')?>.
+  <div class="alert alert-info">
+    <?=$this->transEsc('No reviews were found for this record')?>.
+  </div>
 <?php endif; ?>

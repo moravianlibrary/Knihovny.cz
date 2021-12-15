@@ -177,7 +177,9 @@
     </ul>
     <?php if ($this->cancelForm): ?></form><?php endif; ?>
   <?php else: ?>
-    <?=$this->transEsc('You do not have any interlibrary loan requests placed') ?>.
+    <div class="alert alert-info">
+      <?=$this->transEsc('You do not have any interlibrary loan requests placed') ?>.
+    </div>
   <?php endif; ?>
 </div>
 

@@ -17,7 +17,9 @@
   <?=$this->context($this)->renderInContext('librarycards/selectcard.phtml', ['user' => $this->auth()->isLoggedIn()]); ?>
 
   <?php if (empty($this->fines)): ?>
-    <?=$this->transEsc('You do not have any fines')?>
+    <div class="alert alert-danger">
+      <?=$this->transEsc('You do not have any fines')?>
+    </div>
   <?php else: ?>
     <?php
       // Collect the data to build the table; we process this in advance so we

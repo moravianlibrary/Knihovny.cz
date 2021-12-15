@@ -110,6 +110,8 @@
   </ul>
   <?=$this->paginator ? $this->paginationControl($this->paginator, 'Sliding', 'Helpers/pagination.phtml', ['params' => $this->params]) : ''?>
 <?php else: ?>
-  <?=$this->transEsc('loan_history_empty')?>
+  <div class="alert alert-info">
+    <?=$this->transEsc('loan_history_empty')?>
+  </div>
 <?php endif; ?>
 

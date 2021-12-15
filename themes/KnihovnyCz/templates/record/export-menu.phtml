@@ -16,6 +16,8 @@
   <?php endforeach; ?>
   </ul>
 <?php else: ?>
-  <?=$this->transEsc('export_no_formats')?>
+  <div class="alert alert-info">
+    <?=$this->transEsc('export_no_formats')?>
+  </div>
 <?php endif; ?>
 

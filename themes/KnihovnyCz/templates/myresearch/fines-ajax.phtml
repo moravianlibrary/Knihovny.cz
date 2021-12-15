@@ -1,7 +1,11 @@
 <?php if (isset($this->error)):?>
-  <?=$this->transEsc($this->error)?>
+  <div class="alert alert-danger">
+    <?=$this->transEsc($this->error)?>
+  </div>
 <?php elseif (empty($this->fines)): ?>
-  <?=$this->transEsc('You do not have any fines')?>
+  <div class="alert alert-info">
+    <?=$this->transEsc('You do not have any fines')?>
+  </div>
 <?php else: ?>
     <?php
     // Collect the data to build the table; we process this in advance so we
