@@ -7,7 +7,7 @@ return [
     'helpers' => [
         'factories' => [
             'VuFind\View\Helper\Root\RecordDataFormatter' => 'KnihovnyCz\View\Helper\KnihovnyCz\RecordDataFormatterFactory',
-            KnihovnyCz\View\Helper\KnihovnyCz\Ziskej::class => function (ContainerInterface $container, $requestedName) {
+            KnihovnyCz\View\Helper\KnihovnyCz\ZiskejMvs::class => function (ContainerInterface $container, $requestedName) {
                 $dependency = $container->get(KnihovnyCz\Ziskej\ZiskejMvs::class);
                 return new $requestedName($dependency);
             },
@@ -20,14 +20,16 @@ return [
             \KnihovnyCz\View\Helper\KnihovnyCz\FooterLink::class,
             \KnihovnyCz\View\Helper\KnihovnyCz\LibrariesApiLookfor::class,
             \KnihovnyCz\View\Helper\KnihovnyCz\SplitText::class,
+            \KnihovnyCz\View\Helper\KnihovnyCz\EscapeElementId::class,
         ],
         'aliases' => [
             'footerLink' => \KnihovnyCz\View\Helper\KnihovnyCz\FooterLink::class,
             'recordDataFormatter' => 'VuFind\View\Helper\Root\RecordDataFormatter',
-            'Ziskej' => KnihovnyCz\View\Helper\KnihovnyCz\Ziskej::class,
-            'ZiskejEdd' => KnihovnyCz\View\Helper\KnihovnyCz\ZiskejEdd::class,
+            'ziskejMvs' => KnihovnyCz\View\Helper\KnihovnyCz\ZiskejMvs::class,
+            'ziskejEdd' => KnihovnyCz\View\Helper\KnihovnyCz\ZiskejEdd::class,
             'librariesApiLookfor' => \KnihovnyCz\View\Helper\KnihovnyCz\LibrariesApiLookfor::class,
             'splitText' => \KnihovnyCz\View\Helper\KnihovnyCz\SplitText::class,
+            'escapeElementId' => \KnihovnyCz\View\Helper\KnihovnyCz\EscapeElementId::class,
         ],
     ],
     'favicon' => 'icon-knihovny.png',

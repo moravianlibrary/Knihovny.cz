@@ -82,6 +82,7 @@ class SolrLocal extends \KnihovnyCz\RecordDriver\SolrMarc
         ];
         $f996 = $this->fields['mappings996_display_mv'] ?? [];
         $isCaslin = str_starts_with($this->getUniqueID(), 'caslin');
+        $isAleph = $this->ils->getDriverName($this->getUniqueID()) === 'Aleph';
         foreach ($f996 as $line) {
             [
                 $itemId, $callnumber, $location, $callnumber_second,
@@ -89,7 +90,7 @@ class SolrLocal extends \KnihovnyCz\RecordDriver\SolrMarc
                 $collection_desc, $agency_id, $sequenceNo, $copy_number,
                 $catalog_link
             ] = str_getcsv($line);
-            $item_id = $agency_id . $itemId . $sequenceNo;
+            $item_id = ($isAleph ? $agency_id : '') . $itemId . $sequenceNo;
             if ($isCaslin) {
                 $location = $this->translateWithPrefix('Sigla::', $location);
             }

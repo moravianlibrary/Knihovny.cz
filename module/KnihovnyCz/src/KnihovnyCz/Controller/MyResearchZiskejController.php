@@ -25,6 +25,7 @@ declare(strict_types=1);
  * @category VuFind
  * @package  KnihovnyCz\Controller
  * @author   Robert Sipek <sipek@mzk.cz>
+ * @author   Vaclav Rosecky <vaclav.rosecky@mzk.cz>
  * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://knihovny.cz Main Page
  */
@@ -35,6 +36,7 @@ use KnihovnyCz\Ziskej\ZiskejMvs;
 use Laminas\Http\Response;
 use Laminas\View\Model\ViewModel;
 use Mzk\ZiskejApi\RequestModel\Message;
+use VuFind\Controller\AjaxResponseTrait;
 use VuFind\Exception\LibraryCard;
 use VuFind\Log\LoggerAwareTrait;
 
@@ -44,12 +46,17 @@ use VuFind\Log\LoggerAwareTrait;
  * @category VuFind
  * @package  KnihovnyCz\Controller
  * @author   Robert Sipek <sipek@mzk.cz>
+ * @author   Vaclav Rosecky <vaclav.rosecky@mzk.cz>
  * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://knihovny.cz Main Page
  */
 class MyResearchZiskejController extends AbstractBase
 {
     use LoggerAwareTrait;
+
+    use AjaxResponseTrait;
+
+    use CatalogLoginTrait;
 
     /**
      * Ziskej tickets page
@@ -60,25 +67,38 @@ class MyResearchZiskejController extends AbstractBase
      */
     public function homeAction(): ViewModel
     {
+        // Force login:
+        if (!$this->getUser()) {
+            return $this->forceLogin();
+        }
+        $view = $this->createViewModel();
+        $view->setTemplate('myresearchziskej/list-all');
+        return $view;
+    }
+
+    /**
+     * Return tickets for selected library card
+     *
+     * @return \Laminas\View\Model\ViewModel
+     *
+     * @throws \Http\Client\Exception
+     */
+    public function listAjaxAction()//: ViewModel
+    {
         $view = $this->createViewModel();
 
         try {
+            $catalogUser = $this->catalogLogin();
             $user = $this->getUser();
-            if (!$user) {
-                if ($this->params()->fromQuery('redirect', true)) {
-                    $this->setFollowupUrlToReferer();
-                }
-                return $this->forwardTo('MyResearch', 'Login');
-            }
             $view->setVariable('user', $user);
 
-            $userCard = $user->getCardByCatName($user->cat_username);
+            $userCard = $user->getCardByCatName($catalogUser['cat_username']);
             if (!$userCard) {
-                return $view;
+                throw new \Exception('Library card not found');
             }
             $view->setVariable('userCard', $userCard);
             if (!$userCard->eppn) {
-                return $view;
+                throw new \Exception('User has no eppn');
             }
 
             /**
@@ -105,12 +125,12 @@ class MyResearchZiskejController extends AbstractBase
             );
             $view->setVariable('isLibraryInZiskej', $isLibraryInZiskej);
             if (!$isLibraryInZiskej) {
-                return $view;
+                throw new \Exception('Library is not in Ziskej');
             }
 
             $reader = $ziskejApi->getReader($userCard->eppn);
             if (!$reader || !$reader->isActive()) {
-                return $view;
+                throw new \Exception('Reader is not active in Ziskej');
             }
             $view->setVariable('reader', $reader);
 
@@ -124,11 +144,12 @@ class MyResearchZiskejController extends AbstractBase
                 }
             }
             $view->setVariable('tickets', $tickets);
-            return $view;
         } catch (\Exception $e) {
             $this->logError('Unexpected ' . get_class($e) . ': ' . $e->getMessage());
-            return $view;
         }
+        $view->setTemplate('myresearchziskej/list-ajax');
+        $result = $this->getViewRenderer()->render($view);
+        return $this->getAjaxResponse('text/html', $result, null);
     }
 
     /**

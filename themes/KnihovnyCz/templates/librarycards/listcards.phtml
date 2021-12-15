@@ -3,13 +3,16 @@
   function loadMyAccount() {
     $('.library-card-ajax').each(function onEachLibraryCard() {
       var element = this;
+      var callback = $(element).data('callback');
       var ajaxCall = {
         dataType: "html",
         url: $(element).data('action') + "?cardId=" + $(element).data('card-id'),
         method: "GET",
         success: function show(content) {
           $(element).html(content);
-          loadCovers();
+          if (callback != '') {
+            window[callback](element);
+          }
         }
       };
       $.ajax(ajaxCall);
@@ -21,7 +24,8 @@ JS;
 <?php if ($this->user): ?>
   <?php foreach ($this->user->getLibraryCards() as $card): ?>
     <h3><?=$this->transEsc('Source::' . $card->home_library) ?></h3>
-    <span class='library-card-ajax' data-card-id='<?=$card->id?>' data-action='<?=$action?>'>
+    <span class='library-card-ajax' data-card-id='<?=$card->id?>'
+          data-action='<?=$action?>' data-callback='<?=$this->callback?>'>
       <?=$this->icon('spinner')?>
     </span>
   <?php endforeach; ?>

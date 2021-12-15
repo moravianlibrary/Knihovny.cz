@@ -1,4 +1,3 @@
-
 variables:
   DEPLOY_JOB_IMAGE: "docker.app.knihovny.cz/ci-builds/kustomize:latest"
   TARGET_REGISTRY_URL: registry.app.knihovny.cz

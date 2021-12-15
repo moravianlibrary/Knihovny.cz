@@ -1,0 +1,72 @@
+<?php
+    // Set up page title:
+    $this->headTitle($this->translate('Checked Out Items'));
+
+    // Set up breadcrumbs:
+    $this->layout()->breadcrumbs = '<li><a href="' . $this->url('myresearch-home') . '">' . $this->transEsc('Your Account') . '</a></li> <li class="active">' . $this->transEsc('Checked Out Items') . '</li>';
+
+    // Check if "Renew All" button can be displayed:
+    $renewAll = !$this->ilsPaging || !$paginator;
+
+    $loadJs = <<<JS
+  function loadCheckedOut(element) {
+    loadCovers();
+    // Checkbox select all
+    $(element).find('.checkbox-select-all').on('change', function selectAllCheckboxes() {
+      var form = this.form ? $(this.form) : $(this).closest('form');
+      if (this.checked) {
+        form.find('.checkbox-select-item:not(:checked)').trigger('click');
+      } else {
+        form.find('.checkbox-select-item:checked').trigger('click');
+      }
+      $('[form="' + form.attr('id') + '"]').prop('checked', this.checked);
+      form.find('.checkbox-select-all').prop('checked', this.checked);
+      $('.checkbox-select-all[form="' + form.attr('id') + '"]').prop('checked', this.checked);
+    });
+    $(element).find("form").submit(function onSubmit(event) {
+      event.preventDefault();
+      var button = $(document.activeElement);
+      var form = $(this);
+      var url = $(element).data('action');
+      var data = form.serialize() + '&' + button.attr('id') + '=' + button.val()
+        + '&cardId=' + $(element).data('card-id');
+      $.ajax({
+        type: "POST",
+        url: url,
+        data: data,
+        success: function onSuccess(content) {
+          $(element).html(content);
+          loadCheckedOut(element);
+        }
+      });
+    });
+  };
+JS;
+?>
+
+<a class="search-filter-toggle visible-xs" href="#myresearch-sidebar" data-toggle="offcanvas" title="Expand Sidebar">
+  <?=$this->transEsc('Your Account') ?>
+</a>
+
+<div class="<?=$this->layoutClass('mainbody')?>">
+  <?=$this->flashmessages();?>
+
+  <h3><?=$this->transEsc('Your Checked Out Items')?></h3>
+  <p>
+    <?=$this->context($this)->renderInContext('librarycards/listcards.phtml', [
+        'user' => $this->auth()->isLoggedIn(),
+        'action' => $this->url('myresearch-checkedoutajax'),
+        'callback' => 'loadCheckedOut',
+    ]);
+    ?>
+  </p>
+</div>
+
+<div class="<?=$this->layoutClass('sidebar')?>" id="myresearch-sidebar">
+  <?=$this->context($this)->renderInContext("myresearch/menu.phtml", ['active' => 'checkedout'])?>
+</div>
+
+<?=$this->render('myresearch/notify-account-status.phtml', ['method' => 'checkedOut', 'accountStatus' => $this->accountStatus]); ?>
+
+<?=$this->inlineScript(\Laminas\View\Helper\HeadScript::SCRIPT, $loadJs, 'SET')?>
+<noscript><?=$this->transEsc('Please enable JavaScript.')?></noscript>

@@ -1,0 +1,50 @@
+<?php
+  // Set up page title:
+  $this->headTitle($this->translate('Loan History'));
+
+  // Set up breadcrumbs:
+  $this->layout()->breadcrumbs = '<li><a href="' . $this->url('myresearch-home') . '">' . $this->transEsc('Your Account') . '</a></li> <li class="active">' . $this->transEsc('Loan History') . '</li>';
+
+$loadJs = <<<JS
+  function loadHistoricLoans(element) {
+    loadCovers();
+    $(element).find("ul.pagination>li>a").click(function onClick(event){
+      event.preventDefault();
+      $(element).empty().append(VuFind.spinner('fa-3x fa-fw'));
+      link = $(this).attr('href');
+      $.ajax({
+        type: "GET",
+        url: link,
+        success: function onSuccess(content) {
+          $(element).html(content);
+          loadHistoricLoans(element);
+        }
+      });
+    });
+  };
+JS;
+?>
+
+<a class="search-filter-toggle visible-xs" href="#myresearch-sidebar" data-toggle="offcanvas" title="Expand Sidebar">
+  <?=$this->transEsc('Your Account') ?>
+</a>
+
+<div class="<?=$this->layoutClass('mainbody')?>">
+  <?=$this->flashmessages()?>
+  <h3><?=$this->transEsc('Loan History')?></h3>
+  <p>
+    <?=$this->context($this)->renderInContext('librarycards/listcards.phtml', [
+        'user' => $this->auth()->isLoggedIn(),
+        'action' => $this->url('myresearch-historicloansajax'),
+        'callback' => 'loadHistoricLoans',
+    ]);
+    ?>
+  </p>
+</div>
+
+<div class="<?=$this->layoutClass('sidebar')?>" id="myresearch-sidebar">
+  <?=$this->context($this)->renderInContext("myresearch/menu.phtml", ['active' => 'historicloans'])?>
+</div>
+
+<?=$this->inlineScript(\Laminas\View\Helper\HeadScript::SCRIPT, $loadJs, 'SET')?>
+<noscript><?=$this->transEsc('Please enable JavaScript.')?></noscript>

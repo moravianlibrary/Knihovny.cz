@@ -2,6 +2,9 @@
   $user = $this->auth()->isLoggedIn();
   $patron = $user ? $this->auth()->getILSPatron() : false;
   $capabilityParams = $patron ? ['patron' => $patron] : [];
+  if ($user) {
+    $capabilityParams['user'] = $user;
+  }
   $ilsOnline = ('ils-none' !== $this->ils()->getOfflineMode());
 ?>
 <button class="close-offcanvas btn btn-link" data-toggle="offcanvas"><?=$this->transEsc('navigate_back') ?></button>
@@ -18,7 +21,7 @@
       <i class="fa fa-fw fa-history" aria-hidden="true"></i> <?=$this->transEsc('Loan History')?>
     </a>
   <?php endif; ?>
-  <?php if ($this->Ziskej()->isEnabled()): ?>
+  <?php if ($this->ziskejMvs()->isEnabled()): ?>
     <a href="<?=$this->url('myresearch-ziskej-home')?>" class="flex ziskej<?=$this->active == 'ziskej' ? ' active' : ''?>">
       <span class="flex-col"><i class="fa fa-fw fa-file-text" aria-hidden="true"></i>&nbsp;<?=$this->transEsc('Ziskej::service_name')?></span>
       <span class="ziskej-status status hidden"><i class="fa fa-spin fa-spinner" aria-hidden="true"></i></span>

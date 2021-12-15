@@ -264,4 +264,23 @@ class User extends Base
         $row->cat_pass_enc = $this->cat_pass_enc;
         $row->save();
     }
+
+    /**
+     * Activate the user card by library prefix
+     *
+     * @param string $source Library prefix
+     *
+     * @return bool
+     * @throws \VuFind\Exception\LibraryCard
+     */
+    public function activateCardByPrefix(string $source): bool
+    {
+        foreach ($this->getLibraryCards()->toArray() as $card) {
+            if (($card['home_library'] ?? '') == $source) {
+                $this->activateLibraryCard($card['id']);
+                return true;
+            }
+        }
+        return false;
+    }
 }
