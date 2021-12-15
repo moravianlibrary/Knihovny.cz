@@ -107,6 +107,16 @@ UPDATE inst_sources SET library_name = "Městská knihovna Tábor (vkta)" WHERE 
 UPDATE inst_sources SET library_name = "Chomutovská knihovna (mkchom)" WHERE source = "mkchom";
 UPDATE inst_sources SET library_name = "Městská knihovna Frýdek-Místek (mkfm)" WHERE source = "mkfm";
 UPDATE inst_sources SET library_name = "Městská knihovna Ladislava z Boskovic v Moravské Třebové (mkmt)" WHERE source = "mkmt";
+UPDATE inst_sources SET library_name = "Knihovna města Olomouce (kmol)" WHERE source = "kmol";
+UPDATE inst_sources SET library_name = "Městská knihovna Rožnov pod Radhoštěm (knir)" WHERE source = "knir";
+UPDATE inst_sources SET library_name = "K3 Bohumín - středisko KNIHOVNA (mkbohumin)" WHERE source = "mkbohumin";
+UPDATE inst_sources SET library_name = "Městská knihovna Boskovice (mkboskovic)" WHERE source = "mkboskovic";
+UPDATE inst_sources SET library_name = "Městská knihovny v Chebu (mkcheb)" WHERE source = "mkcheb";
+UPDATE inst_sources SET library_name = "Městská knihovna Chrudim (mkchrudim)" WHERE source = "mkchrudim";
+UPDATE inst_sources SET library_name = "Městská knihovna Jindřichův Hradec (mkjh)" WHERE source = "mkjh";
+UPDATE inst_sources SET library_name = "Městská knihovna Litvínov (mklit)" WHERE source = "mklit";
+UPDATE inst_sources SET library_name = "Husova knihovna Říčany (mkricany)" WHERE source = "mkricany";
+UPDATE inst_sources SET library_name = "Městská knihovna v Třebíči (mktrebic)" WHERE source = "mktrebic";
 
 UPDATE inst_sources SET `library_name` = `source` WHERE `library_name` = '';
 --
