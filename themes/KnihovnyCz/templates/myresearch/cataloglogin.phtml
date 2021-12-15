@@ -11,7 +11,7 @@
 <?php if ($offlineMode == "ils-offline"): ?>
   <?=$this->render('Helpers/ils-offline.phtml', ['offlineModeMsg' => 'ils_offline_login_message'])?>
 <?php else: ?>
-  <h3><?=$this->transEsc('Library Catalog Profile')?></h3>
+  <h2><?=$this->transEsc('Library Catalog Profile')?></h2>
   <?=$this->flashmessages()?>
   <p>
     <?=$this->context($this)->renderInContext('librarycards/selectcard.phtml', ['user' => $this->auth()->isLoggedIn()]); ?>

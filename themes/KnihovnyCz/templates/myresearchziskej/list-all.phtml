@@ -19,7 +19,7 @@ JS;
 <div class="<?=$this->layoutClass('mainbody')?>">
   <?=$this->flashmessages();?>
 
-  <h3><?=$this->transEsc('Ziskej::checked_out_items')?></h3>
+  <h2><?=$this->transEsc('Ziskej::checked_out_items')?></h2>
   <p>
     <?=$this->context($this)->renderInContext('librarycards/listcards.phtml', [
       'user' => $this->auth()->isLoggedIn(),

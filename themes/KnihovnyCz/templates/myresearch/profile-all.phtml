@@ -14,7 +14,7 @@
 <div class="<?=$this->layoutClass('mainbody')?>">
   <?=$this->flashmessages();?>
 
-  <h3><?=$this->transEsc('Library Catalog Profile')?></h3>
+  <h2><?=$this->transEsc('Library Catalog Profile')?></h2>
   <p>
     <?=$this->context($this)->renderInContext('librarycards/listcards.phtml', [
       'user' => $this->auth()->isLoggedIn(),
