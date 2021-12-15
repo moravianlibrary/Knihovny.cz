@@ -55,16 +55,18 @@
   </ul>
 <?php endif; ?>
 
-<ul class="pagination">
-  <?php foreach ($letters as $letter): ?>
-    <li<?php if (strcasecmp($letter, $from) == 0): ?> class="active" aria-current="page"<?php endif; ?>>
-      <a href="<?=$this->url('collections-home')?>?from=<?=urlencode($letter)?><?=$this->escapeHtmlAttr($filterString)?>"
-         aria-label="<?=$this->transEscAttr('page_num', ['%%page%%' => $letter]); ?>">
-        <?=$this->escapeHtml($letter)?>
-      </a>
-    </li>
-  <?php endforeach; ?>
-</ul>
+<nav class="text-center">
+  <ul class="pagination">
+    <?php foreach ($letters as $letter): ?>
+      <li<?php if (strcasecmp($letter, $from) == 0): ?> class="active" aria-current="page"<?php endif; ?>>
+        <a href="<?=$this->url('collections-home')?>?from=<?=urlencode($letter)?><?=$this->escapeHtmlAttr($filterString)?>"
+           aria-label="<?=$this->transEscAttr('page_num', ['%%page%%' => $letter]); ?>">
+          <?=$this->escapeHtml($letter)?>
+        </a>
+      </li>
+    <?php endforeach; ?>
+  </ul>
+</nav>
 <?=$pageLinks ?>
 <div class="clearfix">
   <?=$this->render('collections/list.phtml')?>

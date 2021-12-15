@@ -1,5 +1,6 @@
 <?php if ($this->pageCount): ?>
-  <ul class="pagination">
+  <nav class="text-center">
+    <ul class="pagination">
     <!-- Previous page link -->
     <?php if (isset($this->previous)): ?>
       <li>
@@ -62,4 +63,5 @@
       <li class="disabled"> <span><?=$this->transEsc('Next')?> <span aria-hidden="true">&raquo;</span></span></li>
     <?php endif; ?>
   </ul>
+  </nav>
 <?php endif; ?>

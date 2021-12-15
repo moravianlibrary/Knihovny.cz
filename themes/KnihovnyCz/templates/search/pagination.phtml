@@ -1,5 +1,5 @@
 <?php if ($this->pageCount): ?>
-<div class="text-center">
+<nav class="text-center">
   <ul class="pagination" aria-label="<?=$this->transEscAttr('pagination_label')?>">
     <?php if (isset($this->previous)): ?>
       <?php if (!isset($this->options['disableFirst']) || !$this->options['disableFirst']): ?>
@@ -41,5 +41,5 @@
       <?php endif; ?>
     <?php endif; ?>
   </ul>
-</div>
+</nav>
 <?php endif; ?>
