@@ -24,9 +24,9 @@ Test the code:
 Build image:
   stage: build
   rules:
-    - if:  # build on issue- or feat-
+    - if:  # build on issue or feat-
         ( $CI_PIPELINE_SOURCE == "merge_request_event" ) &&
-        ( ( $CI_MERGE_REQUEST_SOURCE_BRANCH_NAME =~ /^issue-/ ) ||
+        ( ( $CI_MERGE_REQUEST_SOURCE_BRANCH_NAME =~ /^issue/ ) ||
           ( $CI_MERGE_REQUEST_SOURCE_BRANCH_NAME =~ /^feat-/ ) ||
           ( $CI_MERGE_REQUEST_SOURCE_BRANCH_NAME =~ /^feat\// ) ||
           ( $CI_MERGE_REQUEST_SOURCE_BRANCH_NAME =~ /^fix\// )
@@ -123,9 +123,9 @@ Deploy devel image:
     DEPLOY_REPO_BRANCH: devel
     DEPLOY_REPO_DIR: devel
   rules:
-    - if:  # deploy on issue- or feat-
+    - if:  # deploy on issue or feat-
         ( $CI_PIPELINE_SOURCE == "merge_request_event" ) &&
-        ( ( $CI_MERGE_REQUEST_SOURCE_BRANCH_NAME =~ /^issue-/ ) ||
+        ( ( $CI_MERGE_REQUEST_SOURCE_BRANCH_NAME =~ /^issue/ ) ||
           ( $CI_MERGE_REQUEST_SOURCE_BRANCH_NAME =~ /^feat-/ ) ||
           ( $CI_MERGE_REQUEST_SOURCE_BRANCH_NAME =~ /^feat\// ) ||
           ( $CI_MERGE_REQUEST_SOURCE_BRANCH_NAME =~ /^fix\// )
