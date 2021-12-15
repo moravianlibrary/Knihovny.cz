@@ -186,6 +186,15 @@ ALTER TABLE `resource_tags` CHANGE COLUMN `resource_id` `resource_id` int(11) DE
 ALTER TABLE `shortlinks` ADD COLUMN `hash` varchar(32) AFTER `path`;
 ALTER TABLE `shortlinks` ADD UNIQUE KEY `shortlinks_hash_IDX` USING HASH (`hash`);
 
+-- Remove obsolete users
+DELETE FROM user WHERE username NOT IN (
+  SELECT CONCAT(username, ';', ind) keep_username FROM (
+    SELECT SUBSTRING(username, 1, POSITION(';' IN username) - 1) username, MAX(SUBSTRING(username, POSITION(';' IN username) + 1)) ind
+    FROM user
+    GROUP BY 1
+  ) keep
+);
+
 -- Migrate usernames
 UPDATE user SET username = SUBSTRING_INDEX(username, ';', 1);
 
@@ -252,6 +261,12 @@ ALTER TABLE `widget_content` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_un
 ALTER TABLE user_card DROP KEY user_card_eppn_uq;
 ALTER TABLE user_card ADD COLUMN edu_person_unique_id VARCHAR(255) DEFAULT NULL;
 
+DELETE a FROM user_card a
+INNER JOIN user_card b
+WHERE a.id < b.id
+  AND a.cat_username = b.cat_username
+  AND a.home_library != 'Dummy';
+
 -- migration for IdPs with Aleph and Koha - edu_person_unique_id is different from eppn
 UPDATE user_card
 SET edu_person_unique_id = CONCAT(SUBSTR(cat_username, POSITION('.' IN cat_username) + 1), SUBSTR(eppn, POSITION('@' IN eppn)))
@@ -267,10 +282,11 @@ WHERE cat_username LIKE 'kkpc.%'
   OR cat_username LIKE 'cvgz.%'
   OR cat_username LIKE 'tre.%'
   OR cat_username LIKE 'vkta.%'
-  OR cat_username LIKE 'mkuo.%';
+  OR cat_username LIKE 'mkuo.%'
+  OR cat_username LIKE 'mkmt.%';
 
 -- migration for other IdPs - attribute edu_person_unique_id is same as eppn
-UPDATE user_card SET edu_person_unique_id = eppn WHERE edu_person_unique_id IS NULL;
+UPDATE user_card SET edu_person_unique_id = eppn WHERE edu_person_unique_id IS NULL AND home_library != 'Dummy';
 CREATE UNIQUE INDEX user_card_edu_person_unique_id_uq ON user_card(edu_person_unique_id(190));
 
 --
