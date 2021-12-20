@@ -48,32 +48,32 @@ COPY composer.local.json ${VUFIND_ROOT}/composer.local.json
 RUN chown vufind:vufind -R ${VUFIND_ROOT}
 
 RUN mkdir -p ${COMPOSER_HOME} && \
-    mkdir -p ${VUFIND_ROOT}/public && \
     chown vufind:vufind -Rv ${COMPOSER_HOME} ${VUFIND_ROOT}
 
 USER vufind
 
 WORKDIR ${VUFIND_ROOT}
 RUN /usr/local/bin/composer install --no-dev --no-scripts --ignore-platform-req php
-RUN /usr/local/bin/composer update --no-dev --ignore-platform-req php
+RUN /usr/local/bin/composer update --no-dev --no-scripts --ignore-platform-req php
+
+USER root
+RUN chown vufind:vufind -R ${VUFIND_ROOT}/vendor
 
 ########### final image
 FROM localhost/knihovny-php:latest
-ARG VUFIND_ROOT=/var/www/knihovny-cz
+ARG VUFIND_ROOT=/var/www/knihovny-cz/
 
 # Assemble production code from 'compiled' pieces
-COPY --from=vufind-src /src/vufind/config ${VUFIND_ROOT}/config
-COPY --from=vufind-src /src/vufind/languages ${VUFIND_ROOT}/languages
-COPY --from=vufind-src /src/vufind/module ${VUFIND_ROOT}/module
-COPY --from=vufind-src /src/vufind/public ${VUFIND_ROOT}/public
-COPY --from=vufind-src /src/vufind/tests ${VUFIND_ROOT}/tests
-COPY --from=vufind-src /src/vufind/util ${VUFIND_ROOT}/util
-COPY --from=libraries ${VUFIND_ROOT}/vendor ${VUFIND_ROOT}/vendor
-COPY --from=libraries ${VUFIND_ROOT}/public/swagger-ui/*.js  ${VUFIND_ROOT}/public/swagger-ui/*.css ${VUFIND_ROOT}/public/swagger-ui/*.html  ${VUFIND_ROOT}/public/swagger-ui/*.png ${VUFIND_ROOT}/public/swagger-ui/
-COPY ./local ${VUFIND_ROOT}/local
+COPY --from=vufind-src /src/vufind/config /${VUFIND_ROOT}/config
+COPY --from=vufind-src /src/vufind/languages /${VUFIND_ROOT}/languages
+COPY --from=vufind-src /src/vufind/module /${VUFIND_ROOT}/module
+COPY --from=vufind-src /src/vufind/public /${VUFIND_ROOT}/public
+COPY --from=vufind-src /src/vufind/tests /${VUFIND_ROOT}/tests
+COPY --from=vufind-src /src/vufind/util /${VUFIND_ROOT}/util
+COPY --from=libraries /${VUFIND_ROOT}/vendor /${VUFIND_ROOT}/vendor
+COPY ./local /${VUFIND_ROOT}/local
 COPY ./module ${VUFIND_ROOT}/module
 COPY --from=themes /vufind-build-themes/themes ${VUFIND_ROOT}/themes
-COPY --from=vufind-src /src/vufind/build.xml ${VUFIND_ROOT}/build.xml
 
 RUN chown vufind:vufind -R ${VUFIND_ROOT}
 
