@@ -73,7 +73,7 @@ COPY --from=libraries ${VUFIND_ROOT}/public/swagger-ui/*.js  ${VUFIND_ROOT}/publ
 COPY ./local ${VUFIND_ROOT}/local
 COPY ./module ${VUFIND_ROOT}/module
 COPY --from=themes /vufind-build-themes/themes ${VUFIND_ROOT}/themes
-COPY --from=vufind-src /src/vufind/build.xml /${VUFIND_ROOT}/build.xml
+COPY --from=vufind-src /src/vufind/build.xml ${VUFIND_ROOT}/build.xml
 
 RUN chown vufind:vufind -R ${VUFIND_ROOT}
 
