@@ -96,8 +96,7 @@ Build image:
     - git clone git@gitlab.mzk.cz:knihovny.cz/deploy/vufind.git deployment
     - cd deployment/${DEPLOY_REPO_DIR};
     - git checkout ${DEPLOY_REPO_BRANCH}
-
-    - kustomize edit set image registration=${APP_IMAGE_NAME}:${APP_IMAGE_TAG}
+    - kustomize edit set image vufind=${APP_IMAGE_NAME}:${APP_IMAGE_TAG}
     # provide commit-id
     - echo -n ${CI_COMMIT_SHORT_SHA} > config/commit-id.txt
     # owerwrite annotation to force deploy
