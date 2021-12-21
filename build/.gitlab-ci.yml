@@ -144,9 +144,10 @@ Deploy release image:
     - if:  # deploy on version tag
         ( $CI_PIPELINE_SOURCE == "push" )  &&
         ( $CI_COMMIT_TAG =~ /^v[0-9]+.[0-9]+.[0-9]+/  )
+
   environment:
     name: production
-    #url: $DEVEL_ENVIRONMENT_URL
+    url: $PRODUCTION_ENVIRONMENT_URL
 
 Deploy master image:
   extends: .deploy_image
