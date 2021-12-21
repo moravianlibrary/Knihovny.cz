@@ -166,6 +166,7 @@ DROP TABLE `infobox`;
 DROP TABLE `inspirations`;
 DROP TABLE `portal_pages`;
 DROP TABLE `citation_style`;
+DROP TABLE `hosted_idps`;
 
 -- Add table for record cache
 CREATE TABLE `record` (
@@ -299,4 +300,4 @@ CREATE TABLE `csrf_token` (
     `token` varchar(128) NOT NULL,
     `created` datetime NOT NULL,
     PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;
