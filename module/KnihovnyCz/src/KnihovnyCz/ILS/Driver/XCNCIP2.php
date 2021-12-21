@@ -399,4 +399,26 @@ class XCNCIP2 extends \VuFind\ILS\Driver\XCNCIP2
             'callnumber' => $itemCallNo,
         ];
     }
+
+    /**
+     * Get Patron Profile
+     *
+     * This is responsible for retrieving the profile for a specific patron.
+     *
+     * @param array $patron The patron array
+     *
+     * @throws ILSException
+     * @return array        Array of the patron's profile data on success.
+     */
+    public function getMyProfile($patron)
+    {
+        $profile = parent::getMyProfile($patron);
+        $patron = $this->patronLogin(
+            $patron['cat_username'], $patron['cat_password']
+        );
+        if (isset($patron['email'])) {
+            $profile['email'] = $patron['email'];
+        }
+        return $profile;
+    }
 }
