@@ -46,12 +46,11 @@
         RewriteCond %{REQUEST_URI} ^/Shibboleth.*$
         RewriteRule .* - [PT,L] # this is the last rule
 
-        #RewriteCond %{REQUEST_FILENAME} -s [OR]
-        #RewriteCond %{REQUEST_FILENAME} -l [OR]
-        #RewriteCond %{REQUEST_FILENAME} -d
-
-        # sen
         RewriteRule ^AJAX/JSON /ajax  [PT,L,E=worker:ajax]
+        RewriteCond %{REQUEST_FILENAME} -s [OR]
+        RewriteCond %{REQUEST_FILENAME} -l [OR]
+        RewriteCond %{REQUEST_FILENAME} -d
+        RewriteRule ^swagger-ui/.*$ - [PT,L]
         RewriteRule ^. /app  [PT,L,E=worker:main]
    </Directory>
 
