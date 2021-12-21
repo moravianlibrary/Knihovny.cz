@@ -189,7 +189,8 @@ class Inspiration implements \VuFind\ContentBlock\ContentBlockInterface
      */
     public function setConfig($settings)
     {
-        [$this->key, $limit] = explode(':', $settings);
-        $this->limit = (int)$limit ?? 10;
+        $parsedSettings = explode(':', $settings);
+        $this->key = $parsedSettings[0];
+        $this->limit = (int)($parsedSettings[1] ?? 5);
     }
 }
