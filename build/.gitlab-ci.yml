@@ -5,7 +5,6 @@ variables:
   TARGET_IMAGE_TAG: build
   CACHE_REGISTRY_URL: docker.app.knihovny.cz
   BUILD_DEBUG: 'true'
-  BUILD_THIS_MR: '334'
 
 Test the code:
   stage: test
@@ -16,18 +15,28 @@ Test the code:
         ( ( $CI_COMMIT_BRANCH == "master" ) || ( $CI_COMMIT_BRANCH == "main" ) || ( $CI_COMMIT_BRANCH =~ /^devel/ )  )
     - if:  # run tests on MR
         ( $CI_PIPELINE_SOURCE == "merge_request_event" )
+    - if:  # run tests on version tag
+        ( $CI_PIPELINE_SOURCE == "push" )  &&
+        ( $CI_COMMIT_TAG =~ /^v[0-9]+.[0-9]+.[0-9]+/ )
   script:
-    - echo "Add your tests here"
+    - echo "Add your tests here, please"
 
-Build multistage image:
+Build image:
   stage: build
   rules:
-    - if:
+    - if:  # build on issue or feat-
         ( $CI_PIPELINE_SOURCE == "merge_request_event" ) &&
-        ( $CI_MERGE_REQUEST_IID == $BUILD_THIS_MR )
-    - if:  # run build on main, or devel
+        ( ( $CI_MERGE_REQUEST_SOURCE_BRANCH_NAME =~ /^issue/ ) ||
+          ( $CI_MERGE_REQUEST_SOURCE_BRANCH_NAME =~ /^feat-/ ) ||
+          ( $CI_MERGE_REQUEST_SOURCE_BRANCH_NAME =~ /^feat\// ) ||
+          ( $CI_MERGE_REQUEST_SOURCE_BRANCH_NAME =~ /^fix\// )
+        )
+    - if: # run build on main
         ( $CI_PIPELINE_SOURCE == "push" )  &&
-        ( ( $CI_COMMIT_BRANCH == "master" ) || ( $CI_COMMIT_BRANCH == "main" ) || ( $CI_COMMIT_BRANCH =~ /^devel/ )  )
+        ( ( $CI_COMMIT_BRANCH == "master" ) || ( $CI_COMMIT_BRANCH == "main" ) )
+    - if:  # run build on version tag
+        ( $CI_PIPELINE_SOURCE == "push" )  &&
+        ( $CI_COMMIT_TAG =~ /^v[0-9]+.[0-9]+.[0-9]+/  )
   image: ${CACHE_REGISTRY_URL}/mirrors/docker:20.10-git
   services:
     - ${CACHE_REGISTRY_URL}/mirrors/docker:20.10-dind
@@ -54,10 +63,18 @@ Build multistage image:
     # push master
     - |
         if [ "$CI_PIPELINE_SOURCE" == "push" ]; then
-           if [ "$CI_COMMIT_BRANCH" == "master" -o [ "$CI_COMMIT_BRANCH" == "main"]; then
+           if [ "$CI_COMMIT_BRANCH" == "master" -o "$CI_COMMIT_BRANCH" == "main" ]; then
             echo ${TARGET_REGISTRY_URL}/${TARGET_IMAGE_NAME}:branch-${CI_COMMIT_BRANCH}
             docker tag ${TARGET_REGISTRY_URL}/${TARGET_IMAGE_NAME}:build ${TARGET_REGISTRY_URL}/${TARGET_IMAGE_NAME}:branch-${CI_COMMIT_BRANCH}
             docker push --quiet ${TARGET_REGISTRY_URL}/${TARGET_IMAGE_NAME}:branch-${CI_COMMIT_BRANCH}
+           fi
+        fi
+    - |
+        if [ "$CI_PIPELINE_SOURCE" == "push" ]; then
+           if [ "$CI_COMMIT_TAG" ]; then
+            echo ${TARGET_REGISTRY_URL}/${TARGET_IMAGE_NAME}:tag-${CI_COMMIT_TAG}
+            docker tag ${TARGET_REGISTRY_URL}/${TARGET_IMAGE_NAME}:build ${TARGET_REGISTRY_URL}/${TARGET_IMAGE_NAME}:tag-${CI_COMMIT_TAG}
+            docker push --quiet ${TARGET_REGISTRY_URL}/${TARGET_IMAGE_NAME}:tag-${CI_COMMIT_TAG}
            fi
         fi
 
@@ -65,7 +82,7 @@ Build multistage image:
   stage: deploy
   image: "${DEPLOY_JOB_IMAGE}"
   needs:
-    - Build multistage image
+    - Build image
 
   variables:
     APP_IMAGE_NAME: docker.app.knihovny.cz/knihovny-cz/vufind
@@ -80,7 +97,7 @@ Build multistage image:
     - cd deployment/${DEPLOY_REPO_DIR};
     - git checkout ${DEPLOY_REPO_BRANCH}
 
-    #- kustomize edit set image registration=${APP_IMAGE_NAME}:${APP_IMAGE_TAG}
+    - kustomize edit set image registration=${APP_IMAGE_NAME}:${APP_IMAGE_TAG}
     # provide commit-id
     - echo -n ${CI_COMMIT_SHORT_SHA} > config/commit-id.txt
     # owerwrite annotation to force deploy
@@ -89,7 +106,7 @@ Build multistage image:
     - git config user.email "${GITLAB_USER_EMAIL}"
     - |
         cat >> ${TMP_DIR}/commit-message <<EOF
-        ${CI_COMMIT_SHORT_SHA}: ${CI_COMMIT_TITLE}
+        ${APP_IMAGE_TAG}(${CI_COMMIT_SHORT_SHA}): ${CI_COMMIT_TITLE}
         * Upgrade image version to ${APP_IMAGE_TAG}
         * commit: ${CI_PROJECT_URL}/-/commit/${CI_COMMIT_SHORT_SHA}
         * CI job: ${CI_JOB_URL}
@@ -101,18 +118,52 @@ Build multistage image:
 
 Deploy devel image:
   extends: .deploy_image
-  rules:
-    - if:  # run deploy on main, or devel
-        ( $CI_PIPELINE_SOURCE == "push" )  &&
-        ( ( $CI_COMMIT_BRANCH == "master" ) || ( $CI_COMMIT_BRANCH == "main" ) )
-    - if:
-        ( $CI_PIPELINE_SOURCE == "merge_request_event" ) &&
-        ( $CI_MERGE_REQUEST_IID == $BUILD_THIS_MR )
-  environment:
-    name: devel
   variables:
+    APP_IMAGE_TAG: 'mr-${CI_MERGE_REQUEST_IID}'
     DEPLOY_REPO_BRANCH: devel
     DEPLOY_REPO_DIR: devel
+  rules:
+    - if:  # deploy on issue or feat-
+        ( $CI_PIPELINE_SOURCE == "merge_request_event" ) &&
+        ( ( $CI_MERGE_REQUEST_SOURCE_BRANCH_NAME =~ /^issue/ ) ||
+          ( $CI_MERGE_REQUEST_SOURCE_BRANCH_NAME =~ /^feat-/ ) ||
+          ( $CI_MERGE_REQUEST_SOURCE_BRANCH_NAME =~ /^feat\// ) ||
+          ( $CI_MERGE_REQUEST_SOURCE_BRANCH_NAME =~ /^fix\// )
+        )
+  environment:
+    name: devel
+    url: $DEVEL_ENVIRONMENT_URL
+
+
+Deploy release image:
+  extends: .deploy_image
+  variables:
+    APP_IMAGE_TAG: 'tag-${CI_COMMIT_TAG}'
+    DEPLOY_REPO_BRANCH: main
+    DEPLOY_REPO_DIR: production
+  rules:
+    - if:  # deploy on version tag
+        ( $CI_PIPELINE_SOURCE == "push" )  &&
+        ( $CI_COMMIT_TAG =~ /^v[0-9]+.[0-9]+.[0-9]+/  )
+  environment:
+    name: production
+    #url: $DEVEL_ENVIRONMENT_URL
+
+Deploy master image:
+  extends: .deploy_image
+  variables:
+    APP_IMAGE_TAG: 'branch-${CI_COMMIT_BRANCH}'
+    DEPLOY_REPO_BRANCH: devel
+    DEPLOY_REPO_DIR: devel
+
+  rules:
+    - if: # # deploy on main branch
+        ( $CI_PIPELINE_SOURCE == "push" )  &&
+        ( ( $CI_COMMIT_BRANCH == "master" ) || ( $CI_COMMIT_BRANCH == "main" ) )
+
+  environment:
+    name: devel
+    url: $DEVEL_ENVIRONMENT_URL
 
 Debug CI:
   stage: test
