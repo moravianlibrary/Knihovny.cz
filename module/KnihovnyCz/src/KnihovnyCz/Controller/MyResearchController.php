@@ -312,7 +312,7 @@ class MyResearchController extends MyResearchControllerBase
             );
             return;
         }
-        parent::processAuthenticationException();
+        parent::processAuthenticationException($e);
     }
 
     /**
