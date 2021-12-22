@@ -316,17 +316,20 @@ class KohaRest1905 extends AbstractBase implements \Laminas\Log\LoggerAwareInter
     {
         $result = $this->getPatron($patron['id']);
         $expiryDate = isset($result['expiry_date'])
-            ? $this->normalizeDate($result['expiry_date']) : '';
+            ? $this->normalizeDate($result['expiry_date']) : null;
+        $address1 = $result['address'] .
+            (!empty($result['street_number'])
+                ? (' ' . $result['street_number']) : '');
         return [
             'id' => $patron['id'],
             'firstname' => $result['firstname'],
             'lastname' => $result['surname'],
-            'address1' => $result['address'] . ' ' . $result['street_number'],
-            'address2' => $result['address2'],
-            'city' => $result['city'],
-            'country' => $result['country'],
-            'zip' => $result['postal_code'],
-            'phone' => $result['phone'],
+            'address1' => !empty($address1) ? $address1 : null,
+            'address2' => !empty($result['address2']) ? $result['address2'] : null,
+            'city' => !empty($result['city']) ? $result['city'] : null,
+            'country' => !empty($result['country']) ? $result['country'] : null,
+            'zip' => !empty($result['postal_code']) ? $result['postal_code'] : null,
+            'phone' => !empty($result['phone']) ? $result['phone'] : null,
             //FIXME: maybe better as category name - need future api enhancements
             'group' => $result['category_id'],
             'expiration_date' => $expiryDate,
