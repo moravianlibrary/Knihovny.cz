@@ -301,3 +301,5 @@ CREATE TABLE `csrf_token` (
     `created` datetime NOT NULL,
     PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+UPDATE user_card SET card_name = home_library WHERE card_name = '' OR card_name IS NULL;
