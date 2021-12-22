@@ -7,12 +7,6 @@
 <?php elseif (is_array($this->profile)): ?>
   <?=$this->flashmessages();?>
   <table class="table table-striped">
-    <?php
-        $profile = $this->profile;
-        if (!empty($this->user['email'])) {
-            $profile['email'] = $this->user['email'];
-        }
-    ?>
     <?=
         $this->renderArray(
             $arrTemplate,
