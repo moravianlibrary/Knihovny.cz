@@ -125,7 +125,11 @@ class Inspiration implements \VuFind\ContentBlock\ContentBlockInterface
     public function getItems()
     {
         if ($this->items === null) {
+            $this->items = [];
             $widget = $this->getWidget();
+            if (!$widget) {
+                return $this->items;
+            }
             $widgetContent = $this->tableManager->get(
                 \KnihovnyCz\Db\Table\WidgetContent::class
             );
@@ -134,7 +138,7 @@ class Inspiration implements \VuFind\ContentBlock\ContentBlockInterface
             $select->limit($this->limit);
             $select->order(new Expression('RAND()'));
             $content = $widgetContent->selectWith($select);
-            $this->items = [];
+
             foreach ($content as $item) {
                 try {
                     $this->items[] = $this->recordLoader->load($item->value);
@@ -185,7 +189,8 @@ class Inspiration implements \VuFind\ContentBlock\ContentBlockInterface
      */
     public function setConfig($settings)
     {
-        [$this->key, $limit] = explode(':', $settings);
-        $this->limit = (int)$limit ?? 10;
+        $parsedSettings = explode(':', $settings);
+        $this->key = $parsedSettings[0];
+        $this->limit = (int)($parsedSettings[1] ?? 5);
     }
 }
