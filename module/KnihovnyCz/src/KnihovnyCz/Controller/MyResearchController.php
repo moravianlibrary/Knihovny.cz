@@ -166,7 +166,6 @@ class MyResearchController extends MyResearchControllerBase
             $this->flashMessenger()->addErrorMessage($ex->getMessage());
         }
         if ($view instanceof \Laminas\View\Model\ViewModel) {
-            $profile = $view->profile;
             if (isset($view->profile)
                 && isset($view->profile['expiration_date'])
                 && $this->isExpired($view->profile['expiration_date'])
@@ -319,11 +318,11 @@ class MyResearchController extends MyResearchControllerBase
      * Return if the date is in the past, used for checking expired checked
      * out items or registrations.
      *
-     * @param $date Expiration date
+     * @param string $date Expiration date
      *
      * @return bool is expired
      */
-    protected function isExpired($date)
+    protected function isExpired(string $date): bool
     {
         $expire = $this->dateConverter->parseDisplayDate($date);
         $dateDiff = $expire->diff(new \DateTime());

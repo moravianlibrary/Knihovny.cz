@@ -6,10 +6,10 @@
   <?=$this->transEsc($this->mainMessage)?>
   <?php
   $deduplicatedRecords = $this->driver->tryMethod('getDeduplicatedRecords') ?? [];
-  $records = array_filter($deduplicatedRecords, function($record) use ($cardsSources) {
+  $records = array_filter($deduplicatedRecords, function ($record) use ($cardsSources) {
     return in_array($record['source'] ?? null, $cardsSources);
   });
-  $availableRecords = array_map(function($record) {
+  $availableRecords = array_map(function ($record) {
     return [
       'label' => $this->translate('Source::' . $record['source']),
       'url' => $this->recordLinker()->getUrl($record['id']),

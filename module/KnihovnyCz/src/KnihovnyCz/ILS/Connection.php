@@ -49,7 +49,6 @@ class Connection extends ConnectionBase
 {
     /**
      * Methods to check for each library card
-     *
      */
     const CHECKED_METHODS = [
         'getMyTransactionHistory'
@@ -108,8 +107,11 @@ class Connection extends ConnectionBase
      */
     protected function getCapabilityParams($method, $params)
     {
-        if (!(isset($params['user']) && in_array($method,
-                SELF::CHECKED_METHODS))) {
+        if (!(isset($params['user']) && in_array(
+            $method,
+            SELF::CHECKED_METHODS
+        ))
+        ) {
             return [ $params ];
         }
         $user = $params['user'];
