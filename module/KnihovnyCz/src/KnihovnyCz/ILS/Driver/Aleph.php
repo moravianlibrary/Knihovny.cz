@@ -143,11 +143,15 @@ class Aleph extends AlephBase implements TranslatorAwareInterface
             $item_id = $item->attributes()->href;
             $item_id = substr($item_id, strrpos($item_id, '/') + 1);
             $note    = (string)$z30->{'z30-note-opac'};
-            $fullStatus = !empty($duedate) ? $this->translate('holding_due_date') . ' ' . $duedate : '';
+            $fullStatus = !empty($duedate)
+                ? $this->translate('holding_due_date') . ' ' . $duedate
+                : '';
             if (empty($fullStatus)) {
                 $fullStatus = $status;
             } else {
-                $fullStatus = empty($status) ? $fullStatus : implode(" ; ", [$fullStatus, $status]);
+                $fullStatus = empty($status)
+                    ? $fullStatus
+                    : implode(" ; ", [$fullStatus, $status]);
             }
             $holding[] = [
                 'id'                  => $id,
