@@ -57,6 +57,7 @@ class HoldsController extends HoldsControllerBase
         if (!$this->getUser()) {
             return $this->forceLogin();
         }
+        $this->warnSocialUser();
         $view = $this->createViewModel();
         $view->setTemplate('holds/list-all');
         return $view;
