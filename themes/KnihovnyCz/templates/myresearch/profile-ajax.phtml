@@ -2,10 +2,8 @@
     // Template for use by the renderArray helper:
     $arrTemplate = '<tr><th>%%LABEL%%:</th><td> %%VALUE%%</td></tr>';
 ?>
-<?php if (isset($this->error)):?>
-    <?=$this->transEsc($this->error)?>
-<?php elseif (is_array($this->profile)): ?>
-  <?=$this->flashmessages();?>
+<?=$this->flashmessages();?>
+<?php if (is_array($this->profile)): ?>
   <table class="table table-striped">
     <?=
         $this->renderArray(

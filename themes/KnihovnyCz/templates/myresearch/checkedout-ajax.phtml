@@ -3,9 +3,7 @@
     $renewAll = !$this->ilsPaging || !$paginator;
 ?>
 <?=$this->flashmessages()?>
-<?php if (isset($this->error)):?>
-  <?=$this->transEsc($this->error)?>
-<?php elseif (!empty($this->transactions)): ?>
+<?php if (!empty($this->transactions)): ?>
   <nav class="search-header hidden-print">
     <?php if ($paginator): ?>
       <div class="search-stats">
@@ -191,7 +189,7 @@
     </ul>
   <?php if ($this->renewForm): ?></form><?php endif; ?>
   <?=$paginator ? $this->paginationControl($paginator, 'Sliding', 'Helpers/pagination.phtml', compact('params')) : ''?>
-<?php else: ?>
+<?php elseif (!(isset($this->error) && $this->error)): ?>
   <div class="alert alert-info">
     <?=$this->transEsc('You do not have any items checked out')?>.
   </div>

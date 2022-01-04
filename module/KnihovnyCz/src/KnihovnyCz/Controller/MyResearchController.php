@@ -48,6 +48,8 @@ class MyResearchController extends MyResearchControllerBase
 
     use \KnihovnyCz\Controller\CatalogLoginTrait;
 
+    use \KnihovnyCz\Controller\MyResearchTrait;
+
     /**
      * Date converter object
      *
@@ -122,7 +124,7 @@ class MyResearchController extends MyResearchControllerBase
             $view = parent::finesAction();
         } catch (\Exception $ex) {
             $view = $this->createViewModel();
-            $this->flashMessenger()->addErrorMessage($ex->getMessage());
+            $this->showException($ex);
         }
         if (!($view instanceof ViewModel)) {
             $view = $this->createViewModel(
@@ -165,7 +167,8 @@ class MyResearchController extends MyResearchControllerBase
             $view = parent::profileAction();
         } catch (\Exception $ex) {
             $view = $this->createViewModel();
-            $this->flashMessenger()->addErrorMessage($ex->getMessage());
+            $view->error = true;
+            $this->showException($ex);
         }
         if ($view instanceof \Laminas\View\Model\ViewModel) {
             if (isset($view->profile)
@@ -217,7 +220,7 @@ class MyResearchController extends MyResearchControllerBase
         try {
             $view = parent::checkedoutAction();
         } catch (\Exception $ex) {
-            $this->flashMessenger()->addErrorMessage($ex->getMessage());
+            $this->showException($ex);
         }
         $error = ($view == null || !($view instanceof ViewModel));
         // active operation failed -> redirect to show checked out items
@@ -230,6 +233,7 @@ class MyResearchController extends MyResearchControllerBase
         }
         if ($view == null) {
             $view = new ViewModel();
+            $view->error = $error;
         } elseif (isset($view->transactions)) {
             foreach ($view->transactions as $resource) {
                 $ilsDetails = $resource->getExtraDetail('ils_details');
@@ -280,7 +284,8 @@ class MyResearchController extends MyResearchControllerBase
             $view->sortList = false;
         } catch (\Exception $ex) {
             $view = $this->createViewModel();
-            $this->flashMessenger()->addErrorMessage($ex->getMessage());
+            $view->error = true;
+            $this->showException($ex);
         }
         if (!($view instanceof \Laminas\View\Model\ViewModel)) {
             $view = $this->createViewModel(
@@ -288,6 +293,9 @@ class MyResearchController extends MyResearchControllerBase
                     'error' => 'ils_offline_home_message'
                 ]
             );
+        }
+        if ($this->flashMessenger()->hasCurrentMessages('error')) {
+            $view->error = true;
         }
         $view->setTemplate('myresearch/historicloans-ajax');
         $view->cardId = $this->getCardId();
