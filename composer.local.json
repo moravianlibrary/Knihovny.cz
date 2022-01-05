@@ -16,7 +16,7 @@
     },
     "require-dev": {
       "phpstan/phpstan": "^0.12.82",
-      "friendsofphp/php-cs-fixer": "^2.18.4"
+      "friendsofphp/php-cs-fixer": "3.4.0"
     },
     "scripts": {
          "phing-install-dependencies": "phing installswaggerui"
