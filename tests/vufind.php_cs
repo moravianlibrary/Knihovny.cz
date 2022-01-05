@@ -1,7 +1,7 @@
 <?php
 
-$finder = PhpCsFixer\Finder::create()
-    ->in(__DIR__ . '/../module');
+$finder = new PhpCsFixer\Finder();
+$finder->in(__DIR__ . '/../module');
 
 $rules = [
     'align_multiline_comment' => true,
@@ -13,7 +13,9 @@ $rules = [
     'blank_line_after_namespace' => true,
     'braces' => true,
     'cast_spaces' => ['space' => 'none'],
+    'class_attributes_separation' => ['elements' => ['method' => 'one', 'property' => 'one']],
     'concat_space' => ['spacing' => 'one'],
+    'constant_case' => ['case' => 'lower'],
     'elseif' => true,
     'encoding' => true,
     'ereg_to_preg' => true,
@@ -26,11 +28,9 @@ $rules = [
     'linebreak_after_opening_tag' => true,
     'list_syntax' => ['syntax' => 'short'],
     'lowercase_cast' => true,
-    'constant_case' => true,
     'lowercase_keywords' => true,
     'magic_constant_casing' => true,
     'method_argument_space' => true,
-    'class_attributes_separation' => true,
     'native_function_casing' => true,
     'no_blank_lines_after_class_opening' => true,
     'no_blank_lines_after_phpdoc' => true,
@@ -63,6 +63,7 @@ $rules = [
     'php_unit_method_casing' => true,
     'php_unit_mock' => true,
     'php_unit_no_expectation_annotation' => true,
+    'pow_to_exponentiation' => true,
     'single_blank_line_at_eof' => true,
     'single_class_element_per_statement' => true,
     'single_import_per_statement' => true,
@@ -81,9 +82,8 @@ if (!is_dir($cacheDir)) {
     mkdir($cacheDir);
 }
 
-$config = new  PhpCsFixer\Config();
-return $config
-    ->setCacheFile($cacheDir . '/.code.cache')
+$config = new PhpCsFixer\Config();
+return $config->setCacheFile($cacheDir . '/.code.cache')
     ->setRiskyAllowed(true)
     ->setRules($rules)
     ->setFinder($finder);

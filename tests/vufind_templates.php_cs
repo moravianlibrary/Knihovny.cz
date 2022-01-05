@@ -1,6 +1,7 @@
 <?php
 
-$finder = PhpCsFixer\Finder::create()->in(__DIR__ . '/../themes')
+$finder = new PhpCsFixer\Finder();
+$finder->in(__DIR__ . '/../themes')
     ->name('*.phtml');
 
 $rules = [
@@ -12,7 +13,9 @@ $rules = [
     'blank_line_after_namespace' => true,
     //'braces' => true, // disabled because we don't want to create inconsistent indentation, but useful to normalize control structure spacing
     'cast_spaces' => ['space' => 'none'],
+    'class_attributes_separation' => ['elements' => ['method' => 'one', 'property' => 'one']],
     'concat_space' => ['spacing' => 'one'],
+    'constant_case' => ['case' => 'lower'],
     'elseif' => true,
     'encoding' => true,
     'ereg_to_preg' => true,
@@ -24,11 +27,9 @@ $rules = [
     'line_ending' => true,
     'list_syntax' => ['syntax' => 'short'],
     'lowercase_cast' => true,
-    'constant_case' => true,
     'lowercase_keywords' => true,
     'magic_constant_casing' => true,
     'method_argument_space' => true,
-    'class_attributes_separation' => true,
     'native_function_casing' => true,
     'no_blank_lines_after_class_opening' => true,
     'no_blank_lines_after_phpdoc' => true,
@@ -54,6 +55,7 @@ $rules = [
     'non_printable_character' => true,
     'ordered_imports' => true,
     'phpdoc_no_access' => true,
+    'pow_to_exponentiation' => true,
     'single_blank_line_at_eof' => true,
     'single_class_element_per_statement' => true,
     'single_import_per_statement' => true,
@@ -72,9 +74,8 @@ if (!is_dir($cacheDir)) {
     mkdir($cacheDir);
 }
 
-$config = new  PhpCsFixer\Config();
-return $config
-    ->setCacheFile($cacheDir . '/.template.cache')
+$config = new PhpCsFixer\Config();
+return $config->setCacheFile($cacheDir . '/.template.cache')
     ->setRiskyAllowed(true)
     ->setRules($rules)
     ->setFinder($finder);
