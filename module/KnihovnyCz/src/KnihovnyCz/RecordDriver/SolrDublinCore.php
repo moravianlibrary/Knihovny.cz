@@ -27,7 +27,7 @@
  */
 namespace KnihovnyCz\RecordDriver;
 
-use VuFind\View\Helper\Root\RecordLink;
+use VuFind\View\Helper\Root\RecordLinker;
 
 /**
  * Class solr dublin core record driver
@@ -148,20 +148,20 @@ class SolrDublinCore extends SolrDefault
      * Return an XML representation of the record using the specified format.
      * Return false if the format is unsupported.
      *
-     * @param string     $format     Name of format to use (corresponds with OAI-PMH
-     * metadataPrefix parameter).
-     * @param string     $baseUrl    Base URL of host containing VuFind (optional;
+     * @param string       $format  Name of format to use (corresponds with
+     * OAI-PMH metadataPrefix parameter).
+     * @param string       $baseUrl Base URL of host containing VuFind (optional;
      * may be used to inject record URLs into XML when appropriate).
-     * @param RecordLink $recordLink Record link helper (optional; may be used to
+     * @param RecordLinker $linker  Record linker helper (optional; may be used to
      * inject record URLs into XML when appropriate).
      *
-     * @return mixed         XML, or false if format unsupported.
+     * @return mixed XML, or false if format unsupported.
      */
-    public function getXML($format, $baseUrl = null, $recordLink = null)
+    public function getXML($format, $baseUrl = null, $linker = null)
     {
         // We have oai_dc xml saved in fullrecord field in solr, no need to create it
         return ($format === 'oai_dc') ? $this->fields['fullrecord']
-            : parent::getXML($format, $baseUrl, $recordLink);
+            : parent::getXML($format, $baseUrl, $linker);
     }
 
     /**

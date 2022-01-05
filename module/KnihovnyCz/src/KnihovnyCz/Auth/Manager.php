@@ -70,13 +70,12 @@ class Manager extends Base
     /**
      * Does the provided token match the one generated?
      *
-     * @param string $value   value to check
-     * @param mixed  $context context
+     * @param string $value Value to check
      *
      * @return bool
      */
-    public function isValidCsrfHash($value, $context = null)
+    public function isValidCsrfHash($value)
     {
-        return $this->csrf->isValid($value, $context);
+        return $this->csrf->isValid($value);
     }
 }

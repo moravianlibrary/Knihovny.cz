@@ -68,14 +68,25 @@ class GuzzleHttpServiceFactory  implements FactoryInterface
             throw new \Exception('Unexpected options passed to factory.');
         }
         $proxyUrl = null;
+        /**
+         * Main configuration
+         *
+         * @var \Laminas\Config\Config $config
+         */
         $config = $container->get(\VuFind\Config\PluginManager::class)
             ->get('config');
-        if (isset($config->Proxy->host)) {
-            $host = $config->Proxy->host;
-            $port = $config->Proxy->port ?? 80;
-            $auth = $config->Proxy->auth ?? null;
-            $user = $config->Proxy->user ?? null;
-            $pass = $config->Proxy->pass ?? null;
+        /**
+         * Proxy configuration
+         *
+         * @var \Laminas\Config\Config $proxy
+         */
+        $proxy = $config->Proxy;
+        if (isset($proxy->host)) {
+            $host = $proxy->host;
+            $port = $proxy->port ?? 80;
+            $auth = $proxy->auth ?? null;
+            $user = $proxy->user ?? null;
+            $pass = $proxy->pass ?? null;
             if ($auth != null && $auth != 'basic') {
                 throw new \Exception("Only basic auth is supported");
             }

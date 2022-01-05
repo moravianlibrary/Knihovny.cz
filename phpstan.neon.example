@@ -6,12 +6,19 @@ parameters:
     excludes_analyse:
         - %currentWorkingDirectory%/../vufind/module/VuFind/src/VuFind/View/Helper/Root/AuthorNotesFactory.php
     ignoreErrors:
-        - '#PHPDoc tag @throws with type Interop\\Container\\Exception\\ContainerException is not subtype of Throwable#'
         - '#Access to an undefined property Laminas\\Config\\Config::\$[a-zA-Z0-9_]#'
         - '#Call to an undefined method Laminas\\Stdlib\\DispatchableInterface::getRequest\(\)#'
         - '#Access to an undefined property [a-zA-Z0-9_]+\\Db\\Row\\[a-zA-Z0-9_]+::\$[a-zA-Z0-9_]+#'
         - '#Call to an undefined method Laminas\\Db\\ResultSet\\ResultSetInterface::current\(\)#'
         - '#Call to an undefined method [a-zA-Z0-9_]+\\Controller\\[a-zA-Z0-9_]+Controller::flashMessenger\(\)#'
+        - '#Call to an undefined method [a-zA-Z0-9_]+\\Controller\\[a-zA-Z0-9_]+Controller::flashRedirect\(\)#'
+        - '#Call to an undefined method Laminas\\Stdlib\\DispatchableInterface::url\(\)#'
+        - '#Call to an undefined method Laminas\\Stdlib\\DispatchableInterface::translate\(\)#'
+        - '#Call to an undefined method Laminas\\Stdlib\\DispatchableInterface::confirm\(\)#'
+        - '#Call to an undefined method Laminas\\Stdlib\\DispatchableInterface::flashMessenger\(\)#'
+        - '#Call to an undefined method Laminas\\Stdlib\\DispatchableInterface::params\(\)#'
+        - '#Call to an undefined method Laminas\\Stdlib\\DispatchableInterface::redirect\(\)#'
+        - '#Cannot call method toArray\(\) on ArrayIterator\|bool\|Laminas\\Http\\Header\\HeaderInterface\|Laminas\\Http\\Headers#'
     checkMissingIterableValueType: false
     paths:
         - module/KnihovnyCz

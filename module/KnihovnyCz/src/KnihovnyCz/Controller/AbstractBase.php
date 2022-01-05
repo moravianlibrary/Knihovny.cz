@@ -46,10 +46,16 @@ class AbstractBase extends \VuFind\Controller\AbstractBase
     /**
      * Get the user object if logged in, false otherwise.
      *
-     * @return \KnihovnyCz\Db\Row\User|false
+     * @return User|false
      */
-    protected function getUser(): bool|User
+    protected function getUser(): false|User
     {
-        return $this->getAuthManager()->isLoggedIn();
+        /**
+         * User model
+         *
+         * @var User|false $user
+         */
+        $user = $this->getAuthManager()->isLoggedIn();
+        return $user;
     }
 }

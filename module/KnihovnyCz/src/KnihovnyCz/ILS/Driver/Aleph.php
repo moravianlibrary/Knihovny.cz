@@ -87,15 +87,16 @@ class Aleph extends AlephBase implements TranslatorAwareInterface
             $items = [];
         }
         foreach ($items as $item) {
-            $item_status         = (string)$item->{'z30-item-status-code'}; // $isc
+            $item_status_code    = (string)$item->{'z30-item-status-code'}; // $isc
             // $ipsc:
             $item_process_status = (string)$item->{'z30-item-process-status-code'};
             $sub_library_code    = (string)$item->{'z30-sub-library-code'}; // $slc
             $z30 = $item->z30;
+            /* @phpstan-ignore-next-line */
             if ($this->alephTranslator) {
                 $item_status = $this->alephTranslator->tab15Translate(
                     $sub_library_code,
-                    $item_status,
+                    $item_status_code,
                     $item_process_status
                 );
             } else {
@@ -106,12 +107,14 @@ class Aleph extends AlephBase implements TranslatorAwareInterface
                     'sub_lib_desc' => (string)$z30->{'z30-sub-library'}
                 ];
             }
+            /* @phpstan-ignore-next-line */
             if ($item_status['opac'] != 'Y') {
                 continue;
             }
             $availability = false;
             $collection = (string)$z30->{'z30-collection'};
             $collection_desc = ['desc' => $collection];
+            /* @phpstan-ignore-next-line */
             if ($this->alephTranslator) {
                 $collection_code = (string)$item->{'z30-collection-code'};
                 $collection_desc = $this->alephTranslator->tab40Translate(
@@ -126,6 +129,7 @@ class Aleph extends AlephBase implements TranslatorAwareInterface
             if (in_array($status, $this->available_statuses)) {
                 $availability = true;
             }
+            /* @phpstan-ignore-next-line */
             if ($item_status['request'] == 'Y' && $availability == false) {
                 $addLink = true;
             }
@@ -171,8 +175,10 @@ class Aleph extends AlephBase implements TranslatorAwareInterface
                 'holdtype'            => 'hold',
                 /* below are optional attributes*/
                 'collection'          => (string)$collection,
+                /* @phpstan-ignore-next-line */
                 'collection_desc'     => (string)$collection_desc['desc'],
                 'callnumber_second'   => (string)$z30->{'z30-call-no-2'},
+                /* @phpstan-ignore-next-line */
                 'sub_lib_desc'        => (string)$item_status['sub_lib_desc'],
                 'no_of_loans'         => (string)$z30->{'$no_of_loans'},
                 'requested'           => (string)$requested
@@ -235,7 +241,8 @@ class Aleph extends AlephBase implements TranslatorAwareInterface
             $z13 = $item->z13;
             $z30 = $item->z30;
             $group = $item->xpath('@href');
-            $group = substr(strrchr($group[0], "/"), 1);
+            $group = strrchr($group[0], "/");
+            $group = $group ? substr($group, 1) : '';
             $renew = $item->xpath('@renew');
 
             $location = (string)$z36->{$prefix . 'pickup_location'};

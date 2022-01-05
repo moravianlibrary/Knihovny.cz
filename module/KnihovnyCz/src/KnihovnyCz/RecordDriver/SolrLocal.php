@@ -82,6 +82,7 @@ class SolrLocal extends \KnihovnyCz\RecordDriver\SolrMarc
         ];
         $f996 = $this->fields['mappings996_display_mv'] ?? [];
         $isCaslin = str_starts_with($this->getUniqueID(), 'caslin');
+        /* @phpstan-ignore-next-line */
         $isAleph = $this->ils->getDriverName($this->getUniqueID()) === 'Aleph';
         foreach ($f996 as $line) {
             [

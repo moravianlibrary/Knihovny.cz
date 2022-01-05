@@ -120,6 +120,7 @@ class MultiBackend extends \VuFind\ILS\Driver\MultiBackend
      */
     public function getMyTransactions($patron, $params = [])
     {
+        /* @phpstan-ignore-next-line */
         $data = parent::getMyTransactions($patron, $params);
         if (isset($data['records'])) {
             $data['records'] = $this->resolveIds($data['records'], $patron);
@@ -150,6 +151,7 @@ class MultiBackend extends \VuFind\ILS\Driver\MultiBackend
         if (!$supported) {
             return ['success' => false, 'status' => 'driver_no_history'];
         }
+        /* @phpstan-ignore-next-line */
         $data = parent::getMyTransactionHistory($patron, $params);
         if (isset($data['transactions'])) {
             $data['transactions'] = $this->resolveIds(

@@ -166,8 +166,9 @@ class User extends Base
         if ($row->cat_username == $this->cat_username) {
             // Activate another card (if any) or remove cat_username and cat_password
             $cards = $this->getLibraryCards();
-            if ($cards->count() > 0) {
-                $this->activateLibraryCard($cards->current()->id);
+            $card = $cards->current();
+            if (isset($card) && ($card['id'] ?? false)) {
+                $this->activateLibraryCard($card['id']);
             } else {
                 $this->cat_username = null;
                 $this->cat_password = null;
