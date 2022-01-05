@@ -84,7 +84,8 @@ class ZiskejAdminController extends AbstractBase
                 );
             }
             $this->flashMessenger()->addMessage(
-                'Ziskej::message_ziskej_mode_saved', 'success'
+                'Ziskej::message_ziskej_mode_saved',
+                'success'
             );
             return $this->redirect()->refresh();
         }

@@ -47,7 +47,7 @@ class Aleph extends AlephBase implements TranslatorAwareInterface
 {
     use TranslatorAwareTrait;
 
-    const DATE_FORMATS = [
+    public const DATE_FORMATS = [
         '/^[0-9]{8}$/' => 'Ynd',
         '/^[0-9]+\/[A-Za-z]{3}\/[0-9]{4}$/' => 'd/M/Y',
         '/^[0-9]+\/[A-Za-z]{3}\/[0-9]{2}$/' => 'd/M/y',

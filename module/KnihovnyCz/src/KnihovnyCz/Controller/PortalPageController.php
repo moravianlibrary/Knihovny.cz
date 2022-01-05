@@ -47,7 +47,8 @@ class PortalPageController extends \VuFind\Controller\AbstractBase
     public function indexAction()
     {
         return $this->redirect()->toRoute(
-            'content-page', $this->params()->fromRoute()
+            'content-page',
+            $this->params()->fromRoute()
         );
     }
 }

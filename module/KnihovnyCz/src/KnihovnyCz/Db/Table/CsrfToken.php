@@ -57,8 +57,12 @@ class CsrfToken extends Gateway
      * @param RowGateway    $rowObj  Row prototype object (null for default)
      * @param string        $table   Name of database table to interface with
      */
-    public function __construct(Adapter $adapter, PluginManager $tm, $cfg,
-        RowGateway $rowObj = null, $table = 'csrf_token'
+    public function __construct(
+        Adapter $adapter,
+        PluginManager $tm,
+        $cfg,
+        RowGateway $rowObj = null,
+        $table = 'csrf_token'
     ) {
         parent::__construct($adapter, $tm, $cfg, $rowObj, $table);
     }
@@ -92,7 +96,10 @@ class CsrfToken extends Gateway
      *
      * @return void
      */
-    protected function expirationCallback($select, $daysOld, $idFrom = null,
+    protected function expirationCallback(
+        $select,
+        $daysOld,
+        $idFrom = null,
         $idTo = null
     ) {
         $timestamp = strtotime(sprintf('-%d days', (int)$daysOld));

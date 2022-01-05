@@ -64,7 +64,9 @@ class ZiskejApiFactory implements FactoryInterface
      * @throws \Exception
      */
     public function __invoke(
-        ContainerInterface $container, $requestedName, array $options = null
+        ContainerInterface $container,
+        $requestedName,
+        array $options = null
     ): Api {
         $cpkZiskej = $container->get(\KnihovnyCz\Ziskej\ZiskejMvs::class);
 

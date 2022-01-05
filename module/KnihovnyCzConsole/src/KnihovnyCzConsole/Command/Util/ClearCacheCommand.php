@@ -117,8 +117,10 @@ class ClearCacheCommand extends \Symfony\Component\Console\Command\Command
                         $err = ErrorHandler::stop();
                         if ($err && file_exists($pathname)) {
                             ErrorHandler::addError(
-                                $err->getSeverity(), $err->getMessage(),
-                                $err->getFile(), $err->getLine()
+                                $err->getSeverity(),
+                                $err->getMessage(),
+                                $err->getFile(),
+                                $err->getLine()
                             );
                         }
                     }

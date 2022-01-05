@@ -53,7 +53,8 @@ class SolrDefaultBackendFactory extends ParentSolrDefaultBackendFactory
      *
      * @return DeduplicationListener
      */
-    protected function getDeduplicationListener(Backend $backend,
+    protected function getDeduplicationListener(
+        Backend $backend,
         $enabled
     ) {
         $authManager = $this->serviceLocator->get('VuFind\AuthManager');

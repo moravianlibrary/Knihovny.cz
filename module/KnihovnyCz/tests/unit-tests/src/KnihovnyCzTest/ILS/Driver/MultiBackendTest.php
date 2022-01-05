@@ -133,9 +133,12 @@ class MultiBackendTest extends \PHPUnit\Framework\TestCase
     protected function getDriver($sm = null)
     {
         $driver = new MultiBackend(
-            $this->getPluginManager(), $this->getMockILSAuthenticator(),
-            $sm ?? $this->getMockSM(), $this->getMockInstConfigs(),
-            $this->getMockInstSources(), $this->getMockSolrIdResolver()
+            $this->getPluginManager(),
+            $this->getMockILSAuthenticator(),
+            $sm ?? $this->getMockSM(),
+            $this->getMockInstConfigs(),
+            $this->getMockInstSources(),
+            $this->getMockSolrIdResolver()
         );
         $config = [
             'Drivers' => [],

@@ -64,7 +64,8 @@ class SolrDublinCore extends SolrDefault
     {
         $data = $this->getXmlFieldData("subject");
         $data = array_filter(
-            $data, function ($part) {
+            $data,
+            function ($part) {
                 return !preg_match('/^([\W0-9]+|neuvedeno|n[ae]zadáno)$/', $part);
             }
         );

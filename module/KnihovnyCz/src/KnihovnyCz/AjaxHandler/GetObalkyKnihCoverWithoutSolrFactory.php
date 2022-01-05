@@ -62,7 +62,9 @@ class GetObalkyKnihCoverWithoutSolrFactory implements FactoryInterface
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function __invoke(ContainerInterface $container, $requestedName,
+    public function __invoke(
+        ContainerInterface $container,
+        $requestedName,
         array $options = null
     ) {
         $config
@@ -73,7 +75,8 @@ class GetObalkyKnihCoverWithoutSolrFactory implements FactoryInterface
             $container->get(\VuFind\Content\Covers\PluginManager::class)
                 ->get(\VuFind\Content\Covers\ObalkyKnih::class),
             // We only need the view renderer if we're going to use fallbacks:
-            $useFallbacks ? $container->get('ViewRenderer') : null, $useFallbacks
+            $useFallbacks ? $container->get('ViewRenderer') : null,
+            $useFallbacks
         );
     }
 }

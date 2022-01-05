@@ -87,7 +87,8 @@ class LibrariesApiLookfor
         $queries = array_map(
             function ($query) {
                 return $this->getLookfor($query);
-            }, $queryGroup->getQueries()
+            },
+            $queryGroup->getQueries()
         );
         $queryPrefix = $queryGroup->isNegated() ? 'NOT' : '';
         return $queryPrefix . '(' . implode(" $operator ", $queries) . ')';
@@ -114,7 +115,8 @@ class LibrariesApiLookfor
             $subqueries = array_map(
                 function ($fieldName) use ($string) {
                     return $fieldName . ':' . $string;
-                }, $fieldMapping
+                },
+                $fieldMapping
             );
             $queryString = '(' . implode(" OR ", $subqueries) . ')';
         }

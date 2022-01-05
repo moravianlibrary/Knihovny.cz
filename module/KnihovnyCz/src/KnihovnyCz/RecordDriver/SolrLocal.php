@@ -95,9 +95,20 @@ class SolrLocal extends \KnihovnyCz\RecordDriver\SolrMarc
                 $location = $this->translateWithPrefix('Sigla::', $location);
             }
             $items[] = compact(
-                'item_id', 'callnumber', 'location', 'callnumber_second',
-                'description', 'notes', 'year', 'volume', 'issue', 'status',
-                'collection_desc', 'agency_id', 'copy_number', 'catalog_link'
+                'item_id',
+                'callnumber',
+                'location',
+                'callnumber_second',
+                'description',
+                'notes',
+                'year',
+                'volume',
+                'issue',
+                'status',
+                'collection_desc',
+                'agency_id',
+                'copy_number',
+                'catalog_link'
             );
             $filters['year'][$year] = $this->extractYear($year);
             $filters['volume'][$volume] = $this->extractVolume($volume);
@@ -106,7 +117,8 @@ class SolrLocal extends \KnihovnyCz\RecordDriver\SolrMarc
             if (count($values) > 1) {
                 $reverse = ($key == 'year') ? 1 : -1;
                 uasort(
-                    $values, function ($a, $b) use ($reverse) {
+                    $values,
+                    function ($a, $b) use ($reverse) {
                         if (is_int($a) && is_int($b)) {
                             return $reverse * ($b <=> $a);
                         } elseif (is_int($a)) {

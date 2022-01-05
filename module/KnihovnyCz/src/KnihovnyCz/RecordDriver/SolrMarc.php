@@ -39,11 +39,8 @@ namespace KnihovnyCz\RecordDriver;
 class SolrMarc extends SolrDefault
 {
     use \VuFind\RecordDriver\Feature\IlsAwareTrait;
-
     use \VuFind\RecordDriver\Feature\MarcReaderTrait;
-
     use \VuFind\RecordDriver\Feature\MarcAdvancedTrait;
-
     use Feature\PatentTrait;
 
     /**
@@ -57,7 +54,9 @@ class SolrMarc extends SolrDefault
      * file
      */
     public function __construct(
-        $mainConfig = null, $recordConfig = null, $searchSettings = null
+        $mainConfig = null,
+        $recordConfig = null,
+        $searchSettings = null
     ) {
         parent::__construct($mainConfig, $recordConfig, $searchSettings);
         $this->marcReaderClass = \KnihovnyCz\Marc\MarcReader::class;

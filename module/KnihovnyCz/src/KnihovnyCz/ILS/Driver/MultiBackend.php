@@ -80,8 +80,11 @@ class MultiBackend extends \VuFind\ILS\Driver\MultiBackend
      */
     public function __construct(
         ConfigManager $configLoader,
-        ILSAuthenticator $ilsAuth, PluginManager $dm, InstConfigs $instConfigs,
-        InstSources $instSources, SolrIdResolver $idResolver
+        ILSAuthenticator $ilsAuth,
+        PluginManager $dm,
+        InstConfigs $instConfigs,
+        InstSources $instSources,
+        SolrIdResolver $idResolver
     ) {
         $this->instConfigs = $instConfigs;
         $this->instSources = $instSources;
@@ -145,7 +148,9 @@ class MultiBackend extends \VuFind\ILS\Driver\MultiBackend
         $source = $this->getSource($patron['cat_username']);
         $driver = $this->getDriver($source);
         $supported = $this->driverSupportsMethod(
-            $driver, 'getMyTransactionHistory', compact('patron')
+            $driver,
+            'getMyTransactionHistory',
+            compact('patron')
         );
         if (!$supported) {
             return ['success' => false, 'status' => 'driver_no_history'];
@@ -153,7 +158,8 @@ class MultiBackend extends \VuFind\ILS\Driver\MultiBackend
         $data = parent::getMyTransactionHistory($patron, $params);
         if (isset($data['transactions'])) {
             $data['transactions'] = $this->resolveIds(
-                $data['transactions'], $patron
+                $data['transactions'],
+                $patron
             );
             return $data;
         } else {

@@ -84,8 +84,11 @@ class GetHolding extends \VuFind\AjaxHandler\AbstractBase
      * @param RecordLink      $recordLink    Record link
      * @param HoldingsLogic   $holdingsLogic Holdings logic
      */
-    public function __construct(SessionSettings $ss, Holds $holds,
-        RecordLink $recordLink, HoldingsLogic $holdingsLogic
+    public function __construct(
+        SessionSettings $ss,
+        Holds $holds,
+        RecordLink $recordLink,
+        HoldingsLogic $holdingsLogic
     ) {
         $this->sessionSettings = $ss;
         $this->holds = $holds;
@@ -127,11 +130,16 @@ class GetHolding extends \VuFind\AjaxHandler\AbstractBase
                     );
                     $item['label'] = $labels[$holdingStatus] ?? 'default';
                     $status = $this->translateWithSource(
-                        $source, $item['status'], 'HoldingStatus'
+                        $source,
+                        $item['status'],
+                        'HoldingStatus'
                     );
                     if ($status == $item['status']) {
                         $status = $this->translateString(
-                            $status, [], $status, 'HoldingStatus'
+                            $status,
+                            [],
+                            $status,
+                            'HoldingStatus'
                         );
                     }
                     $item['status'] = $status;
@@ -155,11 +163,16 @@ class GetHolding extends \VuFind\AjaxHandler\AbstractBase
      *
      * @return string
      */
-    protected function translateWithSource(string $source, string $text,
+    protected function translateWithSource(
+        string $source,
+        string $text,
         string $domain
     ): string {
         return $this->translateString(
-            $source . '_' . $text, [], $text, $domain
+            $source . '_' . $text,
+            [],
+            $text,
+            $domain
         );
     }
 }

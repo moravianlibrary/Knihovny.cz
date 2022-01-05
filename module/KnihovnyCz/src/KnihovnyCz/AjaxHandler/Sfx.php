@@ -49,7 +49,6 @@ class Sfx extends AbstractBase
     \Laminas\Log\LoggerAwareInterface
 {
     use \VuFind\I18n\Translator\TranslatorAwareTrait;
-
     use \VuFind\Log\LoggerAwareTrait;
 
     /**
@@ -72,7 +71,8 @@ class Sfx extends AbstractBase
      * @param \Laminas\Config\Config                $config      Configuration
      * @param \KnihovnyCz\Service\GuzzleHttpService $httpService HTTP service
      */
-    public function __construct(\Laminas\Config\Config $config,
+    public function __construct(
+        \Laminas\Config\Config $config,
         \KnihovnyCz\Service\GuzzleHttpService $httpService
     ) {
         $this->config = $config;

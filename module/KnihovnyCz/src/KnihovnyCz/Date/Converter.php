@@ -53,7 +53,9 @@ class Converter extends \VuFind\Date\Converter
     public function parseDisplayDate($displayDate)
     {
         return DateTime::createFromFormat(
-            $this->displayDateFormat, $displayDate, $this->timezone
+            $this->displayDateFormat,
+            $displayDate,
+            $this->timezone
         );
     }
 }

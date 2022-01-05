@@ -60,7 +60,8 @@ class SearchController extends \VuFind\Controller\SearchController
             $lookfor = is_array($lookfor) ? $lookfor[0] : $lookfor;
             $limit = 20;
             return $this->redirect()->toRoute(
-                'search2-results', [],
+                'search2-results',
+                [],
                 ['query' => compact('type', 'lookfor', 'limit')]
             );
         }

@@ -146,7 +146,8 @@ class XCNCIP2 extends \VuFind\ILS\Driver\XCNCIP2
                     $holding['duedate'] =  null;
                 }
                 return $holding;
-            }, $holdings
+            },
+            $holdings
         );
         return $holdings;
     }
@@ -172,7 +173,11 @@ class XCNCIP2 extends \VuFind\ILS\Driver\XCNCIP2
             '</ns2:Page></ns2:HistoryDesired></ns1:Ext>',
         ];
         $request = $this->getLookupUserRequest(
-            '', '', $patron['patronAgencyId'], $extras, $patron['id']
+            '',
+            '',
+            $patron['patronAgencyId'],
+            $extras,
+            $patron['id']
         );
 
         $response = $this->sendRequest($request);
@@ -318,7 +323,8 @@ class XCNCIP2 extends \VuFind\ILS\Driver\XCNCIP2
     {
         $element->registerXPathNamespace('ns1', 'http://www.niso.org/2008/ncip');
         $element->registerXPathNamespace(
-            'ns2', 'https://ncip.knihovny.cz/ILSDI/ncip/2015/extensions'
+            'ns2',
+            'https://ncip.knihovny.cz/ILSDI/ncip/2015/extensions'
         );
     }
 
@@ -414,7 +420,8 @@ class XCNCIP2 extends \VuFind\ILS\Driver\XCNCIP2
     {
         $profile = parent::getMyProfile($patron);
         $patron = $this->patronLogin(
-            $patron['cat_username'], $patron['cat_password']
+            $patron['cat_username'],
+            $patron['cat_password']
         );
         if (isset($patron['email'])) {
             $profile['email'] = $patron['email'];

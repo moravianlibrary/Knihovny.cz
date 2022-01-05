@@ -52,7 +52,9 @@ class ZiskejFactory implements FactoryInterface
      * @return \KnihovnyCz\Ziskej\Ziskej
      */
     public function __invoke(
-        ContainerInterface $container, $requestedName, array $options = null
+        ContainerInterface $container,
+        $requestedName,
+        array $options = null
     ): Ziskej {
         /**
          * Main configuration

@@ -115,7 +115,8 @@ class CitaceProService implements \VuFindHttp\HttpServiceAwareInterface
     protected function isCitationStyleValid(string $style): bool
     {
         return array_key_exists(
-            $style, $this->getCitationStyles() ?? []
+            $style,
+            $this->getCitationStyles() ?? []
         );
     }
 
@@ -137,7 +138,9 @@ class CitaceProService implements \VuFindHttp\HttpServiceAwareInterface
     protected function getCitationLocalDomain(): string
     {
         return str_replace(
-            "www.", "", $this->config->Citation->citation_local_domain
+            "www.",
+            "",
+            $this->config->Citation->citation_local_domain
         );
     }
 }

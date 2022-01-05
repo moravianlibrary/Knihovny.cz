@@ -7,7 +7,7 @@
   if (!empty($records)) {
     foreach ($records as $record) {
       $imageSrc = $this->imageLink(
-        'institutions/logos/' . $record['source'] . '/' . $record['source']
+          'institutions/logos/' . $record['source'] . '/' . $record['source']
         . $logosPostfix . '.png'
       );
       $recordUrl = $this->recordLinker()->getUrl($record['id']);

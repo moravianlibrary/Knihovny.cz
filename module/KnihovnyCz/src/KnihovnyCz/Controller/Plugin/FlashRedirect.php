@@ -44,7 +44,7 @@ use VuFind\Controller\Plugin\AbstractRequestBase;
  */
 class FlashRedirect extends AbstractRequestBase
 {
-    const NAMESPACES = [
+    public const NAMESPACES = [
         FlashMessenger::NAMESPACE_DEFAULT,
         FlashMessenger::NAMESPACE_ERROR,
         FlashMessenger::NAMESPACE_INFO,
@@ -52,7 +52,7 @@ class FlashRedirect extends AbstractRequestBase
         FlashMessenger::NAMESPACE_WARNING,
     ];
 
-    const PREFIX = 'flash_';
+    public const PREFIX = 'flash_';
 
     /**
      * Restore messages in flashMessenger from parameters in URL

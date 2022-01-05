@@ -43,7 +43,6 @@ use VuFind\Controller\HoldsController as HoldsControllerBase;
 class HoldsController extends HoldsControllerBase
 {
     use \VuFind\Controller\AjaxResponseTrait;
-
     use \KnihovnyCz\Controller\CatalogLoginTrait;
 
     /**

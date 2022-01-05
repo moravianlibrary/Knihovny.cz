@@ -2027,7 +2027,9 @@ class XCNCIP2Test extends \VuFindTest\ILS\Driver\XCNCIP2Test
                 'id' => '111'
             ], ['page' => 1]);
             $this->assertEquals(
-                $test['result'], $transactions, 'Fixture file: ' . implode(', ', (array)$test['file'])
+                $test['result'],
+                $transactions,
+                'Fixture file: ' . implode(', ', (array)$test['file'])
             );
         }
     }
@@ -2044,7 +2046,9 @@ class XCNCIP2Test extends \VuFindTest\ILS\Driver\XCNCIP2Test
             $this->mockResponse($test['file']);
             $status = $this->driver->getStatusByItemId('123456');
             $this->assertEquals(
-                $test['result'], $status, 'Fixture file: ' . implode(', ', (array)$test['file'])
+                $test['result'],
+                $status,
+                'Fixture file: ' . implode(', ', (array)$test['file'])
             );
         }
     }

@@ -51,7 +51,10 @@ class RouteGenerator extends \VuFind\Route\RouteGenerator
      * @return void
      */
     protected function addRecordRouteKnihovnyCz(
-        array & $config, string $routeBase, string $controller, string $route
+        array & $config,
+        string $routeBase,
+        string $controller,
+        string $route
     ): void {
         // catch-all "tab" route:
         $config['router']['routes'][$routeBase] = [
@@ -100,7 +103,10 @@ class RouteGenerator extends \VuFind\Route\RouteGenerator
     {
         foreach ($routes as $routeBase => $routeData) {
             $this->addRecordRouteKnihovnyCz(
-                $config, $routeBase, $routeData[0], $routeData[1]
+                $config,
+                $routeBase,
+                $routeData[0],
+                $routeData[1]
             );
         }
     }
@@ -115,7 +121,9 @@ class RouteGenerator extends \VuFind\Route\RouteGenerator
      * @return void
      */
     protected function addStaticRouteKnihovnyCz(
-        array & $config, string $route, string $url
+        array & $config,
+        string $route,
+        string $url
     ): void {
         [$controller, $action] = explode('/', $route);
         $routeName = str_replace('/', '-', strtolower($route));

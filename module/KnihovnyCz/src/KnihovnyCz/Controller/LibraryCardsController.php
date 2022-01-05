@@ -52,7 +52,8 @@ class LibraryCardsController extends LibraryCardsControllerBase
         $model = parent::homeAction();
         if ($model instanceof ViewModel) {
             $model->setVariable(
-                'csrfHash', $this->getAuthManager()->getCsrfHash(false)
+                'csrfHash',
+                $this->getAuthManager()->getCsrfHash(false)
             );
         }
         return $model;

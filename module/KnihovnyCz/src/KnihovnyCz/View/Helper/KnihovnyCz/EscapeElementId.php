@@ -41,7 +41,7 @@ use Laminas\View\Helper\AbstractHelper;
  */
 class EscapeElementId extends AbstractHelper
 {
-    const SEARCH = [
+    public const SEARCH = [
         '-',
         '.',
         ',',
@@ -49,7 +49,7 @@ class EscapeElementId extends AbstractHelper
         ':',
     ];
 
-    const REPLACE = '_';
+    public const REPLACE = '_';
 
     /**
      * Escape identifier for use as selector in HTML

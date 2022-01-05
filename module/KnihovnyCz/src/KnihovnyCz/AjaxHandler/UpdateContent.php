@@ -74,7 +74,9 @@ class UpdateContent extends \VuFind\AjaxHandler\AbstractBase
      * @param Filesystem     $filesystem File system util service
      */
     public function __construct(
-        GitWorkingCopy $git, string $branch, Filesystem $filesystem
+        GitWorkingCopy $git,
+        string $branch,
+        Filesystem $filesystem
     ) {
         $this->git = $git;
         $this->branch = $branch;
@@ -101,7 +103,8 @@ class UpdateContent extends \VuFind\AjaxHandler\AbstractBase
             throw new \Exception('Could not find controller');
         }
         $body = json_decode(
-            $controller->getRequest()->getContent(), true
+            $controller->getRequest()->getContent(),
+            true
         );
         $ref = $body['ref'] ?? null;
         if (!preg_match('#refs/heads/(.*)#', $ref, $matches)) {
@@ -127,7 +130,8 @@ class UpdateContent extends \VuFind\AjaxHandler\AbstractBase
         } catch (IOException $exception) {
             $this->formatErrorResponse(
                 'Could not copy content to final destination: '
-                . $exception->getMessage(), 500
+                . $exception->getMessage(),
+                500
             );
         }
         $response = [

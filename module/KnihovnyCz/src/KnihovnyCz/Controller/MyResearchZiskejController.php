@@ -53,9 +53,7 @@ use VuFind\Log\LoggerAwareTrait;
 class MyResearchZiskejController extends AbstractBase
 {
     use LoggerAwareTrait;
-
     use AjaxResponseTrait;
-
     use CatalogLoginTrait;
 
     /**
@@ -121,7 +119,8 @@ class MyResearchZiskejController extends AbstractBase
             $ziskejApi = $this->serviceLocator->get('Mzk\ZiskejApi\Api');
 
             $isLibraryInZiskej = $this->_isLibraryInZiskej(
-                $ziskejApi, $userCard->home_library
+                $ziskejApi,
+                $userCard->home_library
             );
             $view->setVariable('isLibraryInZiskej', $isLibraryInZiskej);
             if (!$isLibraryInZiskej) {
@@ -196,7 +195,10 @@ class MyResearchZiskejController extends AbstractBase
 
         return $this->createViewModel(
             compact(
-                'userCard', 'ticket', 'messages', 'driver'
+                'userCard',
+                'ticket',
+                'messages',
+                'driver'
             )
         );
     }
@@ -237,11 +239,13 @@ class MyResearchZiskejController extends AbstractBase
 
         if ($deleted) {
             $this->flashMessenger()->addMessage(
-                'Ziskej::message_ziskej_order_cancel_success', 'success'
+                'Ziskej::message_ziskej_order_cancel_success',
+                'success'
             );
         } else {
             $this->flashMessenger()->addMessage(
-                'Ziskej::message_ziskej_order_cancel_fail', 'error'
+                'Ziskej::message_ziskej_order_cancel_fail',
+                'error'
             );
         }
 
@@ -267,7 +271,8 @@ class MyResearchZiskejController extends AbstractBase
 
         if (!$this->getRequest()->isPost()) {
             return $this->redirect()->toRoute(
-                'myresearch-ziskej-ticket', [
+                'myresearch-ziskej-ticket',
+                [
                     'eppnDomain' => $eppnDomain,
                     'ticketId' => $ticketId,
                 ]
@@ -288,11 +293,13 @@ class MyResearchZiskejController extends AbstractBase
         $ticketMessage = $this->params()->fromPost('ticketMessage');
         if (empty($ticketMessage)) {
             $this->flashMessenger()->addMessage(
-                'Ziskej::message_ziskej_message_required_ticketMessage', 'error'
+                'Ziskej::message_ziskej_message_required_ticketMessage',
+                'error'
             );
 
             return $this->redirect()->toRoute(
-                'myresearch-ziskej-ticket', [
+                'myresearch-ziskej-ticket',
+                [
                     'eppnDomain' => $eppnDomain,
                     'ticketId' => $ticketId,
                 ]
@@ -311,16 +318,19 @@ class MyResearchZiskejController extends AbstractBase
         $creaded = $ziskejApi->createMessage($userCard->eppn, $ticketId, $message);
         if ($creaded) {
             $this->flashMessenger()->addMessage(
-                'Ziskej::message_ziskej_message_send_success', 'success'
+                'Ziskej::message_ziskej_message_send_success',
+                'success'
             );
         } else {
             $this->flashMessenger()->addMessage(
-                'Ziskej::message_ziskej_message_send_fail', 'error'
+                'Ziskej::message_ziskej_message_send_fail',
+                'error'
             );
         }
 
         return $this->redirect()->toRoute(
-            'myresearch-ziskej-ticket', [
+            'myresearch-ziskej-ticket',
+            [
                 'eppnDomain' => $eppnDomain,
                 'ticketId' => $ticketId,
             ]
@@ -355,7 +365,8 @@ class MyResearchZiskejController extends AbstractBase
      * @throws \Mzk\ZiskejApi\Exception\ApiResponseException
      */
     private function _isLibraryInZiskej(
-        \Mzk\ZiskejApi\Api $ziskejApi, ?string $libraryCode
+        \Mzk\ZiskejApi\Api $ziskejApi,
+        ?string $libraryCode
     ): bool {
         if (empty($libraryCode)) {
             return false;

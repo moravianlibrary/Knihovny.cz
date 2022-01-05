@@ -86,7 +86,8 @@ trait PatentTrait
             break;
         }
         $patentInfoText = implode(
-            ',', [$patentInfoText, $patentInfo['id'], $patentInfo['publish_date']]
+            ',',
+            [$patentInfoText, $patentInfo['id'], $patentInfo['publish_date']]
         ) . "\r\n";
         return $patentInfoText;
     }
@@ -100,14 +101,16 @@ trait PatentTrait
     {
         $fields024 = $this->getStructuredDataFieldArray('024');
         $mpts = array_filter(
-            $fields024, function ($part) {
+            $fields024,
+            function ($part) {
                 return isset($part['2']) && ($part['2'] === 'MPT');
             }
         );
         $mpts = array_map(
             function ($part) {
                 return $part['a'];
-            }, $mpts
+            },
+            $mpts
         );
         return $mpts;
     }
