@@ -193,7 +193,8 @@ class SearchApiController extends \VuFindApi\Controller\SearchApiController
         $idParts = explode('.', $params['id']);
         $bibId = $itemId = null;
         if (count($idParts) === 3) {
-            [$sigla, $bibId, ] = $idParts;
+            [$sigla, $bibId, $itemId] = $idParts;
+            $bibId = substr($bibId, 0, 5) . '-' . substr($bibId, 5);
         } elseif (count($idParts) === 2) {
             [$sigla, $itemId] = $idParts;
         } else {

@@ -67,4 +67,41 @@ class SearchController extends \VuFind\Controller\SearchController
         }
         return parent::dispatch($request, $response);
     }
+
+    /**
+     * Perform a search and send results to a results view
+     *
+     * @param callable $setupCallback Optional setup callback that overrides the
+     * default one
+     *
+     * @return \Laminas\View\Model\ViewModel
+     */
+    protected function getSearchResultsView($setupCallback = null)
+    {
+        $view = parent::getSearchResultsView($setupCallback);
+        $this->disableLastInPagination($view);
+        return $view;
+    }
+
+    /**
+     * Disable link to page with the last results in pagination if the limit on
+     * numer of results is exceeded.
+     *
+     * @param \Laminas\View\Model\ViewModel $view view
+     *
+     * @return void
+     */
+    protected function disableLastInPagination(\Laminas\View\Model\ViewModel $view)
+    {
+        if (!isset($view->results)) {
+            return;
+        }
+        $searchConfig = $this->getConfig('searches');
+        $limit = $searchConfig->Pagination->maxResultsToShowLastLink ?? 0;
+        if ($limit > 0 && $view->results->getResultTotal() > $limit) {
+            $paginationOptions = $view->paginationOptions ?? [];
+            $paginationOptions['disableLast'] = true;
+            $view->paginationOptions = $paginationOptions;
+        }
+    }
 }
