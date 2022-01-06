@@ -125,7 +125,13 @@ class Shibboleth extends Base
                 throw new AuthException('authentication_error_denied');
             }
         }
-        $user = $this->getUserTable()->getByEduPersonUniqueId($eduPersonUniqueId);
+        /**
+         * User db table
+         *
+         * @var \KnihovnyCz\Db\Table\User $userTable
+         */
+        $userTable = $this->getUserTable();
+        $user = $userTable->getByEduPersonUniqueId($eduPersonUniqueId);
 
         // Has the user configured attributes to use for populating the user table?
         foreach ($this->attribsToCheck as $attribute) {
@@ -156,6 +162,7 @@ class Shibboleth extends Base
             'Account',
             $this->sessionManager
         );
+        /* @phpstan-ignore-next-line */
         $session->userInfo = $userInfo;
 
         // Save and return the user object:
@@ -170,7 +177,7 @@ class Shibboleth extends Base
      *
      * @param \Laminas\Http\PhpEnvironment\Request $request        Request object
      * containing account credentials.
-     * @param \VuFind\Db\Row\User                  $connectingUser Connect newly
+     * @param \KnihovnyCz\Db\Row\User              $connectingUser Connect newly
      * created library card to this user.
      *
      * @return void
@@ -193,8 +200,19 @@ class Shibboleth extends Base
         // Is library card already connected to another user? If so, merge the
         // two users.
         if ($card != null && $card->user_id != $connectingUser->id) {
+            /**
+             * User model
+             *
+             * @var \KnihovnyCz\Db\Row\User $user
+             */
             $user = $this->getUserTable()->getById($card->user_id);
-            $this->getUserTable()->merge($user, $connectingUser);
+            /**
+             * User db table
+             *
+             * @var \KnihovnyCz\Db\Table\User $userTable
+             */
+            $userTable = $this->getUserTable();
+            $userTable->merge($user, $connectingUser);
             $card->user_id = $connectingUser->id;
         }
         $username = $this->getAttribute($request, $shib['cat_username']);
@@ -204,6 +222,11 @@ class Shibboleth extends Base
         }
         // check for duplicity - only one library card for institution
         if ($this->checkDuplicateInstitutions) {
+            /**
+             * User card model
+             *
+             * @var \KnihovnyCz\Db\Row\UserCard $libCard
+             */
             foreach ($connectingUser->getLibraryCards() as $libCard) {
                 $institution = explode(
                     '.',
@@ -220,6 +243,11 @@ class Shibboleth extends Base
             }
         }
         if ($card == null) {
+            /**
+             * User model
+             *
+             * @var \KnihovnyCz\Db\Row\UserCard $card
+             */
             $card = $this->getUserCardTable()->createRow();
             $card->created = date('Y-m-d H:i:s');
             $card->user_id = $connectingUser->id;

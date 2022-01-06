@@ -52,12 +52,13 @@ class FooterLink extends AbstractHelper
      */
     public function __invoke(string $page): string
     {
-        return $this->getView()->render(
+        $view = $this->getView();
+        return isset($view) ? $view->render(
             'Helpers/footer-link.phtml',
             [
                 'page' => $page,
                 'title' => 'link_' . $page,
             ]
-        );
+        ) : '';
     }
 }

@@ -153,7 +153,7 @@ class Inspiration implements \VuFind\ContentBlock\ContentBlockInterface
     /**
      * Get widget
      *
-     * @return \KnihovnyCz\Db\Row\Widget
+     * @return \KnihovnyCz\Db\Row\Widget|null
      */
     public function getWidget()
     {

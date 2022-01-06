@@ -77,14 +77,19 @@ class MyResearchController extends MyResearchControllerBase
     {
         // Stop now if the user does not have valid catalog credentials available:
         if (!$user = $this->getAuthManager()->isLoggedIn()) {
-            $this->flashExceptions($this->flashMessenger());
             return $this->forceLogin();
         }
 
         $confirm = $this->params()->fromPost('confirm', false);
         $csrf = $this->params()->fromPost('csrf', null);
 
-        if ($confirm && $this->getAuthManager()->isValidCsrfHash($csrf)) {
+        /**
+         * Auth manager
+         *
+         * @var \KnihovnyCz\Auth\Manager $authManager
+         */
+        $authManager = $this->getAuthManager();
+        if ($confirm && $authManager->isValidCsrfHash($csrf)) {
             $user->delete();
             return $this->logoutAction();
         }
@@ -298,11 +303,10 @@ class MyResearchController extends MyResearchControllerBase
             $view->error = true;
         }
         $view->setTemplate('myresearch/historicloans-ajax');
-        $view->cardId = $this->getCardId();
-        if (!isset($view->params)) {
-            $view->params = [];
-        }
-        $view->params += ['cardId' => $this->getCardId()];
+        $view->setVariable('cardId', $this->getCardId());
+        $params = $view->getVariable('params', []);
+        $params['cardId'] = $this->getCardId();
+        $view->setVariable('params', $params);
         $result = $this->getViewRenderer()->render($view);
         return $this->getAjaxResponse('text/html', $result, null);
     }
@@ -336,8 +340,10 @@ class MyResearchController extends MyResearchControllerBase
      */
     protected function isExpired(string $date): bool
     {
-        $expire = $this->dateConverter->parseDisplayDate($date);
-        $dateDiff = $expire->diff(new \DateTime());
-        return $dateDiff->invert == 0 && $dateDiff->days > 0;
+        if ($expire = $this->dateConverter->parseDisplayDate($date)) {
+            $dateDiff = $expire->diff(new \DateTime());
+            return $dateDiff->invert == 0 && $dateDiff->days > 0;
+        }
+        return false;
     }
 }

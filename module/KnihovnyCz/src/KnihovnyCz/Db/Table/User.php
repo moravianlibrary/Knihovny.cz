@@ -66,6 +66,11 @@ class User extends \VuFind\Db\Table\User
         };
         $row = $this->select($callback)->current();
         if (empty($row)) {
+            /**
+             * User model
+             *
+             * @var \KnihovnyCz\Db\Row\User $row
+             */
             $row = $this->createRow();
             $row->created = date('Y-m-d H:i:s');
             $row->username = $eduPersonUniqueId;
@@ -120,10 +125,20 @@ class User extends \VuFind\Db\Table\User
         // do it in transaction
         $this->getDbConnection()->beginTransaction();
         $institutions = [];
+        /**
+         * Merge source library card
+         *
+         * @var \KnihovnyCz\Db\Row\UserCard $fromCard
+         */
         foreach ($from->getLibraryCards() as $fromCard) {
             $prefix = explode('.', $fromCard->cat_username)[0];
             $institutions[$prefix] = $fromCard;
         }
+        /**
+         * Merge target library card
+         *
+         * @var \KnihovnyCz\Db\Row\UserCard $intoCard
+         */
         foreach ($into->getLibraryCards() as $intoCard) {
             $prefix = explode('.', $intoCard->cat_username)[0];
             if (isset($institutions[$prefix])) {
@@ -131,7 +146,7 @@ class User extends \VuFind\Db\Table\User
                 $srcEpui = $fromCard->edu_person_unique_id;
                 $targetEpui = $intoCard->edu_person_unique_id;
                 if ($srcEpui == $targetEpui) {
-                    $fromCard->remove();
+                    $fromCard->delete();
                 } else {
                     $this->getDbConnection()->rollback();
                     throw new \VuFind\Exception\LibraryCard(
