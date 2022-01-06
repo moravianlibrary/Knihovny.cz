@@ -297,7 +297,8 @@ class User extends Base
         foreach ($this->getLibraryCards() as $card) {
             [$prefix, $username] = explode(
                 '.',
-                $card['cat_username'] ?? '', 2
+                $card['cat_username'] ?? '',
+                2
             );
             if (!empty($username)) {
                 $cards[] = $card;
