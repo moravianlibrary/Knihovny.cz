@@ -46,7 +46,7 @@ class SolrLocalTest extends \PHPUnit\Framework\TestCase
     {
         $expectedItems = [
             [
-                'item_id' => 'AAA001I-03920/2005001',
+                'item_id' => 'I-03920/2005001',
                 'callnumber' => 'UK-88096/1',
                 'location' => 'Brno - sklad',
                 'callnumber_second' => 'vlevo dole',
@@ -59,6 +59,7 @@ class SolrLocalTest extends \PHPUnit\Framework\TestCase
                 'collection_desc' => 'ÚK-sklad',
                 'agency_id' => 'AAA001',
                 'copy_number' => '1',
+                'catalog_link' => '',
             ], [
                 'item_id' => 'J-1/2020',
                 'callnumber' => '',
@@ -73,6 +74,7 @@ class SolrLocalTest extends \PHPUnit\Framework\TestCase
                 'collection_desc' => 'ÚK-sklad',
                 'agency_id' => '',
                 'copy_number' => '',
+                'catalog_link' => '',
             ],
         ];
 
