@@ -208,7 +208,7 @@
     <?php endforeach; ?>
   </ul>
   <?php if ($this->cancelForm): ?></form><?php endif; ?>
-<?php else: ?>
+<?php elseif (!(isset($this->error) && $this->error)): ?>
   <div class="alert alert-info">
     <?=$this->transEsc('You do not have any holds or recalls placed') ?>.
   </div>

@@ -109,9 +109,8 @@
     <?php endforeach; ?>
   </ul>
   <?=$this->paginator ? $this->paginationControl($this->paginator, 'Sliding', 'Helpers/pagination.phtml', ['params' => $this->params]) : ''?>
-<?php else: ?>
+<?php elseif (!(isset($this->error) && $this->error)): ?>
   <div class="alert alert-info">
     <?=$this->transEsc('loan_history_empty')?>
   </div>
 <?php endif; ?>
-

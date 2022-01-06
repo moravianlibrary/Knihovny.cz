@@ -284,4 +284,37 @@ class User extends Base
         }
         return false;
     }
+
+    /**
+     * Get all library cards associated with the user with enabled ILS.
+     *
+     * @return array
+     * @throws \VuFind\Exception\LibraryCard
+     */
+    public function getLibraryCardsWithILS()
+    {
+        $cards = [];
+        foreach ($this->getLibraryCards() as $card) {
+            [$prefix, $username] = explode(
+                '.',
+                $card['cat_username'] ?? '', 2
+            );
+            if (!empty($username)) {
+                $cards[] = $card;
+            }
+        }
+        return $cards;
+    }
+
+    /**
+     * Return if the user is from social network - has no connected library
+     * card with ILS.
+     *
+     * @return bool
+     * @throws \VuFind\Exception\LibraryCard
+     */
+    public function isSocial()
+    {
+        return empty($this->getLibraryCardsWithILS());
+    }
 }
