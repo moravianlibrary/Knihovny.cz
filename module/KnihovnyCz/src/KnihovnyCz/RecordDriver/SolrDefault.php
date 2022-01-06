@@ -504,6 +504,11 @@ class SolrDefault extends \VuFind\RecordDriver\SolrDefault
             },
             (array)$parent->tryMethod('getChildrenIds')
         );
+        /**
+         * User model
+         *
+         * @var \KnihovnyCz\Db\Row\User|false $user
+         */
         $user = $this->authManager->isLoggedIn();
         if ($user) {
             $prefixes = $user->getLibraryPrefixes();
@@ -515,7 +520,7 @@ class SolrDefault extends \VuFind\RecordDriver\SolrDefault
                     $a = ($a !== false) ? $a : PHP_INT_MAX;
                     $b = array_search($b['source'], $prefixes);
                     $b = ($b !== false) ? $b : PHP_INT_MAX;
-                    return $a - $b;
+                    return (int)$a - (int)$b;
                 }
             );
         }

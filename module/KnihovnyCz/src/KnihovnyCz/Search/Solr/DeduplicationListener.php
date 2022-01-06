@@ -169,11 +169,15 @@ class DeduplicationListener extends ParentDeduplicationListener
                     return $a['priority'] - $b['priority'];
                 }
             );
-            $fields['dedup_data'] = $dedupData;
-            $dedupId = reset($dedupData)['id'];
-            $fields['dedup_id'] = $dedupId;
-            $record->setRawData($fields);
-            $idList[] = $dedupId;
+
+            $firstDedupRecord = reset($dedupData);
+            if ($firstDedupRecord !== false) {
+                $fields['dedup_data'] = $dedupData;
+                $dedupId = $firstDedupRecord['id'];
+                $fields['dedup_id'] = $dedupId;
+                $record->setRawData($fields);
+                $idList[] = $dedupId;
+            }
         }
         if (empty($idList)) {
             return;
@@ -252,6 +256,11 @@ class DeduplicationListener extends ParentDeduplicationListener
      */
     public function getSourcesFromLibraryCards()
     {
+        /**
+         * User model
+         *
+         * @var \KnihovnyCz\Db\Row\User|false $user
+         */
         $user = $this->authManager->isLoggedIn();
         if (!$user) {
             return [];

@@ -61,11 +61,14 @@ class FlashRedirect extends AbstractRequestBase
      */
     public function restore()
     {
-        $flashMessenger = $this->getController()->flashMessenger();
+        $controller = $this->getController();
+        if (!$controller) {
+            return;
+        }
+        $flashMessenger = $controller->flashMessenger();
         $flashMessenger->setSessionManager(new NullSessionManager());
         foreach (self::NAMESPACES as $namespace) {
-            $messages = $this->getController()
-                ->params()->fromQuery('flash_' . $namespace);
+            $messages = $controller->params()->fromQuery('flash_' . $namespace);
             if (is_array($messages)) {
                 foreach ($messages as $message) {
                     $flashMessenger->addMessage($message, $namespace);
@@ -87,19 +90,25 @@ class FlashRedirect extends AbstractRequestBase
     public function toUrl($url)
     {
         $newUrl = $this->appendFlashMessages($url);
-        return $this->getController()->redirect()->toUrl($newUrl);
+        $controller = $this->getController();
+        return $controller
+            ? $controller->redirect()->toUrl($newUrl) : new Response();
     }
 
     /**
      * Add to URL parameters with messages from flashMessenger
      *
-     * @param $url URL
+     * @param string $url URL
      *
      * @return string
      */
     protected function appendFlashMessages($url)
     {
-        $flashMessenger = $this->getController()->flashMessenger();
+        $controller = $this->getController();
+        if (!$controller) {
+            return $url;
+        }
+        $flashMessenger = $controller->flashMessenger();
         $queryPart = (string)parse_url($url, PHP_URL_QUERY) ?? '';
         $params = Query::parse($queryPart);
         foreach (self::NAMESPACES as $namespace) {

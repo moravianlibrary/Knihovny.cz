@@ -51,9 +51,13 @@ class Holds extends HoldsBase
      */
     public function cancelHolds($catalog, $patron)
     {
+        $controller = $this->getController();
+        if (!$controller) {
+            return [];
+        }
         // Retrieve the flashMessenger helper:
-        $flashMsg = $this->getController()->flashMessenger();
-        $params = $this->getController()->params();
+        $flashMsg = $controller->flashMessenger();
+        $params = $controller->params();
 
         // Pick IDs to cancel based on which button was pressed:
         $all = $params->fromPost('cancelAll');
@@ -73,10 +77,10 @@ class Holds extends HoldsBase
             // Confirm?
             if ($params->fromPost('confirm') === "0") {
                 if ($params->fromPost('cancelAll') !== null) {
-                    return $this->getController()->confirm(
+                    return $controller->confirm(
                         'hold_cancel_all',
-                        $this->getController()->url()->fromRoute('holds-list'),
-                        $this->getController()->url()->fromRoute('holds-list'),
+                        $controller->url()->fromRoute('holds-list'),
+                        $controller->url()->fromRoute('holds-list'),
                         'confirm_hold_cancel_all_text',
                         [
                             'cancelAll' => 1,
@@ -84,10 +88,10 @@ class Holds extends HoldsBase
                         ]
                     );
                 } else {
-                    return $this->getController()->confirm(
+                    return $controller->confirm(
                         'hold_cancel_selected',
-                        $this->getController()->url()->fromRoute('holds-list'),
-                        $this->getController()->url()->fromRoute('holds-list'),
+                        $controller->url()->fromRoute('holds-list'),
+                        $controller->url()->fromRoute('holds-list'),
                         'confirm_hold_cancel_selected_text',
                         [
                             'cancelSelected' => 1,
@@ -99,6 +103,7 @@ class Holds extends HoldsBase
             }
 
             // Add Patron Data to Submitted Data
+            /* @phpstan-ignore-next-line */
             $cancelResults = $catalog->cancelHolds(
                 ['details' => $details, 'patron' => $patron]
             );
@@ -112,19 +117,17 @@ class Holds extends HoldsBase
                     }
                 }
                 if ($failed) {
-                    $msg = $this->getController()
-                        ->translate(
-                            'hold_cancel_fail_items',
-                            ['%%count%%' => $failed]
-                        );
+                    $msg = $controller->translate(
+                        'hold_cancel_fail_items',
+                        ['%%count%%' => $failed]
+                    );
                     $flashMsg->addErrorMessage($msg);
                 }
                 if ($cancelResults['count'] > 0) {
-                    $msg = $this->getController()
-                        ->translate(
-                            'hold_cancel_success_items',
-                            ['%%count%%' => $cancelResults['count']]
-                        );
+                    $msg = $controller->translate(
+                        'hold_cancel_success_items',
+                        ['%%count%%' => $cancelResults['count']]
+                    );
                     $flashMsg->addSuccessMessage($msg);
                 }
                 return $cancelResults;

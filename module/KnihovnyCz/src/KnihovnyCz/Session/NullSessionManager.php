@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 /**
- * Class PerRequestSessionManager
+ * Class NullSessionManager
  *
  * PHP version 7
  *
@@ -28,9 +28,11 @@ declare(strict_types=1);
  */
 namespace KnihovnyCz\Session;
 
+use Laminas\EventManager\EventManager;
 use Laminas\EventManager\EventManagerInterface;
 use Laminas\Session\AbstractManager;
 use Laminas\Session\Storage\ArrayStorage;
+use Laminas\Session\ValidatorChain;
 
 /**
  * Class PerRequestSessionManager
@@ -46,6 +48,13 @@ use Laminas\Session\Storage\ArrayStorage;
  */
 class NullSessionManager extends AbstractManager
 {
+    /**
+     * Validation chain to determine if session is valid
+     *
+     * @var EventManagerInterface
+     */
+    protected $validatorChain;
+
     /**
      * Constructor
      */
@@ -220,7 +229,10 @@ class NullSessionManager extends AbstractManager
      */
     public function getValidatorChain()
     {
-        return $this;
+        if (null === $this->validatorChain) {
+            $this->setValidatorChain(new EventManager());
+        }
+        return $this->validatorChain;
     }
 
     /**

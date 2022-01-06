@@ -69,6 +69,7 @@ class MyResearchZiskejController extends AbstractBase
         if (!$this->getUser()) {
             return $this->forceLogin();
         }
+        $this->warnSocialUser();
         $view = $this->createViewModel();
         $view->setTemplate('myresearchziskej/list-all');
         return $view;

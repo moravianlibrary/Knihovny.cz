@@ -1,13 +1,11 @@
 <?php
 
-declare(strict_types=1);
-
 /**
- * Class AbstractBase
+ * Class NoILS
  *
  * PHP version 7
  *
- * Copyright (C) Moravian Library 2021.
+ * Copyright (C) Moravian Library 2022.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -23,39 +21,43 @@ declare(strict_types=1);
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  *
  * @category VuFind
- * @package  KnihovnyCz\Controller
- * @author   Robert Šípek <sipek@mzk.cz>
+ * @package  KnihovnyCz\ILS\Driver
+ * @author   Vaclav Rosecky <vaclav.rosecky@mzk.cz>
  * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://knihovny.cz Main Page
  */
-namespace KnihovnyCz\Controller;
+namespace KnihovnyCz\ILS\Driver;
 
-use KnihovnyCz\Db\Row\User;
+use VuFind\Exception\ILS as ILSException;
 
 /**
- * Class AbstractBase
+ * Class NoILS
  *
  * @category VuFind
- * @package  KnihovnyCz\Controller
- * @author   Robert Šípek <sipek@mzk.cz>
+ * @package  KnihovnyCz\ILS\Driver
+ * @author   Vaclav Rosecky <vaclav.rosecky@mzk.cz>
  * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://knihovny.cz Main Page
  */
-class AbstractBase extends \VuFind\Controller\AbstractBase
+class NoILS extends \VuFind\ILS\Driver\NoILS
 {
     /**
-     * Get the user object if logged in, false otherwise.
+     * Patron Login
      *
-     * @return User|false
+     * This is responsible for authenticating a patron against the catalog.
+     *
+     * @param string $username The patron username
+     * @param string $password The patron password
+     *
+     * @throws ILSException
+     * @return mixed           Associative array of patron info on successful login,
+     * null on unsuccessful login.
      */
-    protected function getUser(): false|User
+    public function patronLogin($username, $password)
     {
-        /**
-         * User model
-         *
-         * @var User|false $user
-         */
-        $user = $this->getAuthManager()->isLoggedIn();
-        return $user;
+        return [
+            'cat_username' => $username,
+            'cat_password' => $password,
+        ];
     }
 }

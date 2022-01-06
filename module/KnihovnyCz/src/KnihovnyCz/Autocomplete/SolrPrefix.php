@@ -92,7 +92,10 @@ class SolrPrefix extends \VuFind\Autocomplete\SolrPrefix
                     $this->normalize($result)
                 );
                 foreach ($resultParts as $resultPart) {
-                    if (stripos($resultPart, $queryPart) !== false) {
+                    if (is_string($resultPart)
+                        && is_string($queryPart)
+                        && stripos($resultPart, $queryPart) !== false
+                    ) {
                         $matchedQueryParts++;
                     }
                 }

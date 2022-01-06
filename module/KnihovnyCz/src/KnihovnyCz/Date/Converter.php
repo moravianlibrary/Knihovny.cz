@@ -48,7 +48,7 @@ class Converter extends \VuFind\Date\Converter
      * @param string $displayDate The display formatted date string
      *
      * @throws DateException
-     * @return DateTime            Parsed date
+     * @return DateTime|false     Parsed date
      */
     public function parseDisplayDate($displayDate)
     {

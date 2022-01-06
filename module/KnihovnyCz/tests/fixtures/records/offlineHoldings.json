@@ -6,10 +6,10 @@
       "q":"id:mendelu.55567",
       "indent":"true",
       "wt":"json"}},
-  "response":{"numFound":1,"start":0,"maxScore":17.620237,"docs":[
+  "response":{"numFound":1,"start":0,"maxScore":17.086706,"docs":[
     {
-      "mappings996_display_mv":["\"I-03920/2005\",\"UK-88096/1\",\"Brno - sklad\",\"vlevo dole\",\"\",\"\",\"1943\",\"XXIII\",\"2\",\"A\",\"ÚK-sklad\",\"AAA001\",\"001\",\"1\"",
-        "\"J-1/2020\",\"\",\"Brno - sklad\",\"\",\"\",\"\",\"\",\"\",\"\",\"A\",\"ÚK-sklad\",\"\",\"\",\"\""],
+      "mappings996_display_mv":["\"I-03920/2005\",\"UK-88096/1\",\"Brno - sklad\",\"vlevo dole\",\"\",\"\",\"1943\",\"XXIII\",\"2\",\"A\",\"ÚK-sklad\",\"AAA001\",\"001\",\"1\",\"\"",
+        "\"J-1/2020\",\"\",\"Brno - sklad\",\"\",\"\",\"\",\"\",\"\",\"\",\"A\",\"ÚK-sklad\",\"\",\"\",\"\",\"\""],
       "institution_view_facet_str_mv":["MENDELU"],
       "local_region_institution_facet_str_mv":["0/Library/",
         "1/Library/JM/",
@@ -23,23 +23,21 @@
       "title_sub_display":"sborník pracovních textů",
       "author2_display_mv":["Letní škola elektrochemické a coulochemické detekce ve spojení s kapalinovou chromatografií"],
       "authority2_display_mv":[""],
-      "fullrecord":"00952nam-a2200241-a-4500001001100000003000900011005001700020007000300037008004100040020001800081041000800099044000700107111011800114245013600232260006400368300001600432504002600448653002900474653001900503910002300522996009300545996007200638\u001ekpw0155567\u001eCZ PrSKC\u001e20120927143644.0\u001eta\u001e050823s2005    xr ||||||||||u0|0|||cze||\u001e  \u001fa80-7157-872-X\u001e0 \u001facze\u001e  \u001faxr\u001e2 \u001faLetní škola elektrochemické a coulochemické detekce ve spojení s kapalinovou chromatografií\u001fn1.\u001fd2005\u001fcBrno\u001e10\u001fa1. letní škola elektrochemické a coulochemické detekce ve spojení s kapalinovou chromatografií :\u001fbsborník pracovních textů\u001e  \u001fbMendelova zemědělská a lesnická univerzita,\u001fc2005\u001faBrno\u001e  \u001fa53 s :\u001fbil.\u001e  \u001faObsahuje bibliografie\u001e  \u001faelektrochemická detekce\u001e  \u001fachromatografie\u001e  \u001faBOD006\u001fbUK-88096/1\u001e  \u001fa0\u001fbI-03920/2005\u001fcUK-88096/1\u001feBOD006\u001flBrno - sklad\u001fn10\u001frÚK-sklad\u001fsA\u001ftBOD006.I-03920/2005\u001e  \u001fa0\u001fbJ-1/2020\u001feBOD006\u001flBrno - sklad\u001fn0\u001frÚK-sklad\u001fsA\u001ftBOD006.J-1/2020\u001e\u001d",
+      "fullrecord":"00864nam-a2200229-a-4500001001100000003000900011005001700020007000300037008004100040020001800081041000800099044000700107111011800114245013600232260006400368300001600432504002600448653002900474653001900503910002300522996008900545\u001ekpw0155567\u001eCZ PrSKC\u001e20210811081438.3\u001eta\u001e050823s2005----xr ||||||||||u0|0|||cze||\u001e  \u001fa80-7157-872-X\u001e0 \u001facze\u001e  \u001faxr\u001e2 \u001faLetní škola elektrochemické a coulochemické detekce ve spojení s kapalinovou chromatografií\u001fn1.\u001fd2005\u001fcBrno\u001e10\u001fa1. letní škola elektrochemické a coulochemické detekce ve spojení s kapalinovou chromatografií :\u001fbsborník pracovních textů\u001e  \u001fbMendelova zemědělská a lesnická univerzita,\u001fc2005\u001faBrno\u001e  \u001fa53 s :\u001fbil.\u001e  \u001faObsahuje bibliografie\u001e  \u001faelektrochemická detekce\u001e  \u001fachromatografie\u001e  \u001faBOD006\u001fbUK-88096/1\u001e  \u001fa0\u001fbI-03920/2005\u001fcUK-88096/1\u001feBOD006\u001flÚK Brno\u001fn13\u001frÚK-sklad\u001fsA\u001ftBOD006.I-03920/2005\u001e\u001d",
       "record_format":"local",
       "id001_str":"kpw0155567",
       "sigla_display":"BOD006",
       "title_display":"1. letní škola elektrochemické a coulochemické detekce ve spojení s kapalinovou chromatografií : sborník pracovních textů",
       "isbn_display_mv":["80-7157-872-X"],
       "recordtype":"local",
-      "view_txt_mv":["viewonly",
-        "brno",
+      "view_txt_mv":["brno",
         "cpk"],
       "local_institution_view_facet_mv":["MENDELU"],
       "local_region_institution_facet_mv":["0/Library/",
         "1/Library/JM/",
         "2/Library/JM/MENDELU/"],
       "metaproxy_boolean":false,
-      "barcodes":["I-03920/2005",
-        "J-1/2020"],
+      "barcodes":["I-03920/2005"],
       "local_statuses_facet_str_mv":["0/absent/",
         "0/freestack/"],
       "local_statuses_facet_mv":["0/absent/",
@@ -50,5 +48,5 @@
       "weight_str":"13",
       "parent_id_str":"933482228",
       "_root_":"933482228",
-      "score":17.620237}]
+      "score":17.086706}]
   }}

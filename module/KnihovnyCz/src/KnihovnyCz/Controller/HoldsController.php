@@ -45,6 +45,8 @@ class HoldsController extends HoldsControllerBase
     use \VuFind\Controller\AjaxResponseTrait;
     use \KnihovnyCz\Controller\CatalogLoginTrait;
 
+    use \KnihovnyCz\Controller\MyResearchTrait;
+
     /**
      * Send list of holds to view
      *
@@ -56,6 +58,7 @@ class HoldsController extends HoldsControllerBase
         if (!$this->getUser()) {
             return $this->forceLogin();
         }
+        $this->warnSocialUser();
         $view = $this->createViewModel();
         $view->setTemplate('holds/list-all');
         return $view;
@@ -73,7 +76,7 @@ class HoldsController extends HoldsControllerBase
         try {
             $view = parent::listAction();
         } catch (\Exception $ex) {
-            $this->flashMessenger()->addErrorMessage($ex->getMessage());
+            $this->showException($ex);
         }
         $error = ($view == null || !($view instanceof ViewModel));
         // active operation failed -> redirect to show checked out items
@@ -86,6 +89,7 @@ class HoldsController extends HoldsControllerBase
         }
         if ($view == null) {
             $view = new ViewModel();
+            $view->error = $error;
         }
         $view->setTemplate('holds/list-ajax');
         $result = $this->getViewRenderer()->render($view);

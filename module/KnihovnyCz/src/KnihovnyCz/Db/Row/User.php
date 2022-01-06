@@ -166,8 +166,9 @@ class User extends Base
         if ($row->cat_username == $this->cat_username) {
             // Activate another card (if any) or remove cat_username and cat_password
             $cards = $this->getLibraryCards();
-            if ($cards->count() > 0) {
-                $this->activateLibraryCard($cards->current()->id);
+            $card = $cards->current();
+            if (isset($card) && ($card['id'] ?? false)) {
+                $this->activateLibraryCard($card['id']);
             } else {
                 $this->cat_username = null;
                 $this->cat_password = null;
@@ -282,5 +283,38 @@ class User extends Base
             }
         }
         return false;
+    }
+
+    /**
+     * Get all library cards associated with the user with enabled ILS.
+     *
+     * @return array
+     * @throws \VuFind\Exception\LibraryCard
+     */
+    public function getLibraryCardsWithILS()
+    {
+        $cards = [];
+        foreach ($this->getLibraryCards() as $card) {
+            [$prefix, $username] = explode(
+                '.',
+                $card['cat_username'] ?? '', 2
+            );
+            if (!empty($username)) {
+                $cards[] = $card;
+            }
+        }
+        return $cards;
+    }
+
+    /**
+     * Return if the user is from social network - has no connected library
+     * card with ILS.
+     *
+     * @return bool
+     * @throws \VuFind\Exception\LibraryCard
+     */
+    public function isSocial()
+    {
+        return empty($this->getLibraryCardsWithILS());
     }
 }

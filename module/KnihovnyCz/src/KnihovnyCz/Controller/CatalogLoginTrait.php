@@ -45,7 +45,7 @@ trait CatalogLoginTrait
      * returns false. If there is an ILS exception, a flash message is added and
      * a newly created ViewModel is returned.
      *
-     * @return bool|array|ViewModel
+     * @return bool|array|\Laminas\View\Model\ViewModel
      */
     protected function catalogLogin()
     {
@@ -55,13 +55,14 @@ trait CatalogLoginTrait
         }
         $cardId = $this->getCardId();
         if ($cardId != null) {
-            $card = $user->getLibraryCard($cardId);
+            $card = $user->getLibraryCard((int)$cardId);
             if ($card != null) {
                 $user->cat_username = $card->cat_username;
                 $user->cat_password = $card->cat_password;
             }
         }
         $catalog = $this->getILS();
+        /* @phpstan-ignore-next-line */
         $patron = $catalog->patronLogin(
             $user->cat_username,
             $user->getCatPassword()
@@ -80,5 +81,21 @@ trait CatalogLoginTrait
             'cardId',
             $this->getRequest()->getPost('cardId')
         );
+    }
+
+    /**
+     * Add warning to flash messenger if the user is from social network.
+     *
+     * @return bool
+     */
+    public function warnSocialUser(): void
+    {
+        $user = $this->getUser();
+        if ($user && $user->isSocial()) {
+            $this->flashMessenger()->addMessage(
+                'notif_you_have_user_dummy',
+                'warning'
+            );
+        }
     }
 }

@@ -47,6 +47,8 @@ class MyResearchController extends MyResearchControllerBase
     use \VuFind\Controller\AjaxResponseTrait;
     use \KnihovnyCz\Controller\CatalogLoginTrait;
 
+    use \KnihovnyCz\Controller\MyResearchTrait;
+
     /**
      * Date converter object
      *
@@ -74,14 +76,19 @@ class MyResearchController extends MyResearchControllerBase
     {
         // Stop now if the user does not have valid catalog credentials available:
         if (!$user = $this->getAuthManager()->isLoggedIn()) {
-            $this->flashExceptions($this->flashMessenger());
             return $this->forceLogin();
         }
 
         $confirm = $this->params()->fromPost('confirm', false);
         $csrf = $this->params()->fromPost('csrf', null);
 
-        if ($confirm && $this->getAuthManager()->isValidCsrfHash($csrf)) {
+        /**
+         * Auth manager
+         *
+         * @var \KnihovnyCz\Auth\Manager $authManager
+         */
+        $authManager = $this->getAuthManager();
+        if ($confirm && $authManager->isValidCsrfHash($csrf)) {
             $user->delete();
             return $this->logoutAction();
         }
@@ -103,6 +110,7 @@ class MyResearchController extends MyResearchControllerBase
         if (!$this->getUser()) {
             return $this->forceLogin();
         }
+        $this->warnSocialUser();
         $view = $this->createViewModel();
         $view->setTemplate('myresearch/fines-all');
         return $view;
@@ -120,7 +128,7 @@ class MyResearchController extends MyResearchControllerBase
             $view = parent::finesAction();
         } catch (\Exception $ex) {
             $view = $this->createViewModel();
-            $this->flashMessenger()->addErrorMessage($ex->getMessage());
+            $this->showException($ex);
         }
         if (!($view instanceof ViewModel)) {
             $view = $this->createViewModel(
@@ -145,6 +153,7 @@ class MyResearchController extends MyResearchControllerBase
         if (!$this->getUser()) {
             return $this->forceLogin();
         }
+        $this->warnSocialUser();
         $view = $this->createViewModel();
         $view->setTemplate('myresearch/profile-all');
         return $view;
@@ -162,7 +171,8 @@ class MyResearchController extends MyResearchControllerBase
             $view = parent::profileAction();
         } catch (\Exception $ex) {
             $view = $this->createViewModel();
-            $this->flashMessenger()->addErrorMessage($ex->getMessage());
+            $view->error = true;
+            $this->showException($ex);
         }
         if ($view instanceof \Laminas\View\Model\ViewModel) {
             if (isset($view->profile)
@@ -196,6 +206,7 @@ class MyResearchController extends MyResearchControllerBase
         if (!$this->getUser()) {
             return $this->forceLogin();
         }
+        $this->warnSocialUser();
         $view = $this->createViewModel();
         $view->setTemplate('myresearch/checkedout-all');
         return $view;
@@ -213,7 +224,7 @@ class MyResearchController extends MyResearchControllerBase
         try {
             $view = parent::checkedoutAction();
         } catch (\Exception $ex) {
-            $this->flashMessenger()->addErrorMessage($ex->getMessage());
+            $this->showException($ex);
         }
         $error = ($view == null || !($view instanceof ViewModel));
         // active operation failed -> redirect to show checked out items
@@ -226,6 +237,7 @@ class MyResearchController extends MyResearchControllerBase
         }
         if ($view == null) {
             $view = new ViewModel();
+            $view->error = $error;
         } elseif (isset($view->transactions)) {
             foreach ($view->transactions as $resource) {
                 $ilsDetails = $resource->getExtraDetail('ils_details');
@@ -256,6 +268,7 @@ class MyResearchController extends MyResearchControllerBase
         if (!$this->getUser()) {
             return $this->forceLogin();
         }
+        $this->warnSocialUser();
         $view = $this->createViewModel();
         $view->setTemplate('myresearch/historicloans-all');
         return $view;
@@ -275,7 +288,8 @@ class MyResearchController extends MyResearchControllerBase
             $view->sortList = false;
         } catch (\Exception $ex) {
             $view = $this->createViewModel();
-            $this->flashMessenger()->addErrorMessage($ex->getMessage());
+            $view->error = true;
+            $this->showException($ex);
         }
         if (!($view instanceof \Laminas\View\Model\ViewModel)) {
             $view = $this->createViewModel(
@@ -284,12 +298,14 @@ class MyResearchController extends MyResearchControllerBase
                 ]
             );
         }
-        $view->setTemplate('myresearch/historicloans-ajax');
-        $view->cardId = $this->getCardId();
-        if (!isset($view->params)) {
-            $view->params = [];
+        if ($this->flashMessenger()->hasCurrentMessages('error')) {
+            $view->error = true;
         }
-        $view->params += ['cardId' => $this->getCardId()];
+        $view->setTemplate('myresearch/historicloans-ajax');
+        $view->setVariable('cardId', $this->getCardId());
+        $params = $view->getVariable('params', []);
+        $params['cardId'] = $this->getCardId();
+        $view->setVariable('params', $params);
         $result = $this->getViewRenderer()->render($view);
         return $this->getAjaxResponse('text/html', $result, null);
     }
@@ -323,8 +339,10 @@ class MyResearchController extends MyResearchControllerBase
      */
     protected function isExpired(string $date): bool
     {
-        $expire = $this->dateConverter->parseDisplayDate($date);
-        $dateDiff = $expire->diff(new \DateTime());
-        return $dateDiff->invert == 0 && $dateDiff->days > 0;
+        if ($expire = $this->dateConverter->parseDisplayDate($date)) {
+            $dateDiff = $expire->diff(new \DateTime());
+            return $dateDiff->invert == 0 && $dateDiff->days > 0;
+        }
+        return false;
     }
 }
