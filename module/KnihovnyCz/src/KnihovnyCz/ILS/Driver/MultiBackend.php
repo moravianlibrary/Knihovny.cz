@@ -257,13 +257,18 @@ class MultiBackend extends \VuFind\ILS\Driver\MultiBackend
      */
     public function getStatusByItemIdOrBibId(?string $bibId, ?string $itemId)
     {
-        $status = [];
-        if ($bibId !== null) {
-            $status = $this->getStatus($bibId);
+        if ($bibId !== null && $itemId !== null) {
+            $statuses = $this->getStatus($bibId);
+            $itemId = $this->getLocalId($itemId);
+            foreach ($statuses as $status) {
+                if (($status['item_id'] ?? '') == $itemId) {
+                    return $status;
+                }
+            }
         } elseif ($itemId !== null) {
-            $status = $this->getStatusByItemId($itemId);
+            return $this->getStatusByItemId($itemId);
         }
-        return $status;
+        return [];
     }
 
     /**
