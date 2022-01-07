@@ -8,7 +8,7 @@ $fullTextLinks = $this->driver->getFullTextLinks($this->recordLinker());
     <?php foreach($fullTextLinks as $label => $url): ?>
       <ul class="list-unstyled">
         <li>
-          <a href="<?=$this->escapeHtml($url)?>" title="<?=$this->translate($label)?>"><?=$this->transEsc($label)?></a>
+          <a href="<?=$this->escapeHtml($url)?>" title="<?=$this->translate($label)?>" target="_blank"><?=$this->transEsc($label)?></a>
         </li>
       </ul>
     <?php endforeach; ?>

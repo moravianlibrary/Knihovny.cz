@@ -152,7 +152,8 @@ function setupOpenUrl() {
           let link = $('<a>', {
             text: value.label,
             title: value.label,
-            href: value.url
+            href: value.url,
+            target: '_blank',
           });
           let li = $('<li>', {
             class: 'otherSource',
