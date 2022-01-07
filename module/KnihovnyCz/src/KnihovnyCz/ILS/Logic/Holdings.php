@@ -40,15 +40,15 @@ namespace KnihovnyCz\ILS\Logic;
  */
 class Holdings
 {
-    const STATUS_AVAILABLE = 'available';
+    public const STATUS_AVAILABLE = 'available';
 
-    const STATUS_NOT_AVAILABLE = 'unavailable';
+    public const STATUS_NOT_AVAILABLE = 'unavailable';
 
-    const STATUS_TEMPORARY_NOT_AVAILABLE = 'temporary-unavailable';
+    public const STATUS_TEMPORARY_NOT_AVAILABLE = 'temporary-unavailable';
 
-    const STATUS_UNKNOWN = 'unknown';
+    public const STATUS_UNKNOWN = 'unknown';
 
-    const STATUS_UNDECIDABLE = 'cant-decide';
+    public const STATUS_UNDECIDABLE = 'cant-decide';
 
     /**
      * Availability status mapping

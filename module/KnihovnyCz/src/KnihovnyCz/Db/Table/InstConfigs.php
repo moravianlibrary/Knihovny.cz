@@ -53,8 +53,12 @@ class InstConfigs extends \VuFind\Db\Table\Gateway
      * @param RowGateway    $rowObj  Row prototype object (null for default)
      * @param string        $table   Name of database table to interface with
      */
-    public function __construct(Adapter $adapter, PluginManager $tm, $cfg,
-        RowGateway $rowObj = null, $table = 'inst_configs'
+    public function __construct(
+        Adapter $adapter,
+        PluginManager $tm,
+        $cfg,
+        RowGateway $rowObj = null,
+        $table = 'inst_configs'
     ) {
         parent::__construct($adapter, $tm, $cfg, $rowObj, $table);
     }
@@ -93,10 +97,12 @@ class InstConfigs extends \VuFind\Db\Table\Gateway
                     ->columns(['id', 'value'])
                     ->join('inst_sources', 'source_id = inst_sources.id')
                     ->join(
-                        'inst_keys', 'key_id = inst_keys.id',
+                        'inst_keys',
+                        'key_id = inst_keys.id',
                         ['key' => 'key_name']
                     )->join(
-                        'inst_sections', 'inst_keys.section_id = inst_sections.id',
+                        'inst_sections',
+                        'inst_keys.section_id = inst_sections.id',
                         ['section' => 'section_name']
                     )->where(['inst_sources.source' => $source]);
             }

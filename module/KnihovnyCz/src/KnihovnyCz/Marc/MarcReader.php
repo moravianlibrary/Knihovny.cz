@@ -54,7 +54,8 @@ class MarcReader extends \VuFind\Marc\MarcReader
             parent::setData($data);
         } catch (\Exception $e) {
             $invalidRecord = str_starts_with(
-                $e->getMessage(), 'Invalid MARC record (end of field not found)'
+                $e->getMessage(),
+                'Invalid MARC record (end of field not found)'
             );
             if ($invalidRecord) {
                 $this->leader = str_repeat(' ', 24);

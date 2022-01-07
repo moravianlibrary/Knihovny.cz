@@ -45,7 +45,6 @@ use VuFind\Exception\Auth as AuthException;
 class MyResearchController extends MyResearchControllerBase
 {
     use \VuFind\Controller\AjaxResponseTrait;
-
     use \KnihovnyCz\Controller\CatalogLoginTrait;
 
     use \KnihovnyCz\Controller\MyResearchTrait;

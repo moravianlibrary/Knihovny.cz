@@ -123,7 +123,8 @@ class DocumentTypes implements \VuFind\ContentBlock\ContentBlockInterface
                 'icon' => $itemArray[2] ?? null,
                 'value' => $itemArray[3] ?? null,
                 ];
-            }, $this->itemsConfig->toArray()
+            },
+            $this->itemsConfig->toArray()
         );
     }
 

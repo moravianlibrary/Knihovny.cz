@@ -57,7 +57,9 @@ class UserListFactory
      * creating a service.
      * @throws \Exception if any other error occurs
      */
-    public function __invoke(ContainerInterface $container, $requestedName,
+    public function __invoke(
+        ContainerInterface $container,
+        $requestedName,
         array $options = null
     ) {
         if (!empty($options)) {

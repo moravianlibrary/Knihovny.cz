@@ -52,7 +52,7 @@ class WayfFilterGenerator
      *
      * @const array
      */
-    const FILTER_PROTOTYPE = [
+    public const FILTER_PROTOTYPE = [
         'ver' => '2',
         'allowFeeds' => [
             'eduID.cz' => [

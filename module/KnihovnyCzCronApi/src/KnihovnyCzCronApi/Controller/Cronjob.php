@@ -91,7 +91,8 @@ class Cronjob extends \VuFind\Controller\AbstractBase
      * @return HttpResponse
      */
     protected function runCommand(
-        string $commandName, InputInterface $input
+        string $commandName,
+        InputInterface $input
     ): HttpResponse {
         $pluginManager = $this->serviceLocator->get(CommandPluginManager::class);
         $command = $pluginManager->get($commandName);

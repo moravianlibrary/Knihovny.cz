@@ -41,7 +41,6 @@ use VuFind\Exception\RecordMissing as RecordMissingException;
 class SolrDefault extends \VuFind\RecordDriver\SolrDefault
 {
     use Feature\BuyLinksTrait;
-
     use Feature\ObalkyKnihTrait;
 
     /**
@@ -348,7 +347,9 @@ class SolrDefault extends \VuFind\RecordDriver\SolrDefault
                 'searchTypeTemplate' => 'advanced',
                 'page' => '1',
                 'bool0[]' => 'AND',
-            ], '', '&amp;'
+            ],
+            '',
+            '&amp;'
         );
         foreach ($seriesField as $serie) {
             $result[] = [
@@ -500,7 +501,8 @@ class SolrDefault extends \VuFind\RecordDriver\SolrDefault
                     'source' => $source,
                     'id' => $localId,
                 ];
-            }, (array)$parent->tryMethod('getChildrenIds')
+            },
+            (array)$parent->tryMethod('getChildrenIds')
         );
         /**
          * User model
@@ -512,7 +514,8 @@ class SolrDefault extends \VuFind\RecordDriver\SolrDefault
             $prefixes = $user->getLibraryPrefixes();
             array_unshift($prefixes, $this->getSourceId());
             usort(
-                $results, function ($a, $b) use ($prefixes) {
+                $results,
+                function ($a, $b) use ($prefixes) {
                     $a = array_search($a['source'], $prefixes);
                     $a = ($a !== false) ? $a : PHP_INT_MAX;
                     $b = array_search($b['source'], $prefixes);

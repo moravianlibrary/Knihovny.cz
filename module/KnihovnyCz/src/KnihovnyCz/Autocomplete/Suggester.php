@@ -74,7 +74,9 @@ class Suggester implements \VuFind\I18n\Translator\TranslatorAwareInterface
      * @param ConfigManager  $cm Config manager
      * @param OptionsManager $om Options manager
      */
-    public function __construct(PluginManager $pm, ConfigManager $cm,
+    public function __construct(
+        PluginManager $pm,
+        ConfigManager $cm,
         OptionsManager $om
     ) {
         $this->pluginManager = $pm;
@@ -109,7 +111,9 @@ class Suggester implements \VuFind\I18n\Translator\TranslatorAwareInterface
             $items = [];
             $suggestions = $this->getSuggestionsByType(
                 $request,
-                $type, $query, $limit
+                $type,
+                $query,
+                $limit
             );
             if (empty($suggestions)) {
                 continue;

@@ -82,7 +82,9 @@ class HarvestEbooksCommand extends \Symfony\Component\Console\Command\Command
      * @param string       $name         Command name
      */
     public function __construct(
-        Config $config, TableManager $tableManager, string $name = null
+        Config $config,
+        TableManager $tableManager,
+        string $name = null
     ) {
         $this->config = $config;
         $this->widgetTable = $tableManager->get(Widget::class);

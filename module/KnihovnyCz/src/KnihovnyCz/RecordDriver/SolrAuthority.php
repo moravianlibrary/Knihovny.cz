@@ -152,7 +152,8 @@ class SolrAuthority extends \KnihovnyCz\RecordDriver\SolrMarc
     public function hasPublications()
     {
         return 1 < $this->getCountByField(
-            'authorCorporation_search_txt_mv', $this->getAuthorityId()
+            'authorCorporation_search_txt_mv',
+            $this->getAuthorityId()
         );
     }
 
@@ -164,7 +165,8 @@ class SolrAuthority extends \KnihovnyCz\RecordDriver\SolrMarc
     public function hasPublicationsAbout()
     {
         return 0 < $this->getCountByField(
-            'subjectKeywords_search_txt_mv', $this->getAuthorityId()
+            'subjectKeywords_search_txt_mv',
+            $this->getAuthorityId()
         );
     }
 

@@ -83,8 +83,11 @@ class SearchApiController extends \VuFindApi\Controller\SearchApiController
      * @param FacetFormatter          $ff Facet formatter
      * @param ItemFormatter           $if Item Formatter
      */
-    public function __construct(ServiceLocatorInterface $sm, RecordFormatter $rf,
-        FacetFormatter $ff, ItemFormatter $if
+    public function __construct(
+        ServiceLocatorInterface $sm,
+        RecordFormatter $rf,
+        FacetFormatter $ff,
+        ItemFormatter $if
     ) {
         parent::__construct($sm, $rf, $ff);
         $this->itemFormatter = $if;
@@ -141,7 +144,8 @@ class SearchApiController extends \VuFindApi\Controller\SearchApiController
             'itemFields' => $this->itemFormatter->getRecordFieldSpec(),
         ];
         $json = $this->getViewRenderer()->render(
-            'searchapi/swagger', $viewParams
+            'searchapi/swagger',
+            $viewParams
         );
         return $json;
     }
@@ -200,7 +204,10 @@ class SearchApiController extends \VuFindApi\Controller\SearchApiController
         $source = $driver->siglaToSource($sigla);
         if ($source === null) {
             return $this->output(
-                [], self::STATUS_ERROR, 400, 'No library for this item'
+                [],
+                self::STATUS_ERROR,
+                400,
+                'No library for this item'
             );
         }
         $itemId = $itemId !== null ? $source . '.' . $itemId : null;
@@ -209,7 +216,10 @@ class SearchApiController extends \VuFindApi\Controller\SearchApiController
 
         if (!isset($status['status'])) {
             return $this->output(
-                [], self::STATUS_ERROR, 404, 'Item information not found'
+                [],
+                self::STATUS_ERROR,
+                404,
+                'Item information not found'
             );
         }
 
@@ -239,9 +249,11 @@ class SearchApiController extends \VuFindApi\Controller\SearchApiController
         $fields = $this->getItemFieldList($params);
 
         $response = array_filter(
-            $response, function ($key) use ($fields) {
+            $response,
+            function ($key) use ($fields) {
                 return in_array($key, $fields);
-            }, ARRAY_FILTER_USE_KEY
+            },
+            ARRAY_FILTER_USE_KEY
         );
 
         return $this->output($response, self::STATUS_OK);

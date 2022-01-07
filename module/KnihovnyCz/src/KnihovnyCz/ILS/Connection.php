@@ -50,7 +50,7 @@ class Connection extends ConnectionBase
     /**
      * Methods to check for each library card
      */
-    const CHECKED_METHODS = [
+    public const CHECKED_METHODS = [
         'getMyTransactionHistory'
     ];
 

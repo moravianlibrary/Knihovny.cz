@@ -56,8 +56,12 @@ class Config extends Gateway
      * @param RowGateway    $rowObj  Row prototype object (null for default)
      * @param string        $table   Name of database table to interface with
      */
-    public function __construct(Adapter $adapter, PluginManager $tm, $cfg,
-        RowGateway $rowObj = null, $table = 'config'
+    public function __construct(
+        Adapter $adapter,
+        PluginManager $tm,
+        $cfg,
+        RowGateway $rowObj = null,
+        $table = 'config'
     ) {
         parent::__construct($adapter, $tm, $cfg, $rowObj, $table);
     }
@@ -111,10 +115,12 @@ class Config extends Gateway
                     ->columns(['id', 'array_key', 'value'])
                     ->join('config_files', 'file_id = config_files.id', [])
                     ->join(
-                        'config_sections', 'section_id = config_sections.id',
+                        'config_sections',
+                        'section_id = config_sections.id',
                         ['section' => 'section_name']
                     )->join(
-                        'config_items', 'item_id = config_items.id',
+                        'config_items',
+                        'item_id = config_items.id',
                         ['type' => 'type', 'item' => 'name']
                     )->where(['config_files.file_name' => $filename, 'active' => 1])
                     ->order(['item', 'order']);

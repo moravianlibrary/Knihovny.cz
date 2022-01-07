@@ -59,7 +59,8 @@ class User extends \VuFind\Db\Table\User
     {
         $callback = function ($select) use ($eduPersonUniqueId) {
             $select->join(
-                ['uc' => 'user_card'], 'user.id = uc.user_id',
+                ['uc' => 'user_card'],
+                'user.id = uc.user_id',
                 []
             );
             $select->where->equalTo('uc.edu_person_unique_id', $eduPersonUniqueId);
@@ -91,7 +92,10 @@ class User extends \VuFind\Db\Table\User
      *
      * @return void
      */
-    protected function expirationCallback($select, $daysOld, $idFrom = null,
+    protected function expirationCallback(
+        $select,
+        $daysOld,
+        $idFrom = null,
         $idTo = null
     ) {
         $timestamp = strtotime(sprintf('-%d days', (int)$daysOld));

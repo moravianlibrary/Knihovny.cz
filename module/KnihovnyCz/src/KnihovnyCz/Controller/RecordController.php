@@ -60,7 +60,8 @@ class RecordController extends \VuFind\Controller\RecordController
         $id = $this->params()->fromRoute('id');
         if (str_starts_with($id, 'library')) {
             return $this->redirect()->toRoute(
-                'search2record', $this->params()->fromRoute()
+                'search2record',
+                $this->params()->fromRoute()
             );
         }
         return parent::dispatch($request, $response);
@@ -178,7 +179,8 @@ class RecordController extends \VuFind\Controller\RecordController
 
         if (!$this->params()->fromPost('is_conditions')) {
             $this->flashMessenger()->addMessage(
-                'Ziskej::error_is_conditions', 'error'
+                'Ziskej::error_is_conditions',
+                'error'
             );
             return $this->redirectToRecord('', 'Ziskej');
         }
@@ -215,7 +217,8 @@ class RecordController extends \VuFind\Controller\RecordController
 
         if (!$ziskejReader->isActive()) {
             $this->flashMessenger()->addMessage(
-                'Ziskej::error_account_not_active', 'warning'
+                'Ziskej::error_account_not_active',
+                'warning'
             );
             //@todo next step
             return $this->redirectToRecord('', 'Ziskej');
@@ -228,11 +231,13 @@ class RecordController extends \VuFind\Controller\RecordController
         $ticket = $ziskejApi->createTicket($userCard->eppn, $ticketNew);
 
         $this->flashMessenger()->addMessage(
-            'Ziskej::success_order_finished', 'success'
+            'Ziskej::success_order_finished',
+            'success'
         );
 
         return $this->redirect()->toRoute(
-            'ziskej-order-finished', [
+            'ziskej-order-finished',
+            [
                 'eppnDomain' => $userCard->getEppnDomain(),
                 'ticketId' => $ticket->getId(),
             ]

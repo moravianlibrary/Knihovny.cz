@@ -53,13 +53,9 @@ class KohaRest1905 extends AbstractBase implements \Laminas\Log\LoggerAwareInter
     \VuFindHttp\HttpServiceAwareInterface
 {
     use \VuFind\I18n\Translator\TranslatorAwareTrait;
-
     use \VuFind\Log\LoggerAwareTrait;
-
     use \VuFind\ILS\Driver\CacheTrait;
-
     use \VuFind\ILS\Driver\OAuth2TokenTrait;
-
     use \VuFindHttp\HttpServiceAwareTrait;
 
     /**
@@ -215,7 +211,8 @@ class KohaRest1905 extends AbstractBase implements \Laminas\Log\LoggerAwareInter
         return array_map(
             function ($id) {
                 return $this->getItemStatusesForBiblio($id);
-            }, $ids
+            },
+            $ids
         );
     }
 
@@ -346,7 +343,9 @@ class KohaRest1905 extends AbstractBase implements \Laminas\Log\LoggerAwareInter
      * @return array
      * @throws ILSException|DateException
      */
-    protected function getCheckouts(array $patron, array $params,
+    protected function getCheckouts(
+        array $patron,
+        array $params,
         bool $history = false
     ): array {
         $queryParams = [
@@ -490,7 +489,9 @@ class KohaRest1905 extends AbstractBase implements \Laminas\Log\LoggerAwareInter
         foreach ($renewDetails['details'] as $details) {
             [$checkoutId, $itemId] = explode('|', $details);
             $result = $this->makeRequest(
-                ['v1', 'checkouts', $checkoutId, 'renewal'], false, 'POST'
+                ['v1', 'checkouts', $checkoutId, 'renewal'],
+                false,
+                'POST'
             );
             if ($result['code'] == 403) {
                 $finalResult['details'][$itemId] = [
@@ -576,7 +577,9 @@ class KohaRest1905 extends AbstractBase implements \Laminas\Log\LoggerAwareInter
         foreach ($details as $detail) {
             [$holdId, $itemId] = explode('|', $detail, 2);
             $result = $this->makeRequest(
-                ['v1', 'holds', $holdId], false, 'DELETE'
+                ['v1', 'holds', $holdId],
+                false,
+                'DELETE'
             );
 
             if ($result['code'] != 200) {
@@ -720,7 +723,8 @@ class KohaRest1905 extends AbstractBase implements \Laminas\Log\LoggerAwareInter
             [
                 'v1', 'contrib', 'knihovny_cz', 'items', $data['item_id'],
                 'allows_hold'
-            ], [
+            ],
+            [
                 'patron_id' => $patron['id'],
                 'library_id' => $this->getDefaultPickUpLocation($patron)
             ]
@@ -765,7 +769,8 @@ class KohaRest1905 extends AbstractBase implements \Laminas\Log\LoggerAwareInter
         // Convert last interest date from Display Format to Koha's required format
         try {
             $lastInterestDate = $this->dateConverter->convertFromDisplayDate(
-                'Y-m-d', $holdDetails['requiredBy']
+                'Y-m-d',
+                $holdDetails['requiredBy']
             );
         } catch (DateException $e) {
             // Hold Date is invalid
@@ -778,7 +783,8 @@ class KohaRest1905 extends AbstractBase implements \Laminas\Log\LoggerAwareInter
 
         try {
             $checkTime = $this->dateConverter->convertFromDisplayDate(
-                'U', $holdDetails['requiredBy']
+                'U',
+                $holdDetails['requiredBy']
             );
             if (!is_numeric($checkTime)) {
                 throw new DateException('Result should be numeric');
@@ -809,7 +815,9 @@ class KohaRest1905 extends AbstractBase implements \Laminas\Log\LoggerAwareInter
         }
 
         $result = $this->makeRequest(
-            ['v1', 'holds'], json_encode($request), 'POST'
+            ['v1', 'holds'],
+            json_encode($request),
+            'POST'
         );
 
         if ($result['code'] >= 300) {
@@ -831,7 +839,9 @@ class KohaRest1905 extends AbstractBase implements \Laminas\Log\LoggerAwareInter
     public function getMyFines($patron)
     {
         $result = $this->makeRequest(
-            ['v1', 'patrons', $patron['id'], 'account'], false, 'GET'
+            ['v1', 'patrons', $patron['id'], 'account'],
+            false,
+            'GET'
         );
 
         $fines = [];
@@ -843,9 +853,9 @@ class KohaRest1905 extends AbstractBase implements \Laminas\Log\LoggerAwareInter
                 )
                 : $entry['description'];
             $fineDescription = (
-                    $fineDescription === $entry['description']
+                $fineDescription === $entry['description']
                     || empty($entry['description'])
-                )
+            )
                 ? $fineDescription
                 : $fineDescription . ' (' . $entry['description'] . ')';
             $fines[] = [
@@ -874,8 +884,11 @@ class KohaRest1905 extends AbstractBase implements \Laminas\Log\LoggerAwareInter
      * @return array Result array with keys: 'data', 'code' and 'headers'
      * @throws ILSException
      */
-    protected function makeRequest(array $hierarchy, $params = false,
-        string $method = 'GET', array $headers = []
+    protected function makeRequest(
+        array $hierarchy,
+        $params = false,
+        string $method = 'GET',
+        array $headers = []
     ): array {
         // Set up the request
         $apiUrl = $this->config['Catalog']['host'];
@@ -919,7 +932,8 @@ class KohaRest1905 extends AbstractBase implements \Laminas\Log\LoggerAwareInter
                      */
                     $requestHeaders = $client->getRequest()->getHeaders();
                     $requestHeaders->addHeaderLine(
-                        'Content-Type', 'application/json'
+                        'Content-Type',
+                        'application/json'
                     );
                 }
             }
@@ -1021,7 +1035,9 @@ class KohaRest1905 extends AbstractBase implements \Laminas\Log\LoggerAwareInter
      * id, availability (boolean), status, location, reserve, callnumber.
      * @throws ILSException|DateException
      */
-    protected function getItemStatusesForBiblio(string $id, ?array $patron = null
+    protected function getItemStatusesForBiblio(
+        string $id,
+        ?array $patron = null
     ): array {
         $result = [];
         $availability = $this->makeRequest(
@@ -1157,7 +1173,9 @@ class KohaRest1905 extends AbstractBase implements \Laminas\Log\LoggerAwareInter
     {
         $request = function ($id) {
             return $this->makeRequest(
-                ['v1', 'contrib', 'knihovny_cz', 'biblios', $id], [], 'GET',
+                ['v1', 'contrib', 'knihovny_cz', 'biblios', $id],
+                [],
+                'GET',
                 ['Accept' => 'application/json']
             );
         };
@@ -1175,8 +1193,10 @@ class KohaRest1905 extends AbstractBase implements \Laminas\Log\LoggerAwareInter
      * @return bool
      * @throws ILSException
      */
-    protected function pickUpLocationIsValid(string $pickUpLocation,
-        array $patron, array $holdDetails
+    protected function pickUpLocationIsValid(
+        string $pickUpLocation,
+        array $patron,
+        array $holdDetails
     ): bool {
         $pickUpLibs = $this->getPickUpLocations($patron, $holdDetails);
         foreach ($pickUpLibs as $location) {
@@ -1357,7 +1377,9 @@ class KohaRest1905 extends AbstractBase implements \Laminas\Log\LoggerAwareInter
      * @return array
      */
     protected function getData(
-        string $prefix, callable $request, array $params = []
+        string $prefix,
+        callable $request,
+        array $params = []
     ): array {
         $cacheKey = $prefix . ($params[0] ?? '');
         $data = $this->getCachedData($cacheKey);
@@ -1368,7 +1390,9 @@ class KohaRest1905 extends AbstractBase implements \Laminas\Log\LoggerAwareInter
             $result = $request(...$params);
             if ($result['code'] === 200) {
                 $this->putCachedData(
-                    $cacheKey, $result['data'], $this->cacheTTLs[$prefix]
+                    $cacheKey,
+                    $result['data'],
+                    $this->cacheTTLs[$prefix]
                 );
                 return $result['data'];
             } else {
@@ -1431,7 +1455,9 @@ class KohaRest1905 extends AbstractBase implements \Laminas\Log\LoggerAwareInter
             );
         }
         $this->putCachedData(
-            $cacheKey, $token->getHeaderValue(), $token->getExpiresIn()
+            $cacheKey,
+            $token->getHeaderValue(),
+            $token->getExpiresIn()
         );
         return $token->getHeaderValue();
     }

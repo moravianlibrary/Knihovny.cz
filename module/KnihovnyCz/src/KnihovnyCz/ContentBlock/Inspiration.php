@@ -110,7 +110,8 @@ class Inspiration implements \VuFind\ContentBlock\ContentBlockInterface
      * @param \VuFind\Db\Table\PluginManager $tables Table manager
      * @param \VuFind\Record\Loader          $loader Record loader
      */
-    public function __construct(\VuFind\Db\Table\PluginManager $tables,
+    public function __construct(
+        \VuFind\Db\Table\PluginManager $tables,
         \VuFind\Record\Loader $loader
     ) {
         $this->tableManager = $tables;

@@ -4,7 +4,7 @@
   $searchAction = $options->getSearchAction();
   $list = $list = $this->results->getListObject();
   $listUrl = $this->url($searchAction) . "?" . http_build_query(
-    [
+      [
       'lookfor' => $this->listId,
       'type' => 'id',
     ]

@@ -52,7 +52,9 @@ class RecordDataFormatterFactory
      *
      * @return object
      */
-    public function __invoke(ContainerInterface $container, $requestedName,
+    public function __invoke(
+        ContainerInterface $container,
+        $requestedName,
         array $options = null
     ) {
         /**
@@ -105,8 +107,12 @@ class RecordDataFormatterFactory
     public function getDefaultLibraryCoreFields()
     {
         $fields = [];
-        $setLine = function ($key, $dataMethod, $template = null,
-            $icon = 'fa fa-circle-thin', $heading = true,
+        $setLine = function (
+            $key,
+            $dataMethod,
+            $template = null,
+            $icon = 'fa fa-circle-thin',
+            $heading = true,
             $contentClass = ''
         ) use (&$fields) {
             $fields[$key] = [
@@ -120,21 +126,32 @@ class RecordDataFormatterFactory
         };
 
         $setLine(
-            'Book search', 'getBookSearchFilter',
-            'search_in_library_link.phtml', 'fa fa-search', false
+            'Book search',
+            'getBookSearchFilter',
+            'search_in_library_link.phtml',
+            'fa fa-search',
+            false
         );
         $setLine(
-            'Address', 'getLibraryAddress', null, 'fa fa-map-marker',
-            false, 'library-large'
+            'Address',
+            'getLibraryAddress',
+            null,
+            'fa fa-map-marker',
+            false,
+            'library-large'
         );
         $setLine(
-            'Opening hours', 'getLibraryHours',
-            'opening_hours.phtml', 'fa fa-clock-o'
+            'Opening hours',
+            'getLibraryHours',
+            'opening_hours.phtml',
+            'fa fa-clock-o'
         );
         $setLine('Additional information', 'getLibNote');
         $setLine('Additional information2', 'getLibNote2');
         $setLine(
-            'Web sites', 'getUrls', 'library_links.phtml',
+            'Web sites',
+            'getUrls',
+            'library_links.phtml',
             'fa fa-globe'
         );
         $setLine('Library type', 'getType');
@@ -160,7 +177,9 @@ class RecordDataFormatterFactory
         $spec->setLine('source_term', 'getSource');
         $spec->setLine('term_author', 'getTermAuthors');
         $spec->setLine(
-            'Format', 'getFormats', 'RecordHelper',
+            'Format',
+            'getFormats',
+            'RecordHelper',
             ['helperMethod' => 'getFormatList']
         );
 
@@ -179,14 +198,20 @@ class RecordDataFormatterFactory
         $spec->setLine('Alternative names', 'getAddedEntryPersonalNames');
         $spec->setLine('Source', 'getSource');
         $spec->setTemplateLine(
-            'Published also like', 'getPseudonyms', 'pseudonyms.phtml'
+            'Published also like',
+            'getPseudonyms',
+            'pseudonyms.phtml'
         );
         $spec->setLine(
-            'Format', 'getFormats', 'RecordHelper',
+            'Format',
+            'getFormats',
+            'RecordHelper',
             ['helperMethod' => 'getFormatList']
         );
         $spec->setTemplateLine(
-            'Publications', 'getRelatedUrls', 'publicationurls.phtml'
+            'Publications',
+            'getRelatedUrls',
+            'publicationurls.phtml'
         );
 
         return $spec->getArray();
@@ -201,29 +226,44 @@ class RecordDataFormatterFactory
     {
         $spec = new SpecBuilder();
         $spec->setTemplateLine(
-            'Published in', 'getContainerTitle', 'data-containerTitle.phtml'
+            'Published in',
+            'getContainerTitle',
+            'data-containerTitle.phtml'
         );
         $spec->setLine(
-            'New Title', 'getNewerTitles', null, ['recordLink' => 'title']
+            'New Title',
+            'getNewerTitles',
+            null,
+            ['recordLink' => 'title']
         );
         $spec->setLine(
-            'Previous Title', 'getPreviousTitles', null, ['recordLink' => 'title']
+            'Previous Title',
+            'getPreviousTitles',
+            null,
+            ['recordLink' => 'title']
         );
         $spec->setMultiLine(
-            'Authors', 'getDeduplicatedAuthors', $this->getAuthorFunction()
+            'Authors',
+            'getDeduplicatedAuthors',
+            $this->getAuthorFunction()
         );
         $spec->setLine(
-            'Format', 'getFormats', 'RecordHelper',
+            'Format',
+            'getFormats',
+            'RecordHelper',
             ['helperMethod' => 'getFormatList']
         );
         $spec->setLine('Language', 'getLanguages');
         $spec->setLine('Document range', 'getRange');
         $spec->setTemplateLine(
-            'From monographic series', 'getMonographicSeries',
+            'From monographic series',
+            'getMonographicSeries',
             'data-monographic-series.phtml'
         );
         $spec->setTemplateLine(
-            'Published', 'getPublicationDetails', 'data-publicationDetails.phtml'
+            'Published',
+            'getPublicationDetails',
+            'data-publicationDetails.phtml'
         );
         $spec->setTemplateLine('field773', 'getField773', 'data-7xx-field.phtml');
         $spec->setTemplateLine('field770', 'getField770', 'data-7xx-field.phtml');
@@ -232,15 +272,21 @@ class RecordDataFormatterFactory
         $spec->setTemplateLine('field780', 'getField780', 'data-7xx-field.phtml');
         $spec->setTemplateLine('field785', 'getField785', 'data-7xx-field.phtml');
         $spec->setLine(
-            'Edition', 'getEdition', null,
+            'Edition',
+            'getEdition',
+            null,
             ['prefix' => '<span property="bookEdition">', 'suffix' => '</span>']
         );
         $spec->setTemplateLine('Series', 'getSeries', 'data-series.phtml');
         $spec->setTemplateLine(
-            'Subjects', 'getAllSubjectHeadings', 'data-allSubjectHeadings.phtml'
+            'Subjects',
+            'getAllSubjectHeadings',
+            'data-allSubjectHeadings.phtml'
         );
         $spec->setTemplateLine(
-            'child_records', 'getChildRecordCount', 'data-childRecords.phtml',
+            'child_records',
+            'getChildRecordCount',
+            'data-childRecords.phtml',
             ['allowZero' => false]
         );
         $spec->setLine('Item Description', 'getGeneralNotes');
@@ -265,7 +311,9 @@ class RecordDataFormatterFactory
         /* @phpstan-ignore-next-line */
         $spec->setTemplateLine('Author Notes', true, 'data-authorNotes.phtml');
         $spec->setTemplateLine(
-            'Related Items', 'getAllRecordLinks', 'data-allRecordLinks.phtml'
+            'Related Items',
+            'getAllRecordLinks',
+            'data-allRecordLinks.phtml'
         );
 
         return $spec->getArray();
@@ -280,32 +328,49 @@ class RecordDataFormatterFactory
     {
         $spec = new SpecBuilder();
         $spec->setTemplateLine(
-            'Published in', 'getContainerTitle', 'data-containerTitle.phtml'
+            'Published in',
+            'getContainerTitle',
+            'data-containerTitle.phtml'
         );
         $spec->setLine(
-            'New Title', 'getNewerTitles', null, ['recordLink' => 'title']
+            'New Title',
+            'getNewerTitles',
+            null,
+            ['recordLink' => 'title']
         );
         $spec->setLine(
-            'Previous Title', 'getPreviousTitles', null, ['recordLink' => 'title']
+            'Previous Title',
+            'getPreviousTitles',
+            null,
+            ['recordLink' => 'title']
         );
         $spec->setMultiLine(
-            'Authors', 'getDeduplicatedAuthors', $this->getAuthorFunction()
+            'Authors',
+            'getDeduplicatedAuthors',
+            $this->getAuthorFunction()
         );
         $spec->setLine(
-            'Format', 'getFormats', 'RecordHelper',
+            'Format',
+            'getFormats',
+            'RecordHelper',
             ['helperMethod' => 'getFormatList']
         );
         $spec->setLine('Language', 'getLanguages');
         $spec->setLine('Document range', 'getRange');
         $spec->setTemplateLine(
-            'From monographic series', 'getMonographicSeries',
+            'From monographic series',
+            'getMonographicSeries',
             'data-monographic-series.phtml'
         );
         $spec->setTemplateLine(
-            'Published', 'getPublicationDetails', 'data-publicationDetails.phtml'
+            'Published',
+            'getPublicationDetails',
+            'data-publicationDetails.phtml'
         );
         $spec->setLine(
-            'Edition', 'getEdition', null,
+            'Edition',
+            'getEdition',
+            null,
             ['prefix' => '<span property="bookEdition">', 'suffix' => '</span>']
         );
         $spec->setTemplateLine('Series', 'getSeries', 'data-series.phtml');
@@ -332,7 +397,9 @@ class RecordDataFormatterFactory
         /* @phpstan-ignore-next-line */
         $spec->setTemplateLine('Author Notes', true, 'data-authorNotes.phtml');
         $spec->setTemplateLine(
-            'Related Items', 'getAllRecordLinks', 'data-allRecordLinks.phtml'
+            'Related Items',
+            'getAllRecordLinks',
+            'data-allRecordLinks.phtml'
         );
         return $spec->getArray();
     }

@@ -48,7 +48,8 @@ class SolrMarcTest extends \PHPUnit\Framework\TestCase
     public function testGetStructuredDataFieldArray(): void
     {
         $method = new \ReflectionMethod(
-            '\KnihovnyCz\RecordDriver\SolrMarc', 'getStructuredDataFieldArray'
+            '\KnihovnyCz\RecordDriver\SolrMarc',
+            'getStructuredDataFieldArray'
         );
         $method->setAccessible(true);
         $filename = 'records/record1.json';

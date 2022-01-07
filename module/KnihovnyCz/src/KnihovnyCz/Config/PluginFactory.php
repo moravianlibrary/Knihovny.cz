@@ -61,7 +61,9 @@ class PluginFactory extends \VuFind\Config\PluginFactory
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function __invoke(ContainerInterface $container, $requestedName,
+    public function __invoke(
+        ContainerInterface $container,
+        $requestedName,
         array $options = null
     ) {
         // There is settings to database connection in main file, so it could not be

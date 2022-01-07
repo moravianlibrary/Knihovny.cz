@@ -82,8 +82,11 @@ class GetObalkyKnihCoverWithoutSolr extends AbstractBase
      * @param bool             $useCoverFallbacksOnFail If true we will render a
      * fallback html template in case no image could be loaded
      */
-    public function __construct(SessionSettings $ss, ObalkyKnih $coverHandler,
-        ?PhpRenderer $renderer = null, bool $useCoverFallbacksOnFail = false
+    public function __construct(
+        SessionSettings $ss,
+        ObalkyKnih $coverHandler,
+        ?PhpRenderer $renderer = null,
+        bool $useCoverFallbacksOnFail = false
     ) {
         $this->sessionSettings = $ss;
         $this->coverHandler = $coverHandler;

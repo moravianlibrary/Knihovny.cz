@@ -51,13 +51,13 @@ use VuFindSearch\ParamBag;
  */
 class DeduplicationListener extends ParentDeduplicationListener
 {
-    const OR_FACETS_REGEX = '/(\\{[^\\}]*\\})*([\S]+):\\((.+)\\)/';
+    public const OR_FACETS_REGEX = '/(\\{[^\\}]*\\})*([\S]+):\\((.+)\\)/';
 
-    const FILTER_REGEX = '/(\S+):"([^"]+)"/';
+    public const FILTER_REGEX = '/(\S+):"([^"]+)"/';
 
-    const UNDEF_PRIORITY = 99999;
+    public const UNDEF_PRIORITY = 99999;
 
-    const MIN_PRIORITY = 999999;
+    public const MIN_PRIORITY = 999999;
 
     /**
      * Facet configuration file id
@@ -93,13 +93,20 @@ class DeduplicationListener extends ParentDeduplicationListener
      * enabled
      */
     public function __construct(
-        Backend $backend, ContainerInterface $serviceLocator,
-        $searchCfg, $authManager, $facetCfg,
-        $dataSourceCfg = 'datasources', $enabled = true
+        Backend $backend,
+        ContainerInterface $serviceLocator,
+        $searchCfg,
+        $authManager,
+        $facetCfg,
+        $dataSourceCfg = 'datasources',
+        $enabled = true
     ) {
         parent::__construct(
-            $backend, $serviceLocator, $searchCfg,
-            $dataSourceCfg, $enabled
+            $backend,
+            $serviceLocator,
+            $searchCfg,
+            $dataSourceCfg,
+            $enabled
         );
         $this->authManager = $authManager;
         $this->facetConfig = $facetCfg;
