@@ -57,6 +57,7 @@
 <?php
 if ($recordsCount > 1) {
   $dataJson = json_encode($data);
+  $placeholder = $this->transEsc('institutions_search_placeholder');
   $select2 = <<<JS
 var options = $dataJson;
 function template(option) {
@@ -65,7 +66,7 @@ function template(option) {
 
 jQuery(document).ready(function($) {
   $('#institutions').select2({
-    language: "cs",
+    language: document.documentElement.lang,
     data: options,
     theme: 'bootstrap3',
     templateResult: template,
@@ -73,6 +74,9 @@ jQuery(document).ready(function($) {
   });
   $('#institutions').on('select2:select', function (e) {
     window.location.href = e.params.data.href;
+  });
+  $('#institutions').on('select2:open', function (e) {
+    $('.select2-search__field').attr('placeholder', '$placeholder');
   });
 });
 JS;
