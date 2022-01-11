@@ -49,11 +49,17 @@
     </table>
   <?php endif; ?>
 
-  <div class="btn-group">
-    <?php if ($this->allowConnectingCards): ?>
-      <a href="<?=$this->url('librarycards-connectcardlogin') ?>" class="btn btn-link"><i class="fa fa-edit" aria-hidden="true"></i> <?=$this->transEsc('Add a Library Card using login')?></a>
-    <?php endif;?>
-  </div>
+  <?php if ($this->allowConnectingCards): ?>
+    <h2><?=$this->translate('Library card connect warning label')?></h2>
+    <p class="alert alert-danger" role="alert"><?=$this->translate('Library card connect warning 1')?></p>
+    <p><?=$this->translate('Library card connect warning 2')?></p>
+    <p><?=$this->translate('Library card connect warning 3')?></p>
+    <div class="btn-group">
+      <a href="<?=$this->url('librarycards-connectcardlogin') ?>" class="btn btn-link"><i class="fa fa-edit" aria-hidden="true">
+        </i> <?=$this->transEsc('Add a Library Card using login')?>
+      </a>
+    </div>
+  <?php endif;?>
 
 </div>
 
