@@ -1,4 +1,11 @@
-<?php $account = $this->auth()->getManager(); ?>
+<?php
+  $account = $this->auth()->getManager();
+  $accountLabel = $this->translate("Your Account");
+  $user = $account->isLoggedIn();
+  if ($user && $user->firstname && $user->lastname) {
+    $accountLabel = $user->firstname . ' ' . $user->lastname;
+  }
+?>
 <div class="banner container navbar">
   <div class="navbar-header">
     <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#header-collapse" aria-hidden="true">
@@ -36,7 +43,7 @@
           <?php endif; ?>
           <?php if (is_object($account) && $account->loginEnabled()): // hide login/logout if unavailable ?>
             <li class="logoutOptions<?php if($account->dropdownEnabled()): ?> with-dropdown<?php endif ?><?php if(!$account->isLoggedIn()): ?> hidden<?php endif ?>">
-              <a href="<?=$this->url('myresearch-home', [], ['query' => ['redirect' => 0]])?>"><i id="account-icon" class="fa fa-fw fa-user-circle" aria-hidden="true"></i> <?=$this->transEsc("Your Account")?></a>
+              <a href="<?=$this->url('myresearch-home', [], ['query' => ['redirect' => 0]])?>"><i id="account-icon" class="fa fa-fw fa-user-circle" aria-hidden="true"></i> <?=$this->escapeHtml($accountLabel)?></a>
             </li>
             <?php if($account->dropdownEnabled()): ?>
               <li id="login-dropdown" class="dropdown<?php if(!$account->isLoggedIn()): ?> hidden<?php endif ?>">
