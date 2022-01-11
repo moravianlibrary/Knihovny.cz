@@ -98,6 +98,8 @@ JS;
           $this->headScript()->appendFile("covers.js");
       }
     ?>
+    <?php $this->headScript()->appendFile("cookieconsent.js", 'text/javascript', ['defer' => true]) ?>
+    <?php $this->headScript()->appendFile("cookieconsent-init.js", 'text/javascript', ['defer' => true]) ?>
     <?php $this->headScript()->appendFile("cpk.js") ?>
     <?=$this->headScript() ?>
   </head>
@@ -154,9 +156,9 @@ JS;
       </div>
     </div>
     <div class="offcanvas-overlay" data-toggle="offcanvas"></div>
+    xxx
     <?=$this->googleanalytics()?>
-    <?=$this->piwik()?>
-    <?=$this->matomo()?>
+    xxx
     <?php foreach ($this->captcha()->js() as $jsInclude):?>
       <?=$this->inlineScript(\Laminas\View\Helper\HeadScript::FILE, $jsInclude, 'SET')?>
     <?php endforeach; ?>
