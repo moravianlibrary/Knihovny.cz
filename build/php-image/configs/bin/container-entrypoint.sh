@@ -53,6 +53,9 @@ echo === Executing final command "$1" ===
 if [ "$1" = "shibd" -o "$1" = "shibboleth" ]; then
     exec shibd -f -F
 elif [ "$1" = "apache" ]; then
+    if ! mkdir -p /var/log/apache2/current/ ; then
+        echo "Unable to create directory for log files. This is not probably a problem."
+    fi
     exec apache2 -DFOREGROUND
 elif [ "$1" = "php-fpm" -o "$1" = "php" ]; then
     exec php-fpm

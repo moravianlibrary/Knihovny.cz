@@ -54,8 +54,5 @@
         RewriteRule ^. /app  [PT,L,E=worker:main]
    </Directory>
 
-    ErrorLog /dev/stderr
-    LogFormat "%h %l %u %t \"%r\" %>s %b" common
-    LogFormat "{ \"time\":\"%{sec}t\", \"timeserved\": %{ms}T, \"remoteIP\":\"%a\", \"host\":\"%V\", \"requestPath\":\"%U\", \"query\":\"%q\", \"method\":\"%m\", \"status\":\"%>s\", \"userAgent\":\"%{User-agent}i\", \"referer\":\"%{Referer}i\", \"worker\": \"%{worker}e\" }" json
-    CustomLog /dev/stdout json
+    Include logs/site-logs.conf
 </VirtualHost>
