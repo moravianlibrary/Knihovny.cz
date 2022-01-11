@@ -182,6 +182,7 @@ class Shibboleth extends Base
         $userInfo['firstname'] = $user->firstname;
         $userInfo['lastname'] = $user->lastname;
         $userInfo['email'] = $user->email;
+        $userInfo['safeLogout'] = $shib['safeLogout'] ?? 'global';
         $session = new \Laminas\Session\Container(
             'Account',
             $this->sessionManager

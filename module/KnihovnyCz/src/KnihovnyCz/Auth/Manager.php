@@ -78,4 +78,45 @@ class Manager extends Base
     {
         return $this->csrf->isValid($value);
     }
+
+    /**
+     * Log out the current user.
+     *
+     * @param string $url       URL to redirect user to after logging out.
+     * @param bool   $destroy   Should we destroy the session (true) or just
+     * reset it (false); destroy is for log out, reset is for expiration.
+     * @param bool   $extLogout Logout also in authentication source
+     *
+     * @return string     Redirect URL (usually same as $url, but modified in
+     * some authentication modules).
+     */
+    public function logout($url, $destroy = true, $extLogout = true)
+    {
+        // Perform authentication-specific cleanup and modify redirect URL if
+        // necessary.
+        if ($extLogout) {
+            $url = $this->getAuth()->logout($url);
+        }
+
+        // Reset authentication state
+        $this->getAuth()->resetState();
+
+        // Clear out the cached user object and session entry.
+        $this->currentUser = false;
+        unset($this->session->userId);
+        unset($this->session->userDetails);
+        $this->cookieManager->set('loggedOut', 1);
+
+        // Destroy the session for good measure, if requested.
+        if ($destroy) {
+            $this->sessionManager->destroy();
+        } else {
+            // If we don't want to destroy the session, we still need to empty it.
+            // There should be a way to do this through Laminas\Session, but there
+            // apparently isn't (TODO -- do this better):
+            $_SESSION = [];
+        }
+
+        return $url;
+    }
 }

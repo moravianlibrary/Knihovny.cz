@@ -311,6 +311,73 @@ class MyResearchController extends MyResearchControllerBase
     }
 
     /**
+     * Logout Action
+     *
+     * @return mixed
+     */
+    public function logoutAction()
+    {
+        $account = $this->getAccountContainer();
+        $logout = $account->userInfo['safeLogout'] ?? 'global';
+        $config = $this->getConfig();
+        $logoutTarget = '';
+        if ($logout != 'global') {
+            $logoutTarget = $this->getServerUrl('myresearch-logoutwarning');
+        } elseif (!empty($config->Site->logOutRoute)) {
+            $logoutTarget = $this->getServerUrl($config->Site->logOutRoute);
+        } else {
+            $logoutTarget = $this->getRequest()->getServer()->get('HTTP_REFERER');
+            if (empty($logoutTarget)) {
+                $logoutTarget = $this->getServerUrl('home');
+            }
+
+            // If there is an auth_method parameter in the query, we should strip
+            // it out. Otherwise, the user may get stuck in an infinite loop of
+            // logging out and getting logged back in when using environment-based
+            // authentication methods like Shibboleth.
+            $logoutTarget = preg_replace(
+                '/([?&])auth_method=[^&]*&?/',
+                '$1',
+                $logoutTarget
+            );
+            $logoutTarget = rtrim($logoutTarget, '?');
+
+            // Another special case: if logging out will send the user back to
+            // the MyResearch home action, instead send them all the way to
+            // VuFind home. Otherwise, they might get logged back in again,
+            // which is confusing. Even in the best scenario, they'll just end
+            // up on a login screen, which is not helpful.
+            if ($logoutTarget == $this->getServerUrl('myresearch-home')) {
+                $logoutTarget = $this->getServerUrl('home');
+            }
+        }
+
+        /**
+         * Auth manager
+         *
+         * @var \KnihovnyCz\Auth\Manager
+         */
+        $authManager = $this->getAuthManager();
+        $extLogout = ($logout != 'none');
+        return $this->redirect()
+            ->toUrl($authManager->logout($logoutTarget, true, $extLogout));
+    }
+
+    /**
+     * Logout Warning Action
+     *
+     * @return mixed
+     */
+    public function logoutWarningAction()
+    {
+        if ($this->getUser()) {
+            return $this->redirect()
+                ->toUrl($this->getServerUrl('myresearch-home'));
+        }
+        return $this->createViewModel();
+    }
+
+    /**
      * Process an authentication error.
      *
      * @param AuthException $e Exception to process.
@@ -344,5 +411,18 @@ class MyResearchController extends MyResearchControllerBase
             return $dateDiff->invert == 0 && $dateDiff->days > 0;
         }
         return false;
+    }
+
+    /**
+     * Return a session container with user account.
+     *
+     * @return \Laminas\Session\Container
+     */
+    protected function getAccountContainer()
+    {
+        return new \Laminas\Session\Container(
+            'Account',
+            $this->serviceLocator->get(\Laminas\Session\SessionManager::class)
+        );
     }
 }
