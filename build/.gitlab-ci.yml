@@ -84,6 +84,9 @@ Build image:
   needs:
     - Build image
 
+  retry: # retry deploy job one time (on failure)
+    max: 1
+
   variables:
     APP_IMAGE_NAME: docker.app.knihovny.cz/knihovny-cz/vufind
     APP_IMAGE_TAG: build
