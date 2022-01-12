@@ -303,3 +303,19 @@ CREATE TABLE `csrf_token` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 UPDATE user_card SET card_name = home_library WHERE card_name = '' OR card_name IS NULL;
+
+UPDATE user_card
+SET card_name = SUBSTR(cat_username, 7),
+    home_library = SUBSTR(cat_username, 7),
+    cat_username = CONCAT(SUBSTR(cat_username, 7), ".")
+WHERE cat_username IN ("Dummy.facebook", "Dummy.google", "Dummy.mojeid", "Dummy.linkedin");
+
+UPDATE user_card
+SET card_name = SUBSTRING_INDEX(SUBSTRING_INDEX(eppn, '@', -1), '.', 1),
+    home_library = SUBSTRING_INDEX(SUBSTRING_INDEX(eppn, '@', -1), '.', 1),
+    cat_username = CONCAT(SUBSTRING_INDEX(SUBSTRING_INDEX(eppn, '@', -1), '.', 1), ".")
+WHERE cat_username = "Dummy.social";
+
+DELETE FROM user_card WHERE home_library="Dummy";
+
+
