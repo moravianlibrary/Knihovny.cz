@@ -432,6 +432,20 @@ class SolrDefault extends \VuFind\RecordDriver\SolrDefault
     }
 
     /**
+     * Does record have some links to show?
+     *
+     * @return bool
+     */
+    public function hasLinks(): bool
+    {
+        $parentRecord = $this->getParentRecord();
+        if ($parentRecord !== null) {
+            return (bool)$parentRecord->tryMethod('has856Links');
+        }
+        return false;
+    }
+
+    /**
      * Get links from marc field 856
      *
      * @return array
@@ -439,6 +453,16 @@ class SolrDefault extends \VuFind\RecordDriver\SolrDefault
     protected function get856Links()
     {
         return $this->fields['url'] ?? [];
+    }
+
+    /**
+     * Does record has links from marc field 856
+     *
+     * @return bool
+     */
+    protected function has856Links(): bool
+    {
+        return (bool)($this->fields['url'] ?? false);
     }
 
     /**
