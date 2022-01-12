@@ -230,10 +230,12 @@ $config = [
         'factories' => [
             'KnihovnyCz\Controller\Plugin\Holds' => 'VuFind\Controller\Plugin\AbstractRequestBaseFactory',
             'KnihovnyCz\Controller\Plugin\FlashRedirect' => 'VuFind\Controller\Plugin\AbstractRequestBaseFactory',
+            'KnihovnyCz\Controller\Plugin\ResultScroller' => \KnihovnyCz\Controller\Plugin\ResultScrollerFactory::class,
         ],
         'aliases' => [
             'holds' => 'KnihovnyCz\Controller\Plugin\Holds',
             'flashRedirect' => 'KnihovnyCz\Controller\Plugin\FlashRedirect',
+            'resultScroller' => 'KnihovnyCz\Controller\Plugin\ResultScroller',
         ],
     ],
     'vufind' => [
