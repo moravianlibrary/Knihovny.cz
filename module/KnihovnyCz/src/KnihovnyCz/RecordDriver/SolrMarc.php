@@ -243,4 +243,14 @@ class SolrMarc extends SolrDefault
     {
         return [];
     }
+
+    /**
+     * Returns true if the record supports real-time AJAX status lookups.
+     *
+     * @return bool
+     */
+    public function supportsAjaxStatus()
+    {
+        return false;
+    }
 }
