@@ -66,8 +66,8 @@ cc.run({
             title: 'Analytické cookies',
             description: 'These cookies collect information about how you use the website, which pages you visited and which links you clicked on. All of the data is anonymized and cannot be used to identify you',
             toggle: {
-              value: 'analytics',     // your cookie category
-              enabled: false,
+              value: 'analytics',
+              enabled: true,
               readonly: false
             },
           },
@@ -114,8 +114,8 @@ cc.run({
             title: 'Analytics cookies',
             description: 'These cookies collect information about how you use the website, which pages you visited and which links you clicked on. All of the data is anonymized and cannot be used to identify you',
             toggle: {
-              value: 'targeting',
-              enabled: false,
+              value: 'analytics',
+              enabled: true,
               readonly: false
             }
           }, {
