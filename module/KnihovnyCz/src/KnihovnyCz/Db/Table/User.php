@@ -51,7 +51,6 @@ class User extends \VuFind\Db\Table\User
      * Retrieve a user object from the database based on eduPersonUniqueId.
      *
      * @param string $eduPersonUniqueId eduPersonUniqueId
-     * @param bool   $create            create if not exists
      *
      * @return UserRow
      */

@@ -306,7 +306,7 @@ class Shibboleth extends Base
     /**
      * Return library card by eduPersonPrincipalName without eduPersonUniqueId.
      *
-     * @param string eppn  eduPersonPrincipalName
+     * @param string $eppn eduPersonPrincipalName
      *
      * @return \KnihovnyCz\Db\Row\UserCard|null
      */
