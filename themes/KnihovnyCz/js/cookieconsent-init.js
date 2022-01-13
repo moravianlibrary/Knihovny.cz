@@ -32,14 +32,14 @@ cc.run({
     'cs': {
       consent_modal: {
         title: 'Web používá cookies.',
-        description: 'Hi, this website uses essential cookies to ensure its proper operation and tracking cookies to understand how you interact with it. The latter will be set only after consent. <button type="button" data-cc="c-settings" class="cc-link" title="Nastavení cookies">Nastavení cookies</button>',
+        description: 'Hi, this website uses essential cookies to ensure its proper operation and tracking cookies to understand how you interact with it. The latter will be set only after consent.',
         primary_btn: {
           text: 'Přijmout vše',
           role: 'accept_all'              // 'accept_selected' or 'accept_all'
         },
         secondary_btn: {
-          text: 'Odmítnout vše',
-          role: 'accept_necessary'        // 'settings' or 'accept_necessary'
+          text: 'Nastavit cookies',
+          role: 'settings'        // 'settings' or 'accept_necessary'
         }
       },
       settings_modal: {
@@ -81,14 +81,14 @@ cc.run({
     'en': {
       consent_modal: {
         title: 'We use cookies.',
-        description: 'Hi, this website uses essential cookies to ensure its proper operation and tracking cookies to understand how you interact with it. The latter will be set only after consent. <button type="button" data-cc="c-settings" class="cc-link" title="Cookie settings">Cookie settings</button>',
+        description: 'Hi, this website uses essential cookies to ensure its proper operation and tracking cookies to understand how you interact with it. The latter will be set only after consent.',
         primary_btn: {
           text: 'Accept all',
           role: 'accept_all'              // 'accept_selected' or 'accept_all'
         },
         secondary_btn: {
-          text: 'Reject all',
-          role: 'accept_necessary'        // 'settings' or 'accept_necessary'
+          text: 'Cookie settings',
+          role: 'settings'        // 'settings' or 'accept_necessary'
         }
       },
       settings_modal: {
