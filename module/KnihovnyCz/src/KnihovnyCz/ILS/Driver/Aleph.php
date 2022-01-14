@@ -290,6 +290,51 @@ class Aleph extends AlephBase implements TranslatorAwareInterface
     }
 
     /**
+     * Get profile information using DLF service.
+     *
+     * @param array $user The patron array
+     *
+     * @throws ILSException
+     * @return array      Array of the patron's profile data on success.
+     */
+    public function getMyProfileDLF($user)
+    {
+        $userId = $user['id'];
+        $profile = [
+            'id' => $userId,
+            'cat_username' => $userId,
+        ];
+        // address
+        $xml = $this->doRestDLFRequest(
+            ['patron', $userId, 'patronInformation', 'address']
+        );
+        $address = $xml->xpath('//address-information')[0];
+        foreach ($this->addressMappings as $key => $value) {
+            $profile[$key] = (string)$address->{$value} ?? null;
+        }
+        // parse the fullname into last and first name
+        $fullName = $profile['fullname'];
+        if ($fullName != null) {
+            if (strpos($fullName, ",") === false) {
+                $profile['lastname'] = $fullName;
+                $profile['firstname'] = "";
+            } else {
+                [$profile['lastname'], $profile['firstname']]
+                    = explode(",", $fullName);
+            }
+        }
+        // registration status
+        $xml = $this->doRestDLFRequest(
+            ['patron', $userId, 'patronStatus', 'registration']
+        );
+        $status = $xml->xpath("//institution/z305-bor-status");
+        $expiry = $xml->xpath("//institution/z305-expiry-date");
+        $profile['expiration_date'] = $this->parseDate($expiry[0]);
+        $profile['group'] = $status[0] ?? null;
+        return $profile;
+    }
+
+    /**
      * Parse a date.
      *
      * @param string $date Date to parse
