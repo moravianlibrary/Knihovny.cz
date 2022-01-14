@@ -32,7 +32,7 @@ cc.run({
     'cs': {
       consent_modal: {
         title: 'Souhlas s použitím cookies',
-        description: 'Tento web používá následující soubory cookies:<br><strong>funkční cookies</strong> (vždy) k&nbsp;zajištění správného fungování webu a&nbsp;<strong>analytické cookies</strong> (na&nbsp;základě souhlasu) k&nbsp;analýze návštěvnosti webu.',
+        description: 'Tento web používá následující soubory cookies:<br><strong>funkční cookies</strong> (vždy) k&nbsp;zajištění správného fungování webu a&nbsp;<strong>analytické cookies</strong> (na&nbsp;základě souhlasu) k&nbsp;analýze návštěvnosti webu. Žádné z těchto cookies nelze použít k identifikaci konkrétní osoby.',
         primary_btn: {
           text: 'Přijmout vše',
           role: 'accept_all'              // 'accept_selected' or 'accept_all'
@@ -52,11 +52,13 @@ cc.run({
           {
             title: 'Souhlas s použitím cookies',
             description: '<p>Tento web používá následující soubory cookies:<br>-&nbsp;<strong>funkční cookies</strong> (vždy) k&nbsp;zajištění správného fungování webu,<br>-&nbsp;<strong>analytické cookies</strong> (na&nbsp;základě souhlasu) k&nbsp;analýze návštěvnosti webu.</p>' +
+              '<p>Žádné z těchto cookies nelze použít k identifikaci konkrétní osoby.</p>' +
               'Další informace jsou dostupné na stránce <a class="cc-link" href="/Content/ochrana-osobnich-udaju?lng=cs" target="_blank" title="Zásady ochrany osobních údajů">Zásady ochrany osobních údajů</a>.'
           },
           {
             title: 'Funkční cookies',
-            description: 'Funkční cookies jsou zapotřebí k zajištění základních funkcí webu.<br>Vzhledem k&nbsp;jejich podstatě a&nbsp;účelu jsou povoleny vždy a&nbsp;souhlas s jejich použitím není vyžadován.',
+            description: '<p>Funkční cookies jsou zapotřebí k zajištění základních funkcí webu.</p>' +
+              '<p>Vzhledem k&nbsp;jejich podstatě a&nbsp;účelu jsou povoleny vždy a&nbsp;souhlas s jejich použitím není vyžadován.</p>',
             toggle: {
               value: 'necessary',
               enabled: true,
@@ -65,7 +67,8 @@ cc.run({
           },
           {
             title: 'Analytické cookies',
-            description: 'Analytické cookies umožňují sledovat souhrnné informace o návštěvnosti stránek.<br>Jsou povoleny na základě vašeho souhlasu s jejich použitím.',
+            description: '<p>Analytické cookies umožňují sledovat souhrnné informace o návštěvnosti stránek.<br>Díky těmto informacím jsme schopni lépe přizpůsobit stránky uživatelům webu.</p>' +
+              '<p>Jsou povoleny pouze na základě vašeho souhlasu.</p>',
             toggle: {
               value: 'analytics',
               enabled: true,
