@@ -31,8 +31,8 @@ cc.run({
   languages: {
     'cs': {
       consent_modal: {
-        title: 'Web používá cookies.',
-        description: 'Hi, this website uses essential cookies to ensure its proper operation and tracking cookies to understand how you interact with it. The latter will be set only after consent.',
+        title: 'Souhlas s použitím cookies',
+        description: 'Tento web používá následující soubory cookies:<br><strong>funkční cookies</strong> (vždy) k&nbsp;zajištění správného fungování webu a&nbsp;<strong>analytické cookies</strong> (na&nbsp;základě souhlasu) k&nbsp;analýze návštěvnosti webu.',
         primary_btn: {
           text: 'Přijmout vše',
           role: 'accept_all'              // 'accept_selected' or 'accept_all'
@@ -50,12 +50,13 @@ cc.run({
         close_btn_label: 'Zavřít',
         blocks: [
           {
-            title: 'Použití cookies',
-            description: 'I use cookies to ensure the basic functionalities of the website and to enhance your online experience. You can choose for each category to opt-in/out whenever you want. For more details relative to cookies and other sensitive data, please read the full <a class="cc-link" href="/Content/ochrana-osobnich-udaju?lng=cs" target="_blank" title="Zásady ochrany osobních údajů">Zásady ochrany osobních údajů</a>.'
+            title: 'Souhlas s použitím cookies',
+            description: '<p>Tento web používá následující soubory cookies:<br>-&nbsp;<strong>funkční cookies</strong> (vždy) k&nbsp;zajištění správného fungování webu,<br>-&nbsp;<strong>analytické cookies</strong> (na&nbsp;základě souhlasu) k&nbsp;analýze návštěvnosti webu.</p>' +
+              'Další informace jsou dostupné na stránce <a class="cc-link" href="/Content/ochrana-osobnich-udaju?lng=cs" target="_blank" title="Zásady ochrany osobních údajů">Zásady ochrany osobních údajů</a>.'
           },
           {
             title: 'Funkční cookies',
-            description: 'Funkční cookies jsou zapotřebí k zajištění základních funkcí webu. Tyto druhy cookies jsou vzhledem ke své podstatě a účelu bez povoleny vždy a souhlas subjektu údajů se zde nevyžaduje. Funkční cookies jsou využívány vždy.',
+            description: 'Funkční cookies jsou zapotřebí k zajištění základních funkcí webu.<br>Vzhledem k&nbsp;jejich podstatě a&nbsp;účelu jsou povoleny vždy a&nbsp;souhlas s jejich použitím není vyžadován.',
             toggle: {
               value: 'necessary',
               enabled: true,
@@ -64,23 +65,19 @@ cc.run({
           },
           {
             title: 'Analytické cookies',
-            description: 'These cookies collect information about how you use the website, which pages you visited and which links you clicked on. All of the data is anonymized and cannot be used to identify you',
+            description: 'Analytické cookies umožňují sledovat souhrnné informace o návštěvnosti stránek.<br>Jsou povoleny na základě vašeho souhlasu s jejich použitím.',
             toggle: {
               value: 'analytics',
               enabled: true,
               readonly: false
             },
-          },
-          {
-            title: 'Další informace',
-            description: 'For any queries in relation to our policy on cookies and your choices, please <a class="cc-link" href="/Feedback/Home?lng=cs" target="_blank" title="Kontakty">kontaktujte nás</a>.',
           }
         ]
       }
     },
     'en': {
       consent_modal: {
-        title: 'We use cookies.',
+        title: 'Cookie consent',
         description: 'Hi, this website uses essential cookies to ensure its proper operation and tracking cookies to understand how you interact with it. The latter will be set only after consent.',
         primary_btn: {
           text: 'Accept all',
@@ -118,9 +115,6 @@ cc.run({
               enabled: true,
               readonly: false
             }
-          }, {
-            title: 'More information',
-            description: 'For any queries in relation to our policy on cookies and your choices, please <a class="cc-link" href="/Feedback/Home?lng=en" target="_blank" title="Contacts">contact us</a>.',
           }
         ]
       }
