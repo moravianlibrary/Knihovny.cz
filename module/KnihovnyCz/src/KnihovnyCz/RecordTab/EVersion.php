@@ -48,4 +48,14 @@ class EVersion extends \VuFind\RecordTab\AbstractBase
     {
         return 'Electronic Version';
     }
+
+    /**
+     * Is this tab visible?
+     *
+     * @return bool
+     */
+    public function isVisible()
+    {
+        return $this->getRecordDriver()->tryMethod('hasLinks');
+    }
 }

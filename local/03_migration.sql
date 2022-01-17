@@ -269,25 +269,13 @@ WHERE a.id < b.id
   AND a.home_library != 'Dummy';
 
 -- migration for IdPs with Aleph and Koha - edu_person_unique_id is different from eppn
-UPDATE user_card
-SET edu_person_unique_id = CONCAT(SUBSTR(cat_username, POSITION('.' IN cat_username) + 1), SUBSTR(eppn, POSITION('@' IN eppn)))
-WHERE cat_username LIKE 'kkpc.%'
-  OR cat_username LIKE 'knav.%'
-  OR cat_username LIKE 'nkp.%'
-  OR cat_username LIKE 'ntk.%'
-  OR cat_username LIKE 'svkhk.%'
-  OR cat_username LIKE 'svkos.%'
-  OR cat_username LIKE 'svkpk.%'
-  OR cat_username LIKE 'uzei.%'
-  OR cat_username LIKE 'vkol.%'
-  OR cat_username LIKE 'cvgz.%'
-  OR cat_username LIKE 'tre.%'
-  OR cat_username LIKE 'vkta.%'
-  OR cat_username LIKE 'mkuo.%'
-  OR cat_username LIKE 'mkmt.%';
+UPDATE user_card uc
+JOIN inst_sources lib ON uc.home_library = lib.source
+SET uc.edu_person_unique_id = CONCAT(SUBSTR(uc.at_username, POSITION('.' IN uc.cat_username) + 1), SUBSTR(uc.eppn, POSITION('@' IN uc.eppn)))
+WHERE s.driver IN ('aleph', 'koha');
 
 -- migration for other IdPs - attribute edu_person_unique_id is same as eppn
-UPDATE user_card SET edu_person_unique_id = eppn WHERE edu_person_unique_id IS NULL AND home_library != 'Dummy';
+UPDATE user_card SET edu_person_unique_id = eppn WHERE edu_person_unique_id IS NULL AND home_library NOT IN ('Dummy', 'rkka', 'nlk');
 CREATE UNIQUE INDEX user_card_edu_person_unique_id_uq ON user_card(edu_person_unique_id(190));
 
 --
@@ -303,3 +291,20 @@ CREATE TABLE `csrf_token` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 UPDATE user_card SET card_name = home_library WHERE card_name = '' OR card_name IS NULL;
+
+UPDATE user_card
+SET card_name = SUBSTR(cat_username, 7),
+    home_library = SUBSTR(cat_username, 7),
+    cat_username = CONCAT(SUBSTR(cat_username, 7), ".")
+WHERE cat_username IN ("Dummy.facebook", "Dummy.google", "Dummy.mojeid", "Dummy.linkedin");
+
+UPDATE user_card
+SET card_name = SUBSTRING_INDEX(SUBSTRING_INDEX(eppn, '@', -1), '.', 1),
+    home_library = SUBSTRING_INDEX(SUBSTRING_INDEX(eppn, '@', -1), '.', 1),
+    cat_username = CONCAT(SUBSTRING_INDEX(SUBSTRING_INDEX(eppn, '@', -1), '.', 1), ".")
+WHERE cat_username = "Dummy.social";
+
+DELETE FROM user_card WHERE home_library="Dummy";
+
+UPDATE user_card SET edu_person_unique_id = eppn
+WHERE edu_person_unique_id IS NULL AND home_library IN ('google', 'linkedin', 'facebook');

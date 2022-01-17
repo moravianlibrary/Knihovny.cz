@@ -133,6 +133,26 @@ class Shibboleth extends Base
          */
         $userTable = $this->getUserTable();
         $user = $userTable->getByEduPersonUniqueId($eduPersonUniqueId);
+        // lookup by eduPersonPrincipalName for backward compatibility
+        $lookupByEppn = $shib['lookupByEduPersonPrincipalName'] ?? false;
+        if ($user == null && $lookupByEppn && isset($shib['eppn'])) {
+            $eppn = $this->getAttribute($request, $shib['eppn']);
+            $card = $this->getUserCardByEppnWithoutEpui($eppn);
+            if ($card != null) {
+                $card->edu_person_unique_id = $eduPersonUniqueId;
+                $card->save();
+                $user = $userTable->getById($card->user_id);
+                $user->username = $eduPersonUniqueId;
+            }
+        }
+        if ($user == null) {
+            $user = $userTable->createRow();
+            $user->created = date('Y-m-d H:i:s');
+            $user->username = $eduPersonUniqueId;
+            // Failing to initialize this here can cause Laminas\Db errors in
+            // the VuFind\Auth\Shibboleth and VuFind\Auth\ILS integration tests.
+            $user->user_provided_email = 0;
+        }
 
         // Has the user configured attributes to use for populating the user table?
         foreach ($this->attribsToCheck as $attribute) {
@@ -198,6 +218,15 @@ class Shibboleth extends Base
         }
         $card = $this->getUserCardTable()
             ->getByEduPersonUniqueId($eduPersonUniqueId);
+        // lookup by eduPersonPrincipalName for backward compatibility
+        $lookupByEppn = $shib['lookupByEduPersonPrincipalName'] ?? false;
+        if ($card == null && $lookupByEppn) {
+            $eppn = $this->getAttribute($request, $shib['eppn']);
+            $card = $this->getUserCardByEppnWithoutEpui($eppn);
+            if ($card != null) {
+                $card->edu_person_unique_id = $eduPersonUniqueId;
+            }
+        }
         // Is library card already connected to another user? If so, merge the
         // two users.
         if ($card != null && $card->user_id != $connectingUser->id) {
@@ -272,5 +301,27 @@ class Shibboleth extends Base
     public function getUserCardTable()
     {
         return $this->getDbTableManager()->get('UserCard');
+    }
+
+    /**
+     * Return library card by eduPersonPrincipalName without eduPersonUniqueId.
+     *
+     * @param string $eppn eduPersonPrincipalName
+     *
+     * @return \KnihovnyCz\Db\Row\UserCard|null
+     */
+    protected function getUserCardByEppnWithoutEpui($eppn)
+    {
+        if ($eppn == null) {
+            return null;
+        }
+        $card = $this->getUserCardTable()
+            ->getByEduPersonPrincipalName($eppn);
+        if (!isset($card->edu_person_unique_id)
+            || $card->edu_person_unique_id == null
+        ) {
+            return $card;
+        }
+        return null;
     }
 }

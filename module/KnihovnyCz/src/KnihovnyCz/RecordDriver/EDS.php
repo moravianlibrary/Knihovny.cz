@@ -96,4 +96,14 @@ class EDS extends \VuFind\RecordDriver\EDS
         }
         return $links;
     }
+
+    /**
+     * Get the full text custom links of the record.
+     *
+     * @return array
+     */
+    public function getFTCustomLinks()
+    {
+        return [];
+    }
 }

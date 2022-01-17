@@ -48,8 +48,7 @@ class User extends \VuFind\Db\Table\User
     use \VuFind\Db\Table\ExpirationTrait;
 
     /**
-     * Retrieve a user object from the database based on eduPersonUniqueId
-     * or create new one.
+     * Retrieve a user object from the database based on eduPersonUniqueId.
      *
      * @param string $eduPersonUniqueId eduPersonUniqueId
      *
@@ -66,20 +65,7 @@ class User extends \VuFind\Db\Table\User
             $select->where->equalTo('uc.edu_person_unique_id', $eduPersonUniqueId);
         };
         $row = $this->select($callback)->current();
-        if (empty($row)) {
-            /**
-             * User model
-             *
-             * @var \KnihovnyCz\Db\Row\User $row
-             */
-            $row = $this->createRow();
-            $row->created = date('Y-m-d H:i:s');
-            $row->username = $eduPersonUniqueId;
-            // Failing to initialize this here can cause Laminas\Db errors in
-            // the VuFind\Auth\Shibboleth and VuFind\Auth\ILS integration tests.
-            $row->user_provided_email = 0;
-        }
-        return $row;
+        return empty($row) ? null : $row;
     }
 
     /**

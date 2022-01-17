@@ -1075,22 +1075,24 @@ class KohaRest1905 extends AbstractBase implements \Laminas\Log\LoggerAwareInter
                 $duedate = null;
                 $available = true;
                 if (isset($availability[$item['item_id']])) {
-                    $status = $this->statuses[
-                        $availability[$item['item_id']]['allows_checkout_status']
-                    ];
-                    $status = $item['notforloan'] ? 'Not For Loan' : $status;
-                    $available = $availability[$item['item_id']]['allows_checkout'];
-                    $duedate = isset($availability[$item['item_id']]['date_due'])
-                        ? $this->normalizeDate(
-                            $availability[$item['item_id']]['date_due']
-                        ) : null;
+                    $status = $this->determineStatus(
+                        $item,
+                        $availability[$item['item_id']]
+                    );
+                    $available = $this->determineAvailability(
+                        $item,
+                        $availability[$item['item_id']]
+                    );
+                    $duedate = $this->determineDuedate(
+                        $availability[$item['item_id']]
+                    );
                 }
                 $entry = [
                     'id' => $id,
                     'item_id' => $item['item_id'],
                     'location' => $this->getItemLocationName($item),
                     'collection_desc' => $item['location'],
-                    'availability' => $item['notforloan'] ? false : $available,
+                    'availability' => $available,
                     'status' => $status,
                     'reserve' => count($holds) >= 1 ? 'Y' : 'N',
                     'callnumber' => $item['callnumber'],
@@ -1104,16 +1106,45 @@ class KohaRest1905 extends AbstractBase implements \Laminas\Log\LoggerAwareInter
                     $entry['item_notes'] = [$item['public_notes']];
                 }
 
+                $entry['is_holdable'] = false;
                 if ($holdable == 'Y') {
                     $entry['is_holdable'] = true;
                     $entry['addLink'] = 'check';
-                } else {
-                    $entry['is_holdable'] = false;
                 }
                 $result[] = $entry;
             }
         }
         return $result;
+    }
+
+    /**
+     * Get Status By Item ID
+     *
+     * This is responsible for retrieving the status information of a certain
+     * item.
+     *
+     * @param string $id The item id to retrieve the holdings for
+     *
+     * @throws ILSException
+     * @return mixed     On success, an associative array with the following keys:
+     * id, availability (boolean), status, location, reserve, callnumber.
+     */
+    public function getStatusByItemId($id)
+    {
+        $item = $this->getItem((int)$id);
+        $availability = $this->makeRequest(
+            ['v1', 'contrib', 'knihovny_cz', 'items', $id, 'allows_checkout']
+        );
+        $availability = $availability['data'] ?? [];
+        return [
+            'id' => $item['biblio_id'],
+            'item_id' => $item['item_id'],
+            'availability' => $this->determineAvailability($item, $availability),
+            'status' => $this->determineStatus($item, $availability),
+            'location' => $this->getItemLocationName($item),
+            'callnumber' => $item['callnumber'],
+            'duedate' => $this->determineDuedate($availability),
+        ];
     }
 
     /**
@@ -1406,6 +1437,52 @@ class KohaRest1905 extends AbstractBase implements \Laminas\Log\LoggerAwareInter
             );
             return [];
         }
+    }
+
+    /**
+     * Determine item status string
+     *
+     * @param array $item             Item data from API
+     * @param array $itemAvailability Availability data from API
+     *
+     * @return string
+     */
+    protected function determineStatus(array $item, array $itemAvailability): string
+    {
+        $status
+            = $this->statuses[$itemAvailability['allows_checkout_status']] ?? '';
+        return $item['notforloan'] ? 'Not For Loan' : $status;
+    }
+
+    /**
+     * Determine item availability
+     *
+     * @param array $item             Item data from API
+     * @param array $itemAvailability Availability data from API
+     *
+     * @return bool
+     */
+    protected function determineAvailability(
+        array $item,
+        array $itemAvailability
+    ): bool {
+        $available = $itemAvailability['allows_checkout'] ?? true;
+        return $item['notforloan'] ? false : $available;
+    }
+
+    /**
+     * Determine due date from availability data
+     *
+     * @param array $itemAvailability Availability data from API
+     *
+     * @return string|null
+     * @throws DateException
+     */
+    protected function determineDuedate(array $itemAvailability): ?string
+    {
+        return isset($itemAvailability['date_due'])
+            ? $this->normalizeDate($itemAvailability['date_due'])
+            : null;
     }
 
     /**
