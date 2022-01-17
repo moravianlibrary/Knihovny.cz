@@ -310,7 +310,8 @@ class Aleph extends AlephBase implements TranslatorAwareInterface
         );
         $address = $xml->xpath('//address-information')[0];
         foreach ($this->addressMappings as $key => $value) {
-            $profile[$key] = (string)$address->{$value} ?? null;
+            $value = (string)$address->{$value};
+            $profile[$key] = !empty($value) ? $value : null;
         }
         // parse the fullname into last and first name
         $fullName = $profile['fullname'];
@@ -330,7 +331,7 @@ class Aleph extends AlephBase implements TranslatorAwareInterface
         $status = $xml->xpath("//institution/z305-bor-status");
         $expiry = $xml->xpath("//institution/z305-expiry-date");
         $profile['expiration_date'] = $this->parseDate($expiry[0]);
-        $profile['group'] = $status[0] ?? null;
+        $profile['group'] = !empty($status[0]) ? $status[0] : null;
         return $profile;
     }
 
@@ -343,6 +344,9 @@ class Aleph extends AlephBase implements TranslatorAwareInterface
      */
     public function parseDate($date)
     {
+        if (empty($date)) {
+            return null;
+        }
         foreach (self::DATE_FORMATS as $regex => $format) {
             if (preg_match($regex, $date) === 1) {
                 return $this->dateConverter
