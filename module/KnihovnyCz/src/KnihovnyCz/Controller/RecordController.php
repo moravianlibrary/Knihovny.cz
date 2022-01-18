@@ -114,8 +114,8 @@ class RecordController extends \VuFind\Controller\RecordController
         $view->serverName = $this->getRequest()->getServer()->SERVER_NAME;
         $view->entityId = $this->getRequest()->getServer('Shib-Identity-Provider');
         // getDeduplicatedRecords has to be placed after create view model:
-        $dedupedRecord = $this->driver->tryMethod('getDeduplicatedRecords', [], []);
-        $view->records = $dedupedRecord;
+        $dedupedRecordIds = $this->driver->tryMethod('getDeduplicatedRecordIds', [], []);
+        $view->dedupedRecordIds = $dedupedRecordIds;
 
         return $view;
     }

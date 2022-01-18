@@ -507,27 +507,25 @@ class SolrDefault extends \VuFind\RecordDriver\SolrDefault
     }
 
     /**
-     * Return array of all record ids (with their source institution) deduplicated
-     * with this record
+     * Return deduplicated records - array with key as institution source and
+     * value with record ids
      *
      * @return array
      */
     public function getDeduplicatedRecords()
     {
-        $parent = $this->getParentRecord();
-        if ($parent === null) {
-            return [];
+        $localIds = $this->getDeduplicatedRecordIds();
+        foreach ($localIds as $localId) {
+            [$source] = explode('.', $localId);
+            if (!isset($results[$source])) {
+                $results[$source] = [ $localId ];
+            } else {
+                $results[$source][] = $localId;
+            }
         }
-        $results = array_map(
-            function ($localId) {
-                [$source] = explode('.', $localId);
-                return [
-                    'source' => $source,
-                    'id' => $localId,
-                ];
-            },
-            (array)$parent->tryMethod('getChildrenIds')
-        );
+        foreach ($results as $source => $ids) {
+            sort($ids);
+        }
         /**
          * User model
          *
@@ -537,18 +535,32 @@ class SolrDefault extends \VuFind\RecordDriver\SolrDefault
         if ($user) {
             $prefixes = $user->getLibraryPrefixes();
             array_unshift($prefixes, $this->getSourceId());
-            usort(
+            uksort(
                 $results,
                 function ($a, $b) use ($prefixes) {
-                    $a = array_search($a['source'], $prefixes);
+                    $a = array_search($a, $prefixes);
                     $a = ($a !== false) ? $a : PHP_INT_MAX;
-                    $b = array_search($b['source'], $prefixes);
+                    $b = array_search($b, $prefixes);
                     $b = ($b !== false) ? $b : PHP_INT_MAX;
                     return (int)$a - (int)$b;
                 }
             );
         }
         return $results;
+    }
+
+    /**
+     * Return array of all deduplicated record ids
+     *
+     * @return array
+     */
+    public function getDeduplicatedRecordIds()
+    {
+        $parent = $this->getParentRecord();
+        if ($parent === null) {
+            return [];
+        }
+        return $parent->tryMethod('getChildrenIds') ?? [];
     }
 
     /**

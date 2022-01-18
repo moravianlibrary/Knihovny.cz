@@ -23,9 +23,9 @@ $user = $this->auth()->isLoggedIn();
 $ziskejMvs = $tab->getZiskejMvs();
 
 /**
- * @var string[][] $deduperRecords
+ * @var string[] $dedupedRecordIds
  */
-$dedupedRecords = $tab->getDedupedRecords();
+$dedupedRecordIds = $tab->getDedupedRecordIds();
 ?>
 <?php if ($ziskejViewHelper->isEnabled()): ?>
   <div class="panel panel-default">
@@ -45,8 +45,8 @@ $dedupedRecords = $tab->getDedupedRecords();
             <input type="hidden" name="user_id" value="<?=$this->escapeHtmlAttr('') ?>">
             <input type="hidden" name="doc_id" value="<?=$this->escapeHtmlAttr($driver->getUniqueID()) ?>">
             <input type="hidden" name="entity_id" value="<?=$this->escapeHtmlAttr($tab->getEntityId()) ?>">
-            <?php foreach ($dedupedRecords as $record): ?>
-              <input type="hidden" name="doc_alt_ids[]" value="<?=$this->escapeHtmlAttr($record['id']) ?>">
+            <?php foreach ($dedupedRecordIds as $id): ?>
+              <input type="hidden" name="doc_alt_ids[]" value="<?=$this->escapeHtmlAttr($id) ?>">
             <?php endforeach; ?>
             <input type="image" src="<?=$this->imageLink('logo-ziskej.png') ?>" alt="<?=$this->translate('Ziskej::service_name') ?>">
           </form>

@@ -22,8 +22,8 @@ $ziskejReader = $this->ziskejReader;
         <input type="hidden" name="eppn" id="eppn" value="<?=$userCard->eppn ?>">
         <input type="hidden" name="doc_id" value="<?=$recordDriver->getUniqueID() ?>">
         <input type="hidden" name="entity_id" value="<?=$this->entityId ?>">
-        <?php foreach ($this->records as $record): ?>
-          <input type="hidden" name="doc_alt_ids[]" value="<?=$record['id'] ?>">
+        <?php foreach ($this->dedupedRecordIds as $id): ?>
+          <input type="hidden" name="doc_alt_ids[]" value="<?=$this->escapeHtmlAttr($id) ?>">
         <?php endforeach; ?>
         <div class="row">
           <div class="col-xs-12">

@@ -5,16 +5,18 @@
 <div class="alert alert-info <?=$this->class ?? ''?>">
   <?=$this->transEsc($this->mainMessage)?>
   <?php
+  $availableRecords = [];
   $deduplicatedRecords = $this->driver->tryMethod('getDeduplicatedRecords') ?? [];
-  $records = array_filter($deduplicatedRecords, function ($record) use ($cardsSources) {
-    return in_array($record['source'] ?? null, $cardsSources);
-  });
-  $availableRecords = array_map(function ($record) {
-    return [
-      'label' => $this->translate('Source::' . $record['source']),
-      'url' => $this->recordLinker()->getUrl($record['id']),
-    ];
-  }, $records);
+  foreach ($deduplicatedRecords as $source => $ids) {
+    if (in_array($source, $cardsSources)) {
+      foreach ($ids as $id) {
+        $availableRecords[] = [
+          'label' => $this->translate('Source::' . $source),
+          'url' => $this->recordLinker()->getUrl($id),
+        ];
+      }
+    }
+  }
   ?>
   <?php if (!empty($availableRecords)): ?>
     <?=$this->transEsc('hold_available_in_other_libraries');?>

@@ -1,26 +1,26 @@
 <?php
-  $recordId = $this->driver->getUniqueID();
+  $currentRecordId = $this->driver->getUniqueID();
+  $currentSource = $this->driver->getSourceId();
   $logosPostfix = '_small';
   $data = [];
   $records = $this->driver->tryMethod('getDeduplicatedRecords') ?? [];
   $recordsCount = count($records);
-  if (!empty($records)) {
-    foreach ($records as $record) {
-      $imageSrc = $this->imageLink(
-          'institutions/logos/' . $record['source'] . '/' . $record['source']
-        . $logosPostfix . '.png'
-      );
-      $recordUrl = $this->recordLinker()->getUrl($record['id']);
-      $data[] = [
-        'id' => $record['id'],
-        'image' => $imageSrc,
-        'href' => $recordUrl,
-        'selected' => ($record['id'] == $recordId) ? true : false,
-        'text' => $this->translate('Source::' . $record['source']),
-      ];
-    }
+  foreach ($records as $source => $ids) {
+    $imageSrc = $this->imageLink(
+        'institutions/logos/' . $source . '/' . $source
+      . $logosPostfix . '.png'
+    );
+    $recordId = $ids[0];
+    $data[] = [
+      'id' => $recordId,
+      'image' => $imageSrc,
+      'href' => $this->recordLinker()->getUrl($recordId),
+      'selected' => $source == $currentSource,
+      'text' => $this->translate('Source::' . $source),
+    ];
   }
-  ?>
+  $internalMultiplicity = $records[$currentSource];
+?>
 <div class="well panel-select-institution">
   <?php if ($recordsCount > 1): ?>
     <h3><?=$this->translate('Select institution');?>:</h3>
@@ -52,6 +52,33 @@
       <?php endif; ?>
     </div>
   <?php endif; ?>
+  <br/>
+  <?php
+    $count = count($internalMultiplicity);
+  ?>
+  <?php if ($count > 1): ?>
+    <span>
+    <?=$this->translate('The library has another record(s) for this publication');?>
+      <?php foreach ($internalMultiplicity as $index => $recordId): ?>
+        <?php
+           $sep = ($count == $index + 1) ? '' : ', ';
+           $href = $this->recordLinker()->getUrl($recordId);
+           $title = $this->transEscAttr('Source::' . $this->driver->getSourceId());
+           $label = $this->transEsc('record') . ' ' . ($index + 1);
+           $link = true;
+           if ($recordId == $this->driver->getUniqueID()) {
+             $label .= ' (' . $this->transEsc('current record') . ')';
+             $link = false;
+           }
+        ?>
+        <?php if ($link): ?>
+          <a href="<?=$href?>" title="<?=$title?>"><?=$label?></a><?=$sep?>
+        <?php else: ?>
+          <?=$label?><?=$sep?>
+        <?php endif; ?>
+      <?php endforeach;?>
+    </span>
+  <?php endif;?>
 </div>
 
 <?php

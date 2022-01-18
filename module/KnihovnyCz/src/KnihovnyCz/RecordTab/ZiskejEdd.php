@@ -122,12 +122,12 @@ class ZiskejEdd extends \VuFind\RecordTab\AbstractBase
     }
 
     /**
-     * Get deduplicated records
+     * Get deduplicated record ids
      *
-     * @return string[][]
+     * @return string[]
      */
-    public function getDedupedRecords(): array
+    public function getDedupedRecordIds(): array
     {
-        return $this->driver->tryMethod('getDeduplicatedRecords', [], []);
+        return $this->driver->tryMethod('getDeduplicatedRecordIds', [], []);
     }
 }

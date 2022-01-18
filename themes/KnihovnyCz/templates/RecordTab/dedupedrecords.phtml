@@ -2,21 +2,23 @@
   // Set page title.
   $this->headTitle($this->translate('Institutions') . ': ' . $this->driver->getBreadcrumb());
   $records = $this->driver->tryMethod('getDeduplicatedRecords') ?? [];
+  $results = [];
+  foreach ($records as $source => $ids) {
+    foreach ($ids as $id) {
+      $results[] = [
+        'label' => $this->transEsc('Source::' . $source),
+        'id' => $id
+      ];
+    }
+  }
+  uasort($results, function ($a, $b) {
+    return strcoll($a['label'], $b['label']);
+  });
 ?>
-<?php if(!empty($records)): ?>
-  <?php foreach ($records as & $record): ?>
-    <?php $record['label'] = $this->transEsc('Source::' . $record['source']); ?>
-  <?php endforeach; ?>
-  <?php
-    uasort($records, function ($a, $b) {
-      return strcoll($a['label'], $b['label']);
-    });
-  ?>
-  <?php foreach ($records as $record): ?>
-    <li>
-      <a class="hover-overlay" href="<?=$this->escapeHtmlAttr($this->recordLinker()->getUrl($record['id']))?>">
-        <?=$record['label']?>
-      </a>
-    </li>
-  <?php endforeach; ?>
-<?php endif;
+<?php foreach ($results as $record): ?>
+  <li>
+    <a class="hover-overlay" href="<?=$this->escapeHtmlAttr($this->recordLinker()->getUrl($record['id']))?>">
+      <?=$record['label']?>
+    </a>
+  </li>
+<?php endforeach; ?>
