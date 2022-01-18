@@ -153,6 +153,28 @@ class SearchApiController extends \VuFindApi\Controller\SearchApiController
     /**
      * Record action
      *
+     * @return \Laminas\Http\Response
+     */
+    public function recordAction()
+    {
+        $request = $this->getRequest()->getQuery()->toArray()
+            + $this->getRequest()->getPost()->toArray();
+        $uriPath = $this->getRequest()->getUri()->getPath();
+        $id = $request['id'] ?? '';
+        if (str_starts_with($id, 'library')
+            && str_starts_with($uriPath ?? '', '/api/v1/record')
+        ) {
+            $url = $this->url()->fromRoute('record2Apiv1');
+            $url .= str_contains($url, '?') ? '&' : '?';
+            $url .= http_build_query($request);
+            return $this->redirect()->toUrl($url);
+        }
+        return parent::recordAction();
+    }
+
+    /**
+     * Item action
+     *
      * @return \Laminas\Http\Response|bool
      */
     public function itemAction()

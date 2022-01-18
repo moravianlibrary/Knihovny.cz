@@ -16,21 +16,25 @@
   <?php else: ?>
     <table class="table table-striped">
       <caption class="sr-only"><?=$this->transEsc('Library Cards')?></caption>
-    <tr>
-      <th><?=$this->transEsc('Library Card Name')?></th>
-      <th><?=$this->transEsc('Username')?></th>
-      <th>&nbsp;</th>
-    </tr>
+      <thead>
+        <tr>
+          <th style="width: 15%"></th>
+          <th><?=$this->transEsc('Library Card Name')?></th>
+          <th style="width: 30%"></th>
+        </tr>
+      </thead>
     <?php foreach ($this->libraryCards as $record): ?>
       <tr>
-        <td><?=$this->transEsc('Source::' . $record['card_name'])?></td>
-        <?php $username = $record['cat_username']; if ($this->multipleTargets): ?>
-          <?php $target = ''; ?>
-          <?php if (strstr($username, '.')): ?>
-            <?php [$target, $username] = explode('.', $username, 2); ?>
-          <?php endif; ?>
-        <?php endif; ?>
-        <td><?=$this->escapeHtml($username)?></td>
+        <td>
+          <?php
+          $institution = $record->home_library;
+          $imageLink = sprintf('institutions/logos/%s/%s_small.png', $institution, $institution);
+          ?>
+          <img height="30" src="<?=$this->imageLink($imageLink)?>" alt="<?=$this->transEsc("Source::" . $institution) ?>">
+        </td>
+        <td>
+          <?=$this->transEsc('Source::' . $record['card_name'])?>
+        </td>
         <td>
           <div class="btn-group">
             <?php if ($delete): ?>
@@ -61,25 +65,28 @@
     </div>
   <?php endif;?>
 
+  <br/>
+
+  <div class="btn-group">
+    <a class="btn btn-link dropdown-toggle" data-toggle="dropdown" href="<?=$this->url('myresearch-deleteuser') ?>">
+      <i class="fa fa-trash-o" aria-hidden="true"></i> <?=$this->transEsc('delete_user_account')?>
+    </a>
+    <ul class="dropdown-menu">
+      <pre><?=$this->translate('delete_user_account_confirm')?></pre>
+      <li>
+        <form action="<?=$this->url('myresearch-deleteuser') ?>" method="post">
+          <input type='hidden' name='csrf' value="<?=$this->escapeHtml($this->csrfHash)?>"/>
+          <input type='hidden' name='confirm' value='1'/>
+          <button type='submit' class="btn btn-link"><?=$this->transEscAttr('confirm_dialog_yes') ?></button>
+        </form>
+      </li>
+      <button type='submit' class="btn btn-link"><?=$this->transEscAttr('confirm_dialog_no') ?></button>
+    </ul>
+  </div>
+
 </div>
 
 <div class="<?=$this->layoutClass('sidebar')?>">
   <?=$this->context($this)->renderInContext("myresearch/menu.phtml", ['active' => 'librarycards'])?>
 </div>
 
-<div class="btn-group pull-right">
-  <a class="btn btn-link dropdown-toggle" data-toggle="dropdown" href="<?=$this->url('myresearch-deleteuser') ?>">
-    <i class="fa fa-trash-o" aria-hidden="true"></i> <?=$this->transEsc('delete_user_account')?>
-  </a>
-  <ul class="dropdown-menu">
-    <pre><?=$this->translate('delete_user_account_confirm')?></pre>
-    <li>
-      <form action="<?=$this->url('myresearch-deleteuser') ?>" method="post">
-        <input type='hidden' name='csrf' value="<?=$this->escapeHtml($this->csrfHash)?>"/>
-        <input type='hidden' name='confirm' value='1'/>
-        <button type='submit' class="btn btn-link"><?=$this->transEscAttr('confirm_dialog_yes') ?></button>
-      </form>
-    </li>
-    <button type='submit' class="btn btn-link"><?=$this->transEscAttr('confirm_dialog_no') ?></button>
-  </ul>
-</div>
