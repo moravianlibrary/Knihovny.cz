@@ -53,7 +53,7 @@ cc.run({
             title: 'Souhlas s použitím cookies',
             description: '<p>Tento web používá následující soubory cookies:<br>-&nbsp;<strong>funkční cookies</strong> (vždy) k&nbsp;zajištění správného fungování webu,<br>-&nbsp;<strong>analytické cookies</strong> (na&nbsp;základě souhlasu) k&nbsp;analýze návštěvnosti webu.</p>' +
               '<p>Žádné z těchto cookies nelze použít k identifikaci konkrétní osoby.</p>' +
-              'Další informace jsou dostupné na stránce <a class="cc-link" href="/Content/ochrana-osobnich-udaju?lng=cs" target="_blank" title="Zásady ochrany osobních údajů">Zásady ochrany osobních údajů</a>.'
+              '<p>Další informace jsou dostupné na stránce <a class="cc-link" href="/Content/ochrana-osobnich-udaju?lng=cs" target="_blank" title="Zásady ochrany osobních údajů">Zásady ochrany osobních údajů</a>.</p>'
           },
           {
             title: 'Funkční cookies',
@@ -81,7 +81,7 @@ cc.run({
     'en': {
       consent_modal: {
         title: 'Cookie consent',
-        description: 'Hi, this website uses essential cookies to ensure its proper operation and tracking cookies to understand how you interact with it. The latter will be set only after consent.',
+        description: 'This website uses the following cookies:<br><strong>essential cookies</strong> (always) to ensure its proper operation and <strong>analytics cookies</strong> (only after your consent) to understand how you interact with the site. None of these cookies can be used to identify a specific person.',
         primary_btn: {
           text: 'Accept all',
           role: 'accept_all'              // 'accept_selected' or 'accept_all'
@@ -100,10 +100,12 @@ cc.run({
         blocks: [
           {
             title: 'Cookie usage',
-            description: 'I use cookies to ensure the basic functionalities of the website and to enhance your online experience. You can choose for each category to opt-in/out whenever you want. For more details relative to cookies and other sensitive data, please read the full <a class="cc-link" href="/Content/ochrana-osobnich-udaju?lng=en" target="_blank" title="Privacy Policy">Privacy Policy</a>.'
+            description: '<p>This website uses the following cookies:<br>-&nbsp;<strong>essential cookies</strong> (always) to ensure its proper operation,<br>-&nbsp;<strong>analytics cookies</strong> (only with your consent) to understand how you interact with the website.</p>' +
+              '<p>All of the data is anonymized and cannot be used to identify a specific person.</p>' +
+              '<p>For more details relative to cookies and other sensitive data, please read the full <a class="cc-link" href="/Content/ochrana-osobnich-udaju?lng=en" target="_blank" title="Privacy Policy">Privacy Policy</a>.</p>'
           }, {
             title: 'Strictly necessary cookies',
-            description: 'These cookies are essential for the proper functioning of my website. Without these cookies, the website would not work properly',
+            description: '<p>These cookies are essential for the proper functioning of the website. Without these cookies, the website would not work properly</p>',
             toggle: {
               value: 'necessary',
               enabled: true,
@@ -112,7 +114,8 @@ cc.run({
           },
           {
             title: 'Analytics cookies',
-            description: 'These cookies collect information about how you use the website, which pages you visited and which links you clicked on. All of the data is anonymized and cannot be used to identify you',
+            description: '<p>These cookies collect information about how you use the website.<br>Based on this data, we are able to make better user experience of the website.</p>' +
+              '<p>Only allowed with your consent.</p>',
             toggle: {
               value: 'analytics',
               enabled: true,
