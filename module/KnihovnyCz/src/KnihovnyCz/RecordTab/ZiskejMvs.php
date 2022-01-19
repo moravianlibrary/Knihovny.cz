@@ -90,7 +90,7 @@ class ZiskejMvs extends \VuFind\RecordTab\AbstractBase
      *
      * @throws \Exception
      */
-    public function isVisible(): bool
+    public function isActive(): bool
     {
         return $this->isZiskejActive()
             && $this->getRecordDriver()->tryMethod('getZiskejBoolean');

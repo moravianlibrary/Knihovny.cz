@@ -54,7 +54,7 @@ class EVersion extends \VuFind\RecordTab\AbstractBase
      *
      * @return bool
      */
-    public function isVisible()
+    public function isActive()
     {
         return $this->getRecordDriver()->tryMethod('hasLinks');
     }
