@@ -308,3 +308,11 @@ DELETE FROM user_card WHERE home_library="Dummy";
 
 UPDATE user_card SET edu_person_unique_id = eppn
 WHERE edu_person_unique_id IS NULL AND home_library IN ('google', 'linkedin', 'facebook');
+
+DELETE FROM user WHERE id IN (
+    SELECT u.id
+    FROM user u
+    LEFT OUTER JOIN user_card uc ON u.id = uc.user_id
+    GROUP BY u.id
+    HAVING COUNT(uc.id) = 0
+);
