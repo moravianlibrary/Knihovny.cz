@@ -18,18 +18,6 @@ cc.run({
   auto_language: 'document',
   remove_cookie_tables: true,
 
-  //onFirstAction: function onFirstAction(user_preferences, cookie) {
-  // callback triggered only once
-  //},
-
-  //onAccept: function onAccept(cookie) {
-  // ...
-  //},
-
-  //onChange: function onChange(cookie, changed_preferences) {
-  // ...
-  //},
-
   languages: {
     'cs': {
       consent_modal: {
