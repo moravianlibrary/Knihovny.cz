@@ -31,6 +31,7 @@ namespace KnihovnyCz\Controller;
 
 use Laminas\Stdlib\RequestInterface as Request;
 use Laminas\Stdlib\ResponseInterface as Response;
+use Laminas\View\Model\ViewModel;
 
 /**
  * Class SearchController
@@ -74,7 +75,7 @@ class SearchController extends \VuFind\Controller\SearchController
      * @param callable $setupCallback Optional setup callback that overrides the
      * default one
      *
-     * @return \Laminas\View\Model\ViewModel
+     * @return ViewModel
      */
     protected function getSearchResultsView($setupCallback = null)
     {
@@ -87,12 +88,11 @@ class SearchController extends \VuFind\Controller\SearchController
      * Disable link to page with the last results in pagination if the limit on
      * numer of results is exceeded.
      *
-     * @param \Laminas\View\Model\ViewModel $view view
+     * @param ViewModel|Response $view view
      *
      * @return void
      */
-    protected function disableLastInPagination(\Laminas\View\Model\ViewModel $view)
-    {
+    protected function disableLastInPagination(ViewModel|Response $view) {
         if (!isset($view->results)) {
             return;
         }
