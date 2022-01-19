@@ -1,3 +1,5 @@
+/* global initCookieConsent */
+
 // obtain plugin
 var cc = initCookieConsent();
 
@@ -16,18 +18,6 @@ cc.run({
   auto_language: 'document',
   remove_cookie_tables: true,
 
-  onFirstAction: function (user_preferences, cookie) {
-    // callback triggered only once
-  },
-
-  onAccept: function (cookie) {
-    // ...
-  },
-
-  onChange: function (cookie, changed_preferences) {
-    // ...
-  },
-
   languages: {
     'cs': {
       consent_modal: {
@@ -35,11 +25,11 @@ cc.run({
         description: 'Tento web používá následující soubory cookies:<br><strong>funkční cookies</strong> (vždy) k&nbsp;zajištění správného fungování webu a&nbsp;<strong>analytické cookies</strong> (na&nbsp;základě souhlasu) k&nbsp;analýze návštěvnosti webu. Žádné z těchto cookies nelze použít k identifikaci konkrétní osoby.',
         primary_btn: {
           text: 'Přijmout vše',
-          role: 'accept_all'              // 'accept_selected' or 'accept_all'
+          role: 'accept_all' // 'accept_selected' or 'accept_all'
         },
         secondary_btn: {
           text: 'Nastavit cookies',
-          role: 'settings'        // 'settings' or 'accept_necessary'
+          role: 'settings' // 'settings' or 'accept_necessary'
         }
       },
       settings_modal: {
@@ -62,7 +52,7 @@ cc.run({
             toggle: {
               value: 'necessary',
               enabled: true,
-              readonly: true,          // cookie categories with readonly=true are all treated as "necessary cookies"
+              readonly: true, // cookie categories with readonly=true are all treated as "necessary cookies"
             },
           },
           {
@@ -84,11 +74,11 @@ cc.run({
         description: 'This website uses the following cookies:<br><strong>essential cookies</strong> (always) to&nbsp;ensure its proper operation and <strong>analytics cookies</strong> (only after your consent) to&nbsp;understand how you interact with the&nbsp;site. None of these cookies can be used to&nbsp;identify a&nbsp;specific person.',
         primary_btn: {
           text: 'Accept all',
-          role: 'accept_all'              // 'accept_selected' or 'accept_all'
+          role: 'accept_all' // 'accept_selected' or 'accept_all'
         },
         secondary_btn: {
           text: 'Cookie settings',
-          role: 'settings'        // 'settings' or 'accept_necessary'
+          role: 'settings' // 'settings' or 'accept_necessary'
         }
       },
       settings_modal: {
@@ -109,7 +99,7 @@ cc.run({
             toggle: {
               value: 'necessary',
               enabled: true,
-              readonly: true          // cookie categories with readonly=true are all treated as "necessary cookies"
+              readonly: true // cookie categories with readonly=true are all treated as "necessary cookies"
             }
           },
           {
