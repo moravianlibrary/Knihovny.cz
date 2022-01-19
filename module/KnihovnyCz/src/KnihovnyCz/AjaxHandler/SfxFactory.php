@@ -71,6 +71,7 @@ class SfxFactory implements \Laminas\ServiceManager\Factory\FactoryInterface
         $config
             = $container->get(\VuFind\Config\PluginManager::class)->get('config');
         $client = $container->get(\KnihovnyCz\Service\GuzzleHttpService::class);
-        return new $requestedName($config, $client);
+        $authManager = $container->get(\VuFind\Auth\Manager::class);
+        return new $requestedName($config, $client, $authManager);
     }
 }

@@ -66,17 +66,27 @@ class Sfx extends AbstractBase
     protected $httpService;
 
     /**
+     * Auth Manager
+     *
+     * @var \VuFind\Auth\Manager
+     */
+    protected $authManager;
+
+    /**
      * Constructor
      *
      * @param \Laminas\Config\Config                $config      Configuration
      * @param \KnihovnyCz\Service\GuzzleHttpService $httpService HTTP service
+     * @param \VuFind\Auth\Manager                  $authManager Auth manager
      */
     public function __construct(
         \Laminas\Config\Config $config,
-        \KnihovnyCz\Service\GuzzleHttpService $httpService
+        \KnihovnyCz\Service\GuzzleHttpService $httpService,
+        \VuFind\Auth\Manager $authManager
     ) {
         $this->config = $config;
         $this->httpService = $httpService;
+        $this->authManager = $authManager;
     }
 
     /**
@@ -141,6 +151,25 @@ class Sfx extends AbstractBase
                     ];
                 }
             }
+        }
+        /**
+         * User model
+         *
+         * @var \KnihovnyCz\Db\Row\User|false $user
+         */
+        $user = $this->authManager->isLoggedIn();
+        if ($user) {
+            $prefixes = $user->getLibraryPrefixes();
+            uksort(
+                $results,
+                function ($a, $b) use ($prefixes) {
+                    $a = array_search($a, $prefixes);
+                    $a = ($a !== false) ? $a : PHP_INT_MAX;
+                    $b = array_search($b, $prefixes);
+                    $b = ($b !== false) ? $b : PHP_INT_MAX;
+                    return (int)$a - (int)$b;
+                }
+            );
         }
         return $this->formatResponse($results);
     }
