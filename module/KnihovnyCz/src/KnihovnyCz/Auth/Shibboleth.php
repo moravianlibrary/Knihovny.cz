@@ -133,6 +133,9 @@ class Shibboleth extends Base
          */
         $userTable = $this->getUserTable();
         $user = $userTable->getByEduPersonUniqueId($eduPersonUniqueId);
+        if ($user == null) {
+            $user = $userTable->getByUsername($eduPersonUniqueId, false);
+        }
         // lookup by eduPersonPrincipalName for backward compatibility
         $lookupByEppn = $shib['lookupByEduPersonPrincipalName'] ?? false;
         if ($user == null && $lookupByEppn && isset($shib['eppn'])) {
