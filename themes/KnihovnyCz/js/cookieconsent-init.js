@@ -10,11 +10,8 @@ cc.run({
   delay: 0,
   mode: 'opt-out',
   cookie_expiration: 182,
-
-  theme_css: '/themes/KnihovnyCz/css/cookieconsent.css',
   autoclear_cookies: true,
   page_scripts: true,
-
   auto_language: 'document',
   remove_cookie_tables: true,
 

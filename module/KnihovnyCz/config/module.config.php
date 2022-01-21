@@ -291,7 +291,6 @@ $config = [
                     'libraryinfo' => \KnihovnyCz\RecordTab\LibraryInfo::class,
                     'libraryservices' => \KnihovnyCz\RecordTab\LibraryServices::class,
                     'staffviewdublincore' => \KnihovnyCz\RecordTab\StaffViewDublinCore::class,
-                    'usercommentsobalkyknih' => \KnihovnyCz\RecordTab\UserCommentsObalkyKnih::class,
                 ],
                 'factories' => [
                     \KnihovnyCz\RecordTab\HoldingsILS::class => \VuFind\RecordTab\HoldingsILSFactory::class,
