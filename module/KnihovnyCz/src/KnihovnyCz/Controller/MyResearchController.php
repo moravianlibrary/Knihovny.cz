@@ -110,7 +110,6 @@ class MyResearchController extends MyResearchControllerBase
         if (!$this->getUser()) {
             return $this->forceLogin();
         }
-        $this->warnSocialUser();
         $view = $this->createViewModel();
         $view->setTemplate('myresearch/fines-all');
         return $view;
@@ -153,7 +152,6 @@ class MyResearchController extends MyResearchControllerBase
         if (!$this->getUser()) {
             return $this->forceLogin();
         }
-        $this->warnSocialUser();
         $view = $this->createViewModel();
         $view->setTemplate('myresearch/profile-all');
         return $view;
@@ -206,7 +204,6 @@ class MyResearchController extends MyResearchControllerBase
         if (!$this->getUser()) {
             return $this->forceLogin();
         }
-        $this->warnSocialUser();
         $view = $this->createViewModel();
         $view->setTemplate('myresearch/checkedout-all');
         return $view;
@@ -268,7 +265,6 @@ class MyResearchController extends MyResearchControllerBase
         if (!$this->getUser()) {
             return $this->forceLogin();
         }
-        $this->warnSocialUser();
         $view = $this->createViewModel();
         $view->setTemplate('myresearch/historicloans-all');
         return $view;

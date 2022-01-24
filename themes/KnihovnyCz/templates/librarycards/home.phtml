@@ -59,15 +59,16 @@
     <p><?=$this->translate('Library card connect warning 2')?></p>
     <p><?=$this->translate('Library card connect warning 3')?></p>
     <div class="btn-group">
-      <a href="<?=$this->url('librarycards-connectcardlogin') ?>" class="btn btn-link"><i class="fa fa-edit" aria-hidden="true">
-        </i> <?=$this->transEsc('Add a Library Card using login')?>
+      <a href="<?=$this->url('librarycards-connectcardlogin') ?>" class="btn btn-primary" role="button" aria-pressed="true">
+        <i class="fa fa-edit" aria-hidden="true"></i>
+        <?=$this->transEsc('Add a Library Card using login')?>
       </a>
     </div>
   <?php endif;?>
 
   <br/>
 
-  <div class="btn-group">
+  <div class="btn-group" style="margin-top: 15px">
     <a class="btn btn-link dropdown-toggle" data-toggle="dropdown" href="<?=$this->url('myresearch-deleteuser') ?>">
       <i class="fa fa-trash-o" aria-hidden="true"></i> <?=$this->transEsc('delete_user_account')?>
     </a>

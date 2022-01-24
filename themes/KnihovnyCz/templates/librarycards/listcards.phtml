@@ -68,6 +68,16 @@ JS;
     <?php $i++ ?>
     <?php endforeach; ?>
   </div>
+  <?php if ($this->user && $this->user->isSocial()): ?>
+    <p class="alert alert-warning" role="alert">
+      <?=$this->translate("notif_you_have_user_dummy", ['%%url%%' => $this->url('librarycards-home')])?>
+    </p>
+    <div class="btn-group">
+      <a href="<?=$this->url('librarycards-home') ?>" class="btn btn-primary" role="button" aria-pressed="true">
+        <?=$this->transEsc('Library Cards')?>
+      </a>
+    </div>
+  <?php endif; ?>
 <?php endif; ?>
 
 <?=$this->inlineScript(\Laminas\View\Helper\HeadScript::SCRIPT, $loadJs, 'SET')?>

@@ -82,20 +82,4 @@ trait CatalogLoginTrait
             $this->getRequest()->getPost('cardId')
         );
     }
-
-    /**
-     * Add warning to flash messenger if the user is from social network.
-     *
-     * @return bool
-     */
-    public function warnSocialUser(): void
-    {
-        $user = $this->getUser();
-        if ($user && $user->isSocial()) {
-            $this->flashMessenger()->addMessage(
-                'notif_you_have_user_dummy',
-                'warning'
-            );
-        }
-    }
 }
