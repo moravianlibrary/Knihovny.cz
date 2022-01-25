@@ -196,6 +196,7 @@ INSERT INTO `inst_keys` (`key_name`, `section_id`) VALUES
 ('transactionsHistory', (SELECT `id` FROM `inst_sections` WHERE `section_name` = 'Catalog')),
 ('httpBasicAuth', (SELECT `id` FROM `inst_sections` WHERE `section_name` = 'Catalog')),
 ('otherAcceptedHttpStatusCodes', (SELECT `id` FROM `inst_sections` WHERE `section_name` = 'Catalog')),
+('holdProblemsDisplay', (SELECT `id` FROM `inst_sections` WHERE `section_name` = 'Catalog')),
 -- Koha
 ('HMACKeys', (SELECT `id` FROM `inst_sections` WHERE `section_name` = 'Holds')),
 ('defaultRequiredDate', (SELECT `id` FROM `inst_sections` WHERE `section_name` = 'Holds')),
@@ -276,7 +277,9 @@ INSERT INTO `inst_configs` (`source_id`, `key_id`, `value`) VALUES
 ((SELECT `id` FROM `inst_sources` WHERE `source` = '!ncip'), (SELECT `id` FROM `inst_keys` WHERE `key_name` = 'disableRenewals'), '0'),
 ((SELECT `id` FROM `inst_sources` WHERE `source` = '!ncip'), (SELECT `id` FROM `inst_keys` WHERE `key_name` = 'HMACKeys'), 'item_id:holdtype:level'),
 ((SELECT `id` FROM `inst_sources` WHERE `source` = '!ncip'), (SELECT `id` FROM `inst_keys` WHERE `key_name` = 'defaultRequiredDate'), '0:0:1'),
-((SELECT `id` FROM `inst_sources` WHERE `source` = '!ncip'), (SELECT `id` FROM `inst_keys` WHERE `key_name` = 'extraHoldFields'), '0');
+((SELECT `id` FROM `inst_sources` WHERE `source` = '!ncip'), (SELECT `id` FROM `inst_keys` WHERE `key_name` = 'extraHoldFields'), '0'),
+((SELECT `id` FROM `inst_sources` WHERE `source` = '!ncip'), (SELECT `id` FROM `inst_keys` WHERE `key_name` = 'holdProblemsDisplay'), 'ProblemType');
+
 
 INSERT INTO inst_configs (`source_id`, `key_id`, `value`)
 SELECT s.`id`, (SELECT k.`id` FROM `inst_keys` k WHERE k.key_name = 'disableRenewals') as key_id, 1
@@ -301,6 +304,12 @@ SELECT `inst_sources`.`id`, (SELECT `id` FROM `inst_keys` WHERE `key_name` = "tr
 FROM `inst_sources`
          JOIN `inst_configs` ON `inst_sources`.`id` = `inst_configs`.`source_id`
 WHERE `inst_sources`.`driver` = 'ncip' AND `inst_configs`.`key_id` = (SELECT `id` FROM `inst_keys` WHERE `key_name` = "ils_type") AND `inst_configs`.`value` = 'Verbis';
+
+INSERT INTO `inst_configs` (`source_id`, `key_id`, `value`)
+SELECT `inst_sources`.`id`, (SELECT `id` FROM `inst_keys` WHERE `key_name` = 'holdProblemsDisplay'), 'ProblemType,ProblemDetail'
+FROM `inst_sources`
+       JOIN `inst_configs` ON `inst_sources`.`id` = `inst_configs`.`source_id`
+WHERE `inst_sources`.`driver` = 'ncip' AND `inst_configs`.`key_id` = (SELECT `id` FROM `inst_keys` WHERE `key_name` = 'ils_type') AND `inst_configs`.`value` = 'Arl';
 
 --
 -- Add additional HTTP status codes for Tritius libraries
