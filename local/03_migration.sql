@@ -271,8 +271,8 @@ WHERE a.id < b.id
 -- migration for IdPs with Aleph and Koha - edu_person_unique_id is different from eppn
 UPDATE user_card uc
 JOIN inst_sources lib ON uc.home_library = lib.source
-SET uc.edu_person_unique_id = CONCAT(SUBSTR(uc.at_username, POSITION('.' IN uc.cat_username) + 1), SUBSTR(uc.eppn, POSITION('@' IN uc.eppn)))
-WHERE s.driver IN ('aleph', 'koha');
+SET uc.edu_person_unique_id = CONCAT(SUBSTR(uc.cat_username, POSITION('.' IN uc.cat_username) + 1), SUBSTR(uc.eppn, POSITION('@' IN uc.eppn)))
+WHERE lib.driver IN ('aleph', 'koha');
 
 -- migration for other IdPs - attribute edu_person_unique_id is same as eppn
 UPDATE user_card SET edu_person_unique_id = eppn WHERE edu_person_unique_id IS NULL AND home_library NOT IN ('Dummy', 'rkka', 'nlk');
