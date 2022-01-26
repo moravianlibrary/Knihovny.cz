@@ -37,6 +37,10 @@
         $totalDue += $record['balance'] ?? 0;
     }
 
+    if ($tableData['Fee'] === $tableData['Balance']) {
+      unset($tableData['Balance']);
+    }
+
     // Now empty out any unused columns:
     foreach ($tableData as $column => $values) {
         $empty = true;
