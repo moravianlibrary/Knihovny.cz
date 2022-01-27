@@ -33,7 +33,8 @@
   $this->layout()->title = $this->driver->getShortTitle();
 ?>
 
-<?php if (isset($this->scrollData) && ($this->scrollData['previousRecord'] || $this->scrollData['nextRecord'])): ?>
+<?php if (isset($this->scrollData) && ($this->scrollData['previousRecord']
+    || $this->scrollData['nextRecord'] || $this->scrollData['linkToResults'])): ?>
   <?=$this->render('record/prev-next.phtml'); ?>
 <?php endif; ?>
 
