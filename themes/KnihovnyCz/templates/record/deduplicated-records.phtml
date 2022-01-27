@@ -1,6 +1,6 @@
 <?php
   $currentRecordId = $this->driver->getUniqueID();
-  $currentSource = $this->driver->getSourceId();
+  $currentSource = $this->driver->tryMethod('getSourceId');
   $logosPostfix = '_small';
   $data = [];
   $records = $this->driver->tryMethod('getDeduplicatedRecords') ?? [];
@@ -19,67 +19,71 @@
       'text' => $this->translate('Source::' . $source),
     ];
   }
-  $internalMultiplicity = $records[$currentSource];
+  $internalMultiplicity = $records[$currentSource] ?? [];
+  $internalMultiplicityCount = count($internalMultiplicity);
+  $showInstitutionPanel = $recordsCount >= 1 || $internalMultiplicityCount > 1;
 ?>
-<div class="well panel-select-institution">
-  <?php if ($recordsCount > 1): ?>
-    <h3><?=$this->translate('Select institution');?>:</h3>
-    <div id="records-in-groups-container">
+<?php if ($showInstitutionPanel): ?>
+  <div class="well panel-select-institution">
+    <?php if ($recordsCount > 1): ?>
+      <h3><?=$this->translate('Select institution');?>:</h3>
+      <div id="records-in-groups-container">
+        <div class="input-group input-group-lg">
+          <select id="institutions" class="form-control" style="width: 100%"></select>
+          <?php if ($libraryId = $this->driver->getOwningLibraryId()): ?>
+            <?=$this->render('library-detail-link.phtml', ['libraryId' => $libraryId])?>
+          <?php endif; ?>
+        </div>
+      </div>
+    <?php elseif ($recordsCount === 1): ?>
+      <h3><?=$this->translate('Institution');?>:</h3>
       <div class="input-group input-group-lg">
-        <select id="institutions" class="form-control" style="width: 100%"></select>
+        <span class="select2 select2-container select2-container--bootstrap3">
+            <span class="select2-selection select2-selection--single select2-text" role="combobox" aria-haspopup="true" aria-expanded="false" tabindex="0" aria-disabled="false" aria-labelledby="select2-institutions-container">
+              <span class="select2-selection__rendered" id="select2-institutions-container" role="textbox" aria-readonly="true" title="<?=$data[0]['text']?>">
+                <span class="institutions-selector">
+                  <span class="image">
+                    <img src="<?=$data[0]['image']?>">
+                  </span>
+                  <span class="text"><?=$data[0]['text']?></span>
+                </span>
+              </span>
+            </span>
+        </span>
         <?php if ($libraryId = $this->driver->getOwningLibraryId()): ?>
           <?=$this->render('library-detail-link.phtml', ['libraryId' => $libraryId])?>
         <?php endif; ?>
       </div>
-    </div>
-  <?php elseif ($recordsCount === 1): ?>
-    <h3><?=$this->translate('Institution');?>:</h3>
-    <div class="input-group input-group-lg">
-      <span class="select2 select2-container select2-container--bootstrap3">
-          <span class="select2-selection select2-selection--single select2-text" role="combobox" aria-haspopup="true" aria-expanded="false" tabindex="0" aria-disabled="false" aria-labelledby="select2-institutions-container">
-            <span class="select2-selection__rendered" id="select2-institutions-container" role="textbox" aria-readonly="true" title="<?=$data[0]['text']?>">
-              <span class="institutions-selector">
-                <span class="image">
-                  <img src="<?=$data[0]['image']?>">
-                </span>
-                <span class="text"><?=$data[0]['text']?></span>
-              </span>
-            </span>
-          </span>
+    <?php endif; ?>
+    <br/>
+    <?php
+      $count = count($internalMultiplicity);
+    ?>
+    <?php if ($count > 1): ?>
+      <span>
+      <?=$this->translate('The library has another record(s) for this publication');?>
+        <?php foreach ($internalMultiplicity as $index => $recordId): ?>
+          <?php
+             $sep = ($count == $index + 1) ? '' : ', ';
+             $href = $this->recordLinker()->getUrl($recordId);
+             $title = $this->transEscAttr('Source::' . $this->driver->getSourceId());
+             $label = $this->transEsc('record') . ' ' . ($index + 1);
+             $link = true;
+             if ($recordId == $this->driver->getUniqueID()) {
+               $label .= ' (' . $this->transEsc('current record') . ')';
+               $link = false;
+             }
+          ?>
+          <?php if ($link): ?>
+            <a href="<?=$href?>" title="<?=$title?>"><?=$label?></a><?=$sep?>
+          <?php else: ?>
+            <?=$label?><?=$sep?>
+          <?php endif; ?>
+        <?php endforeach;?>
       </span>
-      <?php if ($libraryId = $this->driver->getOwningLibraryId()): ?>
-        <?=$this->render('library-detail-link.phtml', ['libraryId' => $libraryId])?>
-      <?php endif; ?>
-    </div>
-  <?php endif; ?>
-  <br/>
-  <?php
-    $count = count($internalMultiplicity);
-  ?>
-  <?php if ($count > 1): ?>
-    <span>
-    <?=$this->translate('The library has another record(s) for this publication');?>
-      <?php foreach ($internalMultiplicity as $index => $recordId): ?>
-        <?php
-           $sep = ($count == $index + 1) ? '' : ', ';
-           $href = $this->recordLinker()->getUrl($recordId);
-           $title = $this->transEscAttr('Source::' . $this->driver->getSourceId());
-           $label = $this->transEsc('record') . ' ' . ($index + 1);
-           $link = true;
-           if ($recordId == $this->driver->getUniqueID()) {
-             $label .= ' (' . $this->transEsc('current record') . ')';
-             $link = false;
-           }
-        ?>
-        <?php if ($link): ?>
-          <a href="<?=$href?>" title="<?=$title?>"><?=$label?></a><?=$sep?>
-        <?php else: ?>
-          <?=$label?><?=$sep?>
-        <?php endif; ?>
-      <?php endforeach;?>
-    </span>
-  <?php endif;?>
-</div>
+    <?php endif;?>
+  </div>
+<?php endif;?>
 
 <?php
 if ($recordsCount > 1) {

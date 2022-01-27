@@ -514,6 +514,7 @@ class SolrDefault extends \VuFind\RecordDriver\SolrDefault
      */
     public function getDeduplicatedRecords()
     {
+        $results = [];
         $localIds = $this->getDeduplicatedRecordIds();
         foreach ($localIds as $localId) {
             [$source] = explode('.', $localId);
