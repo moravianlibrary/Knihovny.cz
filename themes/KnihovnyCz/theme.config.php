@@ -6,6 +6,7 @@ return [
     'extends' => 'bootstrap3',
     'helpers' => [
         'factories' => [
+            KnihovnyCz\View\Helper\KnihovnyCz\HeadTitle::class => VuFind\View\Helper\Root\HeadTitleFactory::class,
             'VuFind\View\Helper\Root\RecordDataFormatter' => 'KnihovnyCz\View\Helper\KnihovnyCz\RecordDataFormatterFactory',
             KnihovnyCz\View\Helper\KnihovnyCz\ZiskejMvs::class => function (ContainerInterface $container, $requestedName) {
                 $dependency = $container->get(KnihovnyCz\Ziskej\ZiskejMvs::class);
@@ -30,6 +31,7 @@ return [
             'librariesApiLookfor' => \KnihovnyCz\View\Helper\KnihovnyCz\LibrariesApiLookfor::class,
             'splitText' => \KnihovnyCz\View\Helper\KnihovnyCz\SplitText::class,
             'escapeElementId' => \KnihovnyCz\View\Helper\KnihovnyCz\EscapeElementId::class,
+            'headTitle' => KnihovnyCz\View\Helper\KnihovnyCz\HeadTitle::class,
         ],
     ],
     'favicon' => 'icon-knihovny.png',
