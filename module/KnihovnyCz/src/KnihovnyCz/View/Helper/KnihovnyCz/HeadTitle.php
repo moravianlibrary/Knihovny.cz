@@ -46,6 +46,10 @@ class HeadTitle extends \Laminas\View\Helper\HeadTitle
      */
     protected function escape($string)
     {
-        return htmlspecialchars($string, ENT_SUBSTITUTE);
+        return str_replace(
+            '&amp;',
+            '&',
+            htmlspecialchars($string, ENT_SUBSTITUTE)
+        );
     }
 }
