@@ -475,6 +475,7 @@ $staticRoutes = [
     'Holds/ListAjax' => 'Holds/ListAjax',
     'MyResearchZiskej/ListAjax' => 'MyResearchZiskej/ListAjax',
     'MyResearch/LogoutWarning' => 'MyResearch/LogoutWarning',
+    'Search/Embedded' => 'Search/Embedded',
 ];
 
 $routeGenerator = new \KnihovnyCz\Route\RouteGenerator();

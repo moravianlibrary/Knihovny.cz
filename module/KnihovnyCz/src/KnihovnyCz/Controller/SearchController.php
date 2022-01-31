@@ -29,6 +29,7 @@ declare(strict_types=1);
  */
 namespace KnihovnyCz\Controller;
 
+use Laminas\ServiceManager\ServiceLocatorInterface;
 use Laminas\Stdlib\RequestInterface as Request;
 use Laminas\Stdlib\ResponseInterface as Response;
 use Laminas\View\Model\ViewModel;
@@ -44,6 +45,15 @@ use Laminas\View\Model\ViewModel;
  */
 class SearchController extends \VuFind\Controller\SearchController
 {
+    use \VuFind\I18n\Translator\LanguageInitializerTrait;
+    use \VuFind\I18n\Translator\TranslatorAwareTrait;
+
+    public function __construct(ServiceLocatorInterface $sm)
+    {
+        parent::__construct($sm);
+        $this->setTranslator($sm->get(\Laminas\I18n\Translator\TranslatorInterface::class));
+    }
+
     /**
      * Dispatch a request
      *
@@ -70,6 +80,83 @@ class SearchController extends \VuFind\Controller\SearchController
     }
 
     /**
+     * Show embedded search for use in HTML iframe
+     *
+     * @return ViewModel
+     */
+    public function embeddedAction()
+    {
+        $this->disableSessionWrites();
+        $headers = $this->getResponse()->getHeaders();
+        $headers->addHeaderLine('Content-Security-Policy', 'frame-ancestors *');
+        $headers->addHeaderLine('X_FRAME_OPTIONS', 'ALLOWALL');
+        $view = $this->createViewModel();
+        $view->setTemplate('search/embedded');
+        $view->setTerminal(true);
+        // Use separate parameter for language so we are not interfering with
+        // language for portal
+        $lang = $this->params()->fromQuery('lang', null);
+        if ($lang != null) {
+            $this->setLanguage($lang);
+            $view->language = $lang;
+        }
+        $view->position = $this->params()->fromQuery('position', 'left');
+        $config = $this->getConfig("config");
+        $view->title = $config->Embedded->title ?? "logo_title";
+        $view->logo = $config->Embedded->logo_path ?? null;
+        $view->theme = $config->Site->theme ?? "";
+        $databases = [
+            'default' => [
+                'url' => '/Search/Results',
+                'type' => 'AllFields',
+            ],
+            'eds' => [
+                'url' => '/EDS/Search',
+                'type' => 'AllFields',
+            ],
+            'libraries' => [
+                'url' => '/Libraries/Results',
+                'type' => 'AllLibraries',
+            ],
+        ];
+        $database = strtolower($this->params()->fromQuery('database', ''));
+        $search = $databases[$database] ?? $databases['default'];
+        $baseUrl = rtrim($config->Site->url ?? "", '/');
+        $view->link = $baseUrl . $search['url'];
+        $view->type = $search['type'];
+        return $view;
+    }
+
+    /**
+     * Set up the translator language.
+     *
+     * @param string $userLang User language
+     *
+     * @return void
+     */
+    protected function setLanguage($userLang)
+    {
+        // Start with default language setting; override with user language
+        // preference if set and valid. Default to English if configuration
+        // is missing.
+        $localeSettings = $this->serviceLocator
+            ->get(\VuFind\I18n\Locale\LocaleSettings::class);
+        $translator = $this->serviceLocator
+            ->get(\VuFind\I18n\Locale\LocaleSettings::class);
+        $language = $localeSettings->getDefaultLocale();
+        $allLanguages = array_keys($localeSettings->getEnabledLocales());
+        if ($userLang != '' && in_array($userLang, $allLanguages)) {
+            $language = $userLang;
+        }
+        $this->translator->setLocale($language);
+        $this->addLanguageToTranslator(
+            $this->translator,
+            $localeSettings,
+            $language
+        );
+    }
+
+    /**
      * Perform a search and send results to a results view
      *
      * @param callable $setupCallback Optional setup callback that overrides the
@@ -92,7 +179,8 @@ class SearchController extends \VuFind\Controller\SearchController
      *
      * @return void
      */
-    protected function disableLastInPagination(ViewModel|Response $view) {
+    protected function disableLastInPagination(ViewModel|Response $view)
+    {
         if (!isset($view->results)) {
             return;
         }

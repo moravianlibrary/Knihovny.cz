@@ -40,7 +40,7 @@ for theme in ${EXTENSION_THEME_DIR}/*/; do
 done
 
 # Compile CSS in themes
-grunt less
+grunt less custom
 
 # Local configs
 for config in ${EXTENSION_DIR}/local/*/; do
