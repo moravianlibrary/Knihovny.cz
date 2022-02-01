@@ -83,8 +83,10 @@ class MyResearchZiskejController extends AbstractBase
      */
     public function listAjaxAction()//: ViewModel
     {
+        $this->flashRedirect()->restore();
         $view = $this->createViewModel();
 
+        $ignoreError = false;
         try {
             $catalogUser = $this->catalogLogin();
             $user = $this->getUser();
@@ -124,11 +126,13 @@ class MyResearchZiskejController extends AbstractBase
             );
             $view->setVariable('isLibraryInZiskej', $isLibraryInZiskej);
             if (!$isLibraryInZiskej) {
+                $ignoreError = true;
                 throw new \Exception('Library is not in Ziskej');
             }
 
             $reader = $ziskejApi->getReader($userCard->eppn);
             if (!$reader || !$reader->isActive()) {
+                $ignoreError = true;
                 throw new \Exception('Reader is not active in Ziskej');
             }
             $view->setVariable('reader', $reader);
@@ -144,7 +148,12 @@ class MyResearchZiskejController extends AbstractBase
             }
             $view->setVariable('tickets', $tickets);
         } catch (\Exception $e) {
-            $this->logError('Unexpected ' . get_class($e) . ': ' . $e->getMessage());
+            if (!$ignoreError) {
+                $this->logError('Unexpected ' . get_class($e) . ': ' . $e->getMessage());
+                $view->setVariable('tickets', []);
+                $view->error = true;
+                $this->flashMessenger()->addErrorMessage('ziskej_generic_error_message');
+            }
         }
         $view->setTemplate('myresearchziskej/list-ajax');
         $result = $this->getViewRenderer()->render($view);

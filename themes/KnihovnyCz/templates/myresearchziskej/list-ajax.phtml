@@ -3,6 +3,7 @@
 <?php
 /** @var \KnihovnyCz\Db\Row\UserCard $userCard */
 $userCard = $this->userCard;
+$error = ($this->error ?? false);
 ?>
 <?php if ($userCard && $userCard->eppn): ?>
   <?php if ($this->isZiskejModeEnabled): ?>
@@ -115,7 +116,7 @@ $userCard = $this->userCard;
               </li>
             <?php endforeach; ?>
           </ul>
-        <?php else: ?>
+        <?php elseif (!$error): ?>
           <div class="alert alert-info">
             <?=$this->transEsc('Ziskej::info_no_items')?>
           </div>
