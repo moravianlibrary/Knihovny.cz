@@ -43,12 +43,13 @@ class MarcReader extends \VuFind\Marc\MarcReader
     /**
      * Set MARC record data
      *
-     * @param string $data MARC record in MARCXML or ISO2709 format
+     * @param string|array $data MARC record in MARCXML or ISO2709 format, or an
+     * associative array with 'leader' and 'fields' in the internal format
      *
      * @throws \Exception
      * @return void
      */
-    public function setData(string $data): void
+    public function setData($data): void
     {
         try {
             parent::setData($data);
