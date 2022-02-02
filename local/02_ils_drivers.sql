@@ -3,7 +3,7 @@
 --
 ALTER TABLE `inst_configs`
     COMMENT='Konfigurace knihoven',
-    CHANGE `source` `source` varchar(10) COLLATE 'utf8_general_ci' NOT NULL DEFAULT '' COMMENT 'Knihovna (source)' AFTER `id`,
+    CHANGE `source` `source` varchar(64) COLLATE 'utf8_general_ci' NOT NULL DEFAULT '' COMMENT 'Knihovna (source)' AFTER `id`,
     CHANGE `section` `section` varchar(64) COLLATE 'utf8_general_ci' NOT NULL COMMENT 'Sekce' AFTER `source`,
     CHANGE `key` `key` varchar(64) COLLATE 'utf8_general_ci' NOT NULL COMMENT 'Klíč' AFTER `section`,
     CHANGE `value` `value` mediumtext COLLATE 'utf8_general_ci' NOT NULL COMMENT 'Hodnota' AFTER `key`;
@@ -30,6 +30,8 @@ ALTER TABLE `inst_configs`
     ADD FOREIGN KEY (`source_id`) REFERENCES `inst_sources` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 ALTER TABLE `inst_configs` DROP `source`;
+
+UPDATE `inst_configs` SET `key` = 'defaultRequiredDate', `section` = 'Holds' WHERE `key` = 'default_required_date';
 
 -- Create templates for inst_configs
 INSERT INTO `inst_sources` (`source`) VALUES
@@ -199,7 +201,6 @@ INSERT INTO `inst_keys` (`key_name`, `section_id`) VALUES
 ('holdProblemsDisplay', (SELECT `id` FROM `inst_sections` WHERE `section_name` = 'Catalog')),
 -- Koha
 ('HMACKeys', (SELECT `id` FROM `inst_sections` WHERE `section_name` = 'Holds')),
-('defaultRequiredDate', (SELECT `id` FROM `inst_sections` WHERE `section_name` = 'Holds')),
 ('extraHoldFields', (SELECT `id` FROM `inst_sections` WHERE `section_name` = 'Holds')),
 -- Aleph
 ('sublibadm', (SELECT `id` FROM `inst_sections` WHERE `section_name` = 'sublibadm')),
@@ -231,7 +232,7 @@ INSERT INTO `inst_configs` (`source_id`, `key_id`, `value`) VALUES
 ((SELECT `id` FROM `inst_sources` WHERE `source` = '!aleph'), (SELECT `id` FROM `inst_keys` WHERE `key_name` = 'prefix'), '_SOURCE'),
 ((SELECT `id` FROM `inst_sources` WHERE `source` = '!aleph'), (SELECT `id` FROM `inst_keys` WHERE `key_name` = 'source'), '_SOURCE'),
 ((SELECT `id` FROM `inst_sources` WHERE `source` = '!aleph'), (SELECT `id` FROM `inst_keys` WHERE `key_name` = 'maxItemsParsed'), '15'),
-((SELECT `id` FROM `inst_sources` WHERE `source` = '!aleph'), (SELECT `id` FROM `inst_keys` WHERE `key_name` = 'default_required_date'), ''),
+((SELECT `id` FROM `inst_sources` WHERE `source` = '!aleph'), (SELECT `id` FROM `inst_keys` WHERE `key_name` = 'defaultRequiredDate'), '0:0:1'),
 ((SELECT `id` FROM `inst_sources` WHERE `source` = '!aleph'), (SELECT `id` FROM `inst_keys` WHERE `key_name` = 'barcode'), 'z304-address-5'),
 ((SELECT `id` FROM `inst_sources` WHERE `source` = '!aleph'), (SELECT `id` FROM `inst_keys` WHERE `key_name` = 'fullname'), 'z304-address-1'),
 ((SELECT `id` FROM `inst_sources` WHERE `source` = '!aleph'), (SELECT `id` FROM `inst_keys` WHERE `key_name` = 'street'), 'z304-address-2'),
