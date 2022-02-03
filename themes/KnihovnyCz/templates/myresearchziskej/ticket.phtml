@@ -219,7 +219,7 @@ $this->headTitle($this->translate('Ziskej::header_order_ziskej_num') . ' ' . $ti
         <?php endif; ?>
       </h3>
       <div class="well border">
-        <?php if (count($messages->getAll())): ?>
+        <?php if (is_countable($messages->getAll()) && count($messages->getAll())): ?>
           <?php
           foreach ($messages->getAll() as $message): ?>
             <ul class="media-list">

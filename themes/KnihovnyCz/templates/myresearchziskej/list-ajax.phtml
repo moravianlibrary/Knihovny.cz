@@ -18,7 +18,7 @@ $error = ($this->error ?? false);
           <br>
           <i class="fa fa-fw fa-envelope text-muted"></i> <?=$reader->getEmail()?>
         </div>
-        <?php if (count($this->tickets)): ?>
+        <?php if (is_countable($this->tickets) && count($this->tickets)): ?>
           <ul class="media-list">
             <?php
             $i = 0;
@@ -70,7 +70,7 @@ $error = ($this->error ?? false);
                           </a>
                         </dd>
                       <?php endif; ?>
-                      <?php if (count($record->getFormats()) > 0): ?>
+                      <?php if (is_countable($record->getFormats()) && count($record->getFormats()) > 0): ?>
                         <dt><?=$this->transEsc('Ziskej::label_document_type')?>:</dt>
                         <dd><?=$this->record($record)->getFormatList()?></dd>
                       <?php endif; ?>
