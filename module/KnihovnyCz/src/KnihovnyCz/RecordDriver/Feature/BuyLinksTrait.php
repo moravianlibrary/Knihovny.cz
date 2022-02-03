@@ -109,8 +109,12 @@ trait BuyLinksTrait
     public function hasBuyLinks(): bool
     {
         foreach ($this->getBuyLinksConfiguration() as $link) {
-            if ($this->{$link['method']}()) {
-                return true;
+            try {
+                if ($this->{$link['method']}()) {
+                    return true;
+                }
+            } catch (\Exception $ex) {
+                // ignore exception and consider as not available
             }
         }
         return false;
