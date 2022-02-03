@@ -106,7 +106,12 @@ class ResultScroller extends Base
     {
         $this->initLastSearch();
         $result = parent::getScrollData($driver);
-        $result['linkToResults'] = $this->getLinkToResults();
+        $result['linkToResults'] = null;
+        if (isset($result['currentPosition'])
+            && $result['currentPosition'] != null
+        ) {
+            $result['linkToResults'] = $this->getLinkToResults();
+        }
         return $result;
     }
 
