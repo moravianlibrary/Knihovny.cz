@@ -1,5 +1,6 @@
 <?php
   // Set page title.
+  $recordId = $this->driver->getUniqueId();
   $this->headTitle($this->translate('Institutions') . ': ' . $this->driver->getBreadcrumb());
   $records = $this->driver->tryMethod('getDeduplicatedRecords') ?? [];
   $results = [];
@@ -7,18 +8,44 @@
     foreach ($ids as $id) {
       $results[] = [
         'label' => $this->transEsc('Source::' . $source),
-        'id' => $id
+        'id' => $id,
+        'source' => $source,
+        'index' => 0,
       ];
     }
   }
   uasort($results, function ($a, $b) {
-    return strcoll($a['label'], $b['label']);
+    $result = strcoll($a['label'], $b['label']);
+    if ($result == 0) {
+      $result = $a['id'] <=> $b['id'];
+    }
+    return $result;
   });
+  $prev = null;
+  $index = 0;
+  foreach ($results as &$rec) {
+    if ($prev != null && $rec['source'] == $prev['source']) {
+      $index = ($index == 0) ? 2 : $index + 1;
+      if ($prev['index'] == 0) {
+        $prev['index'] = 1;
+      }
+    } else {
+      $index = 0;
+    }
+    $rec['index'] = $index;
+    $prev = &$rec;
+  }
 ?>
 <?php foreach ($results as $record): ?>
   <li>
     <a class="hover-overlay" href="<?=$this->escapeHtmlAttr($this->recordLinker()->getUrl($record['id']))?>">
       <?=$record['label']?>
+      <?php if ($record['index'] > 0): ?>
+        - <?=$this->transEsc('record') . ' ' . $record['index']?>
+      <?php endif; ?>
+      <?php if ($record['id'] == $recordId):?>
+        (<?=$this->transEsc('current record')?>)
+      <?php endif; ?>
     </a>
   </li>
 <?php endforeach; ?>
