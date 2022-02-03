@@ -125,8 +125,13 @@ Deploy devel image:
     DEPLOY_REPO_BRANCH: devel
     DEPLOY_REPO_DIR: devel
   rules:
-    - if:  # deploy on issue or feat-
+    - if: # do not run on merge_request merge
         ( $CI_PIPELINE_SOURCE == "merge_request_event" ) &&
+        ( $CI_MERGE_REQUEST_EVENT_TYPE == "merged_result" )
+      when: never
+    - if:  # deploy on issue or feat-  while detached
+        ( $CI_PIPELINE_SOURCE == "merge_request_event" ) &&
+        ( $CI_MERGE_REQUEST_EVENT_TYPE == "detached" ) &&
         ( ( $CI_MERGE_REQUEST_SOURCE_BRANCH_NAME =~ /^issue/ ) ||
           ( $CI_MERGE_REQUEST_SOURCE_BRANCH_NAME =~ /^feat-/ ) ||
           ( $CI_MERGE_REQUEST_SOURCE_BRANCH_NAME =~ /^feat\// ) ||
