@@ -99,8 +99,9 @@ class UserList implements \VuFind\ContentBlock\ContentBlockInterface
      */
     public function setConfig($settings)
     {
-        [$this->listId, $limit] = explode(':', $settings);
-        $this->limit = (int)$limit ?? 10;
+        $parsedSettings = explode(':', $settings);
+        $this->listId = $parsedSettings[0];
+        $this->limit = (int)($parsedSettings[1] ?? 5);
     }
 
     /**
