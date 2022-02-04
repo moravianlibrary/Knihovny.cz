@@ -31,9 +31,8 @@ declare(strict_types=1);
  */
 namespace KnihovnyCz\Search\Solr;
 
-use Interop\Container\ContainerInterface;
 use Laminas\EventManager\EventInterface;
-use VuFind\Auth\Manager as AuthManager;
+use Psr\Container\ContainerInterface;
 use VuFind\Search\Solr\DeduplicationListener as ParentDeduplicationListener;
 use VuFindSearch\Backend\Solr\Backend;
 use VuFindSearch\ParamBag;
@@ -86,7 +85,6 @@ class DeduplicationListener extends ParentDeduplicationListener
      * @param Backend            $backend        Search backend
      * @param ContainerInterface $serviceLocator Service locator
      * @param string             $searchCfg      Search config file id
-     * @param AuthManager        $authManager    AuthManager
      * @param string             $facetCfg       Facet config file id
      * @param string             $dataSourceCfg  Data source file id
      * @param bool               $enabled        Whether deduplication is
@@ -96,7 +94,6 @@ class DeduplicationListener extends ParentDeduplicationListener
         Backend $backend,
         ContainerInterface $serviceLocator,
         $searchCfg,
-        $authManager,
         $facetCfg,
         $dataSourceCfg = 'datasources',
         $enabled = true
@@ -108,9 +105,9 @@ class DeduplicationListener extends ParentDeduplicationListener
             $dataSourceCfg,
             $enabled
         );
-        $this->authManager = $authManager;
         $this->facetConfig = $facetCfg;
         $config = $this->serviceLocator->get(\VuFind\Config\PluginManager::class);
+        $this->authManager = $this->serviceLocator->get('VuFind\AuthManager');
         $searchConfig = $config->get($this->searchConfig);
         if (isset($searchConfig->Records->institution_field)) {
             $this->institutionField = $searchConfig->Records->institution_field;

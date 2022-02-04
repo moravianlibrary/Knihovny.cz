@@ -4,6 +4,17 @@
   $logosPostfix = '_small';
   $data = [];
   $records = $this->driver->tryMethod('getDeduplicatedRecords') ?? [];
+  $recordMissing = false;
+  if (!isset($records[$currentSource])) {
+    $records[$currentSource] = [ $currentRecordId ];
+    $recordMissing = true;
+  } else {
+    $recordsForSource = $records[$currentSource];
+    if (!in_array($currentRecordId, $recordsForSource)) {
+      $records[$currentSource] = [ $currentRecordId ];
+      $recordMissing = true;
+    }
+  }
   $recordsCount = count($records);
   foreach ($records as $source => $ids) {
     $imageSrc = $this->imageLink(
@@ -82,6 +93,11 @@
         <?php endforeach;?>
       </span>
     <?php endif;?>
+    <?php if ($recordMissing): ?>
+      <div class="alert alert-warning" role="alert">
+        <?=$this->translate('Current record is missing in the view');?>
+      </div>
+    <?php endif; ?>
   </div>
 <?php endif;?>
 

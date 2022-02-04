@@ -29,6 +29,7 @@ declare(strict_types=1);
  */
 namespace KnihovnyCz\Search\Factory;
 
+use KnihovnyCz\Search\Solr\ChildDocDeduplicationListener;
 use KnihovnyCz\Search\Solr\DeduplicationListener;
 use VuFind\Search\Factory\SolrDefaultBackendFactory
     as ParentSolrDefaultBackendFactory;
@@ -57,12 +58,16 @@ class SolrDefaultBackendFactory extends ParentSolrDefaultBackendFactory
         Backend $backend,
         $enabled
     ) {
-        $authManager = $this->serviceLocator->get('VuFind\AuthManager');
-        return new DeduplicationListener(
+        $class = DeduplicationListener::class;
+        $search = $this->config->get($this->searchConfig);
+        $type = $search->Records->deduplication_type ?? null;
+        if ($type == 'child') {
+            $class = ChildDocDeduplicationListener::class;
+        }
+        return new $class(
             $backend,
             $this->serviceLocator,
             $this->searchConfig,
-            $authManager,
             $this->facetConfig,
             'datasources',
             $enabled
