@@ -26,29 +26,31 @@ $error = ($this->error ?? false);
               ++$i;
               /** @var \Mzk\ZiskejApi\ResponseModel\Ticket $ticket */
               $ticket = $item['ticket'];
-              /** @var \KnihovnyCz\RecordDriver\SolrLocal $record */
+              /** @var ?\KnihovnyCz\RecordDriver\SolrLocal $record */
               $record = $item['record'];
               ?>
               <li class="media well" id="record_<?=$ticket->getHid()?>" data-ziskej="<?=$ticket->getHid()?>">
                 <?php
-                $coverDetails = $this->record($record)->getCoverDetails('checkedout', 'small', $this->recordLink()->getUrl($record));
-                $cover = $coverDetails['html'];
                 $thumbnail = false;
-                $thumbnailAlignment = $this->record($record)->getThumbnailAlignment('account');
-                if ($cover):
-                  ob_start(); ?>
-                  <div class="media-<?=$thumbnailAlignment ?> <?=$this->escapeHtmlAttr($coverDetails['size'])?>">
-                    <?=$cover ?>
+                if ($record) {
+                  $coverDetails = $this->record($record)->getCoverDetails('checkedout', 'small', $this->recordLink()->getUrl($record));
+                  $cover = $coverDetails['html'];
+                  if ($cover) {
+                    ob_start();
+                    echo $cover;
+                    $thumbnail = ob_get_contents();
+                    ob_end_clean();
+                  }
+                }
+                ?>
+                <?php if ($thumbnail): ?>
+                  <div class="media-left small">
+                    <?=$thumbnail?>
                   </div>
-                  <?php $thumbnail = ob_get_contents(); ?>
-                  <?php ob_end_clean(); ?>
-                <?php endif; ?>
-                <?php if ($thumbnail && $thumbnailAlignment == 'left'): ?>
-                  <?=$thumbnail ?>
                 <?php endif ?>
                 <div class="media-body">
                   <h4 class="media-heading">
-                    <?php if (is_a($record, \VuFind\RecordDriver\SolrDefault::class) && !is_a($record, \VuFind\RecordDriver\Missing::class)): ?>
+                    <?php if ($record): ?>
                       <?php
                       $title = !empty($record->getTitle())
                         ? $this->escapeHtml($record->getTitle())
@@ -56,23 +58,25 @@ $error = ($this->error ?? false);
                       ?>
                       <a href="<?=$this->recordLink()->getUrl($record)?>" class="title"><?=$title?></a>
                     <?php else: ?>
-                      <?=$this->transEsc('Title not available')?>
+                      <?=$this->transEsc('record_info_not_available')?>
                     <?php endif; ?>
                   </h4>
                   <div>
                     <dl class="dl-horizontal dl-left">
-                      <?php $listAuthor = $record->getPrimaryAuthor() ?>
-                      <?php if (!empty($listAuthor)): ?>
-                        <dt><?=$this->transEsc('by')?>:</dt>
-                        <dd>
-                          <a href="<?=$this->record($record)->getLink('author', $listAuthor)?>">
-                            <?=$this->escapeHtml($listAuthor)?>
-                          </a>
-                        </dd>
-                      <?php endif; ?>
-                      <?php if (is_countable($record->getFormats()) && count($record->getFormats()) > 0): ?>
-                        <dt><?=$this->transEsc('Ziskej::label_document_type')?>:</dt>
-                        <dd><?=$this->record($record)->getFormatList()?></dd>
+                      <?php if ($record): ?>
+                        <?php $listAuthor = $record->getPrimaryAuthor() ?>
+                        <?php if (!empty($listAuthor)): ?>
+                          <dt><?=$this->transEsc('by')?>:</dt>
+                          <dd>
+                            <a href="<?=$this->record($record)->getLink('author', $listAuthor)?>">
+                              <?=$this->escapeHtml($listAuthor)?>
+                            </a>
+                          </dd>
+                        <?php endif; ?>
+                        <?php if (is_countable($record->getFormats()) && count($record->getFormats()) > 0): ?>
+                          <dt><?=$this->transEsc('Ziskej::label_document_type')?>:</dt>
+                          <dd><?=$this->record($record)->getFormatList()?></dd>
+                        <?php endif; ?>
                       <?php endif; ?>
                       <?php if ($ticket->getCreatedAt()): ?>
                         <dt><?=$this->transEsc('Ziskej::label_date_order')?>:</dt>
@@ -92,7 +96,7 @@ $error = ($this->error ?? false);
                       <?php if ($ticket->getStatus()): ?>
                         <dt><?=$this->transEsc('Ziskej::label_order_status')?>:</dt>
                         <dd>
-                          <span class="label label-<?=$this->ziskejMvs()->getStatusClass($ticket->getStatus()) ?>">
+                          <span class="label label-<?=$this->ziskejMvs()->getStatusClass($ticket->getStatus())?>">
                             <?=$this->transEsc('Ziskej::order_status_' . $ticket->getStatus())?>
                           </span>
                         </dd>
@@ -110,9 +114,6 @@ $error = ($this->error ?? false);
                     </div>
                   </div>
                 </div>
-                <?php if ($thumbnail && $thumbnailAlignment == 'right'): ?>
-                  <?=$thumbnail ?>
-                <?php endif ?>
               </li>
             <?php endforeach; ?>
           </ul>

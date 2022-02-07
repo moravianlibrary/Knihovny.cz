@@ -140,10 +140,17 @@ class MyResearchZiskejController extends AbstractBase
             $tickets = [];
             foreach ($ziskejApi->getTickets($userCard->eppn)->getAll() as $ticket) {
                 if ($ticket->getDocumentId() !== null) {
-                    $tickets[$ticket->getId()] = [
-                        'ticket' => $ticket,
-                        'record' => $this->_getRecord($ticket->getDocumentId()),
-                    ];
+                    try {
+                        $tickets[$ticket->getId()] = [
+                            'ticket' => $ticket,
+                            'record' => $this->_getRecord($ticket->getDocumentId()),
+                        ];
+                    } catch (\VuFind\Exception\RecordMissing $e) {
+                        $tickets[$ticket->getId()] = [
+                            'ticket' => $ticket,
+                            'record' => null,
+                        ];
+                    }
                 }
             }
             $view->setVariable('tickets', $tickets);
@@ -198,7 +205,10 @@ class MyResearchZiskejController extends AbstractBase
         if ($ticket) {
             $documentId = $ticket->getDocumentId();
             if ($documentId) {
-                $driver = $this->_getRecord($documentId);
+                try {
+                    $driver = $this->_getRecord($documentId);
+                } catch (\VuFind\Exception\RecordMissing $e) {
+                }
             }
         }
 
