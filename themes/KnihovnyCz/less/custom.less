@@ -809,3 +809,37 @@ body.ziskej-mode-dev {
   border: 1px solid @brand-primary;
   box-shadow: 1px 0 3px @gray-lighter, -1px 0 3px @gray-lighter, 0 1px 3px @gray-lighter, 0 1px 3px @gray-lighter;
 }
+
+.template-dir-inspiration.template-name-home {
+
+  .search-home-facets {
+    float: left;
+    width: 33.33333333%;
+    position: relative;
+    min-height: 1px;
+    padding-right: 15px;
+    padding-left: 15px;
+  }
+
+  .home-facet .js-tree-container-ul {
+    padding-left: 0;
+    margin-bottom: 20px;
+  }
+
+  li.jstree-node {
+    display: block;
+    padding: 5px 15px;
+    margin-bottom: -1px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+
+    li.jstree-node {
+      border-left: 0;
+      border-right: 0;
+
+      .jstree-icon::before {
+        display:none;
+      }
+    }
+  }
+}

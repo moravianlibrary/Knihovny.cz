@@ -69,7 +69,12 @@ CREATE TABLE `config` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='Konfigurace';
 
 INSERT INTO `config` (`file_id`, `section_id`, `item_id`, `value`, `order`, `active`)
-  SELECT (SELECT `id` FROM `config_files` WHERE `file_name` = 'content'), (SELECT `id` FROM `config_sections` WHERE `section_name` = 'Inspiration'), (SELECT `id` FROM `config_items` WHERE `name` = 'content_block'), CONCAT('Inspiration:', w.name, ':5'), i.widget_position * 10, 1
+  SELECT (SELECT `id` FROM `config_files` WHERE `file_name` = 'content'),
+         (SELECT `id` FROM `config_sections` WHERE `section_name` = 'Inspiration'),
+         (SELECT `id` FROM `config_items` WHERE `name` = 'content_block'),
+         IF(w.name = 'conspectus', 'FacetList:Solr', CONCAT('Inspiration:', w.name, ':5')),
+         i.widget_position * 10,
+         1
     FROM inspirations i
     JOIN widget w ON i.widget_id = w.id;
 
