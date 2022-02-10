@@ -46,6 +46,7 @@ envsubst.a8m -no-unset -i /etc/vufind/config.local.ini -o /var/www/knihovny-cz/l
 envsubst.a8m -no-unset -i /etc/vufind/EDS.local.ini -o /var/www/knihovny-cz/local/knihovny.cz/config/vufind/EDS.local.ini
 envsubst.a8m -no-unset -i /etc/vufind/Search2.local.ini -o /var/www/knihovny-cz/local/knihovny.cz/config/vufind/Search2.local.ini
 envsubst.a8m -no-unset -i /etc/vufind/content.local.ini -o /var/www/knihovny-cz/local/knihovny.cz/config/vufind/content.local.ini
+envsubst.a8m -no-unset -i /etc/vufind/obalkyknih.local.ini -o /var/www/knihovny-cz/local/knihovny.cz/config/vufind/obalkyknih.local.ini
 
 echo === Executing final command "$1" ===
 
