@@ -1,6 +1,7 @@
 <?php
     // Check if "Renew All" button can be displayed:
     $renewAll = !$this->ilsPaging || !$paginator;
+    $itemIndex = 1;
 ?>
 <?=$this->flashmessages()?>
 <?php if (!empty($this->transactions)): ?>
@@ -10,6 +11,7 @@
       <?php
         $abs = $paginator->getAbsoluteItemNumber($paginator->getItemCountPerPage());
         $end = min($abs, $paginator->getTotalItemCount());
+        $itemIndex = $this->paginator->getAbsoluteItemNumber(1);
         $transParams = [
           '%%start%%' => $this->localizedNumber($paginator->getAbsoluteItemNumber(1)),
           '%%end%%' => $this->localizedNumber($end),
@@ -61,20 +63,23 @@
     <?php $i = 0; foreach ($this->transactions as $resource): ?>
       <?php $ilsDetails = $resource->getExtraDetail('ils_details'); ?>
         <li id="record<?=$this->escapeHtmlAttr($resource->getUniqueId())?>" class="result">
-        <?php if ($this->renewForm): ?>
-          <div class="checkbox">
-            <?php if (isset($ilsDetails['renewable']) && $ilsDetails['renewable'] && isset($ilsDetails['renew_details'])): ?>
-              <?php $safeId = preg_replace('/[^a-zA-Z0-9]/', '', $ilsDetails['renew_details']); ?>
-                <label>
-                  <input class="checkbox-select-item" type="checkbox" name="renewSelectedIDS[]" value="<?=$this->escapeHtmlAttr($ilsDetails['renew_details'])?>" id="checkbox_<?=$safeId?>" />
-                </label>
-                <input type="hidden" name="selectAllIDS[]" value="<?=$this->escapeHtmlAttr($ilsDetails['renew_details'])?>" />
-                <input type="hidden" name="renewAllIDS[]" value="<?=$this->escapeHtmlAttr($ilsDetails['renew_details'])?>" />
-            <?php else: ?>
-              <label> </label>
-            <?php endif; ?>
-          </div>
-        <?php endif; ?>
+        <div>
+          <strong class="pull-left order"><?= $itemIndex++ ?>.</strong>
+          <?php if ($this->renewForm): ?>
+            <div class="checkbox">
+              <?php if (isset($ilsDetails['renewable']) && $ilsDetails['renewable'] && isset($ilsDetails['renew_details'])): ?>
+                <?php $safeId = preg_replace('/[^a-zA-Z0-9]/', '', $ilsDetails['renew_details']); ?>
+                  <label>
+                    <input class="checkbox-select-item" type="checkbox" name="renewSelectedIDS[]" value="<?=$this->escapeHtmlAttr($ilsDetails['renew_details'])?>" id="checkbox_<?=$safeId?>" />
+                  </label>
+                  <input type="hidden" name="selectAllIDS[]" value="<?=$this->escapeHtmlAttr($ilsDetails['renew_details'])?>" />
+                  <input type="hidden" name="renewAllIDS[]" value="<?=$this->escapeHtmlAttr($ilsDetails['renew_details'])?>" />
+              <?php else: ?>
+                <label> </label>
+              <?php endif; ?>
+            </div>
+          <?php endif; ?>
+        </div>
 
         <?php
           $coverDetails = $this->record($resource)->getCoverDetails('checkedout', 'small', $this->recordLinker()->getUrl($resource));
