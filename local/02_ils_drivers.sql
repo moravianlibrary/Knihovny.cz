@@ -3,9 +3,6 @@
 --
 ALTER TABLE `inst_configs`
     COMMENT='Konfigurace knihoven',
-    CHANGE `source` `source` varchar(64) COLLATE 'utf8_general_ci' NOT NULL DEFAULT '' COMMENT 'Knihovna (source)' AFTER `id`,
-    CHANGE `section` `section` varchar(64) COLLATE 'utf8_general_ci' NOT NULL COMMENT 'Sekce' AFTER `source`,
-    CHANGE `key` `key` varchar(64) COLLATE 'utf8_general_ci' NOT NULL COMMENT 'Klíč' AFTER `section`,
     CHANGE `value` `value` mediumtext COLLATE 'utf8_general_ci' NOT NULL COMMENT 'Hodnota' AFTER `key`;
 
 --
@@ -38,9 +35,8 @@ INSERT INTO `inst_sources` (`source`) VALUES
 ('!aleph'), ('!koha'), ('!ncip');
 
 -- Define drivers
-UPDATE `inst_sources` SET `driver` = 'aleph' WHERE `source` IN ('cvgz', 'kkpc', 'knav', 'mzk', 'nkp', 'ntk', 'svkhk', 'svkos', 'svkpk', 'uzei', 'vkol', '!aleph');
-UPDATE `inst_sources` SET `driver` = 'koha' WHERE `source` IN ('mkbohumin', 'mkdb', 'mklit', 'mkmt', 'mkuo', 'tre', 'vkta', '!koha');
-UPDATE `inst_sources` SET `driver` = 'caslin' WHERE `source` = 'caslin';
+UPDATE `inst_sources` SET `driver` = 'aleph' WHERE `source` IN ('cvgz', 'kkpc', 'knav', 'mzk', 'muzibib', 'nkp', 'ntk', 'svkhk', 'svkos', 'svkpk', 'usdbibl', 'uzei', 'vkol', '!aleph');
+UPDATE `inst_sources` SET `driver` = 'koha' WHERE `source` IN ('mkbohumin', 'mkdb', 'mkchocen', 'mkchrudim', 'mklit', 'mkmt', 'mkuo', 'slavoj', 'tre', 'vkta', '!koha');
 UPDATE `inst_sources` SET `driver` = 'ncip' WHERE `driver` = '';
 
 --
@@ -119,8 +115,16 @@ UPDATE inst_sources SET library_name = "Městská knihovna Jindřichův Hradec (
 UPDATE inst_sources SET library_name = "Městská knihovna Litvínov (mklit)" WHERE source = "mklit";
 UPDATE inst_sources SET library_name = "Husova knihovna Říčany (mkricany)" WHERE source = "mkricany";
 UPDATE inst_sources SET library_name = "Městská knihovna v Třebíči (mktrebic)" WHERE source = "mktrebic";
+UPDATE inst_sources SET library_name = "Městská knihovna Rožnov pod Radhoštěm (knir)" WHERE source = "knir";
+UPDATE inst_sources SET library_name = "Městská knihovna a infocentrum v Dolním Bousově (mkdb)" WHERE source = "mkdb";
+UPDATE inst_sources SET library_name = "Městská knihovna Milovice (mkmilovice)" WHERE source = "mkmilovice";
+UPDATE inst_sources SET library_name = "Městská knihovna Orlová (mkor)" WHERE source = "mkor";
+UPDATE inst_sources SET library_name = "Městská knihovna Slavoj ve Dvoře Králové (slavoj)" WHERE source = "slavoj";
+UPDATE inst_sources SET library_name = "Městská knihovna Choceň (mkchocen)" WHERE source = "mkchocen";
+UPDATE inst_sources SET library_name = "Městská knihovna Boskovice (mkboskovice)" WHERE source = "mkboskovice";
 
 UPDATE inst_sources SET `library_name` = `source` WHERE `library_name` = '';
+
 --
 -- Create configurations for NoILS drivers
 --
