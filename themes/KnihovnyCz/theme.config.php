@@ -16,6 +16,7 @@ return [
                 $dependency = $container->get(KnihovnyCz\Ziskej\ZiskejEdd::class);
                 return new $requestedName($dependency);
             },
+            KnihovnyCz\View\Helper\KnihovnyCz\SearchTabs::class => \VuFind\View\Helper\Root\SearchTabsFactory::class,
         ],
         'invokables' => [
             \KnihovnyCz\View\Helper\KnihovnyCz\FooterLink::class,
@@ -32,6 +33,7 @@ return [
             'splitText' => \KnihovnyCz\View\Helper\KnihovnyCz\SplitText::class,
             'escapeElementId' => \KnihovnyCz\View\Helper\KnihovnyCz\EscapeElementId::class,
             'headTitle' => KnihovnyCz\View\Helper\KnihovnyCz\HeadTitle::class,
+            'searchTabs' => KnihovnyCz\View\Helper\KnihovnyCz\SearchTabs::class,
         ],
     ],
     'favicon' => 'icon-knihovny.png',
