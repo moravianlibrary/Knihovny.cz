@@ -31,14 +31,14 @@ declare(strict_types=1);
  */
 namespace KnihovnyCz\Controller;
 
-use KnihovnyCz\RecordDriver\SolrDefault;
 use KnihovnyCz\Ziskej\ZiskejMvs;
-use Laminas\Http\Response;
+use Laminas\Http\Response as HttpResponse;
 use Laminas\View\Model\ViewModel;
 use Mzk\ZiskejApi\RequestModel\Message;
 use VuFind\Controller\AjaxResponseTrait;
 use VuFind\Exception\LibraryCard;
 use VuFind\Log\LoggerAwareTrait;
+use VuFind\RecordDriver\AbstractBase as AbstractRecord;
 
 /**
  * Class MyResearchZiskejController
@@ -59,7 +59,7 @@ class MyResearchZiskejController extends AbstractBase
     /**
      * Ziskej tickets page
      *
-     * @return \Laminas\View\Model\ViewModel
+     * @return ViewModel
      *
      * @throws \Http\Client\Exception
      */
@@ -77,11 +77,11 @@ class MyResearchZiskejController extends AbstractBase
     /**
      * Return tickets for selected library card
      *
-     * @return \Laminas\View\Model\ViewModel
+     * @return ViewModel|HttpResponse
      *
      * @throws \Http\Client\Exception
      */
-    public function listAjaxAction()//: ViewModel
+    public function listAjaxAction()
     {
         $this->flashRedirect()->restore();
         $view = $this->createViewModel();
@@ -90,6 +90,12 @@ class MyResearchZiskejController extends AbstractBase
         try {
             $catalogUser = $this->catalogLogin();
             $user = $this->getUser();
+            if (!$user) {
+                return $this->forceLogin();
+            }
+            if (!is_array($catalogUser)) {
+                throw new \Exception('Patron account not found in ILS');
+            }
             $view->setVariable('user', $user);
 
             $userCard = $user->getCardByCatName($catalogUser['cat_username']);
@@ -170,7 +176,7 @@ class MyResearchZiskejController extends AbstractBase
     /**
      * Ziskej ticket detail
      *
-     * @return \Laminas\View\Model\ViewModel
+     * @return ViewModel
      *
      * @throws \Http\Client\Exception
      * @throws \Mzk\ZiskejApi\Exception\ApiResponseException
@@ -225,20 +231,19 @@ class MyResearchZiskejController extends AbstractBase
     /**
      * Cancel Ziskej ticket
      *
-     * @return \Laminas\Http\Response
+     * @return HttpResponse
      *
      * @throws \Http\Client\Exception
      * @throws \Mzk\ZiskejApi\Exception\ApiResponseException
      * @throws \VuFind\Exception\LibraryCard
      */
-    public function ticketCancelAction(): Response
+    public function ticketCancelAction(): HttpResponse
     {
         $eppnDomain = $this->params()->fromRoute('eppnDomain');
         $ticketId = $this->params()->fromRoute('ticketId');
 
         $user = $this->getUser();
         if (!$user) {
-            //$this->flashExceptions($this->flashMessenger());  //@todo
             return $this->forceLogin();
         }
 
@@ -277,13 +282,13 @@ class MyResearchZiskejController extends AbstractBase
     /**
      * Send form: Create new message
      *
-     * @return \Laminas\Http\Response
+     * @return HttpResponse
      *
      * @throws \Http\Client\Exception
      * @throws \Mzk\ZiskejApi\Exception\ApiResponseException
      * @throws \VuFind\Exception\LibraryCard
      */
-    public function ticketMessageAction(): Response
+    public function ticketMessageAction(): HttpResponse
     {
         $eppnDomain = $this->params()->fromRoute('eppnDomain');
         $ticketId = $this->params()->fromRoute('ticketId');
@@ -300,7 +305,6 @@ class MyResearchZiskejController extends AbstractBase
 
         $user = $this->getUser();
         if (!$user) {
-            //$this->flashExceptions($this->flashMessenger());  //@todo
             return $this->forceLogin();
         }
 
@@ -361,11 +365,11 @@ class MyResearchZiskejController extends AbstractBase
      *
      * @param string $documentId Record identifier
      *
-     * @return \KnihovnyCz\RecordDriver\SolrDefault
+     * @return AbstractRecord
      *
      * @throws \Exception
      */
-    private function _getRecord(string $documentId): SolrDefault
+    private function _getRecord(string $documentId): AbstractRecord
     {
         $recordLoader = $this->getRecordLoader();
 

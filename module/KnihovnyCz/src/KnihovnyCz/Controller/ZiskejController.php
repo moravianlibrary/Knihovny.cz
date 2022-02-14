@@ -58,28 +58,18 @@ class ZiskejController extends AbstractBase
         $eppnDomain = $this->params()->fromRoute('eppnDomain');
         $ticketId = $this->params()->fromRoute('ticketId');
 
-        /**
-         * User
-         *
-         * @var \KnihovnyCz\Db\Row\User $user
-         */
         $user = $this->getUser();
         if (!$user) {
             return $this->forceLogin();
         }
 
-        /**
-         * User library card
-         *
-         * @var \KnihovnyCz\Db\Row\UserCard $userCard
-         */
         $userCard = $user->getCardByEppnDomain($eppnDomain);
         if (!$userCard || !$userCard->eppn) {
             throw new LibraryCard('Library Card Not Found');
         }
 
         /**
-         * Ziske API connector
+         * Ziskej API connector
          *
          * @var \Mzk\ZiskejApi\Api $ziskejApi
          */
@@ -87,9 +77,11 @@ class ZiskejController extends AbstractBase
 
         $ticket = $ziskejApi->getTicket($userCard->eppn, $ticketId);
 
-        $view = $this->createViewModel();
-        $view->userCard = $userCard;
-        $view->ticket = $ticket;
-        return $view;
+        return $this->createViewModel(
+            [
+                'userCard' => $userCard,
+                'ticket' => $ticket,
+            ]
+        );
     }
 }
