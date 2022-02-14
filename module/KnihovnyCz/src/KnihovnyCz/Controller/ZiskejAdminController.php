@@ -31,9 +31,7 @@ namespace KnihovnyCz\Controller;
 
 use KnihovnyCz\Ziskej\ZiskejEdd;
 use KnihovnyCz\Ziskej\ZiskejMvs;
-use Mzk\ZiskejApi\ResponseModel\Reader;
 use Mzk\ZiskejApi\ResponseModel\Ticket;
-use Mzk\ZiskejApi\ResponseModel\TicketsCollection;
 
 /**
  * Class ZiskejAdminController
@@ -94,11 +92,6 @@ class ZiskejAdminController extends AbstractBase
             return $view;
         }
 
-        /**
-         * User
-         *
-         * @var \KnihovnyCz\Db\Row\User $user
-         */
         $user = $this->getUser();
         if (!$user) {
             return $view;
@@ -154,20 +147,10 @@ class ZiskejAdminController extends AbstractBase
                 $data[$eppn]['isLibraryInZiskej'] = $inZiskej;
 
                 if ($inZiskej) {
-                    /**
-                     * Reader model
-                     *
-                     * @var Reader $ziskejReader
-                     */
                     $ziskejReader = $ziskejApi->getReader($eppn);
                     $data[$eppn]['reader'] = $ziskejReader;
 
                     if ($ziskejReader && $ziskejReader->isActive()) {
-                        /**
-                         * ILL ticket collection model
-                         *
-                         * @var TicketsCollection $tickets
-                         */
                         $tickets = $ziskejApi->getTickets($eppn)->getAll();
                         $data[$eppn]['tickets'] = [];
                         /**

@@ -83,7 +83,7 @@ class RecordController extends \VuFind\Controller\RecordController
         /**
          * User
          *
-         * @var \KnihovnyCz\Db\Row\User $user
+         * @var ?\KnihovnyCz\Db\Row\User $user
          */
         $user = $this->getUser();
         if (!$user) {
@@ -103,25 +103,32 @@ class RecordController extends \VuFind\Controller\RecordController
         if (!$userCard) {
             throw new LibraryCard('Library Card Not Found');
         }
+        $eppn = $userCard->eppn;
+        $ziskejReader = $eppn ? $ziskejApi->getReader($eppn) : null;
 
-        $ziskejReader = $ziskejApi->getReader($userCard->eppn);
-
-        $view = $this->createViewModel();
+        $view = $this->createViewModel(
+            [
+                'user' => $user,
+                'userCard' => $userCard, //@todo if firstname and lastname is empty
+                'ziskejReader' => $ziskejReader,
+                'serverName' => $this->getRequest()->getServer()->SERVER_NAME,
+                'entityId' =>
+                    $this->getRequest()->getServer('Shib-Identity-Provider'),
+            ]
+        );
         $view->setTemplate('record/ziskej-order');
-        $view->user = $user;
-        $view->userCard = $userCard;    //@todo if firstname and lastname is empty
-        $view->ziskejReader = $ziskejReader;
-        $view->serverName = $this->getRequest()->getServer()->SERVER_NAME;
-        $view->entityId = $this->getRequest()->getServer('Shib-Identity-Provider');
-        // getDeduplicatedRecords has to be placed after create view model:
-        $dedupedRecordIds = $this->driver->tryMethod('getDeduplicatedRecordIds', [], []);
-        $view->dedupedRecordIds = $dedupedRecordIds;
+
+        // getDeduplicatedRecordIds has to be placed after create view model:
+        $view->setVariable(
+            'dedupedRecordIds',
+            $this->driver->tryMethod('getDeduplicatedRecordIds', [], [])
+        );
 
         return $view;
     }
 
     /**
-     * Ziskej order sended
+     * Create Získej order/ticket
      *
      * @return \Laminas\Stdlib\ResponseInterface
      *
@@ -142,7 +149,7 @@ class RecordController extends \VuFind\Controller\RecordController
         /**
          * User
          *
-         * @var \KnihovnyCz\Db\Row\User $user
+         * @var ?\KnihovnyCz\Db\Row\User $user
          */
         $user = $this->getUser();
         if (!$user) {
@@ -198,19 +205,27 @@ class RecordController extends \VuFind\Controller\RecordController
         $multibackend = $this->getILS()->getDriver();
 
         $userCard = $user->getCardByEppn($eppn);
+        if (!$userCard) {
+            $this->flashMessenger()->addMessage(
+                'Ziskej::error_account_not_active',
+                'warning'
+            );
+            return $this->redirectToRecord('', 'Ziskej');
+        }
 
         $responseReader = new Reader(
             $user->firstname,
             $user->lastname,
             $email,
-            $multibackend->sourceToSigla($userCard->home_library),
+            $multibackend->sourceToSigla($userCard->home_library) ?? '',
             true,
             true,
             $userCard->cat_username
         );
 
         $saveFunction = 'createReader';
-        if ($ziskejApi->getReader($userCard->eppn)) {
+        $eppn = $userCard->eppn;
+        if ($eppn && $ziskejApi->getReader($eppn)) {
             $saveFunction = 'updateReader';
         }
         $ziskejReader = $ziskejApi->$saveFunction($userCard->eppn, $responseReader);
@@ -228,18 +243,33 @@ class RecordController extends \VuFind\Controller\RecordController
         $ticketNew->setDocumentAltIds($this->params()->fromPost('doc_alt_ids'));
         $ticketNew->setNote($this->params()->fromPost('text'));
 
-        $ticket = $ziskejApi->createTicket($userCard->eppn, $ticketNew);
+        $ticket = null;
+        if ($eppn) {
+            $ticket = $ziskejApi->createTicket($eppn, $ticketNew);
+        }
 
+        if ($ticket) {
+            $this->flashMessenger()->addMessage(
+                'Ziskej::success_order_finished',
+                'success'
+            );
+
+            return $this->redirect()->toRoute(
+                'ziskej-order-finished',
+                [
+                    'eppnDomain' => $userCard->getEppnDomain(),
+                    'ticketId' => $ticket->getId(),
+                ]
+            );
+        }
         $this->flashMessenger()->addMessage(
             'Ziskej::success_order_finished',
-            'success'
+            'warning'
         );
-
         return $this->redirect()->toRoute(
             'ziskej-order-finished',
             [
                 'eppnDomain' => $userCard->getEppnDomain(),
-                'ticketId' => $ticket->getId(),
             ]
         );
     }

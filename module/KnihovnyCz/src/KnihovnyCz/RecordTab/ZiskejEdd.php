@@ -37,11 +37,9 @@ namespace KnihovnyCz\RecordTab;
  * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://knihovny.cz Main Page
  */
-class ZiskejEdd extends \VuFind\RecordTab\AbstractBase
+class ZiskejEdd extends ZiskejBase
 {
     private \KnihovnyCz\Ziskej\ZiskejEdd $_ziskejEdd;
-
-    private bool $_isZiskejActive = false;
 
     /**
      * Constructor
@@ -53,7 +51,7 @@ class ZiskejEdd extends \VuFind\RecordTab\AbstractBase
     ) {
         $this->_ziskejEdd = $ziskejEdd;
 
-        $this->_isZiskejActive = $ziskejEdd->isEnabled();
+        $this->isZiskejActive = $ziskejEdd->isEnabled();
     }
 
     /**
@@ -82,52 +80,12 @@ class ZiskejEdd extends \VuFind\RecordTab\AbstractBase
     }
 
     /**
-     * Get ZiskejMvs class
+     * Get ZiskejEdd class
      *
      * @return \KnihovnyCz\Ziskej\ZiskejEdd
      */
     public function getZiskejEdd(): \KnihovnyCz\Ziskej\ZiskejEdd
     {
         return $this->_ziskejEdd;
-    }
-
-    /**
-     * Return if ziskej is active
-     *
-     * @return bool
-     */
-    public function isZiskejActive(): bool
-    {
-        return $this->_isZiskejActive;
-    }
-
-    /**
-     * Get server name
-     *
-     * @return string|null
-     */
-    public function getServerName(): ?string
-    {
-        return $this->getRequest()->getServer()->SERVER_NAME;
-    }
-
-    /**
-     * Get entity id
-     *
-     * @return string|null
-     */
-    public function getEntityId(): ?string
-    {
-        return $this->getRequest()->getServer('Shib-Identity-Provider') ?: '';
-    }
-
-    /**
-     * Get deduplicated record ids
-     *
-     * @return string[]
-     */
-    public function getDedupedRecordIds(): array
-    {
-        return $this->driver->tryMethod('getDeduplicatedRecordIds', [], []);
     }
 }
