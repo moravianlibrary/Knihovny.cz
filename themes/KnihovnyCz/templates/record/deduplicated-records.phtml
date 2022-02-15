@@ -95,7 +95,11 @@
     <?php endif;?>
     <?php if ($recordMissing): ?>
       <div class="alert alert-warning" role="alert">
-        <?=$this->translate('Current record is missing in the view');?>
+        <?php if (($link = $this->recordLinker()->getLinkToMainPortal($this->driver)) != null) : ?>
+          <?=$this->translate("record_missing_in_view_with_link", ['%%url%%' => $link])?>
+        <?php else: ?>
+          <?=$this->translate('record_missing_in_view')?>
+        <?php endif; ?>
       </div>
     <?php endif; ?>
   </div>

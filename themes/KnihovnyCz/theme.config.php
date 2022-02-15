@@ -17,6 +17,7 @@ return [
                 return new $requestedName($dependency);
             },
             KnihovnyCz\View\Helper\KnihovnyCz\SearchTabs::class => \VuFind\View\Helper\Root\SearchTabsFactory::class,
+            KnihovnyCz\View\Helper\KnihovnyCz\RecordLinker::class => \KnihovnyCz\View\Helper\KnihovnyCz\RecordLinkerFactory::class,
         ],
         'invokables' => [
             \KnihovnyCz\View\Helper\KnihovnyCz\FooterLink::class,
@@ -34,6 +35,7 @@ return [
             'escapeElementId' => \KnihovnyCz\View\Helper\KnihovnyCz\EscapeElementId::class,
             'headTitle' => KnihovnyCz\View\Helper\KnihovnyCz\HeadTitle::class,
             'searchTabs' => KnihovnyCz\View\Helper\KnihovnyCz\SearchTabs::class,
+            'recordLinker' => KnihovnyCz\View\Helper\KnihovnyCz\RecordLinker::class,
         ],
     ],
     'favicon' => 'icon-knihovny.png',

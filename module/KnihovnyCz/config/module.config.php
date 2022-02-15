@@ -412,6 +412,14 @@ $config = [
                     'solrprefix' => \KnihovnyCz\Autocomplete\SolrPrefix::class,
                 ]
             ],
+            'recommend' => [
+                'factories' => [
+                    \KnihovnyCz\Recommend\RecommendOtherPortals::class => \VuFind\Recommend\InjectConfigManagerFactory::class,
+                ],
+                'aliases' => [
+                    'recommendotherportals' => \KnihovnyCz\Recommend\RecommendOtherPortals::class,
+                ],
+            ]
         ],
     ],
     'service_manager' => [
