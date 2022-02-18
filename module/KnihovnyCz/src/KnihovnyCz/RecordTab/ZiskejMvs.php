@@ -37,29 +37,27 @@ namespace KnihovnyCz\RecordTab;
  * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://knihovny.cz Main Page
  */
-class ZiskejMvs extends \VuFind\RecordTab\AbstractBase
+class ZiskejMvs extends ZiskejBase
 {
     private \VuFind\Auth\Manager $_authManager;
 
-    private \Vufind\ILS\Connection $_ilsDriver;
+    private \VuFind\ILS\Connection $_ilsDriver;
 
     private \Mzk\ZiskejApi\Api $_ziskejApi;
 
     private \KnihovnyCz\Ziskej\ZiskejMvs $_ziskejMvs;
 
-    private bool $_isZiskejActive = false;
-
     /**
      * Constructor
      *
      * @param \VuFind\Auth\Manager         $authManager Authentication manager
-     * @param \Vufind\ILS\Connection       $ilsDriver   ILS driver
+     * @param \VuFind\ILS\Connection       $ilsDriver   ILS driver
      * @param \Mzk\ZiskejApi\Api           $ziskejApi   Ziskej API connector
      * @param \KnihovnyCz\Ziskej\ZiskejMvs $ziskejMvs   Ziskej ILL model
      */
     public function __construct(
         \VuFind\Auth\Manager $authManager,
-        \Vufind\ILS\Connection $ilsDriver,
+        \VuFind\ILS\Connection $ilsDriver,
         \Mzk\ZiskejApi\Api $ziskejApi,
         \KnihovnyCz\Ziskej\ZiskejMvs $ziskejMvs
     ) {
@@ -68,7 +66,7 @@ class ZiskejMvs extends \VuFind\RecordTab\AbstractBase
         $this->_ziskejApi = $ziskejApi;
         $this->_ziskejMvs = $ziskejMvs;
 
-        $this->_isZiskejActive = $ziskejMvs->isEnabled();
+        $this->isZiskejActive = $ziskejMvs->isEnabled();
     }
 
     /**
@@ -107,16 +105,6 @@ class ZiskejMvs extends \VuFind\RecordTab\AbstractBase
     }
 
     /**
-     * Return if ziskej is active
-     *
-     * @return bool
-     */
-    public function isZiskejActive(): bool
-    {
-        return $this->_isZiskejActive;
-    }
-
-    /**
      * Get libraries connected in Ziskej
      *
      * @return array[]
@@ -152,36 +140,6 @@ class ZiskejMvs extends \VuFind\RecordTab\AbstractBase
     }
 
     /**
-     * Get server name
-     *
-     * @return string|null
-     */
-    public function getServerName(): ?string
-    {
-        return $this->getRequest()->getServer()->SERVER_NAME;
-    }
-
-    /**
-     * Get entity id
-     *
-     * @return string|null
-     */
-    public function getEntityId(): ?string
-    {
-        return $this->getRequest()->getServer('Shib-Identity-Provider') ?: '';
-    }
-
-    /**
-     * Get deduplicated record ids
-     *
-     * @return string[]
-     */
-    public function getDedupedRecordIds(): array
-    {
-        return $this->driver->tryMethod('getDeduplicatedRecordIds', [], []);
-    }
-
-    /**
      * Get ids of active libraries in Ziskej
      *
      * @return string[][]
@@ -196,6 +154,7 @@ class ZiskejMvs extends \VuFind\RecordTab\AbstractBase
         $ziskejLibs = $this->_ziskejApi->getLibrariesActive()->getAll();
 
         foreach ($ziskejLibs as $ziskejLib) {
+            /* @phpstan-ignore-next-line */
             $id = $this->_ilsDriver->siglaToSource($ziskejLib->getSigla());
             if (!empty($id)) {
                 $ziskejLibsIds[] = $id;

@@ -428,4 +428,27 @@ class XCNCIP2 extends \VuFind\ILS\Driver\XCNCIP2
         }
         return $profile;
     }
+
+    /**
+     * Get Default Pick Up Location
+     *
+     * Returns the default pick up location set in HorizonXMLAPI.ini
+     *
+     * @param array $patron      Patron information returned by the patronLogin
+     * method.
+     * @param array $holdDetails Optional array, only passed in when getting a list
+     * in the context of placing a hold; contains most of the same values passed to
+     * placeHold, minus the patron data.  May be used to limit the pickup options
+     * or may be ignored.
+     *
+     * @return string A location ID
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    public function getDefaultPickUpLocation($patron, $holdDetails = null)
+    {
+        return !empty($this->pickupLocations)
+            ? $this->pickupLocations[0]['locationID']
+            : false;
+    }
 }

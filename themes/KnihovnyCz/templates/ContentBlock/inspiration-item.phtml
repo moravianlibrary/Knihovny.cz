@@ -21,8 +21,8 @@ if ($cover):
       <?php if($thumbnail): ?>
         <?=$thumbnail?>
       <?php elseif(!empty($formats)): ?>
-        <div class='iconlabel formats-icon-label'>
-          <i class='pr-format-<?= $this->record($this->item)->getFormatClass($formats[0]) ?>'></i>
+        <div class='iconlabel'>
+          <i class='cover-icon <?= $this->record($this->item)->getFormatClass(end($formats)) ?>'></i>
         </div>
       <?php else: ?>
         <img class='recordcover'

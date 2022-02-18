@@ -4,6 +4,7 @@
 /** @var \KnihovnyCz\Db\Row\UserCard $userCard */
 $userCard = $this->userCard;
 $error = ($this->error ?? false);
+$itemIndex = 1;
 ?>
 <?php if ($userCard && $userCard->eppn): ?>
   <?php if ($this->isZiskejModeEnabled): ?>
@@ -30,6 +31,7 @@ $error = ($this->error ?? false);
               $record = $item['record'];
               ?>
               <li class="media well" id="record_<?=$ticket->getHid()?>" data-ziskej="<?=$ticket->getHid()?>">
+                <strong class="pull-left order"><?= $itemIndex++ ?>.</strong>
                 <?php
                 $thumbnail = false;
                 if ($record) {

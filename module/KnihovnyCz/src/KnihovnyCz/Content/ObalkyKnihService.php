@@ -40,11 +40,11 @@ namespace KnihovnyCz\Content;
 class ObalkyKnihService extends \VuFind\Content\ObalkyKnihService
 {
     /**
-     * API endpoint for authoritie
+     * Obalky knih checker
      *
      * @var string
      */
-    protected $authorityApiUrl;
+    protected $checkerUrl = '';
 
     /**
      * Constructor
@@ -59,8 +59,8 @@ class ObalkyKnihService extends \VuFind\Content\ObalkyKnihService
                 "Configuration for ObalkyKnih.cz service is not valid"
             );
         }
-        $this->authorityApiUrl
-            = $config->base_url[0] . $config->authority_endpoint . '/meta';
+
+        $this->checkerUrl = $config->checkerUrl ?? '';
     }
 
     /**
@@ -90,7 +90,12 @@ class ObalkyKnihService extends \VuFind\Content\ObalkyKnihService
      */
     protected function getAuthorityFromService(string $authId)
     {
-        $url = $this->authorityApiUrl . "?";
+        $url = $this->getBaseUrl();
+        if ($url === '') {
+            $this->logWarning('All ObalkyKnih servers are down.');
+            return null;
+        }
+        $url .= $this->endpoints['authority'] . '/meta?';
         $url .= http_build_query(['auth_id' => $authId]);
         $client = $this->getHttpClient($url);
         try {
@@ -100,5 +105,30 @@ class ObalkyKnihService extends \VuFind\Content\ObalkyKnihService
             return null;
         }
         return $response->isSuccess() ? json_decode($response->getBody())[0] : null;
+    }
+
+    /**
+     * Check base URLs and return the first available
+     *
+     * @return string
+     */
+    protected function getAliveUrl(): string
+    {
+        if (empty($this->checkerUrl)) {
+            return parent::getAliveUrl();
+        }
+        $aliveUrl = $this->getCachedData('aliveUrl');
+        if ($aliveUrl !== null) {
+            return $aliveUrl;
+        }
+        $client = $this->getHttpClient($this->checkerUrl);
+        $response = $client->send();
+        $client->setOptions(['timeout' => 1]);
+        if ($response->isSuccess()) {
+            $aliveUrl = trim($response->getBody(), '/"');
+            $this->putCachedData('aliveUrl', $aliveUrl, 30);
+            return $aliveUrl;
+        }
+        return $this->baseUrls[0];
     }
 }

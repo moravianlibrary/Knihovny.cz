@@ -1,5 +1,7 @@
 <?=$this->flashmessages()?>
-
+<?php
+  $itemIndex = 1;
+?>
 <?php if (!empty($this->transactions)): ?>
   <nav class="search-header hidden-print">
     <?php if ($this->paginator): ?>
@@ -7,6 +9,7 @@
         <?php
           $abs = $this->paginator->getAbsoluteItemNumber($this->paginator->getItemCountPerPage());
           $end = min($abs, $this->paginator->getTotalItemCount());
+          $itemIndex = $this->paginator->getAbsoluteItemNumber(1);
           $transParams = [
             '%%start%%' => $this->localizedNumber($this->paginator->getAbsoluteItemNumber(1)),
             '%%end%%' => $this->localizedNumber($end),
@@ -25,6 +28,7 @@
     <?php $i = 0; foreach ($this->transactions as $resource): ?>
       <?php $ilsDetails = $resource->getExtraDetail('ils_details'); ?>
       <li id="record<?=$this->escapeHtmlAttr($resource->getUniqueId())?>" class="result">
+        <strong class="pull-left order"><?= $itemIndex++ ?>.</strong>
         <?php
           $coverDetails = $this->record($resource)->getCoverDetails('checkedout', 'small', $this->recordLinker()->getUrl($resource));
           $cover = $coverDetails['html'];

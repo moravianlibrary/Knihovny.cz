@@ -1,5 +1,7 @@
 <?=$this->flashmessages()?>
-
+<?php
+  $itemIndex = 1;
+?>
 <?php if (!empty($this->recordList)): ?>
   <?php if ($this->cancelForm || $this->updateForm): ?>
     <form name="updateForm" class="inline" method="post" action="<?=$this->escapeHtmlAttr($this->url('holds-list'))?>" id="update_holds" data-clear-account-cache="holds" data-lightbox>
@@ -44,22 +46,25 @@
       <?php $iteration++; ?>
       <?php $ilsDetails = $resource->getExtraDetail('ils_details'); ?>
       <li id="record<?=$this->escapeHtmlAttr($resource->getUniqueId()) ?>" class="result">
-        <?php if (($this->cancelForm && isset($ilsDetails['cancel_details'])) || ($this->updateForm && isset($ilsDetails['updateDetails']))): ?>
-          <?php $safeId = preg_replace('/[^a-zA-Z0-9]/', '', $ilsDetails['cancel_details'] ?? $ilsDetails['updateDetails']); ?>
-          <?php if ($this->cancelForm && isset($ilsDetails['cancel_details'])): ?>
-            <input type="hidden" name="cancelAllIDS[]" value="<?=$this->escapeHtmlAttr($ilsDetails['cancel_details']) ?>" />
+        <div>
+          <strong class="pull-left order"><?= $itemIndex++ ?>.</strong>
+          <?php if (($this->cancelForm && isset($ilsDetails['cancel_details'])) || ($this->updateForm && isset($ilsDetails['updateDetails']))): ?>
+            <?php $safeId = preg_replace('/[^a-zA-Z0-9]/', '', $ilsDetails['cancel_details'] ?? $ilsDetails['updateDetails']); ?>
+            <?php if ($this->cancelForm && isset($ilsDetails['cancel_details'])): ?>
+              <input type="hidden" name="cancelAllIDS[]" value="<?=$this->escapeHtmlAttr($ilsDetails['cancel_details']) ?>" />
+            <?php endif; ?>
+            <div class="checkbox">
+              <label>
+                <input type="checkbox" name="selectedIDS[]" value="<?=$this->escapeHtmlAttr($ilsDetails['cancel_details'] ?? $ilsDetails['updateDetails']) ?>" id="checkbox_<?=$safeId?>" class="checkbox-select-item">
+              </label>
+            </div>
+          <?php elseif ($this->cancelForm || $this->updateForm): ?>
+            <?php // Reserve space for the checkbox to keep columns aligned ?>
+            <div class="checkbox">
+              <label></label>
+            </div>
           <?php endif; ?>
-          <div class="checkbox">
-            <label>
-              <input type="checkbox" name="selectedIDS[]" value="<?=$this->escapeHtmlAttr($ilsDetails['cancel_details'] ?? $ilsDetails['updateDetails']) ?>" id="checkbox_<?=$safeId?>" class="checkbox-select-item">
-            </label>
-          </div>
-        <?php elseif ($this->cancelForm || $this->updateForm): ?>
-          <?php // Reserve space for the checkbox to keep columns aligned ?>
-          <div class="checkbox">
-            <label></label>
-          </div>
-        <?php endif; ?>
+        </div>
 
         <?php
         $coverDetails = $this->record($resource)->getCoverDetails('holds', 'small', $this->recordLinker()->getUrl($resource));

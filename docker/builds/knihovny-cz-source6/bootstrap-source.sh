@@ -59,8 +59,15 @@ init_content_config() {
         "$CONFIG_CONTENT"
 }
 
+init_obalkyknih_config() {
+    CONFIG_OBALKY="${PARAM_VUFIND_CONFIG_ABS_DIR}/config/vufind/obalkyknih.local.ini"
+
+    cp /tmp/obalkyknih.local.template.ini "$CONFIG_OBALKY"
+}
+
 init_config_local "$@"
 init_eds_config "$@"
 init_search2_config "$@"
 init_content_config "$@"
+init_obalkyknih_config "$@"
 exit $?

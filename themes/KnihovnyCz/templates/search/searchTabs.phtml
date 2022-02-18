@@ -1,18 +1,13 @@
 <?php if (count($searchTabs) > 0): ?>
   <ul class="nav nav-pills">
     <?php foreach ($searchTabs as $tab): ?>
-        <?php
-          if (($tab['url'] ?? null) == '/Libraries/Home') {
-            $tab['url'] = '/Libraries/Results?type=AllLibraries';
-          }
-        ?>
-        <?php if ($this->permission()->allowDisplay($tab['permission'])): ?>
-          <li<?=$tab['selected'] ? ' class="active"' : ''?><?=$showCounts ? ' data-show-counts' : ''?>>
-            <a <?=$tab['selected'] ? '' : 'href="' . $this->escapeHtmlAttr($tab['url']) . '"' ?> data-source="<?=$this->escapeHtmlAttr($tab['class'])?>"><?=$this->transEsc($tab['label']); ?></a>
-          </li>
-        <?php elseif ($block = $this->permission()->getAlternateContent($tab['permission'])): ?>
-            <?=$block?>
-        <?php endif; ?>
+      <?php if ($this->permission()->allowDisplay($tab['permission'])): ?>
+        <li<?=$tab['selected'] ? ' class="active"' : ''?><?=$showCounts ? ' data-show-counts' : ''?>>
+          <a <?=$tab['selected'] ? '' : 'href="' . $this->escapeHtmlAttr($tab['url']) . '"' ?> data-source="<?=$this->escapeHtmlAttr($tab['class'])?>"><?=$this->transEsc($tab['label']); ?></a>
+        </li>
+      <?php elseif ($block = $this->permission()->getAlternateContent($tab['permission'])): ?>
+        <?=$block?>
+      <?php endif; ?>
     <?php endforeach; ?>
   </ul>
   <?php if ($showCounts): ?>
