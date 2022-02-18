@@ -29,8 +29,10 @@ declare(strict_types=1);
  */
 namespace KnihovnyCz\Search\Factory;
 
+use KnihovnyCz\Search\Solr\Backend\Response\Json\RecordCollection;
 use KnihovnyCz\Search\Solr\ChildDocDeduplicationListener;
 use KnihovnyCz\Search\Solr\DeduplicationListener;
+use KnihovnyCz\Search\Solr\JsonFacetListener;
 use VuFind\Search\Factory\SolrDefaultBackendFactory
     as ParentSolrDefaultBackendFactory;
 use VuFindSearch\Backend\Solr\Backend;
@@ -46,6 +48,46 @@ use VuFindSearch\Backend\Solr\Backend;
  */
 class SolrDefaultBackendFactory extends ParentSolrDefaultBackendFactory
 {
+    /**
+     * Record collection class for RecordCollectionFactory
+     *
+     * @var string
+     */
+    protected $recordCollectionClass = RecordCollection::class;
+
+    /**
+     * Create listeners.
+     *
+     * @param Backend $backend Backend
+     *
+     * @return void
+     */
+    protected function createListeners(Backend $backend)
+    {
+        parent::createListeners($backend);
+        $events = $this->serviceLocator->get('SharedEventManager');
+        $this->getJsonFacetListener($backend)->attach($events);
+    }
+
+    /**
+     * Get a JSON facet listener for the backend
+     *
+     * @param Backend $backend Search backend
+     *
+     * @return JsonFacetListener
+     */
+    protected function getJsonFacetListener(Backend $backend)
+    {
+        $listener = new JsonFacetListener(
+            $backend,
+            $this->serviceLocator,
+            $this->searchConfig,
+            $this->facetConfig
+        );
+        $listener->setLogger($this->logger);
+        return $listener;
+    }
+
     /**
      * Get a deduplication listener for the backend
      *
