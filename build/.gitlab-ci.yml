@@ -173,6 +173,22 @@ Deploy master image:
     name: devel
     url: $DEVEL_ENVIRONMENT_URL
 
+Deploy tech image:
+  extends: .deploy_image
+  variables:
+    APP_IMAGE_TAG: 'branch-${CI_COMMIT_BRANCH}'
+    DEPLOY_REPO_BRANCH: devel
+    DEPLOY_REPO_DIR: tech
+
+  rules:
+    - if: # deploy on dev2.1 branch
+        ( $CI_PIPELINE_SOURCE == "push" )  &&
+        ( $CI_COMMIT_BRANCH == "dev2.1" )
+
+  environment:
+    name: tech
+    url: $TECH_DEVEL_ENVIRONMENT_URL
+
 Debug CI:
   stage: test
   rules:
