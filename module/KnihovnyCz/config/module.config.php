@@ -441,6 +441,7 @@ $config = [
             \KnihovnyCz\ILS\Connection::class => \VuFind\ILS\ConnectionFactory::class,
             \KnihovnyCz\Date\Converter::class => \VuFind\Service\DateConverterFactory::class,
             \KnihovnyCz\Record\Loader::class => \VuFind\Record\LoaderFactory::class,
+            \KnihovnyCz\Search\SearchRunner::class => \VuFind\Search\SearchRunnerFactory::class,
         ],
         'aliases' => [
             \VuFind\Config\PluginManager::class => \KnihovnyCz\Config\PluginManager::class,
@@ -453,6 +454,8 @@ $config = [
             \VuFind\ILS\Connection::class => \KnihovnyCz\ILS\Connection::class,
             \VuFind\Date\Converter::class => \KnihovnyCz\Date\Converter::class,
             \VuFind\Record\Loader::class => \KnihovnyCz\Record\Loader::class,
+            \VuFind\Search\SearchRunner::class => \KnihovnyCz\Search\SearchRunner::class,
+            'VuFind\SearchRunner' => \KnihovnyCz\Search\SearchRunner::class,
         ],
         'invokables' => [
             \Symfony\Component\Filesystem\Filesystem::class,

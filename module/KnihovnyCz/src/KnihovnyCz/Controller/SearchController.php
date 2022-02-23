@@ -98,13 +98,8 @@ class SearchController extends \VuFind\Controller\SearchController
         $lang = $this->params()->fromQuery('lang', null);
         if ($lang != null) {
             $this->setLanguage($lang);
-            $view->language = $lang;
         }
-        $view->position = $this->params()->fromQuery('position', 'left');
-        $config = $this->getConfig("config");
-        $view->title = $config->Embedded->title ?? "logo_title";
-        $view->logo = $config->Embedded->logo_path ?? null;
-        $view->theme = $config->Site->theme ?? "";
+        $config = $this->getConfig('config');
         $databases = [
             'default' => [
                 'url' => '/Search/Results',
@@ -121,9 +116,21 @@ class SearchController extends \VuFind\Controller\SearchController
         ];
         $database = strtolower($this->params()->fromQuery('database', ''));
         $search = $databases[$database] ?? $databases['default'];
-        $baseUrl = rtrim($config->Site->url ?? "", '/');
-        $view->link = $baseUrl . $search['url'];
-        $view->type = $search['type'];
+        $router = $this->serviceLocator->get('HttpRouter');
+        $serverUrl = $this->serviceLocator->get('ViewRenderer')->plugin('serverurl');
+        $baseUrl = $serverUrl($router->assemble([], ['name' => 'home']));
+        $view->setVariables(
+            [
+                'link' => rtrim($baseUrl, '/') . $search['url'],
+                'type' => $search['type'],
+                'baseUrl' => $baseUrl,
+                'title' => $config->Embedded->title ?? 'logo_title',
+                'logo' => $config->Embedded->logo_path ?? null,
+                'theme' => $config->Site->theme ?? '',
+                'position' => $this->params()->fromQuery('position', 'left'),
+                'language' => $lang,
+            ]
+        );
         return $view;
     }
 

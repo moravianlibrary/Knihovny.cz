@@ -113,13 +113,21 @@ class GetObalkyKnihCoverWithoutSolr extends AbstractBase
                 self::STATUS_HTTP_BAD_REQUEST
             );
         }
-        $recordId = $params->fromQuery('recordId');
-        $format = $params->fromQuery('format');
+        $recordId = $params->fromQuery('recordId', '');
+        $format = $params->fromQuery('format', '');
         $ids = ['recordid' => $recordId];
-        foreach (['isbn', 'issn', 'ismn', 'ean', 'cnb'] as $id) {
+        $idWithoutPrefix = substr($recordId, strpos($recordId, '.') + 1);
+        if (substr($idWithoutPrefix, 0, 5) === 'uuid:'
+            && empty($ids['uuid'] ?? null)
+        ) {
+            $ids['uuid'] = $idWithoutPrefix;
+        }
+        foreach (['isbn', 'issn', 'ismn', 'ean', 'cnb', 'uuid'] as $id) {
             if ($value = $params->fromQuery($id, null)) {
                 $value = ($id === 'isbn') ? new ISBN($value) : $value;
                 $value = ($id === 'ismn') ? new ISMN($value) : $value;
+                $id = ($id === 'cnb') ? 'nbn' : $id;
+                $id = ($id === 'ean') ? 'upc' : $id;
                 $ids[$id] = $value;
             }
         }

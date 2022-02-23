@@ -25,7 +25,7 @@ COPY ./Gruntfile.local.js ${THEMES_BUILD_DIR}/
 
 COPY ./themes ${THEMES_BUILD_DIR}/themes
 WORKDIR ${THEMES_BUILD_DIR}/
-RUN npm install && grunt less -v
+RUN npm install && grunt less custom -v
 RUN rm ${THEMES_BUILD_DIR}/themes/root/css/.htaccess
 
 ########### install PHP libraries
@@ -38,8 +38,7 @@ ARG VUFIND_ROOT=/var/www/knihovny-cz
 RUN apt-get update && apt-get install -y unzip
 
 ## Install Composer
-RUN curl -sS https://getcomposer.org/installer \
-  | php -- --install-dir=/usr/local/bin --filename=composer
+COPY --from=docker.io/composer:latest /usr/bin/composer /usr/local/bin/composer
 
 # Prepare vufind build directories
 COPY --from=vufind-src  /src/vufind/composer.json ${VUFIND_ROOT}/composer.json

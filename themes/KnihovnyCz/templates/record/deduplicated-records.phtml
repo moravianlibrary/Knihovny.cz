@@ -54,7 +54,9 @@
               <span class="select2-selection__rendered" id="select2-institutions-container" role="textbox" aria-readonly="true" title="<?=$data[0]['text']?>">
                 <span class="institutions-selector">
                   <span class="image">
-                    <img src="<?=$data[0]['image']?>">
+                    <?php if (!empty($data[0]['image'])): ?>
+                      <img src="<?=$data[0]['image']?>">
+                    <?php endif; ?>
                   </span>
                   <span class="text"><?=$data[0]['text']?></span>
                 </span>
@@ -112,7 +114,10 @@ if ($recordsCount > 1) {
   $select2 = <<<JS
 var options = $dataJson;
 function template(option) {
-  return $('<span class="institutions-selector"><span class="image"><img src="' + option.image + '"></span><span class="text">' + option.text + '</span></span>');
+  if (option.image) {
+    return $('<span class="institutions-selector"><span class="image"><img src="' + option.image + '"></span><span class="text">' + option.text + '</span></span>');
+  }
+  return $('<span class="institutions-selector"><span class="image"></span><span class="text">' + option.text + '</span></span>');
 }
 
 jQuery(document).ready(function($) {
