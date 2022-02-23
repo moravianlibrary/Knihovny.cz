@@ -25,7 +25,7 @@ COPY ./Gruntfile.local.js ${THEMES_BUILD_DIR}/
 
 COPY ./themes ${THEMES_BUILD_DIR}/themes
 WORKDIR ${THEMES_BUILD_DIR}/
-RUN npm install && grunt less -v
+RUN npm install && grunt less custom -v
 RUN rm ${THEMES_BUILD_DIR}/themes/root/css/.htaccess
 
 ########### install PHP libraries
