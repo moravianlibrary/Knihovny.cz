@@ -349,7 +349,7 @@ WHERE src.id IN (SELECT id FROM inst_sources WHERE driver = 'aleph') AND ic1.val
   AND NOT EXISTS(SELECT 1 FROM inst_configs ic WHERE ic.key_id = @dlfbaseurl AND ic.source_id = src.id);
 
 -- SVK HK does not run REST API on SSL
-UPDATE inst_configs SET value = REPLACE(value, 'https://', 'http://')
+UPDATE inst_configs SET value = REPLACE(value, 'http://', 'https://')
 WHERE source_id IN (
   SELECT id FROM inst_sources WHERE source
   IN ('svkhk')
