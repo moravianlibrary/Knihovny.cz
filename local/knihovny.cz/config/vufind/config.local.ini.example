@@ -74,6 +74,10 @@ type = File
 [Mail]
 sms = disabled
 
+[GoogleTagManager]
+apiKey = "ABC-123456"
+salt = "some salt"
+
 [Parent_Config]
 relative_path = ../../../base/config/vufind/config.ini
 
