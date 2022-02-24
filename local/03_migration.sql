@@ -161,6 +161,7 @@ ALTER TABLE `user_card`
 --
 -- Odstranění nepoužívaných tabulek
 --
+ALTER TABLE `user_settings` DROP FOREIGN KEY `user_settings_ibfk_2`;
 DROP TABLE `frontend`;
 DROP TABLE `infobox`;
 DROP TABLE `inspirations`;
@@ -272,10 +273,17 @@ WHERE a.id < b.id
 UPDATE user_card uc
 JOIN inst_sources lib ON uc.home_library = lib.source
 SET uc.edu_person_unique_id = CONCAT(SUBSTR(uc.cat_username, POSITION('.' IN uc.cat_username) + 1), SUBSTR(uc.eppn, POSITION('@' IN uc.eppn)))
-WHERE lib.driver IN ('aleph', 'koha');
+WHERE lib.driver IN ('koha') OR lib.source IN('kkpc', 'ntk', 'svkhk', 'knav', 'vkol');
+
+UPDATE user_card uc
+  JOIN inst_sources lib ON uc.home_library = lib.source
+  SET uc.edu_person_unique_id = uc.eppn
+WHERE lib.source IN ('mzk', 'svkos', 'svkpk', 'uzei');
+
+-- For migrating of NKP identities, there is extra script updating epui using concrete eppns
 
 -- migration for other IdPs - attribute edu_person_unique_id is same as eppn
-UPDATE user_card SET edu_person_unique_id = eppn WHERE edu_person_unique_id IS NULL AND home_library NOT IN ('Dummy', 'rkka', 'nlk');
+UPDATE user_card SET edu_person_unique_id = eppn WHERE edu_person_unique_id IS NULL AND home_library NOT IN ('Dummy', 'rkka', 'nlk', 'nkp');
 CREATE UNIQUE INDEX user_card_edu_person_unique_id_uq ON user_card(edu_person_unique_id(190));
 
 --
