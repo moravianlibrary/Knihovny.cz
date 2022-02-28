@@ -26,7 +26,7 @@
         <tbody>
         <?php $links = $this->driver->getLinks(); if (!empty($links)): ?>
             <?php foreach ($links as $link):
-                if ($link['status'] === 'online' || $link['status'] === 'dnnt') {
+                if ($link['status'] === 'online' || $link['status'] === 'dnnt' || $link['status'] === 'member') {
                     $statusClass = 'success';
                 } elseif ($link['status'] === 'unknown' || $link['status'] === 'na') {
                     $statusClass = 'default';
