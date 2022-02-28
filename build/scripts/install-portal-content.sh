@@ -44,3 +44,6 @@ chown -R www-data:www-data /git/portal-pages
 
 cp -r /git/portal-pages/data/* /var/www/knihovny-cz/themes/KnihovnyCz/
 
+chown www-data:www-data -R /var/www/knihovny-cz/themes/KnihovnyCz/templates/ContentBlock
+chown www-data:www-data -R /var/www/knihovny-cz/themes/KnihovnyCz/templates/content
+
