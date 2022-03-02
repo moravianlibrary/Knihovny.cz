@@ -74,7 +74,6 @@ class CitaceProService implements \VuFindHttp\HttpServiceAwareInterface
             ? $style : $this->getDefaultCitationStyle();
 
         $query = [
-            'server' => $this->getCitationLocalDomain(),
             'citacniStyl' => $style
         ];
         $citationServerUrl = "https://www.citacepro.com/api/cpk/citace/"
@@ -128,19 +127,5 @@ class CitaceProService implements \VuFindHttp\HttpServiceAwareInterface
     public function getDefaultCitationStyle(): string
     {
         return $this->config->Citation->default_citation_style;
-    }
-
-    /**
-     * Get local domain
-     *
-     * @return string
-     */
-    protected function getCitationLocalDomain(): string
-    {
-        return str_replace(
-            "www.",
-            "",
-            $this->config->Citation->citation_local_domain
-        );
     }
 }
