@@ -27,8 +27,10 @@ declare(strict_types=1);
  * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://knihovny.cz Main Page
  */
+
 namespace KnihovnyCz\Controller;
 
+use Laminas\Http\Response;
 use VuFind\Exception\LibraryCard;
 
 /**
@@ -42,6 +44,24 @@ use VuFind\Exception\LibraryCard;
  */
 class ZiskejController extends AbstractBase
 {
+    /**
+     * Ziskej payment page
+     *
+     * @return \Laminas\Http\Response
+     */
+    public function paymentAction(): Response
+    {
+        $eppnDomain = $this->params()->fromRoute('eppnDomain');
+        $ticketId = $this->params()->fromRoute('ticketId');
+
+        return $this->redirect()->toRoute(
+            'myresearch-ziskej-ticket', [
+                'eppnDomain' => $eppnDomain,
+                'ticketId' => $ticketId,
+            ]
+        );
+    }
+
     /**
      * Ziskej order finished page
      *
