@@ -182,6 +182,20 @@ $config = [
                      ],
                  ],
              ],
+             'ziskej-payment' => [
+                 'type' => \Laminas\Router\Http\Segment::class,
+                 'options' => [
+                     'route' => '/ziskej/payment/:eppnDomain/:ticketId/:paymentTransactionId',
+                     'constraints' => [
+                         'eppnDomain' => '.*',
+                         'ticketId' => '.*',
+                     ],
+                     'defaults' => [
+                         'controller' => 'Ziskej',
+                         'action' => 'Payment',
+                     ],
+                 ],
+             ],
              'ziskej-order-finished' => [
                  'type' => \Laminas\Router\Http\Segment::class,
                  'options' => [
