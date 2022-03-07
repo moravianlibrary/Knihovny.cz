@@ -41,11 +41,14 @@ RUN apt-get update && apt-get install -y \
         ssh \
         vim \
         locales \
-        nodejs \
-        npm \
+        python \
         ${TMP_DEV_PKGS} \
     && apt-get clean \
     && apt-get autoremove -y
+
+# NODEJS, NPM \
+RUN curl -fsSL https://deb.nodesource.com/setup_14.x | bash - \
+    && apt-get install -y nodejs
 
 # Set Czech locales
 RUN sed -i -e 's/# cs_CZ.UTF-8 UTF-8/cs_CZ.UTF-8 UTF-8/' /etc/locale.gen && \
