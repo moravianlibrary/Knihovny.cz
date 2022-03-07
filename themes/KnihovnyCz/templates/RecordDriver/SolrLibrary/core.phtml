@@ -2,7 +2,10 @@
 <div class="row">
     <div class="col-md-6 library-detail">
         <!-- Library name -->
-        <h1 property="name" class="record-title"><?=$this->escapeHtml($this->driver->getTitle())?></h1>
+        <?php
+          $sigla = $this->driver->getSigla();
+        ?>
+        <h1 property="name" class="record-title" data-sigla="<?=$sigla ?: 'undefined' ?>"><?=$this->escapeHtml($this->driver->getTitle())?></h1>
         <?php /* Display Main Details */ ?>
         <?php
             $formatter = $this->recordDataFormatter();

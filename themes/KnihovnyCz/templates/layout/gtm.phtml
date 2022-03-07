@@ -1,0 +1,91 @@
+<?php
+
+/* Chapter 2.1 - user information */
+$user = $this->auth()->isLoggedIn();
+$hashedUserId = $user ? "'" . $user->getHashedId() . "'" : 'undefined';
+$institutions = $user ? "'" . $user->getConnectedInstitutionsForGTM() . "'" : '';
+$institutions = empty($institutions) ? 'undefined' : $institutions;
+
+$gtmUser = <<<JS
+dataLayer.push({
+  'user': {
+    'loggedIn': userIsLoggedIn ? 'Ano' : 'Ne',
+    'userId': $hashedUserId,
+    'loginType': $institutions
+  }
+});
+JS;
+
+echo $this->inlineScript(\Laminas\View\Helper\HeadScript::SCRIPT, $gtmUser, 'SET');
+
+/* Chapter 3.1 - page information */
+/*
+ * Categories:
+ *    frontpage
+ *    search
+ *    account
+ *    info
+ *    record
+ *    library
+ *    error
+ * Types:
+ *    detail
+ *    list
+ *    other
+ */
+
+$gtmPage = <<<JS
+  const pathParts = window.location.pathname.split('/').slice(1);
+  let category;
+  switch (pathParts[0]) {
+      case '':
+          category = 'frontpage'
+          break
+      case 'Search':
+          category = 'search'
+          break;
+      case 'MyResearch':
+      case 'MyResearchZiskej':
+          category = 'account'
+          break;
+      case 'Content':
+      case 'Feedback':
+          category = 'info'
+          break;
+      case 'Record':
+          category = 'record'
+          break;
+      case 'Libraries':
+      case 'LibraryRecord':
+          category = 'library'
+          break;
+      case '???': //TODO how to detect error page?
+          category = 'error'
+          break;
+
+  }
+  let type = 'other';
+  switch (pathParts[0]) {
+      case 'LibraryRecord':
+      case 'Record':
+          type = 'detail';
+          break;
+      case 'Search':
+          type = 'list'
+          break;
+  }
+
+  dataLayer.push({
+    'page': {
+        'title': document.getElementsByTagName('title')[0].textContent,
+        'language': document.getElementsByTagName('html')[0].getAttribute('lang'),
+        'category': category,
+        'type': type,
+        'library': document.getElementsByClassName('record-title')[0]
+                    ? document.getElementsByClassName('record-title')[0].dataset.sigla
+                    : undefined
+    }
+  });
+JS;
+
+echo $this->inlineScript(\Laminas\View\Helper\HeadScript::SCRIPT, $gtmPage, 'SET');

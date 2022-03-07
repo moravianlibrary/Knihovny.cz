@@ -1,6 +1,7 @@
 <?php $this->metadata()->generateMetatags($this->driver);?>
 <div class="media" vocab="http://schema.org/" resource="#record" typeof="<?=$this->driver->getSchemaOrgFormats()?> Product">
   <?php
+    $sigla = $this->driver->getSiglaDisplay();
     $QRCode = $this->record($this->driver)->getQRCode("core");
     $coverDetails = $this->record($this->driver)->getCoverDetails('core', 'medium', $this->record($this->driver)->getThumbnail('large'));
     $cover = $coverDetails['html'];
@@ -33,8 +34,7 @@
     </div>
   <?php endif; ?>
   <div class="media-body">
-
-    <h1 property="name"><?=$this->escapeHtml($this->driver->getShortTitle())?></h1>
+    <h1 property="name" class="record-title" data-sigla="<?=$sigla ?: 'undefined' ?>"><?=$this->escapeHtml($this->driver->getShortTitle())?></h1>
     <p>
       <a class="btn btn-primary" href="#tabnav" data-scrollto-target="[name='tabnav']">
         <i class="fa fa-hand-paper-o mr-05"></i><?=$this->transEsc('Want it') ?>
