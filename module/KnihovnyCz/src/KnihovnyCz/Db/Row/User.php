@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 /**
  * Class User
@@ -145,7 +146,7 @@ class User extends Base
      * @return void
      * @throws \VuFind\Exception\LibraryCard
      */
-    public function deleteLibraryCard($id)
+    public function deleteLibraryCard($id): void
     {
         if (!$this->libraryCardsEnabled()) {
             throw new \VuFind\Exception\LibraryCard('Library Cards Disabled');
@@ -186,7 +187,7 @@ class User extends Base
      * @return void
      * @throws \VuFind\Exception\LibraryCard
      */
-    public function activateLibraryCard($id)
+    public function activateLibraryCard($id): void
     {
         if (!$this->libraryCardsEnabled()) {
             throw new \VuFind\Exception\LibraryCard('Library Cards Disabled');
@@ -209,7 +210,7 @@ class User extends Base
      *
      * @return int
      */
-    public function save()
+    public function save(): int
     {
         // modification for GDPR - do not store last name, first name and email
         // in database
@@ -246,7 +247,7 @@ class User extends Base
      * @return void
      * @throws \VuFind\Exception\PasswordSecurity
      */
-    protected function updateLibraryCardEntry()
+    protected function updateLibraryCardEntry(): void
     {
         if (!$this->libraryCardsEnabled() || empty($this->cat_username)) {
             return;
@@ -317,5 +318,30 @@ class User extends Base
     public function isSocial()
     {
         return empty($this->getLibraryCardsWithILS());
+    }
+
+    /**
+     * Returns salted sha1 hashed id for purposes of google analytics
+     *
+     * @return string
+     */
+    public function getHashedId(): string
+    {
+        return hash(
+            'sha1',
+            $this->cat_username . ($this->config->GoogleTagManager->salt ?? '')
+        );
+    }
+
+    /**
+     * Returns string with connected institutions for purposes of Google Analytics
+     * Institutions are separated by commas
+     * For no institutions empty string is returned
+     *
+     * @return string
+     */
+    public function getConnectedInstitutionsForGTM(): string
+    {
+        return implode(',', $this->getLibraryPrefixes());
     }
 }
