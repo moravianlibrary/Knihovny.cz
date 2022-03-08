@@ -1,12 +1,17 @@
 module.exports = function(grunt) {
   grunt.registerTask("custom", function custom() {
+    var lessFileSettings = [{
+      expand: true,
+      src: "themes/*/less/embedded-search.less",
+      rename: function (dest, src) {
+        return src.replace('/less/', '/css/').replace('.less', '.css');
+      }
+    }];
     grunt.initConfig({
       // LESS compilation
       less: {
         compile: {
-          files: {
-            "./themes/KnihovnyCz/css/embedded-search.css": "./themes/KnihovnyCz/less/embedded-search.less"
-          },
+          files: lessFileSettings,
           options: {
             compress: true,
           }
