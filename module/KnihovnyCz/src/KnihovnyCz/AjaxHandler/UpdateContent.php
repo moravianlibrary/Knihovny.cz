@@ -121,9 +121,9 @@ class UpdateContent extends \VuFind\AjaxHandler\AbstractBase
 
         // All initial test are OK, we could try to do the content update
         $this->git->checkout($branch);
-        $gitOutput = $this->git->pull();
+        $gitOutput = $this->git->pull('--rebase');
         $sourceDir = $this->git->getDirectory() . '/data';
-        $destinationDir = '/var/www/knihovny-cz-extension/themes/KnihovnyCz';
+        $destinationDir = '/var/www/knihovny-cz/themes/KnihovnyCz';
 
         try {
             $this->filesystem->mirror($sourceDir, $destinationDir);

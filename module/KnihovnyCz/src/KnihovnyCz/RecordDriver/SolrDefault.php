@@ -184,7 +184,11 @@ class SolrDefault extends \VuFind\RecordDriver\SolrDefault
      */
     public function getCitationRecordType()
     {
-        return $this->fields['citation_record_type_str'] ?? '';
+        if (!empty($this->fields['citation_record_type_str'])) {
+            return $this->fields['citation_record_type_str'];
+        }
+        $parent = $this->getParentRecord();
+        return ($parent !== null) ? $parent->getCitationRecordType() : '';
     }
 
     /**

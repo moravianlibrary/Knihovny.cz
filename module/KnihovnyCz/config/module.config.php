@@ -40,7 +40,7 @@ $config = [
                      ],
                  ],
              ],
-             'inspiration-show' => [
+             'inspiration-show-legacy' => [
                  'type' => \Laminas\Router\Http\Segment::class,
                  'options' => [
                      'route' => '/inspirace/[:list]',
@@ -50,6 +50,17 @@ $config = [
                      ],
                  ],
              ],
+             'inspiration-show' => [
+                 'type' => \Laminas\Router\Http\Segment::class,
+                 'options' => [
+                     'route' => '/Inspiration/[:list]',
+                     'defaults' => [
+                         'controller' => 'Inspiration',
+                         'action' => 'Show'
+                     ],
+                 ],
+             ],
+
              'inspiration-home-legacy' => [
                  'type' => \Laminas\Router\Http\Segment::class,
                  'options' => [
@@ -179,6 +190,20 @@ $config = [
                      'defaults' => [
                          'controller' => 'Record',
                          'action' => 'ZiskejOrderPost'
+                     ],
+                 ],
+             ],
+             'ziskej-payment' => [
+                 'type' => \Laminas\Router\Http\Segment::class,
+                 'options' => [
+                     'route' => '/ziskej/payment/:eppnDomain/:ticketId/:paymentTransactionId',
+                     'constraints' => [
+                         'eppnDomain' => '.*',
+                         'ticketId' => '.*',
+                     ],
+                     'defaults' => [
+                         'controller' => 'Ziskej',
+                         'action' => 'Payment',
                      ],
                  ],
              ],

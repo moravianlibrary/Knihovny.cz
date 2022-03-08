@@ -398,3 +398,7 @@ itemIds:
   type: array
   items:
     type: string
+citationRecordType:
+  vufind.method: getCitationRecordType
+  description: Citation type needed to generate citation on Citace.com
+  type: string
