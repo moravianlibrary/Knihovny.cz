@@ -7,11 +7,7 @@ docker/builds/knihovny-cz-base6/composer.local.json
 docker/data
 nohup.out
 local/*/cache/
-local/knihovny.cz/config/vufind/*.local.ini
-local/irel/config/vufind/*.local.ini
-local/kiv/config/vufind/*.local.ini
-local/mus/config/vufind/*.local.ini
-local/tech/config/vufind/*.local.ini
+local/*/config/vufind/*.local.ini
 themes/KnihovnyCz/css/compiled.css
 themes/KnihovnyCz/css/embedded-search.css
 themes/KnihovnyCz/images/content

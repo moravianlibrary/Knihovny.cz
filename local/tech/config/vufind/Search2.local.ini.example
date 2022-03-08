@@ -5,15 +5,11 @@
 
 ; Any specific configuration for this view/instance should be in this file
 
+[Index]
+engine = Solr
+url = http://solr-dev.app.knihovny.cz/solr
+default_core = front
+perf_log = /var/www/knihovny-cz/log/solr-json.log
+
 [Parent_Config]
-relative_path = config.local.ini
-
-[Site]
-theme           = tech
-
-[Authentication]
-hideLogin = true
-
-;Configuration parameters for theme of the site
-[Theme]
-logo_path = logo-tech.png
+relative_path = ../../../base/config/vufind/Search2.ini

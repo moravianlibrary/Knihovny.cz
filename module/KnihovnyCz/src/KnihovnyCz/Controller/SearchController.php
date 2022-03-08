@@ -99,7 +99,8 @@ class SearchController extends \VuFind\Controller\SearchController
         if ($lang != null) {
             $this->setLanguage($lang);
         }
-        $config = $this->getConfig('config');
+
+        $config = $this->getConfig("config");
         $databases = [
             'default' => [
                 'url' => '/Search/Results',
@@ -125,7 +126,6 @@ class SearchController extends \VuFind\Controller\SearchController
                 'type' => $search['type'],
                 'baseUrl' => $baseUrl,
                 'title' => $config->Embedded->title ?? 'logo_title',
-                'logo' => $config->Embedded->logo_path ?? null,
                 'theme' => $config->Site->theme ?? '',
                 'position' => $this->params()->fromQuery('position', 'left'),
                 'language' => $lang,
