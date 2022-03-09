@@ -86,7 +86,7 @@ Build image:
     # Push dev2.1
     - |
         if [ "$CI_PIPELINE_SOURCE" == "push" ]; then
-            if [ "$CI_COMMIT_BRANCH" == "dev2.1"]; then
+            if [ "$CI_COMMIT_BRANCH" == "dev2.1" ]; then
               echo ${TARGET_REGISTRY_URL}/${TARGET_IMAGE_NAME}:branch-${CI_COMMIT_BRANCH}
               docker tag ${TARGET_REGISTRY_URL}/${TARGET_IMAGE_NAME}:build ${TARGET_REGISTRY_URL}/${TARGET_IMAGE_NAME}:branch-${CI_COMMIT_BRANCH}
               docker push --quiet ${TARGET_REGISTRY_URL}/${TARGET_IMAGE_NAME}:branch-${CI_COMMIT_BRANCH}
