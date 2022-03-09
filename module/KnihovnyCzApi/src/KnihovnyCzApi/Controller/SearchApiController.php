@@ -111,12 +111,12 @@ class SearchApiController extends \VuFindApi\Controller\SearchApiController
     }
 
     /**
-     * Get Swagger specification JSON fragment for services provided by the
+     * Get API specification JSON fragment for services provided by the
      * controller
      *
      * @return string
      */
-    public function getSwaggerSpecFragment()
+    public function getApiSpecFragment()
     {
         $config = $this->getConfig();
         $results = $this->getResultsManager()->get($this->searchClassId);
@@ -144,7 +144,7 @@ class SearchApiController extends \VuFindApi\Controller\SearchApiController
             'itemFields' => $this->itemFormatter->getRecordFieldSpec(),
         ];
         $json = $this->getViewRenderer()->render(
-            'searchapi/swagger',
+            'searchapi/openapi',
             $viewParams
         );
         return $json;
