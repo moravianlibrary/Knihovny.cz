@@ -38,5 +38,31 @@ return [
             'searchTabs' => KnihovnyCz\View\Helper\KnihovnyCz\SearchTabs::class,
         ],
     ],
+    'icons' => [
+        'aliases' => [
+            /**
+             * Icons can be assigned or overriden here
+             *
+             * Format: 'icon' => [set:]icon[:extra_classes]
+             * Icons assigned without set will use the defaultSet.
+             * In order to specify extra CSS classes, you must also specify a set.
+             *
+             * All of the items below have been specified with FontAwesome to allow
+             * for a strong inheritance safety net but this is not required.
+             */
+            // UI
+            'cart' => 'FontAwesome:suitcase:fa-fw',
+            'cart-add' => 'FontAwesome:plus-circle',
+            'cite' => 'FontAwesome:commenting-o',
+            'dropdown-caret' => 'FontAwesome:caret-down:fa-fw',
+            'feedback' => 'FontAwesome:comments-o:fa-fw',
+            'language-select' => 'FontAwesome:globe:fa-fw',
+            'my-account' => 'FontAwesome:user-circle-o:fa-fw',
+            'sign-in' => 'FontAwesome:sign-in:fa-fw',
+            'sign-out' => 'FontAwesome:sign-out:fa-fw',
+            'ui-menu' => 'FontAwesome:bars:fa-fw',
+            'user-ziskej' => 'FontAwesome:file-text:fa-fw',
+        ],
+    ],
     'favicon' => 'icon-knihovny.png',
 ];

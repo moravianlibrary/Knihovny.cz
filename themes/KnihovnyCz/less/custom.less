@@ -520,12 +520,6 @@ h6:hover .heading-permalink {
   font-size: inherit;
 }
 
-.btn-type-cite::before {
-  content: "\f27b";
-}
-
-// .fa-commenting-o
-
 #citation-container {
   margin-bottom: 2em;
 }
@@ -854,4 +848,16 @@ div .library-card-ajax {
 .similar-items-container .cover-container
 {
     display:none;
+}
+
+#cartItems sup {
+  position: absolute;
+  top: 10px;
+  left: 6px;
+}
+
+@media (max-width: @screen-sm-max) {
+  #cartItems sup {
+    top: 3px;
+  }
 }
