@@ -54,6 +54,7 @@ return [
             'cart' => 'FontAwesome:suitcase:fa-fw',
             'cart-add' => 'FontAwesome:plus-circle',
             'cite' => 'FontAwesome:commenting-o',
+            'currency-czk' => 'FontAwesome:money',
             'dropdown-caret' => 'FontAwesome:caret-down:fa-fw',
             'feedback' => 'FontAwesome:comments-o:fa-fw',
             'language-select' => 'FontAwesome:globe:fa-fw',
