@@ -64,6 +64,6 @@ abstract class LinkServiceAbstractBase implements LinkServiceInterface,
             return [];
         }
         $body = $response->getBody();
-        return empty($body) ? [] : json_decode($body), true);
+        return empty($body) ? [] : json_decode($body, true);
     }
 }
