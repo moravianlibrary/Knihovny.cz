@@ -28,6 +28,10 @@
  */
 namespace KnihovnyCz\ContentBlock;
 
+use KnihovnyCz\Db\Row\UserList as UserListRow;
+use Laminas\Db\ResultSet\ResultSetInterface;
+use Laminas\Db\Sql\Select;
+
 /**
  * Class UserList
  *
@@ -37,57 +41,67 @@ namespace KnihovnyCz\ContentBlock;
  * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://knihovny.cz Main Page
  */
-class UserList implements \VuFind\ContentBlock\ContentBlockInterface
+class UserList extends AbstractDbAwaredRecordIds
 {
-    /**
-     * Search class ID to use for retrieving facets.
-     *
-     * @var string
-     */
-    protected $searchClassId = 'Favorites';
-
     /**
      * User list id
      *
      * @var string
      */
-    protected $listId;
+    protected string $listId;
 
     /**
-     * Limit
+     * Table for main list
      *
-     * @var int
+     * @var string
      */
-    protected $limit;
+    protected string $listTableName = \VuFind\Db\Table\UserList::class;
 
     /**
-     * Search runner
+     * Table for list items
      *
-     * @var \VuFind\Search\SearchRunner
+     * @var string
      */
-    protected $runner;
+    protected string $itemsTableName = \VuFind\Db\Table\UserResource::class;
 
     /**
-     * Constructor
+     * Modify select for getting list items
      *
-     * @param \VuFind\Search\SearchRunner $runner Search runner
+     * @param Select $select
+     *
+     * @return void
      */
-    public function __construct(\VuFind\Search\SearchRunner $runner)
+    protected function setSelect(Select $select): void
     {
-        $this->runner = $runner;
+        $select->where->equalTo('list_id', $this->listId);
+        $select->columns(['id']);
+        $select->join(
+            'resource',
+            'resource.id = user_resource.resource_id',
+            ['record_id']
+        );
     }
 
     /**
-     * Get user list
+     * Takes and returns record ids from result set
      *
-     * @return \VuFind\Search\Base\Results
+     * @param ResultSetInterface $items
+     *
+     * @return array
      */
-    protected function getUserList()
+    protected function getIds(ResultSetInterface $items): array
     {
-        return $this->runner->run(
-            ['id' => $this->listId, 'limit' => $this->limit],
-            $this->searchClassId
-        );
+        return array_column($items->toArray(), 'record_id');
+    }
+
+    /**
+     * Get slug identifier to search for
+     *
+     * @return string
+     */
+    protected function getSlug(): string
+    {
+        return ($this->getList()) ? $this->getList()->getSlug() : '';
     }
 
     /**
@@ -102,19 +116,6 @@ class UserList implements \VuFind\ContentBlock\ContentBlockInterface
         $parsedSettings = explode(':', $settings);
         $this->listId = $parsedSettings[0];
         $this->limit = (int)($parsedSettings[1] ?? 5);
-    }
-
-    /**
-     * Return context variables used for rendering the block's template.
-     *
-     * @return array
-     */
-    public function getContext()
-    {
-        return [
-            'listId' => $this->listId,
-            'results' => $this->getUserList(),
-            'searchClassId' => $this->searchClassId,
-        ];
+        $this->listParams = [ 'id' => $this->listId, 'public' => 1];
     }
 }

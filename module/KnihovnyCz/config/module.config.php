@@ -331,8 +331,8 @@ $config = [
             'contentblock' => [
                 'factories' => [
                     \KnihovnyCz\ContentBlock\DocumentTypes::class => \KnihovnyCz\ContentBlock\DocumentTypesFactory::class,
-                    \KnihovnyCz\ContentBlock\Inspiration::class => \KnihovnyCz\ContentBlock\InspirationFactory::class,
-                    \KnihovnyCz\ContentBlock\UserList::class => \KnihovnyCz\ContentBlock\UserListFactory::class,
+                    \KnihovnyCz\ContentBlock\Inspiration::class => \KnihovnyCz\ContentBlock\AbstractDbAwaredRecordIdsFactory::class,
+                    \KnihovnyCz\ContentBlock\UserList::class => \KnihovnyCz\ContentBlock\AbstractDbAwaredRecordIdsFactory::class,
                 ],
                 'aliases' => [
                     'documenttypes' => \KnihovnyCz\ContentBlock\DocumentTypes::class,
@@ -350,10 +350,12 @@ $config = [
                     \KnihovnyCz\Db\Row\User::class => \VuFind\Db\Row\UserFactory::class,
                     \KnihovnyCz\Db\Row\UserCard::class => \VuFind\Db\Row\RowGatewayFactory::class,
                     \KnihovnyCz\Db\Row\CsrfToken::class => \VuFind\Db\Row\RowGatewayFactory::class,
+                    \KnihovnyCz\Db\Row\UserList::class => \VuFind\Db\Row\UserListFactory::class
                 ],
                 'aliases' => [
                     \VuFind\Db\Row\User::class => \KnihovnyCz\Db\Row\User::class,
                     \VuFind\Db\Row\UserCard::class => \KnihovnyCz\Db\Row\UserCard::class,
+                    \VuFind\Db\Row\UserList::class => \KnihovnyCz\Db\Row\UserList::class,
                 ]
             ],
             'db_table' => [
