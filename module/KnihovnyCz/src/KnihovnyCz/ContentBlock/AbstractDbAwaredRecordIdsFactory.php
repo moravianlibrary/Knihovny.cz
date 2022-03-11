@@ -44,7 +44,7 @@ use Laminas\ServiceManager\Factory\FactoryInterface;
  * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://knihovny.cz Main Page
  */
-class InspirationFactory implements FactoryInterface
+class AbstractDbAwaredRecordIdsFactory implements FactoryInterface
 {
     /**
      * Create an object

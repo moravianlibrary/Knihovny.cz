@@ -72,7 +72,9 @@ class HarvestWidgetsContentsFactory
         $tableManager = $container->get(\VuFind\Db\Table\PluginManager::class);
         return new $requestedName(
             $tableManager->get(\KnihovnyCz\Db\Table\Widget::class),
-            $tableManager->get(\KnihovnyCz\Db\Table\WidgetContent::class)
+            $tableManager->get(\KnihovnyCz\Db\Table\WidgetContent::class),
+            $tableManager->get(\VuFind\Db\Table\UserList::class),
+            $tableManager->get(\VuFind\Db\Table\UserResource::class)
         );
     }
 }

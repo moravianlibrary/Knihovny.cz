@@ -31,8 +31,11 @@ namespace KnihovnyCz\AjaxHandler;
 
 use KnihovnyCz\Db\Table\Widget;
 use KnihovnyCz\Db\Table\WidgetContent;
+use Laminas\Db\Sql\Select;
 use Laminas\Mvc\Controller\Plugin\Params;
 use VuFind\AjaxHandler\AbstractBase;
+use VuFind\Db\Table\UserList;
+use VuFind\Db\Table\UserResource;
 
 /**
  * Class HarvestWidgetsContents
@@ -60,17 +63,37 @@ class HarvestWidgetsContents extends AbstractBase
     protected WidgetContent $content;
 
     /**
+     * User list table
+     *
+     * @var UserList
+     */
+    protected UserList $userList;
+
+    /**
+     * User resource table
+     *
+     * @var UserResource
+     */
+    protected UserResource $resource;
+
+    /**
      * Constructor
      *
      * @param Widget        $widgets        Widget table
      * @param WidgetContent $widgetContents Widget content table
+     * @param UserList      $userLists      User lists table
+     * @param UserResource  $resource       User resource table
      */
     public function __construct(
         Widget $widgets,
-        WidgetContent $widgetContents
+        WidgetContent $widgetContents,
+        UserList $userLists,
+        UserResource $resource
     ) {
         $this->widgets = $widgets;
         $this->content = $widgetContents;
+        $this->userList = $userLists;
+        $this->resource = $resource;
     }
 
     /**
@@ -83,13 +106,37 @@ class HarvestWidgetsContents extends AbstractBase
      */
     public function handleRequest(Params $params)
     {
-        $widgets = $this->widgets->select();
         $data = [];
+
+        /* Inspiration lists from widget tables */
+        $widgets = $this->widgets->select();
         foreach ($widgets as $widget) {
             $contents = $this->content->select(['widget_id' => $widget['id']]);
             $data[] = [
                 'list' => $widget['name'],
                 'items' => array_column($contents->toArray(), 'value'),
+            ];
+        }
+
+        /* Inspiration lists from user defined lists */
+        $lists = $this->userList->select(['public' => 1]);
+        foreach ($lists as $list) {
+            $listId = $list['id'];
+            $resources = $this->resource->select(
+                function (Select $select) use ($listId) {
+                    $select->where->equalTo('list_id', $listId);
+                    $select->columns(['id']);
+                    $select->join(
+                        'resource',
+                        'resource.id = user_resource.resource_id',
+                        ['record_id']
+                    );
+                }
+            );
+
+            $data[] = [
+                'list' => $list->getSlug(),
+                'items' => array_column($resources->toArray(), 'record_id'),
             ];
         }
         return $this->formatResponse($data);

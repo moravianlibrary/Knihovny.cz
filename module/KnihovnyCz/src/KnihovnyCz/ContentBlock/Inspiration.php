@@ -28,7 +28,8 @@
  */
 namespace KnihovnyCz\ContentBlock;
 
-use Laminas\Db\Sql\Predicate\Expression;
+use Laminas\Db\ResultSet\ResultSetInterface;
+use Laminas\Db\Sql\Select;
 
 /**
  * Class Inspiration
@@ -39,146 +40,61 @@ use Laminas\Db\Sql\Predicate\Expression;
  * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://knihovny.cz Main Page
  */
-class Inspiration implements \VuFind\ContentBlock\ContentBlockInterface
+class Inspiration extends AbstractDbAwaredRecordIds
 {
-    /**
-     * Search class ID to use for retrieving facets.
-     *
-     * @var string
-     */
-    protected $searchClassId = 'Solr';
-
-    /**
-     * Facet field
-     *
-     * @var string
-     */
-    protected $facetField = 'inspiration';
-
-    /**
-     * Search type
-     *
-     * @var string
-     */
-    protected $searchType = 'AllFields';
-
-    /**
-     * Table manager
-     *
-     * @var \VuFind\Db\Table\PluginManager
-     */
-    protected $tableManager;
-
-    /**
-     * Record loader
-     *
-     * @var \VuFind\Record\Loader
-     */
-    protected $recordLoader;
-
     /**
      * Widget key
      *
      * @var string
      */
-    protected $key;
+    protected string $key;
 
     /**
-     * Limit
+     * Table for main list
      *
-     * @var int
+     * @var string
      */
-    protected $limit;
+    protected string $listTableName = \KnihovnyCz\Db\Table\Widget::class;
 
     /**
-     * Widget row
+     * Table for list items
      *
-     * @var \KnihovnyCz\Db\Row\Widget
+     * @var string
      */
-    protected $widget;
+    protected string $itemsTableName = \KnihovnyCz\Db\Table\WidgetContent::class;
 
     /**
-     * Widget items
+     * Modify select for getting list items
      *
-     * @var array
-     */
-    protected $items;
-
-    /**
-     * Constructor
+     * @param Select $select
      *
-     * @param \VuFind\Db\Table\PluginManager $tables Table manager
-     * @param \VuFind\Record\Loader          $loader Record loader
+     * @return void
      */
-    public function __construct(
-        \VuFind\Db\Table\PluginManager $tables,
-        \VuFind\Record\Loader $loader
-    ) {
-        $this->tableManager = $tables;
-        $this->recordLoader = $loader;
+    protected function setSelect(Select $select): void
+    {
+        $select->where(['widget_id' => $this->listRow->id]);
     }
 
     /**
-     * Get inspiration list items
+     * Takes and returns record ids from result set
+     *
+     * @param ResultSetInterface $items
      *
      * @return array
      */
-    public function getItems()
+    protected function getIds(ResultSetInterface $items): array
     {
-        if ($this->items === null) {
-            $this->items = [];
-            $widget = $this->getWidget();
-            if (!$widget) {
-                return $this->items;
-            }
-            $widgetContent = $this->tableManager->get(
-                \KnihovnyCz\Db\Table\WidgetContent::class
-            );
-            $select = $widgetContent->getSql()->select();
-            $select->where(['widget_id' => $widget->id]);
-            $select->limit($this->limit);
-            $select->order(new Expression('RAND()'));
-            $content = $widgetContent->selectWith($select);
-
-            foreach ($content as $item) {
-                try {
-                    $this->items[] = $this->recordLoader->load($item->value);
-                } catch (\VuFind\Exception\RecordMissing $exception) {
-                    // Just omit non-existing records
-                }
-            }
-        }
-        return $this->items;
+        return array_column($items->toArray(), 'value');
     }
 
     /**
-     * Get widget
+     * Get slug identifier to search for
      *
-     * @return \KnihovnyCz\Db\Row\Widget|null
+     * @return string
      */
-    public function getWidget()
+    protected function getSlug(): string
     {
-        if ($this->widget === null) {
-            $widgets = $this->tableManager->get(\KnihovnyCz\Db\Table\Widget::class);
-            $this->widget = $widgets->select([ 'name' => $this->key])->current();
-        }
-        return $this->widget;
-    }
-
-    /**
-     * Return context variables used for rendering the block's template.
-     *
-     * @return array
-     */
-    public function getContext()
-    {
-        return [
-            'searchClassId' => $this->searchClassId,
-            'facetField' => $this->facetField,
-            'searchType' => $this->searchType,
-            'widget' => $this->getWidget(),
-            'items' => $this->getItems(),
-        ];
+        return ($this->getList()) ? $this->getList()['name'] : '';
     }
 
     /**
@@ -193,5 +109,6 @@ class Inspiration implements \VuFind\ContentBlock\ContentBlockInterface
         $parsedSettings = explode(':', $settings);
         $this->key = $parsedSettings[0];
         $this->limit = (int)($parsedSettings[1] ?? 5);
+        $this->listParams = [ 'name' => $this->key ];
     }
 }
