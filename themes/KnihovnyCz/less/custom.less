@@ -861,3 +861,31 @@ div .library-card-ajax {
     top: 3px;
   }
 }
+
+.search-controls {
+  label {
+    white-space: nowrap;
+  }
+  .search-stats {
+    flex-grow: 1;
+  }
+}
+
+#search-sidebar h2 {
+  margin-top: 0;
+}
+
+@media (max-width: @screen-sm-max) {
+  .search-controls .search-stats {
+    display: none;
+  }
+}
+
+@media (min-width: @screen-md-min) {
+  .search-header .search-stats {
+    display: none;
+  }
+  .search-header .search-controls .search-stats {
+    display: block;
+  }
+}
