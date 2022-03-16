@@ -8,7 +8,7 @@
     "require": {
         "php-http/guzzle6-adapter": "^2.0",
         "monolog/monolog": "^1.24",
-        "moravianlibrary/ziskej-api-php-client": "^4",
+        "moravianlibrary/ziskej-api-php-client": "^4.2",
         "lcobucci/jwt": "^4.0",
         "cpliakas/git-wrapper": "^3.0",
         "symfony/filesystem": "^4.4",
