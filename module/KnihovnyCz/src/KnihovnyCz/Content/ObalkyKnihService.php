@@ -98,6 +98,7 @@ class ObalkyKnihService extends \VuFind\Content\ObalkyKnihService
         $url .= $this->endpoints['authority'] . '/meta?';
         $url .= http_build_query(['auth_id' => $authId]);
         $client = $this->getHttpClient($url);
+        $client->setOptions(['timeout' => 1]);
         try {
             $response = $client->send();
         } catch (\Exception $e) {
