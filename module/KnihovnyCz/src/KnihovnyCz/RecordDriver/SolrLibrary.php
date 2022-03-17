@@ -56,6 +56,26 @@ class SolrLibrary extends \KnihovnyCz\RecordDriver\SolrMarc
     }
 
     /**
+     * Get library alternative name
+     *
+     * @return array
+     */
+    public function getAlternativeTitles()
+    {
+        return $this->fields['name_alt_display_mv'] ?? [];
+    }
+
+    /**
+     * Get town or city
+     *
+     * @return string
+     */
+    public function getTown()
+    {
+        return $this->fields['town_display'] ?? '';
+    }
+
+    /**
      * Get library opening hours
      *
      * @return array

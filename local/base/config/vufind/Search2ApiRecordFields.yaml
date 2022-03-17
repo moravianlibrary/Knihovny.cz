@@ -146,6 +146,16 @@ title:
   vufind.default: true
   description: Title including any subtitle
   type: string
+alternativeTitles:
+  vufind.method: getAlternativeTitles
+  description: Alternative (usually English) titles including any subtitles
+  type: array
+  items:
+    type: string
+town:
+  vufind.method: getTown
+  description: Town or city library is placed in
+  type: string
 urls:
   vufind.method: "Formatter::getURLs"
   vufind.default: true
