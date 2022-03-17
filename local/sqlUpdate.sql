@@ -108,3 +108,11 @@ WHERE `inst_sources`.`driver` = 'koha'
 
 -- Update DB version
 UPDATE `system` SET `value` = '103' WHERE `key`='DB_VERSION';
+
+-- Issue 522: Czech sorting for favorites
+ALTER TABLE `resource`
+  CHANGE `title` `title` varchar(255) COLLATE 'utf8mb4_czech_ci' NOT NULL DEFAULT '' AFTER `record_id`,
+  CHANGE `author` `author` varchar(255) COLLATE 'utf8mb4_czech_ci' NULL AFTER `title`;
+
+-- Update DB version
+UPDATE `system` SET `value` = '104' WHERE `key`='DB_VERSION';
