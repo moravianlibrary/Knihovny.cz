@@ -53,4 +53,18 @@ class Search2ApiController extends \VuFindApi\Controller\Search2ApiController
      * @var string
      */
     protected $searchRoute = 'libraries/search';
+
+    /**
+     * Descriptive label for the index managed by this controller
+     *
+     * @var string
+     */
+    protected $indexLabel = 'libraries';
+
+    /**
+     * Prefix for use in model names used by API
+     *
+     * @var string
+     */
+    protected $modelPrefix = 'Libraries';
 }
