@@ -166,7 +166,7 @@ form.was-validated select:valid ~ .select2-container--bootstrap3 .select2-select
 }
 
 .input-group-lg .select2-container--bootstrap3 .select2-selection--single {
-  height: calc(2em + 0.74rem + 2px) !important;
+  height: 45px !important;
   font-size: 1.2em;
 }
 
