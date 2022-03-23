@@ -63,6 +63,7 @@ abstract class LinkServiceAbstractBase implements LinkServiceInterface,
         if ($response->getStatusCode() !== 200) {
             return [];
         }
-        return json_decode($response->getBody(), true);
+        $body = $response->getBody();
+        return empty($body) ? [] : json_decode($body, true);
     }
 }

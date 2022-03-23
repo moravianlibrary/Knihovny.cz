@@ -1,11 +1,12 @@
 <?php
+declare(strict_types=1);
 
 /**
- * Class InspirationFactory
+ * Class PageLocatorFactory
  *
- * PHP version 7
+ * PHP version 8
  *
- * Copyright (C) Moravian Library 2019.
+ * Copyright (C) Moravian Library 2022.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -20,31 +21,30 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  *
- * @category VuFind
- * @package  KnihovnyCz\ContentBlock
+ * @category Knihovny.cz
+ * @package  KnihovnyCz\Content
  * @author   Josef Moravec <moravec@mzk.cz>
  * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://knihovny.cz Main Page
  */
-namespace KnihovnyCz\ContentBlock;
+namespace KnihovnyCz\Content;
 
 use Interop\Container\ContainerInterface;
+use Interop\Container\Exception\ContainerException;
 use Laminas\ServiceManager\Exception\ServiceNotCreatedException;
 use Laminas\ServiceManager\Exception\ServiceNotFoundException;
-use Laminas\ServiceManager\Factory\FactoryInterface;
+use VuFind\I18n\Locale\LocaleSettings;
 
 /**
- * Class InspirationFactory
+ * Class PageLocatorFactory
  *
- * PHP version 7
- *
- * @category VuFind
- * @package  KnihovnyCz\ContentBlock
+ * @category Knihovny.cz
+ * @package  KnihovnyCz\Content
  * @author   Josef Moravec <moravec@mzk.cz>
  * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://knihovny.cz Main Page
  */
-class InspirationFactory implements FactoryInterface
+class PageLocatorFactory extends \VuFind\Content\PageLocatorFactory
 {
     /**
      * Create an object
@@ -58,19 +58,32 @@ class InspirationFactory implements FactoryInterface
      * @throws ServiceNotFoundException if unable to resolve the service.
      * @throws ServiceNotCreatedException if an exception is raised when
      * creating a service.
-     * @throws \Exception if any other error occurs
+     * @throws ContainerException&\Throwable if any other error occurs
      */
     public function __invoke(
         ContainerInterface $container,
         $requestedName,
         array $options = null
     ) {
-        if (!empty($options)) {
-            throw new \Exception('Unexpected options sent to factory.');
+        if ($options !== null) {
+            throw new \Exception('Unexpected options sent to factory!');
         }
+        $settings = $container->get(LocaleSettings::class);
+        $configManager = $container->get(\VuFind\Config\PluginManager::class);
 
-        $tablesManager = $container->get(\VuFind\Db\Table\PluginManager::class);
-        $recordLoader = $container->get(\VuFind\Record\Loader::class);
-        return new $requestedName($tablesManager, $recordLoader);
+        $locator =  new $requestedName(
+            $container->get(\VuFindTheme\ThemeInfo::class),
+            $settings->getUserLocale(),
+            $settings->getDefaultLocale(),
+            $configManager->get('content')->Repository->base_url ?? ''
+        );
+
+        // Populate cache storage if a setCacheStorage method is present:
+        if (method_exists($locator, 'setCacheStorage')) {
+            $locator->setCacheStorage(
+                $container->get(\VuFind\Cache\Manager::class)->getCache('object')
+            );
+        }
+        return $locator;
     }
 }

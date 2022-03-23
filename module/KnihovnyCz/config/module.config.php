@@ -236,6 +236,7 @@ $config = [
             \KnihovnyCz\Controller\ZiskejController::class => \VuFind\Controller\AbstractBaseFactory::class,
             \KnihovnyCz\Controller\ZiskejAdminController::class => \VuFind\Controller\AbstractBaseFactory::class,
             \KnihovnyCz\Controller\HoldsController::class => \VuFind\Controller\HoldsControllerFactory::class,
+            \KnihovnyCz\Controller\ContentController::class => \KnihovnyCz\Controller\ContentControllerFactory::class,
         ],
         'aliases' => [
             'Inspiration' => \KnihovnyCz\Controller\InspirationController::class,
@@ -249,6 +250,7 @@ $config = [
             \VuFind\Controller\RecordController::class => \KnihovnyCz\Controller\RecordController::class,
             \VuFind\Controller\SearchController::class => \KnihovnyCz\Controller\SearchController::class,
             \VuFind\Controller\HoldsController::class => \KnihovnyCz\Controller\HoldsController::class,
+            \VuFind\Controller\ContentController::class => \KnihovnyCz\Controller\ContentController::class,
         ],
     ],
     'controller_plugins' => [
@@ -331,13 +333,15 @@ $config = [
             'contentblock' => [
                 'factories' => [
                     \KnihovnyCz\ContentBlock\DocumentTypes::class => \KnihovnyCz\ContentBlock\DocumentTypesFactory::class,
-                    \KnihovnyCz\ContentBlock\Inspiration::class => \KnihovnyCz\ContentBlock\InspirationFactory::class,
-                    \KnihovnyCz\ContentBlock\UserList::class => \KnihovnyCz\ContentBlock\UserListFactory::class,
+                    \KnihovnyCz\ContentBlock\Inspiration::class => \KnihovnyCz\ContentBlock\AbstractDbAwaredRecordIdsFactory::class,
+                    \KnihovnyCz\ContentBlock\UserList::class => \KnihovnyCz\ContentBlock\AbstractDbAwaredRecordIdsFactory::class,
+                    \KnihovnyCz\ContentBlock\TemplateBased::class => \KnihovnyCz\ContentBlock\TemplateBasedFactory::class,
                 ],
                 'aliases' => [
                     'documenttypes' => \KnihovnyCz\ContentBlock\DocumentTypes::class,
                     'inspiration' => \KnihovnyCz\ContentBlock\Inspiration::class,
                     'userlist' => \KnihovnyCz\ContentBlock\UserList::class,
+                    \VuFind\ContentBlock\TemplateBased::class => \KnihovnyCz\ContentBlock\TemplateBased::class,
                 ]
             ],
             'db_row' => [
@@ -350,10 +354,12 @@ $config = [
                     \KnihovnyCz\Db\Row\User::class => \VuFind\Db\Row\UserFactory::class,
                     \KnihovnyCz\Db\Row\UserCard::class => \VuFind\Db\Row\RowGatewayFactory::class,
                     \KnihovnyCz\Db\Row\CsrfToken::class => \VuFind\Db\Row\RowGatewayFactory::class,
+                    \KnihovnyCz\Db\Row\UserList::class => \VuFind\Db\Row\UserListFactory::class
                 ],
                 'aliases' => [
                     \VuFind\Db\Row\User::class => \KnihovnyCz\Db\Row\User::class,
                     \VuFind\Db\Row\UserCard::class => \KnihovnyCz\Db\Row\UserCard::class,
+                    \VuFind\Db\Row\UserList::class => \KnihovnyCz\Db\Row\UserList::class,
                 ]
             ],
             'db_table' => [
@@ -401,9 +407,9 @@ $config = [
                     \KnihovnyCz\AjaxHandler\Edd::class => \KnihovnyCz\AjaxHandler\EddFactory::class,
                     \KnihovnyCz\AjaxHandler\GetCitation::class => \KnihovnyCz\AjaxHandler\GetCitationFactory::class,
                     \KnihovnyCz\AjaxHandler\GetHolding::class => \KnihovnyCz\AjaxHandler\GetHoldingFactory::class,
-                    \KnihovnyCz\AjaxHandler\UpdateContent::class => \KnihovnyCz\AjaxHandler\UpdateContentFactory::class,
                     \KnihovnyCz\AjaxHandler\GetObalkyKnihCoverWithoutSolr::class => \KnihovnyCz\AjaxHandler\GetObalkyKnihCoverWithoutSolrFactory::class,
                     \KnihovnyCz\AjaxHandler\GetACSuggestions::class => \KnihovnyCz\AjaxHandler\GetACSuggestionsFactory::class,
+                    \KnihovnyCz\AjaxHandler\HarvestWidgetsContents::class => \KnihovnyCz\AjaxHandler\HarvestWidgetsContentsFactory::class,
                     \KnihovnyCz\AjaxHandler\Sfx::class => \KnihovnyCz\AjaxHandler\SfxFactory::class,
                 ],
                 'aliases' => [
@@ -411,8 +417,8 @@ $config = [
                     'getcitation' => \KnihovnyCz\AjaxHandler\GetCitation::class,
                     'getHolding' => \KnihovnyCz\AjaxHandler\GetHolding::class,
                     'getObalkyKnihCoverWithoutSolr' => \KnihovnyCz\AjaxHandler\GetObalkyKnihCoverWithoutSolr::class,
-                    'updateContent' => \KnihovnyCz\AjaxHandler\UpdateContent::class,
                     'getACSuggestions' => \KnihovnyCz\AjaxHandler\GetACSuggestions::class,
+                    'harvestWidgetsContents' => \KnihovnyCz\AjaxHandler\HarvestWidgetsContents::class,
                     'sfx' => \KnihovnyCz\AjaxHandler\Sfx::class,
                 ],
             ],
@@ -449,10 +455,10 @@ $config = [
     ],
     'service_manager' => [
         'factories' => [
-            \GitWrapper\GitWorkingCopy::class => \KnihovnyCz\Service\GitFactory::class,
             \KnihovnyCz\Service\CitaceProService::class => \KnihovnyCz\Service\CitaceProServiceFactory::class,
             \KnihovnyCz\Config\PluginManager::class => \KnihovnyCz\Config\PluginManagerFactory::class,
             \KnihovnyCz\Content\ObalkyKnihService::class => \VuFind\Content\ObalkyKnihServiceFactory::class,
+            \KnihovnyCz\Content\PageLocator::class => \KnihovnyCz\Content\PageLocatorFactory::class,
             \KnihovnyCz\ILS\Service\SolrIdResolver::class => \KnihovnyCz\ILS\Service\SolrIdResolverFactory::class,
             \KnihovnyCz\Service\WayfFilterGenerator::class => \KnihovnyCz\Service\WayfFilterGeneratorFactory::class,
             \Mzk\ZiskejApi\Api::class => \KnihovnyCz\Ziskej\ZiskejApiFactory::class,
@@ -471,6 +477,7 @@ $config = [
         'aliases' => [
             \VuFind\Config\PluginManager::class => \KnihovnyCz\Config\PluginManager::class,
             \VuFind\Content\ObalkyKnihService::class => \KnihovnyCz\Content\ObalkyKnihService::class,
+            \VuFind\Content\PageLocator::class => \KnihovnyCz\Content\PageLocator::class,
             \VuFind\Auth\Manager::class => \KnihovnyCz\Auth\Manager::class,
             \VuFind\Autocomplete\Suggester::class => \KnihovnyCz\Autocomplete\Suggester::class,
             'Laminas\Validator\Csrf' => \KnihovnyCz\Validator\DatabaseCsrf::class,

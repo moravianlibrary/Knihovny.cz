@@ -42,7 +42,6 @@ RUN apt-get update && \
     apt-get install -y --no-install-recommends \
         coreutils \
         curl \
-        git \
         openssh-client \
         locales \
         ${ADD_EXTRA_PACKAGES} && \
@@ -50,6 +49,9 @@ RUN apt-get update && \
     apt-get clean
 
 ADD configs/etc /etc
+ADD configs/php-ini/*.ini $PHP_INI_DIR/conf.d/
+# Use the default production configuration
+RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
 ADD configs/bin/container-entrypoint.sh /container-entrypoint.sh
 ADD configs/php/*.conf /usr/local/etc/php-fpm.d/
 ADD configs/initscripts/bootstrap-shibboleth2.sh /onstart.d/000-bootstrap-shibboleth2.sh

@@ -2,11 +2,11 @@
 declare(strict_types=1);
 
 /**
- * Class Search2ApiController
+ * Class UserList
  *
- * PHP version 7
+ * PHP version 8
  *
- * Copyright (C) Moravian Library 2021.
+ * Copyright (C) Moravian Library 2022.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -22,49 +22,35 @@ declare(strict_types=1);
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  *
  * @category Knihovny.cz
- * @package  KnihovnyCzApi\Controller
+ * @package  KnihovnyCz\Db\Row
  * @author   Josef Moravec <moravec@mzk.cz>
  * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://knihovny.cz Main Page
  */
-namespace KnihovnyCzApi\Controller;
+
+namespace KnihovnyCz\Db\Row;
 
 /**
- * Class Search2ApiController
+ * Class UserList
  *
  * @category Knihovny.cz
- * @package  KnihovnyCzApi\Controller
+ * @package  KnihovnyCz\Db\Row
  * @author   Josef Moravec <moravec@mzk.cz>
  * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://knihovny.cz Main Page
  */
-class Search2ApiController extends \VuFindApi\Controller\Search2ApiController
+class UserList extends \VuFind\Db\Row\UserList
 {
     /**
-     * Record route uri
+     * Create slug identifier
      *
-     * @var string
+     * @return string
      */
-    protected $recordRoute = 'libraries/record';
-
-    /**
-     * Search route uri
-     *
-     * @var string
-     */
-    protected $searchRoute = 'libraries/search';
-
-    /**
-     * Descriptive label for the index managed by this controller
-     *
-     * @var string
-     */
-    protected $indexLabel = 'libraries';
-
-    /**
-     * Prefix for use in model names used by API
-     *
-     * @var string
-     */
-    protected $modelPrefix = 'Libraries';
+    public function getSlug(): string
+    {
+        $title = $this['title'];
+        $title = preg_replace("/ /", '-', $title);
+        $title = preg_replace("/[^A-Za-z0-9-]/", '', $title);
+        return $this['id'] . '-' . $title;
+    }
 }

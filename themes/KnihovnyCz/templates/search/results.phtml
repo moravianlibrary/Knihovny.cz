@@ -65,6 +65,11 @@
     <?php if ($recordTotal > 0): ?>
       <div class="search-controls">
         <?=$this->render('search/controls/limit.phtml')?>
+        <div class="search-stats">
+          <?php if ($recordTotal > 0): ?>
+            <?=$this->context()->renderInContext('search/controls/showing.phtml', ['lookfor' => $lookfor, 'recordTotal' => $recordTotal]) ?>
+          <?php endif; ?>
+        </div>
         <?=$this->render('search/controls/sort.phtml')?>
         <?=$this->render('search/controls/view.phtml')?>
       </div>

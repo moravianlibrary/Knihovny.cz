@@ -27,10 +27,12 @@ declare(strict_types=1);
  * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://knihovny.cz Main Page
  */
+
 namespace KnihovnyCz\Controller;
 
 use Laminas\Stdlib\RequestInterface as Request;
 use Laminas\Stdlib\ResponseInterface as Response;
+use Laminas\Validator\EmailAddress;
 use Laminas\View\Model\ViewModel;
 use Mzk\ZiskejApi\RequestModel\Reader;
 use Mzk\ZiskejApi\RequestModel\Ticket;
@@ -44,6 +46,8 @@ use VuFind\Exception\LibraryCard;
  * @author   Josef Moravec <moravec@mzk.cz>
  * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://knihovny.cz Main Page
+ *
+ * @method  \Laminas\Mvc\Plugin\FlashMessenger\FlashMessenger  flashMessenger
  */
 class RecordController extends \VuFind\Controller\RecordController
 {
@@ -135,15 +139,14 @@ class RecordController extends \VuFind\Controller\RecordController
      * @throws \Http\Client\Exception
      * @throws \Mzk\ZiskejApi\Exception\ApiException
      * @throws \Mzk\ZiskejApi\Exception\ApiInputException
-     * @throws \Mzk\ZiskejApi\Exception\ApiResponseException
+     * @throws \Psr\Container\ContainerExceptionInterface
+     * @throws \Psr\Container\NotFoundExceptionInterface
      * @throws \VuFind\Exception\LibraryCard
      */
     public function ziskejOrderPostAction(): Response
     {
-        //@todo try/catch
-
         if (!$this->getRequest()->isPost()) {
-            return $this->redirectToRecord('', 'Ziskej');
+            return $this->redirectToRecord('#ziskejmvs', 'Ziskej');
         }
 
         /**
@@ -170,7 +173,11 @@ class RecordController extends \VuFind\Controller\RecordController
          */
         $eppn = $this->params()->fromPost('eppn');
         if (!$eppn) {
-            //@todo
+            $this->flashMessenger()->addMessage(
+                'Ziskej::error_eppn_missing',
+                'error'
+            );
+            return $this->redirectToRecord('#ziskejmvs', 'Ziskej');
         }
 
         /**
@@ -180,21 +187,36 @@ class RecordController extends \VuFind\Controller\RecordController
          */
         $email = $this->params()->fromPost('email');
         if (!$email) {
-            //@todo
+            $this->flashMessenger()->addMessage(
+                'Ziskej::error_email_missing',
+                'error'
+            );
+            return $this->redirectToRecord('#ziskejmvs', 'Ziskej');
         }
-        //@todo check email format
+
+        $emailValidator = new EmailAddress();
+        if (!$emailValidator->isValid($email)) {
+            $this->flashMessenger()->addMessage(
+                'Ziskej::error_email_wrong',
+                'error'
+            );
+            return $this->redirectToRecord('#ziskejmvs', 'Ziskej');
+        }
 
         if (!$this->params()->fromPost('is_conditions')) {
             $this->flashMessenger()->addMessage(
                 'Ziskej::error_is_conditions',
                 'error'
             );
-            return $this->redirectToRecord('', 'Ziskej');
+            return $this->redirectToRecord('#ziskejmvs', 'Ziskej');
         }
 
         if (!$this->params()->fromPost('is_price')) {
-            $this->flashMessenger()->addMessage('Ziskej::error_is_price', 'error');
-            return $this->redirectToRecord('', 'Ziskej');
+            $this->flashMessenger()->addMessage(
+                'Ziskej::error_is_price',
+                'error'
+            );
+            return $this->redirectToRecord('#ziskejmvs', 'Ziskej');
         }
 
         /**
@@ -208,9 +230,9 @@ class RecordController extends \VuFind\Controller\RecordController
         if (!$userCard) {
             $this->flashMessenger()->addMessage(
                 'Ziskej::error_account_not_active',
-                'warning'
+                'error'
             );
-            return $this->redirectToRecord('', 'Ziskej');
+            return $this->redirectToRecord('#ziskejmvs', 'Ziskej');
         }
 
         $responseReader = new Reader(
@@ -223,29 +245,46 @@ class RecordController extends \VuFind\Controller\RecordController
             $userCard->cat_username
         );
 
-        $saveFunction = 'createReader';
-        $eppn = $userCard->eppn;
-        if ($eppn && $ziskejApi->getReader($eppn)) {
-            $saveFunction = 'updateReader';
+        try {
+            $ziskejReader = $ziskejApi->getReader($userCard->eppn)
+                ? $ziskejApi->updateReader($userCard->eppn, $responseReader)
+                : $ziskejApi->createReader($userCard->eppn, $responseReader);
+        } catch (\Mzk\ZiskejApi\Exception\ApiResponseException $e) {
+            $this->flashMessenger()->addMessage(
+                'Ziskej::failure_order_finished',
+                'error'
+            );
+            $this->flashMessenger()->addMessage(
+                $e->getMessage(),
+                'error'
+            );
+            return $this->redirectToRecord('#ziskejmvs', 'Ziskej');
         }
-        $ziskejReader = $ziskejApi->$saveFunction($userCard->eppn, $responseReader);
 
         if (!$ziskejReader->isActive()) {
             $this->flashMessenger()->addMessage(
                 'Ziskej::error_account_not_active',
                 'warning'
             );
-            //@todo next step
-            return $this->redirectToRecord('', 'Ziskej');
+            return $this->redirectToRecord('#ziskejmvs', 'Ziskej');
         }
 
         $ticketNew = new Ticket($this->params()->fromPost('doc_id'));
         $ticketNew->setDocumentAltIds($this->params()->fromPost('doc_alt_ids'));
         $ticketNew->setNote($this->params()->fromPost('text'));
 
-        $ticket = null;
-        if ($eppn) {
+        try {
             $ticket = $ziskejApi->createTicket($eppn, $ticketNew);
+        } catch (\Mzk\ZiskejApi\Exception\ApiResponseException $e) {
+            $this->flashMessenger()->addMessage(
+                'Ziskej::failure_order_finished',
+                'error'
+            );
+            $this->flashMessenger()->addMessage(
+                $e->getMessage(),
+                'error'
+            );
+            return $this->redirectToRecord('#ziskejmvs', 'Ziskej');
         }
 
         if ($ticket) {
@@ -264,7 +303,7 @@ class RecordController extends \VuFind\Controller\RecordController
         }
         $this->flashMessenger()->addMessage(
             'Ziskej::success_order_finished',
-            'warning'
+            'error'
         );
         return $this->redirect()->toRoute(
             'ziskej-order-finished',

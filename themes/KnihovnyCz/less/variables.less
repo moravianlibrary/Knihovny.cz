@@ -16,7 +16,7 @@
 
 @brand-primary:         #e5004b; // #337ab7
 @brand-success:         #5cb85c;
-@brand-info:            #5bc0de;
+@brand-info:            #2986c4;
 @brand-warning:         #f0ad4e;
 @brand-danger:          #d9534f;
 
@@ -51,7 +51,7 @@
 @font-family-base:        @font-family-sans-serif;
 
 @font-size-base:          15px;
-@font-size-large:         ceil((@font-size-base * 1.25)); // ~18px
+@font-size-large:         ceil(@font-size-base * 1.06); // ~16px
 @font-size-small:         ceil((@font-size-base * 0.85)); // ~12px
 
 @font-size-h1:            floor((@font-size-base * 2.6)); // ~36px
@@ -62,7 +62,7 @@
 @font-size-h6:            ceil((@font-size-base * 0.85)); // ~12px
 
 //** Unit-less `line-height` for use in components like buttons.
-@line-height-base:        1.428571429; // 20/14
+@line-height-base:        1.333333333; // 20/15
 //** Computed "line-height" (`font-size` * `line-height`) for use with `margin`, `padding`, etc.
 @line-height-computed:    floor((@font-size-base * @line-height-base)); // ~20px
 
@@ -88,7 +88,7 @@
 @padding-xs-vertical:       1px;
 @padding-xs-horizontal:     5px;
 
-@line-height-large:         1.3333333; // extra decimals for Win 8.1 Chrome
+@line-height-large:         @line-height-base * 1.06;
 @line-height-small:         1.5;
 
 @border-radius-base:        0px;
@@ -130,6 +130,8 @@
 //== Buttons
 //
 //## For each of Bootstrap's buttons, define text, background and border color.
+@btn-padding-y: 6px;
+@btn-padding-x: 12px;
 
 @btn-font-weight:                normal;
 
@@ -459,7 +461,7 @@
 
 @pager-bg:                             @pagination-bg;
 @pager-border:                         @pagination-border;
-@pager-border-radius:                  15px;
+@pager-border-radius:                  @btn-border-radius-base;
 
 @pager-hover-bg:                       @pagination-hover-bg;
 
@@ -757,19 +759,19 @@
 //
 //##
 
-@badge-color:                 #fff;
+@badge-color:                 @text-color;
 //** Linked badge text color on hover
-@badge-link-hover-color:      #fff;
-@badge-bg:                    @gray-light;
+@badge-link-hover-color:      @badge-color;
+@badge-bg:                    @gray-lighter;
 
 //** Badge text color in active nav link
 @badge-active-color:          @link-color;
 //** Badge background color in active nav link
 @badge-active-bg:             #fff;
 
-@badge-font-weight:           bold;
+@badge-font-weight:           600;
 @badge-line-height:           1;
-@badge-border-radius:         10px;
+@badge-border-radius:         @border-radius-base;
 
 
 //== Breadcrumbs

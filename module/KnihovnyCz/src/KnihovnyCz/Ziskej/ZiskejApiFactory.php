@@ -74,8 +74,10 @@ class ZiskejApiFactory implements FactoryInterface
 
         $logger = new Logger('ZiskejApi');
 
-        $handlerStream = new StreamHandler('log/ziskej-api.log', $logger::DEBUG);
-        $logger->pushHandler($handlerStream);
+        if(!empty($config->Logging->ziskej)){
+            $handlerStream = new StreamHandler($config->Logging->ziskej, $logger::DEBUG);
+            $logger->pushHandler($handlerStream);
+        }
 
         if (!empty($config->Filebeat) && !empty($config->Filebeat->host)) {
             $connectionString = $config->Filebeat->host;

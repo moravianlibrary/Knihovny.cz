@@ -1,12 +1,22 @@
 <?=$this->doctype()?>
+<?php
+$description = $this->translate('meta_description');
+$this->headMeta()->appendName('description', $description);
+$this->headMeta()->appendName('referrer', 'unsafe-url');
+$this->headMeta()->setProperty('og:description', $description);
+$imageUrl = $this->imageLink('knihovny-cz-20200919.png');
+$this->headMeta()->setProperty('og:image', $imageUrl);
+$this->headMeta()->setProperty('og:image:secure_url', $imageUrl);
+$this->headMeta()->setProperty('og:image:type', 'image/png');
+$this->headMeta()->setProperty('og:image:width', '1200');
+$this->headMeta()->setProperty('og:image:height', '630');
 
+?>
 <html lang="<?=$this->layout()->userLang?>"<?php if ($this->layout()->rtl): ?> dir="rtl"<?php endif; ?>>
   <head>
     <?php $this->setupThemeResources(); ?>
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
     <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-    <?=$this->headMeta()?>
-    <?=$this->googleTagManager();?>
 
     <?php
       // Format the page title using the translation system:
@@ -19,7 +29,10 @@
             '%%titleSeparator%%' => $siteConfig->titleSeparator ?? '::'
           ]
       );
+      $fullTitle = preg_replace( "/\x{200c}/u", '', $fullTitle );
+      $fullTitle = ltrim($fullTitle, ' |');
       echo $this->headTitle($fullTitle, \Laminas\View\Helper\Placeholder\Container\AbstractContainer::SET);
+      $this->headMeta()->setProperty('og:title', $fullTitle);
 
       // Set up OpenSearch link:
       $this->headLink(
@@ -35,6 +48,9 @@
       // may not load correctly. Thus, we render early, but use this later.
       $icons = !isset($this->renderingError) ? $this->render('js-icons.phtml') : '{}';
     ?>
+    <?=$this->headMeta()?>
+    <?=$this->googleTagManager();?>
+
     <!-- RTL styling -->
     <?php if ($this->layout()->rtl) {
       $this->headLink()->appendStylesheet('vendor/bootstrap-rtl.min.css');

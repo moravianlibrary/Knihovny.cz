@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Class UserListFactory
+ * Class InspirationFactory
  *
  * PHP version 7
  *
@@ -31,9 +31,12 @@ namespace KnihovnyCz\ContentBlock;
 use Interop\Container\ContainerInterface;
 use Laminas\ServiceManager\Exception\ServiceNotCreatedException;
 use Laminas\ServiceManager\Exception\ServiceNotFoundException;
+use Laminas\ServiceManager\Factory\FactoryInterface;
 
 /**
- * Class UserListFactory
+ * Class InspirationFactory
+ *
+ * PHP version 7
  *
  * @category VuFind
  * @package  KnihovnyCz\ContentBlock
@@ -41,7 +44,7 @@ use Laminas\ServiceManager\Exception\ServiceNotFoundException;
  * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://knihovny.cz Main Page
  */
-class UserListFactory
+class AbstractDbAwaredRecordIdsFactory implements FactoryInterface
 {
     /**
      * Create an object
@@ -66,7 +69,8 @@ class UserListFactory
             throw new \Exception('Unexpected options sent to factory.');
         }
 
-        $runner = $container->get(\VuFind\Search\SearchRunner::class);
-        return new $requestedName($runner);
+        $tablesManager = $container->get(\VuFind\Db\Table\PluginManager::class);
+        $recordLoader = $container->get(\VuFind\Record\Loader::class);
+        return new $requestedName($tablesManager, $recordLoader);
     }
 }

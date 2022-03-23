@@ -39,7 +39,7 @@
           <div class="btn-group">
             <?php if ($delete): ?>
               <a class="btn btn-link dropdown-toggle" data-toggle="dropdown" href="<?=$this->url('librarycards-deletecard') ?>?cardID=<?=urlencode($record['id'])?>">
-                <i class="fa fa-trash-o" aria-hidden="true"></i> <?=$this->transEsc('Disconnect identity')?>
+                <?=$this->icon('profile-card-delete') ?> <?=$this->transEsc('Disconnect identity')?>
               </a>
             <?php endif; ?>
             <ul class="dropdown-menu">
@@ -60,7 +60,7 @@
     <p><?=$this->translate('Library card connect warning 3')?></p>
     <div class="btn-group">
       <a href="<?=$this->url('librarycards-connectcardlogin') ?>" class="btn btn-primary" role="button" aria-pressed="true">
-        <i class="fa fa-edit" aria-hidden="true"></i>
+        <?=$this->icon('ui-add') ?>
         <?=$this->transEsc('Add a Library Card using login')?>
       </a>
     </div>
@@ -70,7 +70,8 @@
 
   <div class="btn-group" style="margin-top: 15px">
     <a class="btn btn-link dropdown-toggle" data-toggle="dropdown" href="<?=$this->url('myresearch-deleteuser') ?>">
-      <i class="fa fa-trash-o" aria-hidden="true"></i> <?=$this->transEsc('delete_user_account')?>
+      <?=$this->icon('ui-delete') ?>
+      <?=$this->transEsc('delete_user_account')?>
     </a>
     <ul class="dropdown-menu">
       <pre><?=$this->translate('delete_user_account_confirm')?></pre>

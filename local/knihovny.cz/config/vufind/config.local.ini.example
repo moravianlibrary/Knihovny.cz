@@ -48,6 +48,7 @@ database        = mysql://user:pw@localhost/dbName
 [Logging]
 file            = /home/vufind/git/VuFind/fatal-errors.log:alert,error
 ;file            = /home/vufind/git/VuFind/fatal-errors.log:alert,error,notice,debug
+ziskej          = /var/www/knihovny-cz/log/ziskej-api.log
 
 [GoogleMaps]
 apikey = AIzaSyALBfl5KwpSRjsvl4h0gzZB1fdq4Ei6DW0

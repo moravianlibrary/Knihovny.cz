@@ -1,11 +1,12 @@
 <?php
+declare(strict_types=1);
 
 /**
- * Class UpdateContentFactory
+ * Class HarvestWidgetsContentsFactory
  *
- * PHP version 7
+ * PHP version 8
  *
- * Copyright (C) Moravian Library 2020.
+ * Copyright (C) Moravian Library 2022.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -20,7 +21,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  *
- * @category VuFind
+ * @category Knihovny.cz
  * @package  KnihovnyCz\AjaxHandler
  * @author   Josef Moravec <moravec@mzk.cz>
  * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
@@ -32,18 +33,17 @@ use Interop\Container\ContainerInterface;
 use Interop\Container\Exception\ContainerException;
 use Laminas\ServiceManager\Exception\ServiceNotCreatedException;
 use Laminas\ServiceManager\Exception\ServiceNotFoundException;
-use Laminas\ServiceManager\Factory\FactoryInterface;
 
 /**
- * Class UpdateContentFactory
+ * Class HarvestWidgetsContentsFactory
  *
- * @category VuFind
+ * @category Knihovny.cz
  * @package  KnihovnyCz\AjaxHandler
  * @author   Josef Moravec <moravec@mzk.cz>
  * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://knihovny.cz Main Page
  */
-class UpdateContentFactory implements FactoryInterface
+class HarvestWidgetsContentsFactory
 {
     /**
      * Create an object
@@ -63,19 +63,18 @@ class UpdateContentFactory implements FactoryInterface
      */
     public function __invoke(
         ContainerInterface $container,
-        $requestedName,
+        string $requestedName,
         array $options = null
     ) {
         if (!empty($options)) {
-            throw new ServiceNotCreatedException(
-                'Unexpected options passed to factory.'
-            );
+            throw new \Exception('Unexpected options passed to factory.');
         }
+        $tableManager = $container->get(\VuFind\Db\Table\PluginManager::class);
         return new $requestedName(
-            $container->get(\GitWrapper\GitWorkingCopy::class),
-            $container->get(\VuFind\Config\PluginManager::class)->get('content')
-                ->Repository['branch'] ?? 'master',
-            $container->get(\Symfony\Component\Filesystem\Filesystem::class)
+            $tableManager->get(\KnihovnyCz\Db\Table\Widget::class),
+            $tableManager->get(\KnihovnyCz\Db\Table\WidgetContent::class),
+            $tableManager->get(\VuFind\Db\Table\UserList::class),
+            $tableManager->get(\VuFind\Db\Table\UserResource::class)
         );
     }
 }

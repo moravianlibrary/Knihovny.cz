@@ -19,7 +19,7 @@ ENV PARAM_VUFIND_GOOGLE_API_KEY=${PARAM_VUFIND_GOOGLE_API_KEY}
 ENV PARAM_VUFIND_CAPTCHA_SITE_KEY=${PARAM_VUFIND_CAPTCHA_SITE_KEY}
 ENV PARAM_VUFIND_CAPTCHA_SECRET_KEY=${PARAM_VUFIND_CAPTCHA_SECRET_KEY}
 ENV PARAM_VUFIND_MYSQL_URL=${PARAM_VUFIND_MYSQL_URL}
-ENV PARAM_VUFIND_COMMIT="3596cce113dc3029c27f9e1715cd6b9a0c0984e0"
+ENV PARAM_VUFIND_COMMIT="6921f257bfe52a153cf229b1ca306e0656ef0d0c"
 ENV PARAM_PORTAL_PAGES_BRANCH=${PARAM_PORTAL_PAGES_BRANCH}
 
 ## Install base VuFind
@@ -47,9 +47,6 @@ RUN rm /var/www/knihovny-cz/composer.lock
 # Install composer dependencies
 RUN composer install --no-interaction -q --ignore-platform-req php
 RUN composer update --no-interaction -q --ignore-platform-req php
-
-# Copy script for content updating and run it on every start
-COPY install-portal-content.sh /onstart/010-install-portal-content.sh
 
 #TODO: sentry/sentry still missing
 
