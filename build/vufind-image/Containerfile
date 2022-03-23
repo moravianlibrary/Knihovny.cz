@@ -35,7 +35,7 @@ ARG COMPOSER_NO_INTERACTION=1
 ARG COMPOSER_HOME=/tmp/composer-cache
 ARG VUFIND_ROOT=/var/www/knihovny-cz
 
-RUN apt-get update && apt-get install -y unzip
+RUN apt-get update && apt-get install -y unzip git
 
 ## Install Composer
 COPY --from=docker.io/composer:latest /usr/bin/composer /usr/local/bin/composer
@@ -78,10 +78,8 @@ COPY --from=vufind-src /src/vufind/build.xml ${VUFIND_ROOT}/build.xml
 RUN chown vufind:vufind -R ${VUFIND_ROOT}
 
 # add random scripts
-COPY  build/scripts/install-portal-content.sh /onstart.d/010-install-portal-content.sh
 COPY  build/scripts/clear-cache.sh /usr/local/bin/clear-cache
 RUN chmod 0755 \
-    /onstart.d/010-install-portal-content.sh \
     /usr/local/bin/clear-cache
 
 ENTRYPOINT [ "/container-entrypoint.sh" ]
