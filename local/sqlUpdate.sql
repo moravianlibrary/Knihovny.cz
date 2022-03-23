@@ -116,3 +116,44 @@ ALTER TABLE `resource`
 
 -- Update DB version
 UPDATE `system` SET `value` = '104' WHERE `key`='DB_VERSION';
+
+
+-- Issue 527: Update record identifiers for ARL
+UPDATE `resource` SET `record_id` = REPLACE(`record_id`, 'kjm_us_cat', 'KjmUsCat') WHERE `record_id` LIKE "%kjm_us_cat%";
+UPDATE `resource` SET `record_id` = REPLACE(`record_id`, 'li_us_cat', 'LiUsCat') WHERE `record_id` LIKE "%li_us_cat%";
+UPDATE `resource` SET `record_id` = REPLACE(`record_id`, 'cbvk_us_cat', 'CbvkUsCat') WHERE `record_id` LIKE "%cbvk_us_cat%";
+UPDATE `resource` SET `record_id` = REPLACE(`record_id`, 'kl_us_cat', 'KlUsCat') WHERE `record_id` LIKE "%kl_us_cat%";
+UPDATE `resource` SET `record_id` = REPLACE(`record_id`, 'vy_us_cat', 'VyUsCat') WHERE `record_id` LIKE "%vy_us_cat%";
+
+UPDATE `record` SET `record_id` = REPLACE(`record_id`, 'kjm_us_cat', 'KjmUsCat') WHERE `record_id` LIKE "%kjm_us_cat%";
+UPDATE `record` SET `record_id` = REPLACE(`record_id`, 'li_us_cat', 'LiUsCat') WHERE `record_id` LIKE "%li_us_cat%";
+UPDATE `record` SET `record_id` = REPLACE(`record_id`, 'cbvk_us_cat', 'CbvkUsCat') WHERE `record_id` LIKE "%cbvk_us_cat%";
+UPDATE `record` SET `record_id` = REPLACE(`record_id`, 'kl_us_cat', 'KlUsCat') WHERE `record_id` LIKE "%kl_us_cat%";
+UPDATE `record` SET `record_id` = REPLACE(`record_id`, 'vy_us_cat', 'VyUsCat') WHERE `record_id` LIKE "%vy_us_cat%";
+
+UPDATE `widget_content` SET `value` = REPLACE(`value`, 'kjm_us_cat', 'KjmUsCat') WHERE `value` LIKE "%kjm_us_cat%";
+UPDATE `widget_content` SET `value` = REPLACE(`value`, 'li_us_cat', 'LiUsCat') WHERE `value` LIKE "%li_us_cat%";
+UPDATE `widget_content` SET `value` = REPLACE(`value`, 'cbvk_us_cat', 'CbvkUsCat') WHERE `value` LIKE "%cbvk_us_cat%";
+UPDATE `widget_content` SET `value` = REPLACE(`value`, 'kl_us_cat', 'KlUsCat') WHERE `value` LIKE "%kl_us_cat%";
+UPDATE `widget_content` SET `value` = REPLACE(`value`, 'vy_us_cat', 'VyUsCat') WHERE `value` LIKE "%vy_us_cat%";
+
+UPDATE `resource` SET `record_id` = REPLACE(`record_id`, 'KjmUsCat_', 'KjmUsCat*') WHERE `record_id` LIKE "%KjmUsCat\\_%";
+UPDATE `resource` SET `record_id` = REPLACE(`record_id`, 'LiUsCat_', 'LiUsCat*') WHERE `record_id` LIKE "%LiUsCat\\_%";
+UPDATE `resource` SET `record_id` = REPLACE(`record_id`, 'CbvkUsCat_', 'CbvkUsCat*') WHERE `record_id` LIKE "%CbvkUsCat\\_%";
+UPDATE `resource` SET `record_id` = REPLACE(`record_id`, 'KlUsCat_', 'KlUsCat*') WHERE `record_id` LIKE "%KlUsCat\\_%";
+UPDATE `resource` SET `record_id` = REPLACE(`record_id`, 'VyUsCat_', 'VyUsCat*') WHERE `record_id` LIKE "%VyUsCat\\_%";
+
+UPDATE `record` SET `record_id` = REPLACE(`record_id`, 'KjmUsCat_', 'KjmUsCat*') WHERE `record_id` LIKE "%KjmUsCat\\_%";
+UPDATE `record` SET `record_id` = REPLACE(`record_id`, 'LiUsCat_', 'LiUsCat*') WHERE `record_id` LIKE "%LiUsCat\\_%";
+UPDATE `record` SET `record_id` = REPLACE(`record_id`, 'CbvkUsCat_', 'CbvkUsCat*') WHERE `record_id` LIKE "%CbvkUsCat\\_%";
+UPDATE `record` SET `record_id` = REPLACE(`record_id`, 'KlUsCat_', 'KlUsCat*') WHERE `record_id` LIKE "%KlUsCat\\_%";
+UPDATE `record` SET `record_id` = REPLACE(`record_id`, 'VyUsCat_', 'VyUsCat*') WHERE `record_id` LIKE "%VyUsCat\\_%";
+
+UPDATE `widget_content` SET `value` = REPLACE(`value`, 'KjmUsCat_', 'KjmUsCat*') WHERE `value` LIKE "%KjmUsCat\\_%";
+UPDATE `widget_content` SET `value` = REPLACE(`value`, 'LiUsCat_', 'LiUsCat*') WHERE `value` LIKE "%LiUsCat\\_%";
+UPDATE `widget_content` SET `value` = REPLACE(`value`, 'CbvkUsCat_', 'CbvkUsCat*') WHERE `value` LIKE "%CbvkUsCat\\_%";
+UPDATE `widget_content` SET `value` = REPLACE(`value`, 'KlUsCat_', 'KlUsCat*') WHERE `value` LIKE "%KlUsCat\\_%";
+UPDATE `widget_content` SET `value` = REPLACE(`value`, 'VyUsCat_', 'VyUsCat*') WHERE `value` LIKE "%VyUsCat\\_%";
+
+-- Update DB version
+UPDATE `system` SET `value` = '105' WHERE `key`='DB_VERSION';
