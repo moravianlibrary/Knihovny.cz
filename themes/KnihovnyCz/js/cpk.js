@@ -1,4 +1,4 @@
-/* exported setupAutocomplete */
+/* exported setupAutocomplete, buildFacetNodes */
 /* global VuFind, extractClassParams, htmlEncode */
 
 // We only need to observe change of type childList
@@ -65,7 +65,7 @@ function setupAutocomplete() {
   searchbox.autocomplete({
     rtl: $(document.body).hasClass("rtl"),
     maxResults: 10,
-    loadingString: VuFind.translate('loading') + '...',
+    loadingString: VuFind.translate('loading_ellipsis'),
     // Auto-submit selected item
     callback: acCallback,
     // AJAX call for autocomplete results
@@ -183,3 +183,171 @@ function setupOpenUrl() {
 jQuery(document).ready(function openUrl() {
   setupOpenUrl();
 });
+
+function setLibraryAutoComplete(facetField) {
+  var libraries = new Map();
+  var element = $(document.getElementById(facetField));
+  const facetFilter = element.data('facet');
+  var nodes = element.jstree(true).get_json('#', {flat: true});
+  const paramSep = window.location.href.includes('?') ? '&' : '?';
+  $.each(nodes, function forEach(i, val) {
+    var facetElement = $(val.text).find('.facet-value');
+    if (facetElement.parent().hasClass('applied')) {
+      return;
+    }
+    const value = facetElement.data('filter-value');
+    const filter = paramSep + "filter[]=~" + facetFilter + ':"' + value + '"';
+    libraries.set(value, {
+      label: facetElement.text(),
+      value: value,
+      href: window.location.href + filter,
+    });
+  });
+  var input = $('<input></input>').addClass('autocomplete-institutions')
+    .attr('placeholder', VuFind.translate('Autocomplete institutions placeholder'));
+  function normalizeString(str) {
+    return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+  }
+  // Search autocomplete
+  input.autocomplete({
+    rtl: $(document.body).hasClass("rtl"),
+    maxResults: 10,
+    loadingString: VuFind.translate('loading') + '...',
+    // AJAX call for autocomplete results
+    handler: function vufindACHandler(inputField, cb) {
+      const query = inputField.val();
+      const terms = normalizeString(query).split(' ');
+      var searcher = extractClassParams(inputField);
+      $.fn.autocomplete.ajax({
+        url: VuFind.path + '/AJAX/JSON',
+        data: {
+          q: query,
+          method: 'getLibrariesACSuggestions',
+          searcher: searcher.searcher
+        },
+        dataType: 'json',
+        success: function autocompleteJSON(json) {
+          var results = new Map();
+          json.data.forEach(function onEach(item) {
+            const library = libraries.get(item.value);
+            if (typeof library !== "undefined") {
+              results.set(item.value, library);
+            }
+          });
+          for (const [key, item] of libraries.entries()) {
+            const searchValue = normalizeString(item.label);
+            const add = terms.every(function hasTerm(term) {
+              return searchValue.startsWith(term) || searchValue.includes(' ' + term);
+            });
+            if (add) {
+              results.set(key, item);
+            }
+          }
+          var ac = [];
+          for (const item of results.values()) {
+            ac.push(item);
+          }
+          cb(ac);
+        }
+      });
+    }
+  });
+  element.parent().prepend(input);
+}
+
+VuFind.listen('VuFind.sidefacets.loaded', function onLoaded(){
+  const facets = [
+    'facet_region_institution_facet_mv',
+    'facet_local_region_institution_facet_mv'
+  ];
+  facets.forEach(function forEeach(facet){
+    var element = document.getElementById(facet);
+    if (element != null) {
+      $(element).bind('loaded.jstree', function onLoad() {
+        setLibraryAutoComplete(facet);
+      });
+    }
+  });
+});
+
+function buildFacetNodes(data, currentPath, allowExclude, excludeTitle, counts)
+{
+  var json = [];
+  var selected = VuFind.translate('Selected');
+  var separator = VuFind.translate('number_thousands_separator');
+
+  for (var i = 0; i < data.length; i++) {
+    var facet = data[i];
+    var html = document.createElement('div');
+    html.className = 'facet';
+
+    var url = currentPath + facet.href;
+    var item = document.createElement('span');
+    item.className = 'main text';
+    if (facet.isApplied) {
+      item.className += ' applied';
+    }
+    item.setAttribute('title', facet.displayText);
+    item.setAttribute('role', 'menuitem');
+    var icon = document.createElement('i');
+    icon.className = 'fa';
+    if (facet.operator === 'OR') {
+      if (facet.isApplied) {
+        icon.className += ' fa-check-square-o';
+        icon.title = selected;
+      } else {
+        icon.className += ' fa-square-o';
+        icon.setAttribute('aria-hidden', 'true');
+      }
+      item.appendChild(icon);
+    } else if (facet.isApplied) {
+      icon.className += ' fa-check pull-right';
+      icon.setAttribute('title', selected);
+      item.appendChild(icon);
+    }
+    var description = document.createElement('span');
+    description.className = 'facet-value';
+    description.appendChild(document.createTextNode(facet.displayText));
+    description.setAttribute('data-filter-value', facet.value);
+    item.appendChild(description);
+    html.appendChild(item);
+
+    if (!facet.isApplied && counts) {
+      var badge = document.createElement('span');
+      badge.className = 'badge';
+      badge.appendChild(document.createTextNode(facet.count.toString().replace(/\B(?=(\d{3})+\b)/g, separator)));
+      html.appendChild(badge);
+      if (allowExclude) {
+        var excludeUrl = currentPath + facet.exclude;
+        var a = document.createElement('a');
+        a.className = 'exclude';
+        a.setAttribute('href', excludeUrl);
+        a.setAttribute('title', excludeTitle);
+
+        var inIcon = document.createElement('i');
+        inIcon.className = 'fa fa-times';
+        a.appendChild(inIcon);
+        html.appendChild(a);
+      }
+    }
+
+    var children = null;
+    if (typeof facet.children !== 'undefined' && facet.children.length > 0) {
+      children = buildFacetNodes(facet.children, currentPath, allowExclude, excludeTitle, counts);
+    }
+    json.push({
+      'text': html.outerHTML,
+      'children': children,
+      'applied': facet.isApplied,
+      'state': {
+        'opened': facet.hasAppliedChildren
+      },
+      'li_attr': facet.isApplied ? { 'class': 'active' } : {},
+      'data': {
+        'url': url.replace(/&amp;/g, '&')
+      }
+    });
+  }
+
+  return json;
+}
