@@ -7,104 +7,62 @@
  * Vyhledávání – fulltext
  * Spouští se po odeslání formulářového pole.
  */
-// $('body').on('click', '#run-autocomplete', function (event) {
-//   event.preventDefault();
-//   dataLayer.push({
-//     'event': 'action.search',
-//     'actionContext': {
-//       'eventCategory': 'search',
-//       'eventAction': 'fulltext',
-//       'eventLabel': $('#searchForm_lookfor').val(),
-//       'eventValue': undefined,
-//       'nonInteraction': false
-//     }
-//   });
-// });
+// on submit search form
+$(document).on('submit', $('form#searchForm'), function (event) {
+  dataLayer.push({
+    'event': 'action.search',
+    'actionContext': {
+      'eventCategory': 'search',
+      'eventAction': 'fulltext',
+      'eventLabel': $('input#searchForm_lookfor').val(),
+      'eventValue': undefined,
+      'nonInteraction': false
+    }
+  });
 
-// clicked on search button
-// $('.searchForm').submit(function (event) {
-//   dataLayer.push({
-//     'event': 'action.search',
-//     'actionContext': {
-//       'eventCategory': 'search',
-//       'eventAction': 'fulltext',
-//       'eventLabel': $('#searchForm_lookfor').val(),
-//       'eventValue': undefined,
-//       'nonInteraction': false
-//     }
-//   });
-// });
-
-//clicked on enter button
-// input.keydown(function (event) {
-//   dataLayer.push({
-//     'event': 'action.search',
-//     'actionContext': {
-//       'eventCategory': 'search',
-//       'eventAction': 'fulltext',
-//       'eventLabel': selected.attr('data-value'),
-//       'eventValue': undefined,
-//       'nonInteraction': false
-//     }
-//   });
-// });
-
-//Zaznamená vyhledvání, pokud je provedeno vybráním z autocomplete
-//themes/bootstrap3/js/autocomplete.js
-// $.fn.autocompleteVufind.element.find('.item').mousedown(function () {
-//   dataLayer.push({
-//     'event': 'action.search',
-//     'actionContext': {
-//       'eventCategory': 'search',
-//       'eventAction': 'fulltext',
-//       'eventLabel': $(this).attr('data-value'),
-//       'eventValue': undefined,
-//       'nonInteraction': false
-//     }
-//   });
-// });
+});
 
 /*
  * Vyhledávání – našeptávač
  * Spouští se po 2000 ms po posledním stisku klávesy.
  */
-// var typingTimer;
-// var doneTypingInterval = 2000;
-// var $input = $('#searchForm_lookfor');
-//
-// $input.on('keyup', function () {
-//   clearTimeout(typingTimer);
-//   typingTimer = setTimeout(doneTyping, doneTypingInterval);
-// });
-//
-// $input.on('keydown', function () {
-//   clearTimeout(typingTimer);
-// });
-//
-// function doneTyping() {
-//   dataLayer.push({
-//     'event': 'action.search',
-//     'actionContext': {
-//       'eventCategory': 'search',
-//       'eventAction': 'whisperer',
-//       'eventLabel': $('#searchForm_lookfor').val(),
-//       'eventValue': undefined,
-//       'nonInteraction': false
-//     }
-//   });
-// }
+let typingTimer;
+const $input = $('input#searchForm_lookfor');
+
+$input.on('keyup', function () {
+  clearTimeout(typingTimer);
+  typingTimer = setTimeout(doneTyping, 2000);
+});
+
+$input.on('keydown', function () {
+  clearTimeout(typingTimer);
+});
+
+function doneTyping() {
+  dataLayer.push({
+    'event': 'action.search',
+    'actionContext': {
+      'eventCategory': 'search',
+      'eventAction': 'whisperer',
+      'eventLabel': $input.val(),
+      'eventValue': undefined,
+      'nonInteraction': false
+    }
+  });
+}
 
 /*
  * Vyhledávání – uložení vyhledávání
  * Spouští se po kliku na tlačítko k uložení vyhledávání.
  */
-// $('body').on('click', '.save-search-link', function (event) {
+// $(document).on('click', '#btnSearchSave', function (event) {
+//   console.debug('uložení vyhledávání');
 //   dataLayer.push({
 //     'event': 'action.search',
 //     'actionContext': {
 //       'eventCategory': 'search',
 //       'eventAction': 'saveSearch',
-//       'eventLabel': response.data.searchTerms.join(),
+//       'eventLabel': response.data.searchTerms.join(), //@todo where to get?
 //       'eventValue': undefined,
 //       'nonInteraction': false
 //     }
@@ -149,8 +107,8 @@
  * Přihlášení
  * Posílá se po úspěšném přihlášení.
  */
-//TODO: We can't distinguish between social and library login, we can only detect general login action
-//TODO: add event listener
+// //TODO: We can't distinguish between social and library login, we can only detect general login action
+// //TODO: add event listener
 // //TODO: get idp name
 // dataLayer.push({
 //   'event': 'action.login',
@@ -172,20 +130,31 @@
 /*
  * favourite = uložení do oblíbených
  * (pozor, jde to i z vyhledávání)
+ * //TODO: z vyhledávání
  */
-// $('#save-record').on('click', function () {
-//   dataLayer.push({
-//     'event': 'action.record',
-//     'actionContext': {
-//       'eventCategory': 'record',
-//       'eventAction': 'favourite',
-//       'eventLabel': $('input.hiddenId').val(),
-//       'eventValue': undefined,
-//       'nonInteraction': false
-//     }
-//   });
-// });
-//
+// detail záznamu
+/*
+ * favourite = uložení do oblíbených
+ * (pozor, jde to i z vyhledávání)
+ * //TODO: z vyhledávání
+ */
+// detail záznamu
+$('form.form-record-save input[type=submit]').on('click', function (event) {
+//$(document).on('click', $('form.form-record-save input[type=submit]'), function (event) {
+  console.debug('Record saved to favourites');
+  event.preventDefault();
+  dataLayer.push({
+    'event': 'action.record',
+    'actionContext': {
+      'eventCategory': 'record',
+      'eventAction': 'favourite',
+      'eventLabel': $('input[name=id]').val(),
+      'eventValue': undefined,
+      'nonInteraction': false
+    }
+  });
+});
+
 // $('.record-toolbar').on('click', '#save-record', function () {
 //   pushRecordEventToGTM('favourite');
 // });
