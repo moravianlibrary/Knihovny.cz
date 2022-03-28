@@ -26,6 +26,8 @@
   -->
   <xsl:param name="idfield" select="'001'"/>
 
+  <xsl:param name="id"/>
+
   <!--
       URI for record source, default none,
       e.g. http://id.loc.gov/vocabulary/organizations/dlc
@@ -126,6 +128,7 @@
         <xsl:with-param name="baseuri" select="$baseuri"/>
         <xsl:with-param name="idfield" select="$idfield"/>
         <xsl:with-param name="recordno" select="$recordno"/>
+        <xsl:with-param name="id" select="$id"/>
       </xsl:apply-templates>
     </xsl:variable>
 

@@ -47,7 +47,7 @@
       <xsl:if test="$vLang != '' and $vScript != ''"><xsl:value-of select="concat($vLang,'-',$vScript)"/></xsl:if>
     </xsl:if>
   </xsl:template>
-        
+
   <!--
       rudimentary LCC validation
       returns "true" if valid, "" if not valid
@@ -85,7 +85,7 @@
     <xsl:variable name="vNormString" select="normalize-space($pString)"/>
     <xsl:variable name="vLength" select="string-length($vNormString)"/>
     <xsl:choose>
-      
+
       <!-- no processing needed for empty string -->
       <xsl:when test="not($vNormString) or $vLength=0"/>
 
@@ -135,7 +135,7 @@
           <xsl:with-param name="pAddBrackets" select="$pAddBrackets"/>
         </xsl:call-template>
       </xsl:when>
-      
+
       <!--
           enclosing punctuation routines do not take into account
           multiple parenthetical clauses that are unbalanced
@@ -202,7 +202,7 @@
           <xsl:with-param name="pAddBrackets" select="$pAddBrackets"/>
         </xsl:call-template>
       </xsl:when>
-      
+
       <!-- special handling for ending periods -->
       <!-- do not remove if we think it is an initial -->
       <!-- do not remove if we think it is an abbreviation -->
@@ -283,7 +283,7 @@
           <xsl:with-param name="pAddBrackets" select="$pAddBrackets"/>
 	</xsl:call-template>
       </xsl:when>
-      
+
       <xsl:otherwise>
         <!-- add matching square brackets if missing -->
         <xsl:call-template name="tBalanceBrackets">
@@ -393,6 +393,7 @@
     <xsl:param name="baseuri" select="'http://example.org/'"/>
     <xsl:param name="idfield" select="'001'"/>
     <xsl:param name="recordno"/>
+    <xsl:param name="id" />
     <xsl:variable name="tag" select="substring($idfield,1,3)"/>
     <xsl:variable name="subfield">
       <xsl:choose>
@@ -404,6 +405,11 @@
     </xsl:variable>
     <xsl:variable name="recordid">
       <xsl:choose>
+        <xsl:when test="$id != ''">
+          <xsl:call-template name="url-encode">
+            <xsl:with-param name="str" select="$id"/>
+          </xsl:call-template>
+        </xsl:when>
         <xsl:when test="$tag &lt; 10">
           <xsl:if test="count(marc:controlfield[@tag=$tag]) = 1">
             <xsl:call-template name="url-encode">
@@ -653,7 +659,7 @@
       based on https://skew.org/xml/stylesheets/url-encode/url-encode.xsl
   -->
   <xsl:template name="url-encode">
-    <xsl:param name="str"/>   
+    <xsl:param name="str"/>
     <xsl:variable name="ascii"> !"#$%&amp;'()*+,-./0123456789:;&lt;=&gt;?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`abcdefghijklmnopqrstuvwxyz{|}~</xsl:variable>
     <xsl:variable name="safe">!'()*-.0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ_abcdefghijklmnopqrstuvwxyz~</xsl:variable>
     <xsl:variable name="hex" >0123456789ABCDEF</xsl:variable>
