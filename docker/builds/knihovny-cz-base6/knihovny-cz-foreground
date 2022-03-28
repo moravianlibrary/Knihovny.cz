@@ -39,6 +39,11 @@ for theme in ${EXTENSION_THEME_DIR}/*/; do
     fi
 done
 
+# XSL
+EXTENSION_XSL_DIR="${EXTENSION_DIR}/xsl"
+VUFIND_XSL_DIR="${PARAM_VUFIND_SRC}/xsl"
+ln -s "${EXTENSION_XSL_DIR}/" "${VUFIND_XSL_DIR}"
+
 # Compile CSS in themes
 grunt less custom
 
