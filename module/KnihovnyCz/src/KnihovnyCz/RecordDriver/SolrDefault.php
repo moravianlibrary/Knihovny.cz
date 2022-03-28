@@ -662,4 +662,21 @@ class SolrDefault extends \VuFind\RecordDriver\SolrDefault
     {
         return $this->fields['sigla_display'] ?? null;
     }
+
+    /**
+     * Get the geo location
+     *
+     * @return array
+     */
+    public function getGeoLocation()
+    {
+        $geo = $this->fields['long_lat_display_mv'] ?? null;
+        if ($geo == null && ($parent = $this->getParentRecord()) != null) {
+            $parentFields = $parent->getRawData();
+            if (isset($parentFields['long_lat_str'])) {
+                $geo = [ $parentFields['long_lat_str'] ];
+            }
+        }
+        return $geo;
+    }
 }

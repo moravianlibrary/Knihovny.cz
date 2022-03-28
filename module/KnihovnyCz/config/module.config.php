@@ -450,6 +450,14 @@ $config = [
                     'Solr' => \KnihovnyCz\Search\Factory\SolrDefaultBackendFactory::class,
                 ],
             ],
+            'search_params' => [
+                'factories' => [
+                    \KnihovnyCz\Search\Solr\Params::class => \KnihovnyCz\Search\Solr\ParamsFactory::class,
+                ],
+                'aliases' => [
+                    \VuFind\Search\Solr\Params::class => \KnihovnyCz\Search\Solr\Params::class,
+                ]
+            ],
             'autocomplete' => [
                 'factories' => [
                     \KnihovnyCz\Autocomplete\SolrPrefix::class => \VuFind\Autocomplete\SolrFactory::class,
@@ -461,9 +469,11 @@ $config = [
             'recommend' => [
                 'factories' => [
                     \KnihovnyCz\Recommend\RecommendOtherPortals::class => \VuFind\Recommend\InjectConfigManagerFactory::class,
+                    \KnihovnyCz\Recommend\MapSelection::class => \KnihovnyCz\Recommend\MapSelectionFactory::class,
                 ],
                 'aliases' => [
                     'recommendotherportals' => \KnihovnyCz\Recommend\RecommendOtherPortals::class,
+                    'mapselection' => \KnihovnyCz\Recommend\MapSelection::class,
                 ],
             ]
         ],
@@ -513,6 +523,7 @@ $config = [
             \KnihovnyCz\Service\GoogleBooksLinkService::class,
             \KnihovnyCz\Service\ZboziLinkService::class,
             \KnihovnyCz\ILS\Logic\Holdings::class,
+            \KnihovnyCz\Geo\Parser::class,
         ]
     ],
 ];

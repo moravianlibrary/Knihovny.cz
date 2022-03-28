@@ -1,4 +1,4 @@
-<?php if ($this->recommend->getSearchResultCoordinates()) :?>
+<?php if ($this->recommend->isActive()) :?>
   <?php
     // Add translation strings
     $this->jsTranslations()->addStrings([
@@ -23,13 +23,14 @@
     $searchParams = $this->recommend->getSearchParams();
     $coordinates = $this->recommend->getSelectedCoordinates()
         ?? $this->recommend->getDefaultCoordinates();
+    $selectBoundingBox = $this->recommend->getSelectedCoordinates() != null;
 
     $resultsCoords = $this->recommend->getMapResultCoordinates();
     $params = [
       json_encode($geoField), json_encode($coordinates),
-      json_encode($urlpath), json_encode($baseUrl),
-      json_encode($searchParams), json_encode($resultsCoords),
-      json_encode($basemap)
+      json_encode($selectBoundingBox), json_encode($urlpath),
+      json_encode($baseUrl), json_encode($searchParams),
+      json_encode($resultsCoords), json_encode($basemap)
     ];
 
     $jsParams = implode(', ', $params);
@@ -42,6 +43,15 @@
       <div id="geo_search_map" style="height: <?php echo $height?>px;"></div>
     </div>
     <?=$this->inlineScript(\Laminas\View\Helper\HeadScript::SCRIPT, $jsLoad, 'SET')?>
+    <?=
+    $this->context($this)->renderInContext(
+        'Recommend/MapScale.phtml',
+        [
+        'mapScaleField' => $this->recommend->getMapScaleField(),
+        'selectedMapScale' => $this->recommend->getSelectedMapScale(),
+      ]
+    );
+    ?>
   </div>
   <?php
     // Overwrite leaflet.draw.js tooltips with international translations
