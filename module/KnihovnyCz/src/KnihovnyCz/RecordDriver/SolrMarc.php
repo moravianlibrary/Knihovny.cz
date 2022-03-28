@@ -253,4 +253,14 @@ class SolrMarc extends SolrDefault
     {
         return false;
     }
+
+    /**
+     * Get an array of physical descriptions of the item.
+     *
+     * @return array
+     */
+    public function getPhysicalDescriptions()
+    {
+        return $this->getFieldArray('300', ['a', 'b', 'c', 'e', 'f', 'g'], true);
+    }
 }
