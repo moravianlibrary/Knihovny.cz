@@ -1,32 +1,9 @@
-#!!! apply files 01_config.sql first
+#!!! apply file 01_config.sql first
 
 -- feature-1192
 -- Make Knihovny.cz database structure compatible with original VuFind
--- VuFind 2.5
-ALTER TABLE `user`
-  MODIFY COLUMN `username` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
-  MODIFY COLUMN `email` varchar(255) NOT NULL DEFAULT '';
-
--- VuFind 3.0
-ALTER TABLE `user`
-  MODIFY COLUMN `cat_password` varchar(70) DEFAULT NULL;
-
-ALTER TABLE `resource`
-  MODIFY COLUMN `record_id` varchar(255) NOT NULL DEFAULT '';
-
-ALTER TABLE `resource`
-  MODIFY COLUMN  `source` varchar(50) NOT NULL DEFAULT 'Solr';
-
-UPDATE `resource` SET source='Solr' WHERE source='VuFind';
-
-ALTER TABLE `resource`
-  MODIFY COLUMN `title` varchar(255) NOT NULL DEFAULT '',
-  MODIFY COLUMN `author` varchar(255) DEFAULT NULL;
 
 -- Modification needed for MySQL strict mode
-ALTER TABLE `comments`
-  MODIFY COLUMN `created` datetime NOT NULL DEFAULT '2000-01-01 00:00:00';
-
 ALTER TABLE `oai_resumption`
   MODIFY COLUMN `expires` datetime NOT NULL DEFAULT '2000-01-01 00:00:00';
 
@@ -39,18 +16,6 @@ ALTER TABLE `search`
 ALTER TABLE `session`
   MODIFY COLUMN `created` datetime NOT NULL DEFAULT '2000-01-01 00:00:00';
 
-ALTER TABLE `user`
-  MODIFY COLUMN `created` datetime NOT NULL DEFAULT '2000-01-01 00:00:00';
-
-ALTER TABLE `user_card`
-  MODIFY COLUMN `created` datetime NOT NULL DEFAULT '2000-01-01 00:00:00';
-
-ALTER TABLE `user_list`
-  MODIFY COLUMN `created` datetime NOT NULL DEFAULT '2000-01-01 00:00:00';
-
--- VuFind 3.1
-ALTER TABLE `tags` CONVERT TO CHARACTER SET utf8 COLLATE utf8_bin;
-
 -- VuFind 4.0
 CREATE TABLE `external_session` (
     `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -62,31 +27,11 @@ CREATE TABLE `external_session` (
     KEY `external_session_id` (`external_session_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE utf8_bin;
 
-ALTER TABLE `user`
-  ADD COLUMN `cat_id` varchar(255) DEFAULT NULL AFTER email,
-  ADD UNIQUE KEY `cat_id` (`cat_id`);
-
 -- VuFind 5.0
-ALTER TABLE `user`
-  ADD COLUMN auth_method varchar(50) DEFAULT NULL AFTER last_login;
-
 ALTER TABLE `session`
   MODIFY COLUMN `data` mediumtext;
 
--- VuFind 5.1
-ALTER TABLE `resource`
-  ADD COLUMN `extra_metadata` mediumtext DEFAULT NULL AFTER source;
-
-ALTER TABLE `user`
-  MODIFY COLUMN `cat_pass_enc` varchar(255) DEFAULT NULL;
-
-ALTER TABLE `user_card`
-  MODIFY COLUMN `cat_password` varchar(70) DEFAULT NULL,
-  MODIFY COLUMN `cat_pass_enc` varchar(255) DEFAULT NULL;
-
 -- VuFind 6.0
-ALTER TABLE `user`
-  ADD COLUMN `email_verified` datetime DEFAULT NULL AFTER email;
 
 CREATE TABLE `shortlinks` (
     `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -94,19 +39,6 @@ CREATE TABLE `shortlinks` (
     `created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE utf8_bin;
-
--- VuFind 6.1
---
--- Modifications to table `user`
---
-ALTER TABLE `user`
-  ADD COLUMN pending_email varchar(255) NOT NULL DEFAULT '';
-
-ALTER TABLE `user`
-  ADD COLUMN user_provided_email tinyint(1) NOT NULL DEFAULT '0';
-
-ALTER TABLE `user`
-  ADD COLUMN last_language varchar(30) NOT NULL DEFAULT '';
 
 --
 -- Modifications to table `search`
@@ -153,37 +85,6 @@ CREATE TABLE `auth_hash` (
    KEY `created` (`created`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
---
--- Add foreign key to user card
---
-DELETE FROM `user_card` WHERE user_id NOT IN (SELECT id FROM user);
-set @query=if((SELECT true FROM information_schema.TABLE_CONSTRAINTS WHERE
-            CONSTRAINT_SCHEMA = DATABASE() AND
-            TABLE_NAME        = 'user_card' AND
-            CONSTRAINT_NAME   = 'user_card_ibfk_1' AND
-            CONSTRAINT_TYPE   = 'FOREIGN KEY')
- = true,'ALTER TABLE user_card DROP FOREIGN KEY user_card_ibfk_1','select 1');
-PREPARE stmt1 FROM @query;
-EXECUTE stmt1;
-DEALLOCATE PREPARE stmt1;
-ALTER TABLE `user_card`
-  ADD CONSTRAINT `user_card_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE;
-
--- Add table for record cache
-CREATE TABLE `record` (
-    `id` int(11) NOT NULL AUTO_INCREMENT,
-    `record_id` varchar(255) DEFAULT NULL,
-    `source` varchar(50) DEFAULT NULL,
-    `version` varchar(20) NOT NULL,
-    `data` longtext DEFAULT NULL,
-    `updated` datetime NOT NULL DEFAULT '2000-01-01 00:00:00',
-    PRIMARY KEY (`id`),
-    UNIQUE KEY `record_id_source` (`record_id`, `source`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- Update table resource_tags (VuFind 7.1)
-ALTER TABLE `resource_tags` CHANGE COLUMN `resource_id` `resource_id` int(11) DEFAULT NULL;
-
 -- Update table shortlinks (VuFind 7.0)
 ALTER TABLE `shortlinks` ADD COLUMN `hash` varchar(32) AFTER `path`;
 ALTER TABLE `shortlinks` ADD UNIQUE KEY `shortlinks_hash_IDX` USING HASH (`hash`);
@@ -191,15 +92,6 @@ ALTER TABLE `shortlinks` ADD UNIQUE KEY `shortlinks_hash_IDX` USING HASH (`hash`
 --
 -- Odstranění nepoužívaných tabulek
 --
-set @query=if((SELECT true FROM information_schema.TABLE_CONSTRAINTS WHERE
-            CONSTRAINT_SCHEMA = DATABASE() AND
-            TABLE_NAME        = 'user_settings' AND
-            CONSTRAINT_NAME   = 'user_settings_ibfk_2' AND
-            CONSTRAINT_TYPE   = 'FOREIGN KEY') = true,'ALTER TABLE user_settings DROP FOREIGN KEY user_settings_ibfk_2','select 1');
-PREPARE stmt1 FROM @query;
-EXECUTE stmt1;
-DEALLOCATE PREPARE stmt1;
-
 DROP TABLE IF EXISTS `frontend`;
 DROP TABLE IF EXISTS `infobox`;
 DROP TABLE IF EXISTS `inspirations`;
@@ -235,41 +127,49 @@ CREATE VIEW `inst_keys` AS SELECT * FROM `vufind`.`inst_keys`;
 CREATE VIEW `inst_configs` AS SELECT * FROM `vufind`.`inst_configs`;
 
 -- Convert to utf8mb4
-ALTER TABLE `resource` DROP KEY `record_id`;
-ALTER TABLE `resource` ADD KEY `record_id` (`record_id`(190));
 ALTER TABLE `search` DROP KEY `notification_base_url_idx`;
 ALTER TABLE `search` ADD KEY `notification_base_url` (`notification_base_url`(190));
 ALTER TABLE `external_session` DROP KEY `external_session_id`;
 ALTER TABLE `external_session` ADD KEY `external_session_id` (`external_session_id`(190));
-ALTER TABLE `user` DROP KEY `username`;
-ALTER TABLE `user` ADD UNIQUE KEY `username` (`username`(190));
-ALTER TABLE `user` DROP KEY `cat_id`;
-ALTER TABLE `user` ADD UNIQUE KEY `cat_id` (`cat_id`(190));
-ALTER TABLE `record` DROP KEY `record_id_source`;
-ALTER TABLE `record` ADD UNIQUE KEY `record_id_source` (`record_id`(140), `source`);
 ALTER TABLE `auth_hash` DROP KEY `hash_type`;
 ALTER TABLE `auth_hash` ADD UNIQUE KEY `hash_type` (`hash`(140), `type`);
-
 ALTER TABLE `auth_hash` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 ALTER TABLE `change_tracker` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-ALTER TABLE `comments` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 ALTER TABLE `external_session` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_bin;
-ALTER TABLE `modal_specific_contents` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 ALTER TABLE `oai_resumption` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-ALTER TABLE `record` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-ALTER TABLE `resource` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-ALTER TABLE `resource_tags` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 ALTER TABLE `search` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 ALTER TABLE `session` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 ALTER TABLE `shortlinks` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_bin;
 ALTER TABLE `system` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-ALTER TABLE `tags` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_bin;
-ALTER TABLE `user` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-ALTER TABLE `user_card` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-ALTER TABLE `user_list` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-ALTER TABLE `user_resource` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-ALTER TABLE `user_settings` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 ALTER TABLE `widget` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 ALTER TABLE `widget_content` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
-UPDATE config SET `active` = 0;
+UPDATE `config` SET `active` = 0;
+
+-- User related tables should be views
+DROP TABLE IF EXISTS `modal_specific_contents`;
+DROP TABLE IF EXISTS `record`;
+DROP TABLE IF EXISTS `user_settings`;
+DROP TABLE IF EXISTS `citation_style`;
+DROP TABLE IF EXISTS `resource_tags`;
+DROP TABLE IF EXISTS `user_resource`;
+DROP TABLE IF EXISTS `user_card`;
+DROP TABLE IF EXISTS `user_list`;
+DROP TABLE IF EXISTS `comments`;
+DROP TABLE IF EXISTS `resource`;
+DROP TABLE IF EXISTS `tags`;
+DROP TABLE IF EXISTS `user`;
+
+CREATE VIEW `user` AS SELECT * FROM `vufind`.`user`;
+CREATE VIEW `user_card` AS SELECT * FROM `vufind`.`user_card`;
+CREATE VIEW `user_list` AS SELECT * FROM `vufind`.`user_list`;
+CREATE VIEW `user_resource` AS SELECT * FROM `vufind`.`user_resource`;
+CREATE VIEW `user_settings` AS SELECT * FROM `vufind`.`user_settings`;
+CREATE VIEW `resource` AS SELECT * FROM `vufind`.`resource`;
+CREATE VIEW `resource_tags` AS SELECT * FROM `vufind`.`resource_tags`;
+CREATE VIEW `tags` AS SELECT * FROM `vufind`.`tags`;
+CREATE VIEW `record` AS SELECT * FROM `vufind`.`record`;
+CREATE VIEW `comments` AS SELECT * FROM `vufind`.`comments`;
+
+DELETE FROM `system` WHERE `key` != 'DB_VERSION';
+UPDATE `system` SET `value` = '100' WHERE `key` = 'DB_VERSION';
