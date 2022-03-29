@@ -5,13 +5,13 @@
   $data = [];
   $records = $this->driver->tryMethod('getDeduplicatedRecords') ?? [];
   $recordMissing = false;
-  if (!isset($records[$currentSource])) {
-    $records[$currentSource] = [ $currentRecordId ];
-    $recordMissing = true;
-  } else {
-    $recordsForSource = $records[$currentSource];
-    if (!in_array($currentRecordId, $recordsForSource)) {
-      $records[$currentSource] = [ $currentRecordId ];
+  if (!empty($records)) {
+    if (!isset($records[$currentSource])) {
+      $records[$currentSource] = [$currentRecordId];
+      $recordMissing = true;
+    }
+    if (!in_array($currentRecordId, $records[$currentSource])) {
+      $records[$currentSource][] = $currentRecordId;
       $recordMissing = true;
     }
   }
