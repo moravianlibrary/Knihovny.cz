@@ -25,6 +25,7 @@ return [
             \KnihovnyCz\View\Helper\KnihovnyCz\LibrariesApiLookfor::class,
             \KnihovnyCz\View\Helper\KnihovnyCz\SplitText::class,
             \KnihovnyCz\View\Helper\KnihovnyCz\EscapeElementId::class,
+            \KnihovnyCz\View\Helper\KnihovnyCz\TextFormatter::class,
         ],
         'aliases' => [
             'footerLink' => \KnihovnyCz\View\Helper\KnihovnyCz\FooterLink::class,
@@ -38,6 +39,7 @@ return [
             'headTitle' => KnihovnyCz\View\Helper\KnihovnyCz\HeadTitle::class,
             'searchTabs' => KnihovnyCz\View\Helper\KnihovnyCz\SearchTabs::class,
             'recordLinker' => KnihovnyCz\View\Helper\KnihovnyCz\RecordLinker::class,
+            'textFormatter' => KnihovnyCz\View\Helper\KnihovnyCz\TextFormatter::class,
         ],
     ],
     'icons' => [

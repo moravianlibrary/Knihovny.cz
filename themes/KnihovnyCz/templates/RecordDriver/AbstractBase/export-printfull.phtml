@@ -1,0 +1,13 @@
+<?=$this->render('RecordDriver/AbstractBase/export-printshort.phtml')?>
+<?php
+  $textFormatter = $this->textFormatter($this->driver);
+?>
+<?=$textFormatter->formatArray('Published', 'getPublicationDetails', '', false, true)?>
+<?=$textFormatter->formatArray('Language', 'getLanguages')?>
+<?=$textFormatter->formatArray('From monographic series', 'getMonographicSeries', 'desc')?>
+<?=$textFormatter->formatArray('Physical Description', 'getPhysicalDescriptions')?>
+<?=$textFormatter->formatArray('ISBN', 'getISBNs')?>
+<?=$textFormatter->formatArray('ISSN', 'getISSNs')?>
+<?=$textFormatter->formatArray('Subjects', 'getAllSubjectHeadings', '', true)?>
+<?=$textFormatter->formatArray('Callnumber', 'getCallNumbers')?>
+<?="\r\n"?>

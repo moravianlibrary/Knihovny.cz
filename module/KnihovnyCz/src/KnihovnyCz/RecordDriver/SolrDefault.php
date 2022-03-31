@@ -43,6 +43,9 @@ class SolrDefault extends \VuFind\RecordDriver\SolrDefault
     use Feature\BuyLinksTrait;
     use Feature\ObalkyKnihTrait;
 
+    private const EDD_SUBTYPE_ARTICLE = 'article';
+    private const EDD_SUBTYPE_SELECTION = 'selection';
+
     /**
      * These Solr fields should be used for snippets if available (listed in order
      * of preference).
@@ -400,6 +403,18 @@ class SolrDefault extends \VuFind\RecordDriver\SolrDefault
         return null !== $eddBooleanParent
             ? $eddBooleanParent
             : (null !== $eddBooleanLocal ? $eddBooleanLocal : false);
+    }
+
+    /**
+     * Return Ziskej EDD subtype of record based on record formats
+     *
+     * @return string
+     */
+    public function getEddSubtype(): string
+    {
+        return in_array('0/ARTICLES/', $this->getFormats())
+            ? self::EDD_SUBTYPE_ARTICLE
+            : self::EDD_SUBTYPE_SELECTION;
     }
 
     /**

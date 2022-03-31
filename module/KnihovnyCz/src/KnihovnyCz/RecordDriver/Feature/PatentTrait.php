@@ -43,20 +43,23 @@ trait PatentTrait
      * Get patent info for export in txt
      *
      * @return string
-     * TODO: Do we really need these two methods? If so, shouldn't it be rendered
-     * in template?
      */
     public function getPatentInfo(): string
     {
         $patentInfo = [];
-        $patentInfo['country'] = $this->getFieldArray('013', ['b'])[0];
-        $patentInfo['type'] = $this->getFieldArray('013', ['c'])[0];
-        $patentInfo['id'] = $this->getFieldArray('013', ['a'])[0];
-        $patentInfo['publish_date'] = $this->getFieldArray('013', ['d'])[0];
-        if (empty($patentInfo)) {
-            return '';
+        $subfields = [
+            'b' => 'country',
+            'c' => 'type',
+            'a' => 'id',
+            'd' => 'publish_date'
+        ];
+        foreach ($subfields as $subfield => $patentInfoKey) {
+            $data = $this->getFieldArray('013', [$subfield]);
+            if (!empty($data)) {
+                $patentInfo[$patentInfoKey] = $data[0];
+            }
         }
-        return $this->renderPatentInfo($patentInfo);
+        return empty($patentInfo) ? '' : $this->renderPatentInfo($patentInfo);
     }
 
     /**
@@ -68,27 +71,17 @@ trait PatentTrait
      */
     public function renderPatentInfo(array $patentInfo): string
     {
-        $patentInfoText = '';
-        $patentInfoText .= $this->translate('Patent') . ': '
-            . $patentInfo['country'] . ', ';
-        switch ($patentInfo['type']) {
-        case 'B6':
-            $patentInfoText .= $this->translate('patent_file');
-            break;
-        case 'A3':
-            $patentInfoText .= $this->translate('app_invention');
-            break;
-        case 'U1':
-            $patentInfoText .= $this->translate('utility_model');
-            break;
-        default:
-            $patentInfoText .= $this->translate('unknown_patent_type');
-            break;
-        }
-        $patentInfoText = implode(
-            ',',
-            [$patentInfoText, $patentInfo['id'], $patentInfo['publish_date']]
-        ) . "\r\n";
+        $patentType = match ($patentInfo['type'] ?? '') {
+            'B6' => 'patent_file',
+            'A3' => 'app_invention',
+            'U1' => 'utility_model',
+            default => 'unknown_patent_type',
+        };
+        $patentInfoText = $patentInfo['country'];
+        $patentInfoText .= ', ' . $this->translate($patentType);
+        $patentInfoText .= !empty($patentInfo['id']) ? ', ' . $patentInfo['id'] : '';
+        $patentInfoText .= !empty($patentInfo['publish_date'])
+            ? ', ' . $patentInfo['publish_date'] : '';
         return $patentInfoText;
     }
 

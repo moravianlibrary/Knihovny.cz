@@ -41,6 +41,7 @@ class SolrMarc extends SolrDefault
     use \VuFind\RecordDriver\Feature\IlsAwareTrait;
     use \VuFind\RecordDriver\Feature\MarcReaderTrait;
     use \VuFind\RecordDriver\Feature\MarcAdvancedTrait;
+    use Feature\BibframeTrait;
     use Feature\PatentTrait;
 
     /**
@@ -252,5 +253,15 @@ class SolrMarc extends SolrDefault
     public function supportsAjaxStatus()
     {
         return false;
+    }
+
+    /**
+     * Get an array of physical descriptions of the item.
+     *
+     * @return array
+     */
+    public function getPhysicalDescriptions()
+    {
+        return $this->getFieldArray('300', ['a', 'b', 'c', 'e', 'f', 'g'], true);
     }
 }
