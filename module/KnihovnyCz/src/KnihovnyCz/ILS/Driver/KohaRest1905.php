@@ -657,7 +657,7 @@ class KohaRest1905 extends AbstractBase implements \Laminas\Log\LoggerAwareInter
      */
     public function getDefaultPickUpLocation($patron = false, $holdDetails = null)
     {
-        return $this->defaultPickUpLocation;
+        return $patron['home_library'] ?? $this->defaultPickUpLocation;
     }
 
     /**
@@ -1171,6 +1171,7 @@ class KohaRest1905 extends AbstractBase implements \Laminas\Log\LoggerAwareInter
             'email' => $data['email'],
             'major' => null,
             'college' => $data['category_id'],
+            'home_library' => $data['library_id'],
         ];
     }
 
