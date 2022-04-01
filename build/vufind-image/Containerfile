@@ -74,6 +74,7 @@ COPY ./local ${VUFIND_ROOT}/local
 COPY ./module ${VUFIND_ROOT}/module
 COPY --from=themes /vufind-build-themes/themes ${VUFIND_ROOT}/themes
 COPY --from=vufind-src /src/vufind/build.xml ${VUFIND_ROOT}/build.xml
+COPY ./xsl ${VUFIND_ROOT}/xsl
 
 RUN chown vufind:vufind -R ${VUFIND_ROOT}
 

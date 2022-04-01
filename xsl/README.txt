@@ -1,0 +1,1 @@
+XSL templates for converting MARC21 XML to BIBFRAME 2 RDF XMl serialization are based on templates from https://github.com/lcnetdev/marc2bibframe2 distributed under Creative Commons Zero 1.0 Universal (CC0 1.0) license.

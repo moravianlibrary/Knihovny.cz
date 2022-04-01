@@ -35,6 +35,7 @@ $dedupedRecordIds = $tab->getDedupedRecordIds();
         <?php if (!empty($ziskejEdd->getCurrentZiskejTechlibFrontUrl())): ?>
           <form action="<?=$ziskejEdd->getCurrentZiskejTechlibFrontUrl() ?>/ticket_create" id="ziskejEddLogo" method="post" target="_blank">
             <input type="hidden" name="service" value="edd">
+            <input type="hidden" name="edd_subtype" value="<?=$driver->getEddSubtype() ?>">
             <input type="hidden" name="source_id" value="<?=$this->escapeHtmlAttr($tab->getServerName()) ?>">
             <input type="hidden" name="doc_id" value="<?=$this->escapeHtmlAttr($driver->getUniqueID()) ?>">
             <input type="hidden" name="entity_id" value="<?=$this->escapeHtmlAttr($tab->getEntityId()) ?>">
@@ -49,6 +50,7 @@ $dedupedRecordIds = $tab->getDedupedRecordIds();
         <?php if (!empty($ziskejEdd->getCurrentZiskejTechlibFrontUrl())): ?>
           <form action="<?=$ziskejEdd->getCurrentZiskejTechlibFrontUrl() ?>/ticket_create" id="ziskejEddButton" method="post" target="_blank">
             <input type="hidden" name="service" value="edd">
+            <input type="hidden" name="edd_subtype" value="<?=$driver->getEddSubtype() ?>">
             <input type="hidden" name="source_id" value="<?=$this->escapeHtmlAttr($tab->getServerName()) ?>">
             <input type="hidden" name="doc_id" value="<?=$this->escapeHtmlAttr($driver->getUniqueID()) ?>">
             <input type="hidden" name="entity_id" value="<?=$this->escapeHtmlAttr($tab->getEntityId()) ?>">

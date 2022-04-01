@@ -12,7 +12,7 @@ AllLibraries:
     - services_search_txt_mv
     - projects_search_txt_mv
     - note2_search_txt
-    - branch_search_txt
+    - branch_search_txt_mv
     - sigla_search_txt
     - cpk_code_search_txt
   FilterQuery: "record_format:library"
