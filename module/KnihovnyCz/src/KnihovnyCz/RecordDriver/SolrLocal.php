@@ -41,16 +41,6 @@ class SolrLocal extends \KnihovnyCz\RecordDriver\SolrMarc
     use Feature\CitaceProTrait;
 
     /**
-     * Get the sigla for display
-     *
-     * @return string
-     */
-    public function getSiglaDisplay()
-    {
-        return $this->fields['sigla_display'] ?? null;
-    }
-
-    /**
      * Get an array of information about record holdings, obtained in real-time
      * from the ILS.
      *
