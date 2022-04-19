@@ -654,4 +654,14 @@ class SolrDefault extends \VuFind\RecordDriver\SolrDefault
     {
         return parent::getDeduplicatedAuthors(array_merge($dataFields, ['id']));
     }
+
+    /**
+     * Get the sigla for display
+     *
+     * @return string|null
+     */
+    public function getSiglaDisplay(): ?string
+    {
+        return $this->fields['sigla_display'] ?? null;
+    }
 }
