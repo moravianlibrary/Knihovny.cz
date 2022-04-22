@@ -41,7 +41,8 @@ class HeadTitle extends \Laminas\View\Helper\HeadTitle
     /**
      * Escape a string
      *
-     * @param  string $string
+     * @param string $string String to escape
+     *
      * @return string
      */
     protected function escape($string)
