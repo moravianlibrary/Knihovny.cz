@@ -1,6 +1,6 @@
 
 variables:
-  VUFIND_COMMIT_ID: 6921f257bfe52a153cf229b1ca306e0656ef0d0c
+  VUFIND_COMMIT_ID: 944e4a55ee689714d6dca28427276ad35407614b
 
 include:
   - local: build/.gitlab-ci.yml
