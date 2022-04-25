@@ -29,7 +29,7 @@ $this->headMeta()->setProperty('og:image:height', '630');
             '%%titleSeparator%%' => $siteConfig->titleSeparator ?? '::'
           ]
       );
-      $fullTitle = preg_replace( "/\x{200c}/u", '', $fullTitle );
+      $fullTitle = preg_replace("/\x{200c}/u", '', $fullTitle);
       $fullTitle = ltrim($fullTitle, ' |');
       echo $this->headTitle($fullTitle, \Laminas\View\Helper\Placeholder\Container\AbstractContainer::SET);
       $this->headMeta()->setProperty('og:title', $fullTitle);

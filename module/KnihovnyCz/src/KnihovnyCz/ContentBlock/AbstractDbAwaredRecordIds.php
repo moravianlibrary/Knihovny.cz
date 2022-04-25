@@ -27,7 +27,6 @@ declare(strict_types=1);
  * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://knihovny.cz Main Page
  */
-
 namespace KnihovnyCz\ContentBlock;
 
 use Laminas\Db\Sql\Predicate\Expression;
@@ -132,9 +131,12 @@ abstract class AbstractDbAwaredRecordIds
      */
     protected function loadRecords(array $ids): array
     {
-        $ids = array_map(function ($id) {
-            return $this->searchClassId . '|' . $id;
-        }, $ids);
+        $ids = array_map(
+            function ($id) {
+                return $this->searchClassId . '|' . $id;
+            },
+            $ids
+        );
         return $this->recordLoader->loadBatch($ids, true);
     }
 
@@ -181,7 +183,7 @@ abstract class AbstractDbAwaredRecordIds
      *
      * @return string
      */
-    protected abstract function getSlug(): string;
+    abstract protected function getSlug(): string;
 
     /**
      * Return context variables used for rendering the block's template.

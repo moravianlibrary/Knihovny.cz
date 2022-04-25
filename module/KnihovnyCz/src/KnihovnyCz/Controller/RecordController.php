@@ -27,7 +27,6 @@ declare(strict_types=1);
  * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://knihovny.cz Main Page
  */
-
 namespace KnihovnyCz\Controller;
 
 use Laminas\Stdlib\RequestInterface as Request;
@@ -47,7 +46,7 @@ use VuFind\Exception\LibraryCard;
  * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://knihovny.cz Main Page
  *
- * @method  \Laminas\Mvc\Plugin\FlashMessenger\FlashMessenger  flashMessenger
+ * @method \Laminas\Mvc\Plugin\FlashMessenger\FlashMessenger  flashMessenger
  */
 class RecordController extends \VuFind\Controller\RecordController
 {
