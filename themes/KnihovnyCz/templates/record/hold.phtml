@@ -14,6 +14,7 @@
 
 <form class="form-record-hold" method="post" name="placeHold" data-clear-account-cache="holds">
   <?=$this->flashmessages()?>
+  <input type="hidden" name="recordId" value="<?=$this->driver->getUniqueID() ?>" />
   <label class="control-label"><?=$this->transEsc('Title')?></label>
   <p class="form-control-static"><?=$this->driver->getBreadcrumb() ?></p>
   <?php if (in_array("comments", $this->extraHoldFields)): ?>

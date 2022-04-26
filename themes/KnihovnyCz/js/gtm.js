@@ -1,3 +1,4 @@
+/* global dataLayer */
 /**
  * Specification:
  * https://docs.google.com/document/d/1Z0BOH1kbeUvsbVGyVe92rw0l462vwCd1_6Dz3RPyRZI/edit
@@ -8,7 +9,7 @@
  * Spouští se po odeslání formulářového pole.
  */
 // on submit search form
-$(document).on('submit', $('form#searchForm'), function (event) {
+$(document).on('submit', $('form#searchForm'), function reportSubmitForm() {
   dataLayer.push({
     'event': 'action.search',
     'actionContext': {
@@ -19,7 +20,6 @@ $(document).on('submit', $('form#searchForm'), function (event) {
       'nonInteraction': false
     }
   });
-
 });
 
 /*
@@ -28,15 +28,6 @@ $(document).on('submit', $('form#searchForm'), function (event) {
  */
 let typingTimer;
 const $input = $('input#searchForm_lookfor');
-
-$input.on('keyup', function () {
-  clearTimeout(typingTimer);
-  typingTimer = setTimeout(doneTyping, 2000);
-});
-
-$input.on('keydown', function () {
-  clearTimeout(typingTimer);
-});
 
 function doneTyping() {
   dataLayer.push({
@@ -51,373 +42,247 @@ function doneTyping() {
   });
 }
 
+$input.on('keyup', function createTimeout() {
+  clearTimeout(typingTimer);
+  typingTimer = setTimeout(doneTyping, 2000);
+});
+
+$input.on('keydown', function createTimeout() {
+  clearTimeout(typingTimer);
+});
+
 /*
  * Vyhledávání – uložení vyhledávání
  * Spouští se po kliku na tlačítko k uložení vyhledávání.
  */
-// $(document).on('click', '#btnSearchSave', function (event) {
-//   console.debug('uložení vyhledávání');
-//   dataLayer.push({
-//     'event': 'action.search',
-//     'actionContext': {
-//       'eventCategory': 'search',
-//       'eventAction': 'saveSearch',
-//       'eventLabel': response.data.searchTerms.join(), //@todo where to get?
-//       'eventValue': undefined,
-//       'nonInteraction': false
-//     }
-//   });
-// });
-
-/*
- * Použití facetů
- * Spouští se s každou zaškrtnutou položkou.
- */
-// $('body').on('click', '.facet-filter', function (event) {
-//   dataLayer.push({
-//     'event': 'action.facet',
-//     'actionContext': {
-//       'eventCategory': 'facet',
-//       'eventAction': $(this).attr('data-facet').split(':')[0],
-//       'eventLabel': $(this).attr('data-facet').split(':')[1],
-//       'eventValue': useFacet,
-//       'nonInteraction': false
-//     }
-//   });
-// });
-
-// $(document).off("click", ".jstree-anchor").on("click", ".jstree-anchor", function () {
-//   var useFacet = 0;
-//   if ($(this).hasClass('jstree-clicked')) {
-//     useFacet = 1;
-//   }
-//   dataLayer.push({
-//     'event': 'action.facet',
-//     'actionContext': {
-//       'eventCategory': 'facet',
-//       'eventAction': $(this).find('.main').attr('data-facet').split(':')[0],
-//       'eventLabel': $(this).find('.main').attr('data-facet').split(':')[1],
-//       'eventValue': useFacet,
-//       'nonInteraction': false
-//     }
-//   });
-// });
-
-/*
- * Přihlášení
- * Posílá se po úspěšném přihlášení.
- */
-// //TODO: We can't distinguish between social and library login, we can only detect general login action
-// //TODO: add event listener
-// //TODO: get idp name
-// dataLayer.push({
-//   'event': 'action.login',
-//   'actionContext': {
-//     'eventCategory': 'login',
-//     'eventAction': typeof idp !== 'undefined'
-//       ? (idp.name == "MojeID | Google+ | Facebook | LinkedIn" ? 'social' : 'library')
-//       : undefined,
-//     'eventLabel': typeof idp !== 'undefined' ? idp.name : undefined,
-//     'eventValue': undefined,
-//     'nonInteraction': false
-//   }
-// });
-
-/*
- * Akce se záznamem
- */
-
-/*
- * favourite = uložení do oblíbených
- * (pozor, jde to i z vyhledávání)
- * //TODO: z vyhledávání
- */
-// detail záznamu
-/*
- * favourite = uložení do oblíbených
- * (pozor, jde to i z vyhledávání)
- * //TODO: z vyhledávání
- */
-// detail záznamu
-$('form.form-record-save input[type=submit]').on('click', function (event) {
-//$(document).on('click', $('form.form-record-save input[type=submit]'), function (event) {
-  console.debug('Record saved to favourites');
-  event.preventDefault();
+$(document).on('click', '#btnSearchSave', function reportSaveSearch() {
   dataLayer.push({
-    'event': 'action.record',
+    'event': 'action.search',
     'actionContext': {
-      'eventCategory': 'record',
-      'eventAction': 'favourite',
-      'eventLabel': $('input[name=id]').val(),
+      'eventCategory': 'search',
+      'eventAction': 'saveSearch',
+      'eventLabel': $('#searchForm_lookfor').val(),
       'eventValue': undefined,
       'nonInteraction': false
     }
   });
 });
 
-// $('.record-toolbar').on('click', '#save-record', function () {
-//   pushRecordEventToGTM('favourite');
-// });
+/* Použití facetů
+ * Spouští se s každou zaškrtnutou položkou.
+ */
+$('.jstree-anchor, .js-facet-item').on('click', function reportFacets() {
+  let action = $(this).find('.facet-value').text();
+  let type = $(this).parents('.collapse').data('facet');
+  let useFacet = 1;
+  if ($(this).hasClass('active') || $(this).find('.facet > span').hasClass('applied')) {
+    useFacet = 0;
+  }
+  dataLayer.push({
+    'event': 'action.facet',
+    'actionContext': {
+      'eventCategory': 'facet',
+      'eventAction': action,
+      'eventLabel': type,
+      'eventValue': useFacet,
+      'nonInteraction': false
+    }
+  });
+});
 
+/* Přihlášení */
+$('#loginOptions a').on('click', function reportLogin() {
+  dataLayer.push({
+    'event': 'action.login',
+    'actionContext': {
+      'eventCategory': 'login',
+      'eventAction': undefined,
+      'eventLabel': undefined,
+      'eventValue': undefined,
+      'nonInteraction': false
+    }
+  });
+});
+
+/* Favorites from search results */
+$('a.save-record').on('click', function reportFavorites() {
+  dataLayer.push({
+    'event': 'action.record',
+    'actionContext': {
+      'eventCategory': 'record',
+      'eventAction': 'favourite',
+      'eventLabel': $(this).data('id'),
+      'eventValue': undefined,
+      'nonInteraction': false
+    }
+  });
+});
+
+/* Favorites from search results - bulk */
+$('#ribbon-save').on('click', function reportFavorites() {
+  $('.record-list li.result input[type="checkbox"]:checked').each(function reportFavorite() {
+    dataLayer.push({
+      'event': 'action.record',
+      'actionContext': {
+        'eventCategory': 'record',
+        'eventAction': 'favourite',
+        'eventLabel': $(this).val(),
+        'eventValue': undefined,
+        'nonInteraction': false
+      }
+    });
+  });
+});
 
 /*
- * sendEmail = poslat e-mailem
+ * Akce se záznamem
  */
-// $('#mail-record').on('click', function () {
-//   dataLayer.push({
-//     'event': 'action.record',
-//     'actionContext': {
-//       'eventCategory': 'record',
-//       'eventAction': 'sendEmail',
-//       'eventLabel': $('input.hiddenId').val(),
-//       'eventValue': undefined,
-//       'nonInteraction': false
-//     }
-//   });
-// });
-//
-// $('.record-toolbar').on('click', '#mail-record', function () {
-//   pushRecordEventToGTM('sendEmail');
-// });
-//
-// /*
-//  * permalink = zobrazení trvalého odkazu
-//  */
-// $('#permalinkAnchor').on('click', function () {
-//   dataLayer.push({
-//     'event': 'action.record',
-//     'actionContext': {
-//       'eventCategory': 'record',
-//       'eventAction': 'permalink',
-//       'eventLabel': $('input.hiddenId').val(),
-//       'eventValue': undefined,
-//       'nonInteraction': false
-//     }
-//   });
-// });
-//
-// $('#permalinkItem').on('click', '#permalinkAnchor', function () {
-//   pushRecordEventToGTM('permalink');
-// });
+/* common functions */
+function pushRecordEventToGTM(eventAction) {
+  dataLayer.push({
+    'event': 'action.record',
+    'actionContext': {
+      'eventCategory': 'record',
+      'eventAction': eventAction,
+      'eventLabel': $('input.hiddenId').val(),
+      'eventValue': undefined,
+      'nonInteraction': false
+    }
+  });
+}
 
-/*
- * showCitation = zobrazení citačního záznamu
- */
-// $('#citace-pro').on('click', function () {
-//   dataLayer.push({
-//     'event': 'action.record',
-//     'actionContext': {
-//       'eventCategory': 'record',
-//       'eventAction': 'showCitation',
-//       'eventLabel': $('input.hiddenId').val(),
-//       'eventValue': undefined,
-//       'nonInteraction': false
-//     }
-//   });
-// });
-//
-// $('#citace-pro').on('click', '.citations-link', function () {
-//   pushRecordEventToGTM('showCitation');
-// });
+/* favourite = uložení do oblíbených */
+$('.save-record').on('click', function reportFavorites() {
+  pushRecordEventToGTM('favourite');
+});
 
-/*
- * export = export citačního záznamu
- */
-// $('.export-toggle').on('click', function () {
-//   dataLayer.push({
-//     'event': 'action.record',
-//     'actionContext': {
-//       'eventCategory': 'record',
-//       'eventAction': 'export',
-//       'eventLabel': $('input.hiddenId').val(),
-//       'eventValue': undefined,
-//       'nonInteraction': false
-//     }
-//   });
-// });
-//
-// $('.record-toolbar').on('click', '.export-toggle', function () {
-//   pushRecordEventToGTM('export');
-// });
+/* sendEmail = poslat e-mailem */
+$('.mail-record').on('click', function reportSendEmail() {
+  pushRecordEventToGTM('sendEmail');
+});
 
-/*
- * comment = přidání komentáře (dole v části Půjčit / E-verze / Komentáře / metadata)
- */
-//TODO: probably remove, as we don't support comments
-// $('form[name=commentRecordObalkyKnih] .btn-primary').on('click', function () {
-//   dataLayer.push({
-//     'event': 'action.record',
-//     'actionContext': {
-//       'eventCategory': 'record',
-//       'eventAction': 'comment',
-//       'eventLabel': '<?=$this->escapeHtmlAttr($this->driver->getUniqueId())?>', //TODO: get id using js
-//       'eventValue': undefined,
-//       'nonInteraction': false
-//     }
-//   });
-// });
+/* permalink = zobrazení trvalého odkazu */
+$('.permalink-record').on('click', function reportPermalink() {
+  pushRecordEventToGTM('permalink');
+});
 
-/*
- * ebook = odchod na e-verzi
- * (bude se nám lehce dublovat s externím odkazem, ale IMHO to není takový problém)
- */
-// $('#e-version-table a').on('click', function () {
-//   dataLayer.push({
-//     'event': 'action.record',
-//     'actionContext': {
-//       'eventCategory': 'record',
-//       'eventAction': 'ebook',
-//       'eventLabel': $('input.hiddenId').val(),
-//       'eventValue': undefined,
-//       'nonInteraction': false
-//     }
-//   });
-// });
+/* showCitation = zobrazení citačního záznamu */
+$('.cite-record').on('click', function reportCiteRecord() {
+  pushRecordEventToGTM('showCitation');
+});
+
+/* export = export citačního záznamu */
+$('.export-toggle').on('click', function reportExportRecord() {
+  pushRecordEventToGTM('export');
+});
+
+/* ebook = odchod na e-verzi */
+$('#e-version-table a').on('click', function reportEversion() {
+  dataLayer.push({
+    'event': 'action.record',
+    'actionContext': {
+      'eventCategory': 'record',
+      'eventAction': 'ebook',
+      'eventLabel': $('input.hiddenId').val(),
+      'eventValue': undefined,
+      'nonInteraction': false
+    }
+  });
+});
 
 /*
  * Akce v uživatelském účtu
  */
 
+/* payment = platba
+ * TODO: implementovat až budeme podporovat platby */
 /*
- * payment = platba
- */
-// $(document).on('click', '#pay-button', function () {
-//   dataLayer.push({
-//     'event': 'action.account',
-//     'actionContext': {
-//       'eventCategory': 'account',
-//       'eventAction': 'payment',
-//       'eventLabel': 'fines',
-//       'eventValue': undefined,
-//       'nonInteraction': false
-//     }
-//   });
-// });
+$(document).on('click', '#pay-button', function reportPayment() {
+  dataLayer.push({
+    'event': 'action.account',
+    'actionContext': {
+      'eventCategory': 'account',
+      'eventAction': 'payment',
+      'eventLabel': 'fines',
+      'eventValue': undefined,
+      'nonInteraction': false
+    }
+  });
+});
+*/
 
+/* connectedAccount = propojený účet */
+$('#connectCardInitializeBtn').on('click', function reportConnectCard() {
+  dataLayer.push({
+    'event': 'action.account',
+    'actionContext': {
+      'eventCategory': 'account',
+      'eventAction': 'connectedAccount',
+      'eventLabel': undefined,
+      'eventValue': undefined,
+      'nonInteraction': false
+    }
+  });
+});
+
+/* register = klik na (před)registraci
+ * TODO: Implementovat, až budeme podporovat odkazy na registrační formuláře knihoven (pokud vůbec) */
 /*
- * connectedAccount = propojený účet
- */
-//TODO: add event listener
-// Account access
-// dataLayer.push({
-//   'event': 'action.account',
-//   'actionContext': {
-//     'eventCategory': 'account',
-//     'eventAction': 'connectedAccount',
-//     'eventLabel': typeof idp !== 'undefined' ? idp.name : undefined,
-//     'eventValue': undefined,
-//     'nonInteraction': false
-//   }
-// });
+  $('#preregistration a').on('click', function reportRegistration() {
+    dataLayer.push({
+      'event': 'action.account',
+      'actionContext': {
+        'eventCategory': 'account',
+        'eventAction': 'register',
+        'eventLabel': $(this).attr('href'),
+        'eventValue': undefined,
+        'nonInteraction': false
+      }
+    });
+  })
+*/
 
+/* prolongItem = prodloužení výpůjčky */
+$(document).on('click', 'input[name=renewSelected],input[name=renewAll]', function reportProlongCheckouts() {
+  dataLayer.push({
+    'event': 'action.account',
+    'actionContext': {
+      'eventCategory': 'account',
+      'eventAction': 'prolongItem',
+      'eventLabel': undefined,
+      'eventValue': undefined,
+      'nonInteraction': false
+    }
+  });
+});
+
+/* order = objednat/rezervovat */
+$('form[name="placeHold"]').on('submit', function reportPlaceHold() {
+  dataLayer.push({
+    'event': 'action.account',
+    'actionContext': {
+      'eventCategory': 'account',
+      'eventAction': 'order',
+      'eventLabel': $('input[name="recordId"]').val(),
+      'eventValue': undefined,
+      'nonInteraction': false
+    }
+  });
+});
+
+/* Kliky na otazníky s nápovědou
+ * TODO: Doplnit až bude implementována nápověda */
 /*
- * register = klik na (před)registraci
- */
-// $(document).ready(function () {
-//   $('#preregistration a').on('click', function () {
-//     dataLayer.push({
-//       'event': 'action.account',
-//       'actionContext': {
-//         'eventCategory': 'account',
-//         'eventAction': 'register',
-//         'eventLabel': $(this).attr('href'),
-//         'eventValue': undefined,
-//         'nonInteraction': false
-//       }
-//     });
-//   })
-// });
-
-/*
- * prolongItem = prodloužení záznamu
- * //TODO ???
- */
-// $(document).on('click', 'input[name=renewSelected],input[name=renewAll]', function () {
-//   dataLayer.push({
-//     'event': 'action.account',
-//     'actionContext': {
-//       'eventCategory': 'account',
-//       'eventAction': 'prolongItem',
-//       'eventLabel': undefined,
-//       'eventValue': undefined,
-//       'nonInteraction': false
-//     }
-//   });
-// });
-
-/*
- * order = objednat/rezervovat
- */
-// $('input[name=placeHold]').on('click', function () {
-//   dataLayer.push({
-//     'event': 'action.account',
-//     'actionContext': {
-//       'eventCategory': 'account',
-//       'eventAction': 'order',
-//       'eventLabel': $('input.hiddenId').val(), //FIXME: Is this right selector?
-//       'eventValue': undefined,
-//       'nonInteraction': false
-//     }
-//   });
-// });
-
-/*
- * Odeslání formuláře s feedbackem
- */
-// $('#help .btn-primary').on('click', function () {
-//   dataLayer.push({
-//     'event': 'action.contact',
-//     'actionContext': {
-//       'eventCategory': 'contact',
-//       'eventAction': 'feedback',
-//       'eventLabel': 'help',
-//       'eventValue': undefined,
-//       'nonInteraction': false
-//     }
-//   });
-// });
-
-// $('#bugreport .btn-primary').on('click', function () {
-//   dataLayer.push({
-//     'event': 'action.contact',
-//     'actionContext': {
-//       'eventCategory': 'contact',
-//       'eventAction': 'feedback',
-//       'eventLabel': 'bugreport',
-//       'eventValue': undefined,
-//       'nonInteraction': false
-//     }
-//   });
-// });
-
-/*
- * Kliky na otazníky s nápovědou
- */
-// $('.questionmark-help').on('click', function helpTag() {
-//   dataLayer.push({
-//     'event': 'action.help',
-//     'actionContext': {
-//       'eventCategory': 'help',
-//       'eventAction': 'click',
-//       'eventLabel': $(this).attr('data-target'),
-//       'eventValue': undefined,
-//       'nonInteraction': false
-//     }
-//   });
-// });
-
-/*
- * common functions
- */
-// function pushRecordEventToGTM(eventAction) {
-//   dataLayer.push({
-//     'event': 'action.record',
-//     'actionContext': {
-//       'eventCategory': 'record',
-//       'eventAction': eventAction,
-//       'eventLabel': '<?=$this->escapeHtmlAttr($this->driver->getUniqueId())?>', //TODO: How to get record id using only JS?
-//       'eventValue': undefined,
-//       'nonInteraction': false
-//     }
-//   });
-// }
+$('.questionmark-help').on('click', function reportHelpUsage() {
+  dataLayer.push({
+    'event': 'action.help',
+    'actionContext': {
+      'eventCategory': 'help',
+      'eventAction': 'click',
+      'eventLabel': $(this).attr('data-target'),
+      'eventValue': undefined,
+      'nonInteraction': false
+    }
+  });
+});
+*/
