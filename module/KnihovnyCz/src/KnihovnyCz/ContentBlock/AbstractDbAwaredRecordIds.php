@@ -29,7 +29,9 @@ declare(strict_types=1);
  */
 namespace KnihovnyCz\ContentBlock;
 
+use Laminas\Db\ResultSet\ResultSetInterface;
 use Laminas\Db\Sql\Predicate\Expression;
+use Laminas\Db\Sql\Select;
 use VuFind\Db\Row\RowGateway;
 use VuFind\Db\Table\PluginManager as TableManager;
 use VuFind\Record\Loader as RecordLoader;
@@ -101,6 +103,20 @@ abstract class AbstractDbAwaredRecordIds
      * @var array
      */
     protected array $listParams;
+
+    /**
+     * Table for main list
+     *
+     * @var string
+     */
+    protected string $listTableName;
+
+    /**
+     * Table for list items
+     *
+     * @var string
+     */
+    protected string $itemsTableName;
 
     /**
      * Limit
@@ -201,4 +217,23 @@ abstract class AbstractDbAwaredRecordIds
             'items' => $this->getItems(),
         ];
     }
+
+    /**
+     * Takes and returns record ids from result set
+     *
+     * @param ResultSetInterface $items List items
+     *
+     * @return array
+     */
+    protected abstract function getIds(ResultSetInterface $items): array;
+
+    /**
+     * Modify select for getting list items
+     *
+     * @param Select $select SQL select object
+     *
+     * @return void
+     */
+    protected abstract function setSelect(Select $select): void;
+
 }
