@@ -22,5 +22,6 @@ themes/KnihovnyCz/templates/content/*
 !themes/KnihovnyCz/templates/content/markdown.phtml
 themes/KnihovnyCz/css/cookieconsent.min.css
 themes/KnihovnyCz/css/cookieconsent.min.css.map
-phpstan.neon
 vendor
+.php_cs_cache
+.commit

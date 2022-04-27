@@ -225,7 +225,7 @@ abstract class AbstractDbAwaredRecordIds
      *
      * @return array
      */
-    protected abstract function getIds(ResultSetInterface $items): array;
+    abstract protected function getIds(ResultSetInterface $items): array;
 
     /**
      * Modify select for getting list items
@@ -234,6 +234,5 @@ abstract class AbstractDbAwaredRecordIds
      *
      * @return void
      */
-    protected abstract function setSelect(Select $select): void;
-
+    abstract protected function setSelect(Select $select): void;
 }
