@@ -60,4 +60,7 @@ COPY phpunit.xml /var/www/knihovny-cz/
 # Install npm and grunt
 RUN npm install -g grunt-cli && npm install
 
+# Install ESlint and JSHint
+RUN npm install -g eslint jshint
+
 CMD ["knihovny-cz-foreground"]
