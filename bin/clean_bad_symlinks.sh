@@ -1,6 +1,7 @@
 #!/bin/bash
 
-rm local/base/base \
+rm -f \
+   local/base/base \
 	 local/irel/irel \
 	 local/kiv/kiv \
 	 local/knihovny.cz/knihovny.cz \
@@ -9,12 +10,14 @@ rm local/base/base \
 	 local/tech/tech \
    local/templates/templates
 
-rm module/KnihovnyCz/KnihovnyCz \
+rm -f \
+   module/KnihovnyCz/KnihovnyCz \
    module/KnihovnyCzApi/KnihovnyCzApi \
    module/KnihovnyCzConsole/KnihovnyCzConsole \
    module/KnihovnyCzCronApi/KnihovnyCzCronApi
 
-rm themes/KnihovnyCz/KnihovnyCz \
+rm -f \
+   themes/KnihovnyCz/KnihovnyCz \
    themes/irel/irel \
    themes/kiv/kiv \
    themes/mus/mus \
