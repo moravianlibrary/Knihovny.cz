@@ -27,7 +27,6 @@ declare(strict_types=1);
  * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://knihovny.cz Main Page
  */
-
 namespace KnihovnyCz\Controller;
 
 use Laminas\Stdlib\RequestInterface as Request;
@@ -47,7 +46,7 @@ use VuFind\Exception\LibraryCard;
  * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://knihovny.cz Main Page
  *
- * @method  \Laminas\Mvc\Plugin\FlashMessenger\FlashMessenger  flashMessenger
+ * @method \Laminas\Mvc\Plugin\FlashMessenger\FlashMessenger  flashMessenger
  */
 class RecordController extends \VuFind\Controller\RecordController
 {
@@ -275,6 +274,26 @@ class RecordController extends \VuFind\Controller\RecordController
 
         try {
             $ticket = $ziskejApi->createTicket($eppn, $ticketNew);
+
+            if (!$ticket) {
+                $this->flashMessenger()->addMessage(
+                    'Ziskej::failure_order_finished',
+                    'error'
+                );
+                return $this->redirectToRecord('#ziskejmvs', 'Ziskej');
+            }
+
+            $this->flashMessenger()->addMessage(
+                'Ziskej::success_order_finished',
+                'success'
+            );
+            return $this->redirect()->toRoute(
+                'myresearch-ziskej-ticket',
+                [
+                    'eppnDomain' => $userCard->getEppnDomain(),
+                    'ticketId' => $ticket->getId(),
+                ]
+            );
         } catch (\Mzk\ZiskejApi\Exception\ApiResponseException $e) {
             $this->flashMessenger()->addMessage(
                 'Ziskej::failure_order_finished',
@@ -286,30 +305,5 @@ class RecordController extends \VuFind\Controller\RecordController
             );
             return $this->redirectToRecord('#ziskejmvs', 'Ziskej');
         }
-
-        if ($ticket) {
-            $this->flashMessenger()->addMessage(
-                'Ziskej::success_order_finished',
-                'success'
-            );
-
-            return $this->redirect()->toRoute(
-                'ziskej-order-finished',
-                [
-                    'eppnDomain' => $userCard->getEppnDomain(),
-                    'ticketId' => $ticket->getId(),
-                ]
-            );
-        }
-        $this->flashMessenger()->addMessage(
-            'Ziskej::success_order_finished',
-            'error'
-        );
-        return $this->redirect()->toRoute(
-            'ziskej-order-finished',
-            [
-                'eppnDomain' => $userCard->getEppnDomain(),
-            ]
-        );
     }
 }

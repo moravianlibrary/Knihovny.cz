@@ -68,7 +68,8 @@ class GoogleTagManagerFactory implements FactoryInterface
         if (!empty($options)) {
             throw new \Exception('Unexpected options sent to factory.');
         }
-        $config = $container->get(\VuFind\Config\PluginManager::class)->get('config');
+        $config
+            = $container->get(\VuFind\Config\PluginManager::class)->get('config');
         $key = $config->GoogleTagManager->apiKey ?? '';
         return new $requestedName($key);
     }

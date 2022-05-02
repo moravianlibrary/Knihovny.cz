@@ -162,10 +162,13 @@ class MyResearchZiskejController extends AbstractBase
             $view->setVariable('tickets', $tickets);
         } catch (\Exception $e) {
             if (!$ignoreError) {
-                $this->logError('Unexpected ' . get_class($e) . ': ' . $e->getMessage());
+                $this->logError(
+                    'Unexpected ' . get_class($e) . ': ' . $e->getMessage()
+                );
                 $view->setVariable('tickets', []);
                 $view->error = true;
-                $this->flashMessenger()->addErrorMessage('ziskej_generic_error_message');
+                $this->flashMessenger()
+                    ->addErrorMessage('ziskej_generic_error_message');
             }
         }
         $view->setTemplate('myresearchziskej/list-ajax');

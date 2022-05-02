@@ -89,8 +89,10 @@
         </div>
       </div>
       <span id="groupPlaceHolder" class="hidden">
-        <?=$this->icon('ui-add') ?>
-        <a href="#" role="button"><?= $this->transEsc('add_search_group') ?></a>
+        <a href="#" role="button">
+          <?=$this->icon('ui-add') ?>
+          <?=$this->transEsc('add_search_group') ?>
+        </a>
       </span>
       <?php /* fallback to a fixed set of search groups/fields if JavaScript is turned off */ ?>
       <div class="no-js">
@@ -123,8 +125,11 @@
                   <?php if($group == 0 && $search == 0): ?>
                     </div>
                     <span class="float-left">
-                      <?=$this->icon('ui-add', 'search_place_holder hidden') ?>
-                      <a href="#" class="add_search_link hidden" role="button"><?=$this->transEsc("add_search")?></a>
+                      <span class="search_place_holder hidden"></span>
+                      <a href="#" class="add_search_link hidden" role="button">
+                        <?=$this->icon('ui-add') ?>
+                        <?=$this->transEsc("add_search")?>
+                      </a>
                     </span>
                   <?php endif; ?>
                 <?php endfor; ?>

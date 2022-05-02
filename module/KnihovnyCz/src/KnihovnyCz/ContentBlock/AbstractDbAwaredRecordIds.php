@@ -27,10 +27,11 @@ declare(strict_types=1);
  * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://knihovny.cz Main Page
  */
-
 namespace KnihovnyCz\ContentBlock;
 
+use Laminas\Db\ResultSet\ResultSetInterface;
 use Laminas\Db\Sql\Predicate\Expression;
+use Laminas\Db\Sql\Select;
 use VuFind\Db\Row\RowGateway;
 use VuFind\Db\Table\PluginManager as TableManager;
 use VuFind\Record\Loader as RecordLoader;
@@ -104,6 +105,20 @@ abstract class AbstractDbAwaredRecordIds
     protected array $listParams;
 
     /**
+     * Table for main list
+     *
+     * @var string
+     */
+    protected string $listTableName;
+
+    /**
+     * Table for list items
+     *
+     * @var string
+     */
+    protected string $itemsTableName;
+
+    /**
      * Limit
      *
      * @var int
@@ -132,9 +147,12 @@ abstract class AbstractDbAwaredRecordIds
      */
     protected function loadRecords(array $ids): array
     {
-        $ids = array_map(function ($id) {
-            return $this->searchClassId . '|' . $id;
-        }, $ids);
+        $ids = array_map(
+            function ($id) {
+                return $this->searchClassId . '|' . $id;
+            },
+            $ids
+        );
         return $this->recordLoader->loadBatch($ids, true);
     }
 
@@ -181,7 +199,7 @@ abstract class AbstractDbAwaredRecordIds
      *
      * @return string
      */
-    protected abstract function getSlug(): string;
+    abstract protected function getSlug(): string;
 
     /**
      * Return context variables used for rendering the block's template.
@@ -199,4 +217,22 @@ abstract class AbstractDbAwaredRecordIds
             'items' => $this->getItems(),
         ];
     }
+
+    /**
+     * Takes and returns record ids from result set
+     *
+     * @param ResultSetInterface $items List items
+     *
+     * @return array
+     */
+    abstract protected function getIds(ResultSetInterface $items): array;
+
+    /**
+     * Modify select for getting list items
+     *
+     * @param Select $select SQL select object
+     *
+     * @return void
+     */
+    abstract protected function setSelect(Select $select): void;
 }

@@ -41,16 +41,6 @@ class SolrLocal extends \KnihovnyCz\RecordDriver\SolrMarc
     use Feature\CitaceProTrait;
 
     /**
-     * Get the sigla for display
-     *
-     * @return string
-     */
-    public function getSiglaDisplay()
-    {
-        return $this->fields['sigla_display'] ?? null;
-    }
-
-    /**
      * Get an array of information about record holdings, obtained in real-time
      * from the ILS.
      *
@@ -83,8 +73,9 @@ class SolrLocal extends \KnihovnyCz\RecordDriver\SolrMarc
         $f996 = $this->fields['mappings996_display_mv'] ?? [];
         $isCaslin = str_starts_with($this->getUniqueID(), 'caslin');
         /* @phpstan-ignore-next-line */
-        $driverName = $this->ils->getDriverName($this->getUniqueID());
-        $isAleph = $this->hasILS() && $driverName === 'Aleph';
+
+        $isAleph = $this->hasILS()
+            && $this->ils->getDriverName($this->getUniqueID()) === 'Aleph';
         foreach ($f996 as $line) {
             [
                 $itemId, $callnumber, $location, $callnumber_second,

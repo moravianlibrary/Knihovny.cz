@@ -48,10 +48,20 @@ class SearchController extends \VuFind\Controller\SearchController
     use \VuFind\I18n\Translator\LanguageInitializerTrait;
     use \VuFind\I18n\Translator\TranslatorAwareTrait;
 
+    /**
+     * Constructor
+     *
+     * @param ServiceLocatorInterface $sm Service manager
+     *
+     * @throws \Psr\Container\ContainerExceptionInterface
+     * @throws \Psr\Container\NotFoundExceptionInterface
+     */
     public function __construct(ServiceLocatorInterface $sm)
     {
         parent::__construct($sm);
-        $this->setTranslator($sm->get(\Laminas\I18n\Translator\TranslatorInterface::class));
+        $this->setTranslator(
+            $sm->get(\Laminas\I18n\Translator\TranslatorInterface::class)
+        );
     }
 
     /**
