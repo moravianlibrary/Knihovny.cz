@@ -243,9 +243,8 @@ class ChildDocDeduplicationListener extends DeduplicationListener
             $mode = $search->Solr->default_field_list_mode;
             if ($mode == 'solr') {
                 return null;
-            } elseif ($mode == 'override' && isset($search->Solr
-                        ->default_field_list_override
-                )
+            } elseif ($mode == 'override'
+                && isset($search->Solr->default_field_list_override)
             ) {
                 return $search->Solr->default_field_list_override;
             }
