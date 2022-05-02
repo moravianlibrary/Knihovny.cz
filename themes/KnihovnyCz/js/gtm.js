@@ -69,26 +69,46 @@ $(document).on('click', '#btnSearchSave', function reportSaveSearch() {
 });
 
 /* Použití facetů
- * Spouští se s každou zaškrtnutou položkou.
- */
-$('.jstree-anchor, .js-facet-item').on('click', function reportFacets() {
-  let action = $(this).find('.facet-value').text();
-  let type = $(this).parents('.collapse').data('facet');
-  let useFacet = 1;
-  if ($(this).hasClass('active') || $(this).find('.facet > span').hasClass('applied')) {
-    useFacet = 0;
-  }
-  dataLayer.push({
-    'event': 'action.facet',
-    'actionContext': {
-      'eventCategory': 'facet',
-      'eventAction': action,
-      'eventLabel': type,
-      'eventValue': useFacet,
-      'nonInteraction': false
+ * Spouští se s každou zaškrtnutou položkou. */
+// Function for adding handler on facets
+const addFacetHandler = function addFacetHandler(target) {
+  $(target).find('.jstree-anchor, .js-facet-item').on('click', function reportFacets() {
+    let action = $(this).find('.facet-value').text();
+    let type = $(this).parents('.collapse').data('facet');
+    let useFacet = 1;
+    if ($(this).hasClass('active') || $(this).find('.facet > span').hasClass('applied')) {
+      useFacet = 0;
     }
+    dataLayer.push({
+      'event': 'action.facet',
+      'actionContext': {
+        'eventCategory': 'facet',
+        'eventAction': action,
+        'eventLabel': type,
+        'eventValue': useFacet,
+        'nonInteraction': false
+      }
+    });
   });
-});
+};
+
+// We need to observe change of type childList and subtree
+const configFacets = { attributes: false, childList: true, subtree: true };
+
+// Callback function to execute when mutations are observed
+const observeFacetsHandler = function observeFacetsHandler(mutationsList) {
+  // Use traditional 'for loops' for IE 11
+  for (const mutation of mutationsList) {
+    addFacetHandler(mutation.target);
+  }
+};
+
+const facetsObserver = new MutationObserver(observeFacetsHandler);
+
+document.addEventListener('DOMContentLoaded', function runObserver() {
+  const targetNode = document.querySelector('.side-facets-container-ajax');
+  facetsObserver.observe(targetNode, configFacets);
+}, false);
 
 /* Přihlášení */
 $('#loginOptions a').on('click', function reportLogin() {
