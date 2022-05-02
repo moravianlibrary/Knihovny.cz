@@ -66,8 +66,8 @@ class LoaderFactory implements FactoryInterface
         if (!empty($options)) {
             throw new \Exception('Unexpected options passed to factory.');
         }
-        $config = $this->serviceLocator->get('VuFind\Config');
-        $search = $this->config->get('searches');
+        $config = $container->get(\VuFind\Config\PluginManager::class);
+        $search = $config->get('searches');
         $filterChildRecords = isset($search->ChildRecordFilters)
             && !empty($search->ChildRecordFilters);
         return new $requestedName(
