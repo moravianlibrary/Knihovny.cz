@@ -527,9 +527,9 @@ class SolrDefault extends \VuFind\RecordDriver\SolrDefault
 
     /**
      * Return deduplicated records - array with key as institution source and
-     * value with record ids
+     * value with record ids or false if not supported
      *
-     * @return array
+     * @return array|false
      */
     public function getDeduplicatedRecords()
     {

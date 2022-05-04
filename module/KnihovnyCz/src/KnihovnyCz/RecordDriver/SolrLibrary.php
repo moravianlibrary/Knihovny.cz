@@ -380,4 +380,15 @@ class SolrLibrary extends \KnihovnyCz\RecordDriver\SolrMarc
     {
         $this->facetsConfig = $facetsConfig;
     }
+
+    /**
+     * Return deduplicated records - array with key as institution source and
+     * value with record ids or false if not supported
+     *
+     * @return array|false
+     */
+    public function getDeduplicatedRecords()
+    {
+        return false;
+    }
 }

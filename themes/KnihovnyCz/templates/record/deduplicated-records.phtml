@@ -3,9 +3,13 @@
   $currentSource = $this->driver->tryMethod('getSourceId');
   $logosPostfix = '_small';
   $data = [];
-  $records = $this->driver->tryMethod('getDeduplicatedRecords') ?? [];
-  $recordMissing = false;
-  if (!empty($records)) {
+  $records = $this->driver->tryMethod('getDeduplicatedRecords', [], false);
+  $recordMissing = $records !== false && empty($records);
+  if ($records === false) {
+    $records = [];
+  } else if (empty($records)) {
+      $records = [$currentSource => [$currentRecordId]];
+  } else if (!empty($records)) {
     if (!isset($records[$currentSource])) {
       $records[$currentSource] = [$currentRecordId];
       $recordMissing = true;
@@ -15,7 +19,6 @@
       $recordMissing = true;
     }
   }
-  $recordsCount = count($records);
   foreach ($records as $source => $ids) {
     $imageSrc = $this->imageLink(
         'institutions/logos/' . $source . '/' . $source
@@ -32,6 +35,7 @@
   }
   $internalMultiplicity = $records[$currentSource] ?? [];
   $internalMultiplicityCount = count($internalMultiplicity);
+  $recordsCount = count($records);
   $showInstitutionPanel = $recordsCount >= 1 || $internalMultiplicityCount > 1;
 ?>
 <?php if ($showInstitutionPanel): ?>
