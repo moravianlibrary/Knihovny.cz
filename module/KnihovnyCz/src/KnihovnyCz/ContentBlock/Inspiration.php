@@ -66,7 +66,7 @@ class Inspiration extends AbstractDbAwaredRecordIds
     /**
      * Modify select for getting list items
      *
-     * @param Select $select
+     * @param Select $select SQL select object
      *
      * @return void
      */
@@ -78,7 +78,7 @@ class Inspiration extends AbstractDbAwaredRecordIds
     /**
      * Takes and returns record ids from result set
      *
-     * @param ResultSetInterface $items
+     * @param ResultSetInterface $items Inspiration list items
      *
      * @return array
      */

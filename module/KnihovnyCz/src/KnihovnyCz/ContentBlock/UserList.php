@@ -28,7 +28,6 @@
  */
 namespace KnihovnyCz\ContentBlock;
 
-use KnihovnyCz\Db\Row\UserList as UserListRow;
 use Laminas\Db\ResultSet\ResultSetInterface;
 use Laminas\Db\Sql\Select;
 
@@ -67,7 +66,7 @@ class UserList extends AbstractDbAwaredRecordIds
     /**
      * Modify select for getting list items
      *
-     * @param Select $select
+     * @param Select $select SQL select object
      *
      * @return void
      */
@@ -85,7 +84,7 @@ class UserList extends AbstractDbAwaredRecordIds
     /**
      * Takes and returns record ids from result set
      *
-     * @param ResultSetInterface $items
+     * @param ResultSetInterface $items List items
      *
      * @return array
      */

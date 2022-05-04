@@ -1,12 +1,10 @@
 <?php
-declare(strict_types=1);
-
 /**
- * Class GoogleTagManagerFactory
+ * Factory for GetACSuggestions AJAX handler.
  *
  * PHP version 7
  *
- * Copyright (C) Moravian Library 2021.
+ * Copyright (C) Moravian Library 2022.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -21,30 +19,30 @@ declare(strict_types=1);
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  *
- * @category CPK-vufind-6
- * @package  KnihovnyCz\View\Helper\KnihovnyCz
- * @author   Josef Moravec <moravec@mzk.cz>
- * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
- * @link     https://knihovny.cz Main Page
+ * @category VuFind
+ * @package  KnihovnyCz\AjaxHandler
+ * @author   Vaclav Rosecky <vaclav.rosecky@mzk.cz>
+ * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
+ * @link     https://vufind.org/wiki/development Wiki
  */
-namespace KnihovnyCz\View\Helper\KnihovnyCz;
+namespace KnihovnyCz\AjaxHandler;
 
 use Interop\Container\ContainerInterface;
 use Interop\Container\Exception\ContainerException;
 use Laminas\ServiceManager\Exception\ServiceNotCreatedException;
 use Laminas\ServiceManager\Exception\ServiceNotFoundException;
-use Laminas\ServiceManager\Factory\FactoryInterface;
 
 /**
- * Class GoogleTagManagerFactory
+ * Factory for GetLibrariesACSuggestions AJAX handler.
  *
- * @category CPK-vufind-6
- * @package  KnihovnyCz\View\Helper\KnihovnyCz
- * @author   Josef Moravec <moravec@mzk.cz>
- * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
- * @link     https://knihovny.cz Main Page
+ * @category VuFind
+ * @package  KnihovnyCz\AjaxHandler
+ * @author   Vaclav Rosecky <vaclav.rosecky@mzk.cz>
+ * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
+ * @link     https://vufind.org/wiki/development Wiki
  */
-class GoogleTagManagerFactory implements FactoryInterface
+class GetLibrariesACSuggestionsFactory
+    implements \Laminas\ServiceManager\Factory\FactoryInterface
 {
     /**
      * Create an object
@@ -59,18 +57,19 @@ class GoogleTagManagerFactory implements FactoryInterface
      * @throws ServiceNotCreatedException if an exception is raised when
      * creating a service.
      * @throws ContainerException&\Throwable if any other error occurs
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __invoke(
         ContainerInterface $container,
         $requestedName,
         array $options = null
-    ): object {
+    ) {
         if (!empty($options)) {
-            throw new \Exception('Unexpected options sent to factory.');
+            throw new \Exception('Unexpected options passed to factory.');
         }
-        $config
-            = $container->get(\VuFind\Config\PluginManager::class)->get('config');
-        $key = $config->GoogleTagManager->apiKey ?? '';
-        return new $requestedName($key);
+        return new $requestedName(
+            $container->get(\VuFind\Search\Results\PluginManager::class)
+        );
     }
 }

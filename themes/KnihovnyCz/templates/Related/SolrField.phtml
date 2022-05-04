@@ -23,7 +23,7 @@
                   <?php $formatClass = 'format-' . preg_replace('/[^a-z]/', '', strtolower($format)); ?>
                   <div class="spinner"><i class="cover-icon <?=$formatClass?>"></i></div>
                 <?php else: ?>
-                  <div class="spinner"><?=$this->icon('spinner') . $this->translate('Loading')?>...</div>
+                  <div class="spinner"><?=$this->icon('spinner') . $this->translate('loading_ellipsis')?></div>
                 <?php endif; ?>
                 <div class="cover-container">
                   <img <?=$dataAttrs?>  data-coversize="small" class="recordcover ajax" alt="<?=$alt ?>" />

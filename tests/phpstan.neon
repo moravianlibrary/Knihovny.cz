@@ -1,0 +1,13 @@
+parameters:
+    phpVersion: 80000
+    scanDirectories:
+        - /var/www/knihovny-cz/module
+    paths:
+        - /var/www/knihovny-cz-extension/module
+    tmpDir: %currentWorkingDirectory%/.phpstan_cache
+    bootstrapFiles:
+        - /var/www/knihovny-cz/tests/phpstan-constants.php
+    level: 0
+    reportUnmatchedIgnoredErrors: false
+    parallel:
+        processTimeout: 600.0

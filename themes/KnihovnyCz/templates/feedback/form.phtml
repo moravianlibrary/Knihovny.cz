@@ -109,3 +109,22 @@
   <?php endforeach ?>
   <?= $this->form()->closeTag() ?>
 <?php if (!$this->inLightbox): ?></div><?php endif; ?>
+<?php
+// Odeslání formuláře s feedbackem
+  $gtm = <<<JS
+  $('form[action="/Feedback/Form/FeedbackSite"]').on('submit', function () {
+    console.debug('feedback');
+    dataLayer.push({
+      'event': 'action.contact',
+      'actionContext': {
+      'eventCategory': 'contact',
+        'eventAction': 'feedback',
+        'eventLabel': 'help',
+        'eventValue': undefined,
+        'nonInteraction': false
+      }
+    });
+  });
+JS;
+?>
+<?=$this->inlineScript(\Laminas\View\Helper\HeadScript::SCRIPT, $gtm, 'SET'); ?>

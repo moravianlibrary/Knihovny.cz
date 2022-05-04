@@ -52,7 +52,7 @@ class GoogleTagManager extends AbstractHelper
     /**
      * Constructor
      *
-     * @param string $key
+     * @param string $key API key
      */
     public function __construct(string $key)
     {
@@ -113,7 +113,9 @@ HTML;
         $jsCode = $this->getRawJavascript();
         $inlineScriptHelper = $this->getView()->plugin('inlinescript');
         $inlineScript = $inlineScriptHelper(
-            \Laminas\View\Helper\HeadScript::SCRIPT, $jsCode, 'SET'
+            \Laminas\View\Helper\HeadScript::SCRIPT,
+            $jsCode,
+            'SET'
         );
         $noScript = $this->getNoScript();
         return $inlineScript . $noScript;

@@ -42,7 +42,6 @@ use VuFind\Search\Solr\AbstractErrorListener as ErrorListener;
  */
 class SearchRunner extends Base
 {
-
     /**
      * Run the search.
      *
@@ -133,5 +132,4 @@ class SearchRunner extends Base
 
         return $results;
     }
-
 }

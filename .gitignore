@@ -16,10 +16,12 @@ themes/KnihovnyCz/css/compiled.css
 themes/KnihovnyCz/css/embedded-search.css
 themes/KnihovnyCz/images/content
 themes/KnihovnyCz/templates/ContentBlock/TemplateBased
+!themes/KnihovnyCz/templates/ContentBlock/TemplateBased/markdown.phtml
 themes/KnihovnyCz/templates/content/*
 !themes/KnihovnyCz/templates/content/content.phtml
 !themes/KnihovnyCz/templates/content/markdown.phtml
 themes/KnihovnyCz/css/cookieconsent.min.css
 themes/KnihovnyCz/css/cookieconsent.min.css.map
-phpstan.neon
 vendor
+.php_cs_cache
+.commit

@@ -12,12 +12,12 @@
   <?php if ($this->accountCapabilities()->getSavedSearchSetting() === 'enabled' && is_numeric($this->results->getSearchId())): ?>
     &mdash;
     <?php if ($this->results->isSavedSearch()): ?>
-      <a href="<?=$this->url('myresearch-savesearch')?>?delete=<?=urlencode($this->results->getSearchId())?>">
-        <?=$this->icon('ui-delete') ?>
+      <a id="btnSearchRemove" href="<?=$this->url('myresearch-savesearch')?>?delete=<?=urlencode($this->results->getSearchId())?>">
+        <?=$this->icon('search-delete') ?>
         <?=$this->transEsc('save_search_remove')?>
       </a>
     <?php else: ?>
-      <a href="<?=$this->url('myresearch-savesearch')?>?save=<?=urlencode($this->results->getSearchId())?>">
+      <a id="btnSearchSave" href="<?=$this->url('myresearch-savesearch')?>?save=<?=urlencode($this->results->getSearchId())?>">
         <?=$this->icon('search-save') ?>
         <?=$this->transEsc('save_search')?>
       </a>
