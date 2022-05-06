@@ -281,8 +281,8 @@ class SolrLibrary extends \KnihovnyCz\RecordDriver\SolrMarc
      */
     public function getBookSearchFilter()
     {
-        $institution = $this->fields['cpk_code_display'] ?? null;
-        $institutionsMappings = $institution
+        $institution = $this->getCpkCode();
+        $institutionsMappings = ($institution !== '')
             ? $this->facetsConfig->InstitutionsMappings->toArray() : [];
         return $institutionsMappings[$institution] ?? null;
     }
@@ -379,5 +379,43 @@ class SolrLibrary extends \KnihovnyCz\RecordDriver\SolrMarc
     public function attachFacetsConfig($facetsConfig)
     {
         $this->facetsConfig = $facetsConfig;
+    }
+
+    /**
+     * Get translated region name
+     *
+     * @return string
+     */
+    public function getRegion(): string
+    {
+        $regionRaw = $this->fields['region_display'] ?? '';
+        return ($regionRaw !== '')
+            ? $this->translate('Region::' . $regionRaw)
+            : '';
+    }
+
+    /**
+     * Get source code for library involved in Knihovny.cz project
+     *
+     * @return string
+     */
+    public function getCpkCode(): string
+    {
+        return $this->fields['cpk_code_display'] ?? '';
+    }
+
+    /**
+     * Return full name based on library source code
+     *
+     * @return string
+     */
+    public function getTranslatedNameBySource(): string
+    {
+        $sourceId = $this->getCpkCode();
+        if ($sourceId !== '') {
+            $translatedName = $this->translate('Source::' . $sourceId);
+            return ($translatedName !== $sourceId) ? $translatedName : '';
+        }
+        return '';
     }
 }
