@@ -1,0 +1,113 @@
+<?php
+$account = $this->auth()->getManager();
+$accountLabel = $this->translate("Your Account");
+$user = $account->isLoggedIn();
+if ($user && $user->firstname && $user->lastname) {
+  $accountLabel = $user->firstname . ' ' . $user->lastname;
+}
+?>
+<div class="banner container navbar">
+  <div class="navbar-header">
+    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#header-collapse" aria-hidden="true">
+      <?=$this->icon('ui-menu', 'fa-fw') ?>
+    </button>
+    <a class="navbar-brand lang-<?=$this->layout()->userLang ?>" href="<?=$this->url('home') ?>">
+      <img class="knihovny-logo" src="<?=$this->render('layout/logoimagelink.phtml');?>" alt="<?= $this->translate('logo_alt') ?>">
+    </a>
+  </div>
+  <?php if (!isset($this->layout()->renderingError)): ?>
+    <div class="collapse navbar-collapse" id="header-collapse">
+      <nav>
+        <ul class="nav navbar-nav navbar-right flip">
+          <?php if ($this->feedback()->tabEnabled()): ?>
+            <li>
+              <a id="feedbackLink" data-lightbox href="<?=$this->url('feedback-home') ?>">
+                <?=$this->icon('feedback') ?>
+                <?=$this->transEsc("Feedback")?>
+              </a>
+            </li>
+          <?php endif; ?>
+          <?php $cart = $this->cart(); if ($cart->isActive()): ?>
+            <li id="cartSummary">
+              <a id="cartItems" data-lightbox title="<?=$this->transEscAttr('View Book Bag')?>" href="<?=$this->url('cart-home')?>">
+                <span role="status"><span class="sr-only"><?=$this->transEsc('Book Bag')?>:</span>
+                  <sup class="badge badge-info">
+                    <strong><?=count($cart->getItems())?></strong><span class="sr-only"> <?=$this->transEsc('items')?></span>
+                  </sup>
+                  <?=$this->icon('cart') ?>
+                </span>
+                <?=$this->transEsc('Book Bag')?>
+                <span class="full<?=!$cart->isFull() ? ' hidden' : '' ?>">(<?=$this->transEsc('bookbag_full') ?>)</span>
+              </a>
+            </li>
+          <?php endif; ?>
+          <?php if (is_object($account) && $account->loginEnabled()): // hide login/logout if unavailable ?>
+            <li class="logoutOptions<?php if($account->dropdownEnabled()): ?> with-dropdown<?php endif ?><?php if(!$account->isLoggedIn()): ?> hidden<?php endif ?>">
+              <a href="<?=$this->url('myresearch-home', [], ['query' => ['redirect' => 0]])?>">
+                <span id="account-icon"><?=$this->icon('my-account') ?></span>
+                <?=$this->escapeHtml($accountLabel)?>
+              </a>
+            </li>
+            <?php if ($account->dropdownEnabled()): ?>
+              <li id="login-dropdown" class="dropdown<?php if(!$account->isLoggedIn()): ?> hidden<?php endif ?>">
+                <a href="#" data-toggle="dropdown"><?=$this->icon('dropdown-caret') ?></a>
+                <div class="dropdown-menu">
+                  <?=$this->render('myresearch/menu'); ?>
+                </div>
+              </li>
+            <?php endif; ?>
+            <li class="logoutOptions<?php if(!$account->isLoggedIn()): ?> hidden<?php endif ?>">
+              <a href="<?=$this->url('myresearch-logout')?>" class="logout">
+                <?=$this->icon('sign-out') ?>
+                <?=$this->transEsc("Log Out")?>
+              </a>
+            </li>
+            <li id="loginOptions"<?php if($account->isLoggedIn()): ?> class="hidden"<?php endif ?>>
+              <?php if ($account->getSessionInitiator($this->serverUrl($this->url('myresearch-home')))): ?>
+                <a href="<?=$this->url('myresearch-userlogin')?>">
+                  <?=$this->icon('sign-in') ?>
+                  <?=$this->transEsc("Institutional Login")?>
+                </a>
+              <?php else: ?>
+                <a href="<?=$this->url('myresearch-userlogin')?>" data-lightbox>
+                  <?=$this->icon('sign-in') ?>
+                  <?=$this->transEsc("Login")?>
+                </a>
+              <?php endif; ?>
+            </li>
+          <?php endif; ?>
+
+          <?php if (isset($this->layout()->themeOptions) && count($this->layout()->themeOptions) > 1): ?>
+            <li class="theme dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown"><?=$this->transEsc("Theme")?><?=$this->icon('dropdown-caret') ?></a>
+              <ul class="dropdown-menu">
+                <?php foreach ($this->layout()->themeOptions as $current): ?>
+                  <li<?=$current['selected'] ? ' class="active"' : ''?>>
+                    <a href="<?=$this->escapeHtmlAttr($this->url()->addQueryParameters(['ui' => $current['name']])) ?>" rel="nofollow">
+                      <?=$this->transEsc($current['desc']) ?>
+                    </a>
+                  </li>
+                <?php endforeach; ?>
+              </ul>
+            </li>
+          <?php endif; ?>
+
+          <?php if (isset($this->layout()->allLangs) && count($this->layout()->allLangs) > 1): ?>
+            <li class="language dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown"><?=$this->icon('language-select') ?> <?=$this->transEsc("Language")?><?=$this->icon('dropdown-caret') ?></a>
+              <ul class="dropdown-menu">
+                <?php foreach ($this->layout()->allLangs as $langCode => $langName): ?>
+                  <li<?=$this->layout()->userLang == $langCode ? ' class="active"' : ''?>>
+                    <a href="<?=$this->escapeHtmlAttr($this->url()->addQueryParameters(['lng' => $langCode])) ?>" rel="nofollow">
+                      <?=$this->displayLanguageOption($langName) ?>
+                    </a>
+                  </li>
+                <?php endforeach; ?>
+              </ul>
+            </li>
+          <?php endif; ?>
+        </ul>
+      </nav>
+    </div>
+  <?php endif; ?>
+</div>
