@@ -8,12 +8,12 @@ docker/data
 nohup.out
 local/*/cache/
 local/*/config/vufind/*.local.ini
-themes/KnihovnyCz/css/compiled.css
-themes/KnihovnyCz/css/embedded-search.css
-themes/KnihovnyCz/images/content
-themes/KnihovnyCz/templates/ContentBlock/TemplateBased
+themes/*/css/compiled.css
+themes/*/css/embedded-search.css
+themes/*/images/content
+themes/*/templates/ContentBlock/TemplateBased
 !themes/KnihovnyCz/templates/ContentBlock/TemplateBased/markdown.phtml
-themes/KnihovnyCz/templates/content/*
+themes/*/templates/content/*
 !themes/KnihovnyCz/templates/content/content.phtml
 !themes/KnihovnyCz/templates/content/markdown.phtml
 themes/KnihovnyCz/css/cookieconsent.min.css

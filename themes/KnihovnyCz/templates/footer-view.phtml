@@ -1,0 +1,71 @@
+<footer class="hidden-print">
+  <div class="linkbar">
+    <div class="container">
+      <div class="row">
+        <div class="col-xs-12 col-sm-6 col-md-4">
+          <ul class="list-unstyled">
+            <li><?=$this->footerLink('ochrana-osobnich-udaju') ?></li>
+          </ul>
+        </div>
+        <div class="col-xs-12 col-sm-6 col-md-4">
+          <ul class="list-unstyled">
+            <li><?=$this->footerLink('napoveda') ?></li>
+          </ul>
+        </div>
+        <div class="col-xs-12 col-sm-6 col-md-4">
+          <ul class="list-unstyled">
+            <li><a data-lightbox href="<?=$this->url('feedback-home') ?>"><?=$this->transEsc("Feedback")?></a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="infobar">
+    <div class="container">
+      <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8">
+          <h3><?=$this->translate('Footer header') ?></h3>
+          <p class="text">
+            <?=$this->translate('Footer text') ?>
+          </p>
+        </div>
+        <div class="col-xs-12 col-sm-6 col-md-2 col-lg-2">
+          <h3><?=$this->translate('Follow us') ?></h3>
+          <ul class="list-unstyled list-inline">
+            <li>
+              <a href="https://www.facebook.com/Knihovny.cz/" title="<?=$this->translate('Facebook: Knihovny.cz') ?>" target="_blank">
+                <i class="fa fa-2x fa-facebook-square"></i>
+              </a>
+            </li>
+            <li>
+              <a href="https://github.com/moravianlibrary/Knihovny.cz" title="<?=$this->translate('Github: Knihovny.cz') ?>" target="_blank">
+                <i class="fa fa-2x fa-github-square"></i>
+              </a>
+            </li>
+          </ul>
+        </div>
+        <div class="col-xs-12 col-sm-6 col-md-2 col-lg-2">
+          <h3><?=$this->translate('Develops') ?></h3>
+          <div>
+            <a href="http://mzk.cz/" title="<?=$this->translate('source_mzk') ?>" target="_blank" rel="nofollow">
+              <img class="logo mzk-logo" src="<?=$this->imageLink('logos/logo-mzk.svg') ?>" alt="<?=$this->translate('source_mzk') ?>">
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="copybar">
+    <div class="container">
+      <p>
+        <span>&copy; 2015–<?=date('Y') ?></span> |
+        <a href="https://www.mzk.cz/" title="<?=$this->translate('Moravian Library') ?>" target="_blank">
+          <?=$this->translate('Moravian Library') ?>
+        </a>
+      </p>
+      <p>
+        <small class="text-muted">Knihovny.cz v<?=$this->config()->get('config')->Site->version?></small>
+      </p>
+    </div>
+  </div>
+</footer>

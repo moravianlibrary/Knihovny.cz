@@ -204,6 +204,54 @@ Deploy tech image:
     name: tech
     url: $TECH_DEVEL_ENVIRONMENT_URL
 
+Deploy irel image:
+  extends: .deploy_image
+  variables:
+    APP_IMAGE_TAG: 'branch-${CI_COMMIT_BRANCH}'
+    DEPLOY_REPO_BRANCH: devel
+    DEPLOY_REPO_DIR: irel
+
+  rules:
+    - if: # deploy on dev2.1 branch
+        ( $CI_PIPELINE_SOURCE == "push" )  &&
+        ( $CI_COMMIT_BRANCH == "dev2.1" )
+
+  environment:
+    name: irel
+    url: $IREL_DEVEL_ENVIRONMENT_URL
+
+Deploy kiv image:
+  extends: .deploy_image
+  variables:
+    APP_IMAGE_TAG: 'branch-${CI_COMMIT_BRANCH}'
+    DEPLOY_REPO_BRANCH: devel
+    DEPLOY_REPO_DIR: kiv
+
+  rules:
+    - if: # deploy on dev2.1 branch
+        ( $CI_PIPELINE_SOURCE == "push" )  &&
+        ( $CI_COMMIT_BRANCH == "dev2.1" )
+
+  environment:
+    name: kiv
+    url: $KIV_DEVEL_ENVIRONMENT_URL
+
+Deploy mus image:
+  extends: .deploy_image
+  variables:
+    APP_IMAGE_TAG: 'branch-${CI_COMMIT_BRANCH}'
+    DEPLOY_REPO_BRANCH: devel
+    DEPLOY_REPO_DIR: mus
+
+  rules:
+    - if: # deploy on dev2.1 branch
+        ( $CI_PIPELINE_SOURCE == "push" )  &&
+        ( $CI_COMMIT_BRANCH == "dev2.1" )
+
+  environment:
+    name: mus
+    url: $MUS_DEVEL_ENVIRONMENT_URL
+
 Debug CI:
   stage: test
   rules:
