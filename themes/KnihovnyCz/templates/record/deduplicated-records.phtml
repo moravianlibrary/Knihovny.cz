@@ -7,9 +7,9 @@
   $recordMissing = $records !== false && empty($records);
   if ($records === false) {
     $records = [];
-  } else if (empty($records)) {
+  } elseif (empty($records)) {
       $records = [$currentSource => [$currentRecordId]];
-  } else if (!empty($records)) {
+  } elseif (!empty($records)) {
     if (!isset($records[$currentSource])) {
       $records[$currentSource] = [$currentRecordId];
       $recordMissing = true;
