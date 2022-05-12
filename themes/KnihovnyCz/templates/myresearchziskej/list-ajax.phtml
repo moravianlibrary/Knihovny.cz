@@ -4,7 +4,6 @@
 /** @var \KnihovnyCz\Db\Row\UserCard $userCard */
 $userCard = $this->userCard;
 $error = ($this->error ?? false);
-$itemIndex = 1;
 ?>
 <?php if ($userCard && $userCard->eppn): ?>
   <?php if ($this->isZiskejModeEnabled): ?>
@@ -20,105 +19,71 @@ $itemIndex = 1;
           <i class="fa fa-fw fa-envelope text-muted"></i> <?=$reader->getEmail()?>
         </div>
         <?php if (is_countable($this->tickets) && count($this->tickets)): ?>
-          <ul class="media-list">
-            <?php
-            $i = 0;
-            foreach ($this->tickets as $item):
-              ++$i;
-              /** @var \Mzk\ZiskejApi\ResponseModel\Ticket $ticket */
-              $ticket = $item['ticket'];
-              /** @var ?\KnihovnyCz\RecordDriver\SolrLocal $record */
-              $record = $item['record'];
-              ?>
-              <li class="media well" id="record_<?=$ticket->getHid()?>" data-ziskej="<?=$ticket->getHid()?>">
-                <strong class="pull-left order"><?= $itemIndex++ ?>.</strong>
-                <?php
-                $thumbnail = false;
-                if ($record) {
-                  $coverDetails = $this->record($record)->getCoverDetails('checkedout', 'small', $this->recordLink()->getUrl($record));
-                  $cover = $coverDetails['html'];
-                  if ($cover) {
-                    ob_start();
-                    echo $cover;
-                    $thumbnail = ob_get_contents();
-                    ob_end_clean();
-                  }
+          <?php
+          $dateLimit = new DateTime('-14 days');
+          $currentTickets = [];
+          $archivedTickets = [];
+          foreach ($this->tickets as $item) {
+            /** @var \Mzk\ZiskejApi\ResponseModel\Ticket $ticket */
+            $ticket = $item['ticket'];
+            switch ($ticket->getStatus()) {
+              case 'closed':
+              case 'cancelled':
+                $archivedTickets[] = $item;
+                break;
+              case 'rejected':
+                if ($ticket->getUpdatedAt() >= $dateLimit) {
+                  $currentTickets[] = $item;
+                } else {
+                  $archivedTickets[] = $item;
                 }
-                ?>
-                <?php if ($thumbnail): ?>
-                  <div class="media-left small">
-                    <?=$thumbnail?>
-                  </div>
-                <?php endif ?>
-                <div class="media-body">
-                  <h4 class="media-heading">
-                    <?php if ($record): ?>
-                      <?php
-                      $title = !empty($record->getTitle())
-                        ? $this->escapeHtml($record->getTitle())
-                        : $this->transEsc('Title not available');
-                      ?>
-                      <a href="<?=$this->recordLink()->getUrl($record)?>" class="title"><?=$title?></a>
-                    <?php else: ?>
-                      <?=$this->transEsc('record_info_not_available')?>
-                    <?php endif; ?>
-                  </h4>
-                  <div>
-                    <dl class="dl-horizontal dl-left">
-                      <?php if ($record): ?>
-                        <?php $listAuthor = $record->getPrimaryAuthor() ?>
-                        <?php if (!empty($listAuthor)): ?>
-                          <dt><?=$this->transEsc('by')?>:</dt>
-                          <dd>
-                            <a href="<?=$this->record($record)->getLink('author', $listAuthor)?>">
-                              <?=$this->escapeHtml($listAuthor)?>
-                            </a>
-                          </dd>
-                        <?php endif; ?>
-                        <?php if (is_countable($record->getFormats()) && count($record->getFormats()) > 0): ?>
-                          <dt><?=$this->transEsc('Ziskej::label_document_type')?>:</dt>
-                          <dd><?=$this->record($record)->getFormatList()?></dd>
-                        <?php endif; ?>
-                      <?php endif; ?>
-                      <?php if ($ticket->getCreatedAt()): ?>
-                        <dt><?=$this->transEsc('Ziskej::label_date_order')?>:</dt>
-                        <dd><?=$this->dateTime()->convertToDisplayDate('U', $ticket->getCreatedAt()->getTimestamp())?></dd>
-                      <?php endif; ?>
-                      <?php if ($ticket->getRequestedAt()): ?>
-                        <dt><?=$this->transEsc('Ziskej::label_date_deliver')?>:</dt>
-                        <dd><?=$this->dateTime()->convertToDisplayDate('U', $ticket->getRequestedAt()->getTimestamp())?></dd>
-                      <?php endif; ?>
-                      <?php if ($ticket->getReturnAt()): ?>
-                        <dt><?=$this->transEsc('Ziskej::label_date_return')?>:</dt>
-                        <dd><?=$this->dateTime()->convertToDisplayDate('U', $ticket->getReturnAt()->getTimestamp())?></dd>
-                      <?php endif; ?>
-                      <dt><?=$this->transEsc('Ziskej::label_order_number')?>:</dt>
-                      <dd><?=$ticket->getHid()?></dd>
-
-                      <?php if ($ticket->getStatus()): ?>
-                        <dt><?=$this->transEsc('Ziskej::label_order_status')?>:</dt>
-                        <dd>
-                          <span class="label label-<?=$this->ziskejMvs()->getStatusClass($ticket->getStatus())?>">
-                            <?=$this->transEsc('Ziskej::order_status_' . $ticket->getStatus())?>
-                          </span>
-                        </dd>
-                      <?php endif; ?>
-                    </dl>
-                    <div class="text-right">
-                      <?php if ($ticket->getStatus() == 'created' && !empty($ticket->getPaymentUrl())): ?>
-                        <a class="btn btn-sm btn-warning" href="<?=$ticket->getPaymentUrl()?>" target="_blank" title="<?=$this->transEsc("Ziskej::btn_order_pay_title")?>">
-                          <i class="fa fa-shopping-cart"></i> <?=$this->transEsc("Ziskej::btn_order_pay")?>
-                        </a>
-                      <?php endif; ?>
-                      <a class="btn btn-sm btn-primary" href="<?=$this->url('myresearch-ziskej-ticket', ['eppnDomain' => $userCard->getEppnDomain(), 'ticketId' => $ticket->getId()])?>" title="<?=$this->transEsc("Ziskej::btn_order_detail_title")?>">
-                        <i class="fa fa-search"></i> <?=$this->transEsc("Ziskej::btn_order_detail")?>
-                      </a>
-                    </div>
-                  </div>
-                </div>
+                break;
+              default:
+                $currentTickets[] = $item;
+                break;
+            }
+          }
+          ?>
+          <div>
+            <ul class="nav nav-tabs" role="tablist">
+              <li role="presentation" class="active">
+                <a href="#current_<?=$userCard->card_name?>" aria-controls="current_<?=$userCard->card_name?>" role="tab" data-toggle="tab">
+                  <?=$this->transEsc('Ziskej::tab_active')?>
+                </a>
               </li>
-            <?php endforeach; ?>
-          </ul>
+              <li role="presentation">
+                <a href="#history_<?=$userCard->card_name?>" aria-controls="history_<?=$userCard->card_name?>" role="tab" data-toggle="tab">
+                  <?=$this->transEsc('Ziskej::tab_history')?>
+                </a>
+              </li>
+            </ul>
+            <div class="tab-content well">
+              <div role="tabpanel" class="tab-pane active" id="current_<?=$userCard->card_name?>">
+                <?php if (count($currentTickets)): ?>
+                  <?=$this->render('_ziskej-tickets-list.phtml', [
+                    'ticketsData' => $currentTickets,
+                    'userCard' => $userCard,
+                  ])?>
+                <?php else: ?>
+                  <div class="alert alert-info">
+                    <?=$this->transEsc('Ziskej::message_no_current_orders')?>
+                  </div>
+                <?php endif; ?>
+              </div>
+              <div role="tabpanel" class="tab-pane" id="history_<?=$userCard->card_name?>">
+                <?php if (count($archivedTickets)): ?>
+                  <?=$this->render('_ziskej-tickets-list.phtml', [
+                    'ticketsData' => $archivedTickets,
+                    'userCard' => $userCard,
+                  ])?>
+                <?php else: ?>
+                  <div class="alert alert-info">
+                    <?=$this->transEsc('Ziskej::message_no_history_orders')?>
+                  </div>
+                <?php endif; ?>
+              </div>
+            </div>
+          </div>
         <?php elseif (!$error): ?>
           <div class="alert alert-info">
             <?=$this->transEsc('Ziskej::info_no_items')?>
