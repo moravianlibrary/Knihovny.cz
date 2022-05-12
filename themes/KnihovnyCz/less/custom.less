@@ -66,6 +66,20 @@ fieldset, .fieldset {
   background: transparent;
 }
 
+.nav-tabs {
+  background: #f6f6f6;
+}
+
+.nav-tabs > li > a {
+  padding: 12px 15px 9px;
+}
+
+.nav-tabs > li:not(.active) > a:hover {
+  border-top-color: transparent;
+  border-left-color: transparent;
+  border-right-color: transparent;
+}
+
 .nav-tabs > li.active > a,
 .nav-tabs > li.active > a:hover,
 .nav-tabs > li.active > a:focus {
@@ -101,6 +115,9 @@ fieldset, .fieldset {
 .well.tab-content {
   padding: 19px 19px 9px;
   border-top: 0;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+  border-color: #dddddd;
 }
 
 dl.dl-horizontal {
