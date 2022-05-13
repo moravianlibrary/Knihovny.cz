@@ -172,6 +172,7 @@ Author:
     author_find:
       - [onephrase, 100]
       - [and, 50]
+  FilterQuery: "*:* NOT (record_format:sfx OR record_format:library)"
 
 ISN:
   DismaxFields:
@@ -185,6 +186,7 @@ ISN:
       - [and, 100]
     isbn:
       - [and, 100]
+  FilterQuery: "*:* NOT (record_format:sfx OR record_format:library)"
 
 Subject:
   DismaxFields:
@@ -215,6 +217,7 @@ Subject:
     genre_viz:
       - [onephrase, 200]
       - [and, 100]
+  FilterQuery: "*:* NOT (record_format:sfx OR record_format:library)"
 
 Inspiration:
   DismaxFields:
@@ -222,6 +225,7 @@ Inspiration:
   QueryFields:
     inspiration:
       - [onephrase, 100]
+  FilterQuery: "*:* NOT (record_format:sfx OR record_format:library)"
 
 # This field definition is a compromise that supports both journal-level and
 # article-level data.  The disadvantage is that hits in article titles will
@@ -265,6 +269,7 @@ JournalTitle:
     series2:
       - [onephrase, 50]
       - [and , ~]
+  FilterQuery: "*:* NOT (record_format:sfx OR record_format:library)"
 
 Title:
   DismaxFields:
@@ -291,6 +296,7 @@ Title:
       - [and, 100]
     title_old:
       - [and, ~]
+  FilterQuery: "*:* NOT (record_format:sfx OR record_format:library)"
 
 Series:
   DismaxFields:
@@ -306,6 +312,7 @@ Series:
     series2:
       - [onephrase, 50]
       - [and, 50]
+  FilterQuery: "*:* NOT (record_format:sfx OR record_format:library)"
 
 AllFields:
   DismaxFields:
@@ -432,7 +439,7 @@ AllFields:
       - [onephrase, ~]
     uniftitle_viz:
       - [onephrase, 100]
-  FilterQuery: "*:* NOT record_format:sfx"
+  FilterQuery: "*:* NOT (record_format:sfx OR record_format:library)"
 
 adv_search_title_series:
   DismaxFields:
@@ -458,7 +465,7 @@ adv_search_title_series:
     titleSeries_search_txt_mv:
       - [onephrase, 100]
       - [and, 50]
-  FilterQuery: "*:* NOT record_format:sfx"
+  FilterQuery: "*:* NOT (record_format:sfx OR record_format:library)"
 
 adv_search_author_corporation:
   DismaxFields:
@@ -489,7 +496,7 @@ adv_search_author_corporation:
     corporation_viz:
     - [onephrase, 50]
     - [and, 20]
-  FilterQuery: "*:* NOT record_format:sfx"
+  FilterQuery: "*:* NOT (record_format:sfx OR record_format:library)"
 
 adv_search_subject_keywords:
   DismaxFields:
@@ -517,7 +524,7 @@ adv_search_subject_keywords:
     genre_viz:
       - [onephrase, 50]
       - [and, 20]
-  FilterQuery: "*:* NOT record_format:sfx"
+  FilterQuery: "*:* NOT (record_format:sfx OR record_format:library)"
 
 adv_search_source_title:
   DismaxFiels:
@@ -533,7 +540,7 @@ adv_search_source_title:
     sourceTitle_search_txt_mv:
       - [onephrase, 100]
       - [and, 50]
-  FilterQuery: "*:* NOT record_format:sfx"
+  FilterQuery: "*:* NOT (record_format:sfx OR record_format:library)"
 
 adv_search_isbn_issn_ismn:
   DismaxFields:
@@ -553,7 +560,7 @@ adv_search_isbn_issn_ismn:
     ismn_isn_mv:
       - [onephrase, 100]
       - [and, 50]
-  FilterQuery: "*:* NOT record_format:sfx"
+  FilterQuery: "*:* NOT (record_format:sfx OR record_format:library)"
 
 adv_search_call_number:
   Dismaxfields:
@@ -569,7 +576,7 @@ adv_search_call_number:
     callNumber_search_txt_mv:
       - [onephrase, 100]
       - [and, 50]
-  FilterQuery: "*:* NOT record_format:sfx"
+  FilterQuery: "*:* NOT (record_format:sfx OR record_format:library)"
 
 adv_search_publisher:
   Dismaxfields:
@@ -585,7 +592,7 @@ adv_search_publisher:
     publisher_search_txt_mv:
       - [onephrase, 100]
       - [and, 50]
-  FilterQuery: "*:* NOT record_format:sfx"
+  FilterQuery: "*:* NOT (record_format:sfx OR record_format:library)"
 
 adv_search_year_of_publication:
   Dismaxfields:
@@ -601,7 +608,7 @@ adv_search_year_of_publication:
     publishDate_txt_mv:
       - [onephrase, 100]
       - [and, 50]
-  FilterQuery: "*:* NOT record_format:sfx"
+  FilterQuery: "*:* NOT (record_format:sfx OR record_format:library)"
 
 adv_search_place_of_publication:
   Dismaxfields:
@@ -619,7 +626,7 @@ adv_search_place_of_publication:
       - [onephrase, 100]
     country_search_txt_mv:
       - [onephrase, 100]
-  FilterQuery: "*:* NOT record_format:sfx"
+  FilterQuery: "*:* NOT (record_format:sfx OR record_format:library)"
 
 adv_search_001:
   Dismaxfields:
@@ -639,7 +646,7 @@ adv_search_001:
     id_authority:
       - [onephrase, 100]
       - [and, 50]
-  FilterQuery: "*:* NOT record_format:sfx"
+  FilterQuery: "*:* NOT (record_format:sfx OR record_format:library)"
 
 adv_search_nbn:
   Dismaxfields:
@@ -655,7 +662,7 @@ adv_search_nbn:
     cnb_isn_mv:
       - [onephrase, 100]
       - [and, 50]
-  FilterQuery: "*:* NOT record_format:sfx"
+  FilterQuery: "*:* NOT (record_format:sfx OR record_format:library)"
 
 adv_search_fulltext:
   Dismaxfields:
@@ -683,7 +690,7 @@ adv_search_fulltext:
     fulltext_analyser_txt_mv:
       - [onephrase, 100]
       - [and, 50]
-  FilterQuery: "*:* NOT record_format:sfx"
+  FilterQuery: "*:* NOT (record_format:sfx OR record_format:library)"
 
 adv_search_ipc:
   CustomMunge:
@@ -698,7 +705,7 @@ adv_search_ipc:
       - [onephrase, 10000]
       - [withoutWhiteSpaces, 1000]
       - [withoutWhiteSpacesSlash, ~]
-  FilterQuery: "*:* NOT record_format:sfx"
+  FilterQuery: "*:* NOT (record_format:sfx OR record_format:library)"
 
 adv_search_monographic_series:
   Dismaxfields:
@@ -713,3 +720,4 @@ adv_search_monographic_series:
   QueryFields:
     monographic_series_txt_mv:
       - [onephrase, 1]
+  FilterQuery: "*:* NOT (record_format:sfx OR record_format:library)"
