@@ -1311,14 +1311,17 @@ class KohaRest1905 extends AbstractBase implements \Laminas\Log\LoggerAwareInter
     /**
      * Get service configuration
      *
-     * @param string $func Function for which the configuration is needed
+     * @param string $function Function for which the configuration is needed
+     * @param array  $params   Optional feature-specific parameters (array)
      *
-     * @return array
+     * @return array An array with key-value pairs.
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function getConfig($func)
+    public function getConfig($function, $params = [])
     {
         $config = [];
-        switch ($func) {
+        switch ($function) {
         case 'Holds':
                 $config = [
                     "HMACKeys" => "id:item_id",
