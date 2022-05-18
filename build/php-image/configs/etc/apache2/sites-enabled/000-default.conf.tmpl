@@ -40,7 +40,7 @@
 
    RewriteEngine On
    RewriteCond %{THE_REQUEST} "\S+ (.*)\/{2,}(.*) \S+"
-   RewriteRule (.*) $1 [R=301,L]
+   RewriteRule (.*) $$1 [R=301,L]
 
    <Directory /var/www/knihovny-cz/public/>
         Require all granted
