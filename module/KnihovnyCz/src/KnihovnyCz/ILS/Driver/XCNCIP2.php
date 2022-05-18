@@ -451,4 +451,17 @@ class XCNCIP2 extends \VuFind\ILS\Driver\XCNCIP2
             ? $this->pickupLocations[0]['locationID']
             : false;
     }
+
+    /**
+     * Check NextItemToken for emptiness
+     *
+     * @param \SimpleXMLElement[] $nextItemToken Next item token elements from NCIP
+     * Response
+     *
+     * @return bool
+     */
+    protected function isNextItemTokenEmpty(array $nextItemToken): bool
+    {
+        return !empty($nextItemToken) && !empty((string)$nextItemToken[0]);
+    }
 }
