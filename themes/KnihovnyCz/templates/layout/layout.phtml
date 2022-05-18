@@ -10,6 +10,8 @@ $this->headMeta()->setProperty('og:image:secure_url', $imageUrl);
 $this->headMeta()->setProperty('og:image:type', 'image/png');
 $this->headMeta()->setProperty('og:image:width', '1200');
 $this->headMeta()->setProperty('og:image:height', '630');
+// Disable automatic telephone number detection and link creation on Safari
+$this->headMeta()->appendName('format-detection', 'telephone=no');
 
 ?>
 <html lang="<?=$this->layout()->userLang?>"<?php if ($this->layout()->rtl): ?> dir="rtl"<?php endif; ?>>

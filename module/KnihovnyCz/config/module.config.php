@@ -466,6 +466,8 @@ $config = [
             \KnihovnyCz\ILS\Connection::class => \VuFind\ILS\ConnectionFactory::class,
             \KnihovnyCz\Date\Converter::class => \VuFind\Service\DateConverterFactory::class,
             \KnihovnyCz\Search\SearchRunner::class => \VuFind\Search\SearchRunnerFactory::class,
+            \KnihovnyCz\Markdown\InvolvedLibraries\InvolvedLibrariesExtension::class => \KnihovnyCz\Markdown\InvolvedLibraries\InvolvedLibrariesExtensionFactory::class,
+            \KnihovnyCz\Content\InvolvedLibrariesService::class => \KnihovnyCz\Content\InvolvedLibrariesServiceFactory::class,
         ],
         'aliases' => [
             \VuFind\Config\PluginManager::class => \KnihovnyCz\Config\PluginManager::class,

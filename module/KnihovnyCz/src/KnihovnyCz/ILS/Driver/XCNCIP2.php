@@ -91,7 +91,7 @@ class XCNCIP2 extends \VuFind\ILS\Driver\XCNCIP2
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function getConfig($function, $params = null)
+    public function getConfig($function, $params = [])
     {
         if ($function == 'getMyTransactionHistory') {
             // See https://docs.google.com/document/d/1yzXOjSzl56jK_K5A9TgYpz4ddPsIHEvnrzUdf0dO8eQ/edit#heading=h.ac9ql1xl54r7

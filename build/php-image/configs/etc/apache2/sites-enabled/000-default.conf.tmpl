@@ -38,9 +38,12 @@
    ProxyPass "/app" "fcgi://${PHP_FPM_BACKEND}:9000/var/www/knihovny-cz/public/index.php"
    ProxyPass "/ajax" "fcgi://${PHP_FPM_BACKEND}:9100/var/www/knihovny-cz/public/index.php"
 
+   RewriteEngine On
+   RewriteCond %{THE_REQUEST} "\S+ (.*)\/{2,}(.*) \S+"
+   RewriteRule (.*) $1 [R=301,L]
+
    <Directory /var/www/knihovny-cz/public/>
         Require all granted
-        RewriteEngine On
 
         # Shibboleth handler
         RewriteCond %{REQUEST_URI} ^/Shibboleth.*$
