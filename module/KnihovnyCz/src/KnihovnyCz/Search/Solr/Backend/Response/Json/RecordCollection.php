@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 /**
  * Simple JSON-based record collection.
@@ -28,7 +29,6 @@
  */
 namespace KnihovnyCz\Search\Solr\Backend\Response\Json;
 
-use VuFindSearch\Backend\Solr\Response\Json\Facets;
 use VuFindSearch\Backend\Solr\Response\Json\RecordCollection as Base;
 
 /**
@@ -47,12 +47,12 @@ class RecordCollection extends Base
      *
      * @return array
      */
-    public function getFacets()
+    public function getFacets(): array
     {
-        if (!$this->facets) {
-            $this->facets = new Facets($this->parseFacets());
+        if (null === $this->facetFields) {
+            $this->facetFields = $this->parseFacets();
         }
-        return $this->facets;
+        return $this->facetFields;
     }
 
     /**
@@ -62,7 +62,7 @@ class RecordCollection extends Base
      */
     protected function parseFacets()
     {
-        $facets = $this->response['facet_counts'];
+        $facets = parent::getFacets();
         if (isset($this->response['facets'])) {
             foreach ($this->response['facets'] as $field => $facet) {
                 if (is_array($facet)) {
@@ -80,9 +80,7 @@ class RecordCollection extends Base
                         );
                     }
                     foreach ($buckets as $bucket) {
-                        $value = $bucket['val'];
-                        $count = $bucket['count'];
-                        $facets['facet_fields'][$field][] = [$value, $count];
+                        $facets[$field][$bucket['val']] = $bucket['count'];
                     }
                 }
             }
