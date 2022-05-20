@@ -66,6 +66,7 @@ return [
             'sign-in' => 'FontAwesome:sign-in:fa-fw',
             'sign-out' => 'FontAwesome:sign-out:fa-fw',
             'ui-menu' => 'FontAwesome:bars:fa-fw',
+            'user-list-add' => 'FontAwesome:star',
             'user-ziskej' => 'FontAwesome:file-text:fa-fw',
         ],
     ],

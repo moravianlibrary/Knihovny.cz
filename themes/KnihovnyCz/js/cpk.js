@@ -65,7 +65,7 @@ function setupAutocomplete() {
   searchbox.autocomplete({
     rtl: $(document.body).hasClass("rtl"),
     maxResults: 10,
-    loadingString: VuFind.translate('loading') + '...',
+    loadingString: VuFind.translate('loading_ellipsis'),
     // Auto-submit selected item
     callback: acCallback,
     // AJAX call for autocomplete results
@@ -184,6 +184,92 @@ jQuery(document).ready(function openUrl() {
   setupOpenUrl();
 });
 
+function setLibraryAutoComplete(facetField) {
+  var libraries = new Map();
+  var element = $(document.getElementById(facetField));
+  const facetFilter = element.data('facet');
+  var nodes = element.jstree(true).get_json('#', {flat: true});
+  const paramSep = window.location.href.includes('?') ? '&' : '?';
+  $.each(nodes, function forEach(i, val) {
+    var facetElement = $(val.text).find('.facet-value');
+    if (facetElement.parent().hasClass('applied')) {
+      return;
+    }
+    const value = facetElement.data('filter-value');
+    const filter = paramSep + "filter[]=~" + facetFilter + ':"' + value + '"';
+    libraries.set(value, {
+      label: facetElement.text(),
+      value: value,
+      href: window.location.href + filter,
+    });
+  });
+  var input = $('<input></input>').addClass('autocomplete-institutions')
+    .attr('placeholder', VuFind.translate('Autocomplete institutions placeholder'));
+  function normalizeString(str) {
+    return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+  }
+  // Search autocomplete
+  input.autocomplete({
+    rtl: $(document.body).hasClass("rtl"),
+    maxResults: 10,
+    loadingString: VuFind.translate('loading') + '...',
+    // AJAX call for autocomplete results
+    handler: function vufindACHandler(inputField, cb) {
+      const query = inputField.val();
+      const terms = normalizeString(query).split(' ');
+      var searcher = extractClassParams(inputField);
+      $.fn.autocomplete.ajax({
+        url: VuFind.path + '/AJAX/JSON',
+        data: {
+          q: query,
+          method: 'getLibrariesACSuggestions',
+          searcher: searcher.searcher
+        },
+        dataType: 'json',
+        success: function autocompleteJSON(json) {
+          var results = new Map();
+          json.data.forEach(function onEach(item) {
+            const library = libraries.get(item.value);
+            if (typeof library !== "undefined") {
+              results.set(item.value, library);
+            }
+          });
+          for (const [key, item] of libraries.entries()) {
+            const searchValue = normalizeString(item.label);
+            const add = terms.every(function hasTerm(term) {
+              return searchValue.startsWith(term) || searchValue.includes(' ' + term);
+            });
+            if (add) {
+              results.set(key, item);
+            }
+          }
+          var ac = [];
+          for (const item of results.values()) {
+            ac.push(item);
+          }
+          cb(ac);
+        }
+      });
+    }
+  });
+  element.parent().prepend(input);
+}
+
+VuFind.listen('VuFind.sidefacets.loaded', function onLoaded(){
+  const facets = [
+    'facet_region_institution_facet_mv',
+    'facet_local_region_institution_facet_mv'
+  ];
+  facets.forEach(function forEeach(facet){
+    var element = document.getElementById(facet);
+    if (element != null) {
+      $(element).bind('loaded.jstree', function onLoad() {
+        setLibraryAutoComplete(facet);
+      });
+    }
+  });
+});
+
 function buildFacetNodes(data, currentPath, allowExclude, excludeTitle, counts)
 {
   var json = [];
@@ -225,6 +311,7 @@ function buildFacetNodes(data, currentPath, allowExclude, excludeTitle, counts)
     var description = document.createElement('span');
     description.className = 'facet-value';
     description.appendChild(document.createTextNode(facet.displayText));
+    description.setAttribute('data-filter-value', facet.value);
     item.appendChild(description);
     html.appendChild(item);
 

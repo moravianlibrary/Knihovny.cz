@@ -100,6 +100,8 @@ class RecordController extends \VuFind\Controller\RecordController
      *
      * @throws \Http\Client\Exception
      * @throws \Mzk\ZiskejApi\Exception\ApiResponseException
+     * @throws \Psr\Container\ContainerExceptionInterface
+     * @throws \Psr\Container\NotFoundExceptionInterface
      * @throws \VuFind\Exception\LibraryCard
      */
     public function ziskejOrderAction(): ViewModel
@@ -116,6 +118,17 @@ class RecordController extends \VuFind\Controller\RecordController
             return $this->forceLogin();
         }
 
+        $userCard = $user->getCardByEppnDomain(
+            $this->params()->fromRoute('eppnDomain')
+        );
+        if (!$userCard) {
+            throw new LibraryCard('Library Card Not Found');
+        }
+
+        $user->activateCardByPrefix($userCard->card_name);
+
+        $patron = $this->catalogLogin();
+
         /**
          * Ziskej API connector
          *
@@ -123,19 +136,15 @@ class RecordController extends \VuFind\Controller\RecordController
          */
         $ziskejApi = $this->serviceLocator->get('Mzk\ZiskejApi\Api');
 
-        $eppnDomain = $this->params()->fromRoute('eppnDomain');
-
-        $userCard = $user->getCardByEppnDomain($eppnDomain);
-        if (!$userCard) {
-            throw new LibraryCard('Library Card Not Found');
-        }
-        $eppn = $userCard->eppn;
-        $ziskejReader = $eppn ? $ziskejApi->getReader($eppn) : null;
+        $ziskejReader = $userCard->eppn
+            ? $ziskejApi->getReader($userCard->eppn)
+            : null;
 
         $view = $this->createViewModel(
             [
                 'user' => $user,
-                'userCard' => $userCard, //@todo if firstname and lastname is empty
+                'userCard' => $userCard,
+                'patron' => $patron,
                 'ziskejReader' => $ziskejReader,
                 'serverName' => $this->getRequest()->getServer()->SERVER_NAME,
                 'entityId' =>
@@ -257,9 +266,13 @@ class RecordController extends \VuFind\Controller\RecordController
             return $this->redirectToRecord('#ziskejmvs', 'Ziskej');
         }
 
-        $responseReader = new Reader(
-            $user->firstname,
-            $user->lastname,
+        $user->activateCardByPrefix($userCard->card_name);
+
+        $patron = $this->catalogLogin();
+
+        $requestReader = new Reader(
+            !empty($patron['firstname']) ? $patron['firstname'] : '–',
+            !empty($patron['lastname']) ? $patron['lastname'] : '–',
             $email,
             $multibackend->sourceToSigla($userCard->home_library) ?? '',
             true,
@@ -269,8 +282,8 @@ class RecordController extends \VuFind\Controller\RecordController
 
         try {
             $ziskejReader = $ziskejApi->getReader($userCard->eppn)
-                ? $ziskejApi->updateReader($userCard->eppn, $responseReader)
-                : $ziskejApi->createReader($userCard->eppn, $responseReader);
+                ? $ziskejApi->updateReader($userCard->eppn, $requestReader)
+                : $ziskejApi->createReader($userCard->eppn, $requestReader);
         } catch (\Mzk\ZiskejApi\Exception\ApiResponseException $e) {
             $this->flashMessenger()->addMessage(
                 'Ziskej::failure_order_finished',

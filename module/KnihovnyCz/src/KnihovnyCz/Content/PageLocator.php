@@ -55,6 +55,7 @@ class PageLocator extends \VuFind\Content\PageLocator
      */
     protected $types = [
         'md',
+        'phtml'
     ];
 
     /**
@@ -85,7 +86,6 @@ class PageLocator extends \VuFind\Content\PageLocator
 
     /**
      * Try to find a template using
-     * //TODO add url based match types here
      * 1) Current language
      * 2) Default language
      * 3) No language
@@ -158,16 +158,39 @@ class PageLocator extends \VuFind\Content\PageLocator
         foreach ($templates as $matchType => $template) {
             foreach ($this->types as $type) {
                 $filename = "$template.$type";
-                $file = $this->checkFileAvailability($filename);
-                if (true === $file) {
-                    return [
-                        'renderer' => $type,
-                        'path' => $filename,
-                        'relativePath' => $filename,
-                        'page' => basename($template),
-                        'theme' => '',
-                        'matchType' => $matchType,
-                    ];
+                if ($type === 'md') {
+                    $file = $this->checkFileAvailability($filename);
+                    if (true === $file) {
+                        return [
+                            'renderer' => $type,
+                            'path' => $filename,
+                            'relativePath' => $filename,
+                            'page' => basename($template),
+                            'theme' => '',
+                            'matchType' => $matchType,
+                        ];
+                    }
+                }
+                if ($type === 'phtml') {
+                    $pathDetails = $this->themeInfo->findContainingTheme(
+                        $filename,
+                        $this->themeInfo::RETURN_ALL_DETAILS
+                    );
+                    if (null != $pathDetails) {
+                        $relativeTemplatePath = preg_replace(
+                            '"^templates/"',
+                            '',
+                            $pathDetails['relativePath']
+                        );
+                        return [
+                            'renderer' => $type,
+                            'path' => $pathDetails['path'],
+                            'relativePath' => $relativeTemplatePath,
+                            'page' => basename($template),
+                            'theme' => $pathDetails['theme'],
+                            'matchType' => $matchType,
+                        ];
+                    }
                 }
             }
         }
