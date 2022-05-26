@@ -41,6 +41,8 @@ use VuFind\Exception\Auth as AuthException;
  * @author   Vaclav Rosecky <vaclav.rosecky@mzk.cz>
  * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://knihovny.cz Main Page
+ *
+ * @method Plugin\FlashRedirect flashRedirect() Flash redirect controller plugin
  */
 class MyResearchController extends MyResearchControllerBase
 {
