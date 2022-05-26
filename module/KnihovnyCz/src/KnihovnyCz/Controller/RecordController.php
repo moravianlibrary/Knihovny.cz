@@ -106,6 +106,10 @@ class RecordController extends \VuFind\Controller\RecordController
 
         $patron = $this->catalogLogin();
 
+        if (!is_array($patron)) {
+            throw new LibraryCard('ILS connection failed');
+        }
+
         /**
          * Ziskej API connector
          *
