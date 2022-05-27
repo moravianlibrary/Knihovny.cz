@@ -15,6 +15,9 @@
   if ($this->facet['operator'] == 'AND') {
     $classList[] = 'facetAND';
   }
+  if ($this->facet['count'] == '0') {
+    $classList[] = 'emptyFacet';
+  }
 
   $displayText = '-';
   if (!empty($this->facet['displayText'])) {

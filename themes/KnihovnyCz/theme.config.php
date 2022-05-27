@@ -17,6 +17,7 @@ return [
                 return new $requestedName($dependency);
             },
             KnihovnyCz\View\Helper\KnihovnyCz\SearchTabs::class => \VuFind\View\Helper\Root\SearchTabsFactory::class,
+            KnihovnyCz\View\Helper\KnihovnyCz\RecordLinker::class => \KnihovnyCz\View\Helper\KnihovnyCz\RecordLinkerFactory::class,
             \KnihovnyCz\View\Helper\KnihovnyCz\GoogleTagManager::class => \KnihovnyCz\View\Helper\KnihovnyCz\GoogleTagManagerFactory::class,
         ],
         'invokables' => [
@@ -37,6 +38,7 @@ return [
             'escapeElementId' => \KnihovnyCz\View\Helper\KnihovnyCz\EscapeElementId::class,
             'headTitle' => KnihovnyCz\View\Helper\KnihovnyCz\HeadTitle::class,
             'searchTabs' => KnihovnyCz\View\Helper\KnihovnyCz\SearchTabs::class,
+            'recordLinker' => KnihovnyCz\View\Helper\KnihovnyCz\RecordLinker::class,
             'textFormatter' => KnihovnyCz\View\Helper\KnihovnyCz\TextFormatter::class,
         ],
     ],

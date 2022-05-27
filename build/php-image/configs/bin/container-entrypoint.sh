@@ -42,11 +42,11 @@ fi
 
 echo === Copying vufind config files ===
 
-envsubst.a8m -no-unset -i /etc/vufind/config.local.ini -o /var/www/knihovny-cz/local/knihovny.cz/config/vufind/config.local.ini
-envsubst.a8m -no-unset -i /etc/vufind/EDS.local.ini -o /var/www/knihovny-cz/local/knihovny.cz/config/vufind/EDS.local.ini
-envsubst.a8m -no-unset -i /etc/vufind/Search2.local.ini -o /var/www/knihovny-cz/local/knihovny.cz/config/vufind/Search2.local.ini
-envsubst.a8m -no-unset -i /etc/vufind/content.local.ini -o /var/www/knihovny-cz/local/knihovny.cz/config/vufind/content.local.ini
-envsubst.a8m -no-unset -i /etc/vufind/obalkyknih.local.ini -o /var/www/knihovny-cz/local/knihovny.cz/config/vufind/obalkyknih.local.ini
+envsubst.a8m -no-unset -i /etc/vufind/config.local.ini -o ${VUFIND_LOCAL_DIR}/config/vufind/config.local.ini
+envsubst.a8m -no-unset -i /etc/vufind/EDS.local.ini -o ${VUFIND_LOCAL_DIR}/config/vufind/EDS.local.ini
+envsubst.a8m -no-unset -i /etc/vufind/Search2.local.ini -o ${VUFIND_LOCAL_DIR}/config/vufind/Search2.local.ini
+envsubst.a8m -no-unset -i /etc/vufind/content.local.ini -o ${VUFIND_LOCAL_DIR}/config/vufind/content.local.ini
+envsubst.a8m -no-unset -i /etc/vufind/obalkyknih.local.ini -o ${VUFIND_LOCAL_DIR}/config/vufind/obalkyknih.local.ini
 
 echo === Executing final command "$1" ===
 

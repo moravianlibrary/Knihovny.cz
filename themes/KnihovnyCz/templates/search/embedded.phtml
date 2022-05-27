@@ -1,10 +1,6 @@
 <?php
 $center = $this->position == 'top' ? 'center' : '';
-$logo = $this->logo;
 $language = $this->language ?? $this->layout()->userLang;
-if ($logo == null) {
-  $logo = 'logo-knihovny.cz-' . $language . '.svg';
-}
 ?>
 <?=$this->doctype()?>
 
@@ -15,9 +11,10 @@ if ($logo == null) {
   <link rel='stylesheet' type='text/css' href='/themes/<?=$this->theme?>/css/embedded-search.css'>
 </head>
 <body>
-  <?php if ($logo != ''): ?>
-    <a href='<?=$this->baseUrl?>' title='<?=$this->escapeHtmlAttr($title)?>'>
-      <img class="logo <?=$center?>" src="<?=$this->imageLink($logo)?>" alt="<?= $this->translate('logo_alt') ?>">
+  <?php $logo = $this->render('layout/logoimagelink.phtml', ['language' => $language]);?>
+  <?php if (!empty($logo)): ?>
+    <a href='<?=$baseUrl?>' title='<?=$this->transEsc($this->title)?>'>
+      <img class="logo <?=$center?>" src="<?=$logo?>" alt="<?=$this->translate('logo_alt') ?>">
     </a>
   <?php endif;?>
 

@@ -287,6 +287,9 @@ function buildFacetNodes(data, currentPath, allowExclude, excludeTitle, counts)
     if (facet.isApplied) {
       item.className += ' applied';
     }
+    if (facet.count === 0) {
+      item.className += ' emptyFacet';
+    }
     item.setAttribute('title', facet.displayText);
     item.setAttribute('role', 'menuitem');
     var icon = document.createElement('i');

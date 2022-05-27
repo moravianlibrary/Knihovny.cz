@@ -123,11 +123,13 @@ class SolrIdResolver
         }
         $queryField = $config['solrQueryField'] ?? $this->defaultSolrQueryField;
         $queryFieldPrefix = $config['solrQueryFieldPrefix'] ?? '';
-        $params = new \VuFindSearch\ParamBag(
+        $params = new \KnihovnyCz\Search\ParamBag(
             [
-            'fq' => ['merged_child_boolean:true'], 'fl' => "id,$queryField",
+            'fq' => ['merged_child_boolean:true'],
+            'fl' => "id,$queryField",
             ]
         );
+        $params->setApplyChildFilter(false);
         $fullQuery = new \VuFindSearch\Query\QueryGroup('OR');
         $idMappings = [];
         foreach ($ids as $id) {

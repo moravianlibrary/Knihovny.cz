@@ -46,6 +46,33 @@ class SolrLibrary extends \KnihovnyCz\RecordDriver\SolrMarc
     protected $facetsConfig = null;
 
     /**
+     * Institution field
+     *
+     * @var string
+     */
+    protected $institutionField = null;
+
+    /**
+     * Constructor
+     *
+     * @param \Laminas\Config\Config $mainConfig     VuFind main configuration (omit
+     * for built-in defaults)
+     * @param \Laminas\Config\Config $recordConfig   Record-specific configuration
+     * file (omit to use $mainConfig as $recordConfig)
+     * @param \Laminas\Config\Config $searchSettings Search-specific configuration
+     * file
+     */
+    public function __construct(
+        $mainConfig = null,
+        $recordConfig = null,
+        $searchSettings = null
+    ) {
+        parent::__construct($mainConfig, $recordConfig, $searchSettings);
+        $this->institutionField = $searchSettings->Records->institution_field ??
+            'region_institution_facet_mv';
+    }
+
+    /**
      * Get library name
      *
      * @return string
@@ -284,7 +311,14 @@ class SolrLibrary extends \KnihovnyCz\RecordDriver\SolrMarc
         $institution = $this->getCpkCode();
         $institutionsMappings = ($institution !== '')
             ? $this->facetsConfig->InstitutionsMappings->toArray() : [];
-        return $institutionsMappings[$institution] ?? null;
+        $filterValue = $institutionsMappings[$institution] ?? null;
+        if ($filterValue == null) {
+            return null;
+        }
+        return urlencode(
+            '~' . $this->institutionField .
+            ':"' . $filterValue . '"'
+        );
     }
 
     /**
@@ -379,6 +413,17 @@ class SolrLibrary extends \KnihovnyCz\RecordDriver\SolrMarc
     public function attachFacetsConfig($facetsConfig)
     {
         $this->facetsConfig = $facetsConfig;
+    }
+
+    /**
+     * Return deduplicated records - array with key as institution source and
+     * value with record ids or false if not supported
+     *
+     * @return array|false
+     */
+    public function getDeduplicatedRecords()
+    {
+        return false;
     }
 
     /**
