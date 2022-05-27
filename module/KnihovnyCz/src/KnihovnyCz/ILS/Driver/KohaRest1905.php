@@ -386,8 +386,6 @@ class KohaRest1905 extends AbstractBase implements \Laminas\Log\LoggerAwareInter
                 'dueStatus' => $this->determineDueStatus($entry['due_date']),
                 'returnDate' => $this->normalizeDate($entry['checkin_date'] ?? ''),
                 'renew' => $entry['renewals'],
-                'publication_year' => $biblio['copyright_date']
-                    ?? $biblio['publication_year'] ?? '',
                 'borrowingLocation' => $this->getLibraryName($entry['library_id']),
             ];
 

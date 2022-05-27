@@ -42,9 +42,9 @@
         response.data.holding.forEach(function (item) {
           var elm = null;
           if (item.item_id) {
-            elm = holds.find('tr[data-item-id="' + item.item_id + '"]');
+            elm = holds.find('tr[data-item-id="' + item.item_id.trim() + '"]');
           } else if (item.number) {
-            elm = holds.find('tr[data-copy-number="' + item.number + '"]');
+            elm = holds.find('tr[data-copy-number="' + item.number.trim() + '"]');
           } else {
             return;
           }

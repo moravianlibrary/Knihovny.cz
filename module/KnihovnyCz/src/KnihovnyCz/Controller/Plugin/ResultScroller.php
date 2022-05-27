@@ -105,6 +105,8 @@ class ResultScroller extends Base
     public function getScrollData($driver)
     {
         $this->initLastSearch();
+        $driver = $driver->tryMethod('getParentRecord', [], null)
+            ?? $driver;
         $result = parent::getScrollData($driver);
         $result['linkToResults'] = null;
         if (isset($result['currentPosition'])
@@ -152,5 +154,35 @@ class ResultScroller extends Base
         if ($this->enabled) {
             $this->lastSearch = parent::restoreLastSearch();
         }
+    }
+
+    /**
+     * Fetch the given page of results from the given search object and
+     * return the IDs of the records in an array.
+     *
+     * @param object $searchObject The search object to use to execute the search
+     * @param int    $page         The page number to fetch (null for current)
+     *
+     * @return array
+     */
+    protected function fetchPage($searchObject, $page = null)
+    {
+        if (null !== $page) {
+            $searchObject->getParams()->setPage($page);
+            $searchObject->performAndProcessSearch();
+        }
+
+        $retVal = [];
+        foreach ($searchObject->getResults() as $record) {
+            if (!($record instanceof \VuFind\RecordDriver\AbstractBase)) {
+                return false;
+            }
+            $retVal[] = $record->getSourceIdentifier() . '|' . $record->tryMethod(
+                'getParentRecordID',
+                [],
+                $record->getUniqueId()
+            );
+        }
+        return $retVal;
     }
 }

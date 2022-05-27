@@ -74,7 +74,7 @@ class GuzzleHttpService
         if ($this->proxy != null) {
             $stack->push(self::addProxy($this->proxy));
         }
-        $config = ($config ?? []) + ['handler' => $stack];
+        $config['handler'] = $stack;
         return Client::createWithConfig($config);
     }
 
