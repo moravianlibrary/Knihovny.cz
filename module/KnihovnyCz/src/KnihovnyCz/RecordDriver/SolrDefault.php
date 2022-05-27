@@ -111,7 +111,7 @@ class SolrDefault extends \VuFind\RecordDriver\SolrDefault
      */
     public function getParentRecordID()
     {
-        return $this->fields['parent_id_str'] ?? '';
+        return $this->fields['parent_id_str'] ?? null;
     }
 
     /**
@@ -491,8 +491,9 @@ class SolrDefault extends \VuFind\RecordDriver\SolrDefault
      */
     public function getParentRecord()
     {
-        if ($this->parentRecord === null && $this->recordLoader !== null) {
-            $parentRecordId = $this->getParentRecordID();
+        if ($this->parentRecord === null && $this->recordLoader !== null
+            && ($parentRecordId = $this->getParentRecordID()) !== null
+        ) {
             try {
                 $this->parentRecord = $this->recordLoader->load($parentRecordId);
             } catch (RecordMissingException $exception) {
@@ -576,10 +577,7 @@ class SolrDefault extends \VuFind\RecordDriver\SolrDefault
      */
     public function getDeduplicatedRecordIds()
     {
-        $parent = $this->getParentRecord();
-        if ($parent === null) {
-            return [];
-        }
+        $parent = $this->getParentRecord() ?? $this;
         return $parent->tryMethod('getChildrenIds') ?? [];
     }
 

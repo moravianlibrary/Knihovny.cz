@@ -11,6 +11,7 @@ USAGE: $name [-b branch] [-c directory_name]
 
   -b            Branch to use for build. Defaults to master
   -c            Config directory to use, aka view name. Defaults to knihovny.cz
+  -t            Build type - devel, deploy, local, tech. Defaults to 'devel'
   -l            Enable shibboleth login [true|false], default enabled
   --help|-h     Print usage
 
@@ -20,6 +21,7 @@ EOF
 branch="master"
 config_dir=""
 shib_login="true"
+type="devel"
 while true ; do
     case "$1" in
         -b)
@@ -33,6 +35,13 @@ while true ; do
             case "$2" in
                 "") shift 2 ;;
                 *) config_dir=$2;
+                   echo "Processing argument: $1 = $2";
+                   shift 2 ;;
+            esac ;;
+        -t)
+            case "$2" in
+                "") shift 2 ;;
+                *) type=$2;
                    echo "Processing argument: $1 = $2";
                    shift 2 ;;
             esac ;;
@@ -77,7 +86,7 @@ fi
 service="devel6-${port}"
 http_port=$(($port+10000))
 https_port=$(($port+10443))
-container_name="knihovny-devel-$branch"
+container_name="knihovny-$type-$branch"
 
 PROJECT_PATH=`dirname $(readlink -nf $0)`/..
 cd $PROJECT_PATH
@@ -93,7 +102,7 @@ if [[ $? != 0 ]]; then
 fi
 
 
-$PROJECT_PATH/bin/run.sh -d -t devel -p $http_port -s $https_port -b $branch -service $service -n $container_name
+$PROJECT_PATH/bin/run.sh -d -t $type -p $http_port -s $https_port -b $branch -service $service -n $container_name
 
 git checkout "$CURRENT_BRANCH"
 

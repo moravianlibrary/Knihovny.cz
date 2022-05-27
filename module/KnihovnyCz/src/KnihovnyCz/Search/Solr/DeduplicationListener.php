@@ -158,7 +158,7 @@ class DeduplicationListener extends ParentDeduplicationListener
                 }
                 $dedupData[$source] = [
                     'id' => $localId,
-                    'priority' => $localPriority ?? 99999
+                    'priority' => $localPriority,
                 ];
             }
 

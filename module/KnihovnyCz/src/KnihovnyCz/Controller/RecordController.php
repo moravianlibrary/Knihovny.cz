@@ -71,6 +71,30 @@ class RecordController extends \VuFind\Controller\RecordController
     }
 
     /**
+     * Redirect to local record
+     *
+     * @return mixed
+     */
+    public function redirectToLocalRecordAction()
+    {
+        $record = $this->loadRecord();
+        $recordId = $record->getUniqueID();
+        $records = $record->tryMethod('getDeduplicatedRecords', [], []);
+        if (!empty($records)) {
+            $institution = $this->params()->fromQuery('institution');
+            $first = reset($records);
+            if ($institution !== null && isset($records[$institution])) {
+                $first = $records[$institution];
+            }
+            $recordId = reset($first);
+        }
+        return $this->redirect()->toRoute(
+            'record',
+            ['id' => $recordId]
+        );
+    }
+
+    /**
      * Ziskej order
      *
      * @return \Laminas\View\Model\ViewModel
@@ -105,6 +129,10 @@ class RecordController extends \VuFind\Controller\RecordController
         $user->activateCardByPrefix($userCard->card_name);
 
         $patron = $this->catalogLogin();
+
+        if (!is_array($patron)) {
+            throw new LibraryCard('ILS connection failed');
+        }
 
         /**
          * Ziskej API connector

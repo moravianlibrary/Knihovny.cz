@@ -54,5 +54,6 @@
         RewriteRule ^. /app  [PT,L,E=worker:main]
    </Directory>
 
+    Include default-config.d/*.conf
     Include logs/site-logs.conf
 </VirtualHost>
