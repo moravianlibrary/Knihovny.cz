@@ -78,4 +78,36 @@ class RecordLinker extends Base
         }
         return rtrim($baseUrl, '/') . $this->getTabUrl($driver);
     }
+
+    /**
+     * Given a record driver, get a URL for that record that links to local
+     * record.
+     *
+     * @param \VuFind\RecordDriver\AbstractBase|string $driver Record driver
+     * representing record to link to, or source|id pipe-delimited string
+     *
+     * @return string
+     */
+    public function getLinkToLocalRecord($driver)
+    {
+        $route = $this->getControllerName($driver);
+        if ($route === 'record') {
+            return $this->getActionUrl($driver, 'redirectToLocalRecord');
+        }
+        return $this->getUrl($driver);
+    }
+
+    /**
+     * Given a record driver, get a controller for that record.
+     *
+     * @param \VuFind\RecordDriver\AbstractBase|string $driver Record driver
+     * representing record to link to, or source|id pipe-delimited string
+     *
+     * @return string
+     */
+    protected function getControllerName($driver)
+    {
+        $details = $this->router->getRouteDetails($driver);
+        return $details['route'];
+    }
 }

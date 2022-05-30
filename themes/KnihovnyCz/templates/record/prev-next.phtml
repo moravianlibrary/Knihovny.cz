@@ -12,10 +12,7 @@
       <?php if ($this->scrollData['firstRecord']): ?>
         <li role="none">
           <?php
-            $link = $this->recordLinker()->getUrl($this->scrollData['firstRecord']);
-            if (!str_starts_with($this->scrollData['firstRecord'], 'EDS')) {
-              $link = $this->recordLinker()->getActionUrl($this->scrollData['firstRecord'], 'redirectToLocalRecord');
-            }
+            $link = $this->recordLinker()->getLinkToLocalRecord($this->scrollData['firstRecord']);
           ?>
           <a href="<?=$this->escapeHtmlAttr($link)?>" aria-label="<?=$this->transEscAttr('First Search Result')?>" rel="nofollow">
             <?=$this->icon('page-first') ?>
@@ -25,10 +22,7 @@
       <?php endif; ?>
       <li role="none">
         <?php
-          $link = $this->recordLinker()->getUrl($this->scrollData['previousRecord']);
-          if (!str_starts_with($this->scrollData['previousRecord'], 'EDS')) {
-            $link = $this->recordLinker()->getActionUrl($this->scrollData['previousRecord'], 'redirectToLocalRecord');
-          }
+          $link = $this->recordLinker()->getLinkToLocalRecord($this->scrollData['previousRecord']);
         ?>
         <a href="<?=$this->escapeHtmlAttr($link)?>" aria-label="<?=$this->transEscAttr('Previous Search Result')?>" rel="nofollow">
           <?=$this->icon('page-prev') ?>
@@ -50,10 +44,7 @@
     <?php if ($this->scrollData['nextRecord']): ?>
       <li role="none">
         <?php
-          $link = $this->recordLinker()->getUrl($this->scrollData['nextRecord']);
-          if (!str_starts_with($this->scrollData['nextRecord'], 'EDS')) {
-            $link = $this->recordLinker()->getActionUrl($this->scrollData['nextRecord'], 'redirectToLocalRecord');
-          }
+          $link = $this->recordLinker()->getLinkToLocalRecord($this->scrollData['nextRecord']);
         ?>
         <a href="<?=$this->escapeHtmlAttr($link)?>" aria-label="<?=$this->transEscAttr('Next Search Result')?>" rel="nofollow">
           <?=$this->transEsc('Next')?>
@@ -63,10 +54,7 @@
       <?php if ($this->scrollData['lastRecord']): ?>
         <li role="none">
           <?php
-            $link = $this->recordLinker()->getUrl($this->scrollData['lastRecord']);
-            if (!str_starts_with($this->scrollData['lastRecord'], 'EDS')) {
-              $link = $this->recordLinker()->getActionUrl($this->scrollData['lastRecord'], 'redirectToLocalRecord');
-            }
+            $link = $this->recordLinker()->getLinkToLocalRecord($this->scrollData['lastRecord']);
           ?>
           <a href="<?=$this->escapeHtmlAttr($link)?>" aria-label="<?=$this->transEscAttr('Last Search Result')?>" rel="nofollow">
             <?=$this->transEsc('Last')?>
