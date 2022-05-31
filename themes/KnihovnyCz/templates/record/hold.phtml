@@ -33,6 +33,10 @@
     <label class="control-label"><?=$this->transEsc('Details about item')?></label>
     <p class="form-control-static"><?=$this->escapeHtml($detailsAboutItem)?></p>
   <?php endif; ?>
+  <?php if ($this->orderInQueue > 1):?>
+    <label class="control-label"><?=$this->transEsc('Order in queue')?></label>
+    <p class="form-control-static"><?=$this->orderInQueue?></p>
+  <?php endif; ?>
   <?php if (in_array("comments", $this->extraHoldFields)): ?>
     <div class="form-group hold-comment">
       <label class="control-label"><?=$this->transEsc("Comments")?>:</label>
