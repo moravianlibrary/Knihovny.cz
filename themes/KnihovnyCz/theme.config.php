@@ -55,6 +55,7 @@ return [
              * for a strong inheritance safety net but this is not required.
              */
             // UI
+            'back-to-record' => 'FontAwesome:long-arrow-left',
             'cart' => 'FontAwesome:suitcase:fa-fw',
             'cart-add' => 'FontAwesome:plus-circle',
             'cite' => 'FontAwesome:commenting-o',

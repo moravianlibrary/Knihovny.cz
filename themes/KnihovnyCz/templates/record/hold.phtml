@@ -9,6 +9,12 @@
     $item = $this->driver->getOfflineHoldingByItemId($this->gatheredDetails['item_id']);
     $detailsAboutItem = $item['description'] ?? null;
 ?>
+
+<a href="<?=$this->recordLinker()->getTabUrl($this->driver, 'holdings')?>" class="backToRecord">
+  <?= $this->icon('back-to-record'); ?>
+  <?= $this->transEsc('Back to record'); ?>
+</a>
+
 <h2><?=$this->transEsc('request_place_text')?></h2>
 <?php if ($this->helpTextHtml): ?>
   <p class="helptext"><?=$this->helpTextHtml?></p>
