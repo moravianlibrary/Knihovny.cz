@@ -139,6 +139,27 @@ class SolrLocal extends \KnihovnyCz\RecordDriver\SolrMarc
     }
 
     /**
+     * Get an array of offline information about holding by item id
+     *
+     * @param string $itemId item id to return
+     *
+     * @return array
+     */
+    public function getOfflineHoldingByItemId($itemId)
+    {
+        $holdings = $this->getOfflineHoldings();
+        if (empty($holdings)) {
+            return [];
+        }
+        foreach ($holdings['holdings'][0]['items'] as $item) {
+            if ($item['item_id'] == $itemId) {
+                return $item;
+            }
+        }
+        return [];
+    }
+
+    /**
      * Does record has any items attached?
      *
      * @return bool
