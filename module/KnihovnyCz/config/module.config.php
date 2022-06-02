@@ -458,6 +458,14 @@ $config = [
                     'solrprefix' => \KnihovnyCz\Autocomplete\SolrPrefix::class,
                 ]
             ],
+            'recommend' => [
+                'factories' => [
+                    \KnihovnyCz\Recommend\RecommendOtherPortals::class => \VuFind\Recommend\InjectConfigManagerFactory::class,
+                ],
+                'aliases' => [
+                    'recommendotherportals' => \KnihovnyCz\Recommend\RecommendOtherPortals::class,
+                ],
+            ]
         ],
     ],
     'service_manager' => [
@@ -478,6 +486,7 @@ $config = [
             \KnihovnyCz\Validator\DatabaseCsrf::class => \KnihovnyCz\Validator\DatabaseCsrfFactory::class,
             \KnihovnyCz\ILS\Connection::class => \VuFind\ILS\ConnectionFactory::class,
             \KnihovnyCz\Date\Converter::class => \VuFind\Service\DateConverterFactory::class,
+            \KnihovnyCz\Record\Loader::class => \VuFind\Record\LoaderFactory::class,
             \KnihovnyCz\Search\SearchRunner::class => \VuFind\Search\SearchRunnerFactory::class,
             \KnihovnyCz\Markdown\InvolvedLibraries\InvolvedLibrariesExtension::class => \KnihovnyCz\Markdown\InvolvedLibraries\InvolvedLibrariesExtensionFactory::class,
             \KnihovnyCz\Content\InvolvedLibrariesService::class => \KnihovnyCz\Content\InvolvedLibrariesServiceFactory::class,
@@ -493,6 +502,7 @@ $config = [
             \VuFind\Validator\CsrfInterface::class => \KnihovnyCz\Validator\DatabaseCsrf::class,
             \VuFind\ILS\Connection::class => \KnihovnyCz\ILS\Connection::class,
             \VuFind\Date\Converter::class => \KnihovnyCz\Date\Converter::class,
+            \VuFind\Record\Loader::class => \KnihovnyCz\Record\Loader::class,
             \VuFind\Search\SearchRunner::class => \KnihovnyCz\Search\SearchRunner::class,
             'VuFind\SearchRunner' => \KnihovnyCz\Search\SearchRunner::class,
         ],

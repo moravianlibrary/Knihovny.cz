@@ -155,19 +155,44 @@ CREATE TABLE `auth_hash` (
 -- Add foreign key to user card
 --
 DELETE FROM `user_card` WHERE user_id NOT IN (SELECT id FROM user);
+set @query=if((SELECT true FROM information_schema.TABLE_CONSTRAINTS WHERE
+            CONSTRAINT_SCHEMA = DATABASE() AND
+            TABLE_NAME        = 'user_card' AND
+            CONSTRAINT_NAME   = 'user_card_ibfk_1' AND
+            CONSTRAINT_TYPE   = 'FOREIGN KEY')
+ = true,'ALTER TABLE user_card DROP FOREIGN KEY user_card_ibfk_1','select 1');
+PREPARE stmt1 FROM @query;
+EXECUTE stmt1;
+DEALLOCATE PREPARE stmt1;
 ALTER TABLE `user_card`
-    ADD CONSTRAINT `user_card_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE;
+  ADD CONSTRAINT `user_card_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE;
 
 --
 -- Odstranění nepoužívaných tabulek
 --
-ALTER TABLE `user_settings` DROP FOREIGN KEY `user_settings_ibfk_2`;
-DROP TABLE `frontend`;
-DROP TABLE `infobox`;
-DROP TABLE `inspirations`;
-DROP TABLE `portal_pages`;
-DROP TABLE `citation_style`;
-DROP TABLE `hosted_idps`;
+set @query=if((SELECT true FROM information_schema.TABLE_CONSTRAINTS WHERE
+            CONSTRAINT_SCHEMA = DATABASE() AND
+            TABLE_NAME        = 'user_settings' AND
+            CONSTRAINT_NAME   = 'user_settings_ibfk_2' AND
+            CONSTRAINT_TYPE   = 'FOREIGN KEY') = true,'ALTER TABLE user_settings DROP FOREIGN KEY user_settings_ibfk_2','select 1');
+PREPARE stmt1 FROM @query;
+EXECUTE stmt1;
+DEALLOCATE PREPARE stmt1;
+
+DROP TABLE IF EXISTS `frontend`;
+DROP TABLE IF EXISTS `infobox`;
+DROP TABLE IF EXISTS `inspirations`;
+DROP TABLE IF EXISTS `portal_pages`;
+DROP TABLE IF EXISTS `citation_style`;
+DROP TABLE IF EXISTS `hosted_idps`;
+DROP TABLE IF EXISTS `email_delayer`;
+DROP TABLE IF EXISTS `email_types`;
+DROP TABLE IF EXISTS `libraries_geolocations`;
+DROP TABLE IF EXISTS `notifications`;
+DROP TABLE IF EXISTS `notification_types`;
+DROP TABLE IF EXISTS `user_stats`;
+DROP TABLE IF EXISTS `user_stats_fields`;
+
 
 -- Add table for record cache
 CREATE TABLE `record` (
@@ -188,6 +213,7 @@ ALTER TABLE `resource_tags` CHANGE COLUMN `resource_id` `resource_id` int(11) DE
 ALTER TABLE `shortlinks` ADD COLUMN `hash` varchar(32) AFTER `path`;
 ALTER TABLE `shortlinks` ADD UNIQUE KEY `shortlinks_hash_IDX` USING HASH (`hash`);
 
+
 -- Remove obsolete users
 DELETE FROM user WHERE username NOT IN (
   SELECT CONCAT(username, ';', ind) keep_username FROM (
@@ -200,15 +226,12 @@ DELETE FROM user WHERE username NOT IN (
 -- Migrate usernames
 UPDATE user SET username = SUBSTRING_INDEX(username, ';', 1);
 
--- Convert to utf8mb4
-DROP TABLE email_delayer;
-DROP TABLE email_types;
-DROP TABLE libraries_geolocations;
-DROP TABLE notifications;
-DROP TABLE notification_types;
-DROP TABLE user_stats;
-DROP TABLE user_stats_fields;
+-- Issue 211 Identities
+-- eppn is replaced by edu_person_unique_id
+ALTER TABLE user_card DROP KEY user_card_eppn_uq;
+ALTER TABLE user_card ADD COLUMN edu_person_unique_id VARCHAR(255) DEFAULT NULL;
 
+-- Convert to utf8mb4
 ALTER TABLE `resource` DROP KEY `record_id`;
 ALTER TABLE `resource` ADD KEY `record_id` (`record_id`(190));
 ALTER TABLE `search` DROP KEY `notification_base_url_idx`;
@@ -257,11 +280,6 @@ ALTER TABLE `user_resource` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_uni
 ALTER TABLE `user_settings` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 ALTER TABLE `widget` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 ALTER TABLE `widget_content` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-
--- Issue 211 Identities
--- eppn is replaced by edu_person_unique_id
-ALTER TABLE user_card DROP KEY user_card_eppn_uq;
-ALTER TABLE user_card ADD COLUMN edu_person_unique_id VARCHAR(255) DEFAULT NULL;
 
 DELETE a FROM user_card a
 INNER JOIN user_card b

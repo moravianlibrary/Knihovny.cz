@@ -1,0 +1,7 @@
+<?php $links = $this->recommend->getLinks(); if (!empty($links)): ?>
+  <div class="alert alert-info">
+    <?php foreach($links as $portal => $url): ?>
+      <a target="_blank" href="<?=$url?>"><?=$this->transEsc('recommend_link_to_portal_' . $portal)?></a>
+    <?php endforeach; ?>
+  </div>
+<?php endif;

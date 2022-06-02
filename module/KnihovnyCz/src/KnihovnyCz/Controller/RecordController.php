@@ -29,6 +29,8 @@ declare(strict_types=1);
  */
 namespace KnihovnyCz\Controller;
 
+use Laminas\Config\Config;
+use Laminas\ServiceManager\ServiceLocatorInterface;
 use Laminas\Stdlib\RequestInterface as Request;
 use Laminas\Stdlib\ResponseInterface as Response;
 use Laminas\Validator\EmailAddress;
@@ -51,6 +53,26 @@ use VuFind\Exception\LibraryCard;
 class RecordController extends \VuFind\Controller\RecordController
 {
     /**
+     * Redirect library records to library record controller?
+     *
+     * @var boolean
+     */
+    protected $redirectToLibrary = false;
+
+    /**
+     * Constructor
+     *
+     * @param ServiceLocatorInterface $sm     Service manager
+     * @param Config                  $config VuFind configuration
+     */
+    public function __construct(ServiceLocatorInterface $sm, Config $config)
+    {
+        parent::__construct($sm, $config);
+        $this->redirectToLibrary = ($config->SearchTabs->Search2 ?? null)
+            == "Libraries directory";
+    }
+
+    /**
      * Dispatch a request
      *
      * @param Request       $request  Http request
@@ -60,8 +82,9 @@ class RecordController extends \VuFind\Controller\RecordController
      */
     public function dispatch(Request $request, Response $response = null)
     {
-        $id = $this->params()->fromRoute('id');
-        if (str_starts_with($id, 'library')) {
+        if ($this->redirectToLibrary
+            && str_starts_with($this->params()->fromRoute('id'), 'library')
+        ) {
             return $this->redirect()->toRoute(
                 'search2record',
                 $this->params()->fromRoute()
