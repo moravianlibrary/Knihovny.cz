@@ -27,7 +27,7 @@
    </Directory>
 
    <Proxy "fcgi://${PHP_FPM_BACKEND}:9000/"> # APP worker
-      ProxySet enablereuse=Off max=100 timeout=15 retry=1
+      ProxySet enablereuse=Off max=100 timeout=50 retry=1
    </Proxy>
 
    <Proxy "fcgi://${PHP_FPM_BACKEND}:9100/"> # API worker
