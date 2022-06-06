@@ -34,8 +34,8 @@ $ziskejReader = $this->ziskejReader;
             <p>
               <strong><?=$this->transEsc("Ziskej::label_fullname") ?>:</strong>
               <br>
-              <?=$this->escapeHtml($patron['firstname']) ?>
-              <?=$this->escapeHtml($patron['lastname']) ?>
+              <?=$this->escapeHtml($patron['firstname'] ?? '') ?>
+              <?=$this->escapeHtml($patron['lastname'] ?? '') ?>
             </p>
             <div class="form-group">
               <label for="email"><?=$this->transEsc("Ziskej::label_email") ?>:</label>
