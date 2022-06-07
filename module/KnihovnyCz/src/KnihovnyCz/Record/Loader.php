@@ -109,9 +109,10 @@ class Loader extends LoaderBase
                 [
                     'fq' => ['merged_child_boolean:true'],
                     'fl' => 'id',
+                    'hl' => ['false'],
                 ]
             );
-            $query = new \VuFindSearch\Query\Query('parent_id_str' . ':' . $id);
+            $query = new \VuFindSearch\Query\Query('_root_' . ':' . $id);
             $command = new SearchCommand(
                 'Solr',
                 $query,

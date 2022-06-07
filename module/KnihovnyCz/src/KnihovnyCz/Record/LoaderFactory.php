@@ -25,7 +25,7 @@
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://vufind.org/wiki/development Wiki
  */
-namespace VuFind\Record;
+namespace KnihovnyCz\Record;
 
 use Interop\Container\ContainerInterface;
 use Interop\Container\Exception\ContainerException;
@@ -69,7 +69,7 @@ class LoaderFactory implements FactoryInterface
         $config = $container->get(\VuFind\Config\PluginManager::class);
         $search = $config->get('searches');
         $filterChildRecords = isset($search->ChildRecordFilters)
-            && !empty($search->ChildRecordFilters);
+            && !empty($search->ChildRecordFilters->toArray());
         return new $requestedName(
             $container->get(\VuFindSearch\Service::class),
             $container->get(\VuFind\RecordDriver\PluginManager::class),
