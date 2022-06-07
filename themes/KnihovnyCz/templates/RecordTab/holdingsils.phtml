@@ -42,7 +42,7 @@
         response.data.holding.forEach(function (item) {
           var elm = null;
           if (item.item_id) {
-            elm = holds.find('tr[data-item-id="' + item.item_id.trim() + '"]');
+            elm = holds.find('tr[data-item-id="' + item.item_id + '"]');
           } else if (item.number) {
             elm = holds.find('tr[data-copy-number="' + item.number.trim() + '"]');
           } else {
