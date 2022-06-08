@@ -50,7 +50,7 @@
         RewriteCond %{REQUEST_FILENAME} -s [OR]
         RewriteCond %{REQUEST_FILENAME} -l [OR]
         RewriteCond %{REQUEST_FILENAME} -d
-        RewriteRule ^swagger-ui/.*$ - [PT,L]
+        RewriteRule ^(swagger-ui/.*|robots.txt)$ - [PT,L]
         RewriteRule ^. /app  [PT,L,E=worker:main]
    </Directory>
 

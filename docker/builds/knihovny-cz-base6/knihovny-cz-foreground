@@ -12,8 +12,8 @@ if [ -z "$PARAM_VUFIND_CONFIG_DIR" ]; then
     export PARAM_VUFIND_CONFIG_DIR="knihovny.cz"
 fi;
 
-if [[ -n "$PARAM_VUFIND_ROBOTS_TXT" && -e "${PARAM_VUFIND_SRC}/public/$PARAM_VUFIND_ROBOTS_TXT" ]]; then
-    cp "${PARAM_VUFIND_SRC}/public/$PARAM_VUFIND_ROBOTS_TXT" "${PARAM_VUFIND_SRC}/public/robots.txt"
+if [[ -n "$PARAM_VUFIND_ROBOTS_TXT" && -e "${EXTENSION_DIR}/public/$PARAM_VUFIND_ROBOTS_TXT" ]]; then
+    ln -s "${EXTENSION_DIR}/public/$PARAM_VUFIND_ROBOTS_TXT" "${PARAM_VUFIND_SRC}/public/robots.txt"
 fi;
 
 # Export common configuration

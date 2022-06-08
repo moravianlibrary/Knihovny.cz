@@ -1,0 +1,19 @@
+# Configuration for production
+# A Crawl-delay: of 30 seconds would allow crawlers to index your entire 1,000 page website in just 8.3 hours
+# A Crawl-delay: of 500 seconds would allow crawlers to index your entire 1,000 page website in 5.8 days
+User-agent: *
+Crawl-delay: 30
+Allow: /
+Disallow: /Search/Results
+Disallow: /EDS/Search
+Disallow: /Libraries/Results
+Disallow: /AJAX/JSON?method=getSaveStatuses*
+Disallow: /AJAX/JSON?method=getItemStatuses*
+Disallow: /AJAX/JSON?method=getHolding
+Disallow: /Record/*/Export*
+Disallow: /Record/*/Save*
+Disallow: /Record/*/Cite
+Disallow: /Record/*/ZiskejMvs
+Disallow: /Record/*/Buy
+Disallow: /Record/*/Email
+Disallow: /Record/*?mylang=*
