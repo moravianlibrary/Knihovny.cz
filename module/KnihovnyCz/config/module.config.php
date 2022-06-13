@@ -481,7 +481,7 @@ $config = [
             \KnihovnyCz\Ziskej\ZiskejMvs::class => \KnihovnyCz\Ziskej\ZiskejFactory::class,
             \KnihovnyCz\Auth\Manager::class => \VuFind\Auth\ManagerFactory::class,
             \KnihovnyCz\Autocomplete\Suggester::class => \VuFind\Autocomplete\SuggesterFactory::class,
-            'VuFindHttp\HttpService' => \KnihovnyCz\Service\HttpServiceFactory::class,
+            \KnihovnyCz\Service\HttpService::class => \KnihovnyCz\Service\HttpServiceFactory::class,
             \KnihovnyCz\Service\GuzzleHttpService::class => \KnihovnyCz\Service\GuzzleHttpServiceFactory::class,
             \KnihovnyCz\Validator\DatabaseCsrf::class => \KnihovnyCz\Validator\DatabaseCsrfFactory::class,
             \KnihovnyCz\ILS\Connection::class => \VuFind\ILS\ConnectionFactory::class,
@@ -492,6 +492,8 @@ $config = [
             \KnihovnyCz\Content\InvolvedLibrariesService::class => \KnihovnyCz\Content\InvolvedLibrariesServiceFactory::class,
         ],
         'aliases' => [
+            'VuFind\Http' => 'VuFindHttp\HttpService',
+            'VuFindHttp\HttpService' => \KnihovnyCz\Service\HttpService::class,
             \VuFind\Config\PluginManager::class => \KnihovnyCz\Config\PluginManager::class,
             \VuFind\Content\ObalkyKnihService::class => \KnihovnyCz\Content\ObalkyKnihService::class,
             \VuFind\Content\PageLocator::class => \KnihovnyCz\Content\PageLocator::class,

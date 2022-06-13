@@ -65,6 +65,9 @@ port = 3128
 auth = basic
 user = vufind
 pass = ***
+non_proxy_host[] = cluster.local
+non_proxy_host[] = knihovny.cz
+non_proxy_host[] = mzk.cz
 
 [Http]
 adapter = 'Laminas\Http\Client\Adapter\Default'

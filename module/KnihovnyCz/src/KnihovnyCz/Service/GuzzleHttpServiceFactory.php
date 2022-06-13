@@ -81,7 +81,7 @@ class GuzzleHttpServiceFactory  implements FactoryInterface
          * @var \Laminas\Config\Config $proxy
          */
         $proxy = $config->Proxy;
-        if (isset($proxy->host)) {
+        if (isset($proxy->host) && !empty($proxy->host)) {
             $host = $proxy->host;
             $port = $proxy->port ?? 80;
             $auth = $proxy->auth ?? null;
@@ -90,10 +90,7 @@ class GuzzleHttpServiceFactory  implements FactoryInterface
             if ($auth != null && $auth != 'basic') {
                 throw new \Exception("Only basic auth is supported");
             }
-            if ($auth == 'basic') {
-                if ($user == null || $pass == null) {
-                    throw new \Exception("No credentials for proxy");
-                }
+            if ($auth == 'basic' && !empty($user) && !empty($pass)) {
                 $user = urlencode($user);
                 $pass = urlencode($pass);
                 $proxyUrl = "http://$user:$pass@$host:$port/";

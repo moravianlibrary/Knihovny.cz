@@ -4,7 +4,7 @@
  *
  * PHP version 7
  *
- * Copyright (C) Villanova University 2019.
+ * Copyright (C) Moravian Library 2022.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -19,7 +19,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  *
- * @category VuFind
+ * @category KnihovnyCz
  * @package  Service
  * @author   Demian Katz <demian.katz@villanova.edu>
  * @author   Vaclav Rosecky <vaclav.rosecky@mzk.cz>
@@ -37,7 +37,7 @@ use Psr\Container\ContainerInterface;
 /**
  * KnihovnyCz HTTP Service factory.
  *
- * @category VuFind
+ * @category KnihovnyCz
  * @package  Service
  * @author   Demian Katz <demian.katz@villanova.edu>
  * @author   Vaclav Rosecky <vaclav.rosecky@mzk.cz>
@@ -83,6 +83,10 @@ class HttpServiceFactory implements FactoryInterface
                 if (isset($config->Proxy->{$key})) {
                     $options['proxy_' . $key] = $config->Proxy->{$key};
                 }
+            }
+            if (isset($config->Proxy->non_proxy_host)) {
+                $options['non_proxy_host'] = $config->Proxy
+                    ->non_proxy_host->toArray();
             }
         }
         $defaults = isset($config->Http)
