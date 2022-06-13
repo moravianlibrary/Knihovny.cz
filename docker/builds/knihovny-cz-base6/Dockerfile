@@ -19,7 +19,7 @@ ENV PARAM_VUFIND_GOOGLE_API_KEY=${PARAM_VUFIND_GOOGLE_API_KEY}
 ENV PARAM_VUFIND_CAPTCHA_SITE_KEY=${PARAM_VUFIND_CAPTCHA_SITE_KEY}
 ENV PARAM_VUFIND_CAPTCHA_SECRET_KEY=${PARAM_VUFIND_CAPTCHA_SECRET_KEY}
 ENV PARAM_VUFIND_MYSQL_URL=${PARAM_VUFIND_MYSQL_URL}
-ENV PARAM_VUFIND_COMMIT="4af460b70473fdebdd67118a0708f269f69e241e"
+ENV PARAM_VUFIND_COMMIT="c81f20f3f1410bac7d7b2d22d03257269860779f"
 ENV PARAM_PORTAL_PAGES_BRANCH=${PARAM_PORTAL_PAGES_BRANCH}
 
 ## Install base VuFind
@@ -45,8 +45,7 @@ COPY ./Gruntfile.local.js /var/www/knihovny-cz/
 RUN rm /var/www/knihovny-cz/composer.lock
 
 # Install composer dependencies
-RUN composer install --no-interaction -q --ignore-platform-req php
-RUN composer update --no-interaction -q --ignore-platform-req php
+RUN composer install --no-interaction -q
 
 #TODO: sentry/sentry still missing
 
@@ -59,8 +58,5 @@ COPY phpunit.xml /var/www/knihovny-cz/
 
 # Install npm and grunt
 RUN npm install -g grunt-cli && npm install
-
-# Install ESlint and JSHint
-RUN npm install -g eslint jshint
 
 CMD ["knihovny-cz-foreground"]

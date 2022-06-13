@@ -25,7 +25,7 @@ COPY ./Gruntfile.local.js ${THEMES_BUILD_DIR}/
 
 COPY ./themes ${THEMES_BUILD_DIR}/themes
 WORKDIR ${THEMES_BUILD_DIR}/
-RUN npm install && grunt less custom -v
+RUN npm install --production && grunt less custom -v
 RUN rm ${THEMES_BUILD_DIR}/themes/root/css/.htaccess
 
 ########### install PHP libraries
@@ -54,8 +54,7 @@ RUN mkdir -p ${COMPOSER_HOME} && \
 USER vufind
 
 WORKDIR ${VUFIND_ROOT}
-RUN /usr/local/bin/composer install --no-dev --no-scripts --ignore-platform-req php
-RUN /usr/local/bin/composer update --no-dev --ignore-platform-req php
+RUN /usr/local/bin/composer install --no-dev
 
 ########### final image
 FROM localhost/knihovny-php:latest

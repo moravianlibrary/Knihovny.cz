@@ -29,9 +29,9 @@ declare(strict_types=1);
  */
 namespace KnihovnyCz\RecordDriver;
 
-use Interop\Container\ContainerInterface;
 use Laminas\ServiceManager\Exception\ServiceNotCreatedException;
 use Laminas\ServiceManager\Exception\ServiceNotFoundException;
+use Psr\Container\ContainerInterface;
 
 /**
  * Class SolrLocalFactory

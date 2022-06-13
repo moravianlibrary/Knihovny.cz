@@ -28,8 +28,8 @@ declare(strict_types=1);
  */
 namespace KnihovnyCz\Ziskej;
 
-use Interop\Container\ContainerInterface;
 use Laminas\ServiceManager\Factory\FactoryInterface;
+use Psr\Container\ContainerInterface;
 
 /**
  * Factory for instantiating objects
@@ -45,9 +45,9 @@ class ZiskejFactory implements FactoryInterface
     /**
      * Create service
      *
-     * @param \Interop\Container\ContainerInterface $container     DI container
-     * @param string                                $requestedName Service name
-     * @param array|null                            $options       Service options
+     * @param ContainerInterface $container     DI container
+     * @param string             $requestedName Service name
+     * @param array|null         $options       Service options
      *
      * @return \KnihovnyCz\Ziskej\Ziskej
      */
