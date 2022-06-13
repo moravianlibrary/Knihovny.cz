@@ -57,6 +57,7 @@ COPY ./knihovny-cz-foreground /usr/local/bin/
 COPY phpunit.xml /var/www/knihovny-cz/
 
 # Install npm and grunt
+COPY package.json /var/www/knihovny-cz/
 RUN npm install -g grunt-cli && npm install
 
 CMD ["knihovny-cz-foreground"]
