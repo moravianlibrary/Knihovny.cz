@@ -10,8 +10,7 @@
         "monolog/monolog": "^1.24",
         "moravianlibrary/ziskej-api-php-client": "^4.2",
         "lcobucci/jwt": "^4.0",
-        "symfony/filesystem": "^4.4",
-        "ocramius/proxy-manager": "2.10.1"
+        "symfony/filesystem": "^5.4"
     },
     "scripts": {
          "phing-install-dependencies": "phing installswaggerui"

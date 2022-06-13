@@ -29,7 +29,6 @@ declare(strict_types = 1);
 namespace KnihovnyCz\Ziskej;
 
 use Http\Message\Authentication\Bearer;
-use Interop\Container\ContainerInterface;
 use Laminas\ServiceManager\Factory\FactoryInterface;
 use Lcobucci\JWT\Configuration;
 use Lcobucci\JWT\Signer\Ecdsa\MultibyteStringConverter;
@@ -41,6 +40,7 @@ use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 use Mzk\ZiskejApi\Api;
 use Mzk\ZiskejApi\ApiClient;
+use Psr\Container\ContainerInterface;
 
 /**
  * Class ZiskejApiFactory

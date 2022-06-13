@@ -28,7 +28,7 @@ declare(strict_types=1);
  */
 namespace KnihovnyCz\View\Helper\KnihovnyCz;
 
-use Interop\Container\ContainerInterface;
+use Psr\Container\ContainerInterface;
 use VuFind\View\Helper\Root\RecordDataFormatter\SpecBuilder;
 
 /**

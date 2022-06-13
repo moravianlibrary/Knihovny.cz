@@ -28,9 +28,9 @@
  */
 namespace KnihovnyCz\Config;
 
-use Interop\Container\ContainerInterface;
 use KnihovnyCz\Db\Table\Config as ConfigTable;
 use Laminas\Config\Config;
+use Psr\Container\ContainerInterface;
 
 /**
  * Class PluginFactory
