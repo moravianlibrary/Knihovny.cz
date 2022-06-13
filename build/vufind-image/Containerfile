@@ -19,13 +19,13 @@ ARG THEMES_BUILD_DIR=/vufind-build-themes
 RUN apk add --no-cache nodejs npm git \
     && npm install -g grunt-cli
 COPY --from=vufind-src /src/vufind/themes ${THEMES_BUILD_DIR}/themes
-COPY --from=vufind-src /src/vufind/package.json ${THEMES_BUILD_DIR}/
+COPY package.json ${THEMES_BUILD_DIR}/
 COPY --from=vufind-src /src/vufind/Gruntfile.js ${THEMES_BUILD_DIR}/
 COPY ./Gruntfile.local.js ${THEMES_BUILD_DIR}/
 
 COPY ./themes ${THEMES_BUILD_DIR}/themes
 WORKDIR ${THEMES_BUILD_DIR}/
-RUN npm install && grunt less custom -v
+RUN npm install --production && grunt less custom -v
 RUN rm ${THEMES_BUILD_DIR}/themes/root/css/.htaccess
 
 ########### install PHP libraries

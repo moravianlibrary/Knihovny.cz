@@ -1,0 +1,22 @@
+{
+  "name": "knihovny-cz",
+  "version": "2.1.0",
+  "description": "Dev tools to handle css preprocessing, js magic, and compression",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/moravianlibrary/Knihovny.cz"
+  },
+  "bugs": {
+    "url": "https://github.com/moravianlibrary/Knihovny.cz/issues"
+  },
+  "dependencies": {
+    "grunt": "^1.0.4",
+    "grunt-contrib-less": "^2.0.0",
+    "jit-grunt": "^0.10.0"
+  },
+  "devDependencies": {
+    "eslint": "^8.15.0",
+    "grunt-contrib-watch": "^1.1.0",
+    "jshint": "^2.13.4"
+  }
+}

@@ -192,6 +192,7 @@ export PARAM_VUFIND_CONFIG_DIR=${PARAM_VUFIND_CONFIG_DIR:-knihovny.cz}
 #fi
 
 cp "../composer.local.json" "./builds/knihovny-cz-base6/"
+cp "../package.json" "./builds/knihovny-cz-base6/"
 
 for srv in php-extensions6 apache-shibboleth6 knihovny-cz; do
     docker-compose build "$srv"
