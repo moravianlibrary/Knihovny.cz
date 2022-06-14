@@ -36,6 +36,8 @@ use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\BufferedOutput;
 use VuFindConsole\Command\PluginManager as CommandPluginManager;
+use VuFindConsole\Command\Util\ExpireSearchesCommand;
+use VuFindConsole\Command\Util\SitemapCommand;
 
 /**
  * Class Cronjob
@@ -80,6 +82,28 @@ class Cronjob extends \VuFind\Controller\AbstractBase
     {
         $input = new ArrayInput([]);
         return $this->runCommand(HarvestEbooksCommand::class, $input);
+    }
+
+    /**
+     * Expire searches endpoint
+     *
+     * @return HttpResponse
+     */
+    public function expireSearchesAction(): HttpResponse
+    {
+        $input = new ArrayInput(['age' => '7']);
+        return $this->runCommand(ExpireSearchesCommand::class, $input);
+    }
+
+    /**
+     * Site map endpoint
+     *
+     * @return HttpResponse
+     */
+    public function siteMapAction(): HttpResponse
+    {
+        $input = new ArrayInput([]);
+        return $this->runCommand(SitemapCommand::class, $input);
     }
 
     /**
