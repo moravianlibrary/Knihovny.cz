@@ -13,7 +13,7 @@ if [ -z "$PARAM_VUFIND_CONFIG_DIR" ]; then
 fi;
 
 if [[ -n "$PARAM_VUFIND_ROBOTS_TXT" && -e "${EXTENSION_DIR}/public/$PARAM_VUFIND_ROBOTS_TXT" ]]; then
-    ln -s "${EXTENSION_DIR}/public/$PARAM_VUFIND_ROBOTS_TXT" "${PARAM_VUFIND_SRC}/public/robots.txt"
+    ln -s -f "${EXTENSION_DIR}/public/$PARAM_VUFIND_ROBOTS_TXT" "${PARAM_VUFIND_SRC}/public/robots.txt"
 fi;
 
 # Export common configuration
