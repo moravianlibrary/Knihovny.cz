@@ -107,7 +107,9 @@ const facetsObserver = new MutationObserver(observeFacetsHandler);
 
 document.addEventListener('DOMContentLoaded', function runObserver() {
   const targetNode = document.querySelector('.side-facets-container-ajax');
-  facetsObserver.observe(targetNode, configFacets);
+  if (targetNode !== null) {
+    facetsObserver.observe(targetNode, configFacets);
+  }
 }, false);
 
 /* Přihlášení */
