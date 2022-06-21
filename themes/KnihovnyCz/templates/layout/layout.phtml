@@ -12,7 +12,8 @@ $this->headMeta()->setProperty('og:image:width', '1200');
 $this->headMeta()->setProperty('og:image:height', '630');
 // Disable automatic telephone number detection and link creation on Safari
 $this->headMeta()->appendName('format-detection', 'telephone=no');
-
+$gtmCode = $this->googleTagManager();
+$gtmEnabled = !empty($gtmCode);
 ?>
 <html lang="<?=$this->layout()->userLang?>"<?php if ($this->layout()->rtl): ?> dir="rtl"<?php endif; ?>>
   <head>
@@ -51,7 +52,7 @@ $this->headMeta()->appendName('format-detection', 'telephone=no');
       $icons = !isset($this->renderingError) ? $this->render('js-icons.phtml') : '{}';
     ?>
     <?=$this->headMeta()?>
-    <?=$this->googleTagManager();?>
+    <?=$gtmCode?>
 
     <!-- RTL styling -->
     <?php if ($this->layout()->rtl) {
@@ -117,7 +118,9 @@ JS;
     <?php $this->headScript()->appendFile("lib/cookieconsent.min.js", 'text/javascript', ['defer' => true]) ?>
     <?php $this->headScript()->appendFile("cookieconsent-init.js", 'text/javascript', ['defer' => true]) ?>
     <?php $this->headScript()->appendFile("cpk.js") ?>
-    <?php $this->headScript()->appendFile("gtm.js", 'text/javascript', ['defer' => true]) ?>
+    <?php if ($gtmEnabled): ?>
+      <?php $this->headScript()->appendFile("gtm.js", 'text/javascript', ['defer' => true]) ?>
+    <?php endif; ?>
     <?=$this->headScript() ?>
   </head>
   <body class="template-dir-<?=$this->templateDir?> template-name-<?=$this->templateName?> <?=$this->layoutClass('offcanvas-row')?><?php if ($this->layout()->rtl): ?> rtl<?php endif; ?> ziskej-mode-<?=$this->ziskejMvs()->getCurrentMode()?>">
@@ -177,6 +180,8 @@ JS;
 
     <?=$this->footScript() ?>
     <?=$this->render('ziskej-bar.phtml') ?>
-    <?=$this->render('gtm.phtml');?>
+    <?php if ($gtmEnabled): ?>
+      <?=$this->render('gtm.phtml');?>
+    <?php endif; ?>
   </body>
 </html>
