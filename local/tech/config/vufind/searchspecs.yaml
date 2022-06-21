@@ -220,7 +220,7 @@ Subject:
     genre_viz:
       - [onephrase, 200]
       - [and, 100]
-  FilterQuery: "*:* NOT (record_format:sfx OR record_format:library)"
+  FilterQuery: "*:* NOT record_format:library"
 
 Inspiration:
   DismaxFields:
