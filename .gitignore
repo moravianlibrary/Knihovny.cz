@@ -4,6 +4,7 @@ composer.json
 composer.lock
 docker/*.env
 docker/builds/knihovny-cz-base6/composer.local.json
+docker/builds/knihovny-cz-base6/package.json
 docker/data
 nohup.out
 local/*/cache/
