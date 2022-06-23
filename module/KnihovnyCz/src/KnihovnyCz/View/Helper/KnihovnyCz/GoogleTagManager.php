@@ -86,38 +86,48 @@ JS;
     }
 
     /**
+     * Is GTM enabled
+     *
+     * @return bool
+     */
+    public function isEnabled(): bool
+    {
+        return !empty($this->key);
+    }
+
+    /**
+     * Returns GTM Javascript code.
+     *
+     * @return string
+     */
+    public function getCode(): string
+    {
+        if (!$this->isEnabled()) {
+            return '';
+        }
+        $inlineScriptHelper = $this->getView()->plugin('inlinescript');
+        return $inlineScriptHelper(
+            \Laminas\View\Helper\HeadScript::SCRIPT,
+            $this->getRawJavascript(),
+            'SET'
+        )->toString();
+    }
+
+    /**
      * Returns GTM noscript alternative code.
      *
      * @return string
      */
-    protected function getNoScript(): string
+    public function getNoScriptCode(): string
     {
+        if (!$this->isEnabled()) {
+            return '';
+        }
         return <<<HTML
 <noscript>
   <iframe src="https://www.googletagmanager.com/ns.html?id={$this->key}"
           height="0" width="0" style="display:none;visibility:hidden"></iframe>
 </noscript>
 HTML;
-    }
-
-    /**
-     * Runs the view helper
-     *
-     * @return string
-     */
-    public function __invoke(): string
-    {
-        if (empty($this->key)) {
-            return '';
-        }
-        $jsCode = $this->getRawJavascript();
-        $inlineScriptHelper = $this->getView()->plugin('inlinescript');
-        $inlineScript = $inlineScriptHelper(
-            \Laminas\View\Helper\HeadScript::SCRIPT,
-            $jsCode,
-            'SET'
-        );
-        $noScript = $this->getNoScript();
-        return $inlineScript . $noScript;
     }
 }
