@@ -29,6 +29,7 @@ declare(strict_types=1);
  */
 namespace KnihovnyCzCronApi\Controller;
 
+use KnihovnyCzConsole\Command\Util\ExpireCsrfTokensCommand;
 use KnihovnyCzConsole\Command\Util\ExpireUsersCommand;
 use KnihovnyCzConsole\Command\Util\HarvestEbooksCommand;
 use Laminas\Http\Response as HttpResponse;
@@ -82,6 +83,17 @@ class Cronjob extends \VuFind\Controller\AbstractBase
     {
         $input = new ArrayInput([]);
         return $this->runCommand(HarvestEbooksCommand::class, $input);
+    }
+
+    /**
+     * Expire csrf tokens endpoint
+     *
+     * @return HttpResponse
+     */
+    public function expireCsrfTokensAction(): HttpResponse
+    {
+        $input = new ArrayInput(['age' => 3]);
+        return $this->runCommand(ExpireCsrfTokensCommand::class, $input);
     }
 
     /**
