@@ -157,3 +157,8 @@ UPDATE `widget_content` SET `value` = REPLACE(`value`, 'VyUsCat_', 'VyUsCat*') W
 
 -- Update DB version
 UPDATE `system` SET `value` = '105' WHERE `key`='DB_VERSION';
+
+-- #616: Remove eknihy_ke_stazeni from widgets
+DELETE FROM `widget` WHERE `name` = 'eknihy_ke_stazeni';
+UPDATE `system` SET `value` = '106' WHERE `key`='DB_VERSION';
+

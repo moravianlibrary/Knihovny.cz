@@ -31,7 +31,6 @@ namespace KnihovnyCzCronApi\Controller;
 
 use KnihovnyCzConsole\Command\Util\ExpireCsrfTokensCommand;
 use KnihovnyCzConsole\Command\Util\ExpireUsersCommand;
-use KnihovnyCzConsole\Command\Util\HarvestEbooksCommand;
 use Laminas\Http\Response as HttpResponse;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputInterface;
@@ -72,17 +71,6 @@ class Cronjob extends \VuFind\Controller\AbstractBase
     {
         $input = new ArrayInput(['age' => '730',]);
         return $this->runCommand(ExpireUsersCommand::class, $input);
-    }
-
-    /**
-     * Harvest ebooks endpoint
-     *
-     * @return HttpResponse
-     */
-    public function harvestEbooksAction(): HttpResponse
-    {
-        $input = new ArrayInput([]);
-        return $this->runCommand(HarvestEbooksCommand::class, $input);
     }
 
     /**
