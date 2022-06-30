@@ -31,9 +31,8 @@ namespace KnihovnyCz\Ziskej;
 use Http\Message\Authentication\Bearer;
 use Laminas\ServiceManager\Factory\FactoryInterface;
 use Lcobucci\JWT\Configuration;
-use Lcobucci\JWT\Signer\Ecdsa\MultibyteStringConverter;
 use Lcobucci\JWT\Signer\Ecdsa\Sha512;
-use Lcobucci\JWT\Signer\Key;
+use Lcobucci\JWT\Signer\Key\InMemory as InMemoryKey;
 use Monolog\Formatter\JsonFormatter;
 use Monolog\Handler\SocketHandler;
 use Monolog\Handler\StreamHandler;
@@ -86,8 +85,7 @@ class ZiskejApiFactory implements FactoryInterface
                 $connectionString .= ':' . $config->Filebeat->port;
             }
             $handlerSocket = new SocketHandler($connectionString);
-            $formaterJson = new JsonFormatter();
-            $handlerSocket->setFormatter($formaterJson);
+            $handlerSocket->setFormatter(new JsonFormatter());
             $logger->pushHandler($handlerSocket);
         }
         $httpService = $container->get(\KnihovnyCz\Service\GuzzleHttpService::class);
@@ -97,23 +95,18 @@ class ZiskejApiFactory implements FactoryInterface
             ]
         );
 
-        // generate token
-        $signer = new Sha512(new MultibyteStringConverter());
-        $privateKey = Key\LocalFileReference::file(
-            'file://' . $cpkZiskej->getPrivateKeyFileLocation()
+        $jwtConfig = Configuration::forSymmetricSigner(
+            Sha512::create(),
+            InMemoryKey::file($cpkZiskej->getPrivateKeyFileLocation())
         );
 
-        $config = Configuration::forSymmetricSigner(
-            $signer,
-            $privateKey
-        );
-
-        $token = $config->builder()
+        $now   = new \DateTimeImmutable();
+        $token = $jwtConfig->builder()
             ->issuedBy('cpk')
-            ->issuedAt((new \DateTimeImmutable())->setTimestamp(time()))
-            ->expiresAt((new \DateTimeImmutable())->setTimestamp(time() + 3600))
+            ->issuedAt($now)
+            ->expiresAt($now->modify('+1 hour'))
             ->withClaim('app', 'cpk')
-            ->getToken($signer, $privateKey);
+            ->getToken($jwtConfig->signer(), $jwtConfig->signingKey());
 
         //@todo store token
 
