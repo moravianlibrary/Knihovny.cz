@@ -19,7 +19,7 @@ $language = $this->language ?? $this->layout()->userLang;
   <?php endif;?>
 
   <form action='<?=$this->escapeHtmlAttr($link)?>' method='get' class='search-body <?=$center?>' target='_top'>
-    <input class='form-control lookfor <?=$center?>' type='text' name='lookfor' value=''>
+    <input class='form-control lookfor <?=$center?>' type='text' name='lookfor' value='<?=$this->lookfor?>'>
     <input type='hidden' name='type' value='<?=$this->escapeHtmlAttr($this->type)?>'>
     <input type='hidden' name='lng' value='<?=$this->escapeHtmlAttr($language)?>'>
     <input class='form-control find-button' type='submit' value='<?=$this->translate('Find')?>'>

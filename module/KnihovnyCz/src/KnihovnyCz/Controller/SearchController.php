@@ -6,7 +6,7 @@ declare(strict_types=1);
  *
  * PHP version 7
  *
- * Copyright (C) Moravian Library 2021.
+ * Copyright (C) Moravian Library 2022.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -21,7 +21,7 @@ declare(strict_types=1);
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  *
- * @category CPK-vufind-6
+ * @category Knihovny.cz
  * @package  KnihovnyCz\Controller
  * @author   Josef Moravec <moravec@mzk.cz>
  * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
@@ -37,7 +37,7 @@ use Laminas\View\Model\ViewModel;
 /**
  * Class SearchController
  *
- * @category CPK-vufind-6
+ * @category Knihovny.cz
  * @package  KnihovnyCz\Controller
  * @author   Josef Moravec <moravec@mzk.cz>
  * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
@@ -109,6 +109,7 @@ class SearchController extends \VuFind\Controller\SearchController
         if ($lang != null) {
             $this->setLanguage($lang);
         }
+        $view->setVariable('lookfor', $this->params()->fromQuery('lookfor', ''));
 
         $config = $this->getConfig("config");
         $databases = [
