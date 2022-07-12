@@ -66,6 +66,7 @@ return [
             'feedback' => 'FontAwesome:comments-o:fa-fw',
             'language-select' => 'FontAwesome:globe:fa-fw',
             'my-account' => 'FontAwesome:user-circle-o:fa-fw',
+            'share-record' => 'FontAwesome:share-alt',
             'sign-in' => 'FontAwesome:sign-in:fa-fw',
             'sign-out' => 'FontAwesome:sign-out:fa-fw',
             'ui-menu' => 'FontAwesome:bars:fa-fw',

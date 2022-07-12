@@ -3,6 +3,7 @@
   if (!empty($addThis)) {
     $this->headScript()->appendFile('https://s7.addthis.com/js/250/addthis_widget.js?pub=' . urlencode($addThis));
   }
+  $this->headScript()->appendFile('https://unpkg.com/share-api-polyfill/dist/share-min.js');
 ?>
 <nav class="record-nav">
   <ul class="nav nav-pills nav-stacked" aria-label="<?=$this->transEscAttr('ajaxview_label_tools'); ?>">
@@ -78,6 +79,13 @@
       </li>
     <?php endif; ?>
 
+    <li role="none">
+      <a class="share-record">
+        <?=$this->icon('share-record') ?>
+        <?=$this->transEsc('share_btn_text')?>
+      </a>
+    </li>
+
     <?php $cart = $this->cart(); ?>
     <?php if ($cart->isActive()): ?>
     <?php $cartId = $this->driver->getSourceIdentifier() . '|' . $this->driver->getUniqueId(); ?>
@@ -103,3 +111,40 @@
 
   </ul>
 </nav>
+
+<?php
+$title = $this->escapeJs($this->driver->getTitle());
+$text = $this->driver->getSummary();
+$text = isset($text[0]) ? $this->escapeJs($text[0]) : '';
+$url = $this->escapeJs($this->serverUrl() . $this->recordLinker()->getUrl($this->driver));
+$language = $this->escapeJs($this->layout()->userLang);
+$js = <<<JS
+const shareData = {
+  title: '$title',
+  text: '$text',
+  url: '$url'
+}
+const polyfillSettings = {
+    copy: false,
+    email: true,
+    print: true,
+    sms: false,
+    messenger: true,
+    facebook: true,
+    whatsapp: true,
+    twitter: true,
+    linkedin: false,
+    telegram: false,
+    skype: false,
+    pinterest: false,
+    language: '$language'
+  }
+const link = document.querySelector('.share-record');
+
+link.addEventListener('click', async () => {
+    await navigator.share(shareData, polyfillSettings);
+});
+JS;
+?>
+<?=$this->inlineScript(\Laminas\View\Helper\HeadScript::SCRIPT, $js, 'SET')?>
+
