@@ -448,6 +448,7 @@ $config = [
             'search_backend' => [
                 'factories' => [
                     'Solr' => \KnihovnyCz\Search\Factory\SolrDefaultBackendFactory::class,
+                    'EDS' => \KnihovnyCz\Search\Factory\EdsBackendFactory::class,
                 ],
             ],
             'search_params' => [
