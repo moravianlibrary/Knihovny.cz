@@ -520,7 +520,6 @@ $config = [
             'VuFind\SearchRunner' => \KnihovnyCz\Search\SearchRunner::class,
         ],
         'invokables' => [
-            \Symfony\Component\Filesystem\Filesystem::class,
             \KnihovnyCz\Service\GoogleBooksLinkService::class,
             \KnihovnyCz\Service\ZboziLinkService::class,
             \KnihovnyCz\ILS\Logic\Holdings::class,
