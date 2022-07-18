@@ -12,8 +12,7 @@ $this->headMeta()->setProperty('og:image:width', '1200');
 $this->headMeta()->setProperty('og:image:height', '630');
 // Disable automatic telephone number detection and link creation on Safari
 $this->headMeta()->appendName('format-detection', 'telephone=no');
-$gtmCode = $this->googleTagManager();
-$gtmEnabled = !empty($gtmCode);
+$gtmEnabled = $this->googleTagManager()->isEnabled();
 ?>
 <html lang="<?=$this->layout()->userLang?>"<?php if ($this->layout()->rtl): ?> dir="rtl"<?php endif; ?>>
   <head>
@@ -52,7 +51,10 @@ $gtmEnabled = !empty($gtmCode);
       $icons = !isset($this->renderingError) ? $this->render('js-icons.phtml') : '{}';
     ?>
     <?=$this->headMeta()?>
-    <?=$gtmCode?>
+
+    <?php if ($gtmEnabled): ?>
+      <?=$this->googleTagManager()->getCode()?>
+    <?php endif; ?>
 
     <!-- RTL styling -->
     <?php if ($this->layout()->rtl) {
@@ -124,6 +126,9 @@ JS;
     <?=$this->headScript() ?>
   </head>
   <body class="template-dir-<?=$this->templateDir?> template-name-<?=$this->templateName?> <?=$this->layoutClass('offcanvas-row')?><?php if ($this->layout()->rtl): ?> rtl<?php endif; ?> ziskej-mode-<?=$this->ziskejMvs()->getCurrentMode()?>">
+    <?php if ($gtmEnabled): ?>
+      <?=$this->googleTagManager()->getNoScriptCode()?>
+    <?php endif; ?>
     <?php // Set up the search box -- there are three possible cases:
       // 1. No search box was set; we should default to the normal box
       // 2. It was set to false; we should display nothing
