@@ -14,7 +14,7 @@
 <?php endif; ?>
 
 <div class='field856'>
-    <table class='table table-striped' id='e-version-table'>
+    <table class='table table-striped responsive-table' id='e-version-table'>
         <thead>
         <tr>
             <th class="col-md-2"><?=$this->translate('Destination');?></th>
@@ -37,18 +37,18 @@
                 ?>
 
                 <tr>
-                    <td><?=$this->transEsc($link['destination'])?></td>
+                    <td data-title="<?=$this->translate('Destination');?>"><?=$this->transEsc($link['destination'])?></td>
                     <?php if ($link['status'] === 'protected'): ?>
-                        <td>
+                        <td data-title="<?=$this->translate('Accessibility');?>">
                             <a target='_blank' data-toggle="tooltip" data-placement="top" rel='nofollow' title="<?=$this->translate('What does it mean?')?>" href='https://cs.wikipedia.org/wiki/Voln%C3%A9_d%C3%ADlo'>
                                 <span class="label label-<?=$statusClass?>"><?=$this->transEsc('link_access_status_' . $link['status'])?></span>
                             </a>
                         </td>
                     <?php else : ?>
-                        <td><span class="label label-<?=$statusClass?>"><?=$this->transEsc('link_access_status_' . $link['status'])?></span></td>
+                        <td data-title="<?=$this->translate('Accessibility');?>"><span class="label label-<?=$statusClass?>"><?=$this->transEsc('link_access_status_' . $link['status'])?></span></td>
                     <?php endif; ?>
-                    <td><a title='<?=$this->transEsc($description)?>' href='<?=$link['url']?>' target='_blank'><?=$this->transEsc($description)?></a></td>
-                    <td><?=$this->transEsc('Source::' . $link['source'])?></td>
+                    <td data-title="<?=$this->translate('Link');?>"><a title='<?=$this->transEsc($description)?>' href='<?=$link['url']?>' target='_blank'><?=$this->transEsc($description)?></a></td>
+                    <td data-title="<?=$this->translate('Distributor');?>"><?=$this->transEsc('Source::' . $link['source'])?></td>
                 </tr>
             <?php endforeach; ?>
         <?php endif; ?>
