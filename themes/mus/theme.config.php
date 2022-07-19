@@ -1,5 +1,5 @@
 <?php
 return [
     'extends' => 'KnihovnyCz',
-    'favicon' => 'logo-mus.png',
+    'favicon' => 'logos/logo-mus.png',
 ];
