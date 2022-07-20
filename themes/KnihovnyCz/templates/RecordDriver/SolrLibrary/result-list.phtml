@@ -14,11 +14,11 @@
 <input type="hidden" value="<?=$this->escapeHtmlAttr($this->driver->getUniqueID())?>" class="hiddenId" />
 <input type="hidden" value="<?=$this->escapeHtmlAttr($this->driver->getSourceIdentifier())?>" class="hiddenSource" />
 <div class="media">
-
+  <?php if ($thumbnail && $thumbnailAlignment == 'left'): ?>
+    <?=$thumbnail ?>
+  <?php endif ?>
   <div class="media-body">
-    <div class="row">
-      <div class="col-xs-12">
-        <div class="result-body">
+    <div class="result-body">
           <h3 class="title">
             <a href="<?=$this->escapeHtmlAttr($this->recordLinker()->getUrl($this->driver))?>" class="getFull" data-view="<?=$this->params->getOptions()->getListViewOption() ?>">
               <?=$this->record($this->driver)->getTitleHtml()?>
@@ -117,16 +117,6 @@
             <?php endif; ?>
           </div>
 
-          <div class="result-formats">
-            <?=$this->record($this->driver)->getFormatList() ?>
-
-            <?php if (empty($urls) && $this->driver->supportsAjaxStatus()): ?>
-              <span class="status ajax-availability hidden">
-            <span class="label label-default"><?=$this->transEsc('loading_ellipsis')?></span>
-          </span>
-            <?php endif; ?>
-          </div>
-
         </div>
         <div class="result-links hidden-print">
           <?php /* Display qrcode if appropriate: */ ?>
@@ -179,8 +169,6 @@
           <?php endif; ?>
 
           <?=$this->driver->supportsCoinsOpenUrl()?'<span class="Z3988" title="' . $this->escapeHtmlAttr($this->driver->getCoinsOpenUrl()) . '"></span>':''?>
-        </div>
-      </div>
     </div>
   </div>
   <?php if ($thumbnail && $thumbnailAlignment == 'right'): ?>

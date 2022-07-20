@@ -463,4 +463,25 @@ class SolrLibrary extends \KnihovnyCz\RecordDriver\SolrMarc
         }
         return '';
     }
+
+    /**
+     * Get fake NBN for getting image from Obálkyknih.cz
+     *
+     * @return array
+     */
+    public function getCleanNBN()
+    {
+        $sigla = strtolower($this->getSigla());
+        return ['nbn' => "$sigla-$sigla"];
+    }
+
+    /**
+     * Get formats for display
+     *
+     * @return array
+     */
+    public function getFormats()
+    {
+        return ['libraries'];
+    }
 }
