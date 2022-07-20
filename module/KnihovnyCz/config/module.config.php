@@ -367,7 +367,7 @@ $config = [
                     \KnihovnyCz\Db\Row\User::class => \VuFind\Db\Row\UserFactory::class,
                     \KnihovnyCz\Db\Row\UserCard::class => \VuFind\Db\Row\RowGatewayFactory::class,
                     \KnihovnyCz\Db\Row\CsrfToken::class => \VuFind\Db\Row\RowGatewayFactory::class,
-                    \KnihovnyCz\Db\Row\UserList::class => \VuFind\Db\Row\UserListFactory::class
+                    \KnihovnyCz\Db\Row\UserList::class => \KnihovnyCz\Db\Row\UserListFactory::class
                 ],
                 'aliases' => [
                     \VuFind\Db\Row\User::class => \KnihovnyCz\Db\Row\User::class,
