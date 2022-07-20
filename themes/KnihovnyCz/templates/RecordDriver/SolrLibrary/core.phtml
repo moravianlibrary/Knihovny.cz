@@ -1,3 +1,7 @@
+<?php
+  $coverDetails = $this->record($this->driver)->getCoverDetails('core', 'medium', $this->record($this->driver)->getThumbnail('large'));
+  $cover = $coverDetails['html'];
+?>
 <div class="media" vocab="http://schema.org/" resource="#record" typeof="<?=$this->driver->getSchemaOrgFormats()?> Product">
 <div class="row">
     <div class="col-md-6 library-detail">
@@ -6,6 +10,9 @@
           $sigla = $this->driver->getSigla();
         ?>
         <h1 property="name" class="record-title" data-sigla="<?=$sigla ?: 'undefined' ?>"><?=$this->escapeHtml($this->driver->getTitle())?></h1>
+        <?php if ($cover): ?>
+          <?=$cover?>
+        <?php endif; ?>
         <?php /* Display Main Details */ ?>
         <?php
             $formatter = $this->recordDataFormatter();
