@@ -29,6 +29,8 @@ declare(strict_types=1);
  */
 namespace KnihovnyCz\Search\Factory;
 
+use KnihovnyCz\Search\Solr\Backend\Connector;
+use KnihovnyCz\Search\Solr\Backend\PerformanceLogger;
 use KnihovnyCz\Search\Solr\Backend\Response\Json\RecordCollection;
 use KnihovnyCz\Search\Solr\ChildDocDeduplicationListener;
 use KnihovnyCz\Search\Solr\DeduplicationListener;
@@ -54,6 +56,13 @@ class SolrDefaultBackendFactory extends ParentSolrDefaultBackendFactory
      * @var string
      */
     protected $recordCollectionClass = RecordCollection::class;
+
+    /**
+     * Solr connector class
+     *
+     * @var string
+     */
+    protected $connectorClass = Connector::class;
 
     /**
      * Create listeners.
@@ -114,5 +123,25 @@ class SolrDefaultBackendFactory extends ParentSolrDefaultBackendFactory
             'datasources',
             $enabled
         );
+    }
+
+    /**
+     * Create the SOLR connector.
+     *
+     * @return Connector
+     */
+    protected function createConnector()
+    {
+        $connector = parent::createConnector();
+        $request = $this->serviceLocator->get('Request');
+        $connector->setRequest($request);
+        $config = $this->config->get($this->mainConfig);
+        $perfLog = $config->Index->perf_log ?? null;
+        if ($perfLog != null) {
+            $baseUrl = $config->Site->url;
+            $logger = new PerformanceLogger($perfLog, $baseUrl, $request);
+            $connector->setPerformanceLogger($logger);
+        }
+        return $connector;
     }
 }
