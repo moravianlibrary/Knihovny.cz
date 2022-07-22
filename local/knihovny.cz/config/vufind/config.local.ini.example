@@ -19,6 +19,7 @@ theme		= KnihovnyCz
 engine       = Solr
 url          = http://solr-dev.app.knihovny.cz/solr
 default_core = front
+perf_log = /var/www/knihovny-cz/log/solr-json.log
 
 [Authentication]
 method		= Shibboleth
