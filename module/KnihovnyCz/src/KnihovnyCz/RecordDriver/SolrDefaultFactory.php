@@ -68,6 +68,9 @@ class SolrDefaultFactory extends \VuFind\RecordDriver\SolrDefaultFactory
          */
         $driver = parent::__invoke($container, $requestedName, $options);
         $driver->attachRecordLoader($container->get(\VuFind\Record\Loader::class));
+        $driver->attachRecordFactory(
+            $container->get('VuFind\RecordDriverPluginManager')
+        );
         $driver->attachLibraryIdMappings(
             $container->get(\VuFind\Config\PluginManager::class)
                 ->get('MultiBackend')->LibraryIDMapping

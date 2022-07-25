@@ -71,6 +71,13 @@ class SolrDefault extends \VuFind\RecordDriver\SolrDefault
     protected $recordLoader = null;
 
     /**
+     * Record factory
+     *
+     * @var \VuFind\RecordDriver\PluginManager
+     */
+    protected $recordFactory;
+
+    /**
      * Library id mappings (by source)
      *
      * @var \Laminas\Config\Config
@@ -491,6 +498,10 @@ class SolrDefault extends \VuFind\RecordDriver\SolrDefault
      */
     public function getParentRecord()
     {
+        if ($this->parentRecord === null && isset($this->fields['parent_data'])) {
+            $this->parentRecord = $this->recordFactory
+                ->getSolrRecord($this->fields['parent_data']);
+        }
         if ($this->parentRecord === null && $this->recordLoader !== null
             && ($parentRecordId = $this->getParentRecordID()) !== null
         ) {
@@ -591,6 +602,19 @@ class SolrDefault extends \VuFind\RecordDriver\SolrDefault
     public function attachRecordLoader(\VuFind\Record\Loader $recordLoader)
     {
         $this->recordLoader = $recordLoader;
+    }
+
+    /**
+     * Attach a Record factory
+     *
+     * @param \VuFind\RecordDriver\PluginManager $recordFactory Record factory
+     *
+     * @return void
+     */
+    public function attachRecordFactory(
+        \VuFind\RecordDriver\PluginManager $recordFactory
+    ) {
+        $this->recordFactory = $recordFactory;
     }
 
     /**
