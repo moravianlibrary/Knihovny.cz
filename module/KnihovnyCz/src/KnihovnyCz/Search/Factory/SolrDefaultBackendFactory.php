@@ -51,6 +51,13 @@ use VuFindSearch\Backend\Solr\Backend;
 class SolrDefaultBackendFactory extends ParentSolrDefaultBackendFactory
 {
     /**
+     * Site configuration file identifier.
+     *
+     * @var string
+     */
+    protected $siteConfig = 'config';
+
+    /**
      * Record collection class for RecordCollectionFactory
      *
      * @var string
@@ -138,7 +145,8 @@ class SolrDefaultBackendFactory extends ParentSolrDefaultBackendFactory
         $config = $this->config->get($this->mainConfig);
         $perfLog = $config->Index->perf_log ?? null;
         if ($perfLog != null) {
-            $baseUrl = $config->Site->url;
+            $siteConfig = $this->config->get($this->siteConfig);
+            $baseUrl = $siteConfig->Site->url ?? '';
             $logger = new PerformanceLogger($perfLog, $baseUrl, $request);
             $connector->setPerformanceLogger($logger);
         }
