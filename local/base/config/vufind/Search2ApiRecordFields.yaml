@@ -163,3 +163,7 @@ urls:
   type: array
   items:
     $ref: '#/components/schemas/Url'
+cpkCode:
+  vufind.method: getCpkCode
+  description: Library identifier used by Knihovny.cz
+  type: string
