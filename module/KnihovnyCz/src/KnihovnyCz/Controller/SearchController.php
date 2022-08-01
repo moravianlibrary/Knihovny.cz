@@ -90,6 +90,18 @@ class SearchController extends \VuFind\Controller\SearchController
     }
 
     /**
+     * Home action
+     *
+     * @return mixed
+     */
+    public function homeAction()
+    {
+        $view = parent::homeAction();
+        $view->setVariable('hideFilters', true);
+        return $view;
+    }
+
+    /**
      * Show embedded search for use in HTML iframe
      *
      * @return ViewModel

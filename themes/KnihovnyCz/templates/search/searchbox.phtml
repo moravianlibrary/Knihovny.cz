@@ -28,7 +28,10 @@
     }
     $hiddenFilterParams = $this->searchTabs()->getCurrentHiddenFilterParams($this->searchClassId, $ignoreHiddenFilterMemory, '?');
 
-    if (!isset($this->filterList) || !isset($this->checkboxFilters)) {
+    if ($this->hideFilters ?? false) {
+        $filterList = [];
+        $checkboxFilters = [];
+    } elseif (!isset($this->filterList) || !isset($this->checkboxFilters)) {
         $params = $this->searchMemory()->getLastSearchParams($this->searchClassId);
         $filterList = $params->getFilterList(true);
         $checkboxFilters = $params->getCheckboxFacets();
