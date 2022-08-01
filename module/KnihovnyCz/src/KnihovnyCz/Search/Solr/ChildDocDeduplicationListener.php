@@ -45,15 +45,6 @@ use VuFindSearch\Backend\Solr\Backend;
  */
 class ChildDocDeduplicationListener extends DeduplicationListener
 {
-    public const CHILD_DOCUMENT_LIMIT = 10000;
-
-    /**
-     * Record factory
-     *
-     * @var RecordFactory
-     */
-    protected $recordFactory;
-
     /**
      * Field list to fetch from Solr
      *
@@ -88,8 +79,6 @@ class ChildDocDeduplicationListener extends DeduplicationListener
             $dataSourceCfg,
             $enabled
         );
-        $this->recordFactory = $this->serviceLocator
-            ->get('VuFind\RecordDriverPluginManager');
         $this->fieldList = $this->getListOfFields();
     }
 
@@ -151,21 +140,20 @@ class ChildDocDeduplicationListener extends DeduplicationListener
                 $searchConfig->RawHiddenFilters->toArray()
             );
         }
-        $childFilter = '';
-        if (!empty($childFilters)) {
-            $childFilter = 'childFilter=\'' . join(
-                " AND ",
-                $childFilters
-            ) . '\'';
-        }
         $fl = $params->get('fl');
         if (empty($fl)) {
             $fl = $this->fieldList;
         }
-        $limit = self::CHILD_DOCUMENT_LIMIT;
-        $fl = $fl . ", [child parentFilter=merged_boolean:true"
-            . " $childFilter limit=$limit]";
+        $fl = $fl . ", childs:[subquery]";
         $params->set('fl', $fl);
+        $params->set(
+            'childs.q',
+            '{!term f=parent_id_str v=$row.id} merged_child_boolean:true'
+        );
+        $params->set('childs.fl', 'id');
+        if (!empty($childFilters)) {
+            $params->set('childs.fq', join(" AND ", $childFilters));
+        }
     }
 
     /**
@@ -197,7 +185,7 @@ class ChildDocDeduplicationListener extends DeduplicationListener
     protected function getLocalRecordIds($fields)
     {
         $ids = [];
-        $childs = $fields['_childDocuments_'] ?? [];
+        $childs = $fields['childs']['docs'] ?? [];
         foreach ($childs as $rawLocalRecord) {
             $ids[] = $rawLocalRecord['id'];
         }
@@ -224,6 +212,7 @@ class ChildDocDeduplicationListener extends DeduplicationListener
         $recordSources,
         $sourcePriority
     ) {
+        $localRecordData['parent_data'] = $dedupRecordData;
         return $localRecordData;
     }
 
