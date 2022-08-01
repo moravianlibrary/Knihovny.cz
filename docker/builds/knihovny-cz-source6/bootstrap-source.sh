@@ -9,7 +9,7 @@ init_config_local() {
 
     CONFIG_LOCAL="${PARAM_VUFIND_CONFIG_ABS_DIR}/config/vufind/config.local.ini"
 
-    PARAM_VUFIND_URL="https://$PARAM_VUFIND_HOST:$PARAM_VUFIND_SSL_PORT/"
+    PARAM_VUFIND_URL="https://$PARAM_VUFIND_HOST:$PARAM_VUFIND_SSL_PORT"
 
     cp /tmp/config.local.template.ini "$CONFIG_LOCAL"
     sed -i \
