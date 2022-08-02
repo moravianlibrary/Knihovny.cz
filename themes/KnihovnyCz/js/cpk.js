@@ -271,6 +271,52 @@ VuFind.listen('VuFind.sidefacets.buildtree', function onLoaded(event){
   setLibraryAutoComplete(element, data);
 });
 
+jQuery(document).ready(function saveInstitutionFilter() {
+  var element = $('#my-institution-filter-save');
+  var hidePopover = function hidePopover(){
+    var callback = null;
+    return function onTimeout() {
+      if (callback != null) {
+        clearTimeout(callback);
+      }
+      callback = setTimeout(function hidePopoverInner() {
+        element.popover('hide');
+      }, 5000);
+    };
+  }();
+  element.on('click', function onClick() {
+    event.stopPropagation();
+    element.popover('show');
+    element.data('bs.popover').options.content = element.data('content-progress');
+    element.popover('show');
+    var institutions = element.data('institutions').split(';');
+    var url = VuFind.path + '/AJAX/JSON?method=saveInstitutionFilter';
+    $.ajax({
+      dataType: "json",
+      url: url,
+      method: "POST",
+      data: {'institutions[]': institutions},
+      success: function onSuccess(){
+        $('#my-institution-filter').attr('href', window.location);
+        element.data('bs.popover').options.content = element.data('content-ok');
+        element.popover('show');
+        hidePopover();
+      },
+      error: function onError(json){
+        var message = element.data('content-error');
+        if ('responseJSON' in json) {
+          message = json.responseJSON.data;
+        }
+        element.data('bs.popover').options.content = message;
+        element.popover('show');
+        hidePopover();
+      },
+    });
+    return true;
+  });
+  element.show();
+});
+
 VuFind.listen('VuFind.sidefacets.loaded', function onLoaded(){
   const facets = [
     'facet_region_institution_facet_mv',

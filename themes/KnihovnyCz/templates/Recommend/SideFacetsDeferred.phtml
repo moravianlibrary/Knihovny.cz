@@ -71,6 +71,26 @@
     <div class="facet-group" id="side-panel-<?=$this->escapeHtmlAttr($field) ?>">
       <button class="title<?php if (in_array($field, $collapsedFacets)): ?> collapsed<?php endif ?>" data-toggle="collapse" data-target="#side-collapse-<?=$this->escapeHtmlAttr($field) ?>" >
         <?=$this->transEsc($facetName)?>
+        <?php if ($field == $this->recommend->getInstitutionField() && $this->auth()->isLoggedIn()):?>
+          <?php if (($myFilterLink = $this->recommend->getMyFilter()) !== false): ?>
+            <a href='<?=$myFilterLink?>' onclick='event.stopPropagation()'
+               id='my-institution-filter'
+               title="<?=$this->translate('my_institution_filter_load_title')?>">
+              <?=$this->icon('load-institution-filter') ?>
+            </a>
+          <?php endif; ?>
+          <?php if(!empty($institutions = $this->recommend->getSelectedInstitutionFilter())): ?>
+            <span title='<?= $this->transEsc('my_institution_filter_save_title')?>'>
+              <a id="my-institution-filter-save" style="display:none;"
+                data-institutions="<?=$this->escapeHtmlAttr(implode(';', $institutions)) ?>"
+                data-content-progress="<?= $this->transEsc('my_institution_filter_saving')?>"
+                data-content-ok="<?= $this->transEsc('my_institution_filter_saved')?>"
+                data-content-error="<?= $this->transEsc('my_institution_filter_not_saved')?>">
+                <?=$this->icon('save-institution-filter') ?>
+              </a>
+            </span>
+          <?php endif; ?>
+        <?php endif; ?>
       </button>
       <div id="side-collapse-<?=$this->escapeHtmlAttr($field) ?>" class="collapse<?php if (!in_array($field, $collapsedFacets)): ?> in<?php endif ?>"<?php if (!in_array($field, $hierarchicalFacets)):?> data-facet="<?=$this->escapeHtmlAttr($field) ?>"<?php endif ?><?php if (in_array($field, $forceUncollapsedFacets)): ?> data-force-in="1"<?php endif ?>>
         <span class="facet-load-failed hidden"> <?=$this->transEsc('ajax_load_interrupted')?></span>
