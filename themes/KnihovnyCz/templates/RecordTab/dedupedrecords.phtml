@@ -15,7 +15,7 @@
     }
   }
   uasort($results, function ($a, $b) {
-    $result = strcoll($a['label'], $b['label']);
+    $result = $this->sorter()->compare($a['label'], $b['label']);
     if ($result == 0) {
       $result = $a['id'] <=> $b['id'];
     }

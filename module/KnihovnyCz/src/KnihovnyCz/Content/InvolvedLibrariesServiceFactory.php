@@ -64,8 +64,10 @@ class InvolvedLibrariesServiceFactory
         $requestedName,
         array $options = null
     ) {
-        return new $requestedName(
+        $service = new $requestedName(
             $container->get(\VuFind\Search\Results\PluginManager::class)
         );
+        $service->setSorter($container->get(\VuFind\I18n\Sorter::class));
+        return $service;
     }
 }

@@ -41,8 +41,10 @@ use VuFind\Search\Results\PluginManager as ResultsManager;
  * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://knihovny.cz Main Page
  */
-class InvolvedLibrariesService
+class InvolvedLibrariesService implements \VuFind\I18n\HasSorterInterface
 {
+    use \VuFind\I18n\HasSorterTrait;
+
     /**
      * Results manager
      *
@@ -91,7 +93,7 @@ class InvolvedLibrariesService
                 ];
             }
         }
-        uksort($libraries, 'strcoll');
+        uksort($libraries, [$this->getSorter(), 'compare']);
         return $libraries;
     }
 }
