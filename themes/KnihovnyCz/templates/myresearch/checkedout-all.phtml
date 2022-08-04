@@ -28,13 +28,29 @@
       hideLibraryCardContent(element);
       var button = $(document.activeElement);
       var form = $(this);
-      var url = $(element).data('action');
+      var page = form.find('input[name="page"]').val();
+      var url = $(element).data('action') + '?page=' + page;
+      console.log(url);
       var data = form.serialize() + '&' + button.attr('id') + '=' + button.val()
         + '&cardId=' + $(element).data('card-id');
       $.ajax({
         type: "POST",
         url: url,
         data: data,
+        success: function onSuccess(content) {
+          showLibraryCardContent(element, content, function onComplete() {
+            loadCheckedOut(element);
+          });
+        }
+      });
+    });
+    $(element).find("ul.pagination>li>a").click(function onClick(event){
+      event.preventDefault();
+      hideLibraryCardContent(element);
+      link = $(this).attr('href');
+      $.ajax({
+        type: "GET",
+        url: link,
         success: function onSuccess(content) {
           showLibraryCardContent(element, content, function onComplete() {
             loadCheckedOut(element);

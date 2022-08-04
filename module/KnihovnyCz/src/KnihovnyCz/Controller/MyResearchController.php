@@ -250,8 +250,10 @@ class MyResearchController extends MyResearchControllerBase
         }
         // disable sorting
         $view->sortList = false;
-        $view->cardId = $this->getCardId();
         $view->setTemplate('myresearch/checkedout-ajax');
+        $params = $view->getVariable('params', []);
+        $params['cardId'] = $this->getCardId();
+        $view->setVariable('params', $params);
         $result = $this->getViewRenderer()->render($view);
         return $this->getAjaxResponse('text/html', $result, null);
     }

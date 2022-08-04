@@ -29,6 +29,7 @@
     <form name="renewals" method="post" id="renewals" data-clear-account-cache="checkedOut" data-disable-on-submit>
       <input type="hidden" value="<?=$this->escapeHtmlAttr($this->auth()->getManager()->getCsrfHash())?>" name="csrf"/>
       <input type="hidden" id="submitType" name="renewSelected" value="1">
+      <input type="hidden" value="<?=$this->escapeHtmlAttr($this->params['page'] ?? '1')?>" name="page"/>
       <div class="toolbar">
         <div class="checkbox">
           <label>
@@ -208,7 +209,7 @@
       <?php endforeach; ?>
     </ul>
   <?php if ($this->renewForm): ?></form><?php endif; ?>
-  <?=$paginator ? $this->paginationControl($paginator, 'Sliding', 'Helpers/pagination.phtml', compact('params')) : ''?>
+  <?=$paginator ? $this->paginationControl($paginator, 'Sliding', 'Helpers/pagination.phtml', ['params' => $this->params]) : ''?>
 <?php elseif (!(isset($this->error) && $this->error)): ?>
   <div class="alert alert-info">
     <?=$this->transEsc('You do not have any items checked out')?>.
