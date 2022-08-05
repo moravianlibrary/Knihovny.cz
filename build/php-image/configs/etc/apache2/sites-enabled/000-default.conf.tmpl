@@ -21,6 +21,8 @@
 
    DocumentRoot /var/www/knihovny-cz/public/
    AliasMatch ^/themes/([0-9a-zA-Z-_]*)/(css|images|js|assets)/(.*)$ /var/www/knihovny-cz/themes/$$1/$$2/$$3
+   AliasMatch ^/sitemap(.*).xml$ /var/www/knihovny-cz/sitemaps/sitemap$$1.xml
+
    <Directory ~ "^/var/www/knihovny-cz/themes/([0-9a-zA-Z-_]*)/(css|images|js|assets)/">
       require all granted
       AllowOverride None
@@ -53,6 +55,16 @@
         RewriteRule ^(swagger-ui/.*|robots.txt)$ - [PT,L]
         RewriteRule ^. /app  [PT,L,E=worker:main]
    </Directory>
+
+    <Directory /var/www/knihovny-cz/sitemaps/>
+        <IfModule !mod_authz_core.c>
+            Order allow,deny
+            Allow from all
+        </IfModule>
+        <IfModule mod_authz_core.c>
+            Require all granted
+        </IfModule>
+    </Directory>
 
     Include default-config.d/*.conf
     Include logs/site-logs.conf

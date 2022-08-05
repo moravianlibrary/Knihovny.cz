@@ -76,6 +76,7 @@ fi
 
 # Create place for logs
 mkdir -p "${PARAM_VUFIND_SRC:-/var/www/src}/log"
+touch "${PARAM_VUFIND_SRC:-/var/www/src}/log/solr-json.log"
 
 # List all environment variables
 # WARNING: possible threat of exploiting the secrets here (by saving `env` output to the docker logs)
