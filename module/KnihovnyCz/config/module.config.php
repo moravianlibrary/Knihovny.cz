@@ -477,7 +477,15 @@ $config = [
                     'recommendotherportals' => \KnihovnyCz\Recommend\RecommendOtherPortals::class,
                     'mapselection' => \KnihovnyCz\Recommend\MapSelection::class,
                 ],
-            ]
+            ],
+            'sitemap' => [
+                'factories' => [
+                    \KnihovnyCz\Sitemap\Plugin\Index::class => \KnihovnyCz\Sitemap\Plugin\IndexFactory::class,
+                ],
+                'aliases' => [
+                    \VuFind\Sitemap\Plugin\Index::class => \KnihovnyCz\Sitemap\Plugin\Index::class,
+                ]
+            ],
         ],
     ],
     'service_manager' => [
