@@ -103,6 +103,8 @@ class SolrLocal extends \KnihovnyCz\RecordDriver\SolrMarc
                 'copy_number',
                 'catalog_link'
             );
+            $year = trim($year);
+            $volume = trim($volume);
             $filters['year'][$year] = $this->extractYear($year);
             $filters['volume'][$volume] = $this->extractVolume($volume);
         }
