@@ -486,6 +486,14 @@ $config = [
                     \VuFind\Sitemap\Plugin\Index::class => \KnihovnyCz\Sitemap\Plugin\Index::class,
                 ]
             ],
+            'form_handler' => [
+                'factories' => [
+                    \KnihovnyCz\Form\Handler\AskLibrary::class => \Laminas\ServiceManager\Factory\InvokableFactory::class,
+                ],
+                'aliases' => [
+                    'asklibrary' => \KnihovnyCz\Form\Handler\AskLibrary::class,
+                ],
+            ],
         ],
     ],
     'service_manager' => [
