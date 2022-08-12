@@ -170,6 +170,7 @@ CREATE VIEW `resource_tags` AS SELECT * FROM `vufind`.`resource_tags`;
 CREATE VIEW `tags` AS SELECT * FROM `vufind`.`tags`;
 CREATE VIEW `record` AS SELECT * FROM `vufind`.`record`;
 CREATE VIEW `comments` AS SELECT * FROM `vufind`.`comments`;
+CREATE VIEW `feedback` AS SELECT * FROM `vufind`.`feedback`;
 
 DELETE FROM `system` WHERE `key` != 'DB_VERSION';
 UPDATE `system` SET `value` = '100' WHERE `key` = 'DB_VERSION';

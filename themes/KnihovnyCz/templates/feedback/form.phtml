@@ -126,5 +126,11 @@
     });
   });
 JS;
+
+  $formAdjustment = <<<JS
+    $('form[action*="PtejteSeKnihovny"]').parent().children('h1,h2').hide();
+JS;
+
 ?>
 <?=$this->inlineScript(\Laminas\View\Helper\HeadScript::SCRIPT, $gtm, 'SET'); ?>
+<?=$this->inlineScript(\Laminas\View\Helper\HeadScript::SCRIPT, $formAdjustment, 'SET'); ?>

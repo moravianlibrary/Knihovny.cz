@@ -151,3 +151,94 @@ forms:
         required: true
         settings:
         # help: message_help
+
+
+  PtejteSeKnihovny:
+    title: Ask your library
+    enabled: true
+    useCaptcha: true
+    reportReferrer: false
+    reportUserAgent: false
+    onlyForLoggedUsers: false
+    response: Thank you for your question.
+    senderNameRequired: false
+    senderEmailRequired: true
+    primaryHandler: asklibrary
+    secondaryHandlers:
+      - database
+
+    help:
+      pre: asklibrary_help_pre_html
+      post: asklibrary_help_post_html
+
+    fields:
+      - name: library
+        type: hidden
+        settings:
+          - [value, 'ABA001']
+      - name: subject
+        type: text
+        label: Question
+        required: true
+      - name: message
+        type: textarea
+        label: Question details
+        required: true
+        settings:
+      - name: category
+        type: select
+        label: Category
+        required: true
+        options:
+          - value: "informace-o-knihovne"
+            label: "Information about library"
+          - value: "informace-o-vydanych-dokumentech"
+            label: "Information about publications"
+          - value: "antropologie-etnografie"
+            label: "Anthropology, ethnography"
+          - value: "biologicke-vedy"
+            label: "Biology"
+          - value: "divadlo-film-tanec"
+            label: "Drama, film, dancing"
+          - value: "ekonomicke-vedy-obchod"
+            label: "Economy, business"
+          - value: "filozofie-a-nabozenstvi"
+            label: "Philosophy, religion"
+          - value: "fyzika-a-pribuzne-vedy"
+            label: "Physics"
+          - value: "geografie-geologie-vedy-o-zemi"
+            label: "Geography, geology"
+          - value: "historie-a-pomocne-historicke-vedy-biograficke-studie"
+            label: "History and auxiliary historical sciences"
+          - value: "hudba"
+            label: "Music"
+          - value: "chemie-krystalografie-mineralogicke-vedy"
+            label: "Chemistry, crystallography, mineralogy"
+          - value: "jazyk-lingvistika-a-literatura"
+            label: "Linguistic and literature"
+          - value: "knihovnictvi-informatika-vseobecne-referencni-literatura"
+            label: "Library science, informatics, reference literature"
+          - value: "lekarstvi"
+            label: "Medicine"
+          - value: "matematika"
+            label: "Mathematics"
+          - value: "politicke-vedy-vojenstvi"
+            label: "Political science, the military"
+          - value: "pravo"
+            label: "Law"
+          - value: "psychologie"
+            label: "Psychology"
+          - value: "sociologie"
+            label: "Sociology"
+          - value: "technika-technologie-inzenyrstvi"
+            label: "Technology, engineering"
+          - value: "telesna-vychova-a-sport-rekreace"
+            label: "Physical education and sport, recreation"
+          - value: "umeni-architektura-muzeologie"
+            label: "Art, architecture, museology"
+          - value: "vychova-a-vzdelavani"
+            label: "Education"
+          - value: "vypocetni-technika"
+            label: "Computing"
+          - value: "zemedelstvi"
+            label: "Agriculture"
