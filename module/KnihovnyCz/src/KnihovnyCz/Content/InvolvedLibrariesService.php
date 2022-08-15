@@ -69,7 +69,7 @@ class InvolvedLibrariesService implements \VuFind\I18n\HasSorterInterface
      */
     public function getInvolvedLibraries(): array
     {
-        $lookfor = "portal_facet_mv:\"KNIHOVNYCZ_YES\"";
+        $filters = ["portal_facet_mv:\"KNIHOVNYCZ_YES\""];
         /**
          * Search results
          *
@@ -80,7 +80,7 @@ class InvolvedLibrariesService implements \VuFind\I18n\HasSorterInterface
         $params->getOptions()->disableHighlighting();
         $params->getOptions()->spellcheckEnabled(false);
         $params->getOptions()->setLimitOptions([1000]);
-        $params->initFromRequest(new Parameters(['lookfor' => $lookfor ]));
+        $params->initFromRequest(new Parameters(['filter' => $filters]));
         $libraries = [];
         foreach ($results->getResults() as $library) {
             $name = $library->getTranslatedNameBySource();
@@ -92,6 +92,14 @@ class InvolvedLibrariesService implements \VuFind\I18n\HasSorterInterface
                     'id' => $library->getUniqueID(),
                 ];
             }
+        }
+        foreach ($libraries as &$librariesByRegion) {
+            usort(
+                $librariesByRegion,
+                function ($a, $b) {
+                    return $this->getSorter()->compare($a['name'], $b['name']);
+                }
+            );
         }
         uksort($libraries, [$this->getSorter(), 'compare']);
         return $libraries;
