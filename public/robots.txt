@@ -3,7 +3,7 @@
 # A Crawl-delay: of 500 seconds would allow crawlers to index your entire 1,000 page website in 5.8 days
 User-agent: *
 Crawl-delay: 30
-Sitemap: https://www.knihovny.cz/sitemapIndex.xml
+#Sitemap: https://www.knihovny.cz/sitemapIndex.xml
 Allow: /
 Disallow: /Search/Results
 Disallow: /EDS/Search
