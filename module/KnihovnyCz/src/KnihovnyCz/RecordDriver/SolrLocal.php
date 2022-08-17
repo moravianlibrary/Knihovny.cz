@@ -74,8 +74,7 @@ class SolrLocal extends \KnihovnyCz\RecordDriver\SolrMarc
         $isCaslin = str_starts_with($this->getUniqueID(), 'caslin');
         /* @phpstan-ignore-next-line */
 
-        $isAleph = $this->hasILS()
-            && $this->ils->getDriverName($this->getUniqueID()) === 'Aleph';
+        $isAleph = $this->isAleph();
         foreach ($f996 as $line) {
             [
                 $itemId, $callnumber, $location, $callnumber_second,

@@ -703,4 +703,14 @@ class SolrDefault extends \VuFind\RecordDriver\SolrDefault
         }
         return $geo;
     }
+
+    /**
+     * Get id from field 001 of marc record (indexed in solr)
+     *
+     * @return string
+     */
+    protected function getIdFrom001(): string
+    {
+        return $this->fields['id001_str'] ?? '';
+    }
 }
