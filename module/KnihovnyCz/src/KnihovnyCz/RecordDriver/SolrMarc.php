@@ -40,7 +40,9 @@ class SolrMarc extends SolrDefault
 {
     use \VuFind\RecordDriver\Feature\IlsAwareTrait;
     use \VuFind\RecordDriver\Feature\MarcReaderTrait;
-    use \VuFind\RecordDriver\Feature\MarcAdvancedTrait;
+    use \VuFind\RecordDriver\Feature\MarcAdvancedTrait {
+        getCleanNBN as getCleanNBNMarc;
+    }
     use Feature\BibframeTrait;
     use Feature\PatentTrait;
 
@@ -244,5 +246,109 @@ class SolrMarc extends SolrDefault
     public function getPhysicalDescriptions()
     {
         return $this->getFieldArray('300', ['a', 'b', 'c', 'e', 'f', 'g'], true);
+    }
+
+    /**
+     * Get just the first listed national bibliography number (or false if none
+     * available).
+     *
+     * @return mixed
+     */
+    public function getCleanNBN()
+    {
+        $nbn = $this->getCleanNBNMarc();
+        if (empty($nbn)
+            && $sigla = $this->ils->sourceToSigla($this->getSourceId())
+        ) {
+            $sigla = strtolower($this->remapSiglaForNkp($sigla));
+            $nbn['nbn'] = $sigla . '-' . $this->getLocalIdForObalkyKnih();
+        }
+        return $nbn;
+    }
+
+    /**
+     * Get identifier stripped of all prefixes
+     *
+     * @return string
+     */
+    protected function getLocalIdForObalkyKnih(): string
+    {
+        $sigla = strtolower($this->ils->sourceToSigla($this->getSourceId()));
+        [, $id] = explode('.', $this->getUniqueID(), 2);
+        if ($sigla === 'boa001') {
+            return strtolower(str_replace('-', '', $id));
+        }
+        // NKP, NLK, ARL and Verbis libraries use 001 as identifiers in obalky knih
+        if ($sigla === 'aba001'
+            || $sigla === 'aba008'
+            || $this->isArl()
+            || $this->isVerbis()
+        ) {
+            return strtolower($this->getIdFrom001());
+        }
+        if ($this->isAleph() && strpos($id, '-') !== false) {
+            [$id] = explode(' ', $id);
+            [, $id] = explode('-', $id);
+            $id = trim($id);
+            if ($sigla === 'ola001') {
+                return 'vkol' . $id;
+            }
+            return $id;
+        }
+        return $id;
+    }
+
+    /**
+     * Is record from library with Aleph ILS?
+     *
+     * @return bool
+     */
+    protected function isAleph(): bool
+    {
+        return $this->hasILS()
+            && $this->ils->getDriverName($this->getUniqueID()) === 'Aleph';
+    }
+
+    /**
+     * Is record from library with ARL ILS?
+     *
+     * @return bool
+     */
+    protected function isArl(): bool
+    {
+        return str_contains($this->getUniqueID(), 'UsCat*');
+    }
+
+    /**
+     * Is record from library with Verbis ILS?
+     *
+     * @return bool
+     */
+    protected function isVerbis(): bool
+    {
+        return 'verbis' == strtolower($this->ils->getIlsType($this->getUniqueID()));
+    }
+
+    /**
+     * As we work with all NKP departments as it would be one library, we need to
+     * remap some bases to the correct sigla
+     *
+     * @param string $sigla Sigla
+     *
+     * @return string
+     */
+    protected function remapSiglaForNkp(string $sigla): string
+    {
+        if ($sigla !== 'aba001') {
+            return $sigla;
+        }
+        [, $id] = explode('.', $this->getUniqueID(), 2);
+        $base = substr($id, 0, 5);
+        return match ($base) {
+            'KKL01' => 'aba003',
+            'SLK01' => 'aba004',
+            'STT01' => 'aba018',
+            default => 'aba001',
+        };
     }
 }

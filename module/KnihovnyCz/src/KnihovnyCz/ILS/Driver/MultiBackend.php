@@ -201,7 +201,7 @@ class MultiBackend extends \VuFind\ILS\Driver\MultiBackend
         if ($method == 'placeStorageRetrievalRequest') {
             return false;
         }
-        if ($method == 'getDriverName') {
+        if ($method == 'getDriverName' || $method == "getIlsType") {
             return true;
         }
         return parent::supportsMethod($method, $params);
@@ -316,5 +316,18 @@ class MultiBackend extends \VuFind\ILS\Driver\MultiBackend
         return (!empty($source) && !empty($driver = $this->getDriver($source)))
             ? (new \ReflectionClass($driver))->getShortName()
             : '';
+    }
+
+    /**
+     * Get ILS type - only suitable for XCNCIP2 driver
+     *
+     * @param string $recordId Record identifier
+     *
+     * @return string
+     */
+    public function getIlsType(string $recordId): string
+    {
+        $config = $this->getDriverConfig($this->getSource($recordId));
+        return $config['Catalog']['ils_type'] ?? '';
     }
 }
