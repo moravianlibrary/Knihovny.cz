@@ -437,24 +437,10 @@ class SolrDefault extends \VuFind\RecordDriver\SolrDefault
      */
     public function getLinks()
     {
-        $links = [];
         $parentRecord = $this->getParentRecord();
-        if ($parentRecord !== null) {
-            $rawLinks = (array)$parentRecord->tryMethod('get856Links');
-            foreach ($rawLinks as $rawLink) {
-                $parts = explode("|", $rawLink);
-                $link = [
-                    'destination' => (substr($parts[0], 0, 4) === 'kram')
-                        ? 'Digital library' : 'Web',
-                    'status' => $parts[1] != '' ? $parts[1] : null,
-                    'url' => $parts[2] != '' ? $parts[2] : null,
-                    'desc' => $parts[3] != '' ? $parts[3] : null,
-                    'source' => $parts[0] != '' ? $parts[0] : null
-                ];
-                $links[] = $link;
-            }
-        }
-        return $links;
+        return ($parentRecord !== null)
+            ? (array)$parentRecord->tryMethod('get856Links')
+            : [];
     }
 
     /**
@@ -478,7 +464,7 @@ class SolrDefault extends \VuFind\RecordDriver\SolrDefault
      */
     protected function get856Links()
     {
-        return $this->fields['url'] ?? [];
+        return $this->getLinksFromSolrField('url');
     }
 
     /**
@@ -712,5 +698,42 @@ class SolrDefault extends \VuFind\RecordDriver\SolrDefault
     protected function getIdFrom001(): string
     {
         return $this->fields['id001_str'] ?? '';
+    }
+
+    /**
+     * Get links of serials to library catalogue
+     *
+     * @return array
+     */
+    public function getSerialLinks(): array
+    {
+        return $this->getLinksFromSolrField('catalog_serial_link_display_mv');
+    }
+
+    /**
+     * General function for getting links
+     *
+     * @param string $field Solr index field
+     *
+     * @return array
+     */
+    protected function getLinksFromSolrField(string $field = 'url'): array
+    {
+        $rawLinks = $this->fields[$field] ?? [];
+        $links = [];
+        foreach ($rawLinks as $rawLink) {
+            $parts = explode("|", $rawLink);
+            $destination = (substr($parts[0], 0, 4) === 'kram')
+                ? 'Digital library'
+                : ($parts[3] == 'catalog_serial_link' ? 'Library catalogue' : 'Web');
+            $links[] = [
+                'destination' => $destination,
+                'status' => $parts[1] != '' ? $parts[1] : null,
+                'url' => $parts[2] != '' ? $parts[2] : null,
+                'desc' => $parts[3] != '' ? $parts[3] : null,
+                'source' => $parts[0] != '' ? $parts[0] : null
+            ];
+        }
+        return $links;
     }
 }

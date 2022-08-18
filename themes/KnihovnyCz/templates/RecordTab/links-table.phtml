@@ -1,0 +1,39 @@
+<div class='field856'>
+  <table class='table table-striped responsive-table' id='e-version-table'>
+    <thead>
+    <tr>
+      <th class="col-md-2"><?=$this->translate('Destination');?></th>
+      <th class="col-md-2"><?=$this->translate('Accessibility');?></th>
+      <th class="col-md-3"><?=$this->translate('Link');?></th>
+      <th class="col-md-5"><?=$this->translate('Distributor');?></th>
+    </tr>
+    </thead>
+    <tbody>
+      <?php foreach ($this->links as $link):
+        if ($link['status'] === 'online' || $link['status'] === 'dnnt' || $link['status'] === 'member') {
+          $statusClass = 'success';
+        } elseif ($link['status'] === 'unknown' || $link['status'] === 'na') {
+          $statusClass = 'default';
+        } else {
+          $statusClass = 'danger';
+        }
+        $description = $link['desc'] ?? 'Link';
+        ?>
+        <tr>
+          <td data-title="<?=$this->translate('Destination');?>"><?=$this->transEsc($link['destination'])?></td>
+          <?php if ($link['status'] === 'protected'): ?>
+            <td data-title="<?=$this->translate('Accessibility');?>">
+              <a target='_blank' data-toggle="tooltip" data-placement="top" rel='nofollow' title="<?=$this->translate('What does it mean?')?>" href='https://cs.wikipedia.org/wiki/Voln%C3%A9_d%C3%ADlo'>
+                <span class="label label-<?=$statusClass?>"><?=$this->transEsc('link_access_status_' . $link['status'])?></span>
+              </a>
+            </td>
+          <?php else : ?>
+            <td data-title="<?=$this->translate('Accessibility');?>"><span class="label label-<?=$statusClass?>"><?=$this->transEsc('link_access_status_' . $link['status'])?></span></td>
+          <?php endif; ?>
+          <td data-title="<?=$this->translate('Link');?>"><a title='<?=$this->transEsc($description)?>' href='<?=$link['url']?>' target='_blank'><?=$this->transEsc($description)?></a></td>
+          <td data-title="<?=$this->translate('Distributor');?>"><?=$this->transEsc('Source::' . $link['source'])?></td>
+        </tr>
+      <?php endforeach; ?>
+    </tbody>
+  </table>
+</div>

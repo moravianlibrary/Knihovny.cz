@@ -49,6 +49,8 @@ class HoldingsILS extends \VuFind\RecordTab\HoldingsILS
     {
         $hasHoldings
             = $this->getRecordDriver()->tryMethod('hasOfflineHoldings', [], false);
-        return $this->hideWhenEmpty ? $hasHoldings : true;
+        $hasSerialLinks
+            = $this->getRecordDriver()->tryMethod('getSerialLinks', [], false);
+        return $this->hideWhenEmpty ? ($hasHoldings || $hasSerialLinks) : true;
     }
 }
