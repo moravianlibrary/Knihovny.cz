@@ -53,6 +53,13 @@ class ChildDocDeduplicationListener extends DeduplicationListener
     protected $fieldList;
 
     /**
+     * Maximal number of child documents to fetch
+     *
+     * @var int
+     */
+    protected const MAX_CHILD_DOCUMENTS = 10000;
+
+    /**
      * Constructor.
      *
      * @param Backend            $backend        Search backend
@@ -151,6 +158,7 @@ class ChildDocDeduplicationListener extends DeduplicationListener
             '{!term f=parent_id_str v=$row.id} merged_child_boolean:true'
         );
         $params->set('childs.fl', 'id');
+        $params->set('childs.rows', self::MAX_CHILD_DOCUMENTS);
         if (!empty($childFilters)) {
             $params->set('childs.fq', join(" AND ", $childFilters));
         }
