@@ -137,7 +137,8 @@ class RecommendOtherPortals implements RecommendInterface
         }
         $links = [];
         foreach ($this->links as $portal => $baseUrl) {
-            $links[$portal] = rtrim($baseUrl, '/') . '/' . $this->query;
+            $links[$portal] = rtrim($baseUrl, '/') . '/Search/Results'
+                . $this->query;
         }
         return $links;
     }
