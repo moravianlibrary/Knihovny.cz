@@ -184,25 +184,27 @@ jQuery(document).ready(function openUrl() {
   setupOpenUrl();
 });
 
-function setLibraryAutoComplete(facetField) {
-  var libraries = new Map();
-  var element = $(document.getElementById(facetField));
+function setLibraryAutoComplete(element, data) {
   const facetFilter = element.data('facet');
-  var nodes = element.jstree(true).get_json('#', {flat: true});
   const paramSep = window.location.href.includes('?') ? '&' : '?';
-  $.each(nodes, function forEach(i, val) {
-    var facetElement = $(val.text).find('.facet-value');
-    if (facetElement.parent().hasClass('applied')) {
-      return;
+  var libraries = new Map();
+  function traverse(item) {
+    if (Array.isArray(item)) {
+      item.forEach(it => traverse(it));
+    } else if ('children' in item && item.children.length > 0) {
+      traverse(item.children);
+    } else {
+      const value = item.value;
+      const filter = paramSep + "filter[]=~" + facetFilter + ':"' + value + '"';
+      libraries.set(value, {
+        label: item.displayText,
+        value: value,
+        href: window.location.href + filter,
+      });
     }
-    const value = facetElement.data('filter-value');
-    const filter = paramSep + "filter[]=~" + facetFilter + ':"' + value + '"';
-    libraries.set(value, {
-      label: facetElement.text(),
-      value: value,
-      href: window.location.href + filter,
-    });
-  });
+  }
+  traverse(data);
+
   var input = $('<input></input>').addClass('autocomplete-institutions')
     .attr('placeholder', VuFind.translate('Autocomplete institutions placeholder'));
   function normalizeString(str) {
@@ -254,6 +256,20 @@ function setLibraryAutoComplete(facetField) {
   });
   element.parent().prepend(input);
 }
+
+VuFind.listen('VuFind.sidefacets.buildtree', function onLoaded(event){
+  var facet = event.detail.node[0].id;
+  const facets = [
+    'facet_region_institution_facet_mv',
+    'facet_local_region_institution_facet_mv'
+  ];
+  if (!facets.includes(facet)) {
+    return;
+  }
+  var data = event.detail.data;
+  var element = $(document.getElementById(facet));
+  setLibraryAutoComplete(element, data);
+});
 
 jQuery(document).ready(function saveInstitutionFilter() {
   var element = $('#my-institution-filter-save');
@@ -400,3 +416,13 @@ function buildFacetNodes(data, currentPath, allowExclude, excludeTitle, counts)
 
   return json;
 }
+
+/* eslint-disable no-undef */
+buildFacetTree = (function wrapper(_super) {
+  return function callback() {
+    var treeNode = arguments[0];
+    var facetData = arguments[1];
+    VuFind.emit('VuFind.sidefacets.buildtree', {node: treeNode, data: facetData});
+    return _super.apply(this, arguments);
+  };
+})(buildFacetTree);
