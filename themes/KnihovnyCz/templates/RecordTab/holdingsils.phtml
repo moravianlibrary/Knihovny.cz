@@ -141,6 +141,10 @@ JS;
 
 ?>
 
+<?php if ($serialLinks = $this->driver->tryMethod('getSerialLinks')) : ?>
+  <?=$this->render('RecordTab/links-table.phtml', ['links' => $serialLinks]);?>
+<?php endif; ?>
+
 <?php if (!empty($holdings['blocks'])):?>
   <div id="account-block-msg" class="alert alert-danger">
     <?=$this->transEsc('account_block_options_missing', ['%%details%%' => implode('; ', $holdings['blocks'])]) ?>
