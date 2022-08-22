@@ -70,8 +70,6 @@ return [
             'ui-menu' => 'FontAwesome:bars:fa-fw',
             'user-list-add' => 'FontAwesome:star',
             'user-ziskej' => 'FontAwesome:file-text:fa-fw',
-            'save-institution-filter' => 'FontAwesome:floppy-o:fa-fw',
-            'load-institution-filter' => 'FontAwesome:home:fa-fw',
         ],
     ],
     'favicon' => 'icon-knihovny.png',
