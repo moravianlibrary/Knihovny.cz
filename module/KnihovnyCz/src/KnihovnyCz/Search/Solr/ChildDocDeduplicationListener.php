@@ -235,17 +235,6 @@ class ChildDocDeduplicationListener extends DeduplicationListener
             \VuFind\Config\PluginManager::class
         );
         $searchConfig = $config->get($this->searchConfig);
-        $search = $searchConfig->get($this->searchConfig);
-        if (isset($search->Solr->default_field_list_mode)) {
-            $mode = $search->Solr->default_field_list_mode;
-            if ($mode == 'solr') {
-                return null;
-            } elseif ($mode == 'override'
-                && isset($search->Solr->default_field_list_override)
-            ) {
-                return $search->Solr->default_field_list_override;
-            }
-        }
-        return '*,score';
+        return $searchConfig->General->default_record_fields ?? '*,score';
     }
 }
