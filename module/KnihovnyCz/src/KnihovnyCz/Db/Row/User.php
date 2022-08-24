@@ -344,4 +344,15 @@ class User extends Base
     {
         return implode(',', $this->getLibraryPrefixes());
     }
+
+    /**
+     * Return user settings
+     *
+     * @return \KnihovnyCz\Db\Row\UserSettings
+     */
+    public function getUserSettings(): UserSettings
+    {
+        $userSettings = $this->getDbTable('UserSettings');
+        return $userSettings->getOrCreateByUserId($this->id);
+    }
 }
