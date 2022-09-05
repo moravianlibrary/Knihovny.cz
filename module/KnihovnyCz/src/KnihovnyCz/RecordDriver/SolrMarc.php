@@ -257,7 +257,7 @@ class SolrMarc extends SolrDefault
     public function getCleanNBN()
     {
         $nbn = $this->getCleanNBNMarc();
-        if (empty($nbn)
+        if (empty($nbn) && $this->ils != null
             && $sigla = $this->ils->sourceToSigla($this->getSourceId())
         ) {
             $sigla = strtolower($this->remapSiglaForNkp($sigla));
