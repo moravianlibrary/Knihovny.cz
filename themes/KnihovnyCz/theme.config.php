@@ -15,7 +15,7 @@ return [
                 $dependency = $container->get(KnihovnyCz\Ziskej\ZiskejEdd::class);
                 return new $requestedName($dependency);
             },
-            KnihovnyCz\View\Helper\KnihovnyCz\SearchTabs::class => \VuFind\View\Helper\Root\SearchTabsFactory::class,
+            KnihovnyCz\View\Helper\KnihovnyCz\SearchTabs::class => \KnihovnyCz\View\Helper\KnihovnyCz\SearchTabsFactory::class,
             KnihovnyCz\View\Helper\KnihovnyCz\RecordLinker::class => \KnihovnyCz\View\Helper\KnihovnyCz\RecordLinkerFactory::class,
             \KnihovnyCz\View\Helper\KnihovnyCz\GoogleTagManager::class => \KnihovnyCz\View\Helper\KnihovnyCz\GoogleTagManagerFactory::class,
             \KnihovnyCz\View\Helper\KnihovnyCz\GeoCoords::class => \VuFind\View\Helper\Root\GeoCoordsFactory::class,

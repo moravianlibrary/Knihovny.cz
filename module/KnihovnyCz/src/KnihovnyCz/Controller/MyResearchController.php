@@ -378,6 +378,45 @@ class MyResearchController extends MyResearchControllerBase
     }
 
     /**
+     * User settings action
+     *
+     * @return \Laminas\View\Model\ViewModel|mixed
+     */
+    public function userSettingsAction()
+    {
+        // Force login:
+        if (!$this->getUser()) {
+            return $this->forceLogin();
+        }
+        /**
+         * User setting service
+         *
+         * @var \KnihovnyCz\Service\UserSettingsService
+         */
+        $userSettings = $this->serviceLocator
+            ->get(\KnihovnyCz\Service\UserSettingsService::class);
+        if ($this->params()->fromPost('submit')) {
+            if ($userSettings->save($this->params()->fromPost())) {
+                $this->flashMessenger()->addSuccessMessage(
+                    $this->translate('user_settings_updated')
+                );
+            } else {
+                $this->flashMessenger()->addErrorMessage(
+                    $this->translate('user_settings_update_failed')
+                );
+            }
+        }
+        $view = $this->createViewModel();
+        $settings = $this->serviceLocator
+            ->get(\KnihovnyCz\Service\UserSettingsService::class)
+            ->getAvailableSettings();
+        $view->recordsPerPage = $settings['recordsPerPage'];
+        $view->citationStyle = $settings['citationStyle'];
+        $view->setTemplate('myresearch/usersettings');
+        return $view;
+    }
+
+    /**
      * Process an authentication error.
      *
      * @param AuthException $e Exception to process.
