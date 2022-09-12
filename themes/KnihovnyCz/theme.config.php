@@ -72,6 +72,7 @@ return [
             'user-ziskej' => 'FontAwesome:file-text:fa-fw',
             'save-institution-filter' => 'FontAwesome:floppy-o:fa-fw',
             'load-institution-filter' => 'FontAwesome:home:fa-fw',
+            'user-settings' => 'FontAwesome:gear:fa-fw',
         ],
     ],
     'favicon' => 'icon-knihovny.png',
