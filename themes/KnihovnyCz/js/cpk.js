@@ -317,21 +317,6 @@ jQuery(document).ready(function saveInstitutionFilter() {
   element.show();
 });
 
-VuFind.listen('VuFind.sidefacets.loaded', function onLoaded(){
-  const facets = [
-    'facet_region_institution_facet_mv',
-    'facet_local_region_institution_facet_mv'
-  ];
-  facets.forEach(function forEeach(facet){
-    var element = document.getElementById(facet);
-    if (element != null) {
-      $(element).bind('loaded.jstree', function onLoad() {
-        setLibraryAutoComplete(facet);
-      });
-    }
-  });
-});
-
 function buildFacetNodes(data, currentPath, allowExclude, excludeTitle, counts)
 {
   var json = [];
@@ -418,11 +403,13 @@ function buildFacetNodes(data, currentPath, allowExclude, excludeTitle, counts)
 }
 
 /* eslint-disable no-undef */
-buildFacetTree = (function wrapper(_super) {
-  return function callback() {
-    var treeNode = arguments[0];
-    var facetData = arguments[1];
-    VuFind.emit('VuFind.sidefacets.buildtree', {node: treeNode, data: facetData});
-    return _super.apply(this, arguments);
-  };
-})(buildFacetTree);
+if (typeof buildFacetTree === 'function') {
+  buildFacetTree = (function wrapper(_super) {
+    return function callback() {
+      var treeNode = arguments[0];
+      var facetData = arguments[1];
+      VuFind.emit('VuFind.sidefacets.buildtree', {node: treeNode, data: facetData});
+      return _super.apply(this, arguments);
+    };
+  })(buildFacetTree);
+}
