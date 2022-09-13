@@ -42,6 +42,11 @@ fi
 
 echo === Copying vufind config files ===
 
+if [ -z "$VUFIND_LOCAL_DIR" ]; then
+  echo "Missing VUFIND_LOCAL_DIR environment variable"
+  exit 1
+fi
+
 envsubst.a8m -no-unset -i /etc/vufind/config.local.ini -o ${VUFIND_LOCAL_DIR}/config/vufind/config.local.ini
 envsubst.a8m -no-unset -i /etc/vufind/EDS.local.ini -o ${VUFIND_LOCAL_DIR}/config/vufind/EDS.local.ini
 envsubst.a8m -no-unset -i /etc/vufind/Search2.local.ini -o ${VUFIND_LOCAL_DIR}/config/vufind/Search2.local.ini
