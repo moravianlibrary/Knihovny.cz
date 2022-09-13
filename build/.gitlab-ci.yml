@@ -129,7 +129,7 @@ Deploy MR image:
         ( $CI_PIPELINE_SOURCE == "merge_request_event" ) &&
         ( $CI_MERGE_REQUEST_EVENT_TYPE == "merged_result" )
       when: never
-    - if:  # deploy on issue or feat-  while detached
+    - if:  # deploy on issue or feat-  while detached (when required)
         ( $CI_PIPELINE_SOURCE == "merge_request_event" ) &&
         ( $CI_MERGE_REQUEST_EVENT_TYPE == "detached" ) &&
         ( ( $CI_MERGE_REQUEST_SOURCE_BRANCH_NAME =~ /^issue/ ) ||
@@ -137,7 +137,7 @@ Deploy MR image:
           ( $CI_MERGE_REQUEST_SOURCE_BRANCH_NAME =~ /^feat\// ) ||
           ( $CI_MERGE_REQUEST_SOURCE_BRANCH_NAME =~ /^fix\// )
         )
-      when: never
+      when: manual
   environment:
     name: devel
     url: $DEVEL_ENVIRONMENT_URL
