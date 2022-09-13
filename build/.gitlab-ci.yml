@@ -194,7 +194,7 @@ Deploy dev image:
 Deploy irel image:
   extends: .deploy_image
   variables:
-    APP_IMAGE_TAG: 'tag-${CI_COMMIT_BRANCH}'
+    APP_IMAGE_TAG: 'tag-${CI_COMMIT_TAG}'
     DEPLOY_REPO_BRANCH: main
     DEPLOY_REPO_DIR: irel
   rules:
@@ -210,7 +210,7 @@ Deploy irel image:
 Deploy kiv image:
   extends: .deploy_image
   variables:
-    APP_IMAGE_TAG: 'tag-${CI_COMMIT_BRANCH}'
+    APP_IMAGE_TAG: 'tag-${CI_COMMIT_TAG}'
     DEPLOY_REPO_BRANCH: main
     DEPLOY_REPO_DIR: kiv
 
@@ -227,7 +227,7 @@ Deploy kiv image:
 Deploy mus image:
   extends: .deploy_image
   variables:
-    APP_IMAGE_TAG: 'tag-${CI_COMMIT_BRANCH}'
+    APP_IMAGE_TAG: 'tag-${CI_COMMIT_TAG}'
     DEPLOY_REPO_BRANCH: main
     DEPLOY_REPO_DIR: mus
 
