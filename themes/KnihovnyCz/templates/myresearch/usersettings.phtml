@@ -1,0 +1,54 @@
+<?php
+    // Set up page title:
+    $this->headTitle($this->translate('User settings'));
+
+    // Set up breadcrumbs:
+    $this->layout()->breadcrumbs = '<li><a href="' . $this->url('myresearch-usersettings') . '">' . $this->transEsc('Your Account') . '</a></li> <li class="active">' . $this->transEsc('User settings') . '</li>';
+
+    // Template for use by the renderArray helper:
+    $arrTemplate = '<tr><th>%%LABEL%%:</th><td> %%VALUE%%</td></tr>';
+?>
+
+<a class="search-filter-toggle visible-xs" href="#myresearch-sidebar" data-toggle="offcanvas" title="Expand Sidebar">
+  <?=$this->transEsc('Your Account') ?>
+</a>
+
+<div class="<?=$this->layoutClass('mainbody')?>">
+  <h2><?=$this->transEsc('User settings')?></h2>
+  <?=$this->flashmessages();?>
+
+  <form class="" action="<?=$this->currentPath()?>" method="post">
+
+    <div class="form-group">
+      <?php if (!empty($this->recordsPerPage['values'])): ?>
+        <label for="recordsPerPage"><?=$this->transEsc('Results per page')?></label>
+        <select id="recordsPerPage" name="recordsPerPage" class="jumpMenu form-control">
+          <?php foreach ($this->recordsPerPage['values'] as $limit): ?>
+            <option value="<?=$this->escapeHtmlAttr($limit)?>"<?=$limit == $this->recordsPerPage['selected']?' selected="selected"':''?>><?=$this->escapeHtml($limit)?></option>
+          <?php endforeach; ?>
+        </select>
+      <?php endif; ?>
+    </div>
+
+    <div class="form-group">
+      <?php if (!empty($this->citationStyle['values'])): ?>
+        <label for="citationStyle"><?=$this->transEsc('Citation style')?></label>
+        <select id="citationStyle" name="citationStyle" class="jumpMenu form-control">
+          <?php foreach ($this->citationStyle['values'] as $code => $label): ?>
+            <option value="<?=$this->escapeHtmlAttr($code)?>"<?=$code == $this->citationStyle['selected']?' selected="selected"':''?>><?=$this->escapeHtml($label)?></option>
+          <?php endforeach; ?>
+        </select>
+      <?php endif; ?>
+    </div>
+
+    <div class="form-group">
+      <input class="btn btn-primary" type="submit" name="submit" value="<?=$this->transEscAttr('Save') ?>"/>
+    </div>
+
+  </form>
+
+</div>
+
+<div class="<?=$this->layoutClass('sidebar')?>" id="myresearch-sidebar">
+  <?=$this->context($this)->renderInContext("myresearch/menu.phtml", ['active' => 'usersettings'])?>
+</div>

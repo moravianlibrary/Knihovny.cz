@@ -15,7 +15,7 @@ return [
                 $dependency = $container->get(KnihovnyCz\Ziskej\ZiskejEdd::class);
                 return new $requestedName($dependency);
             },
-            KnihovnyCz\View\Helper\KnihovnyCz\SearchTabs::class => \VuFind\View\Helper\Root\SearchTabsFactory::class,
+            KnihovnyCz\View\Helper\KnihovnyCz\SearchTabs::class => \KnihovnyCz\View\Helper\KnihovnyCz\SearchTabsFactory::class,
             KnihovnyCz\View\Helper\KnihovnyCz\RecordLinker::class => \KnihovnyCz\View\Helper\KnihovnyCz\RecordLinkerFactory::class,
             \KnihovnyCz\View\Helper\KnihovnyCz\GoogleTagManager::class => \KnihovnyCz\View\Helper\KnihovnyCz\GoogleTagManagerFactory::class,
             \KnihovnyCz\View\Helper\KnihovnyCz\GeoCoords::class => \VuFind\View\Helper\Root\GeoCoordsFactory::class,
@@ -70,6 +70,9 @@ return [
             'ui-menu' => 'FontAwesome:bars:fa-fw',
             'user-list-add' => 'FontAwesome:star',
             'user-ziskej' => 'FontAwesome:file-text:fa-fw',
+            'save-institution-filter' => 'FontAwesome:floppy-o:fa-fw',
+            'load-institution-filter' => 'FontAwesome:home:fa-fw',
+            'user-settings' => 'FontAwesome:gear:fa-fw',
         ],
     ],
     'favicon' => 'icon-knihovny.png',

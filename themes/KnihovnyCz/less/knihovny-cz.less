@@ -86,6 +86,20 @@ fieldset, .fieldset {
   font-weight: 600;
 }
 
+
+.nav-pills > li.active > a,
+.nav-pills > li.active > a:hover,
+.nav-pills > li.active > a:focus {
+  text-decoration: none;
+  cursor: default;
+}
+.nav-tabs > li.active > a,
+.nav-tabs > li.active > a:hover,
+.nav-tabs > li.active > a:focus {
+  text-decoration: none;
+  cursor: default;
+}
+
 .list-group {
   .list-group-item {
     a {
@@ -113,7 +127,7 @@ fieldset, .fieldset {
 }
 
 .well.tab-content {
-  padding: 19px 19px 9px;
+  padding: 19px 19px;
   border-top: 0;
   -webkit-box-shadow: none;
   box-shadow: none;
@@ -1016,4 +1030,20 @@ form[action*="PtejteSeKnihovny"] {
   }
 }
 
+#my-institution-filter-save, #my-institution-filter {
+  text-decoration: none;
+}
 
+@media (max-width: @screen-xs-max) {
+  .searchForm ul.nav {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: min-content min-content min-content;
+    li {
+      margin-left: 0;
+    }
+    li.active {
+      grid-row: -1;
+    }
+  }
+}

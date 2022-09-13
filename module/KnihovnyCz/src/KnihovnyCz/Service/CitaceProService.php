@@ -49,14 +49,21 @@ class CitaceProService implements \VuFindHttp\HttpServiceAwareInterface
      */
     protected Config $config;
 
+    /*
+     * Default citation style
+     */
+    protected string $defaultCitationStyle;
+
     /**
      * CitaceProService constructor.
      *
-     * @param Config $config Citation configuration
+     * @param Config $config               Citation       configuration
+     * @param string $defaultCitationStyle default citation style
      */
-    public function __construct(Config $config)
+    public function __construct(Config $config, $defaultCitationStyle)
     {
         $this->config = $config;
+        $this->defaultCitationStyle = $defaultCitationStyle;
     }
 
     /**
@@ -126,6 +133,6 @@ class CitaceProService implements \VuFindHttp\HttpServiceAwareInterface
      */
     public function getDefaultCitationStyle(): string
     {
-        return $this->config->Citation->default_citation_style;
+        return $this->defaultCitationStyle;
     }
 }

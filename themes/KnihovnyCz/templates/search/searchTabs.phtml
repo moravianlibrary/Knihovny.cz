@@ -1,5 +1,5 @@
 <?php if (count($searchTabs) > 0): ?>
-  <ul class="nav nav-pills">
+  <ul class="nav nav-tabs">
     <?php foreach ($searchTabs as $tab): ?>
       <?php if ($this->permission()->allowDisplay($tab['permission'])): ?>
         <li<?=$tab['selected'] ? ' class="active"' : ''?><?=$this->showCounts ? ' data-show-counts' : ''?>>

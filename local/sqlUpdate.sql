@@ -183,3 +183,9 @@ CREATE TABLE `feedback` (
   CONSTRAINT `feedback_ibfk_2` FOREIGN KEY (`updated_by`) REFERENCES `user` (`id`) ON DELETE SET NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;
 UPDATE `system` SET `value` = '107' WHERE `key`='DB_VERSION';
+
+-- #164: user setting
+UPDATE citation_style SET value = NULL WHERE id = 2;
+INSERT INTO citation_style(id, description, value) VALUES (38673, 'ČSN ISO 690', '38673');
+UPDATE user_settings SET citation_style = 38673 WHERE citation_style = 2;
+DELETE FROM citation_style WHERE id = 2;

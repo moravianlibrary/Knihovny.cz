@@ -71,7 +71,7 @@
 <?php else: ?>
   <form id="searchForm" class="searchForm" method="get" action="<?=$this->url($basicSearch)?>" name="searchForm" autocomplete="off">
     <?= $this->context($this)->renderInContext('search/searchTabs', ['searchTabs' => $tabConfig['tabs'], 'showCounts' => $tabConfig['showCounts']]); ?>
-    <div class="well">
+    <div class="tab-content well">
     <?php $placeholder = $this->searchbox()->getPlaceholderText($tabConfig['selected']['id'] ?? null); ?>
       <div class="b4-input-group">
     <input id="searchForm_lookfor" class="searchForm_lookfor form-control input-lg search-query<?php if($this->searchbox()->autocompleteEnabled($this->searchClassId)):?> autocomplete searcher:<?=$this->escapeHtmlAttr($this->searchClassId) ?><?=$this->searchbox()->autocompleteAutoSubmit($this->searchClassId) ? ' ac-auto-submit' : '' ?><?php endif ?>" type="text" name="lookfor" value="<?=$this->escapeHtmlAttr($this->lookfor)?>"<?php if ($placeholder): ?> placeholder="<?=$this->transEscAttr($placeholder) ?>"<?php endif ?> aria-label="<?=$this->transEscAttr("search_terms")?>" />

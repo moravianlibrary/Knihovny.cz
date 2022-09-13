@@ -367,7 +367,8 @@ $config = [
                     \KnihovnyCz\Db\Row\User::class => \VuFind\Db\Row\UserFactory::class,
                     \KnihovnyCz\Db\Row\UserCard::class => \VuFind\Db\Row\RowGatewayFactory::class,
                     \KnihovnyCz\Db\Row\CsrfToken::class => \VuFind\Db\Row\RowGatewayFactory::class,
-                    \KnihovnyCz\Db\Row\UserList::class => \KnihovnyCz\Db\Row\UserListFactory::class
+                    \KnihovnyCz\Db\Row\UserList::class => \KnihovnyCz\Db\Row\UserListFactory::class,
+                    \KnihovnyCz\Db\Row\UserSettings::class => \VuFind\Db\Row\RowGatewayFactory::class,
                 ],
                 'aliases' => [
                     \VuFind\Db\Row\User::class => \KnihovnyCz\Db\Row\User::class,
@@ -385,10 +386,12 @@ $config = [
                     \KnihovnyCz\Db\Table\Widget::class => \VuFind\Db\Table\GatewayFactory::class,
                     \KnihovnyCz\Db\Table\WidgetContent::class => \VuFind\Db\Table\GatewayFactory::class,
                     \KnihovnyCz\Db\Table\CsrfToken::class => \VuFind\Db\Table\GatewayFactory::class,
+                    \KnihovnyCz\Db\Table\UserSettings::class => \VuFind\Db\Table\GatewayFactory::class,
                 ],
                 'aliases' => [
                     \VuFind\Db\Table\User::class => \KnihovnyCz\Db\Table\User::class,
                     \VuFind\Db\Table\UserCard::class => \KnihovnyCz\Db\Table\UserCard::class,
+                    'UserSettings' => \KnihovnyCz\Db\Table\UserSettings::class,
                 ],
             ],
             'ils_driver' => [
@@ -425,6 +428,7 @@ $config = [
                     \KnihovnyCz\AjaxHandler\GetLibrariesACSuggestions::class => \KnihovnyCz\AjaxHandler\GetLibrariesACSuggestionsFactory::class,
                     \KnihovnyCz\AjaxHandler\HarvestWidgetsContents::class => \KnihovnyCz\AjaxHandler\HarvestWidgetsContentsFactory::class,
                     \KnihovnyCz\AjaxHandler\Sfx::class => \KnihovnyCz\AjaxHandler\SfxFactory::class,
+                    \KnihovnyCz\AjaxHandler\SaveInstitutionFilter::class => \KnihovnyCz\AjaxHandler\SaveInstitutionFilterFactory::class,
                 ],
                 'aliases' => [
                     'edd' => \KnihovnyCz\AjaxHandler\Edd::class,
@@ -435,6 +439,7 @@ $config = [
                     'getLibrariesACSuggestions' => \KnihovnyCz\AjaxHandler\GetLibrariesACSuggestions::class,
                     'harvestWidgetsContents' => \KnihovnyCz\AjaxHandler\HarvestWidgetsContents::class,
                     'sfx' => \KnihovnyCz\AjaxHandler\Sfx::class,
+                    'saveInstitutionFilter' => \KnihovnyCz\AjaxHandler\SaveInstitutionFilter::class,
                 ],
             ],
             'related' => [
@@ -460,6 +465,14 @@ $config = [
                     \VuFind\Search\Solr\Params::class => \KnihovnyCz\Search\Solr\Params::class,
                 ]
             ],
+            'search_results' => [
+                'factories' => [
+                    \KnihovnyCz\Search\Solr\Results::class => \VuFind\Search\Solr\ResultsFactory::class,
+                ],
+                'aliases' => [
+                    \VuFind\Search\Solr\Results::class => \KnihovnyCz\Search\Solr\Results::class,
+                ]
+            ],
             'autocomplete' => [
                 'factories' => [
                     \KnihovnyCz\Autocomplete\SolrPrefix::class => \VuFind\Autocomplete\SolrFactory::class,
@@ -472,10 +485,12 @@ $config = [
                 'factories' => [
                     \KnihovnyCz\Recommend\RecommendOtherPortals::class => \VuFind\Recommend\InjectConfigManagerFactory::class,
                     \KnihovnyCz\Recommend\MapSelection::class => \KnihovnyCz\Recommend\MapSelectionFactory::class,
+                    \KnihovnyCz\Recommend\SideFacetsDeferred::class => \KnihovnyCz\Recommend\SideFacetsDeferredFactory::class,
                 ],
                 'aliases' => [
                     'recommendotherportals' => \KnihovnyCz\Recommend\RecommendOtherPortals::class,
                     'mapselection' => \KnihovnyCz\Recommend\MapSelection::class,
+                    'sidefacetsdeferred' => \KnihovnyCz\Recommend\SideFacetsDeferred::class,
                 ],
             ],
             'sitemap' => [
@@ -507,7 +522,7 @@ $config = [
             \Mzk\ZiskejApi\Api::class => \KnihovnyCz\Ziskej\ZiskejApiFactory::class,
             \KnihovnyCz\Ziskej\ZiskejEdd::class => \KnihovnyCz\Ziskej\ZiskejFactory::class,
             \KnihovnyCz\Ziskej\ZiskejMvs::class => \KnihovnyCz\Ziskej\ZiskejFactory::class,
-            \KnihovnyCz\Auth\Manager::class => \VuFind\Auth\ManagerFactory::class,
+            \KnihovnyCz\Auth\Manager::class => \KnihovnyCz\Auth\ManagerFactory::class,
             \KnihovnyCz\Autocomplete\Suggester::class => \VuFind\Autocomplete\SuggesterFactory::class,
             \KnihovnyCz\Service\HttpService::class => \KnihovnyCz\Service\HttpServiceFactory::class,
             \KnihovnyCz\Service\GuzzleHttpService::class => \KnihovnyCz\Service\GuzzleHttpServiceFactory::class,
@@ -518,6 +533,7 @@ $config = [
             \KnihovnyCz\Search\SearchRunner::class => \VuFind\Search\SearchRunnerFactory::class,
             \KnihovnyCz\Markdown\InvolvedLibraries\InvolvedLibrariesExtension::class => \KnihovnyCz\Markdown\InvolvedLibraries\InvolvedLibrariesExtensionFactory::class,
             \KnihovnyCz\Content\InvolvedLibrariesService::class => \KnihovnyCz\Content\InvolvedLibrariesServiceFactory::class,
+            \KnihovnyCz\Service\UserSettingsService::class => \KnihovnyCz\Service\UserSettingsServiceFactory::class,
         ],
         'aliases' => [
             'VuFind\Http' => 'VuFindHttp\HttpService',
@@ -535,6 +551,7 @@ $config = [
             \VuFind\Record\Loader::class => \KnihovnyCz\Record\Loader::class,
             \VuFind\Search\SearchRunner::class => \KnihovnyCz\Search\SearchRunner::class,
             'VuFind\SearchRunner' => \KnihovnyCz\Search\SearchRunner::class,
+            \VuFind\Search\Solr\Results::class => \KnihovnyCz\Search\Solr\Results::class,
         ],
         'invokables' => [
             \KnihovnyCz\Service\GoogleBooksLinkService::class,
@@ -564,6 +581,7 @@ $staticRoutes = [
     'MyResearch/ProfileAjax' => 'MyResearch/ProfileAjax',
     'MyResearch/CheckedoutAjax' => 'MyResearch/CheckedoutAjax',
     'MyResearch/HistoricloansAjax' => 'MyResearch/HistoricloansAjax',
+    'MyResearch/UserSettings' => 'MyResearch/UserSettings',
     'Holds/ListAjax' => 'Holds/ListAjax',
     'MyResearchZiskej/ListAjax' => 'MyResearchZiskej/ListAjax',
     'MyResearch/LogoutWarning' => 'MyResearch/LogoutWarning',

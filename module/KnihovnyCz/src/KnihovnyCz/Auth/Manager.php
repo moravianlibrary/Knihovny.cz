@@ -28,8 +28,16 @@
  */
 namespace KnihovnyCz\Auth;
 
+use KnihovnyCz\Service\UserSettingsService as Restorer;
+use Laminas\Config\Config;
+use Laminas\Session\SessionManager;
 use VuFind\Auth\Manager as Base;
+use VuFind\Auth\PluginManager;
+use VuFind\Cookie\CookieManager;
 use VuFind\Db\Row\User;
+use VuFind\Db\Row\User as UserRow;
+use VuFind\Db\Table\User as UserTable;
+use VuFind\Validator\CsrfInterface;
 
 /**
  * Wrapper class for handling logged-in user in session.
@@ -42,6 +50,44 @@ use VuFind\Db\Row\User;
  */
 class Manager extends Base
 {
+    /**
+     * Restorer to load saved user settings to sesssion
+     *
+     * @var Restorer
+     */
+    protected $restorer;
+
+    /**
+     * Constructor
+     *
+     * @param Config         $config         VuFind configuration
+     * @param UserTable      $userTable      User table gateway
+     * @param SessionManager $sessionManager Session manager
+     * @param PluginManager  $pm             Authentication plugin manager
+     * @param CookieManager  $cookieManager  Cookie manager
+     * @param CsrfInterface  $csrf           CSRF validator
+     * @param Restorer       $restorer       Restorer
+     */
+    public function __construct(
+        Config $config,
+        UserTable $userTable,
+        SessionManager $sessionManager,
+        PluginManager $pm,
+        CookieManager $cookieManager,
+        CsrfInterface $csrf,
+        Restorer $restorer
+    ) {
+        parent::__construct(
+            $config,
+            $userTable,
+            $sessionManager,
+            $pm,
+            $cookieManager,
+            $csrf
+        );
+        $this->restorer = $restorer;
+    }
+
     /**
      * Checks whether the user is logged in.
      *
@@ -118,5 +164,18 @@ class Manager extends Base
         }
 
         return $url;
+    }
+
+    /**
+     * Updates the user information in the session.
+     *
+     * @param UserRow $user User object to store in the session
+     *
+     * @return void
+     */
+    public function updateSession($user)
+    {
+        parent::updateSession($user);
+        $this->restorer->restore();
     }
 }

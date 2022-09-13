@@ -96,6 +96,10 @@
       <?=$this->transEsc('history_saved_searches')?>
     </a>
   <?php endif; ?>
+    <a href="<?=$this->url('myresearch-usersettings')?>?require_login"<?=$this->active == 'usersettings' ? ' class="active"' : ''?>>
+      <?=$this->icon('user-settings') ?>
+      <?=$this->transEsc('User settings')?>
+    </a>
   <?php if ($user): ?>
     <a href="<?=$this->url('myresearch-logout')?>">
       <?=$this->icon('sign-out') ?>
