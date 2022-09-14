@@ -315,6 +315,7 @@ class RecordDataFormatterFactory
             'getAllRecordLinks',
             'data-allRecordLinks.phtml'
         );
+        $spec->setLine('Reviewed', 'getReviews');
 
         return $spec->getArray();
     }
