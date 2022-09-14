@@ -267,6 +267,33 @@ class SolrMarc extends SolrDefault
     }
 
     /**
+     * Get reviews
+     *
+     * @return array
+     */
+    public function getReviews(): array
+    {
+        $fields = $this->getMarcReader()->getFields('787');
+        $reviews = [];
+        foreach ($fields as $field) {
+            if ($field['i1'] != '0') {
+                continue;
+            }
+            $sf = [];
+            foreach ($field['subfields'] as $subfield) {
+                $sf[$subfield['code']] = $subfield['data'];
+            }
+            if (isset($sf['i']) && trim($sf['i']) == 'Recenze na:'
+                && isset($sf['t']) && isset($sf['d'])
+            ) {
+                $reviews[] = (isset($sf['a']) ? $sf['a'] . '. ' : '') .
+                    $sf['t'] . '. -- ' . $sf['d'];
+            }
+        }
+        return $reviews;
+    }
+
+    /**
      * Get identifier stripped of all prefixes
      *
      * @return string
