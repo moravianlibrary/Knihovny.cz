@@ -138,6 +138,7 @@ Deploy MR image:
           ( $CI_MERGE_REQUEST_SOURCE_BRANCH_NAME =~ /^fix\// )
         )
       when: manual
+  allow_failure: true # this is optional
   environment:
     name: devel
     url: $DEVEL_ENVIRONMENT_URL
