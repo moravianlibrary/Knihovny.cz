@@ -123,7 +123,7 @@ Deploy MR image:
   variables:
     APP_IMAGE_TAG: 'mr-${CI_MERGE_REQUEST_IID}'
     DEPLOY_REPO_BRANCH: devel
-    DEPLOY_REPO_DIR: mr
+    DEPLOY_REPO_DIR: devel
   rules:
     - if: # do not run on merge_request merge
         ( $CI_PIPELINE_SOURCE == "merge_request_event" ) &&

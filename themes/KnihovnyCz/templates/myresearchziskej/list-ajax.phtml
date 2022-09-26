@@ -90,8 +90,8 @@ $error = ($this->error ?? false);
           </div>
         <?php endif; ?>
       <?php else: ?>
-        <div class="alert alert-danger">
-          <?=$this->transEsc('Ziskej::reader_disabled_in_ziskej')?>
+        <div class="alert alert-info">
+          <?=$this->transEsc('Ziskej::message_no_current_orders')?>
         </div>
       <?php endif; ?>
     <?php else: ?>
