@@ -44,7 +44,7 @@ use Psr\Container\ContainerInterface;
  * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://knihovny.cz Main Page
  */
-class GetCitationFactory implements FactoryInterface
+class GetCitationsFactory implements FactoryInterface
 {
     /**
      * Create an object

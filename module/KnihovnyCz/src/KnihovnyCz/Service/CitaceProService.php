@@ -77,6 +77,13 @@ class CitaceProService implements \VuFindHttp\HttpServiceAwareInterface
      */
     public function getCitation(string $recordId, ?string $style = null): string
     {
+        $source = 'Solr';
+        if (str_contains($recordId, '|')) {
+            [$source, $recordId] = explode('|', $recordId);
+        }
+        if ($source != 'Solr') {
+            throw new \Exception('Citation not found');
+        }
         $style = $style && $this->isCitationStyleValid($style)
             ? $style : $this->getDefaultCitationStyle();
 
@@ -99,6 +106,19 @@ class CitaceProService implements \VuFindHttp\HttpServiceAwareInterface
         }
         $citation = $item->c14n();
         return $citation;
+    }
+
+    /**
+     * Get link to citacepro.com
+     *
+     * @param string $recordId Record identifier
+     *
+     * @return string
+     */
+    public function getCitationLink(string $recordId): string
+    {
+        return "https://www.citacepro.com/nacist-dokument-sysno/"
+            . $recordId . "?katalog=cpk";
     }
 
     /**

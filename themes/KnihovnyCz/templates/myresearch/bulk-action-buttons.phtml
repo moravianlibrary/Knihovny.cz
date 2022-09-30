@@ -18,6 +18,7 @@
       <li><button class="toolbar-btn" type="submit" name="export" value="1" title="<?=$this->transEscAttr('export_selected')?>"><?=$this->icon('export') ?> <?=$this->transEsc('Export')?></button></li>
     <?php endif; ?>
     <li><button class="toolbar-btn" type="submit" name="print" value="1" title="<?=$this->transEscAttr('print_selected')?>" data-lightbox-ignore><?=$this->icon('print') ?> <?=$this->transEsc('Print')?></button></li>
+    <li><button class="toolbar-btn" type="submit" name="cite" value="1" title="<?=$this->transEscAttr('cite_selected')?>"><?=$this->icon('cite') ?> <?=$this->transEsc('Cite this')?></button></li>
     <?php if ($this->cart()->isActive()): ?>
       <li><button class="toolbar-btn" id="<?=$this->idPrefix?>updateCart" type="submit" name="add" value="1"><?=$this->icon('cart-add') ?> <?=$this->transEsc('Add to Book Bag')?></button></li>
     <?php endif; ?>

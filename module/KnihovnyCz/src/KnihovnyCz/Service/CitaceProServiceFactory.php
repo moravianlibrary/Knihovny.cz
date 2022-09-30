@@ -76,8 +76,9 @@ class CitaceProServiceFactory implements FactoryInterface
             'Account',
             $container->get(\Laminas\Session\SessionManager::class)
         );
-        $defaultCitationStyle = (string)$session->citationStyle
-            ?? $defaultCitationStyle;
-        return new $requestedName($config, $defaultCitationStyle);
+        $defaultCitationStyle = isset($session->citationStyle)
+            && !empty($session->citationStyle) ? $session->citationStyle
+            : $defaultCitationStyle;
+        return new $requestedName($config, (string)$defaultCitationStyle);
     }
 }
