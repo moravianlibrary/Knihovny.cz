@@ -369,11 +369,13 @@ $config = [
                     \KnihovnyCz\Db\Row\CsrfToken::class => \VuFind\Db\Row\RowGatewayFactory::class,
                     \KnihovnyCz\Db\Row\UserList::class => \KnihovnyCz\Db\Row\UserListFactory::class,
                     \KnihovnyCz\Db\Row\UserSettings::class => \VuFind\Db\Row\RowGatewayFactory::class,
+                    \KnihovnyCz\Db\Row\Resource::class => \VuFind\Db\Row\RowGatewayFactory::class,
                 ],
                 'aliases' => [
                     \VuFind\Db\Row\User::class => \KnihovnyCz\Db\Row\User::class,
                     \VuFind\Db\Row\UserCard::class => \KnihovnyCz\Db\Row\UserCard::class,
                     \VuFind\Db\Row\UserList::class => \KnihovnyCz\Db\Row\UserList::class,
+                    \VuFind\Db\Row\Resource::class => \KnihovnyCz\Db\Row\Resource::class,
                 ]
             ],
             'db_table' => [
@@ -387,11 +389,13 @@ $config = [
                     \KnihovnyCz\Db\Table\WidgetContent::class => \VuFind\Db\Table\GatewayFactory::class,
                     \KnihovnyCz\Db\Table\CsrfToken::class => \VuFind\Db\Table\GatewayFactory::class,
                     \KnihovnyCz\Db\Table\UserSettings::class => \VuFind\Db\Table\GatewayFactory::class,
+                    \KnihovnyCz\Db\Table\Resource::class => \VuFind\Db\Table\ResourceFactory::class,
                 ],
                 'aliases' => [
                     \VuFind\Db\Table\User::class => \KnihovnyCz\Db\Table\User::class,
                     \VuFind\Db\Table\UserCard::class => \KnihovnyCz\Db\Table\UserCard::class,
                     'UserSettings' => \KnihovnyCz\Db\Table\UserSettings::class,
+                    \VuFind\Db\Table\Resource::class => \KnihovnyCz\Db\Table\Resource::class,
                 ],
             ],
             'ils_driver' => [
@@ -456,6 +460,14 @@ $config = [
                     'Search2' => \KnihovnyCz\Search\Factory\Search2BackendFactory::class,
                     'EDS' => \KnihovnyCz\Search\Factory\EdsBackendFactory::class,
                 ],
+            ],
+            'search_options' => [
+                'factories' => [
+                    \KnihovnyCz\Search\Favorites\Options::class => \VuFind\Search\Options\OptionsFactory::class,
+                ],
+                'aliases' => [
+                    \VuFind\Search\Favorites\Options::class => \KnihovnyCz\Search\Favorites\Options::class,
+                ]
             ],
             'search_params' => [
                 'factories' => [
