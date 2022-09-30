@@ -250,6 +250,7 @@ $config = [
             \KnihovnyCz\Controller\ZiskejAdminController::class => \VuFind\Controller\AbstractBaseFactory::class,
             \KnihovnyCz\Controller\HoldsController::class => \VuFind\Controller\HoldsControllerFactory::class,
             \KnihovnyCz\Controller\ContentController::class => \KnihovnyCz\Controller\ContentControllerFactory::class,
+            \KnihovnyCz\Controller\CartController::class => \VuFind\Controller\CartControllerFactory::class,
         ],
         'aliases' => [
             'Inspiration' => \KnihovnyCz\Controller\InspirationController::class,
@@ -264,6 +265,7 @@ $config = [
             \VuFind\Controller\SearchController::class => \KnihovnyCz\Controller\SearchController::class,
             \VuFind\Controller\HoldsController::class => \KnihovnyCz\Controller\HoldsController::class,
             \VuFind\Controller\ContentController::class => \KnihovnyCz\Controller\ContentController::class,
+            \VuFind\Controller\CartController::class => \KnihovnyCz\Controller\CartController::class,
         ],
     ],
     'controller_plugins' => [
@@ -421,7 +423,7 @@ $config = [
             'ajaxhandler' => [
                 'factories' => [
                     \KnihovnyCz\AjaxHandler\Edd::class => \KnihovnyCz\AjaxHandler\EddFactory::class,
-                    \KnihovnyCz\AjaxHandler\GetCitation::class => \KnihovnyCz\AjaxHandler\GetCitationFactory::class,
+                    \KnihovnyCz\AjaxHandler\GetCitations::class => \KnihovnyCz\AjaxHandler\GetCitationsFactory::class,
                     \KnihovnyCz\AjaxHandler\GetHolding::class => \KnihovnyCz\AjaxHandler\GetHoldingFactory::class,
                     \KnihovnyCz\AjaxHandler\GetObalkyKnihCoverWithoutSolr::class => \KnihovnyCz\AjaxHandler\GetObalkyKnihCoverWithoutSolrFactory::class,
                     \KnihovnyCz\AjaxHandler\GetACSuggestions::class => \KnihovnyCz\AjaxHandler\GetACSuggestionsFactory::class,
@@ -432,7 +434,7 @@ $config = [
                 ],
                 'aliases' => [
                     'edd' => \KnihovnyCz\AjaxHandler\Edd::class,
-                    'getcitation' => \KnihovnyCz\AjaxHandler\GetCitation::class,
+                    'getcitations' => \KnihovnyCz\AjaxHandler\GetCitations::class,
                     'getHolding' => \KnihovnyCz\AjaxHandler\GetHolding::class,
                     'getObalkyKnihCoverWithoutSolr' => \KnihovnyCz\AjaxHandler\GetObalkyKnihCoverWithoutSolr::class,
                     'getACSuggestions' => \KnihovnyCz\AjaxHandler\GetACSuggestions::class,
@@ -586,6 +588,7 @@ $staticRoutes = [
     'MyResearchZiskej/ListAjax' => 'MyResearchZiskej/ListAjax',
     'MyResearch/LogoutWarning' => 'MyResearch/LogoutWarning',
     'Search/Embedded' => 'Search/Embedded',
+    'Cart/Cite' => 'Cart/Cite',
 ];
 
 $routeGenerator = new \KnihovnyCz\Route\RouteGenerator();

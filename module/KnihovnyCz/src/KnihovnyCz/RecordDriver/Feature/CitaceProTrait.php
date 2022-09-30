@@ -91,4 +91,15 @@ trait CitaceProTrait
     {
         return $this->citacePro->getCitation($this->getUniqueID(), $style);
     }
+
+    /**
+     * Get link to citacepro.com
+     *
+     * @return string
+     * @throws \Exception
+     */
+    public function getCitationLink(): string
+    {
+        return $this->citacePro->getCitationLink($this->getUniqueID());
+    }
 }

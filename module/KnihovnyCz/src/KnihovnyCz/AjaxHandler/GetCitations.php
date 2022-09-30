@@ -2,7 +2,7 @@
 declare(strict_types=1);
 
 /**
- * Class GetCitation
+ * Class GetCitations
  *
  * PHP version 7
  *
@@ -23,7 +23,7 @@ declare(strict_types=1);
  *
  * @category VuFind
  * @package  KnihovnyCz\AjaxHandler
- * @author   Josef Moravec <moravec@mzk.cz>
+ * @author   Vaclav Rosecky <vaclav.rosecky@mzk.cz>
  * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://knihovny.cz Main Page
  */
@@ -34,15 +34,15 @@ use Laminas\Mvc\Controller\Plugin\Params;
 use VuFind\Session\Settings as SessionSettings;
 
 /**
- * Class GetCitation
+ * Class GetCitations
  *
  * @category VuFind
  * @package  KnihovnyCz\AjaxHandler
- * @author   Josef Moravec <moravec@mzk.cz>
+ * @author   Vaclav Rosecky <vaclav.rosecky@mzk.cz>
  * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://knihovny.cz Main Page
  */
-class GetCitation extends \VuFind\AjaxHandler\AbstractBase
+class GetCitations extends \VuFind\AjaxHandler\AbstractBase
 {
     /**
      * CitacePro service
@@ -71,18 +71,17 @@ class GetCitation extends \VuFind\AjaxHandler\AbstractBase
     public function handleRequest(Params $params): array
     {
         $this->disableSessionWrites();  // avoid session write timing bug
-        $recordId = $params->fromPost('recordId');
+        $ids = $params->fromPost('recordIds');
         $citeStyle = $params->fromPost('citationStyle');
 
-        try {
-            $citation = $this->citacePro->getCitation($recordId, $citeStyle);
-            if (!empty($citation)) {
-                return $this->formatResponse($citation);
+        $citations = [];
+        foreach ($ids as $id) {
+            try {
+                $citations[$id] = $this->citacePro->getCitation($id, $citeStyle);
+            } catch (\Exception $ex) {
+                $citations[$id] = false;
             }
-        } catch (\Exception $e) {
-            return $this->formatResponse($e->getMessage(), self::STATUS_HTTP_ERROR);
         }
-
-        return $this->formatResponse('Unknown error', self::STATUS_HTTP_ERROR);
+        return $this->formatResponse($citations);
     }
 }

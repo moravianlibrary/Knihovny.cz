@@ -10,86 +10,18 @@
   // Collect citation data:
   $citation = $this->driver->getCitation($this->style);
   $citationStyles = $this->driver->getCitationFormats();
+  $citationLink = $this->driver->getCitationLink();
   $currentStyle = array_key_exists($this->style, $citationStyles) ? $this->style : $this->driver->getDefaultCitationStyle();
   $recordId = $driver->getUniqueID();
   ?>
   <h2><?=$this->transEsc('Record Citations') ?>: <span class="title-in-heading"><?=$this->escapeHtml($this->driver->getBreadcrumb())?></span></h2>
-  <?php
-  if (!empty($citationStyles)) :?>
-    <div id="citation-container">
-      <div id='citation-loader' class="hidden"><?=$this->icon('spinner', 'fa-fw') . $this->translate('loading_ellipsis')?></div>
-      <div id='citation-placeholder'><?=$citation?></div>
-    </div>
-    <div id='citation-style-selector'>
-      <select class='style' id='record_<?=$recordId?>'>
-        <?php foreach($citationStyles as $style => $description): ?>
-          <option value='<?=$style?>'<?=($style == $currentStyle) ? 'selected="selected"' : ''?>><?=$description?></option>
-        <?php endforeach; ?>
-      </select>
-      <a id="citace-pro" href="https://www.citacepro.com/nacist-dokument-sysno/<?=$driver->getUniqueID()?>?katalog=cpk" target="_blank">
-        <img src="/themes/KnihovnyCz/images/logoCitacePROkatalog.png" alt="Citace PRO">
-      </a>
-    </div>
-  <?php endif; ?>
-
-<?php
-$script = <<<JS
-  function selectText(element) {
-    var range, selection;
-    if (window.getSelection) {
-      selection = window.getSelection();
-      range = document.createRange();
-      range.selectNodeContents(element);
-      selection.removeAllRanges();
-      selection.addRange(range);
-    } else if (document.body.createTextRange) {
-      range = document.body.createTextRange();
-      range.moveToElementText(element);
-      range.select();
-    }
-  }
-
-  function updateCitation(citation) {
-    const citationEl = $('#citation-placeholder');
-    citationEl.html(citation);
-    $('#citation-loader').addClass('hidden');
-    $('#citation-placeholder').removeClass('hidden');
-    $('#citace').click(function selectCitation() {
-        selectText(this);
-    });
-  }
-
-  function getCitation( recordId, citationStyle) {
-    $.ajax({
-      dataType: 'json',
-      async: true,
-      type: 'POST',
-      url: '/AJAX/JSON?method=getCitation',
-      data: { recordId: recordId, citationStyle: citationStyle },
-      success: function citationSuccessHandler(result) {
-        updateCitation(result.data);
-      },
-      fail: function citationFailHandler(jqXHR, textStatus) {
-        console.log( "Request failed: " + textStatus );
-      }
-    });
-  }
-
-  $(document).ready(function citationForm() {
-    $('#citace-pro').off('click');
-    $('#citace').click(function selectCitation() {
-      selectText(this);
-    });
-    $('#citation-style-selector').change(function citationChangeHandler(event) {
-      var style = event.target.value;
-      $('#citation-placeholder').addClass('hidden');
-      $('#citation-loader').removeClass('hidden');
-      getCitation('$recordId',  style);
-    });
-  });
-JS;
-echo $this->inlineScript(\Laminas\View\Helper\HeadScript::SCRIPT, $script, 'SET');
-?>
-<br />
-<?=$this->copyToClipboardButton('#citation-placeholder');?>
-
+  <?=
+    $this->context($this)->renderInContext(
+        'cite/cite.phtml',
+        [
+            'citationStyles' => $citationStyles,
+            'citations' => [ $driver->getUniqueID() => $citation ],
+            'citationLink' => $driver->getCitationLink(),
+        ]
+    );
+  ?>
