@@ -150,8 +150,8 @@ class RecordDataFormatterFactory
         $setLine('Additional information2', 'getLibNote2');
         $setLine(
             'Web sites',
-            'getUrls',
-            'library_links.phtml',
+            'getWebsites',
+            'library_websites.phtml',
             'fa fa-globe'
         );
         $setLine('Library type', 'getType');
