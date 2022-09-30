@@ -186,7 +186,7 @@ class SolrLibrary extends \KnihovnyCz\RecordDriver\SolrMarc
      *
      * @return array
      */
-    public function getUrls()
+    public function getWebsites()
     {
         $urls = $this->fields['url_display_mv'] ?? [];
         $filter = function ($url) {
