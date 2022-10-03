@@ -14,7 +14,7 @@
   <div class="ajaxcover">
     <div class="spinner"><i class="cover-icon <?=$formatClass?>"></i></div>
     <div class="cover-container">
-      <img <?php if ($linkPreview): ?>data-linkpreview="true" <?php endif; ?>data-context="<?=$this->escapeHtmlAttr($this->context)?>" data-recordsource="<?=$this->escapeHtmlAttr($driver->getSourceIdentifier())?>" data-recordid="<?=$this->escapeHtmlAttr($driver->getUniqueID())?>" data-coversize="<?=$this->escapeHtmlAttr($size)?>" class="recordcover ajax" alt="<?=$this->escapeHtmlAttr($alt); ?>" />
+      <img <?php if ($linkPreview): ?>data-linkpreview="true" <?php endif; ?>data-context="<?=$this->escapeHtmlAttr($this->context)?>" data-recordsource="<?=$this->escapeHtmlAttr($driver->getSourceIdentifier())?>" data-recordid="<?=$this->escapeHtmlAttr($driver->getUniqueID())?>" data-coversize="<?=$this->escapeHtmlAttr($size)?>" data-format="<?=$this->escapeHtmlAttr($formatClass)?>" class="recordcover ajax" alt="<?=$this->escapeHtmlAttr($alt); ?>" />
     </div>
   </div>
 <?php endif; ?>
