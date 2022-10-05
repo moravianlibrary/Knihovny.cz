@@ -413,3 +413,11 @@ if (typeof buildFacetTree === 'function') {
     };
   })(buildFacetTree);
 }
+
+jQuery(document).ready(function coverImageLoadError($) {
+  $('.ajaxcover img').on('error', function showCoverIconOnError() {
+    const format = $(this).data('format');
+    $(this).parent().append('<i class="cover-icon ' + format + '"></i>');
+    $(this).hide();
+  });
+});
