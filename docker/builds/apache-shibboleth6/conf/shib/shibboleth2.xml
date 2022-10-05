@@ -172,6 +172,10 @@
                               backingFilePath="/etc/shibboleth/eduid-social-idp.xml"
                               reloadInterval="7200"/>
 
+            <MetadataProvider type="XML" uri="https://metadata.eduid.cz/entities/standaloneidps"
+                              backingFilePath="/etc/shibboleth/eduid-standalone-idp.xml"
+                              reloadInterval="7200"/>
+
             <MetadataProvider type="XML" uri="https://login.cesnet.cz/proxy/saml2/idp/metadata.php"
                               backingFilePath="/etc/shibboleth/cesnet-proxy-idp.xml"
                               reloadInterval="7200"/>
