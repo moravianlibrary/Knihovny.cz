@@ -61,6 +61,9 @@ class WayfFilterGenerator
             'SocialIdPs' => [
                 'allowIdPs' => [],
             ],
+            'StandaloneIdP' => [
+                'allowIdPs' => [],
+            ],
         ],
     ];
 
