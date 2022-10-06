@@ -68,10 +68,6 @@ class EDS extends \VuFind\RecordDriver\EDS
     public function getFullTextLinks($linker)
     {
         $links = [];
-        $accessUrl = $this->getAccessUrl();
-        if ($accessUrl != null) {
-            $links['Fulltext'] = $accessUrl;
-        }
         // Linked Full Text
         if (($link = $this->getLinkedFullTextLink()) != null) {
             $links['Linked Full Text'] = $link;
