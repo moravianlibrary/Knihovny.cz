@@ -59,4 +59,49 @@ trait MyResearchTrait
         }
         $this->flashMessenger()->addErrorMessage($message);
     }
+
+    /**
+     * Add details from offline holdings
+     *
+     * @param $resources resources
+     *
+     * @return void
+     */
+    protected function addDetailsFromOfflineHoldings(&$resources)
+    {
+        foreach ($resources as &$resource) {
+            $ilsDetails = $resource->getExtraDetail('ils_details');
+            if (!empty($ilsDetails['volume'] ?? null)) {
+                continue;
+            }
+            if (isset($ilsDetails['description'])) {
+                $ilsDetails['volume'] = $ilsDetails['description'];
+            } elseif (isset($ilsDetails['hold_item_id'])) {
+                $item = $resource->tryMethod(
+                    'getOfflineHoldingByItemId',
+                    [$ilsDetails['hold_item_id']],
+                    []
+                );
+                $ilsDetails['volume'] = $item['description'] ?? null;
+            } elseif (isset($ilsDetails['item_id'])
+                && str_contains($ilsDetails['item_id'], '.')
+            ) {
+                [, $itemId] = explode('.', $ilsDetails['item_id']);
+                $item = $resource->tryMethod(
+                    'getOfflineHoldingByItemId',
+                    [$itemId],
+                    []
+                );
+                $ilsDetails['volume'] = $item['description'] ?? null;
+            } elseif (isset($ilsDetails['barcode'])) {
+                $item = $resource->tryMethod(
+                    'getOfflineHoldingByBarcode',
+                    [$ilsDetails['barcode']],
+                    []
+                );
+                $ilsDetails['volume'] = $item['d'] ?? null;
+            }
+            $resource->setExtraDetail('ils_details', $ilsDetails);
+        }
+    }
 }

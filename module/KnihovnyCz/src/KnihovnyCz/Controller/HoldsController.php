@@ -80,6 +80,10 @@ class HoldsController extends HoldsControllerBase
             $this->showException($ex);
         }
         $error = ($view == null || !($view instanceof ViewModel));
+        if (!$error) {
+            $recordList = $view->recordList ?? [];
+            $this->addDetailsFromOfflineHoldings($recordList);
+        }
         // active operation failed -> redirect to show checked out items
         if ($this->getRequest()->isPost() && $error) {
             $url = $this->url()->fromRoute('holds-listajax');

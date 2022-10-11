@@ -351,6 +351,88 @@ class Aleph extends AlephBase implements TranslatorAwareInterface
     }
 
     /**
+     * Get Patron Holds
+     *
+     * This is responsible for retrieving all holds by a specific patron.
+     *
+     * @param array $user The patron array from patronLogin
+     *
+     * @throws DateException
+     * @throws ILSException
+     * @return array      Array of the patron's holds on success.
+     */
+    public function getMyHolds($user)
+    {
+        $userId = $user['id'];
+        $holdList = [];
+        $xml = $this->doRestDLFRequest(
+            ['patron', $userId, 'circulationActions', 'requests', 'holds'],
+            ['view' => 'full']
+        );
+        foreach ($xml->xpath('//hold-request') as $item) {
+            $z37 = $item->z37;
+            $z13 = $item->z13;
+            $z30 = $item->z30;
+            $delete = $item->xpath('@delete');
+            $href = $item->xpath('@href');
+            $type = "hold";
+            $location = (string)$z37->{'z37-pickup-location'};
+            $reqnum = (string)$z37->{'z37-doc-number'}
+                . (string)$z37->{'z37-item-sequence'}
+                . (string)$z37->{'z37-sequence'};
+            $expire = (string)$z37->{'z37-end-request-date'};
+            $create = (string)$z37->{'z37-open-date'};
+            $holddate = (string)$z37->{'z37-hold-date'};
+            $title = (string)$z13->{'z13-title'};
+            $author = (string)$z13->{'z13-author'};
+            $isbn = (string)$z13->{'z13-isbn-issn'};
+            $barcode = (string)$z30->{'z30-barcode'};
+            $item_id = (string)$z37->{'z37-doc-number'}
+                . (string)$z37->{'z37-sequence'};
+            $hold_item_id = (string)$z37->{'translate-change-active-library'}
+                . (string)$z37->{'z37-doc-number'}
+                . (string)$z37->{'z37-item-sequence'};
+            // remove superfluous spaces in status
+            $status = preg_replace("/\s[\s]+/", " ", $item->status);
+            $position = null;
+            // Extract position in the hold queue from item status
+            if (preg_match($this->queuePositionRegex, $status, $matches)) {
+                $position = $matches['position'];
+            }
+            if ($holddate == "00000000") {
+                $holddate = null;
+            } else {
+                $holddate = $this->parseDate($holddate);
+            }
+            $delete = ($delete[0] == "Y");
+            // Secondary, Aleph-specific identifier that may be useful for
+            // local customizations
+            $adm_id = (string)$z30->{'z30-doc-number'};
+
+            $holdList[] = [
+                'type' => $type,
+                'item_id' => $item_id,
+                'adm_id'   => $adm_id,
+                'hold_item_id' => $hold_item_id,
+                'location' => $location,
+                'title' => $title,
+                'author' => $author,
+                'isbn' => $isbn,
+                'reqnum' => $reqnum,
+                'barcode' => $barcode,
+                'id' => $this->barcodeToID($barcode),
+                'expire' => $this->parseDate($expire),
+                'holddate' => $holddate,
+                'delete' => $delete,
+                'create' => $this->parseDate($create),
+                'status' => $status,
+                'position' => $position,
+            ];
+        }
+        return $holdList;
+    }
+
+    /**
      * Get profile information using DLF service.
      *
      * @param array $user The patron array

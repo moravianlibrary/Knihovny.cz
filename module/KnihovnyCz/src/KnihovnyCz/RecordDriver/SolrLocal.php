@@ -161,6 +161,24 @@ class SolrLocal extends \KnihovnyCz\RecordDriver\SolrMarc
     }
 
     /**
+     * Get an array of offline information about holding by barcode
+     *
+     * @param string $barcode barcode to return
+     *
+     * @return array
+     */
+    public function getOfflineHoldingByBarcode($barcode)
+    {
+        $items = $this->getStructuredDataFieldArray('996');
+        foreach ($items as $item) {
+            if ($item['b'] == $barcode) {
+                return $item;
+            }
+        }
+        return [];
+    }
+
+    /**
      * Does record has any items attached?
      *
      * @return bool
