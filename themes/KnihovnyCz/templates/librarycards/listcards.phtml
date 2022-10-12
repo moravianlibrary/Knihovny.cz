@@ -43,7 +43,8 @@ JS;
 <?php if ($this->user): ?>
   <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
     <?php $i = 1; ?>
-    <?php foreach ($this->user->getLibraryCardsWithILS() as $card): ?>
+    <?php $cards = $this->userCards($this->user->getLibraryCardsWithILS())->getSortedByLibraryName(); ?>
+    <?php foreach ($cards as $card): ?>
       <?php
       $institution = $card->home_library;
       $imageLink = sprintf('institutions/logos/%s/%s_small.png', $institution, $institution);

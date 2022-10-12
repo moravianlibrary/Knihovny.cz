@@ -23,7 +23,8 @@
           <th style="width: 30%"></th>
         </tr>
       </thead>
-    <?php foreach ($this->libraryCards as $record): ?>
+    <?php $records = $this->userCards($this->libraryCards)->getSortedByLibraryName(); ?>
+    <?php foreach ($records as $record): ?>
       <tr>
         <td>
           <?php

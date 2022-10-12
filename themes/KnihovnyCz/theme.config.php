@@ -26,6 +26,7 @@ return [
             \KnihovnyCz\View\Helper\KnihovnyCz\SplitText::class,
             \KnihovnyCz\View\Helper\KnihovnyCz\EscapeElementId::class,
             \KnihovnyCz\View\Helper\KnihovnyCz\TextFormatter::class,
+            KnihovnyCz\View\Helper\KnihovnyCz\UserCards::class,
         ],
         'aliases' => [
             'footerLink' => \KnihovnyCz\View\Helper\KnihovnyCz\FooterLink::class,
@@ -40,6 +41,7 @@ return [
             'recordLinker' => KnihovnyCz\View\Helper\KnihovnyCz\RecordLinker::class,
             'textFormatter' => KnihovnyCz\View\Helper\KnihovnyCz\TextFormatter::class,
             'geocoords' => \KnihovnyCz\View\Helper\KnihovnyCz\GeoCoords::class,
+            'userCards' => KnihovnyCz\View\Helper\KnihovnyCz\UserCards::class,
         ],
     ],
     'icons' => [
