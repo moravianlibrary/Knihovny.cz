@@ -29,6 +29,7 @@ declare(strict_types=1);
  */
 namespace KnihovnyCz\Db\Row;
 
+use Laminas\Db\ResultSet\ResultSet;
 use VuFind\Db\Row\User as Base;
 
 /**
@@ -289,10 +290,10 @@ class User extends Base
     /**
      * Get all library cards associated with the user with enabled ILS.
      *
-     * @return array
+     * @return \Laminas\Db\ResultSet\ResultSet
      * @throws \VuFind\Exception\LibraryCard
      */
-    public function getLibraryCardsWithILS()
+    public function getLibraryCardsWithILS(): ResultSet
     {
         $cards = [];
         foreach ($this->getLibraryCards() as $card) {
@@ -305,7 +306,8 @@ class User extends Base
                 $cards[] = $card;
             }
         }
-        return $cards;
+        $resultSet = new ResultSet();
+        return $resultSet->initialize($cards);
     }
 
     /**
@@ -315,9 +317,9 @@ class User extends Base
      * @return bool
      * @throws \VuFind\Exception\LibraryCard
      */
-    public function isSocial()
+    public function isSocial(): bool
     {
-        return empty($this->getLibraryCardsWithILS());
+        return !($this->getLibraryCardsWithILS()->count());
     }
 
     /**
