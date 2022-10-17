@@ -17,14 +17,22 @@ Shibboleth expected secrets:
 * /etc/apache2/sites-enabled/099-server-status.conf
   * provide server-status on port :8117
 
-Environment variables:
+Required environment variables:
 
 * `APACHE_LOG_DIR`
 * `APACHE_SITE_NAME`
+* `VUFIND_LOCAL_DIR`
+
+Optional environment variables:
+
+* `MEMCACHED_SERVICE` - 127.0.0.1:11211
+* `VUFIND_CACHE_DIR`
+* `DEBUG` - set to `1` to enable initscripts debugging
+* `PARAM_VUFIND_ROBOTS_TXT` - provide location of robots.txt file
 
 ### vufind-app
 
-
+...
 
 ## TODO:
 

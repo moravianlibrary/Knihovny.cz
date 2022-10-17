@@ -69,6 +69,8 @@ elif [ "$1" = "apache" ]; then
     exec apache2 -DFOREGROUND
 elif [ "$1" = "php-fpm" -o "$1" = "php" ]; then
     exec php-fpm
+elif [ "$1" = "php-cli" ]; then
+    exec php "$2" "${@:3}"
 elif [ "$1" = "sh" ]; then
     exec bash
 elif [ "$1" = "sleep" ]; then
