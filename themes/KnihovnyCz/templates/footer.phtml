@@ -78,7 +78,10 @@
       </div>
       <div class="row">
         <div class="col-xs-12">
-          <a href="<?=$this->url('content-page', ['page' => 'ochrana-osobnich-udaju']);?>#cookies"><?=$this->translate('use_of_cookies');?></a>
+          <a href="<?=$this->url('content-page', ['page' => 'ochrana-osobnich-udaju']);?>#cookies"><?=$this->translate('use_of_cookies');?></a>.
+          <?php if ($this->cookieConsent()->isEnabled()): ?>
+            <a href="#" type="button" data-cc="show-preferencesModal" aria-haspopup="dialog"><?=$this->transEsc('Cookie Settings')?></a>
+          <?php endif; ?>
         </div>
       </div>
     </div>
