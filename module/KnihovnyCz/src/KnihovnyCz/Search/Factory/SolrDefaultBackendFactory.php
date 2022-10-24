@@ -35,6 +35,7 @@ use KnihovnyCz\Search\Solr\Backend\Response\Json\RecordCollection;
 use KnihovnyCz\Search\Solr\ChildDocDeduplicationListener;
 use KnihovnyCz\Search\Solr\DeduplicationListener;
 use KnihovnyCz\Search\Solr\JsonFacetListener;
+use KnihovnyCz\Search\Solr\OneChildDocDeduplicationListener;
 use VuFind\Search\Factory\SolrDefaultBackendFactory
     as ParentSolrDefaultBackendFactory;
 use VuFindSearch\Backend\Solr\Backend;
@@ -121,6 +122,8 @@ class SolrDefaultBackendFactory extends ParentSolrDefaultBackendFactory
         $type = $search->Records->deduplication_type ?? null;
         if ($type == 'child') {
             $class = ChildDocDeduplicationListener::class;
+        } elseif ($type == 'one_child') {
+            $class = OneChildDocDeduplicationListener::class;
         }
         return new $class(
             $backend,
