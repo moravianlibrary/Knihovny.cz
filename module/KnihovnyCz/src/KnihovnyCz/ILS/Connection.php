@@ -51,7 +51,8 @@ class Connection extends ConnectionBase
      * Methods to check for each library card
      */
     public const CHECKED_METHODS = [
-        'getMyTransactionHistory'
+        'getMyTransactionHistory',
+        'getMyShortLoans',
     ];
 
     /**
@@ -124,5 +125,25 @@ class Connection extends ConnectionBase
             ];
         }
         return $newParams;
+    }
+
+    /**
+     * Check ShortLoans
+     *
+     * A support method for checkFunction(). This is responsible for checking
+     * the driver configuration to determine if the system supports ShortLoans.
+     *
+     * @param array $functionConfig The Hold configuration values
+     * @param array $params         An array of function-specific params (or null)
+     *
+     * @return mixed On success, an associative array with specific function keys
+     * and values either for placing holds via a form or a URL; on failure, false.
+     */
+    protected function checkMethodgetMyShortLoans($functionConfig, $params)
+    {
+        if (parent::checkCapability('getMyShortLoans', [$params ?: []])) {
+            return true;
+        }
+        return false;
     }
 }

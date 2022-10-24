@@ -1,0 +1,31 @@
+<?php
+// Set up page title:
+$this->headTitle($this->translate('short_loan_list_text'));
+
+// Set up breadcrumbs:
+$this->layout()->breadcrumbs = '<li><a href="' . $this->url('myresearch-shortloans') . '">' . $this->transEsc('Your Account') . '</a></li> <li class="active">' . $this->transEsc('Short loans') . '</li>';
+
+$this->headScript()->appendFile('holds.js');
+?>
+
+<a class="search-filter-toggle visible-xs" href="#myresearch-sidebar" data-toggle="offcanvas" title="Expand Sidebar">
+  <?=$this->transEsc('Your Account') ?>
+</a>
+
+<div class="<?=$this->layoutClass('mainbody')?>">
+  <h2><?=$this->transEsc('short_loan_list_text')?></h2>
+  <?=$this->flashmessages();?>
+  <?=$this->context($this)->renderInContext('librarycards/listcards.phtml', [
+      'user' => $this->auth()->isLoggedIn(),
+      'action' => $this->url('myresearch-shortloansajax'),
+      'callback' => 'loadHolds',
+    ]);
+  ?>
+</div>
+
+<div class="<?=$this->layoutClass('sidebar')?>" id="myresearch-sidebar">
+  <?=$this->context($this)->renderInContext("myresearch/menu.phtml", ['active' => 'shortloans'])?>
+</div>
+
+<noscript><?=$this->transEsc('Please enable JavaScript.')?></noscript>
+

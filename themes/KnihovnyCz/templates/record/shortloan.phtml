@@ -1,0 +1,67 @@
+<?php
+    // Set page title.
+    $this->headTitle($this->translate('short_loan_request_text') . ': ' . $this->driver->getBreadcrumb());
+
+    // Set up breadcrumbs:
+    $this->layout()->breadcrumbs = $this->searchMemory()->getLastSearchLink($this->transEsc('Search'), '<li>', '</li> ')
+        . '<li>' . $this->recordLinker()->getBreadcrumbHtml($this->driver) . '</li> '
+        . '<li class="active">' . $this->transEsc('short_loan_text') . '</li>';
+    $numOfSlots = ($this->max - $this->min) * $this->slotsInHour;
+?>
+
+<a href="<?=$this->recordLinker()->getTabUrl($this->driver, 'holdings')?>" class="backToRecord">
+  <?= $this->icon('back-to-record'); ?>
+  <?= $this->transEsc('Back to record'); ?>
+</a>
+
+<h2><?=$this->transEsc('short_loan_request_text')?>: <?=$this->driver->getBreadcrumb()?></h2>
+<?php if ($this->helpTextHtml): ?>
+  <p class="helptext"><?=$this->helpTextHtml?></p>
+<?php endif; ?>
+
+<div id="popupMessages"><?=$this->flashmessages()?></div>
+
+<div class="short-loan-form">
+  <form class="form-record-shortloan form-inline" method="post" name="shortLoan" id="shortLoan">
+    <input type="hidden" name="csrf" value="<?=$this->escapeHtmlAttr($this->auth()->getManager()->getCsrfHash())?>" />
+    <table class="table table-striped responsive-table table-bordered table-condensed">
+      <tr class="visible-md visible-lg">
+        <th style="width: 150px;"><?=$this->translate('Date')?></th>
+        <?php for ($i = 0; $i != $numOfSlots; $i++): ?>
+          <th></th>
+        <?php endfor; ?>
+      </tr>
+      <?php foreach ($this->slots as $date => $slotsInDay):?>
+        <tr>
+          <td>
+            <?=$this->escapeHtml($date)?>
+          </td>
+          <?php foreach ($slotsInDay as $slot):?>
+            <?php
+              $colspan = ($slot['end'] - $slot['start']) * $this->slotsInHour;
+            ?>
+            <?php if ($slot['available']):?>
+              <td class="short-loan-free" colspan='<?=$colspan?>'>
+                <div class="form-group">
+                  <input type="checkbox" name="slot[]" value="<?=$this->escapeHtmlAttr($slot['slot'])?>" id="<?=$this->escapeHtmlAttr('slot' . $slot['slot'])?>"/>
+                  <label for="<?=$this->escapeHtmlAttr('slot' . $slot['slot'])?>">
+                    <?=$slot['start_time'] . ' - ' . $slot['end_time']?>
+                  </label>
+                </div>
+              </td>
+            <?php elseif ($slot['virtual'] ?? false):?>
+              <td class="short-loan-virtual" colspan='<?=$colspan?>'/>
+            <?php else:?>
+              <td class="short-loan-reserved" colspan='<?=$colspan?>'/>
+            <?php endif; ?>
+          <?php endforeach;?>
+        </tr>
+      <?php endforeach;?>
+    </table>
+
+    <div class="control-group">
+      <input class="btn btn-primary" type="submit" name="placeHold" value="<?=$this->transEsc('short_loan_reguest_submit_text')?>"/>
+    </div>
+
+  </form>
+</div>

@@ -134,6 +134,25 @@ class MultiBackend extends \VuFind\ILS\Driver\MultiBackend
     }
 
     /**
+     * Return short loan requests for patron
+     *
+     * @param array $patron patron
+     *
+     * @return array
+     */
+    public function getMyShortLoans($patron)
+    {
+        /* @phpstan-ignore-next-line */
+        $data = parent::getMyShortLoans($patron);
+        if (isset($data['records'])) {
+            $data['records'] = $this->resolveIds($data['records'], $patron);
+            return $data;
+        } else {
+            return $this->resolveIds($data, $patron);
+        }
+    }
+
+    /**
      * Get Patron Transaction History
      *
      * This is responsible for retrieving all historic transactions

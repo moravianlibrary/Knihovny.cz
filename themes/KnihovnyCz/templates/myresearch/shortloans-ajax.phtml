@@ -1,0 +1,83 @@
+<?php if (!empty($this->links)):?>
+  <ul>
+    <?php foreach($this->links as $link): ?>
+      <li>
+        <a href="<?=$this->recordLink()->getUrl($link['id'])?>"><?=$this->transEsc($link['label'])?></a>
+      </li>
+    <?php endforeach; ?>
+  </ul>
+<?php endif; ?>
+
+<?=$this->flashmessages()?>
+
+<?php if (!empty($this->recordList)): ?>
+  <?php if ($this->cancelForm): ?>
+    <form name="updateForm" class="inline" method="post" action="<?=$this->escapeHtmlAttr($this->url('myresearch-shortloans'))?>" id="update_short_loans" data-clear-account-cache="shortloans" data-lightbox>
+    <input type="hidden" value="<?=$this->escapeHtmlAttr($this->auth()->getManager()->getCsrfHash())?>" name="csrf"/>
+    <input type="hidden" id="submitType" name="cancelSelected" value="1"/>
+    <input type="hidden" id="cancelConfirm" name="confirm" value="0"/>
+    <div class="toolbar">
+      <div class="checkbox">
+        <label>
+          <input type="checkbox" name="selectAll" class="checkbox-select-all"/>
+            <?=$this->transEsc('select_page')?>
+        </label>
+        <?php if ($this->cancelForm || true): ?>
+          <div class="btn-group">
+            <input id="cancelSelected" name="cancelSelected" type="submit" value="<?=$this->transEscAttr("short_loan_cancel_selected") ?>" class="btn btn-default dropdown-toggle" data-toggle="dropdown" data-lightbox-ignore>
+            <ul class="dropdown-menu">
+              <li class="disabled"><a><?=$this->transEsc("short_loan_confirm_cancel_selected") ?></a></li>
+              <li><a href="#" id="confirm_cancel_selected_yes"><?=$this->transEsc('confirm_dialog_yes') ?></a></li>
+              <li><a href="#" class="confirm_cancel_no"><?=$this->transEsc('confirm_dialog_no')?></a></li>
+            </ul>
+          </div>
+          <div class="btn-group">
+            <input id="cancelAll" name="cancelAll" type="submit" value="<?=$this->transEscAttr("short_loan_cancel_all") ?>" class="btn btn-default dropdown-toggle" data-toggle="dropdown" data-lightbox-ignore>
+            <ul class="dropdown-menu">
+              <li class="disabled"><a><?=$this->transEsc("short_loan_confirm_cancel_all") ?></a></li>
+              <li><a href="#" id="confirm_cancel_all_yes"><?=$this->transEsc('confirm_dialog_yes') ?></a></li>
+              <li><a href="#" class="confirm_cancel_no"><?=$this->transEsc('confirm_dialog_no')?></a></li>
+            </ul>
+          </div>
+        <?php endif; ?>
+      </div>
+    </div>
+  <?php endif; ?>
+
+  <table class="table table-striped result">
+    <tr>
+      <th></th>
+      <th><?=$this->transEsc('short_loan_request_start')?></th>
+      <th><?=$this->transEsc('short_loan_request_end')?></th>
+      <th><?=$this->transEsc('Title')?></th>
+      <th><?=$this->transEsc('Description')?></th>
+    </tr>
+    <?php foreach ($this->recordList as $resource): ?>
+      <?php $ilsDetails = $resource->getExtraDetail('ils_details');?>
+      <tr>
+        <td>
+          <div>
+            <?php if ($this->cancelForm && isset($ilsDetails['cancel_details'])): ?>
+              <?php $checkboxId = $this->escapeElementId('checkbox_' . $ilsDetails['cancel_details']); ?>
+              <input type="hidden" name="cancelAllIDS[]" value="<?=$this->escapeHtmlAttr($ilsDetails['cancel_details']) ?>" />
+                <label>
+                  <input type="checkbox" name="selectedIDS[]" value="<?=$this->escapeHtmlAttr($ilsDetails['cancel_details']) ?>" id="<?=$checkboxId?>" class="checkbox-select-item">
+                </label>
+            <?php elseif ($this->cancelForm): ?>
+              <?php // Reserve space for the checkbox to keep columns aligned ?>
+                <label></label>
+            <?php endif; ?>
+          </div>
+        </td>
+        <td><?=$this->transEsc($ilsDetails['start'])?></td>
+        <td><?=$this->transEsc($ilsDetails['end'])?></td>
+        <td>
+          <a href="<?=$this->recordLink()->getUrl($resource)?>"><?=$this->escapeHtml($resource->getTitle())?></a>
+        </td>
+        <td><?=$this->transEsc($ilsDetails['callnumber'])?></td>
+      </tr>
+    <?php endforeach; ?>
+  </table>
+
+  <?php if ($this->cancelForm): ?></form><?php endif; ?>
+<?php endif; ?>

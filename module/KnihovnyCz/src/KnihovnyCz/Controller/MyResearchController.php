@@ -32,6 +32,7 @@ use Laminas\ServiceManager\ServiceLocatorInterface;
 use Laminas\View\Model\ViewModel;
 use VuFind\Controller\MyResearchController as MyResearchControllerBase;
 use VuFind\Exception\Auth as AuthException;
+use VuFind\Validator\CsrfInterface;
 
 /**
  * Class MyResearchController
@@ -43,6 +44,7 @@ use VuFind\Exception\Auth as AuthException;
  * @link     https://knihovny.cz Main Page
  *
  * @method Plugin\FlashRedirect flashRedirect() Flash redirect controller plugin
+ * @method Plugin\ShortLoans shortLoans() Time slots controller plugin
  */
 class MyResearchController extends MyResearchControllerBase
 {
@@ -414,6 +416,69 @@ class MyResearchController extends MyResearchControllerBase
         $view->citationStyle = $settings['citationStyle'];
         $view->setTemplate('myresearch/usersettings');
         return $view;
+    }
+
+    /**
+     * Short loans action
+     *
+     * @return \Laminas\View\Model\ViewModel|mixed
+     */
+    public function shortLoansAction()
+    {
+        // Force login:
+        if (!$this->getUser()) {
+            return $this->forceLogin();
+        }
+        $view = $this->createViewModel();
+        $view->setTemplate('myresearch/shortloans-all');
+        return $view;
+    }
+
+    /**
+     * Send list of fines to view as HTML for rendering in AJAX
+     *
+     * @return mixed
+     */
+    public function shortLoansAjaxAction()
+    {
+        $this->flashRedirect()->restore();
+        // Stop now if the user does not have valid catalog credentials available:
+        if (!is_array($patron = $this->catalogLogin())) {
+            return $patron;
+        }
+
+        $this->shortLoans()->cancelShortLoans(
+            $patron,
+            $this->serviceLocator->get(CsrfInterface::class)
+        );
+
+        $view = $this->createViewModel();
+
+        // Connect to the ILS:
+        $catalog = $this->getILS();
+
+        // Check function config
+        $functionConfig = $catalog->checkFunction(
+            'getMyShortLoans',
+            $patron
+        );
+
+        $view->cancelForm = $functionConfig;
+        if (false === $functionConfig) {
+            $this->flashMessenger()->addErrorMessage('ils_action_unavailable');
+        } else {
+            $requests = $catalog->getMyShortLoans($patron);
+            $this->shortLoans()->addCancelDetails($requests);
+            $requests = $this->ilsRecords()->getDrivers($requests);
+            $view->recordList = $requests;
+            $view->links = $catalog->getMyShortLoanLinks($patron);
+            if (empty($requests)) {
+                $this->flashMessenger()->addInfoMessage('short_loan_empty_list');
+            }
+        }
+        $view->setTemplate('myresearch/shortloans-ajax');
+        $result = $this->getViewRenderer()->render($view);
+        return $this->getAjaxResponse('text/html', $result, null);
     }
 
     /**
