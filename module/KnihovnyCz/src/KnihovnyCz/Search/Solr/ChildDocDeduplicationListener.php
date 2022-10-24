@@ -151,14 +151,14 @@ class ChildDocDeduplicationListener extends DeduplicationListener
         if (empty($fl)) {
             $fl = $this->fieldList;
         }
-        $fl = $fl . ", childs:[subquery]";
-        $params->set('fl', $fl);
+        $newFieldList = $fl . ", childs:[subquery]";
+        $params->set('fl', $newFieldList);
         $params->set(
             'childs.q',
             '{!term f=parent_id_str v=$row.id} merged_child_boolean:true'
         );
-        $params->set('childs.fl', 'id');
-        $params->set('childs.rows', self::MAX_CHILD_DOCUMENTS);
+        $params->set('childs.fl', $this->getChildListOfFields($fl));
+        $params->set('childs.rows', static::MAX_CHILD_DOCUMENTS);
         if (!empty($childFilters)) {
             $params->set('childs.fq', join(" AND ", $childFilters));
         }
@@ -236,5 +236,17 @@ class ChildDocDeduplicationListener extends DeduplicationListener
         );
         $searchConfig = $config->get($this->searchConfig);
         return $searchConfig->General->default_record_fields ?? '*,score';
+    }
+
+    /**
+     * Return new list of fields to fetch from Solr for child record
+     *
+     * @param string $parentFieldList field list used for fetching parent records
+     *
+     * @return string|null
+     */
+    protected function getChildListOfFields($parentFieldList)
+    {
+        return "id";
     }
 }
