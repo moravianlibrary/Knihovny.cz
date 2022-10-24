@@ -38,6 +38,7 @@ use Laminas\View\Model\ViewModel;
 use Mzk\ZiskejApi\RequestModel\Reader;
 use Mzk\ZiskejApi\RequestModel\Ticket;
 use VuFind\Exception\LibraryCard;
+use VuFind\Validator\CsrfInterface;
 
 /**
  * Class RecordController
@@ -49,6 +50,7 @@ use VuFind\Exception\LibraryCard;
  * @link     https://knihovny.cz Main Page
  *
  * @method \Laminas\Mvc\Plugin\FlashMessenger\FlashMessenger  flashMessenger
+ * @method Plugin\ShortLoans shortLoans() Time slots controller plugin
  */
 class RecordController extends \VuFind\Controller\RecordController
 {
@@ -369,6 +371,58 @@ class RecordController extends \VuFind\Controller\RecordController
             );
             return $this->redirectToRecord('#ziskejmvs', 'Ziskej');
         }
+    }
+
+    /**
+     * Short loan action.
+     *
+     * @return \Laminas\View\Model\ViewModel
+     */
+    public function shortLoanAction()
+    {
+        $driver = $this->loadRecord();
+
+        // Stop now if the user does not have valid catalog credentials available:
+        if (!is_array($patron = $this->catalogLogin())) {
+            return $patron;
+        }
+
+        // If we're not supposed to be here, give up now!
+        $catalog = $this->getILS();
+        $checkHolds = $catalog->checkFunction(
+            'Holds',
+            [
+                'id' => $driver->getUniqueID(),
+                'patron' => $patron
+            ]
+        );
+        if (!$checkHolds) {
+            return $this->redirectToRecord();
+        }
+        $recordId = $driver->getUniqueID();
+        $itemId = $this->params()->fromQuery('item_id');
+
+        // Process form submissions if necessary:
+        if (null !== $this->params()->fromPost('placeHold')) {
+            $success = $this->shortLoans()->placeHolds(
+                $patron,
+                $recordId,
+                $itemId,
+                $this->serviceLocator->get(CsrfInterface::class)
+            );
+            if ($success) {
+                return $this->redirectToRecord();
+            }
+        }
+        $shortLoanInfo = $catalog->getHoldingInfoForItem(
+            $patron['id'],
+            $recordId,
+            $itemId
+        );
+        $slots = $shortLoanInfo['slots'];
+        $view = $this->createViewModel($this->shortLoans()->fillSlots($slots));
+        $view->setTemplate('record/shortloan');
+        return $view;
     }
 
     /**

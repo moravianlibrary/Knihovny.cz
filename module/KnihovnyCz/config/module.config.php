@@ -269,6 +269,9 @@ $config = [
         ],
     ],
     'controller_plugins' => [
+        'invokables' => [
+            \KnihovnyCz\Controller\Plugin\ShortLoans::class => \KnihovnyCz\Controller\Plugin\ShortLoans::class,
+        ],
         'factories' => [
             'KnihovnyCz\Controller\Plugin\Holds' => 'VuFind\Controller\Plugin\AbstractRequestBaseFactory',
             'KnihovnyCz\Controller\Plugin\FlashRedirect' => 'VuFind\Controller\Plugin\AbstractRequestBaseFactory',
@@ -278,6 +281,7 @@ $config = [
             'holds' => 'KnihovnyCz\Controller\Plugin\Holds',
             'flashRedirect' => 'KnihovnyCz\Controller\Plugin\FlashRedirect',
             'resultScroller' => 'KnihovnyCz\Controller\Plugin\ResultScroller',
+            'shortLoans' => \KnihovnyCz\Controller\Plugin\ShortLoans::class,
         ],
     ],
     'vufind' => [
@@ -548,6 +552,7 @@ $config = [
             \KnihovnyCz\Markdown\InvolvedLibraries\InvolvedLibrariesExtension::class => \KnihovnyCz\Markdown\InvolvedLibraries\InvolvedLibrariesExtensionFactory::class,
             \KnihovnyCz\Content\InvolvedLibrariesService::class => \KnihovnyCz\Content\InvolvedLibrariesServiceFactory::class,
             \KnihovnyCz\Service\UserSettingsService::class => \KnihovnyCz\Service\UserSettingsServiceFactory::class,
+            \KnihovnyCz\ILS\Logic\Holds::class => \VuFind\ILS\Logic\LogicFactory::class,
         ],
         'aliases' => [
             'VuFind\Http' => 'VuFindHttp\HttpService',
@@ -566,6 +571,7 @@ $config = [
             \VuFind\Search\SearchRunner::class => \KnihovnyCz\Search\SearchRunner::class,
             'VuFind\SearchRunner' => \KnihovnyCz\Search\SearchRunner::class,
             \VuFind\Search\Solr\Results::class => \KnihovnyCz\Search\Solr\Results::class,
+            \VuFind\ILS\Logic\Holds::class => \KnihovnyCz\ILS\Logic\Holds::class,
         ],
         'invokables' => [
             \KnihovnyCz\Service\GoogleBooksLinkService::class,
@@ -596,6 +602,8 @@ $staticRoutes = [
     'MyResearch/CheckedoutAjax' => 'MyResearch/CheckedoutAjax',
     'MyResearch/HistoricloansAjax' => 'MyResearch/HistoricloansAjax',
     'MyResearch/UserSettings' => 'MyResearch/UserSettings',
+    'MyResearch/ShortLoans' => 'MyResearch/ShortLoans',
+    'MyResearch/ShortLoansAjax' => 'MyResearch/ShortLoansAjax',
     'Holds/ListAjax' => 'Holds/ListAjax',
     'MyResearchZiskej/ListAjax' => 'MyResearchZiskej/ListAjax',
     'MyResearch/LogoutWarning' => 'MyResearch/LogoutWarning',
@@ -603,7 +611,12 @@ $staticRoutes = [
     'Cart/Cite' => 'Cart/Cite',
 ];
 
+$nonTabRecordActions = [
+    'shortLoan'
+];
+
 $routeGenerator = new \KnihovnyCz\Route\RouteGenerator();
+$routeGenerator->addNonTabRecordActions($config, $nonTabRecordActions);
 $routeGenerator->addRecordRoutes($config, $recordRoutes);
 $routeGenerator->addStaticRoutes($config, $staticRoutes);
 

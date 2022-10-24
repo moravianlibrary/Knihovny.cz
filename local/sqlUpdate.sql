@@ -189,3 +189,14 @@ UPDATE citation_style SET value = NULL WHERE id = 2;
 INSERT INTO citation_style(id, description, value) VALUES (38673, 'ČSN ISO 690', '38673');
 UPDATE user_settings SET citation_style = 38673 WHERE citation_style = 2;
 DELETE FROM citation_style WHERE id = 2;
+
+-- #683: short loans
+SET @mzk_source_id = (SELECT id FROM inst_sources WHERE source = 'mzk');
+INSERT INTO `inst_sections` (`section_name`) VALUES('ShortLoan');
+INSERT INTO `inst_keys` (`key_name`, `section_id`) VALUES ('enabled', (SELECT `id` FROM `inst_sections` WHERE `section_name` = 'ShortLoan'));
+SELECT @short_loan_enabled_id := LAST_INSERT_ID();
+INSERT INTO inst_configs (source_id, key_id, value, timestamp) VALUES (@mzk_source_id, @short_loan_enabled_id, 'true', NOW());
+INSERT INTO `inst_sections` (`section_name`) VALUES('ShortLoanLinks');
+INSERT INTO `inst_keys` (`key_name`, `section_id`) VALUES ('MZK01-000680703', (SELECT `id` FROM `inst_sections` WHERE `section_name` = 'ShortLoanLinks'));
+SELECT @study_room_id := LAST_INSERT_ID();
+INSERT INTO inst_configs (source_id, key_id, value, timestamp) VALUES (@mzk_source_id, @study_room_id, 'Team study room', NOW());

@@ -55,6 +55,48 @@ class Aleph extends AlephBase implements TranslatorAwareInterface
         '/^[0-9]+\/[0-9]+\/[0-9]{2}$/' => 'd/m/y',
     ];
 
+    protected const TIME_FORMAT = '/^[0-2][0-9][0-6][0-9]$/';
+
+    /**
+     * Public Function which retrieves historic loan, renew, hold and cancel
+     * settings from the driver ini file.
+     *
+     * @param string $func   The name of the feature to be checked
+     * @param array  $params Optional feature-specific parameters (array)
+     *
+     * @return array An array with key-value pairs.
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    public function getConfig($func, $params = [])
+    {
+        if ($func == 'getMyShortLoans') {
+            return [];
+        }
+        return parent::getConfig($func, $params);
+    }
+
+    /**
+     * Helper method to determine whether or not a certain method can be
+     * called on this driver.  Required method for any smart drivers.
+     *
+     * @param string $method The name of the called method.
+     * @param array  $params Array of passed parameters
+     *
+     * @return bool True if the method can be called with the given parameters,
+     * false otherwise.
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    public function supportsMethod($method, $params)
+    {
+        // Short loans are only available if properly configured
+        if ($method == 'getMyShortLoans') {
+            return !empty($this->config['ShortLoan']['enabled']);
+        }
+        return parent::supportsMethod($method, $params);
+    }
+
     /**
      * Get Holding
      *
@@ -122,6 +164,7 @@ class Aleph extends AlephBase implements TranslatorAwareInterface
                     $sub_library_code
                 );
             }
+            $holdType = 'hold';
             $requested = false;
             $duedate = null;
             $addLink = false;
@@ -136,6 +179,13 @@ class Aleph extends AlephBase implements TranslatorAwareInterface
             if (!empty($patron)) {
                 $hold_request = $item->xpath('info[@type="HoldRequest"]/@allowed');
                 $addLink = ($hold_request[0] == 'Y');
+                if (!$addLink) {
+                    $hold_request = $item->xpath('info[@type="ShortLoan"]/@allowed');
+                    if ($hold_request[0] == 'Y') {
+                        $holdType = 'shortloan';
+                        $addLink = true;
+                    }
+                }
             }
             $statuses = explode(';', $status, 2);
             $dueDateRegEx = "/([0-9]*\\/[a-zA-Z0-9]*\\/[0-9]*)/";
@@ -160,6 +210,7 @@ class Aleph extends AlephBase implements TranslatorAwareInterface
             $holding[] = [
                 'id'                  => $id,
                 'item_id'             => $item_id,
+                'holdtype'            => $holdType,
                 'availability'        => $availability,
                 'availability_status' => (string)$z30->{'z30-item-status'},
                 'status'              => $fullStatus,
@@ -172,7 +223,6 @@ class Aleph extends AlephBase implements TranslatorAwareInterface
                 'notes'               => ($note == null) ? null : [$note],
                 'is_holdable'         => true,
                 'addLink'             => $addLink,
-                'holdtype'            => 'hold',
                 /* below are optional attributes*/
                 'collection'          => (string)$collection,
                 /* @phpstan-ignore-next-line */
@@ -362,6 +412,290 @@ class Aleph extends AlephBase implements TranslatorAwareInterface
             $holdInfo['item_id']
         );
         return $details['order'];
+    }
+
+    /**
+     * Support method for placeHold -- get holding info for an item.
+     *
+     * @param string $patronId Patron ID
+     * @param string $id       Bib ID
+     * @param string $group    Item ID
+     *
+     * @return array
+     */
+    public function getHoldingInfoForItem($patronId, $id, $group)
+    {
+        [$bib, $sys_no] = $this->parseId($id);
+        $resource = $bib . $sys_no;
+        $xml = $this->doRestDLFRequest(
+            ['patron', $patronId, 'record', $resource, 'items', $group]
+        );
+        $holdRequestAllowed = $xml->xpath(
+            "//item/info[@type='HoldRequest']/@allowed"
+        );
+        $holdRequestAllowed = !empty($holdRequestAllowed)
+            && $holdRequestAllowed[0] == 'Y';
+        if ($holdRequestAllowed) {
+            return $this->extractHoldingInfoForItem($xml);
+        }
+        $shortLoanAllowed = $xml->xpath("//item/info[@type='ShortLoan']/@allowed");
+        $shortLoanAllowed = !empty($shortLoanAllowed) && $shortLoanAllowed[0] == 'Y';
+        if ($shortLoanAllowed) {
+            return $this->extractShortLoanInfoForItem($xml);
+        }
+        throw new \Exception("Hold request or short loan is not alllowed");
+    }
+
+    /**
+     * Place short loan request
+     *
+     * @param array $details details
+     *
+     * @return array
+     */
+    public function placeShortLoan($details)
+    {
+        [$bib, $sys_no] = $this->parseId($details['id']);
+        $recordId = $bib . $sys_no;
+        $slot = $details['slot'];
+        $itemId = $details['item_id'];
+        $patron = $details['patron'];
+        $patronId = $patron['id'];
+        $body = new \SimpleXMLElement(
+            '<?xml version="1.0" encoding="UTF-8"?>'
+            . '<short-loan-parameters></short-loan-parameters>'
+        );
+        $body->addChild('request-slot', $slot);
+        $data = 'post_xml=' . $body->asXML();
+        try {
+            $result = $this->doRestDLFRequest(
+                ['patron', $patronId, 'record', $recordId,
+                'items', $itemId, 'shortLoan'],
+                null,
+                "PUT",
+                $data
+            );
+        } catch (\Exception $ex) {
+            return ['success' => false, 'sysMessage' => $ex->getMessage];
+        }
+        return ['success' => true];
+    }
+
+    /**
+     * Return short loan requests for patron
+     *
+     * @param array $patron patron
+     *
+     * @return array
+     */
+    public function getMyShortLoans($patron)
+    {
+        $xml = $this->doRestDLFRequest(
+            ['patron', $patron['id'], 'circulationActions',
+            'requests', 'bookings'],
+            ["view" => "full"]
+        );
+        $results = [];
+        foreach ($xml->xpath('//booking-request') as $item) {
+            $delete = $item->xpath('@delete');
+            $href = $item->xpath('@href');
+            $item_id = substr($href[0], strrpos($href[0], '/') + 1);
+            $z13 = $item->z13;
+            $z37 = $item->z37;
+            $z30 = $item->z30;
+            $barcode = (string)$z30->{'z30-barcode'};
+            $startDate = (string)$z37->{'z37-booking-start-date'};
+            $startTime = (string)$z37->{'z37-booking-start-hour'};
+            $endDate = (string)$z37->{'z37-booking-end-date'};
+            $endTime = (string)$z37->{'z37-booking-end-hour'};
+            $callnumber = $z30->{'z30-call-no'};
+            $start = $this->parseDate($startDate)
+                . ' ' . $this->parseTime($startTime);
+            $end = $this->parseDate($endDate)
+                . ' ' . $this->parseTime($endTime);
+            $delete = ($delete[0] == "Y");
+            $id = (string)$z13->{'z13-doc-number'};
+            $adm_id = (string)$z30->{'z30-doc-number'};
+            $sortKey = (string)$startDate[0] . $item_id;
+            $results[$sortKey] = [
+                'id'         => $this->barcodeToID($barcode),
+                'adm_id'     => $adm_id,
+                'start'      => $start,
+                'end'        => $end,
+                'delete'     => $delete,
+                'item_id'    => $item_id,
+                'barcode'    => $barcode,
+                'callnumber' => $callnumber
+            ];
+        }
+        ksort($results);
+        $results = array_values($results);
+        return $results;
+    }
+
+    /**
+     * Return short loan requests for patron
+     *
+     * @param array $patron patron
+     *
+     * @return array
+     */
+    public function getMyShortLoanLinks($patron)
+    {
+        $links = $this->config['ShortLoanLinks'] ?? [];
+        $result = [];
+        foreach ($links as $id => $label) {
+            $result[] = [
+                'id' => $id,
+                'label' => $label,
+            ];
+        }
+        return $result;
+    }
+
+    /**
+     * Get details for canceling short loan request
+     *
+     * @param array $details details
+     *
+     * @return array|null
+     */
+    public function getCancelShortLoanDetails($details)
+    {
+        if ($details['delete']) {
+            return $details['item_id'];
+        } else {
+            return null;
+        }
+    }
+
+    /**
+     * Cancel short loan requests
+     *
+     * @param array $details details
+     *
+     * @return array
+     */
+    public function cancelShortLoans($details)
+    {
+        $patron = $details['patron'];
+        $patronId = $patron['id'];
+        $count = 0;
+        $statuses = [];
+        foreach ($details['details'] as $id) {
+            try {
+                $result = $this->doRestDLFRequest(
+                    ['patron', $patronId, 'circulationActions',
+                    'requests', 'bookings', $id],
+                    null,
+                    "DELETE"
+                );
+            } catch (\Exception $ex) {
+                $statuses[$id] = [
+                    'success' => false,
+                    'status' => 'cancel_hold_failed',
+                    'sysMessage' => (string)$ex->getMessage()
+                ];
+            }
+            $count++;
+            $statuses[$id] = [
+                'success' => true,
+                'status' => 'cancel_hold_ok'
+            ];
+        }
+        $statuses['count'] = $count;
+        return $statuses;
+    }
+
+    /**
+     * Extract holdings for items from XML response
+     *
+     * @param $xml xml to process
+     *
+     * @return array
+     * @throws \VuFind\Exception\ILS
+     */
+    protected function extractHoldingInfoForItem($xml)
+    {
+        $locations = [];
+        $part = $xml->xpath('//pickup-locations');
+        if ($part) {
+            foreach ($part[0]->children() as $node) {
+                $arr = $node->attributes();
+                $code = (string)$arr['code'];
+                $loc_name = (string)$node;
+                $locations[$code] = $loc_name;
+            }
+        } else {
+            throw new ILSException('No pickup locations');
+        }
+        $requests = 0;
+        $str = $xml->xpath('//item/queue/text()');
+        if ($str != null) {
+            [$requests] = explode(' ', trim($str[0]));
+        }
+        $date = $xml->xpath('//last-interest-date/text()');
+        $date = $date[0];
+        $date = "" . substr($date, 6, 2) . "." . substr($date, 4, 2) . "."
+            . substr($date, 0, 4);
+        return [
+            'pickup-locations' => $locations,
+            'last-interest-date' => $date,
+            'order' => $requests + 1,
+        ];
+    }
+
+    /**
+     * Extract short loan info for items from XML response
+     *
+     * @param $xml xml to process
+     *
+     * @return array
+     * @throws \VuFind\Exception\ILS
+     */
+    protected function extractShortLoanInfoForItem($xml)
+    {
+        $shortLoanInfo = $xml->xpath("//item/info[@type='ShortLoan']");
+        $slots = [];
+        foreach ($shortLoanInfo[0]->{'short-loan'}->{'slot'} as $slot) {
+            $numOfItems = (int)$slot->{'num-of-items'};
+            $numOfOccupied = (int)$slot->{'num-of-occupied'};
+            $available = ($numOfItems - $numOfOccupied) > 0;
+            $startDate = $this->parseDate((string)$slot->{'start'}->{'date'});
+            $startTime = $slot->{'start'}->{'hour'};
+            $endTime = $slot->{'end'}->{'hour'};
+            $id = (string)$slot->attributes()->id[0];
+            if (!isset($slots[$startDate])) {
+                $slots[$startDate] = [];
+            }
+            $slots[$startDate][] = [
+                'slot' => $id,
+                'start_time' => $this->parseTime($startTime),
+                'end_time' => $this->parseTime($endTime),
+                'available' => $available,
+            ];
+        }
+        $result = [
+            'type'       => 'short',
+            'slots'      => $slots,
+        ];
+        return $result;
+    }
+
+    /**
+     * Parse a time.
+     *
+     * @param string $time time to parse
+     *
+     * @return string formatted time
+     */
+    protected function parseTime($time)
+    {
+        if (preg_match(self::TIME_FORMAT, $time) === 0) {
+            throw new \Exception("Invalid time: $time");
+        }
+        return substr($time, 0, 2) . ':'
+            . substr($time, 2, 2);
     }
 
     /**
