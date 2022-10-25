@@ -11,7 +11,26 @@ function showMap() {
   $('#map').css('height', '600px').removeClass('hidden');
 }
 
-function initialize(libraries) {
+function initialize(records) {
+  let libraries = [];
+  records.forEach(function forEachLibrary(lib) {
+    libraries.push(lib);
+    if (!lib.branches) {
+      return;
+    }
+    lib.branches.forEach(function forEachBranch(branch) {
+      if (!branch.coordinates) {
+        return;
+      }
+      libraries.push({
+        'id': lib.id,
+        'title': lib.title,
+        'branch_title': branch.title,
+        'address': [branch.address],
+        'coordinates': branch.coordinates,
+      });
+    });
+  });
   let mapCenter = { lat: 49.78, lng: 15.39 };
   let markers = [];
   let map = new google.maps.Map(document.getElementById('map'), {
@@ -32,13 +51,17 @@ function initialize(libraries) {
     ) {
       continue;
     }
-    let contentString = '<div id="content" class="marker-info">' +
-      '<div class="marker-title">' + library.title + '</div>' +
-      '<div class="marker-subtitle">' + library.address[0] + '</div>' +
-      '<div class="marker-link"><strong><a href="/LibraryRecord/' + library.id +
-      '">' + VuFind.translate('Library detail') + '</a></strong>' +
-    '</div>';
-    info[i] = new google.maps.InfoWindow({ content: contentString });
+    let content = $("<div/>", {id: "content", "class": "marker-info"});
+    if (library.branch_title) {
+      content.append($("<div/>").attr('class', 'marker-title')
+        .text(library.branch_title));
+    }
+    content.append($("<div/>").attr('class', 'marker-title').text(library.title));
+    content.append($("<div/>").attr('class', 'marker-subtitle').text(library.address[0]));
+    let link = $("<a/>").attr('href', '/LibraryRecord/' + library.id)
+      .text(VuFind.translate('Library detail'));
+    content.append($("<div/>").append($("<strong/>").attr('class', 'marker-link').append(link)));
+    info[i] = new google.maps.InfoWindow({ content: content.prop('outerHTML') });
 
     let marker = new google.maps.Marker({
       position: new google.maps.LatLng(library.coordinates.lat, library.coordinates.lng),

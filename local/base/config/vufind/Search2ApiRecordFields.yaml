@@ -84,6 +84,12 @@ coordinates:
   type: array
   items:
     type: string
+branches:
+  vufind.method: getBranches
+  description: branches
+  type: array
+  items:
+    type: string
 childRecordCount:
   vufind.method: getChildRecordCount
   description: Number of child records

@@ -302,6 +302,36 @@ class SolrLibrary extends \KnihovnyCz\RecordDriver\SolrMarc
     }
 
     /**
+     * Get branches
+     *
+     * @return array
+     */
+    public function getBranches()
+    {
+        $branches = $this->fields['branch_display_mv'] ?? [];
+        $result = [];
+        foreach ($branches as $branch) {
+            $fields = array_map('trim', explode('|', $branch));
+            $branch = [
+                'title'       => $fields[0],
+                'address'     => $fields[1],
+                'town'        => $fields[2] ?? null,
+                'gps_display' => $fields[3] ?? null,
+            ];
+            $coordinates = $fields[4] ?? null;
+            if ($coordinates != null) {
+                [$lat, $lng] = explode(' ', $coordinates);
+                $branch['coordinates'] = [
+                    "lat" => floatval($lat),
+                    "lng" => floatval($lng),
+                ];
+            }
+            $result[] = $branch;
+        }
+        return $result;
+    }
+
+    /**
      * Get facet value for library represented by this record
      *
      * @return string|null
@@ -331,7 +361,10 @@ class SolrLibrary extends \KnihovnyCz\RecordDriver\SolrMarc
         $gps = $this->fields['gps_display'] ?? '';
         $coords = [];
         if ($gps != '') {
-            [$coords['lat'], $coords['lng']] = explode(" ", $gps, 2);
+            [$coords['lat'], $coords['lng']] = array_map(
+                'floatval',
+                explode(" ", $gps, 2)
+            );
         }
         return $coords;
     }

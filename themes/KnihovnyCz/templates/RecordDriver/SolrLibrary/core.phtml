@@ -41,21 +41,70 @@
             <div id="map"></div>
             <?php
               $apiKey = $this->config()->get('config')->GoogleMaps->apikey;
-              $lat = $coords['lat'];
-              $lng = $coords['lng'];
+              $addresses = $this->driver->getLibraryAddress();
+              $address = !(empty($addresses))? $addresses[0] : null;
+              $coordinates = [
+                  [
+                      'title' => $this->driver->getTitle(),
+                      'address' => $address,
+                      'lng' => $coords['lng'],
+                      'lat' => $coords['lat'],
+                  ]
+              ];
+              foreach ($this->driver->tryMethod('getBranches', []) as $branch) {
+                  if (isset($branch['coordinates']) && !empty($branch['coordinates'])) {
+                      $coordinates[] = [
+                          'title' => $branch['title'],
+                          'address' => $branch['address'] ?? null,
+                          'lng' => $branch['coordinates']['lng'],
+                          'lat' => $branch['coordinates']['lat'],
+                      ];
+                  }
+              }
+              $coordinates = json_encode($coordinates);
               $initMap = <<<JS
                 function initMap() {
-                  var myLatLng = {lat: 49.78, lng: 15.39};
+                  var coordinates = $coordinates;
+                  var info = [];
+                  var myLatLng = {lat: coordinates[0].lat, lng: coordinates[0].lng};
                   var map = new google.maps.Map(document.getElementById('map'), {
-                    zoom: 7,
+                    zoom: 10,
                     center: myLatLng
                   });
-                  var position = { lat: $lat, lng: $lng };
-                  var marker = new google.maps.Marker({
-                    position: position,
-                    map: map,
-                    title: 'name of library'
+                  var bounds = new google.maps.LatLngBounds();
+                  coordinates.forEach(function forEachCoord(coord, index){
+                    var position = new google.maps.LatLng(coord.lat, coord.lng);
+                    bounds.extend(position);
+                    var marker = new google.maps.Marker({
+                      position: position,
+                      map: map,
+                      title: 'name of library'
+                    });
+                    var content = $("<div/>", {id: "content", "class": "marker-info"});
+                    content.append($("<div/>").attr('class', 'marker-title')
+                      .text(coord.title));
+                    if (coord.address != null) {
+                      content.append($("<div/>").attr('class', 'marker-subtitle')
+                        .text(coord.address));
+                    }
+                    info[index] = new google.maps.InfoWindow({ content: content.prop('outerHTML') });
+                    if (index > 0) {
+                      marker.setIcon("http://maps.google.com/mapfiles/ms/icons/blue-dot.png");
+                    }
+                    marker.addListener("click", () => {
+                      let isMap = info[index].getMap();
+                      info.forEach(function closeInfoWindows(infoWindow) {
+                        infoWindow.close();
+                      });
+                      if (!isMap) {
+                        info[index].open(map, marker);
+                      }
+                    });
                   });
+                  if (coordinates.length > 1) {
+                    map.fitBounds(bounds);
+                    map.panToBounds(bounds);
+                  }
                 }
 JS;
             $googleMapsScript = "https://maps.googleapis.com/maps/api/js?key=" . $this->escapeUrl($apiKey) . "&callback=initMap";
