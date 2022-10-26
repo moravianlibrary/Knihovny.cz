@@ -28,6 +28,7 @@
  */
 namespace KnihovnyCz\ILS\Driver;
 
+use KnihovnyCz\Date\Converter as DateConverter;
 use KnihovnyCz\Db\Table\InstConfigs;
 use KnihovnyCz\Db\Table\InstSources;
 use KnihovnyCz\ILS\Service\SolrIdResolver;
@@ -69,14 +70,22 @@ class MultiBackend extends \VuFind\ILS\Driver\MultiBackend
     protected SolrIdResolver $idResolver;
 
     /**
+     * Date converter object
+     *
+     * @var \KnihovnyCz\Date\Converter
+     */
+    protected $dateConverter = null;
+
+    /**
      * Constructor
      *
-     * @param ConfigManager    $configLoader Configuration loader
-     * @param ILSAuthenticator $ilsAuth      ILS authenticator
-     * @param PluginManager    $dm           ILS driver manager
-     * @param InstConfigs      $instConfigs  Instances configurations
-     * @param InstSources      $instSources  Instances names
-     * @param SolrIdResolver   $idResolver   Id resolver
+     * @param ConfigManager    $configLoader  Configuration loader
+     * @param ILSAuthenticator $ilsAuth       ILS authenticator
+     * @param PluginManager    $dm            ILS driver manager
+     * @param InstConfigs      $instConfigs   Instances configurations
+     * @param InstSources      $instSources   Instances names
+     * @param SolrIdResolver   $idResolver    Id resolver
+     * @param DateConverter    $dateConverter Date converter
      */
     public function __construct(
         ConfigManager $configLoader,
@@ -84,11 +93,13 @@ class MultiBackend extends \VuFind\ILS\Driver\MultiBackend
         PluginManager $dm,
         InstConfigs $instConfigs,
         InstSources $instSources,
-        SolrIdResolver $idResolver
+        SolrIdResolver $idResolver,
+        DateConverter $dateConverter
     ) {
         $this->instConfigs = $instConfigs;
         $this->instSources = $instSources;
         $this->idResolver = $idResolver;
+        $this->dateConverter = $dateConverter;
         parent::__construct($configLoader, $ilsAuth, $dm);
     }
 
@@ -203,6 +214,26 @@ class MultiBackend extends \VuFind\ILS\Driver\MultiBackend
         $srrs = parent::getMyStorageRetrievalRequests($patron);
         $data = array_merge($holds, $srrs);
         return $this->resolveIds($data, $patron);
+    }
+
+    /**
+     * Get Patron Profile
+     *
+     * This is responsible for retrieving the profile for a specific patron.
+     *
+     * @param array $patron The patron array
+     *
+     * @return mixed Array of the patron's profile data
+     */
+    public function getMyProfile($patron)
+    {
+        $profile = parent::getMyProfile($patron);
+        if (isset($profile['expiration_date'])
+            && $this->isExpired($profile['expiration_date'])
+        ) {
+            $profile['expired'] = true;
+        }
+        return $profile;
     }
 
     /**
@@ -348,5 +379,22 @@ class MultiBackend extends \VuFind\ILS\Driver\MultiBackend
     {
         $config = $this->getDriverConfig($this->getSource($recordId));
         return $config['Catalog']['ils_type'] ?? '';
+    }
+
+    /**
+     * Return if the date is in the past, used for checking expired checked
+     * out items or registrations.
+     *
+     * @param string $date Expiration date
+     *
+     * @return bool is expired
+     */
+    protected function isExpired(string $date): bool
+    {
+        if ($expire = $this->dateConverter->parseDisplayDate($date)) {
+            $dateDiff = $expire->diff(new \DateTime());
+            return $dateDiff->invert == 0 && $dateDiff->days > 0;
+        }
+        return false;
     }
 }

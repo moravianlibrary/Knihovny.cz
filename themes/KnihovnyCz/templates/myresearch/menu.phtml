@@ -83,6 +83,7 @@
   <a href="<?=$this->url('myresearch-profile')?>"<?=$this->active == 'profile' ? ' class="active"' : ''?>>
     <?=$this->icon('profile') ?>
     <?=$this->transEsc('Profile')?>
+    <span class="profile-status status hidden"><?=$this->icon('spinner') ?></span>
   </a>
   <?php if ($ilsOnline && $user && $user->libraryCardsEnabled()): ?>
     <a href="<?=$this->url('librarycards-home')?>"<?=$this->active == 'librarycards' ? ' class="active"' : ''?>>

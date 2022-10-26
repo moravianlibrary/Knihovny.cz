@@ -138,7 +138,8 @@ class MultiBackendTest extends \PHPUnit\Framework\TestCase
             $sm ?? $this->getMockSM(),
             $this->getMockInstConfigs(),
             $this->getMockInstSources(),
-            $this->getMockSolrIdResolver()
+            $this->getMockSolrIdResolver(),
+            new \KnihovnyCz\Date\Converter()
         );
         $config = [
             'Drivers' => [],

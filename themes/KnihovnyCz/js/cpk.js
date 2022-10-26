@@ -421,3 +421,21 @@ jQuery(document).ready(function coverImageLoadError($) {
     $(this).hide();
   });
 });
+
+$(document).ready(function registerAccountAjax() {
+  VuFind.account.register("profile", {
+    selector: ".profile-status",
+    ajaxMethod: "getUserProfile",
+    render: function render($element, status, ICON_LEVELS) {
+      if (status.expired === false) {
+        $element.addClass("hidden");
+        return ICON_LEVELS.NONE;
+      }
+      $element.html('<span class="badge account-alert">!</span>');
+      return ICON_LEVELS.DANGER;
+    },
+    updateNeeded: function updateNeeded(currentStatus, status) {
+      return status.expired !== currentStatus.expired;
+    }
+  });
+});
