@@ -1,11 +1,10 @@
 <?php
-
 /**
- * Class MultiBackendFactory
+ * Factory for AbstractIlsAndUserAction AJAX handlers.
  *
  * PHP version 7
  *
- * Copyright (C) Moravian Library 2020.
+ * Copyright (C) Moravian Library 2022.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -21,29 +20,29 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  *
  * @category VuFind
- * @package  KnihovnyCz\ILS\Driver
- * @author   Josef Moravec <moravec@mzk.cz>
- * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
- * @link     https://knihovny.cz Main Page
+ * @package  KnihovnyCz\AjaxHandler
+ * @author   Vaclav Rosecky <vaclav.rosecky@mzk.cz>
+ * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
+ * @link     https://vufind.org/wiki/development Wiki
  */
-namespace KnihovnyCz\ILS\Driver;
+namespace KnihovnyCz\AjaxHandler;
 
 use Laminas\ServiceManager\Exception\ServiceNotCreatedException;
 use Laminas\ServiceManager\Exception\ServiceNotFoundException;
-use Laminas\ServiceManager\Factory\FactoryInterface;
 use Psr\Container\ContainerExceptionInterface as ContainerException;
 use Psr\Container\ContainerInterface;
 
 /**
- * Factory for MultiBackend ILS driver.
+ * Factory for AbstractIlsAndUserAction AJAX handlers.
  *
  * @category VuFind
- * @package  ILS_Drivers
- * @author   Demian Katz <demian.katz@villanova.edu>
+ * @package  KnihovnyCz\AjaxHandler
+ * @author   Vaclav Rosecky <vaclav.rosecky@mzk.cz>
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://vufind.org/wiki/development Wiki
  */
-class MultiBackendFactory implements FactoryInterface
+class AbstractIlsAndUserActionFactory
+    implements \Laminas\ServiceManager\Factory\FactoryInterface
 {
     /**
      * Create an object
@@ -57,25 +56,21 @@ class MultiBackendFactory implements FactoryInterface
      * @throws ServiceNotFoundException if unable to resolve the service.
      * @throws ServiceNotCreatedException if an exception is raised when
      * creating a service.
-     * @throws ContainerException if any other error occurs
+     * @throws ContainerException&\Throwable if any other error occurs
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __invoke(
         ContainerInterface $container,
         $requestedName,
         array $options = null
     ) {
-        if (!empty($options)) {
-            throw new \Exception('Unexpected options passed to factory.');
-        }
-        $tableManager = $container->get(\VuFind\Db\Table\PluginManager::class);
         return new $requestedName(
-            $container->get(\VuFind\Config\PluginManager::class),
+            $container->get(\VuFind\Session\Settings::class),
+            $container->get(\KnihovnyCz\ILS\MultiConnection::class),
             $container->get(\VuFind\Auth\ILSAuthenticator::class),
-            $container->get(\VuFind\ILS\Driver\PluginManager::class),
-            $tableManager->get(\KnihovnyCz\Db\Table\InstConfigs::class),
-            $tableManager->get(\KnihovnyCz\Db\Table\InstSources::class),
-            $container->get(\KnihovnyCz\ILS\Service\SolrIdResolver::class),
-            $container->get(\KnihovnyCz\Date\Converter::class)
+            $container->get(\VuFind\Auth\Manager::class)->isLoggedIn(),
+            ...($options ?: [])
         );
     }
 }

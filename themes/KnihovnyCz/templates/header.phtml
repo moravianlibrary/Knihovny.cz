@@ -58,6 +58,13 @@
                   <?=$this->render('myresearch/menu'); ?>
                 </div>
               </li>
+            <?php else: ?>
+              <div class="hidden">
+                <span class="checkedout-status status hidden"><?=$this->icon('spinner') ?></span>
+                <span class="holds-status status hidden"><?=$this->icon('spinner') ?></span>
+                <span class="fines-status status hidden"><?=$this->icon('spinner') ?></span>
+                <span class="profile-status status hidden"><?=$this->icon('spinner') ?></span>
+              </div>
             <?php endif; ?>
             <li class="logoutOptions<?php if(!$account->isLoggedIn()): ?> hidden<?php endif ?>">
               <a href="<?=$this->url('myresearch-logout')?>" class="logout">

@@ -178,8 +178,8 @@ class MyResearchController extends MyResearchControllerBase
         }
         if ($view instanceof \Laminas\View\Model\ViewModel) {
             if (isset($view->profile)
-                && isset($view->profile['expiration_date'])
-                && $this->isExpired($view->profile['expiration_date'])
+                && isset($view->profile['expired'])
+                && $view->profile['expired']
             ) {
                 $this->flashMessenger()->addErrorMessage(
                     'library_card_expirated_warning'

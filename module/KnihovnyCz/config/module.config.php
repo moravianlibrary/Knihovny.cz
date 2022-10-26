@@ -439,6 +439,10 @@ $config = [
                     \KnihovnyCz\AjaxHandler\HarvestWidgetsContents::class => \KnihovnyCz\AjaxHandler\HarvestWidgetsContentsFactory::class,
                     \KnihovnyCz\AjaxHandler\Sfx::class => \KnihovnyCz\AjaxHandler\SfxFactory::class,
                     \KnihovnyCz\AjaxHandler\SaveInstitutionFilter::class => \KnihovnyCz\AjaxHandler\SaveInstitutionFilterFactory::class,
+                    \VuFind\AjaxHandler\GetUserTransactions::class => \KnihovnyCz\AjaxHandler\AbstractIlsAndUserActionFactory::class,
+                    \VuFind\AjaxHandler\GetUserHolds::class => \KnihovnyCz\AjaxHandler\AbstractIlsAndUserActionFactory::class,
+                    \VuFind\AjaxHandler\GetUserFines::class => \KnihovnyCz\AjaxHandler\GetUserFinesFactory::class,
+                    \KnihovnyCz\AjaxHandler\GetUserProfile::class => \KnihovnyCz\AjaxHandler\AbstractIlsAndUserActionFactory::class,
                 ],
                 'aliases' => [
                     'edd' => \KnihovnyCz\AjaxHandler\Edd::class,
@@ -450,6 +454,7 @@ $config = [
                     'harvestWidgetsContents' => \KnihovnyCz\AjaxHandler\HarvestWidgetsContents::class,
                     'sfx' => \KnihovnyCz\AjaxHandler\Sfx::class,
                     'saveInstitutionFilter' => \KnihovnyCz\AjaxHandler\SaveInstitutionFilter::class,
+                    'getUserProfile' => \KnihovnyCz\AjaxHandler\GetUserProfile::class,
                 ],
             ],
             'related' => [
@@ -550,6 +555,7 @@ $config = [
             \KnihovnyCz\Service\GuzzleHttpService::class => \KnihovnyCz\Service\GuzzleHttpServiceFactory::class,
             \KnihovnyCz\Validator\DatabaseCsrf::class => \KnihovnyCz\Validator\DatabaseCsrfFactory::class,
             \KnihovnyCz\ILS\Connection::class => \VuFind\ILS\ConnectionFactory::class,
+            \KnihovnyCz\ILS\MultiConnection::class => \KnihovnyCz\ILS\MultiConnectionFactory::class,
             \KnihovnyCz\Date\Converter::class => \VuFind\Service\DateConverterFactory::class,
             \KnihovnyCz\Record\Loader::class => \KnihovnyCz\Record\LoaderFactory::class,
             \KnihovnyCz\Search\SearchRunner::class => \VuFind\Search\SearchRunnerFactory::class,

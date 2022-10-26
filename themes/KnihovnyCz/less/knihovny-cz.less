@@ -805,6 +805,30 @@ body.ziskej-mode-dev {
 
 .myresearch-menu .status {
   font-weight: bold;
+
+  .badge {
+    border-radius: 2px;
+    margin: 0 2px;
+    border: 1px solid; /* color inherited from bootstrap */
+    height: 20px;
+
+    &.account-none {
+      color: @gray-dark;
+      background-color: @gray-lighter;
+    }
+    &.account-info {
+      color: @gray-dark;
+      background-color: @gray-lighter;
+    }
+    &.account-warning {
+      color: @gray-dark;
+      background-color: @gray-lighter;
+    }
+    &.account-alert {
+      color: @gray-dark;
+      background-color: @gray-lighter;
+    }
+  }
 }
 
 .result {
