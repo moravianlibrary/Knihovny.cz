@@ -57,6 +57,13 @@ class Params extends \VuFind\Search\Solr\Params
     protected $boostFunctions = [];
 
     /**
+     * Array of array parameters
+     *
+     * @var array
+     */
+    protected $jsonFacets = [];
+
+    /**
      * Constructor
      *
      * @param \VuFind\Search\Base\Options  $options      Options to use
@@ -85,6 +92,13 @@ class Params extends \VuFind\Search\Solr\Params
         foreach ($this->boostFunctions as $func) {
             $backendParams->add('boost', $func);
         }
+        $jsonFacet = [];
+        foreach ($this->jsonFacets as $field => $parameters) {
+            $jsonFacet[$field] = $parameters;
+        }
+        if (!empty($jsonFacet)) {
+            $backendParams->add('json.facet', json_encode($jsonFacet));
+        }
         return $backendParams;
     }
 
@@ -98,6 +112,19 @@ class Params extends \VuFind\Search\Solr\Params
     public function addBoostFunction($function)
     {
         $this->boostFunctions[] = $function;
+    }
+
+    /**
+     * Add json facet to Solr query
+     *
+     * @param string $field      field to facet on
+     * @param array  $parameters parameters
+     *
+     * @return void
+     */
+    public function addJsonFacet($field, $parameters)
+    {
+        $this->jsonFacets[$field] = $parameters;
     }
 
     /**

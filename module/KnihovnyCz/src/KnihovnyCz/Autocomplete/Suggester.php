@@ -141,10 +141,12 @@ class Suggester implements \VuFind\I18n\Translator\TranslatorAwareInterface
      */
     protected function getTypes($type)
     {
-        if ($type != 'AllFields') {
-            return [ $type ];
-        } else {
+        if ($type == 'AllFields') {
             return ['Title', 'Author', 'Subject'];
+        } elseif ($type == 'AllLibraries') {
+            return ['Name', 'Town'];
+        } else {
+            return [ $type ];
         }
     }
 
