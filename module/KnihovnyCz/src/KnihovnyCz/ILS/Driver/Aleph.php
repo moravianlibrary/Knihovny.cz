@@ -73,6 +73,9 @@ class Aleph extends AlephBase implements TranslatorAwareInterface
         if ($func == 'getMyShortLoans') {
             return [];
         }
+        if ($func == 'getMyPaymentLink') {
+            return [];
+        }
         return parent::getConfig($func, $params);
     }
 
@@ -93,6 +96,10 @@ class Aleph extends AlephBase implements TranslatorAwareInterface
         // Short loans are only available if properly configured
         if ($method == 'getMyShortLoans') {
             return !empty($this->config['ShortLoan']['enabled']);
+        }
+        // Short loans are only available if properly configured
+        if ($method == 'getMyPaymentLink') {
+            return !empty($this->config['Payment']['url']);
         }
         return parent::supportsMethod($method, $params);
     }
@@ -605,6 +612,31 @@ class Aleph extends AlephBase implements TranslatorAwareInterface
         }
         $statuses['count'] = $count;
         return $statuses;
+    }
+
+    /**
+     * Return link to pay all fines
+     *
+     * @param array $patron patron
+     * @param int   $fine   fine to pay
+     *
+     * @return string
+     */
+    public function getMyPaymentLink($patron, $fine)
+    {
+        $paymentUrl  = $this->config['Payment']['url'] ?? null;
+        if ($paymentUrl == null) {
+            return null;
+        }
+        $params = [
+            'id'     => $patron['id'],
+            'adm'    => $this->useradm,
+            'amount' => $fine,
+            'time'   => time(),
+        ];
+        $query = http_build_query($params);
+        $url = $paymentUrl . '?' . $query;
+        return $url;
     }
 
     /**

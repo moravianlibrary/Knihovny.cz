@@ -146,4 +146,24 @@ class Connection extends ConnectionBase
         }
         return false;
     }
+
+    /**
+     * Check PaymentLink
+     *
+     * A support method for checkFunction(). This is responsible for checking
+     * the driver configuration to determine if the system supports PaymentLink.
+     *
+     * @param array $functionConfig The Hold configuration values
+     * @param array $params         An array of function-specific params (or null)
+     *
+     * @return mixed On success, an associative array with specific function keys
+     * and values either for placing holds via a form or a URL; on failure, false.
+     */
+    protected function checkMethodgetMyPaymentLink($functionConfig, $params)
+    {
+        if (parent::checkCapability('getMyPaymentLink', [$params ?: []])) {
+            return true;
+        }
+        return false;
+    }
 }

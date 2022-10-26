@@ -79,4 +79,9 @@
       <td><?=$this->safeMoneyFormat($totalDue / 100.00) ?></td>
     </tr>
   </table>
+  <?php if (isset($this->paymentLink)):?>
+    <a href="<?=$this->paymentLink?>" class="btn btn-primary">
+      <?=$this->transEsc('online_payment_fine_link_text')?>
+    </a>
+  <?php endif; ?>
 <?php endif; ?>
