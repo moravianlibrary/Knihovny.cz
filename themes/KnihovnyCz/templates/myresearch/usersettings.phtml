@@ -21,7 +21,7 @@
 
     <div class="form-group">
       <?php if (!empty($this->recordsPerPage['values'])): ?>
-        <label for="recordsPerPage"><?=$this->transEsc('Results per page')?></label>
+        <label for="recordsPerPage"><?=$this->transEsc('Results per page setting')?></label>
         <select id="recordsPerPage" name="recordsPerPage" class="jumpMenu form-control">
           <?php foreach ($this->recordsPerPage['values'] as $limit): ?>
             <option value="<?=$this->escapeHtmlAttr($limit)?>"<?=$limit == $this->recordsPerPage['selected']?' selected="selected"':''?>><?=$this->escapeHtml($limit)?></option>
