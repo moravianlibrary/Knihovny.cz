@@ -478,9 +478,11 @@ $config = [
             'search_params' => [
                 'factories' => [
                     \KnihovnyCz\Search\Solr\Params::class => \KnihovnyCz\Search\Solr\ParamsFactory::class,
+                    \KnihovnyCz\Search\Search2\Params::class => \KnihovnyCz\Search\Solr\ParamsFactory::class,
                 ],
                 'aliases' => [
                     \VuFind\Search\Solr\Params::class => \KnihovnyCz\Search\Solr\Params::class,
+                    \VuFind\Search\Search2\Params::class => \KnihovnyCz\Search\Search2\Params::class,
                 ]
             ],
             'search_results' => [
@@ -494,9 +496,11 @@ $config = [
             'autocomplete' => [
                 'factories' => [
                     \KnihovnyCz\Autocomplete\SolrPrefix::class => \VuFind\Autocomplete\SolrFactory::class,
+                    \KnihovnyCz\Autocomplete\SolrPrefixSorted::class => \VuFind\Autocomplete\SolrFactory::class,
                 ],
                 'aliases' => [
                     'solrprefix' => \KnihovnyCz\Autocomplete\SolrPrefix::class,
+                    'solrprefixsorted' => \KnihovnyCz\Autocomplete\SolrPrefixSorted::class,
                 ]
             ],
             'recommend' => [

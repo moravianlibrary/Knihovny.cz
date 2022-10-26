@@ -48,6 +48,7 @@ class SolrPrefix extends \VuFind\Autocomplete\SolrPrefix
      */
     public function __construct(\VuFind\Search\Results\PluginManager $results)
     {
+        parent::__construct($results);
         $this->resultsManager = $results;
         $this->limit = 30;
     }
@@ -67,6 +68,27 @@ class SolrPrefix extends \VuFind\Autocomplete\SolrPrefix
         $result = parent::getSuggestions($query);
         $result = $this->filter($query, $result);
         return array_splice($result, 0, 10);
+    }
+
+    /**
+     * Set configuration
+     *
+     * Set parameters that affect the behavior of the autocomplete handler.
+     * These values normally come from the search configuration file.
+     *
+     * @param string $params Parameters to set
+     *
+     * @return void
+     */
+    public function setConfig($params)
+    {
+        $configFields = explode(':', $params, 3);
+        $this->autocompleteField = $configFields[0];
+        $this->facetField = $configFields[1];
+        if (count($configFields) > 2) {
+            $this->searchClassId = $configFields[2];
+        }
+        $this->initSearchObject();
     }
 
     /**
