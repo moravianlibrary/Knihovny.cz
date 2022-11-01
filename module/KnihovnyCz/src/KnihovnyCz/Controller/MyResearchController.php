@@ -203,6 +203,16 @@ class MyResearchController extends MyResearchControllerBase
                     'library_card_expirated_warning'
                 );
             }
+            $catalog = $this->getILS();
+            $patron = $this->catalogLogin();
+            $functionConfig = $catalog->checkFunction(
+                'getMyProlongRegistrationLink',
+                $patron
+            );
+            if ($functionConfig !== false) {
+                $view->prolongRegistrationLink = $catalog
+                    ->getMyProlongRegistrationLink($patron);
+            }
         } else {
             $view = $this->createViewModel(
                 [
@@ -507,12 +517,39 @@ class MyResearchController extends MyResearchControllerBase
                 ->addErrorMessage('online_payment_fine_proceed_nok');
             break;
         case 'error':
+        default:
             $this->flashMessenger()
                 ->addErrorMessage('online_payment_fine_proceed_error');
             break;
 
         }
         return $this->redirect()->toRoute('myresearch-fines');
+    }
+
+    /**
+     * Action for finished payment of registration prolongation
+     *
+     * @return mixed
+     */
+    public function prolongationPaymentAction()
+    {
+        $status = $this->params()->fromQuery('status');
+        switch ($status) {
+        case 'ok':
+            $this->flashMessenger()
+                ->addInfoMessage('online_prolongation_payment_ok');
+            break;
+        case 'nok':
+            $this->flashMessenger()
+                ->addErrorMessage('online_prolongation_payment_nok');
+            break;
+        case 'error':
+        default:
+            $this->flashMessenger()
+                ->addErrorMessage('online_prolongation_payment_error');
+            break;
+        }
+        return $this->redirect()->toRoute('myresearch-profile');
     }
 
     /**

@@ -53,6 +53,7 @@ class Aleph extends AlephBase implements TranslatorAwareInterface
         '/^[0-9]+\/[A-Za-z]{3}\/[0-9]{2}$/' => 'd/M/y',
         '/^[0-9]+\/[0-9]+\/[0-9]{4}$/' => 'd/m/Y',
         '/^[0-9]+\/[0-9]+\/[0-9]{2}$/' => 'd/m/y',
+        '/^[0-9]+\. [0-9]+\. [0-9]{4}$/' => 'd. m. Y',
     ];
 
     protected const TIME_FORMAT = '/^[0-2][0-9][0-6][0-9]$/';
@@ -100,6 +101,9 @@ class Aleph extends AlephBase implements TranslatorAwareInterface
         // Short loans are only available if properly configured
         if ($method == 'getMyPaymentLink') {
             return !empty($this->config['Payment']['url']);
+        }
+        if ($method == 'getMyProlongRegistrationLink') {
+            return !empty($this->config['ProlongRegistration']['url']);
         }
         return parent::supportsMethod($method, $params);
     }
@@ -636,6 +640,43 @@ class Aleph extends AlephBase implements TranslatorAwareInterface
         ];
         $query = http_build_query($params);
         $url = $paymentUrl . '?' . $query;
+        return $url;
+    }
+
+    /**
+     * Get link for prolonging of registration
+     *
+     * @param array $patron patron
+     *
+     * @return string
+     */
+    public function getMyProlongRegistrationLink($patron)
+    {
+        $url = $this->config['ProlongRegistration']['url'] ?? null;
+        if ($url == null) {
+            return null;
+        }
+        $status = $this->config['ProlongRegistration']['status'] ?? '03';
+        $from = $this->config['ProlongRegistration']['from'] ?? 'cpk';
+        $hmac = $this->config['ProlongRegistration']['hmac'] ?? null;
+        $expire = $this->dateConverter->parseDisplayDate(
+            $this->parseDate($patron['expiration_date'])
+        );
+        $dateDiff = date_diff(date_create(), $expire);
+        $daysDiff =  (($dateDiff->invert == 0) ? 1 : -1) * $dateDiff->days;
+        if ($daysDiff > 31) {
+            return null;
+        }
+        $hash = hash_hmac('sha256', $patron['id'], $hmac, true);
+        $hash = base64_encode($hash);
+        $params = [
+            'id'           => $patron['id'],
+            'status_cten'  => $status,
+            'from'         => 'cpk',
+            'hmac'         => $hash,
+        ];
+        $query = http_build_query($params);
+        $url = $url . '?' . $query;
         return $url;
     }
 
