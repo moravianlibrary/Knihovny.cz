@@ -133,10 +133,28 @@ class MyResearchController extends MyResearchControllerBase
             $view = $this->createViewModel();
             $this->showException($ex);
         }
-        if (!($view instanceof ViewModel)) {
+        if ($view instanceof ViewModel) {
+            // Check function config
+            $catalog = $this->getILS();
+            $patron = $this->catalogLogin();
+            $functionConfig = $catalog->checkFunction(
+                'getMyPaymentLink',
+                $patron
+            );
+            if ($functionConfig !== false && !empty($view->fines)) {
+                $totalDue = 0;
+                foreach ($view->fines as $fine) {
+                    $totalDue += $fine['balance'] ?? 0;
+                }
+                if ($totalDue < 0) {
+                    $view->paymentLink = $catalog
+                        ->getMyPaymentLink($patron, -1 * $totalDue);
+                }
+            }
+        } else {
             $view = $this->createViewModel(
                 [
-                'error' => 'ils_offline_home_message'
+                    'error' => 'ils_offline_home_message'
                 ]
             );
         }
@@ -479,6 +497,32 @@ class MyResearchController extends MyResearchControllerBase
         $view->setTemplate('myresearch/shortloans-ajax');
         $result = $this->getViewRenderer()->render($view);
         return $this->getAjaxResponse('text/html', $result, null);
+    }
+
+    /**
+     * Action for finished payment
+     *
+     * @return mixed
+     */
+    public function finesPaymentAction()
+    {
+        $status = $this->getRequest()->getQuery('status');
+        switch ($status) {
+        case 'ok':
+            $this->flashMessenger()
+                ->addInfoMessage('online_payment_fine_proceed_ok');
+            break;
+        case 'nok':
+            $this->flashMessenger()
+                ->addErrorMessage('online_payment_fine_proceed_nok');
+            break;
+        case 'error':
+            $this->flashMessenger()
+                ->addErrorMessage('online_payment_fine_proceed_error');
+            break;
+
+        }
+        return $this->redirect()->toRoute('myresearch-fines');
     }
 
     /**

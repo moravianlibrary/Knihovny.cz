@@ -200,3 +200,13 @@ INSERT INTO `inst_sections` (`section_name`) VALUES('ShortLoanLinks');
 INSERT INTO `inst_keys` (`key_name`, `section_id`) VALUES ('MZK01-000680703', (SELECT `id` FROM `inst_sections` WHERE `section_name` = 'ShortLoanLinks'));
 SELECT @study_room_id := LAST_INSERT_ID();
 INSERT INTO inst_configs (source_id, key_id, value, timestamp) VALUES (@mzk_source_id, @study_room_id, 'Team study room', NOW());
+
+-- #166: online payments
+INSERT INTO `inst_sections` (`section_name`) VALUES('Payment');
+INSERT INTO `inst_keys` (`key_name`, `section_id`)
+  VALUES ('url', (SELECT `id` FROM `inst_sections` WHERE `section_name` = 'Payment'));
+SELECT @payment_link := LAST_INSERT_ID();
+SET @mzk_source_id = (SELECT id FROM inst_sources WHERE source = 'mzk');
+INSERT INTO inst_configs (source_id, key_id, value, timestamp)
+  VALUES (@mzk_source_id, @payment_link, 'https://aleph.mzk.cz/cgi-bin/c-gpe1-vufind.pl', NOW());
+UPDATE `system` SET `value` = '109' WHERE `key`='DB_VERSION';
