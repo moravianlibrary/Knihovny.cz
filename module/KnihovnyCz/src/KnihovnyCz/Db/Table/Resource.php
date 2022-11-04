@@ -32,7 +32,7 @@ use Laminas\Db\Sql\Expression;
 use Laminas\Db\Sql\Select;
 
 /**
- * Class User
+ * Class Resource
  *
  * @category VuFind
  * @package  KnihovnyCz\Db\Table
@@ -42,6 +42,20 @@ use Laminas\Db\Sql\Select;
  */
 class Resource extends \VuFind\Db\Table\Resource
 {
+    protected const SORT_FIELDS = [
+        'author' => 'author_sort',
+    ];
+
+    /**
+     * Return all resources.
+     *
+     * @return \Laminas\Db\ResultSet\AbstractResultSet
+     */
+    public function findAll()
+    {
+        return $this->select();
+    }
+
     /**
      * Get a set of records from the requested favorite list.
      *
@@ -143,6 +157,12 @@ class Resource extends \VuFind\Db\Table\Resource
             // to sort null values to the bottom:
             $parts = explode(' ', $sort);
             $rawField = trim($parts[0]);
+            if (($sortField = self::SORT_FIELDS[$rawField] ?? null) != null) {
+                $sort = $rawField = $sortField;
+                if (isset($parts[1])) {
+                    $sort .= ' ' . $parts[1];
+                }
+            }
 
             // Start building the list of sort fields:
             $order = [];

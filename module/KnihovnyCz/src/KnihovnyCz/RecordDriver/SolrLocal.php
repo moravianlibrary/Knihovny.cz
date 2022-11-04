@@ -58,6 +58,20 @@ class SolrLocal extends \KnihovnyCz\RecordDriver\SolrMarc
     }
 
     /**
+     * Get the main author of the record for sorting purposes.
+     *
+     * @return string
+     */
+    public function getPrimaryAuthorForSorting()
+    {
+        $parent = $this->getParentRecord();
+        if ($parent != null) {
+            return $parent->tryMethod('getPrimaryAuthorForSorting');
+        }
+        return null;
+    }
+
+    /**
      * Get an array of information about record holdings, obtained in real-time
      * from the ILS.
      *

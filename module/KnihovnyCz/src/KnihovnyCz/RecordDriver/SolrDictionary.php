@@ -71,7 +71,7 @@ class SolrDictionary extends \KnihovnyCz\RecordDriver\SolrMarc
      *
      * @return string
      */
-    public function getTitle()
+    public function getTitle(): string
     {
         return $this->fields['title'] ?? '';
     }

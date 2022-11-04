@@ -434,3 +434,6 @@ SELECT `vufind`.`ratings`.`id` AS `id`,
 FROM `vufind`.`ratings`;
 
 UPDATE `system` SET `value` = '115' WHERE `key`='DB_VERSION';
+
+ALTER TABLE `resource` ADD COLUMN author_sort VARCHAR(255) COLLATE 'utf8mb4_czech_ci' NULL AFTER `author`;
+UPDATE `system` SET `value` = '116' WHERE `key`='DB_VERSION';
