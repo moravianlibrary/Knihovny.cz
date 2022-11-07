@@ -13,6 +13,7 @@ USAGE: $name [-b branch] [-c directory_name]
   -c            Config directory to use, aka view name. Defaults to knihovny.cz
   -t            Build type - devel, deploy, local, tech. Defaults to 'devel'
   -l            Enable shibboleth login [true|false], default enabled
+  -p            Port - defaults to automatic detection - takes first available from 10000 to 10009 for standard build, 10010 to 10019 for disabled shibboleth
   --help|-h     Print usage
 
 EOF
@@ -22,6 +23,7 @@ branch="master"
 config_dir=""
 shib_login="true"
 type="devel"
+port=0
 while true ; do
     case "$1" in
         -b)
@@ -52,6 +54,13 @@ while true ; do
                    shib_login=$2
                    shift 2 ;;
             esac ;;
+        -p)
+            case "$2" in
+                "") shift 2 ;;
+                *) echo "Processing argument: $1 = $2";
+                   port=$2
+                   shift 2 ;;
+            esac ;;
         --help|-h)
             print_usage;
             exit 0;;
@@ -59,24 +68,31 @@ while true ; do
     esac
 done
 
-port=0
-port_start=10000
-port_end=10009
-if [ "$shib_login" == "false" ]; then
-    port_start=10010
-    port_end=10019
-fi
-for i in $(seq "$port_start" "$port_end"); do
-    docker_port=$((i+10000));
-    if ! netstat -ln | grep ":$docker_port " | grep -q 'LISTEN'; then
-        port=$i
-        break
+if [ "$port" != "0" ]; then
+    docker_port=$(($port+10000))
+    if netstat -ln | grep ":$docker_port " | grep -q 'LISTEN'; then
+        echo "Port $port is already in use, exiting"
+        exit 1
     fi
-done
+else
+    port_start=10000
+    port_end=10009
+    if [ "$shib_login" == "false" ]; then
+        port_start=10010
+        port_end=10019
+    fi
+    for i in $(seq "$port_start" "$port_end"); do
+        docker_port=$((i+10000));
+        if ! netstat -ln | grep ":$docker_port " | grep -q 'LISTEN'; then
+            port=$i
+            break
+        fi
+    done
 
-if [ $port = 0 ]; then
-    echo "No free available port"
-    exit 1
+    if [ $port = 0 ]; then
+        echo "No free available port"
+        exit 1
+    fi
 fi
 
 if [ ! -z "$config_dir" ]; then
