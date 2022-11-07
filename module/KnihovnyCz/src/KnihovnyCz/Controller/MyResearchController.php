@@ -257,16 +257,6 @@ class MyResearchController extends MyResearchControllerBase
         if ($view == null) {
             $view = new ViewModel();
             $view->error = $error;
-        } elseif (isset($view->transactions)) {
-            foreach ($view->transactions as $resource) {
-                $ilsDetails = $resource->getExtraDetail('ils_details');
-                if (isset($ilsDetails['duedate'])
-                    && $this->isExpired($ilsDetails['duedate'])
-                ) {
-                    $ilsDetails['dueStatus'] = 'overdue';
-                    $resource->setExtraDetail('ils_details', $ilsDetails);
-                }
-            }
         }
         // disable sorting
         $view->sortList = false;
@@ -542,23 +532,6 @@ class MyResearchController extends MyResearchControllerBase
             return;
         }
         parent::processAuthenticationException($e);
-    }
-
-    /**
-     * Return if the date is in the past, used for checking expired checked
-     * out items or registrations.
-     *
-     * @param string $date Expiration date
-     *
-     * @return bool is expired
-     */
-    protected function isExpired(string $date): bool
-    {
-        if ($expire = $this->dateConverter->parseDisplayDate($date)) {
-            $dateDiff = $expire->diff(new \DateTime());
-            return $dateDiff->invert == 0 && $dateDiff->days > 0;
-        }
-        return false;
     }
 
     /**

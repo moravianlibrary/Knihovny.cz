@@ -137,10 +137,14 @@ class MultiBackend extends \VuFind\ILS\Driver\MultiBackend
         /* @phpstan-ignore-next-line */
         $data = parent::getMyTransactions($patron, $params);
         if (isset($data['records'])) {
-            $data['records'] = $this->resolveIds($data['records'], $patron);
+            $records = $data['records'];
+            $records = $this->processOverdueTransactions($records);
+            $data['records'] = $this->resolveIds($records, $patron);
             return $data;
         } else {
-            return $this->resolveIds($data, $patron);
+            return $this->processOverdueTransactions(
+                $this->resolveIds($data, $patron)
+            );
         }
     }
 
@@ -379,6 +383,26 @@ class MultiBackend extends \VuFind\ILS\Driver\MultiBackend
     {
         $config = $this->getDriverConfig($this->getSource($recordId));
         return $config['Catalog']['ils_type'] ?? '';
+    }
+
+    /**
+     * Set overdue status for expired transactions
+     *
+     * @param array $details details from ILS
+     *
+     * @return array
+     */
+    protected function processOverdueTransactions($details)
+    {
+        foreach ($details as &$detail) {
+            if (isset($detail['duedate'])
+                && $this->isExpired($detail['duedate'])
+                && !isset($detail['dueStatus'])
+            ) {
+                $detail['dueStatus'] = 'overdue';
+            }
+        }
+        return $details;
     }
 
     /**
