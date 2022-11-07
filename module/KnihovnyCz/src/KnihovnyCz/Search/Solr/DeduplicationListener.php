@@ -215,6 +215,7 @@ class DeduplicationListener extends ParentDeduplicationListener
             );
             $foundLocalRecord->setRawData($localRecordData);
             $foundLocalRecord->setHighlightDetails($record->getHighlightDetails());
+            $foundLocalRecord->setSourceIdentifiers($record->getSourceIdentifier());
             $result->replace($record, $foundLocalRecord);
         }
     }

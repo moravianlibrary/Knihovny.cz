@@ -69,6 +69,7 @@ class OneChildDocDeduplicationListener extends ChildDocDeduplicationListener
                 ->get(\VuFind\RecordDriver\PluginManager::class);
             $newRecord = $recordFactory->getSolrRecord($childRawData);
             $newRecord->setHighlightDetails($record->getHighlightDetails());
+            $newRecord->setSourceIdentifiers($record->getSourceIdentifier());
             $result->replace($record, $newRecord);
         }
     }
