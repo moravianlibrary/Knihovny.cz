@@ -26,6 +26,11 @@
         );
     ?>
   </table>
+  <?php if (isset($this->prolongRegistrationLink)):?>
+    <a href="<?=$this->prolongRegistrationLink?>" class="btn btn-primary">
+      <?=$this->transEsc('online_prolongation_link_text')?>
+    </a>
+  <?php endif; ?>
 <?php elseif ('ils-none' !== $this->ils()->getOfflineMode() && $this->patronLoginView && !empty($this->patronLoginView->getTemplate())): ?>
     <?=$this->partial($this->patronLoginView);?>
 <?php endif; ?>

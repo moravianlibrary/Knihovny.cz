@@ -166,4 +166,31 @@ class Connection extends ConnectionBase
         }
         return false;
     }
+
+    /**
+     * Check prolonging of registration
+     *
+     * A support method for checkFunction(). This is responsible for checking
+     * the driver configuration to determine if the system supports link
+     * for prolonging of registration.
+     *
+     * @param array $functionConfig The Hold configuration values
+     * @param array $params         An array of function-specific params (or null)
+     *
+     * @return mixed On success, an associative array with specific function keys
+     * and values either for placing holds via a form or a URL; on failure, false.
+     */
+    protected function checkMethodgetMyProlongRegistrationLink(
+        $functionConfig,
+        $params
+    ) {
+        if (parent::checkCapability(
+            'getMyProlongRegistrationLink',
+            [$params ?: []]
+        )
+        ) {
+            return true;
+        }
+        return false;
+    }
 }

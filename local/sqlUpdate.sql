@@ -210,3 +210,20 @@ SET @mzk_source_id = (SELECT id FROM inst_sources WHERE source = 'mzk');
 INSERT INTO inst_configs (source_id, key_id, value, timestamp)
   VALUES (@mzk_source_id, @payment_link, 'https://aleph.mzk.cz/cgi-bin/c-gpe1-vufind.pl', NOW());
 UPDATE `system` SET `value` = '109' WHERE `key`='DB_VERSION';
+
+-- #165: prolong registration
+INSERT INTO `inst_sections` (`section_name`) VALUES('ProlongRegistration');
+SELECT @prolong_registration_section_id := LAST_INSERT_ID();
+INSERT INTO `inst_keys` (`key_name`, `section_id`) VALUES ('url', @prolong_registration_section_id);
+SELECT @prolong_registration_url_id := LAST_INSERT_ID();
+INSERT INTO `inst_keys` (`key_name`, `section_id`) VALUES ('status', @prolong_registration_section_id);
+SELECT @prolong_registration_status_id := LAST_INSERT_ID();
+INSERT INTO `inst_keys` (`key_name`, `section_id`) VALUES ('from', @prolong_registration_section_id);
+SELECT @prolong_registration_from_id := LAST_INSERT_ID();
+INSERT INTO `inst_keys` (`key_name`, `section_id`) VALUES ('hmac', @prolong_registration_section_id);
+SELECT @prolong_registration_hmac_id := LAST_INSERT_ID();
+SET @mzk_source_id = (SELECT id FROM inst_sources WHERE source = 'mzk');
+INSERT INTO inst_configs (source_id, key_id, value, timestamp) VALUES (@mzk_source_id, @prolong_registration_url_id, 'http://aleph.mzk.cz/cgi-bin/prodl_reg.pl', NOW());
+INSERT INTO inst_configs (source_id, key_id, value, timestamp) VALUES (@mzk_source_id, @prolong_registration_status_id, '03', NOW());
+INSERT INTO inst_configs (source_id, key_id, value, timestamp) VALUES (@mzk_source_id, @prolong_registration_from_id, 'cpk', NOW());
+INSERT INTO inst_configs (source_id, key_id, value, timestamp) VALUES (@mzk_source_id, @prolong_registration_hmac_id, 'rayedhmVaiU7', NOW());
