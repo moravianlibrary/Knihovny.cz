@@ -33,6 +33,7 @@
   <?php endif; ?>
   <div class="media-body">
     <h1 property="name" class="record-title"><?=$this->escapeHtml($this->driver->getTitle())?></h1>
+    <?=$this->record($this->driver)->renderTemplate('summary.phtml')?>
     <?php /* Display Main Details */ ?>
     <?php
     $formatter = $this->recordDataFormatter();

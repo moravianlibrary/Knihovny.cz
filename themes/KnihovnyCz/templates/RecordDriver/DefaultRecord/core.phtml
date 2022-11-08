@@ -55,17 +55,7 @@
       <?=$this->record($this->driver)->renderTemplate('versions-link.phtml')?>
     <?php endif; ?>
 
-    <?php $summary = $this->driver->getSummary(); $summary = isset($summary[0]) ? $this->escapeHtml($summary[0]) : false; ?>
-    <?php if ($summary): ?>
-      <?php $splitText = $this->splitText($summary, 360); ?>
-      <p>
-        <span class="text-first"><?=$this->escapeHtml($splitText->first())?></span>
-        <?php if ($splitText->last()): ?>
-          <span class="text-last hidden"><?=$this->escapeHtml($splitText->last())?></span>
-          <span class="btn-show-full-text">… <a><?=$this->transEsc('full_description')?></a></span>
-        <?php endif; ?>
-      </p>
-    <?php endif; ?>
+    <?=$this->record($this->driver)->renderTemplate('summary.phtml')?>
 
     <?php if ($this->userlist()->getMode() !== 'disabled'): ?>
       <?php /* Display the lists that this record is saved to */ ?>
