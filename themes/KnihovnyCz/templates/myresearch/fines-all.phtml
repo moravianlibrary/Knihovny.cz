@@ -11,7 +11,10 @@
 </a>
 
 <div class="<?=$this->layoutClass('mainbody')?>">
-  <h2><?=$this->transEsc('Your Fines')?></h2>
+  <div class="context-help">
+    <h2 class="context-text"><?=$this->transEsc('Your Fines')?></h2>
+    <?=$this->contextHelp('fines', 'heading')?>
+  </div>
     <?=$this->flashmessages()?>
 
     <?=$this->context($this)->renderInContext('librarycards/listcards.phtml', [

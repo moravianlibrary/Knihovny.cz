@@ -40,7 +40,18 @@
   }
 ?>
 <?php if ($results->getResultTotal() > 0 || $hasVisibleCheckboxes): ?>
-  <h2><?=$this->transEsc($this->slot('side-facet-caption')->get('Refine Results')) ?></h2>
+  <div class="context-help">
+    <h2 class="context-text"><?=$this->transEsc($this->slot('side-facet-caption')->get('Refine Results')) ?></h2>
+    <?php
+    $contextHelpLinks = [
+      'search2' => 'facets',
+      'eds' => 'ci-facets',
+    ];
+    ?>
+    <?php if (isset($contextHelpLinks[$this->layout()->templateDir])): ?>
+      <?=$this->contextHelp($contextHelpLinks[$this->layout()->templateDir], 'heading')?>
+    <?php endif; ?>
+  </div>
 <?php endif; ?>
 <?php if ($hasVisibleCheckboxes): ?>
   <div class="checkboxFilter">

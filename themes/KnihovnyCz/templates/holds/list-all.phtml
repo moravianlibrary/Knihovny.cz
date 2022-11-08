@@ -13,7 +13,10 @@ $this->headScript()->appendFile('holds.js');
 </a>
 
 <div class="<?=$this->layoutClass('mainbody')?>">
-  <h2><?=$this->transEsc('Your Holds and Recalls')?></h2>
+  <div class="context-help">
+    <h2 class="context-text"><?=$this->transEsc('Your Holds and Recalls')?></h2>
+    <?=$this->contextHelp('holds', 'heading')?>
+  </div>
   <?=$this->flashmessages()?>
 
   <?=$this->context($this)->renderInContext('librarycards/listcards.phtml', [

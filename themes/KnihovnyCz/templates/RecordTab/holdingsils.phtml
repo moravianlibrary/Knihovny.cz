@@ -141,6 +141,11 @@ JS;
 
 ?>
 
+<div class="context-help">
+  <h3 class="context-text mt-0"><?=$this->transEsc('Holdings')?></h3>
+  <?=$this->contextHelp('core-tabs-holdings', 'heading')?>
+</div>
+
 <?php if ($serialLinks = $this->driver->tryMethod('getSerialLinks')) : ?>
   <?=$this->render('RecordTab/links-table.phtml', ['links' => $serialLinks]);?>
 <?php endif; ?>

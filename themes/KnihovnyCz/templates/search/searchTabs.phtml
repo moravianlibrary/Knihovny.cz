@@ -9,6 +9,9 @@
         <?=$block?>
       <?php endif; ?>
     <?php endforeach; ?>
+    <li>
+      <?=$this->contextHelp('index-tabs', 'tabs')?>
+    </li>
   </ul>
   <?php if ($this->showCounts): ?>
     <?php $this->headScript()->appendFile('resultcount.js'); ?>

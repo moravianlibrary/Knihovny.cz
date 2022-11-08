@@ -79,7 +79,19 @@
         <input type="hidden" name="sort" value="<?=$this->escapeHtmlAttr($lastSort)?>" />
       <?php endif; ?>
       <div class="clearfix">
-        <h2 class="pull-left flip"><?=$this->transEsc('Advanced Search')?></h2>
+        <div class="context-help">
+          <h2 class="context-text"><?=$this->transEsc('Advanced Search')?></h2>
+          <?php
+          $contextHelpLinks = [
+            'search' => 'advanced-search',
+            'search2' => 'advanced-search',
+            'eds' => 'ci-advanced-search',
+          ];
+          ?>
+          <?php if(isset($contextHelpLinks[$this->layout()->templateDir])): ?>
+          <?=$this->contextHelp($contextHelpLinks[$this->layout()->templateDir], 'heading')?>
+          <?php endif; ?>
+        </div>
         <div id="groupJoin" class="form-inline pull-right flip">
           <label for="groupJoinOptions"><?=$this->transEsc("search_match")?>:</label>
           <select id="groupJoinOptions" name="join" class="form-control">
@@ -200,11 +212,6 @@
           </div>
         <?php endforeach; ?>
       <?php endif; ?>
-      <h2><?=$this->transEsc("Search Tips")?></h2>
-      <div class="facet-group">
-        <a class="facet help-link" data-lightbox href="<?=$this->url('help-home')?>?topic=advsearch&amp;_=<?=time() ?>"><?=$this->transEsc("Help with Advanced Search")?></a>
-        <a class="facet help-link" data-lightbox href="<?=$this->url('help-home')?>?topic=search&amp;_=<?=time() ?>"><?=$this->transEsc("Help with Search Operators")?></a>
-      </div>
     </div>
   </form>
 </div>

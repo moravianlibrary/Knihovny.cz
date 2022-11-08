@@ -36,10 +36,13 @@
     $jsParams = implode(', ', $params);
     $jsLoad = "loadMapSelection(" . $jsParams . ");";
   ?>
+  <div class="context-help">
+    <h2 class="context-text mt-0"><?=$this->transEsc('Geographic Search') ?></h2>
+    <?=$this->contextHelp('geosearch', 'heading')?>
+  </div>
   <div class="authorbox">
     <div id="geo_search" style="display: none;">
       <button id="draw_box"><?php echo $this->transEsc('Draw Search Box')?></button>
-      <span class="geo_maphelp">&nbsp;<a href="<?php echo $this->url('help-home')?>?topic=geosearch" data-lightbox class="help-link"><?php echo $this->transEsc('Need Help?')?></a></span>
       <div id="geo_search_map" style="height: <?php echo $height?>px;"></div>
     </div>
     <?=$this->inlineScript(\Laminas\View\Helper\HeadScript::SCRIPT, $jsLoad, 'SET')?>
