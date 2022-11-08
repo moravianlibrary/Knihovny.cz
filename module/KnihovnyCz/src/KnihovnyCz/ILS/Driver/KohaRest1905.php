@@ -1321,12 +1321,13 @@ class KohaRest1905 extends AbstractBase implements \Laminas\Log\LoggerAwareInter
         $config = [];
         switch ($function) {
         case 'Holds':
-                $config = [
-                    "HMACKeys" => "id:item_id",
-                    "extraHoldFields" => "comments:requiredByDate:pickUpLocation",
-                    "defaultRequiredDate" => "0:0:1",
-                ];
-            break;
+            $holdsConfig = $this->config['Holds'] ?? [];
+            $defaults = [
+                "HMACKeys" => "id:item_id",
+                "extraHoldFields" => "comments:requiredByDate:pickUpLocation",
+                "defaultRequiredDate" => "0:0:1",
+            ];
+            return $holdsConfig + $defaults;
         case 'IllRequests':
             $config = [ "HMACKeys" => "id:item_id" ];
             break;

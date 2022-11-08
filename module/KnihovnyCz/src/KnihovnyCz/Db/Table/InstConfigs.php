@@ -94,7 +94,7 @@ class InstConfigs extends \VuFind\Db\Table\Gateway
         $dbConfig = $this->select(
             function (Select $select) use ($source) {
                 $select
-                    ->columns(['id', 'value'])
+                    ->columns(['id', 'value', 'array_key'])
                     ->join('inst_sources', 'source_id = inst_sources.id')
                     ->join(
                         'inst_keys',
@@ -108,13 +108,16 @@ class InstConfigs extends \VuFind\Db\Table\Gateway
             }
         );
 
-        foreach ($dbConfig as $dbConfigRow) {
-            $section = $dbConfigRow['section'];
-            $key = $dbConfigRow['key'];
-            $value = $dbConfigRow['value'];
-            $config[$section][$key] = $value;
+        foreach ($dbConfig as $cfgItem) {
+            $section = $cfgItem['section'];
+            $key = $cfgItem['key'];
+            $value = $cfgItem['value'];
+            if (isset($cfgItem['array_key']) && $cfgItem['array_key'] !== null) {
+                $config[$section][$key][$cfgItem['array_key']] = $value;
+            } else {
+                $config[$section][$key] = $value;
+            }
         }
-
         return $config;
     }
 }

@@ -189,6 +189,7 @@ UPDATE citation_style SET value = NULL WHERE id = 2;
 INSERT INTO citation_style(id, description, value) VALUES (38673, 'ČSN ISO 690', '38673');
 UPDATE user_settings SET citation_style = 38673 WHERE citation_style = 2;
 DELETE FROM citation_style WHERE id = 2;
+UPDATE `system` SET `value` = '108' WHERE `key`='DB_VERSION';
 
 -- #683: short loans
 SET @mzk_source_id = (SELECT id FROM inst_sources WHERE source = 'mzk');
@@ -200,6 +201,7 @@ INSERT INTO `inst_sections` (`section_name`) VALUES('ShortLoanLinks');
 INSERT INTO `inst_keys` (`key_name`, `section_id`) VALUES ('MZK01-000680703', (SELECT `id` FROM `inst_sections` WHERE `section_name` = 'ShortLoanLinks'));
 SELECT @study_room_id := LAST_INSERT_ID();
 INSERT INTO inst_configs (source_id, key_id, value, timestamp) VALUES (@mzk_source_id, @study_room_id, 'Team study room', NOW());
+UPDATE `system` SET `value` = '109' WHERE `key`='DB_VERSION';
 
 -- #166: online payments
 INSERT INTO `inst_sections` (`section_name`) VALUES('Payment');
@@ -209,7 +211,7 @@ SELECT @payment_link := LAST_INSERT_ID();
 SET @mzk_source_id = (SELECT id FROM inst_sources WHERE source = 'mzk');
 INSERT INTO inst_configs (source_id, key_id, value, timestamp)
   VALUES (@mzk_source_id, @payment_link, 'https://aleph.mzk.cz/cgi-bin/c-gpe1-vufind.pl', NOW());
-UPDATE `system` SET `value` = '109' WHERE `key`='DB_VERSION';
+UPDATE `system` SET `value` = '110' WHERE `key`='DB_VERSION';
 
 -- #165: prolong registration
 INSERT INTO `inst_sections` (`section_name`) VALUES('ProlongRegistration');
@@ -227,3 +229,107 @@ INSERT INTO inst_configs (source_id, key_id, value, timestamp) VALUES (@mzk_sour
 INSERT INTO inst_configs (source_id, key_id, value, timestamp) VALUES (@mzk_source_id, @prolong_registration_status_id, '03', NOW());
 INSERT INTO inst_configs (source_id, key_id, value, timestamp) VALUES (@mzk_source_id, @prolong_registration_from_id, 'cpk', NOW());
 INSERT INTO inst_configs (source_id, key_id, value, timestamp) VALUES (@mzk_source_id, @prolong_registration_hmac_id, 'rayedhmVaiU7', NOW());
+UPDATE `system` SET `value` = '111' WHERE `key`='DB_VERSION';
+
+-- #32: Add helpText inst config key
+ALTER TABLE `inst_configs` ADD `array_key` varchar(191) DEFAULT NULL COMMENT 'Klíč pole (nepovinné)' AFTER  `key_id`;
+
+INSERT INTO `inst_keys` (`key_name`, `section_id`) VALUES
+('helpText', (SELECT `id` FROM `inst_sections` WHERE `section_name` = 'Holds'));
+
+-- Czech texts
+INSERT INTO `inst_configs` (`source_id`, `key_id`, `array_key`, `value`) VALUES
+  ((SELECT `id` FROM `inst_sources` WHERE `source` = 'mzk'), (SELECT `id` FROM `inst_keys` WHERE `key_name` = 'helpText'), 'cs', '<p>Pokud vyplňujete tento formulář pro <strong>publikaci, která je právě vypůjčená</strong> jiným čtenářem, provede se <strong>rezervace</strong> dané publikace. Publikaci si budete moci vypůjčit, jakmile ji vrátí čtenáři před Vámi (jejich počet vidíte v poli &quot;Vaše pořadí ve frontě&quot;).</p>
+
+<p>Vyplňujete-li tento formulář pro <strong>volnou publikaci, kterou si chcete nechat donést ze skladu nebo odložit na pobočce</strong>, provede se <strong>objednávka</strong> dané publikace.</p>
+
+<p><strong>Objednávky zadané po 18:00</strong> v pracovní dny a po celý den <strong>v sobotu a neděli</strong> budou vyřízeny až <strong>ráno následujícího pracovního dne</strong>.</p>
+
+<p>Pokud si objednáváte knihu <strong>z depozitáře</strong>, kde je <strong>doba vyhledání 10 dní</strong>, <strong>prodlužte si, prosím, dobu zájmu o výpůjčku</strong>.</p>
+
+<p>Ve chvíli, kdy bude Vaše publikace nachystaná na vyzvednutí, budete informováni e-mailem.</p>'),
+  ((SELECT `id` FROM `inst_sources` WHERE `source` = 'svkhk'), (SELECT `id` FROM `inst_keys` WHERE `key_name` = 'helpText'), 'cs', '<p>Pokud vyplňujete tento formulář pro <strong>publikaci, která je právě vypůjčená</strong> jiným čtenářem, provede se <strong>rezervace</strong> dané publikace. Publikaci si budete moci vypůjčit, jakmile ji vrátí čtenáři před Vámi (jejich počet vidíte v poli &quot;Vaše pořadí ve frontě&quot;).</p>
+
+<p>Vyplňujete-li tento formulář pro <strong>volnou publikaci, kterou si chcete nechat donést ze skladu nebo odložit na pobočce</strong>, provede se <strong>objednávka</strong> dané publikace.</p>
+
+<p>Objednávky zadané na sbírku <strong>Ext.sklad - 2. den po 14. hod.</strong> budou vyřízeny <strong>následující pracovní den po 14. hodině</strong>.</p>
+
+<p><strong>Požadavky zadané v pracovní den po 18.30 a o víkendu</strong>, začínají být <strong>zpracovávány až následující pracovní den</strong> a dodány jsou až <strong>další den po 14. hodině.</strong><br />
+Např. objednáte-li si knihu nebo periodikum v sobotu, budete ji mít k dispozici až v úterý odpoledne.</p>'),
+  ((SELECT `id` FROM `inst_sources` WHERE `source` = 'iir'), (SELECT `id` FROM `inst_keys` WHERE `key_name` = 'helpText'), 'cs', '<p>Pokud si objednáváte<strong> dostupnou jednotku v oddělení ÚMV sklad</strong>, publikace pro Vás bude přichystána <strong>následující výpůjční den</strong>.</p>'),
+  ((SELECT `id` FROM `inst_sources` WHERE `source` = 'kvkl'), (SELECT `id` FROM `inst_keys` WHERE `key_name` = 'helpText'), 'cs', '<p>Pokud vyplňujete tento formulář pro <strong>publikaci, která je právě vypůjčená</strong> jiným čtenářem, provede se <strong>rezervace</strong> dané publikace. Publikaci si budete moci vypůjčit, jakmile ji vrátí čtenáři před Vámi (jejich počet vidíte v poli &quot;Vaše pořadí ve frontě&quot;).</p>
+
+<p>Vyplňujete-li tento formulář pro <strong>volnou publikaci, kterou si chcete nechat donést ze skladu nebo odložit na pobočce</strong>, provede se <strong>objednávka</strong> dané publikace.</p>
+
+<p><strong>Vyžádat (objednat)</strong> si můžete pouze ty dokumenty, které jsou umístěny <strong>ve skladu</strong>.</p>
+
+<ul>
+	<li>Vyžádané dokumenty si můžete <strong>vyzvednout ve Studijní knihovně (1. patro) za 20 minut, nejpozději do 48 hodin od doby vyžádání</strong>.</li>
+	<li>Žádanky odeslané v době <strong>od 18.30 hod.</strong> budou připraveny <strong>k vyzvednutí další výpůjční den</strong>.</li>
+	<li>Jeden uživatel si může <strong>objednat maximálně 10 dokumentů (s výjimkou časopisů, kde je maximum 5 ročníků)</strong> a to pouze těch, které nejsou vypůjčené.</li>
+</ul>
+
+<p><strong>Rezervovat</strong> si můžete pouze ty dokumenty, které nemají momentálně volný exemplář, to znamená, že <strong>jsou všechny vypůjčené</strong>.</p>
+
+<ul>
+	<li>Za rezervaci se platí <strong>poplatek 7 Kč.</strong></li>
+  <li>Za objednávku z volného výběru se platí <strong>poplatek 10 Kč.</strong></li>
+  <li>Za objednávku ze skladu se poplatek <strong>neplatí.</strong></li>
+  <li>Ve chvíli, kdy bude Váš rezervovaný dokument připraven k vyzvednutí <strong>budete informováni e-mailem či SMS zprávou</strong>.</li>
+</ul>'),
+  ((SELECT `id` FROM `inst_sources` WHERE `source` = 'mkkh'), (SELECT `id` FROM `inst_keys` WHERE `key_name` = 'helpText'), 'cs', '<p>Pokud vyplňujete tento formulář pro <strong>publikaci, která je právě vypůjčená</strong> jiným čtenářem, provede se <strong>rezervace</strong> dané publikace. Publikaci si budete moci vypůjčit, jakmile ji vrátí čtenáři před Vámi (jejich počet vidíte v poli &quot;Vaše pořadí ve frontě&quot;).</p>
+
+<p>Vyplňujete-li tento formulář pro <strong>volnou publikaci, kterou si chcete nechat odložit</strong>, provede se <strong>objednávka</strong> dané publikace.</p>
+
+<p><strong>Rezervace jsou zpoplatněny dle platného knihovního řádu.</strong><br />
+Objednávky bývají zpravidla vyřízeny do následujícího pracovního dne (v případě poboček maximálně do 5 pracovních dnů).<br />
+Rezervované a objednané publikace necháváme <strong>připraveny po dobu 14 dní</strong>.</p>'),
+  ((SELECT `id` FROM `inst_sources` WHERE `source` = 'mkp'), (SELECT `id` FROM `inst_keys` WHERE `key_name` = 'helpText'), 'cs', '<p><strong>Rezervace je placená služba.</strong> Poplatek za rezervaci se platí po jejím splnění.<br />
+<strong>O splnění rezervace knihovna informuje e-mailem (10 Kč) nebo poštou (25 Kč)</strong>.<br />
+Rezervovat si můžete absenční tituly dostupné právě teď v knihovně, vypůjčené, rezervované, v oběhu nebo ve vaší pobočce nepřítomné.</p>
+
+<p><strong>Pobočku, kde si chcete knihu půjčit, zvolíte v kolonce místo vyzvednutí.</strong><br />
+Rezervace je připravena k vyzvednutí až po oznámení.<br />
+Stav svých rezervací můžete sledovat v on-line čtenářském kontě.</p>
+
+<p><strong>Zvolte, do kdy máte o rezervaci zájem.</strong> Zadáním konkrétního data se vyhnete tomu, že se rezervace splní v době, kdy už knihu nepotřebujete. <br />
+Doba splnění rezervace je závislá na tom, zda je kniha přítomná v knihovně nebo zda se čeká na její vracení nebo převoz na vybranou pobočku.</p>
+
+<p><strong>Oznámení se standardně zasílá na e-mail</strong> uvedený v kontaktních údajích čtenáře.<br />
+<strong>Rezervace v knihovně čeká 5 provozních dnů.</strong></p>
+
+<p>Je možné zvolit si <strong>zaslání oznámení poštou.</strong> <strong>Tato volba není dostupná na portálu Knihovny.cz</strong> - máte-li zájem o tuto službu, <strong>použijte online katalog Městské knihovny v Praze</strong>.<br />
+<strong>Rezervace pak v knihovně čeká 10 provozních dnů</strong> a k poplatku za splnění rezervace se účtuje <strong>15 Kč za poštovné</strong> (tj. dohromady 25 Kč).</p>'),
+  ((SELECT `id` FROM `inst_sources` WHERE `source` = 'svkul'), (SELECT `id` FROM `inst_keys` WHERE `key_name` = 'helpText'), 'cs', '<p>Pokud vyplňujete tento formulář <strong>pro dokument, který je právě vypůjčený</strong> jiným čtenářem, <strong>provede se rezervace</strong> daného dokumentu. Dokument si budete moci vypůjčit, jakmile ji vrátí čtenáři před Vámi (jejich počet vidíte v poli &quot;Vaše pořadí ve frontě&quot;).</p>
+
+<p>Vyplňujete-li tento formulář pro <strong>volný dokument</strong>, který si chcete nechat donést <strong>ze skladu</strong>, <strong>provede se objednávka</strong> daného dokumentu. Objednávky zadané <strong>po 18:00 v pracovní dny a po celý den v sobotu a neděli budou vyřízeny až ráno následujícího pracovního dne</strong>.</p>'),
+  ((SELECT `id` FROM `inst_sources` WHERE `source` = 'tre'), (SELECT `id` FROM `inst_keys` WHERE `key_name` = 'helpText'), 'cs', '<p>Pokud vyplňujete tento formulář pro <strong>publikaci, která je právě vypůjčená</strong> jiným čtenářem, provede se <strong>rezervace</strong> dané publikace. Publikaci si budete moci vypůjčit, jakmile ji vrátí čtenáři před Vámi (jejich počet vidíte v poli &quot;Vaše pořadí ve frontě&quot;).<br />
+Vyzvednout si je můžete jakmile <strong>obdržíte potvrzení e-mailem nebo SMS</strong>.<br />
+Od té doby máte <strong>5 pracovních dní na jejich vyzvednutí.</strong></p>
+
+<p>Vyplňujete-li tento formulář pro <strong>volnou publikaci, kterou si chcete nechat donést ze skladu nebo odložit na pobočce</strong>, provede se <strong>objednávka</strong> dané publikace.<br />
+Dokumenty Vám <strong>načteme jako výpůjčku a pošleme potvrzující e-mail</strong>.<br />
+Od té doby máte <strong>3 pracovní dny na jejich vyzvednutí</strong>.</p>'),
+  ((SELECT `id` FROM `inst_sources` WHERE `source` = 'vkta'), (SELECT `id` FROM `inst_keys` WHERE `key_name` = 'helpText'), 'cs', '<p>Pokud vyplňujete tento formulář pro <strong>publikaci, která je právě vypůjčená</strong> jiným čtenářem, provede se <strong>rezervace</strong> dané publikace. Publikaci si budete moci vypůjčit, jakmile ji vrátí čtenáři před Vámi (jejich počet vidíte v poli &quot;Vaše pořadí ve frontě&quot;).</p>
+
+<p>Vyplňujete-li tento formulář pro <strong>volnou publikaci, kterou si chcete nechat donést ze skladu nebo odložit na pobočce</strong>, provede se <strong>objednávka</strong> dané publikace.</p>
+
+<p>O tom, že je kniha připravena k vyzvednutí, dostane čtenář potvrzující zprávu.</p>
+
+<p><strong>Objednávka je k dispozici dva provozní dny.</strong></p>
+
+<p><strong>Rezervace je k dispozici 7 provozních dnů</strong></p>');
+
+-- English texts
+INSERT INTO `inst_configs` (`source_id`, `key_id`, `array_key`, `value`) VALUES
+((SELECT `id` FROM `inst_sources` WHERE `source` = 'mzk'), (SELECT `id` FROM `inst_keys` WHERE `key_name` = 'helpText'), 'en', '<p>If you are filling out this form for a <strong>publication that is currently borrowed</strong> by another reader, the <strong>reservation</strong> of the given publication will be made. You will be able to borrow the publication as soon as the readers before you have returned it (you can see their number in the field &quot;Your position in the queue&quot;).</p>
+
+<p>If you are filling out this form for a <strong>currently available publication that you want to have delivered from the warehouse or left at the branch</strong>, an <strong>order</strong> for the given publication will be placed.</p>
+
+<p><strong>Orders placed after 18:00</strong> on working days and all day on <strong>saturdays and sundays</strong> will be processed <strong>in the morning of the following working day</strong>.</p>
+
+<p>If you are ordering a book <strong>from a depository</strong>, where the <strong>search time is 10 days</strong>, <strong>please extend the period of interest</strong>.</p>
+
+<p>You will be notified by e-mail when your publication is ready to pick up.</p>');
+
+UPDATE `system` SET `value` = '112' WHERE `key`='DB_VERSION';
