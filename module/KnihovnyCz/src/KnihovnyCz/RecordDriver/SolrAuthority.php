@@ -41,6 +41,20 @@ use VuFindSearch\Command\SearchCommand;
 class SolrAuthority extends \KnihovnyCz\RecordDriver\SolrMarc
 {
     /**
+     * Record data formatter key
+     *
+     * @return string
+     */
+    protected string $recordDataFormatterKey = 'authority';
+
+    /**
+     * Record data description
+     *
+     * @return string
+     */
+    protected string $recordDataTypeDescription = "Authority Details";
+
+    /**
      * Get the full title of the record.
      *
      * @return string
