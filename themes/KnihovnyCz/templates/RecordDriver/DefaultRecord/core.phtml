@@ -35,11 +35,7 @@
   <?php endif; ?>
   <div class="media-body">
     <h1 property="name" class="record-title" data-sigla="<?=$sigla ?: 'undefined' ?>"><?=$this->escapeHtml($this->driver->getShortTitle())?></h1>
-    <p>
-      <a class="btn btn-primary" href="#tabnav" data-scrollto-target="[name='tabnav']">
-        <i class="fa fa-hand-paper-o mr-05"></i><?=$this->transEsc('Want it') ?>
-      </a>
-    </p>
+    <?=$this->record($this->driver)->renderTemplate('wantit.phtml');?>
     <?php foreach ($this->driver->tryMethod('getFullTitlesAltScript', [], []) as $altTitle): ?>
       <div class="title-alt">
         <?=$this->escapeHtml($altTitle)?>
@@ -67,10 +63,10 @@
     <?php /* Display Main Details */ ?>
     <?php
       $formatter = $this->recordDataFormatter();
-      $coreFields = $formatter->getData($driver, $formatter->getDefaults('core'));
+      $coreFields = $formatter->getData($driver, $formatter->getDefaults($this->driver->getRecordDataFormatterKey()));
     ?>
     <?php if (!empty($coreFields)): ?>
-      <h4 class="sr-only"><?=$this->transEsc('Bibliographic Details')?></h4>
+      <h4 class="sr-only"><?=$this->transEsc($this->driver->getRecordDataTypeDescription())?></h4>
       <dl class="dl-horizontal">
         <?php foreach ($coreFields as $current): ?>
           <dt><?=$this->transEsc($current['label'])?>:</dt>

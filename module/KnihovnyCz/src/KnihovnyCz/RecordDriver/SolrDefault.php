@@ -57,6 +57,20 @@ class SolrDefault extends \VuFind\RecordDriver\SolrDefault
     ];
 
     /**
+     * Record data formatter key
+     *
+     * @return string
+     */
+    protected string $recordDataFormatterKey = 'core';
+
+    /**
+     * Record data description
+     *
+     * @return string
+     */
+    protected string $recordDataTypeDescription = "Bibliographic Details";
+
+    /**
      * Parent record
      *
      * @var \VuFind\RecordDriver\AbstractBase|null
@@ -735,5 +749,25 @@ class SolrDefault extends \VuFind\RecordDriver\SolrDefault
             ];
         }
         return $links;
+    }
+
+    /**
+     * Get record data formatter key
+     *
+     * @return string
+     */
+    public function getRecordDataFormatterKey(): string
+    {
+        return $this->recordDataFormatterKey;
+    }
+
+    /**
+     * Get record data type description
+     *
+     * @return string
+     */
+    public function getRecordDataTypeDescription(): string
+    {
+        return $this->recordDataTypeDescription;
     }
 }
