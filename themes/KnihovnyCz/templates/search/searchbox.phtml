@@ -104,6 +104,16 @@
       <input type="hidden" name="type" value="<?=$this->escapeHtmlAttr($handlers[0]['value'])?>" />
     <?php endif; ?>
     <button type="submit" class="btn btn-lg btn-primary"><?=$this->icon('search') ?> <?=$this->transEsc("Find")?></button>
+    <?php
+    $contextHelpLinks = [
+      'search' => 'autocomplete',
+      'search2' => 'autocomplete',
+      'eds' => 'ci-autocomplete',
+    ];
+    ?>
+    <?php if(isset($contextHelpLinks[$this->layout()->templateDir])): ?>
+      <?=$this->contextHelp($contextHelpLinks[$this->layout()->templateDir], 'search')?>
+    <?php endif; ?>
     <?php if ($advSearch): ?>
       <a href="<?=$this->url($advSearch) . (($this->searchId ?? false) ? '?edit=' . $this->escapeHtmlAttr($this->searchId) : $hiddenFilterParams) ?>" class="btn btn-lg btn-link" rel="nofollow"><?=$this->transEsc("Advanced")?></a>
     <?php endif; ?>

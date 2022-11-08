@@ -72,12 +72,22 @@ fieldset, .fieldset {
 
 .nav-tabs > li > a {
   padding: 12px 15px 9px;
+  color: #555555;
+  background-color: #e8e8e8;
 }
 
-.nav-tabs > li:not(.active) > a:hover {
+.nav-tabs > li:not(.active) > a {
+  border-bottom: 1px solid #dddddd;
+}
+
+.nav-tabs > li:not(.active) > a:hover,
+.nav-tabs > li:not(.active) > a:focus {
   border-top-color: transparent;
   border-left-color: transparent;
   border-right-color: transparent;
+  color: #e5004b;
+  background-color: #ffffff;
+  text-decoration: none;
 }
 
 .nav-tabs > li.active > a,
@@ -1100,3 +1110,40 @@ form[action*="PtejteSeKnihovny"] {
   margin-bottom: 1em;
 }
 
+
+div.context-help {
+}
+
+.context-text {
+  display: inline-block;
+}
+
+a.context-help-link {
+  display: inline-block !important;
+  position: relative !important;
+  height: fit-content;
+  top: -8px !important;
+  border: 0 !important;
+  padding: 0 !important;
+  color: #666666;
+  background-color: transparent !important;
+
+  &:hover {
+    color: #e5004b;
+  }
+
+  &.context-help-link-heading {
+  }
+
+  &.context-help-link-search {
+    margin: 0 5px;
+  }
+
+  &.context-help-link-tabs {
+    margin: 0 5px;
+  }
+}
+
+.mt-0 {
+  margin-top: 0;
+}

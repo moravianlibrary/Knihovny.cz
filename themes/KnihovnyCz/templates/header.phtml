@@ -32,7 +32,7 @@
           <?php endif; ?>
           <?php $cart = $this->cart(); if ($cart->isActive()): ?>
             <li id="cartSummary">
-              <a id="cartItems" data-lightbox title="<?=$this->transEscAttr('View Book Bag')?>" href="<?=$this->url('cart-home')?>">
+              <a id="cartItems" title="<?=$this->transEscAttr('View Book Bag')?>" href="<?=$this->url('cart-home')?>">
                 <span role="status"><span class="sr-only"><?=$this->transEsc('Book Bag')?>:</span>
                   <sup class="badge badge-info">
                     <strong><?=count($cart->getItems())?></strong><span class="sr-only"> <?=$this->transEsc('items')?></span>

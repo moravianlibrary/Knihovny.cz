@@ -3,9 +3,16 @@
   $this->headTitle($this->translate('Book Bag'));
 
   // Set up breadcrumbs:
-  $this->layout()->breadcrumbs = $this->searchMemory()->getLastSearchLink($this->transEsc('Search'), '<li>', '</li> ')
+  $this->layout()->breadcrumbs = $this->searchMemory()->getLastSearchLink($this->transEsc('Search'), '<li>', '</li> ');
+
+  // Hide searchbox
+  $this->layout()->searchbox = false;
 ?>
-<h2><?=$this->transEsc('Book Bag') ?></h2>
+
+<div class="context-help">
+  <h2 class="context-text"><?=$this->transEsc('Book Bag') ?></h2>
+  <?=$this->contextHelp('book-bag', 'heading')?>
+</div>
 <?=$this->flashmessages()?>
 <form class="form-inline" action="<?=$this->url('cart-processor')?>" method="post"  name="cartForm" data-lightbox-onsubmit="cartFormHandler">
   <input type="hidden" id="dropdown_value"/>

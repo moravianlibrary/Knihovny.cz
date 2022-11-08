@@ -10,7 +10,10 @@
 
   <?=$this->flashmessages()?>
 
-  <h2><?=$this->transEsc('Library Cards')?></h2>
+  <div class="context-help">
+    <h2 class="context-text"><?=$this->transEsc('Library Cards')?></h2>
+    <?=$this->contextHelp('library-cards', 'heading')?>
+  </div>
   <?php if ($this->libraryCards->count() == 0): ?>
     <div><?=$this->transEsc('You do not have any library cards')?></div>
   <?php else: ?>
