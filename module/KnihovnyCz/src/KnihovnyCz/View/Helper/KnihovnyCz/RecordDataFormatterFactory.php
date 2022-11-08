@@ -172,7 +172,6 @@ class RecordDataFormatterFactory
 
         $spec->setLine('alternative_term', 'getAlternatives');
         $spec->setLine('english_term', 'getEnglish');
-        $spec->setLine('explanation_term', 'getSummary');
         $spec->setLine('relative_term', 'getRelatives');
         $spec->setLine('source_term', 'getSource');
         $spec->setLine('term_author', 'getTermAuthors');
@@ -194,7 +193,6 @@ class RecordDataFormatterFactory
     public function getDefaultAuthorityCoreSpecs()
     {
         $spec = new SpecBuilder();
-        $spec->setLine('Bibliographic Details', 'getSummary');
         $spec->setLine('Alternative names', 'getAddedEntryPersonalNames');
         $spec->setLine('Source', 'getSource');
         $spec->setTemplateLine(
