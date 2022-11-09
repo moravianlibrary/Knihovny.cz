@@ -44,20 +44,18 @@ class ContextHelp extends AbstractHelper
     /**
      * Render context help
      *
-     * @param string      $page Context help page identifier
-     * @param string|null $type Context help type
+     * @param string $page Context help page identifier
+     * @param string $type Context help type
      *
      * @return string
      */
-    public function __invoke(string $page, string $type = null): string
+    public function __invoke(string $page, string $type = ''): string
     {
         $classes[] = 'context-help-link';
 
-        $classes[] = match ($type) {
-            'heading' => 'context-help-link-heading',
-            'search' => 'context-help-link-search',
-            'tabs' => 'context-help-link-tabs',
-        };
+        if ($type !== '') {
+            $classes[] = 'context-help-link-' . $type;
+        }
 
         $view = $this->getView();
         return isset($view) ? $view->render(
