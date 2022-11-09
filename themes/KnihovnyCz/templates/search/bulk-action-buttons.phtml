@@ -22,7 +22,7 @@
         <li><button id="<?=$this->idPrefix?>updateCart" type="submit" class="toolbar-btn" name="add" value="1"<?php if ($this->formAttr): ?> form="<?=$this->escapeHtmlAttr($this->formAttr) ?>"<?php endif; ?>><?=$this->icon('cart-add') ?> <?=$this->transEsc('Add to Book Bag')?></button></li>
       <?php endif; ?>
       <li>
-        <?=$this->contextHelp('search-results')?>
+        <?=$this->contextHelp('search-results', 'tabs')?>
       </li>
     </ul>
   </nav>
