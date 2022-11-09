@@ -56,6 +56,11 @@ function setupAutocomplete() {
   var acCallback = function ac_cb_noop() {};
   if (searchbox.hasClass("ac-auto-submit")) {
     acCallback = function autoSubmitAC(item, input) {
+      var element = $(window.event.target.parentNode);
+      if (element.hasClass('autocomplete-link')) {
+        item.href = element.attr('href');
+        return true;
+      }
       input.val(item.value);
       $("#searchForm").submit();
       return false;
@@ -65,6 +70,7 @@ function setupAutocomplete() {
   searchbox.autocomplete({
     rtl: $(document.body).hasClass("rtl"),
     maxResults: 10,
+    highlight: false,
     loadingString: VuFind.translate('loading_ellipsis'),
     // Auto-submit selected item
     callback: acCallback,

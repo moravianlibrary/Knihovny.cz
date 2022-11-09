@@ -119,10 +119,15 @@ class Suggester implements \VuFind\I18n\Translator\TranslatorAwareInterface
                 continue;
             }
             foreach ($suggestions as $item) {
-                $items[] = [
-                    'value' => $item,
-                    'type' => $type,
-                ];
+                if (is_scalar($item)) {
+                    $items[] = [
+                        'value' => $item,
+                        'type' => $type,
+                    ];
+                } else {
+                    $item['type'] = $type;
+                    $items[] = $item;
+                }
             }
             $result[] = [
                 'label' => $this->translate('Search in ' . $type),
