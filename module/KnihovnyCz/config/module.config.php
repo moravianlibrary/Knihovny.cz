@@ -500,8 +500,8 @@ $config = [
             ],
             'autocomplete' => [
                 'factories' => [
-                    \KnihovnyCz\Autocomplete\SolrPrefix::class => \VuFind\Autocomplete\SolrFactory::class,
-                    \KnihovnyCz\Autocomplete\SolrPrefixSorted::class => \VuFind\Autocomplete\SolrFactory::class,
+                    \KnihovnyCz\Autocomplete\SolrPrefix::class => \KnihovnyCz\Autocomplete\SolrFactoryWithEscaper::class,
+                    \KnihovnyCz\Autocomplete\SolrPrefixSorted::class => \KnihovnyCz\Autocomplete\SolrFactoryWithEscaper::class,
                     \KnihovnyCz\Autocomplete\SolrAuthorityEnricher::class => \KnihovnyCz\Autocomplete\SolrAuthorityEnricherFactory::class,
                 ],
                 'aliases' => [

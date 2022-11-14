@@ -1,6 +1,6 @@
 <?php
 /**
- * Factory for SolrAuthorityEnricher
+ * Factory for SolrPrefix and SolrPrefixSorted.
  *
  * PHP version 7
  *
@@ -17,34 +17,32 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  *
  * @category Knihovny.cz
  * @package  Autocomplete
  * @author   Vaclav Rosecky <vaclav.rosecky@mzk.cz>
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
- * @link     http://vufind.org/wiki/vufind2:autosuggesters Wiki
+ * @link     https://vufind.org/wiki/development Wiki
  */
 namespace KnihovnyCz\Autocomplete;
 
 use Laminas\ServiceManager\Exception\ServiceNotCreatedException;
 use Laminas\ServiceManager\Exception\ServiceNotFoundException;
-use Laminas\ServiceManager\Factory\FactoryInterface;
 use Psr\Container\ContainerExceptionInterface as ContainerException;
 use Psr\Container\ContainerInterface;
 
 /**
- * Factory for SolrAuthorityEnricher
- *
- * This class provides suggestions by using the local Solr index.
+ * Factory for SolrPrefix and SolrPrefixSorted.
  *
  * @category Knihovny.cz
  * @package  Autocomplete
  * @author   Vaclav Rosecky <vaclav.rosecky@mzk.cz>
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
- * @link     https://vufind.org/wiki/development:plugins:autosuggesters Wiki
+ * @link     https://vufind.org/wiki/development Wiki
  */
-class SolrAuthorityEnricherFactory implements FactoryInterface
+class SolrFactoryWithEscaper implements
+    \Laminas\ServiceManager\Factory\FactoryInterface
 {
     /**
      * Create an object
@@ -69,10 +67,7 @@ class SolrAuthorityEnricherFactory implements FactoryInterface
     ) {
         return new $requestedName(
             $container->get(\VuFind\Search\Results\PluginManager::class),
-            $container->get('ViewHelperManager')->get('escapeHtml'),
-            $container->get(\VuFindSearch\Service::class),
-            $container->get('ViewHelperManager')->get('recordLinker'),
-            $container->get('ViewRenderer')
+            $container->get('ViewHelperManager')->get('escapeHtml')
         );
     }
 }
