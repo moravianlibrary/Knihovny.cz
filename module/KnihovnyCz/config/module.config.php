@@ -502,10 +502,12 @@ $config = [
                 'factories' => [
                     \KnihovnyCz\Autocomplete\SolrPrefix::class => \VuFind\Autocomplete\SolrFactory::class,
                     \KnihovnyCz\Autocomplete\SolrPrefixSorted::class => \VuFind\Autocomplete\SolrFactory::class,
+                    \KnihovnyCz\Autocomplete\SolrAuthorityEnricher::class => \KnihovnyCz\Autocomplete\SolrAuthorityEnricherFactory::class,
                 ],
                 'aliases' => [
                     'solrprefix' => \KnihovnyCz\Autocomplete\SolrPrefix::class,
                     'solrprefixsorted' => \KnihovnyCz\Autocomplete\SolrPrefixSorted::class,
+                    'solrauthorityenricher' => \KnihovnyCz\Autocomplete\SolrAuthorityEnricher::class,
                 ]
             ],
             'recommend' => [
