@@ -27,6 +27,8 @@
  */
 namespace KnihovnyCz\RecordDriver;
 
+use KnihovnyCz\RecordDriver\Feature\WikidataTrait;
+use VuFind\Cache\CacheTrait;
 use VuFindSearch\Command\SearchCommand;
 
 /**
@@ -40,6 +42,41 @@ use VuFindSearch\Command\SearchCommand;
  */
 class SolrAuthority extends \KnihovnyCz\RecordDriver\SolrMarc
 {
+    use WikidataTrait;
+    use CacheTrait;
+
+    protected $wikiExternalLinks = [
+        'orcid' => 'P496',
+        'isni' => 'P213',
+        'abart' => 'P6844',
+        'viaf' => 'P214',
+        'cbdb' => 'P10400',
+        'dbknih' => 'P10387',
+        'csfd' => 'P2605',
+        'twitter' => 'P2002',
+        'instagram' => 'P2003',
+        'wikitree' => 'P2949',
+        'fide' => 'P1440',
+    ];
+
+    protected array $wikiSiteLinks = ['wikipedia', 'wikiquote', 'wikisource',];
+
+    protected array $identifiers = ['wikidata', 'viaf', 'isni', 'orcid',];
+
+    protected array $externalLinks = [
+        'wikipedia',
+        'wikiquote',
+        'wikisource',
+        'abart',
+        'cbdb',
+        'dbknih',
+        'csfd',
+        'twitter',
+        'instagram',
+        'wikitree',
+        'fide',
+    ];
+
     /**
      * Record data formatter key
      *
@@ -261,5 +298,267 @@ class SolrAuthority extends \KnihovnyCz\RecordDriver\SolrMarc
             'title' => $this->getTitle(),
             'nbn' => $this->getAuthorityId(),
         ];
+    }
+
+    /**
+     * Method to ensure uniform cache keys for cached VuFind objects.
+     *
+     * @param string|null $suffix Optional suffix that will get appended to the
+     * object class name calling getCacheKey()
+     *
+     * @return string
+     */
+    protected function getCacheKey($suffix = null)
+    {
+        $id = str_replace('.', '_', $this->getUniqueID());
+        return 'authority_record_' . $id . '_' . $suffix;
+    }
+
+    /**
+     * Return NKCR AUT ID or OsobnostiRegionu.cz Id
+     *
+     * @return string
+     */
+    protected function getCombinedAuthorityId(): string
+    {
+        $id = $this->getAuthorityId();
+        if (!empty($id)) {
+            return $id;
+        }
+        [, $id2] = explode('.', $this->getUniqueID());
+        return $id2;
+    }
+
+    /**
+     * Get data for this authority record from wikidata
+     *
+     * @return array
+     * @throws \Psr\Http\Client\ClientExceptionInterface
+     */
+    protected function getWikidataData(): array
+    {
+        $data = $this->getCachedData('wikidata');
+        if (empty($data)) {
+            $query = $this->getLinksQuery();
+            $data = $this->sparqlService->query(
+                $query,
+                ['schema', 'wikibase', 'wdt', 'wd']
+            );
+            $this->putCachedData('wikidata', $data);
+        }
+        return $data;
+    }
+
+    /**
+     * Get links to external websites from wikidata
+     *
+     * @return array
+     */
+    public function getWikidataLinks(): array
+    {
+        $data = $this->getWikidataData();
+        $links = [];
+        $linkFields = array_merge(
+            ['wikidata'],
+            $this->wikiSiteLinks,
+            array_keys($this->wikiExternalLinks)
+        );
+        foreach ($data as $link) {
+            foreach ($linkFields as $field) {
+                $formatter = $field . 'Formatter';
+                if (isset($link[$field]['value'])) {
+                    $url = $link[$field]['value'];
+                    if (isset($link[$formatter]['value'])) {
+                        $url = str_replace(
+                            '$1',
+                            urlencode($link[$field]['value']),
+                            $link[$formatter]['value']
+                        );
+                    }
+                    $links[] = [
+                        'url' => $url,
+                        'label' => $field,
+                    ];
+                }
+            }
+        }
+        return $links;
+    }
+
+    /**
+     * Creates query for wikidata links
+     *
+     * @return string
+     */
+    protected function getLinksQuery(): string
+    {
+        $id = $this->getCombinedAuthorityId();
+
+        $urlQueryPattern = <<<SPARQL
+    OPTIONAL {
+        wd:%s wdt:P1630 ?%sFormatter .
+        ?wikidata wdt:%s ?%s .
+    }
+
+SPARQL;
+
+        $siteLinksQueryPattern = <<<SPARQL
+	OPTIONAL {
+		?%s schema:about ?wikidata .
+		?%s schema:inLanguage "%s".
+		?%s schema:isPartOf/wikibase:wikiGroup "%s" .
+	}
+
+SPARQL;
+
+        $queryPattern = <<<SPARQL
+SELECT ?wikidata ?wikidataLabel %s %s %s ?signature ?pronunciation ?ipa
+WHERE
+{
+	?wikidata wdt:P691|wdt:P9299 "%s" .
+%s
+%s
+    OPTIONAL {
+        ?wikidata wdt:P109 ?signature .
+    }
+
+    OPTIONAL {
+        ?wikidata wdt:P443 ?pronunciation .
+    }
+
+    OPTIONAL {
+        ?wikidata wdt:P898 ?ipa .
+    }
+
+	SERVICE wikibase:label { bd:serviceParam wikibase:language "%s". }
+}
+LIMIT 1
+SPARQL;
+        $siteLinksFields = array_map(
+            function ($siteField) {
+                return '?' . $siteField;
+            },
+            $this->wikiSiteLinks
+        );
+        $fields = array_map(
+            function ($field) {
+                return '?' . $field;
+            },
+            array_keys($this->wikiExternalLinks)
+        );
+        $formatters = array_map(
+            function ($field) {
+                return $field . 'Formatter';
+            },
+            $fields
+        );
+        $queryUrls = '';
+        foreach ($this->wikiExternalLinks as $name => $property) {
+            $queryUrls .= sprintf(
+                $urlQueryPattern,
+                $property,
+                $name,
+                $property,
+                $name
+            );
+        }
+        $querySiteLinks = '';
+        foreach ($this->wikiSiteLinks as $site) {
+            $querySiteLinks .= sprintf(
+                $siteLinksQueryPattern,
+                $site,
+                $site,
+                $this->getTranslatorLocale(),
+                $site,
+                $site
+            );
+        }
+        return sprintf(
+            $queryPattern,
+            implode(' ', $siteLinksFields),
+            implode(' ', $fields),
+            implode(' ', $formatters),
+            addslashes($id),
+            $querySiteLinks,
+            $queryUrls,
+            $this->getTranslatorLocale()
+        );
+    }
+
+    /**
+     * Get image URL of this person's signature
+     *
+     * @return string
+     * @throws \Psr\Http\Client\ClientExceptionInterface
+     */
+    protected function getSignature(): string
+    {
+        $data = $this->getWikidataData();
+        foreach ($data as $link) {
+            if (isset($link['signature']['value'])) {
+                return $link['signature']['value'];
+            }
+        }
+
+        return '';
+    }
+
+    /**
+     * Get sound file URL and IPA transcription of this person's name
+     *
+     * @return array
+     * @throws \Psr\Http\Client\ClientExceptionInterface
+     */
+    protected function getPronunciation(): array
+    {
+        $data = $this->getWikidataData();
+        $return = [];
+        foreach ($data as $link) {
+            if (isset($link['pronunciation']['value'])) {
+                $return['pronunciation'] = $link['pronunciation']['value'];
+            }
+            if (isset($link['ipa']['value'])) {
+                $return['ipa'] = $link['ipa']['value'];
+            }
+        }
+
+        return $return;
+    }
+
+    /**
+     * Get links to external sites/databases by type
+     *
+     * @param string $type Type of link
+     *
+     * @return array
+     */
+    protected function getExternalLinksByType(string $type): array
+    {
+        return array_filter(
+            $this->getWikidataLinks(),
+            function ($link) use ($type) {
+                return in_array($link['label'], $this->$type);
+            }
+        );
+    }
+
+    /**
+     * Get links to external sites
+     *
+     * @return array
+     */
+    public function getExternalLinks(): array
+    {
+        return $this->getExternalLinksByType('externalLinks');
+    }
+
+    /**
+     * Get links to external databases
+     *
+     * @return array
+     */
+    public function getIdentifiersLinks(): array
+    {
+        return $this->getExternalLinksByType('identifiers');
     }
 }

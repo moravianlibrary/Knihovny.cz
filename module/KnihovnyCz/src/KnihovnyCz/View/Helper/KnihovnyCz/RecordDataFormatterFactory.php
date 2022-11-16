@@ -181,6 +181,11 @@ class RecordDataFormatterFactory
             'RecordHelper',
             ['helperMethod' => 'getFormatList']
         );
+        $spec->setTemplateLine(
+            'wiki_link',
+            'getWikidataLinks',
+            'wikidata_tdkiv_link.phtml'
+        );
 
         return $spec->getArray();
     }
@@ -193,6 +198,11 @@ class RecordDataFormatterFactory
     public function getDefaultAuthorityCoreSpecs()
     {
         $spec = new SpecBuilder();
+        $spec->setTemplateLine(
+            'Pronunciation',
+            'getPronunciation',
+            'pronunciation.phtml'
+        );
         $spec->setLine('Alternative names', 'getAddedEntryPersonalNames');
         $spec->setLine('Source', 'getSource');
         $spec->setTemplateLine(
@@ -210,6 +220,15 @@ class RecordDataFormatterFactory
             'Publications',
             'getRelatedUrls',
             'publicationurls.phtml'
+        );
+        $spec->setLine(
+            'Signature',
+            'getSignature',
+            null,
+            [
+                'itemPrefix' => '<img class="signature" src="',
+                'itemSuffix' => '"/>'
+            ]
         );
 
         return $spec->getArray();

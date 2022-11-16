@@ -27,6 +27,8 @@
  */
 namespace KnihovnyCz\RecordDriver;
 
+use KnihovnyCz\RecordDriver\Feature\WikidataTrait;
+
 /**
  * Knihovny.cz solr dictionary record driver
  *
@@ -38,6 +40,8 @@ namespace KnihovnyCz\RecordDriver;
  */
 class SolrDictionary extends \KnihovnyCz\RecordDriver\SolrMarc
 {
+    use WikidataTrait;
+
     /**
      * Record data formatter key
      *
@@ -124,5 +128,58 @@ class SolrDictionary extends \KnihovnyCz\RecordDriver\SolrMarc
     public function getFilterParamsForRelated()
     {
         return ['handler' => 'morelikethisdictionary'];
+    }
+
+    /**
+     * Get data from Wikidata
+     *
+     * @return array
+     */
+    public function getWikidataInfo(): array
+    {
+        [, $id] = explode('.', $this->getUniqueID());
+        $queryPattern = <<<SPARQL
+SELECT ?tdkiv ?tdkivLabel ?article
+WHERE
+{
+	?tdkiv wdt:P5398 "%s" .
+	OPTIONAL {
+		?article schema:about ?tdkiv .
+		?article schema:inLanguage "%s".
+		?article schema:isPartOf/wikibase:wikiGroup "wikipedia" .
+	}
+
+	SERVICE wikibase:label { bd:serviceParam wikibase:language "%s". }
+}
+SPARQL;
+        $query = sprintf(
+            $queryPattern,
+            addslashes($id),
+            $this->getTranslatorLocale(),
+            $this->getTranslatorLocale()
+        );
+        return $this->sparqlService->query($query, ['schema', 'wikibase', 'wdt']);
+    }
+
+    /**
+     * Get links to external websites from wikidata
+     *
+     * @return array
+     */
+    public function getWikidataLinks(): array
+    {
+        $info = $this->getWikidataInfo();
+        $info = array_filter(
+            $info,
+            function ($item) {
+                return isset($item['article']['value']);
+            }
+        );
+        return array_map(
+            function ($item) {
+                return $item['article']['value'];
+            },
+            $info
+        );
     }
 }

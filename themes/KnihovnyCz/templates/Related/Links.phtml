@@ -1,0 +1,15 @@
+<?php $links = $this->related->getLinks(); if (!empty($links)):?>
+  <h2><?=$this->transEsc($this->related->getLabel())?></h2>
+  <ul class="external-links">
+    <?php foreach ($links as $link): ?>
+      <?php $label = $this->translate('link_' . $link['label']); ?>
+      <?php
+      $imageUrl = $this->imageLink('externalLogos/' . $link['label'] . '.ico');
+      if (empty($imageUrl)) {
+        $imageUrl = $this->imageLink('externalLogos/' . $link['label'] . '.png');
+      }
+      ?>
+      <li><img class="" src="<?=$imageUrl?>"/><a href="<?=$this->escapeHtmlAttr($link['url'])?>" title="<?=$label?>" target="_blank"><?=$label?></a></li>
+    <?php endforeach; ?>
+  </ul>
+<?php endif; ?>
