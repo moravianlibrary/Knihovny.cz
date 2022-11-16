@@ -19,7 +19,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  *
- * @category VuFind
+ * @category Knihovny.cz
  * @package  Autocomplete
  * @author   Demian Katz <demian.katz@villanova.edu>
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
@@ -35,7 +35,7 @@ use VuFind\Search\Options\PluginManager as OptionsManager;
 /**
  * Autocomplete handler plugin manager
  *
- * @category VuFind
+ * @category Knihovny.cz
  * @package  Autocomplete
  * @author   Vaclav Rosecky <vaclav.rosecky@mzk.cz>
  * @author   Demian Katz <demian.katz@villanova.edu>

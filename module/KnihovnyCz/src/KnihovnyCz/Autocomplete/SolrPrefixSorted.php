@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  *
- * @category VuFind
+ * @category Knihovny.cz
  * @package  Autocomplete
  * @author   Vaclav Rosecky <vaclav.rosecky@mzk.cz>
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
@@ -34,7 +34,7 @@ namespace KnihovnyCz\Autocomplete;
  *
  * This class provides suggestions by using the local Solr index.
  *
- * @category VuFind
+ * @category Knihovny.cz
  * @package  Autocomplete
  * @author   Vaclav Rosecky <vaclav.rosecky@mzk.cz>
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
@@ -48,6 +48,13 @@ class SolrPrefixSorted implements \VuFind\Autocomplete\AutocompleteInterface
      * @var \VuFind\Search\Results\PluginManager
      */
     protected $resultsManager;
+
+    /**
+     * Helper for escaping HTML
+     *
+     * @var \Laminas\View\Helper\EscapeHtml
+     */
+    protected $escapeHtml;
 
     /**
      * Search object
@@ -94,11 +101,15 @@ class SolrPrefixSorted implements \VuFind\Autocomplete\AutocompleteInterface
     /**
      * Constructor
      *
-     * @param \VuFind\Search\Results\PluginManager $results Results plugin manager
+     * @param \VuFind\Search\Results\PluginManager $results    Results plugin manager
+     * @param \Laminas\View\Helper\EscapeHtml      $escapeHtml Escape HTML helper
      */
-    public function __construct(\VuFind\Search\Results\PluginManager $results)
-    {
+    public function __construct(
+        \VuFind\Search\Results\PluginManager $results,
+        \Laminas\View\Helper\EscapeHtml $escapeHtml
+    ) {
         $this->resultsManager = $results;
+        $this->escapeHtml = $escapeHtml;
     }
 
     /**
@@ -115,6 +126,7 @@ class SolrPrefixSorted implements \VuFind\Autocomplete\AutocompleteInterface
             throw new \Exception('Please set configuration first.');
         }
 
+        $highlighter = new Highlighter($query);
         $results = [];
         try {
             $params = $this->searchObject->getParams();
@@ -150,7 +162,13 @@ class SolrPrefixSorted implements \VuFind\Autocomplete\AutocompleteInterface
             $facets = $this->searchObject->getFacetList($filter);
             if (isset($facets[$this->facetField]['list'])) {
                 foreach ($facets[$this->facetField]['list'] as $filter) {
-                    $results[] = $filter['value'];
+                    $value = $filter['value'];
+                    $results[] = [
+                        'label' => $highlighter->highlight(
+                            ($this->escapeHtml)($value)
+                        ),
+                        'value' => $filter['value'],
+                    ];
                 }
             }
         } catch (\Exception $e) {

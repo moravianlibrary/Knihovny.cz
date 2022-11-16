@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  *
- * @category VuFind
+ * @category Knihovny.cz
  * @package  Autocomplete
  * @author   Vaclav Rosecky <vaclav.rosecky@mzk.cz>
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
@@ -28,12 +28,15 @@
  */
 namespace KnihovnyCz\Autocomplete;
 
+use Laminas\View\Helper\EscapeHtml;
+use VuFind\Search\Results\PluginManager as ResultsManager;
+
 /**
  * Solr autocomplete module with prefix queries using edge N-gram filter
  *
  * This class provides suggestions by using the local Solr index.
  *
- * @category VuFind
+ * @category Knihovny.cz
  * @package  Autocomplete
  * @author   Vaclav Rosecky <vaclav.rosecky@mzk.cz>
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
@@ -42,14 +45,25 @@ namespace KnihovnyCz\Autocomplete;
 class SolrPrefix extends \VuFind\Autocomplete\SolrPrefix
 {
     /**
+     * Helper for escaping HTML
+     *
+     * @var EscapeHtml
+     */
+    protected $escapeHtml;
+
+    /**
      * Constructor
      *
-     * @param \VuFind\Search\Results\PluginManager $results Results plugin manager
+     * @param ResultsManager $results    Results plugin manager
+     * @param EscapeHtml     $escapeHtml Escape HTML helper
      */
-    public function __construct(\VuFind\Search\Results\PluginManager $results)
-    {
+    public function __construct(
+        \VuFind\Search\Results\PluginManager $results,
+        \Laminas\View\Helper\EscapeHtml $escapeHtml
+    ) {
         parent::__construct($results);
         $this->resultsManager = $results;
+        $this->escapeHtml = $escapeHtml;
         $this->limit = 30;
     }
 
@@ -101,9 +115,10 @@ class SolrPrefix extends \VuFind\Autocomplete\SolrPrefix
      */
     protected function filter($query, $results)
     {
+        $highlighter = new Highlighter($query);
         $filtered = [];
         $normalizedQuery = $this->normalize($query);
-        $queryParts = (array)preg_split('/\s+/', $normalizedQuery);
+        $queryParts = (array)preg_split('/\s+/', trim($normalizedQuery));
         $queryPartsCount = count($queryParts);
 
         foreach ($results as $result) {
@@ -123,7 +138,12 @@ class SolrPrefix extends \VuFind\Autocomplete\SolrPrefix
                 }
             }
             if ($matchedQueryParts == $queryPartsCount) {
-                $filtered[] = $result;
+                $filtered[] = [
+                    'label' => $highlighter->highlight(
+                        ($this->escapeHtml)($result)
+                    ),
+                    'value' => $result,
+                ];
             }
         }
 

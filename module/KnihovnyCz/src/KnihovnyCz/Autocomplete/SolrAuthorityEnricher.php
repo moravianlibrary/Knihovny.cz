@@ -20,7 +20,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  *
- * @category VuFind
+ * @category Knihovny.cz
  * @package  Autocomplete
  * @author   Vaclav Rosecky <vaclav.rosecky@mzk.cz>
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
@@ -29,6 +29,7 @@
 namespace KnihovnyCz\Autocomplete;
 
 use KnihovnyCz\View\Helper\KnihovnyCz\RecordLinker as RecordLinker;
+use Laminas\View\Helper\EscapeHtml;
 use Laminas\View\Renderer\PhpRenderer as Renderer;
 use VuFind\Search\Results\PluginManager as Results;
 use VuFindSearch\Command\SearchCommand;
@@ -40,7 +41,7 @@ use VuFindSearch\Service as SearchService;
  * This class provides suggestions by using the local Solr index and enrich
  * them with link to authority record.
  *
- * @category VuFind
+ * @category Knihovny.cz
  * @package  Autocomplete
  * @author   Vaclav Rosecky <vaclav.rosecky@mzk.cz>
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
@@ -77,6 +78,13 @@ class SolrAuthorityEnricher extends SolrPrefix
     protected $recordLinker;
 
     /**
+     * Escape html helper
+     *
+     * @var \Laminas\View\Helper\EscapeHtml
+     */
+    protected $escapeHtml;
+
+    /**
      * Renderer
      *
      * @var Renderer
@@ -108,17 +116,19 @@ class SolrAuthorityEnricher extends SolrPrefix
      * Constructor
      *
      * @param Results       $results       Results plugin manager
+     * @param EscapeHtml    $escapeHtml    Escape HTML helper
      * @param SearchService $searchService Search service plugin manager
      * @param RecordLinker  $recordLinker  Record linker
      * @param Renderer      $renderer      Renderer
      */
     public function __construct(
         \VuFind\Search\Results\PluginManager $results,
+        \Laminas\View\Helper\EscapeHtml $escapeHtml,
         \VuFindSearch\Service $searchService,
         \KnihovnyCz\View\Helper\KnihovnyCz\RecordLinker $recordLinker,
         \Laminas\View\Renderer\PhpRenderer $renderer
     ) {
-        parent::__construct($results);
+        parent::__construct($results, $escapeHtml);
         $this->searchService = $searchService;
         $this->recordLinker = $recordLinker;
         $this->renderer = $renderer;
@@ -158,10 +168,11 @@ class SolrAuthorityEnricher extends SolrPrefix
         $params->setApplyChildFilter(false);
         $fullQuery = new \VuFindSearch\Query\QueryGroup('OR');
         foreach ($authors as $author) {
-            if (!$this->isUnique($author)) {
+            $value = $author['value'];
+            if (!$this->isUnique($value)) {
                 continue;
             }
-            $query = $this->searchField . ':(' . $author . ')';
+            $query = $this->searchField . ':(' . $value . ')';
             $query = new \VuFindSearch\Query\Query($query);
             $fullQuery->addQuery($query);
         }
@@ -183,21 +194,23 @@ class SolrAuthorityEnricher extends SolrPrefix
         }
         $newResults = [];
         foreach ($authors as $author) {
-            $label = $author;
-            $recordIds = $idsByAuthor[$author] ?? [];
+            $label = $author['label'];
+            $value = $author['value'];
+            $recordIds = $idsByAuthor[$value] ?? [];
             // show link to authority record if only one author was found
             if (count($recordIds) == 1) {
                 $label = $this->renderer->render(
                     'autocomplete/authority',
                     [
-                        'author' => $author,
-                        'link'   => $this->recordLinker->getUrl($recordIds[0])
+                        'label' => $label,
+                        'value' => $value,
+                        'link'  => $this->recordLinker->getUrl($recordIds[0])
                     ]
                 );
             }
             $newResults[] = [
                 'label' => $label,
-                'value' => $author,
+                'value' => $value,
             ];
         }
         return $newResults;
