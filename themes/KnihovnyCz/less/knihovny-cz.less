@@ -29,7 +29,7 @@
 
 .nav .btn-bookbag-toggle a {
   display: block;
-  padding: @nav-link-padding;
+  padding: 10px 0;
   text-decoration: none;
 
   &:hover,
@@ -39,6 +39,10 @@
     text-decoration: @link-hover-decoration;
     background-color: transparent;
   }
+}
+
+.record-nav .nav li a {
+  padding: 10px 0;
 }
 
 // GENERAL
@@ -1146,4 +1150,22 @@ a.context-help-link {
 
 .mt-0 {
   margin-top: 0;
+}
+
+ul.external-links {
+  list-style: none;
+  padding-left: 0;
+  img {
+    margin-right: 0.5em;
+    margin-bottom: 0.3em;
+    height: 1em;
+  }
+}
+
+.record audio {
+  max-width: 100%;
+}
+
+img.signature {
+  max-height: 10em;
 }

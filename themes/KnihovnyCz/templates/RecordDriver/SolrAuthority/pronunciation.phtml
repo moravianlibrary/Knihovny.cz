@@ -1,0 +1,8 @@
+<?php if (!empty($data)): ?>
+  <?php if (!empty($this->data['ipa'])): ?>
+    <p>[<?=$this->escapeHtml($this->data['ipa'])?>]</p>
+  <?php endif; ?>
+  <?php if (!empty($this->data['pronunciation'])): ?>
+    <audio src="<?=$this->data['pronunciation']?>" controls></audio>
+  <?php endif; ?>
+<?php endif;
