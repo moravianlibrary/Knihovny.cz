@@ -99,6 +99,13 @@ class SolrPrefixSorted implements \VuFind\Autocomplete\AutocompleteInterface
     protected $limit = 10;
 
     /**
+     * Filters to apply to Solr search
+     *
+     * @var array
+     */
+    protected $filters = [];
+
+    /**
      * Constructor
      *
      * @param \VuFind\Search\Results\PluginManager $results    Results plugin manager
@@ -155,6 +162,9 @@ class SolrPrefixSorted implements \VuFind\Autocomplete\AutocompleteInterface
             $options = $params->getOptions();
             $options->disableHighlighting();
             $options->spellcheckEnabled(false);
+            foreach ($this->filters as $current) {
+                $this->searchObject->getParams()->addFilter($current);
+            }
             $this->searchObject->getResults();
             $filter = [
                 $this->facetField => $this->facetField
@@ -197,6 +207,18 @@ class SolrPrefixSorted implements \VuFind\Autocomplete\AutocompleteInterface
             $this->searchClassId = $entries[3];
         }
         $this->initSearchObject();
+    }
+
+    /**
+     * Add filters (in addition to the configured ones)
+     *
+     * @param array $filters Filters to add
+     *
+     * @return void
+     */
+    public function addFilters($filters)
+    {
+        $this->filters += $filters;
     }
 
     /**
