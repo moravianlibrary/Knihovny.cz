@@ -58,11 +58,10 @@ class SplitText extends AbstractHelper
         $length = (int)min(strlen($string), $length);
         $strpos = (int)strpos($string, ' ', $length);
 
-        if ($strpos <= $length) {
+        if ($strpos < $length) {
             $this->_first = $string;
             $this->_last = null;
         } else {
-            $strpos = (int)strpos($string, ' ', $length);
             $this->_first = substr($string, 0, $strpos) ?: null;
             $this->_last = substr($string, $strpos, strlen($string) - $strpos)
                 ?: null;
