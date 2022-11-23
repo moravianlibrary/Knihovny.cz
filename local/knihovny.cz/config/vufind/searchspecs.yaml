@@ -356,6 +356,7 @@ AllFields:
     - auto_conspectus_txt_mv^5
     - title_search_txt_mv
     - author_search_txt_mv
+    - occupation_txt_mv
   DismaxParams:
     - [bq, "inspiration:top_results^1"]
     - [bf, "if(exists(merged_records_boolean),10000,0)" ]
@@ -439,6 +440,8 @@ AllFields:
       - [onephrase, ~]
     uniftitle_viz:
       - [onephrase, 100]
+    occupation_txt_mv:
+      - [ onephrase, ~ ]
   FilterQuery: "*:* NOT record_format:library"
 
 adv_search_title_series:
@@ -838,5 +841,14 @@ adv_search_monographic_series:
   DismaxHandler: edismax
   QueryFields:
     monographic_series_txt_mv:
+      - [onephrase, 1]
+  FilterQuery: "*:* NOT record_format:library"
+
+adv_search_occupation:
+  DisMaxFields:
+    - occupation_txt_mv
+  DismaxHandler: edismax
+  QueryFields:
+    occupation_txt_mv:
       - [onephrase, 1]
   FilterQuery: "*:* NOT record_format:library"
