@@ -27,8 +27,6 @@
  */
 namespace KnihovnyCz\RecordDriver;
 
-use KnihovnyCz\RecordDriver\Feature\WikidataTrait;
-use VuFind\Cache\CacheTrait;
 use VuFindSearch\Command\SearchCommand;
 
 /**
@@ -42,9 +40,6 @@ use VuFindSearch\Command\SearchCommand;
  */
 class SolrAuthority extends \KnihovnyCz\RecordDriver\SolrMarc
 {
-    use WikidataTrait;
-    use CacheTrait;
-
     protected $wikiExternalLinks = [
         'orcid' => 'P496',
         'isni' => 'P213',
@@ -311,20 +306,6 @@ class SolrAuthority extends \KnihovnyCz\RecordDriver\SolrMarc
     }
 
     /**
-     * Method to ensure uniform cache keys for cached VuFind objects.
-     *
-     * @param string|null $suffix Optional suffix that will get appended to the
-     * object class name calling getCacheKey()
-     *
-     * @return string
-     */
-    protected function getCacheKey($suffix = null)
-    {
-        $id = str_replace('.', '_', $this->getUniqueID());
-        return 'authority_record_' . $id . '_' . $suffix;
-    }
-
-    /**
      * Return NKCR AUT ID or OsobnostiRegionu.cz Id
      *
      * @return string
@@ -340,26 +321,6 @@ class SolrAuthority extends \KnihovnyCz\RecordDriver\SolrMarc
     }
 
     /**
-     * Get data for this authority record from wikidata
-     *
-     * @return array
-     * @throws \Psr\Http\Client\ClientExceptionInterface
-     */
-    protected function getWikidataData(): array
-    {
-        $data = $this->getCachedData('wikidata');
-        if (empty($data)) {
-            $query = $this->getLinksQuery();
-            $data = $this->sparqlService->query(
-                $query,
-                ['schema', 'wikibase', 'wdt', 'wd']
-            );
-            $this->putCachedData('wikidata', $data);
-        }
-        return $data;
-    }
-
-    /**
      * Get links to external websites from wikidata
      *
      * @return array
@@ -367,50 +328,22 @@ class SolrAuthority extends \KnihovnyCz\RecordDriver\SolrMarc
     public function getWikidataLinks(): array
     {
         $data = $this->getWikidataData();
-        $links = [];
         $linkFields = array_merge(
             ['wikidata'],
             $this->wikiSiteLinks,
             array_keys($this->wikiExternalLinks)
         );
-        foreach ($data as $link) {
-            foreach ($linkFields as $field) {
-                $formatter = $field . 'Formatter';
-                if (isset($link[$field]['value'])) {
-                    $url = $link[$field]['value'];
-                    if (isset($link[$formatter]['value'])) {
-                        $url = str_replace(
-                            '$1',
-                            urlencode($link[$field]['value']),
-                            $link[$formatter]['value']
-                        );
-                    }
-                    $links[] = [
-                        'url' => $url,
-                        'label' => $field,
-                    ];
-                }
-            }
-        }
-        return $links;
+        return $this->formatLinks($data, $linkFields);
     }
 
     /**
      * Creates query for wikidata links
      *
-     * @return string
+     * @return array[string query, array prefixes]
      */
-    protected function getLinksQuery(): string
+    protected function getWikidataQuery(): array
     {
         $id = $this->getCombinedAuthorityId();
-
-        $urlQueryPattern = <<<SPARQL
-    OPTIONAL {
-        wd:%s wdt:P1630 ?%sFormatter .
-        ?wikidata wdt:%s ?%s .
-    }
-
-SPARQL;
 
         $siteLinksQueryPattern = <<<SPARQL
 	OPTIONAL {
@@ -422,7 +355,7 @@ SPARQL;
 SPARQL;
 
         $queryPattern = <<<SPARQL
-SELECT ?wikidata ?wikidataLabel %s %s %s ?signature ?pronunciation ?ipa
+SELECT ?wikidata ?wikidataLabel %s %s ?signature ?pronunciation ?ipa
 WHERE
 {
 	?wikidata wdt:P691|wdt:P9299 "%s" .
@@ -450,28 +383,11 @@ SPARQL;
             },
             $this->wikiSiteLinks
         );
-        $fields = array_map(
-            function ($field) {
-                return '?' . $field;
-            },
-            array_keys($this->wikiExternalLinks)
+        $subquery = $this->createExternalIdentifiersSubquery(
+            'wikidata',
+            $this->wikiExternalLinks
         );
-        $formatters = array_map(
-            function ($field) {
-                return $field . 'Formatter';
-            },
-            $fields
-        );
-        $queryUrls = '';
-        foreach ($this->wikiExternalLinks as $name => $property) {
-            $queryUrls .= sprintf(
-                $urlQueryPattern,
-                $property,
-                $name,
-                $property,
-                $name
-            );
-        }
+
         $querySiteLinks = '';
         foreach ($this->wikiSiteLinks as $site) {
             $querySiteLinks .= sprintf(
@@ -483,16 +399,16 @@ SPARQL;
                 $site
             );
         }
-        return sprintf(
+        $query = sprintf(
             $queryPattern,
             implode(' ', $siteLinksFields),
-            implode(' ', $fields),
-            implode(' ', $formatters),
+            $subquery['variables'],
             addslashes($id),
             $querySiteLinks,
-            $queryUrls,
+            $subquery['where'],
             $this->getTranslatorLocale()
         );
+        return [$query, ['schema', 'wikibase', 'wdt', 'wd']];
     }
 
     /**

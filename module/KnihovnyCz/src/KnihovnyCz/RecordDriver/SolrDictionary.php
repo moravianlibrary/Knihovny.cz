@@ -27,8 +27,6 @@
  */
 namespace KnihovnyCz\RecordDriver;
 
-use KnihovnyCz\RecordDriver\Feature\WikidataTrait;
-
 /**
  * Knihovny.cz solr dictionary record driver
  *
@@ -40,8 +38,6 @@ use KnihovnyCz\RecordDriver\Feature\WikidataTrait;
  */
 class SolrDictionary extends \KnihovnyCz\RecordDriver\SolrMarc
 {
-    use WikidataTrait;
-
     /**
      * Record data formatter key
      *

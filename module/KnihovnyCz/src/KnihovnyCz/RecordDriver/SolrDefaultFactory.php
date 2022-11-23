@@ -87,6 +87,15 @@ class SolrDefaultFactory extends \VuFind\RecordDriver\SolrDefaultFactory
         $driver->attachAuthManager(
             $container->get('VuFind\AuthManager')
         );
+        $driver->attachSparqlService(
+            $container->get(\KnihovnyCz\Wikidata\SparqlService::class)
+        );
+        // Populate cache storage if a setCacheStorage method is present:
+        if (method_exists($driver, 'setCacheStorage')) {
+            $driver->setCacheStorage(
+                $container->get(\VuFind\Cache\Manager::class)->getCache('object')
+            );
+        }
         return $driver;
     }
 }

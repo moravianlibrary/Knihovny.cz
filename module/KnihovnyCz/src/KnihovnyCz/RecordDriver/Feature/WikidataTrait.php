@@ -59,4 +59,108 @@ trait WikidataTrait
     ): void {
         $this->sparqlService = $sparqlService;
     }
+
+    /**
+     * Create Wikidata query for getting property values and corresponding formatters
+     *
+     * @param string $entityVariable           Wikidata entity variable
+     * @param array  $identifiersAndProperties Array of identifiers => properties
+     *
+     * @return array
+     */
+    protected function createExternalIdentifiersSubquery(
+        string $entityVariable,
+        array $identifiersAndProperties
+    ): array {
+        $urlQueryPattern = <<<SPARQL
+    OPTIONAL {
+        wd:%s wdt:P1630 ?%sFormatter .
+        ?%s wdt:%s ?%s .
+    }
+
+SPARQL;
+        $subquery = '';
+        foreach ($identifiersAndProperties as $externalIdentifier => $property) {
+            $subquery .= sprintf(
+                $urlQueryPattern,
+                $property,
+                $externalIdentifier,
+                $entityVariable,
+                $property,
+                $externalIdentifier
+            );
+        }
+        $fields = array_map(
+            function ($field) {
+                return '?' . $field;
+            },
+            array_keys($identifiersAndProperties)
+        );
+        $formatters = array_map(
+            function ($field) {
+                return $field . 'Formatter';
+            },
+            $fields
+        );
+        $variables = array_merge($fields, $formatters);
+        return [
+            'variables' => implode(' ', $variables),
+            'where' => $subquery,
+        ];
+    }
+
+    /**
+     * Get data for this authority record from wikidata
+     *
+     * @return array
+     * @throws \Psr\Http\Client\ClientExceptionInterface
+     */
+    protected function getWikidataData(): array
+    {
+        $data = $this->getCachedData('wikidata');
+        if (empty($data)) {
+            $queryData = $this->tryMethod('getWikidataQuery');
+            if (empty($queryData)) {
+                return [];
+            }
+            [$query, $prefixes] = $queryData;
+            $data = $this->sparqlService->query($query, $prefixes);
+            $this->putCachedData('wikidata', $data);
+        }
+        return $data;
+    }
+
+    /**
+     * Format links using wikidata formatters
+     *
+     * @param array $data          Data from Wikidata
+     * @param array $linksToFormat Links to format
+     *
+     * @return array
+     */
+    protected function formatLinks(array $data, array $linksToFormat): array
+    {
+        $links = [];
+        foreach ($data as $link) {
+            foreach ($linksToFormat as $field) {
+                $formatter = $field . 'Formatter';
+                if (isset($link[$field]['value'])) {
+                    $url = $link[$field]['value'];
+                    if (isset($link[$formatter]['value'])) {
+                        $url = str_replace(
+                            '$1',
+                            urlencode($link[$field]['value']),
+                            $link[$formatter]['value']
+                        );
+                    }
+                    $links[] = [
+                        'url' => $url,
+                        'label' => $field,
+                        'value' => $link[$field]['value'],
+                    ];
+                }
+            }
+        }
+        return $links;
+    }
 }

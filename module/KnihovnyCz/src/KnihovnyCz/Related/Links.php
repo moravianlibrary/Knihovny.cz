@@ -69,6 +69,7 @@ class Links implements \VuFind\Related\RelatedInterface
         $this->links = match ($settings) {
             'external' => $driver->tryMethod('getExternalLinks') ?? [],
             'identifiers' => $driver->tryMethod('getIdentifiersLinks') ?? [],
+            'socialsites' => $driver->tryMethod('getSocialSitesLinks') ?? [],
             default => [],
         };
         $this->label = "related_" . $settings . "_links";
