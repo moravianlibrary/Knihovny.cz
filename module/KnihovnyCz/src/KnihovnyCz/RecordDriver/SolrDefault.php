@@ -42,6 +42,8 @@ class SolrDefault extends \VuFind\RecordDriver\SolrDefault
 {
     use Feature\BuyLinksTrait;
     use Feature\ObalkyKnihTrait;
+    use Feature\WikidataTrait;
+    use \VuFind\Cache\CacheTrait;
 
     private const EDD_SUBTYPE_ARTICLE = 'article';
     private const EDD_SUBTYPE_SELECTION = 'selection';
@@ -769,5 +771,19 @@ class SolrDefault extends \VuFind\RecordDriver\SolrDefault
     public function getRecordDataTypeDescription(): string
     {
         return $this->recordDataTypeDescription;
+    }
+
+    /**
+     * Method to ensure uniform cache keys for cached VuFind objects.
+     *
+     * @param string|null $suffix Optional suffix that will get appended to the
+     * object class name calling getCacheKey()
+     *
+     * @return string
+     */
+    protected function getCacheKey($suffix = null)
+    {
+        $id = str_replace('.', '_', $this->getUniqueID());
+        return 'record_' . $id . '_' . $suffix;
     }
 }

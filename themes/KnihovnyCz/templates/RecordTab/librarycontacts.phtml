@@ -15,6 +15,12 @@
     <?php foreach ($emailes as $email): ?><a href="mailto:<?=$this->escapeHtmlAttr($email)?>"><?=$this->escapeHtml($email)?></a><br/><?php endforeach; ?>
 <?php endif; ?>
 
+<!-- ISDS-->
+<?php $isds = $this->driver->getIsds(); if (!empty($isds)): ?>
+  <h2><i class="fa fa-envelope-o"></i> <?=$this->translate('databox')?></h2>
+  <?php foreach ($isds as $isd): ?><a href="<?=$this->escapeHtmlAttr($isd['url'])?>"><?=$this->escapeHtml($isd['value'])?></a><br/><?php endforeach; ?>
+<?php endif; ?>
+
 <!-- LibResponsibility-->
 <?php $libresponsibilities = $this->driver->getLibResponsibility(); if (!empty($libresponsibilities)): ?>
     <h2><i class="fa fa-circle-thin"></i> <?=$this->translate('LibResponsibility')?></h2>

@@ -27,6 +27,8 @@
  */
 namespace KnihovnyCz\RecordDriver;
 
+use KnihovnyCz\RecordDriver\Feature\WikidataTrait;
+
 /**
  * Knihovny.cz solr library record driver
  *
@@ -38,6 +40,25 @@ namespace KnihovnyCz\RecordDriver;
  */
 class SolrLibrary extends \KnihovnyCz\RecordDriver\SolrMarc
 {
+    use WikidataTrait;
+
+    protected array $wikiExternalLinks = [
+        'isds' => 'P8987',
+        'facebook' => 'P2013',
+        'youtube' => 'P2397',
+        'github' => 'P2037',
+        'twitter' => 'P2002',
+        'instagram' => 'P2003',
+    ];
+
+    protected array $socialSites = [
+        'facebook',
+        'instagram',
+        'twitter',
+        'youtube',
+        'github',
+    ];
+
     /**
      * Facets configuration
      *
@@ -516,5 +537,65 @@ class SolrLibrary extends \KnihovnyCz\RecordDriver\SolrMarc
     public function getFormats()
     {
         return ['libraries'];
+    }
+
+    /**
+     * Creates query for wikidata links
+     *
+     * @return array[string query, array prefixes]
+     */
+    protected function getWikidataQuery(): array
+    {
+        $id = $this->getSigla();
+
+        $queryPattern = <<<SPARQL
+SELECT ?wikidata ?wikidataLabel %s
+WHERE
+{
+	?wikidata wdt:P9559 "%s" .
+%s
+
+	SERVICE wikibase:label { bd:serviceParam wikibase:language "%s". }
+}
+LIMIT 1
+SPARQL;
+
+        $subquery = $this->createExternalIdentifiersSubquery(
+            'wikidata',
+            $this->wikiExternalLinks
+        );
+
+        $query = sprintf(
+            $queryPattern,
+            $subquery['variables'],
+            addslashes($id),
+            $subquery['where'],
+            $this->getTranslatorLocale()
+        );
+        return [$query, ['wikibase', 'wdt', 'wd']];
+    }
+
+    /**
+     * Get links to social networks
+     *
+     * @return array
+     * @throws \Psr\Http\Client\ClientExceptionInterface
+     */
+    public function getSocialSitesLinks(): array
+    {
+        $data = $this->getWikidataData();
+        return $this->formatLinks($data, $this->socialSites);
+    }
+
+    /**
+     * Get information about ISDS (datova schranka)
+     *
+     * @return array
+     * @throws \Psr\Http\Client\ClientExceptionInterface
+     */
+    public function getIsds(): array
+    {
+        $data = $this->getWikidataData();
+        return $this->formatLinks($data, ['isds']);
     }
 }
