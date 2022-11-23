@@ -301,6 +301,16 @@ class SolrAuthority extends \KnihovnyCz\RecordDriver\SolrMarc
     }
 
     /**
+     * Get authority occupation
+     *
+     * @return array
+     */
+    public function getOccupation(): array
+    {
+        return $this->fields['occupation_display_mv'] ?? [];
+    }
+
+    /**
      * Method to ensure uniform cache keys for cached VuFind objects.
      *
      * @param string|null $suffix Optional suffix that will get appended to the

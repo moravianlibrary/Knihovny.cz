@@ -198,6 +198,7 @@ class RecordDataFormatterFactory
     public function getDefaultAuthorityCoreSpecs()
     {
         $spec = new SpecBuilder();
+        $spec->setLine('Occupation', 'getOccupation');
         $spec->setTemplateLine(
             'Pronunciation',
             'getPronunciation',
