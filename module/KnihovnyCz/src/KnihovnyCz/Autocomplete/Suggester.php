@@ -120,7 +120,9 @@ class Suggester implements \VuFind\I18n\Translator\TranslatorAwareInterface
                         'type' => $type,
                     ];
                 } else {
-                    $item['type'] = $type;
+                    if (!isset($item['type'])) {
+                        $item['type'] = $type;
+                    }
                     $items[] = $item;
                 }
             }

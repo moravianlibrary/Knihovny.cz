@@ -594,11 +594,13 @@ $config = [
                 'factories' => [
                     \KnihovnyCz\Autocomplete\SolrPrefix::class => \KnihovnyCz\Autocomplete\SolrFactoryWithFilter::class,
                     \KnihovnyCz\Autocomplete\SolrPrefixSorted::class => \KnihovnyCz\Autocomplete\SolrFactoryWithFilter::class,
+                    \KnihovnyCz\Autocomplete\SolrPrefixHandler::class => \KnihovnyCz\Autocomplete\SolrFactoryWithFilter::class,
                     \KnihovnyCz\Autocomplete\SolrAuthorityEnricher::class => \KnihovnyCz\Autocomplete\SolrAuthorityEnricherFactory::class,
                 ],
                 'aliases' => [
                     'solrprefix' => \KnihovnyCz\Autocomplete\SolrPrefix::class,
                     'solrprefixsorted' => \KnihovnyCz\Autocomplete\SolrPrefixSorted::class,
+                    'solrprefixhandler' => \KnihovnyCz\Autocomplete\SolrPrefixHandler::class,
                     'solrauthorityenricher' => \KnihovnyCz\Autocomplete\SolrAuthorityEnricher::class,
                 ]
             ],
