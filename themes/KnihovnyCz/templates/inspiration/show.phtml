@@ -1,0 +1,35 @@
+<?php
+$listName = $this->list->title_cs ?? $this->list->title ?? '';
+// Set page title.
+$this->headTitle($listName);
+$this->layout()->breadcrumbs .= '<li class="active">' . $this->escapeHtml($listName) . '</li>';
+$this->layout()->searchbox = false;
+// Load search actions and settings (if any):
+$options = $this->searchOptions($this->searchClassId);
+$searchAction = $options->getSearchAction();
+$listUrl = $this->url($searchAction) . "?" . http_build_query(
+    [
+      'lookfor' => $this->facetField . ':"' . $this->slug . '"',
+      'type' => $this->searchType,
+    ]
+);
+?>
+
+<h1><?=$listName?></h1>
+<p>
+  <?=$this->list->description ?? ''?>
+</p>
+
+<div class="row">
+  <?php $i = 0; ?>
+  <?php foreach ($this->items as $item):?>
+    <?php if (get_class($item) === \VuFind\RecordDriver\Missing::class): ?>
+      <?php continue; ?>
+    <?php endif; ?>
+    <?php $i++; ?>
+    <?=$this->context($this)->renderInContext('item', ['item' => $item]); ?>
+    <?php if ($i % 2 == 0): ?>
+      <div class="clearfix"></div>
+    <?php endif; ?>
+    <?php endforeach; ?>
+</div>
