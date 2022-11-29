@@ -69,13 +69,29 @@ class InspirationController extends \VuFind\Controller\AbstractBase
     public function showAction()
     {
         $list = $this->params()->fromRoute('list');
-        $lookfor = 'inspiration:' . $list;
-        $options = [
-            'query' => [
-                'lookfor'  => $lookfor,
-                'type' => 'AllFields',
-            ]
-        ];
-        return $this->redirect()->toRoute('search-results', [], $options);
+        $listData = $this->getListData($list);
+        return $this->createViewModel($listData);
+    }
+
+    /**
+     * Get inspiration list data
+     *
+     * @param string $listId List identifier
+     *
+     * @return array
+     */
+    protected function getListData(string $listId): array
+    {
+        $blockManager = $this->serviceLocator
+            ->get(\VuFind\ContentBlock\PluginManager::class);
+        $listType = 'Inspiration';
+        $slugParts = explode('-', $listId);
+        if (is_numeric($slugParts[0])) {
+            $listId = $slugParts[0];
+            $listType = 'UserList';
+        }
+        $contentBlock = $blockManager->get($listType);
+        $contentBlock->setConfig($listId . ':50');
+        return $contentBlock->getContext();
     }
 }
