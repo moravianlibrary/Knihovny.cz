@@ -27,6 +27,8 @@
  */
 namespace KnihovnyCz\RecordDriver;
 
+use KnihovnyCz\RecordDriver\Feature\WikidataTrait;
+use VuFind\Cache\CacheTrait;
 use VuFind\View\Helper\Root\RecordLinker;
 
 /**
@@ -40,6 +42,9 @@ use VuFind\View\Helper\Root\RecordLinker;
  */
 class EDS extends \VuFind\RecordDriver\EDS
 {
+    use WikidataTrait;
+    use CacheTrait;
+
     /**
      * Get access url
      *
@@ -101,5 +106,19 @@ class EDS extends \VuFind\RecordDriver\EDS
     public function getFTCustomLinks()
     {
         return [];
+    }
+
+    /**
+     * Method to ensure uniform cache keys for cached VuFind objects.
+     *
+     * @param string|null $suffix Optional suffix that will get appended to the
+     * object class name calling getCacheKey()
+     *
+     * @return string
+     */
+    protected function getCacheKey($suffix = null)
+    {
+        $id = str_replace(['.', ','], '_', $this->getUniqueID());
+        return 'edsrecord_' . $id . '_' . $suffix;
     }
 }

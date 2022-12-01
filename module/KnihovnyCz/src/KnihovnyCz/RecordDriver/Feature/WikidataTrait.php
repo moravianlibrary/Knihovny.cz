@@ -163,4 +163,67 @@ SPARQL;
         }
         return $links;
     }
+
+    /**
+     * Get information about cited documents
+     *
+     * @return array
+     */
+    public function getCitedDocuments(): array
+    {
+        $data = $this->getCachedData('cites');
+        if (empty($data)) {
+            $data = $this->getCitesFromWikidata();
+            $this->putCachedData('wikidata', $data);
+        }
+        return $data;
+    }
+
+    /**
+     * Get information about cited documents from wikidata
+     *
+     * @return array
+     */
+    protected function getCitesFromWikidata(): array
+    {
+        $doi = $this->getCleanDOI();
+        if (empty($doi)) {
+            return [];
+        }
+        $doi = strtoupper($doi);
+        $queryPattern = <<<SPARQL
+SELECT ?item ?cite ?citeLabel ?authorLabel ?authorStringLabel ?doi
+WHERE
+{
+  ?item wdt:P356 "%s" ;
+        wdt:P2860 ?cite .
+  ?cite wdt:P356 ?doi .
+  OPTIONAL {
+    ?cite wdt:P50 ?author .
+  }
+  OPTIONAL {
+    ?cite wdt:P2093 ?authorString .
+  }
+  SERVICE wikibase:label { bd:serviceParam wikibase:language "%s". }
+}
+SPARQL;
+        $lang = ($this->getTranslatorLocale() === 'cs') ? 'cs,en' : 'en,cs';
+        $query = sprintf($queryPattern, $doi, $lang);
+        $data = $this->sparqlService->query($query, ['wdt', 'wd', 'wikibase']);
+        $citedDocuments = [];
+        foreach ($data as $item) {
+            if (isset($item['authorLabel']['value'])) {
+                $citedDocuments[$item['cite']['value']]['authors'][]
+                    = $item['authorLabel']['value'];
+            }
+            if (isset($item['authorStringLabel']['value'])) {
+                $citedDocuments[$item['cite']['value']]['authors'][]
+                    = $item['authorStringLabel']['value'];
+            }
+            $citedDocuments[$item['cite']['value']]['doi'] = $item['doi']['value'];
+            $citedDocuments[$item['cite']['value']]['title']
+                = $item['citeLabel']['value'];
+        }
+        return $citedDocuments;
+    }
 }
