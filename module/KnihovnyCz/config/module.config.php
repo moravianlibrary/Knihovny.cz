@@ -304,7 +304,7 @@ $config = [
                     \KnihovnyCz\RecordDriver\SolrMarc::class => \KnihovnyCz\RecordDriver\SolrDefaultFactory::class,
                     \KnihovnyCz\RecordDriver\SolrLocal::class => \KnihovnyCz\RecordDriver\SolrLocalFactory::class,
                     \KnihovnyCz\RecordDriver\Search2Library::class => \KnihovnyCz\RecordDriver\SolrLibraryFactory::class,
-                    \KnihovnyCz\RecordDriver\EDS::class => \VuFind\RecordDriver\NameBasedConfigFactory::class,
+                    \KnihovnyCz\RecordDriver\EDS::class => \KnihovnyCz\RecordDriver\EdsFactory::class,
                 ],
                 'aliases' => [
                     'solrauthority' => \KnihovnyCz\RecordDriver\SolrAuthority::class,
@@ -329,6 +329,7 @@ $config = [
             'recordtab' => [
                 'invokables' => [
                     'buy' => \KnihovnyCz\RecordTab\Buy::class,
+                    'cites' => \KnihovnyCz\RecordTab\Cites::class,
                     'dedupedrecords' => \KnihovnyCz\RecordTab\DedupedRecords::class,
                     'edsavailability' => \KnihovnyCz\RecordTab\EdsAvailability::class,
                     'eversion' => \KnihovnyCz\RecordTab\EVersion::class,

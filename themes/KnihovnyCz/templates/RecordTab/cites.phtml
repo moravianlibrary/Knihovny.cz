@@ -1,0 +1,20 @@
+<?php
+// Set page title.
+$this->headTitle($this->driver->getBreadcrumb());
+$data = $this->driver->getCitedDocuments();
+?>
+<h3><?= $this->translate('Cited documents'); ?></h3>
+<?php foreach($data as $document): ?>
+  <?php
+    $searchAction = $this->searchOptions($this->driver->getSourceIdentifier())->getSearchAction();
+    $url = $this->url($searchAction) . "?" . http_build_query(
+        [
+        'lookfor' => $document['doi'] ?? $document['title'],
+        'type' => 'AllFields',
+      ]
+    );
+    $authors = implode(', ', array_unique($document['authors'] ?? []));
+  ?>
+  <?=$authors?>: <br />
+  <a href="<?=$url?>"><?=$document['title']?></a><br /><br />
+<?php endforeach; ?>
