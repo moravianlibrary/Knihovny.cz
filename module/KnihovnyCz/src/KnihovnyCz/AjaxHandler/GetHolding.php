@@ -32,7 +32,7 @@ use Laminas\Mvc\Controller\Plugin\Params;
 use VuFind\ILS\Connection;
 use VuFind\ILS\Logic\Holds as Holds;
 use VuFind\Session\Settings as SessionSettings;
-use VuFind\View\Helper\Root\RecordLink as RecordLink;
+use VuFind\View\Helper\Root\RecordLinker as RecordLinker;
 
 /**
  * Class Get Holding
@@ -65,9 +65,9 @@ class GetHolding extends \VuFind\AjaxHandler\AbstractBase
     /**
      * Record link helper
      *
-     * @var RecordLink
+     * @var RecordLinker
      */
-    protected $recordLink;
+    protected $recordLinker;
 
     /**
      * Holdings logic helper
@@ -81,18 +81,18 @@ class GetHolding extends \VuFind\AjaxHandler\AbstractBase
      *
      * @param SessionSettings $ss            Session settings
      * @param Holds           $holds         Hold logic
-     * @param RecordLink      $recordLink    Record link
+     * @param RecordLinker    $recordLinker  Record link
      * @param HoldingsLogic   $holdingsLogic Holdings logic
      */
     public function __construct(
         SessionSettings $ss,
         Holds $holds,
-        RecordLink $recordLink,
+        RecordLinker $recordLinker,
         HoldingsLogic $holdingsLogic
     ) {
         $this->sessionSettings = $ss;
         $this->holds = $holds;
-        $this->recordLink = $recordLink;
+        $this->recordLinker = $recordLinker;
         $this->holdingsLogic = $holdingsLogic;
     }
 
@@ -122,7 +122,7 @@ class GetHolding extends \VuFind\AjaxHandler\AbstractBase
         foreach ($holding['holdings'] as $location => $hold) {
             foreach ($hold['items'] as $item) {
                 if (isset($item['link'])) {
-                    $item['link'] = $this->recordLink->getRequestUrl($item['link']);
+                    $item['link'] = $this->recordLinker->getRequestUrl($item['link']);
                 }
                 if (isset($item['status'])) {
                     $holdingStatus = $this->holdingsLogic->getAvailabilityByStatus(

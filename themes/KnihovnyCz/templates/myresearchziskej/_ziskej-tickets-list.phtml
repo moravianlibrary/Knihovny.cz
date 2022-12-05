@@ -12,7 +12,7 @@
       <?php
       $thumbnail = false;
       if ($record) {
-        $coverDetails = $this->record($record)->getCoverDetails('checkedout', 'small', $this->recordLink()->getUrl($record));
+        $coverDetails = $this->record($record)->getCoverDetails('checkedout', 'small', $this->recordLinker()->getUrl($record));
         $cover = $coverDetails['html'];
         if ($cover) {
           ob_start();
@@ -35,7 +35,7 @@
               ? $this->escapeHtml($record->getTitle())
               : $this->transEsc('Title not available');
             ?>
-            <a href="<?=$this->recordLink()->getUrl($record)?>" class="title"><?=$title?></a>
+            <a href="<?=$this->recordLinker()->getUrl($record)?>" class="title"><?=$title?></a>
           <?php else: ?>
             <?=$this->transEsc('record_info_not_available')?>
           <?php endif; ?>

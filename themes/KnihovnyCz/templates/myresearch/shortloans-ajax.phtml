@@ -2,7 +2,7 @@
   <ul>
     <?php foreach($this->links as $link): ?>
       <li>
-        <a href="<?=$this->recordLink()->getUrl($link['id'])?>"><?=$this->transEsc($link['label'])?></a>
+        <a href="<?=$this->recordLinker()->getUrl($link['id'])?>"><?=$this->transEsc($link['label'])?></a>
       </li>
     <?php endforeach; ?>
   </ul>
@@ -72,7 +72,7 @@
         <td><?=$this->transEsc($ilsDetails['start'])?></td>
         <td><?=$this->transEsc($ilsDetails['end'])?></td>
         <td>
-          <a href="<?=$this->recordLink()->getUrl($resource)?>"><?=$this->escapeHtml($resource->getTitle())?></a>
+          <a href="<?=$this->recordLinker()->getUrl($resource)?>"><?=$this->escapeHtml($resource->getTitle())?></a>
         </td>
         <td><?=$this->transEsc($ilsDetails['callnumber'])?></td>
       </tr>
