@@ -794,7 +794,7 @@ body.ziskej-mode-dev {
   align-items: center;
   justify-content: center;
   background-color: rgba(0, 0, 0, 0.4);
-  z-index: 2000;
+  z-index: 999;
 }
 
 // fix button color
@@ -1172,4 +1172,20 @@ ul.external-links {
 
 img.signature {
   max-height: 10em;
+}
+
+.dropdown-menu {
+  li {
+    &.divider {
+      margin: 3px 0;
+    }
+
+    a {
+      padding: 0.5rem 1rem 0.3rem 0.8rem;
+    }
+  }
+}
+
+.flex{
+  display: flex !important;
 }
