@@ -76,7 +76,10 @@ class PluginFactory extends \VuFind\Config\PluginFactory
                 ->get(ConfigTable::class);
             $dbConfig = $this->loadConfigFromDb($requestedName);
         }
-        $fileConfig = $this->loadConfigFile($requestedName . '.ini');
+        $pathResolver = $container->get(\VuFind\Config\PathResolver::class);
+        $fileConfig = $this->loadConfigFile(
+            $pathResolver->getConfigPath($requestedName . '.ini')
+        );
         return $fileConfig->merge($dbConfig);
     }
 

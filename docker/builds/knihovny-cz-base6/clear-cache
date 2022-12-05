@@ -2,4 +2,4 @@
 
 cd /var/www/knihovny-cz
 
-VUFIND_LOCAL_DIR="local/$PARAM_VUFIND_CONFIG_DIR" VUFIND_LOCAL_MODULES="KnihovnyCz,KnihovnyCzConsole" php public/index.php util/clear_cache
+VUFIND_LOCAL_DIR="local/$PARAM_VUFIND_CONFIG_DIR" VUFIND_LOCAL_MODULES="KnihovnyCz,KnihovnyCzConsole,VuFindConsole" php public/index.php util/clear_cache

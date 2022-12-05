@@ -71,7 +71,7 @@ class GetHoldingFactory implements \Laminas\ServiceManager\Factory\FactoryInterf
         return new $requestedName(
             $container->get(\VuFind\Session\Settings::class),
             $container->get(\VuFind\ILS\Logic\Holds::class),
-            $container->get('ViewHelperManager')->get('recordLink'),
+            $container->get('ViewHelperManager')->get('recordLinker'),
             $container->get(\KnihovnyCz\ILS\Logic\Holdings::class)
         );
     }
