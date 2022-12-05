@@ -45,34 +45,19 @@
             </li>
           <?php endif; ?>
           <?php if (is_object($account) && $account->loginEnabled()): // hide login/logout if unavailable ?>
-            <li class="logoutOptions<?php if($account->dropdownEnabled()): ?> with-dropdown<?php endif ?><?php if(!$account->isLoggedIn()): ?> hidden<?php endif ?>">
-              <a href="<?=$this->url('myresearch-home', [], ['query' => ['redirect' => 0]])?>">
+            <?php if($account->isLoggedIn()): ?>
+            <li class="dropdown">
+              <a href="#" data-toggle="dropdown">
                 <span id="account-icon"><?=$this->icon('my-account') ?></span>
-                <?=$this->escapeHtml($accountLabel)?>
+                <?=$this->escapeHtml($accountLabel)?><?=$this->icon('dropdown-caret') ?>
               </a>
+              <ul class="dropdown-menu">
+                <?=$this->render('accountmenu'); ?>
+              </ul>
             </li>
-            <?php if ($account->dropdownEnabled()): ?>
-              <li id="login-dropdown" class="dropdown<?php if(!$account->isLoggedIn()): ?> hidden<?php endif ?>">
-                <a href="#" data-toggle="dropdown"><?=$this->icon('dropdown-caret') ?></a>
-                <div class="dropdown-menu">
-                  <?=$this->render('myresearch/menu'); ?>
-                </div>
-              </li>
-            <?php else: ?>
-              <div class="hidden">
-                <span class="checkedout-status status hidden"><?=$this->icon('spinner') ?></span>
-                <span class="holds-status status hidden"><?=$this->icon('spinner') ?></span>
-                <span class="fines-status status hidden"><?=$this->icon('spinner') ?></span>
-                <span class="profile-status status hidden"><?=$this->icon('spinner') ?></span>
-              </div>
-            <?php endif; ?>
-            <li class="logoutOptions<?php if(!$account->isLoggedIn()): ?> hidden<?php endif ?>">
-              <a href="<?=$this->url('myresearch-logout')?>" class="logout">
-                <?=$this->icon('sign-out') ?>
-                <?=$this->transEsc("Log Out")?>
-              </a>
-            </li>
-            <li id="loginOptions"<?php if($account->isLoggedIn()): ?> class="hidden"<?php endif ?>>
+            <?php endif ?>
+            <?php if(!$account->isLoggedIn()): ?>
+            <li id="loginOptions">
               <?php if ($account->getSessionInitiator($this->serverUrl($this->url('myresearch-home')))): ?>
                 <a href="<?=$this->url('myresearch-userlogin')?>">
                   <?=$this->icon('sign-in') ?>
@@ -85,8 +70,8 @@
                 </a>
               <?php endif; ?>
             </li>
+            <?php endif ?>
           <?php endif; ?>
-
           <?php if (isset($this->layout()->themeOptions) && count($this->layout()->themeOptions) > 1): ?>
             <li class="theme dropdown">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown"><?=$this->transEsc("Theme")?><?=$this->icon('dropdown-caret') ?></a>
@@ -101,10 +86,12 @@
               </ul>
             </li>
           <?php endif; ?>
-
           <?php if (isset($this->layout()->allLangs) && count($this->layout()->allLangs) > 1): ?>
             <li class="language dropdown">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown"><?=$this->icon('language-select') ?> <?=$this->transEsc("Language")?><?=$this->icon('dropdown-caret') ?></a>
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                <?=$this->icon('language-select') ?>
+                <?=$this->transEsc("Language")?><?=$this->icon('dropdown-caret') ?>
+              </a>
               <ul class="dropdown-menu">
                 <?php foreach ($this->layout()->allLangs as $langCode => $langName): ?>
                   <li<?=$this->layout()->userLang == $langCode ? ' class="active"' : ''?>>
