@@ -37,122 +37,155 @@
 
 <?php if ($ilsOnline && $this->ils()->checkCapability('getMyTransactions', $capabilityParams)): ?>
 <li class="<?=$this->active == 'checkedout' ? 'active' : ''?>">
-  <a href="<?=$this->url('myresearch-checkedout')?>">
-    <?=$this->icon('user-checked-out') ?>
-    <?=$this->transEsc('Checked Out Items')?>
+  <a href="<?=$this->url('myresearch-checkedout')?>" class="flex checkedout">
+    <span class="flex-col">
+      <?=$this->icon('user-checked-out') ?>
+      <?=$this->transEsc('Checked Out Items')?>
+    </span>
+    <span class="checkedout-status status hidden"><?=$this->icon('spinner') ?></span>
   </a>
 </li>
 <?php endif; ?>
 <?php if ($ilsOnline && $this->ils()->checkCapability('getMyShortLoans', $capabilityParams)): ?>
 <li class="<?=$this->active == 'shortloans' ? 'active' : ''?>">
-  <a href="<?=$this->url('myresearch-shortloans')?>?require_login">
-    <?=$this->icon('short-loans') ?>
-    <?=$this->transEsc('short_loan_title_text')?>
+  <a href="<?=$this->url('myresearch-shortloans')?>?require_login" class="flex">
+    <span class="flex-col">
+      <?=$this->icon('short-loans') ?>
+      <?=$this->transEsc('short_loan_title_text')?>
+    </span>
   </a>
 </li>
 <?php endif; ?>
 <?php if ($ilsOnline && $this->ils()->checkFunction('getMyTransactionHistory', $capabilityParams)): ?>
 <li class="<?=$this->active == 'historicloans' ? 'active' : ''?>">
-  <a href="<?=$this->url('myresearch-historicloans')?>">
-    <?=$this->icon('user-loan-history') ?>
-    <?=$this->transEsc('Loan History')?>
+  <a href="<?=$this->url('myresearch-historicloans')?>" class="flex">
+    <span class="flex-col">
+      <?=$this->icon('user-loan-history') ?>
+      <?=$this->transEsc('Loan History')?>
+    </span>
   </a>
 </li>
 <?php endif; ?>
 <?php if ($this->ziskejMvs()->isEnabled()): ?>
 <li class="<?=$this->active == 'ziskej' ? 'active' : ''?>">
-  <a href="<?=$this->url('myresearch-ziskej-home')?>">
-    <?=$this->icon('user-ziskej') ?>
-    <?=$this->transEsc('Ziskej::service_name')?>
+  <a href="<?=$this->url('myresearch-ziskej-home')?>" class="flex ziskej">
+    <span class="flex-col">
+      <?=$this->icon('user-ziskej') ?>
+      <?=$this->transEsc('Ziskej::service_name')?>
+    </span>
+    <span class="ziskej-status status hidden"><?=$this->icon('spinner') ?></span>
   </a>
 </li>
 <?php endif; ?>
 <?php if ($ilsOnline && $this->ils()->checkCapability('getMyHolds', $capabilityParams)): ?>
 <li class="<?=$this->active == 'holds' ? 'active' : ''?>">
-  <a href="<?=$this->url('holds-list')?>">
-    <?=$this->icon('user-holds') ?>
-    <?=$this->transEsc('Holds and Recalls')?>
+  <a href="<?=$this->url('holds-list')?>" class="flex">
+    <span class="flex-col">
+      <?=$this->icon('user-holds') ?>
+      <?=$this->transEsc('Holds and Recalls')?>
+    </span>
+    <span class="holds-status status hidden"><?=$this->icon('spinner') ?></span>
   </a>
 </li>
 <?php endif; ?>
 <?php if ($ilsOnline && $this->ils()->checkFunction('StorageRetrievalRequests', $capabilityParams)): ?>
 <li class="<?=$this->active == 'storageRetrievalRequests' ? 'active' : ''?>">
-  <a href="<?=$this->url('myresearch-storageretrievalrequests')?>">
-    <?=$this->icon('user-storage-retrievals') ?>
-    <?=$this->transEsc('Storage Retrieval Requests')?>
+  <a href="<?=$this->url('myresearch-storageretrievalrequests')?>" class="flex">
+    <span class="flex-col">
+      <?=$this->icon('user-storage-retrievals') ?>
+      <?=$this->transEsc('Storage Retrieval Requests')?>
+    </span>
   </a>
 </li>
 <?php endif; ?>
 <?php if ($ilsOnline && $this->ils()->checkFunction('ILLRequests', $capabilityParams)): ?>
 <li class="<?=$this->active == 'ILLRequests' ? 'active' : ''?>">
-  <a href="<?=$this->url('myresearch-illrequests')?>">
-    <?=$this->icon('user-ill-requests') ?>
-    <?=$this->transEsc('Interlibrary Loan Requests')?>
+  <a href="<?=$this->url('myresearch-illrequests')?>" class="flex">
+    <span class="flex-col">
+      <?=$this->icon('user-ill-requests') ?>
+      <?=$this->transEsc('Interlibrary Loan Requests')?>
+    </span>
   </a>
 </li>
 <?php endif; ?>
 <?php if ($ilsOnline && $this->ils()->checkCapability('getMyFines', $capabilityParams)): ?>
 <li class="<?=$this->active == 'fines' ? 'active' : ''?>">
-  <a href="<?=$this->url('myresearch-fines')?>">
+  <a href="<?=$this->url('myresearch-fines')?>" class="flex">
     <?php
       // Use a "fines" icon based on the configured default currency symbol:
       $currencyIcon = 'currency-' . strtolower($this->config()->get('config')->Site->defaultCurrency ?? 'usd');
     ?>
-    <?=$this->icon($currencyIcon) ?>
-    <?=$this->transEsc('Fines')?>
+    <span class="flex-col">
+      <?=$this->icon($currencyIcon) ?>
+      <?=$this->transEsc('Fines')?>
+    </span>
   </a>
 </li>
 <?php endif; ?>
 <li class="<?=$this->active == 'profile' ? 'active' : ''?>">
-  <a href="<?=$this->url('myresearch-profile')?>">
-    <?=$this->icon('profile') ?>
-    <?=$this->transEsc('Profile')?>
+  <a href="<?=$this->url('myresearch-profile')?>" class="flex">
+    <span class="flex-col">
+      <?=$this->icon('profile') ?>
+      <?=$this->transEsc('Profile')?>
+    </span>
   </a>
 </li>
 <?php if ($ilsOnline && $user && $user->libraryCardsEnabled()): ?>
 <li class="<?=$this->active == 'librarycards' ? 'active' : ''?>">
-  <a href="<?=$this->url('librarycards-home')?>">
-    <?=$this->icon('barcode') ?>
-    <?=$this->transEsc('Library Cards')?>
+  <a href="<?=$this->url('librarycards-home')?>" class="flex">
+    <span class="flex-col">
+      <?=$this->icon('barcode') ?>
+      <?=$this->transEsc('Library Cards')?>
+    </span>
   </a>
 </li>
 <?php endif; ?>
 <?php if ($this->overdrive()->showMyContentLink()):?>
 <li class="<?=$this->active == 'dgcontent' ? 'active' : ''?>">
-   <a href="<?=$this->url('overdrive-mycontent')?>">
-    <?=$this->icon('overdrive') ?>
-    <?=$this->transEsc('Overdrive Content')?>
+   <a href="<?=$this->url('overdrive-mycontent')?>" class="flex">
+     <span class="flex-col">
+      <?=$this->icon('overdrive') ?>
+      <?=$this->transEsc('Overdrive Content')?>
+     </span>
   </a>
 </li>
 <?php endif; ?>
 <?php if ($this->accountCapabilities()->getSavedSearchSetting() === 'enabled'): ?>
 <li class="<?=$this->active == 'history' ? 'active' : ''?>">
-  <a href="<?=$this->url('search-history')?>?require_login">
-    <?=$this->icon('search') ?>
-    <?=$this->transEsc('history_saved_searches')?>
+  <a href="<?=$this->url('search-history')?>?require_login" class="flex">
+    <span class="flex-col">
+      <?=$this->icon('search') ?>
+      <?=$this->transEsc('history_saved_searches')?>
+    </span>
   </a>
 </li>
 <?php endif; ?>
 <li class="<?=$this->active == 'usersettings' ? 'active' : ''?>">
-  <a href="<?=$this->url('myresearch-usersettings')?>?require_login">
-    <?=$this->icon('user-settings') ?>
-    <?=$this->transEsc('User settings')?>
+  <a href="<?=$this->url('myresearch-usersettings')?>?require_login" class="flex">
+    <span class="flex-col">
+      <?=$this->icon('user-settings') ?>
+      <?=$this->transEsc('User settings')?>
+    </span>
   </a>
 </li>
 <?php if ($user && $this->userlist()->getMode() !== 'disabled'): ?>
 <li class="<?=$this->active == 'mylist' ? 'active' : ''?>">
-  <a href="<?=$this->url('myresearch-favorites')?>">
-    <?=$this->icon('user-favorites') ?>
-    <?=$this->transEsc('Your Favorites')?>
+  <a href="<?=$this->url('myresearch-favorites')?>" class="flex">
+    <span class="flex-col">
+      <?=$this->icon('user-favorites') ?>
+      <?=$this->transEsc('Your Favorites')?>
+    </span>
   </a>
 </li>
 <?php endif ?>
 <?php if ($user): ?>
 <li role="separator" class="divider"></li>
 <li>
-  <a href="<?=$this->url('myresearch-logout')?>">
-    <?=$this->icon('sign-out') ?>
-    <?=$this->transEsc("Log Out")?>
+  <a href="<?=$this->url('myresearch-logout')?>" class="flex">
+    <span class="flex-col">
+      <?=$this->icon('sign-out') ?>
+      <?=$this->transEsc("Log Out")?>
+    </span>
   </a>
 </li>
 <?php endif; ?>
