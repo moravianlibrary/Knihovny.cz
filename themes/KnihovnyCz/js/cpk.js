@@ -79,10 +79,11 @@ function setupAutocomplete() {
       var query = input.val();
       var searcher = extractClassParams(input);
       var hiddenFilters = [];
-      $('#searchForm').find('input[name="hiddenFilters[]"]').each(
+      $('#searchForm').find('input[name="hiddenFilters[]"], input[name="filter[]"]').each(
         function hiddenFiltersEach() {
           hiddenFilters.push($(this).val());
         });
+
       $.fn.autocomplete.ajax({
         url: VuFind.path + '/AJAX/JSON',
         data: {
