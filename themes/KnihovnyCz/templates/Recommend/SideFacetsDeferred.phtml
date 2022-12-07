@@ -73,8 +73,7 @@
   <?php foreach ($activeFacets as $field => $facetName): ?>
     <div class="facet-group" id="side-panel-<?=$this->escapeHtmlAttr($field) ?>">
       <button class="title<?php if (in_array($field, $collapsedFacets)): ?> collapsed<?php endif ?>" data-toggle="collapse" data-target="#side-collapse-<?=$this->escapeHtmlAttr($field) ?>" >
-        <span class="facet-title"><?=$this->transEsc($facetName)?></span>
-        <?=$this->icon('collapse', 'facet-title-icon') ?>
+        <span class="facet-title"><?=$this->transEsc($facetName)?>
         <?php if ($field == $this->recommend->getInstitutionField() && $this->auth()->isLoggedIn()):?>
           <?php if (($myFilterLink = $this->recommend->getMyFilter()) !== false): ?>
             <a href='<?=$myFilterLink?>' onclick='event.stopPropagation()'
@@ -95,6 +94,8 @@
             </span>
           <?php endif; ?>
         <?php endif; ?>
+        </span><!-- .facet-title -->
+        <?=$this->icon('collapse', 'facet-title-icon') ?>
       </button>
       <div id="side-collapse-<?=$this->escapeHtmlAttr($field) ?>" class="collapse<?php if (!in_array($field, $collapsedFacets)): ?> in<?php endif ?>"<?php if (!in_array($field, $hierarchicalFacets)):?> data-facet="<?=$this->escapeHtmlAttr($field) ?>"<?php endif ?><?php if (in_array($field, $forceUncollapsedFacets)): ?> data-force-in="1"<?php endif ?>>
         <span class="facet-load-failed hidden"> <?=$this->transEsc('ajax_load_interrupted')?></span>
