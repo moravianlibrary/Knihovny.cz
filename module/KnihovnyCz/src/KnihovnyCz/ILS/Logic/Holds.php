@@ -63,7 +63,7 @@ class Holds extends \VuFind\ILS\Logic\Holds
                             && ($copy['addLink'] ?? false)
                             && ($copy['is_holdable'] ?? true)
                         ) {
-                            $action = ($copy['holdtype'] == 'shortloan')
+                            $action = ($copy['holdtype'] ?? '' == 'shortloan')
                                 ? 'ShortLoan' : 'Hold';
                             $copy['link'] = $this->getRequestDetails(
                                 $copy,
