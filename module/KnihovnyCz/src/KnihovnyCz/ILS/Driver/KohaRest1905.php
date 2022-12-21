@@ -580,7 +580,7 @@ class KohaRest1905 extends AbstractBase implements \Laminas\Log\LoggerAwareInter
                 'DELETE'
             );
 
-            if ($result['code'] != 200) {
+            if (!in_array($result['code'], [200, 204])) {
                 $response[$itemId] = [
                     'success' => false,
                     'status' => 'hold_cancel_fail',
