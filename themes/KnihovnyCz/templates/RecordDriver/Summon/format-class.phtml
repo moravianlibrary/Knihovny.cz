@@ -1,44 +1,17 @@
 <?php
-  // Convert Summon formats to VuFind formats so icons display correctly:
-  switch ($this->format) {
-      case 'Audio Recording':
-          echo 'audio';
-          break;
-      case 'Book':
-      case 'Book Chapter':
-          echo 'book';
-          break;
-      case 'Computer File':
-      case 'Web Resource':
-          echo 'electronic';
-          break;
-      case 'Dissertation':
-      case 'Manuscript':
-      case 'Paper':
-      case 'Patent':
-          echo 'manuscript';
-          break;
-      case 'eBook':
-          echo 'ebook';
-          break;
-      case 'Kit':
-          echo 'kit';
-          break;
-      case 'Image':
-      case 'Photograph':
-          echo 'photo';
-          break;
-      case 'Music Score':
-          echo 'musicalscore';
-          break;
-      case 'Newspaper Article':
-          echo 'newspaper';
-          break;
-      case 'Video Recording':
-          echo 'video';
-          break;
-      default:
-          echo 'journal';
-          break;
-  }
+  $formatClass = match($this->format) {
+    'Audio Recording', 'Streaming Audio' => 'audio',
+    'Book', 'Book Chapter' => 'books',
+    'eBook' => 'ebook',
+    'Computer File', 'Web Resource', 'Electronic Resource' => 'ebook',
+    'Dissertation', 'Manuscript', 'Paper', 'Patent' => 'thesis',
+    'Kit', 'Data Set' => 'other',
+    'Image', 'Photograph' => 'visualdocuments',
+    'Music Score' => 'musicalscores',
+    'Map' => 'maps',
+    'Video Recording', 'Video', 'Streaming Video' => 'video',
+    'Standard' => 'norms',
+    default => 'articles',
+  };
+  echo 'format-' . $formatClass;
 ?>

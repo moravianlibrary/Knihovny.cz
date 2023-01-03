@@ -1,11 +1,11 @@
 <?php
 
 /**
- * Class EdsAvailability
+ * Class SfxAvailability
  *
  * PHP version 7
  *
- * Copyright (C) Moravian Library 2019.
+ * Copyright (C) Moravian Library 2022.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -22,22 +22,22 @@
  *
  * @category VuFind
  * @package  KnihovnyCz\RecordTab
- * @author   Josef Moravec <moravec@mzk.cz>
+ * @author   Vaclav Rosecky <vaclav.rosecky@mzk.cz>
  * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://knihovny.cz Main Page
  */
 namespace KnihovnyCz\RecordTab;
 
 /**
- * Class EdsAvailability
+ * Class SfxAvailability
  *
  * @category VuFind
  * @package  KnihovnyCz\RecordTab
- * @author   Josef Moravec <moravec@mzk.cz>
+ * @author   Vaclav Rosecky <vaclav.rosecky@mzk.cz>
  * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://knihovny.cz Main Page
  */
-class EdsAvailability extends \VuFind\RecordTab\AbstractBase
+class SfxAvailability extends \VuFind\RecordTab\AbstractBase
 {
     /**
      * Get the on-screen description for this tab.
