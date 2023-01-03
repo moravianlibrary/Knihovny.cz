@@ -305,6 +305,7 @@ $config = [
                     \KnihovnyCz\RecordDriver\SolrLocal::class => \KnihovnyCz\RecordDriver\SolrLocalFactory::class,
                     \KnihovnyCz\RecordDriver\Search2Library::class => \KnihovnyCz\RecordDriver\SolrLibraryFactory::class,
                     \KnihovnyCz\RecordDriver\EDS::class => \KnihovnyCz\RecordDriver\EdsFactory::class,
+                    \KnihovnyCz\RecordDriver\Summon::class => \KnihovnyCz\RecordDriver\SummonFactory::class,
                 ],
                 'aliases' => [
                     'solrauthority' => \KnihovnyCz\RecordDriver\SolrAuthority::class,
@@ -316,6 +317,7 @@ $config = [
                     'solrlocal' => \KnihovnyCz\RecordDriver\SolrLocal::class,
                     'search2library' => \KnihovnyCz\RecordDriver\Search2Library::class,
                     'eds' => \KnihovnyCz\RecordDriver\EDS::class,
+                    'summon' => \KnihovnyCz\RecordDriver\Summon::class,
                 ],
                 'delegators' => [
                     \KnihovnyCz\RecordDriver\SolrMarc::class => [
@@ -331,7 +333,7 @@ $config = [
                     'buy' => \KnihovnyCz\RecordTab\Buy::class,
                     'cites' => \KnihovnyCz\RecordTab\Cites::class,
                     'dedupedrecords' => \KnihovnyCz\RecordTab\DedupedRecords::class,
-                    'edsavailability' => \KnihovnyCz\RecordTab\EdsAvailability::class,
+                    'sfxavailability' => \KnihovnyCz\RecordTab\SfxAvailability::class,
                     'eversion' => \KnihovnyCz\RecordTab\EVersion::class,
                     'librarybranches' => \KnihovnyCz\RecordTab\LibraryBranches::class,
                     'librarycontacts' => \KnihovnyCz\RecordTab\LibraryContacts::class,
