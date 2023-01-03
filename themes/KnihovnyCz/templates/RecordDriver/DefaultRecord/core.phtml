@@ -3,7 +3,7 @@
 ?>
 <div class="media" vocab="http://schema.org/" resource="#record" typeof="<?=$this->driver->getSchemaOrgFormats()?> Product">
   <?php
-    $sigla = $this->driver->getSiglaDisplay();
+    $sigla = $this->driver->tryMethod('getSiglaDisplay');
     $QRCode = $this->record($this->driver)->getQRCode("core");
     $coverDetails = $this->record($this->driver)->getCoverDetails('core', 'medium', $this->record($this->driver)->getThumbnail('large'));
     $cover = $coverDetails['html'];
@@ -71,10 +71,10 @@
     <?php /* Display Main Details */ ?>
     <?php
       $formatter = $this->recordDataFormatter();
-      $coreFields = $formatter->getData($driver, $formatter->getDefaults($this->driver->getRecordDataFormatterKey()));
+      $coreFields = $formatter->getData($driver, $formatter->getDefaults($this->driver->tryMethod('getRecordDataFormatterKey') ?? 'core'));
     ?>
     <?php if (!empty($coreFields)): ?>
-      <h4 class="sr-only"><?=$this->transEsc($this->driver->getRecordDataTypeDescription())?></h4>
+      <h4 class="sr-only"><?=$this->transEsc($this->driver->tryMethod('getRecordDataTypeDescription') ?? 'Bibliographic Details')?></h4>
       <dl class="dl-horizontal">
         <?php foreach ($coreFields as $current): ?>
           <dt><?=$this->transEsc($current['label'])?>:</dt>

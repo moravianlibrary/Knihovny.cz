@@ -93,6 +93,10 @@ mode_urls["dev"] = "https://ziskej-dev.techlib.cz:9080/api/v1"
 [Certs]
 ziskej = "/var/www/cert-cpk-ziskej-api.key"
 
+[Summon]
+apiId        = knihovny
+apiKey       = "TiRVQ73xarf3ZG+Va/fT1OcoGuSkQr1ybCRYsPC0dEQ="
+
 [Filebeat]
 host = xx.xx.xx.xx
 port = xxxx
