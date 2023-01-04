@@ -358,12 +358,16 @@ $config = [
                     \KnihovnyCz\ContentBlock\Inspiration::class => \KnihovnyCz\ContentBlock\AbstractDbAwaredRecordIdsFactory::class,
                     \KnihovnyCz\ContentBlock\UserList::class => \KnihovnyCz\ContentBlock\AbstractDbAwaredRecordIdsFactory::class,
                     \KnihovnyCz\ContentBlock\TemplateBased::class => \KnihovnyCz\ContentBlock\TemplateBasedFactory::class,
+                    \KnihovnyCz\ContentBlock\TemplateBasedForLoggedIn::class => \KnihovnyCz\ContentBlock\TemplateBasedForLoggedInFactory::class,
+                    \KnihovnyCz\ContentBlock\TemplateBasedForUnloggedIn::class => \KnihovnyCz\ContentBlock\TemplateBasedForUnloggedInFactory::class,
                 ],
                 'aliases' => [
                     'documenttypes' => \KnihovnyCz\ContentBlock\DocumentTypes::class,
                     'inspiration' => \KnihovnyCz\ContentBlock\Inspiration::class,
                     'userlist' => \KnihovnyCz\ContentBlock\UserList::class,
                     \VuFind\ContentBlock\TemplateBased::class => \KnihovnyCz\ContentBlock\TemplateBased::class,
+                    'templatebasedforloggedin' => \KnihovnyCz\ContentBlock\TemplateBasedForLoggedIn::class,
+                    'templatebasedforunloggedin' => \KnihovnyCz\ContentBlock\TemplateBasedForUnloggedIn::class,
                 ]
             ],
             'db_row' => [
