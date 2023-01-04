@@ -59,7 +59,9 @@ class Summon extends \VuFind\RecordDriver\Summon
     {
         $links = [];
         if (isset($this->fields['OpenAccessLink'])) {
-            $links['Open access link'] = $this->fields['OpenAccessLink'][0];
+            $links['Open access link'] = $this->fixOpenAccessLink(
+                $this->fields['OpenAccessLink'][0]
+            );
         }
         return $links;
     }
@@ -86,5 +88,24 @@ class Summon extends \VuFind\RecordDriver\Summon
     {
         $id = str_replace(['.', ','], '_', $this->getUniqueID());
         return 'summonrecord_' . $id . '_' . $suffix;
+    }
+
+    /**
+     * Fix Open access link
+     *
+     * @param string $url Url to fix
+     *
+     * @return mixed
+     */
+    protected function fixOpenAccessLink($url)
+    {
+        if (str_contains($url, '%requestingapplication%')) {
+            return str_replace(
+                '%requestingapplication%',
+                'summon',
+                $url
+            );
+        }
+        return $url;
     }
 }
