@@ -580,7 +580,7 @@ class KohaRest1905 extends AbstractBase implements \Laminas\Log\LoggerAwareInter
                 'DELETE'
             );
 
-            if ($result['code'] != 200) {
+            if (!in_array($result['code'], [200, 204])) {
                 $response[$itemId] = [
                     'success' => false,
                     'status' => 'hold_cancel_fail',
@@ -845,7 +845,8 @@ class KohaRest1905 extends AbstractBase implements \Laminas\Log\LoggerAwareInter
         $fines = [];
 
         foreach ($result['data']['outstanding_debits']['lines'] as $entry) {
-            $fineDescription = (isset($this->finesMappings[$entry['account_type']]))
+            $fineDescription
+                = (isset($this->finesMappings[$entry['account_type'] ?? null]))
                 ? $this->translateMessage(
                     $this->finesMappings[$entry['account_type']]
                 )
