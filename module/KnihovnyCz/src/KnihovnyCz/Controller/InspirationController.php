@@ -28,9 +28,6 @@
  */
 namespace KnihovnyCz\Controller;
 
-use Laminas\Db\Sql\Predicate\Like as LikePredicate;
-use Laminas\Db\Sql\Select;
-
 /**
  * Class Inspiration
  *
@@ -51,57 +48,7 @@ class InspirationController extends \VuFind\Controller\AbstractBase
     {
         $blocks = $this->serviceLocator->get(\VuFind\ContentBlock\BlockLoader::class)
             ->getFromConfig('content', 'Inspiration', 'content_block');
-        $tableManager = $this->serviceLocator
-            ->get(\VuFind\Db\Table\PluginManager::class);
-        $widgetsTable = $tableManager->get(\KnihovnyCz\Db\Table\Widget::class);
-        $widgetList = $widgetsTable->select();
-
-        $blockManager = $this->serviceLocator
-            ->get(\VuFind\ContentBlock\PluginManager::class);
-        $listType = 'Inspiration';
-        $widgets = [];
-        foreach ($widgetList as $widget) {
-            $contentBlock = $blockManager->get($listType);
-            $contentBlock->setConfig($widget->name . ':0');
-            $widgets[$widget->category][] = $contentBlock->getContext();
-        }
-        $userListTable = $tableManager->get(\VuFind\Db\Table\UserList::class);
-        $userLists = $userListTable->select(
-            function (Select $select) {
-                $select->join('user', 'user.id = user_list.user_id', [])
-                    ->where(
-                        [
-                            'user_list.public' => 1,
-                            new LikePredicate('user.major', '%widgets%')
-                        ]
-                    );
-            }
-        );
-        $listType = 'UserList';
-        foreach ($userLists as $userList) {
-            $contentBlock = $blockManager->get($listType);
-            $contentBlock->setConfig($userList->id . ':0');
-            $widgets[$userList->category][] = $contentBlock->getContext();
-        }
-        $sorter = $this->serviceLocator->get(\VuFind\I18n\Sorter::class);
-        foreach ($widgets as $category => $widget) {
-            usort(
-                $widgets[$category],
-                function ($a, $b) use ($sorter) {
-                    $aTitle = $a['list']->title_cs ?? $a['list']->title ?? '';
-                    $bTitle = $b['list']->title_cs ?? $b['list']->title ?? '';
-                    return $sorter->compare($aTitle, $bTitle);
-                }
-            );
-        }
-        uasort(
-            $widgets,
-            function ($a, $b) {
-                return -1 * (count($a) - count($b));
-            }
-        );
-
-        return $this->createViewModel(compact('blocks', 'widgets'));
+        return $this->createViewModel(compact('blocks'));
     }
 
     /**
