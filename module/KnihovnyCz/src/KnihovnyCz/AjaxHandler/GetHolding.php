@@ -122,7 +122,8 @@ class GetHolding extends \VuFind\AjaxHandler\AbstractBase
         foreach ($holding['holdings'] as $location => $hold) {
             foreach ($hold['items'] as $item) {
                 if (isset($item['link'])) {
-                    $item['link'] = $this->recordLinker->getRequestUrl($item['link']);
+                    $item['link']
+                        = $this->recordLinker->getRequestUrl($item['link']);
                 }
                 if (isset($item['status'])) {
                     $holdingStatus = $this->holdingsLogic->getAvailabilityByStatus(
