@@ -52,8 +52,8 @@ class TemplateBasedForUnloggedIn extends TemplateBased
     /**
      * TemplateBasedHiddenForLoggedIn constructor
      *
-     * @param \KnihovnyCz\Content\PageLocator $pageLocator Content page locator service
-     * @param bool                            $isLoggedIn  If user is logged in
+     * @param PageLocator $pageLocator Content page locator service
+     * @param bool        $isLoggedIn  If user is logged in
      */
     public function __construct(
         PageLocator $pageLocator,
