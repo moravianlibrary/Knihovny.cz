@@ -1,0 +1,7 @@
+<?php if ($data = $this->driver->getCsvData()): ?>
+<?php
+  $out = fopen('php://output', 'w');
+  fputcsv($out, $data);
+  fclose($out);
+?>
+<?php endif; ?>
