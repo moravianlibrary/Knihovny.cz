@@ -598,4 +598,30 @@ SPARQL;
         $data = $this->getWikidataData();
         return $this->formatLinks($data, ['isds']);
     }
+
+    /**
+     * Get data for CSV export
+     *
+     * @return array
+     */
+    public function getCsvData(): array
+    {
+        $addresses = $this->getLibraryAddress();
+        $phones = $this->getPhone();
+        $emails = $this->getEmail();
+        $websites = $this->getWebsites();
+        $isds = $this->getIsds();
+        return [
+            'name' => $this->getTitle(),
+            'sigla' => $this->getSigla(),
+            'address' => array_shift($addresses),
+            'phone' => array_shift($phones),
+            'email' => array_shift($emails),
+            'web' => array_shift($websites)['url'] ?? '',
+            'isds' => array_shift($isds)['value'] ?? '',
+            'type' => implode(',', $this->getType()),
+            'note' => $this->getLibNote(),
+            'note2' => $this->getLibNote2(),
+        ];
+    }
 }
