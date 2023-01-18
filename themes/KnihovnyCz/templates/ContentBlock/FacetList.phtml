@@ -6,7 +6,7 @@
   $noJsSupport = $this->config()->nonJavascriptSupportEnabled();
 ?>
 <?php if (!empty($facetList)): ?>
-  <div class="search-home-facets">
+  <div class="search-home-facets col-md-4">
     <?php foreach ($facetList as $field => $details): ?>
       <?php $labelHeading = $this->transEsc('home_browse_by_facet', ['%%facet%%' => $this->translate($details['label'])]); ?>
       <?php if ($isHierarchy = in_array($field, $hierarchicalFacets ?? [])):

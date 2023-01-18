@@ -333,3 +333,32 @@ INSERT INTO `inst_configs` (`source_id`, `key_id`, `array_key`, `value`) VALUES
 <p>You will be notified by e-mail when your publication is ready to pick up.</p>');
 
 UPDATE `system` SET `value` = '112' WHERE `key`='DB_VERSION';
+
+-- Issue 714
+
+DROP TABLE IF EXISTS `widget_categories`;
+CREATE TABLE `widget_categories` (
+  `category` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'Kategorie',
+  `description` mediumtext NOT NULL COMMENT 'Popis kategorie',
+  PRIMARY KEY (`category`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_czech_ci COMMENT='Inspirační seznamy - kategorie';
+
+INSERT INTO `widget_categories` (`category`, `description`) VALUES
+  ('authors',	'Autoři'),
+  ('awards',	'Literární ceny'),
+  ('children',	'Pro děti'),
+  ('ebooks',	'E-knihy'),
+  ('fiction',	'Beletrie'),
+  ('history',	'Historie'),
+  ('hobby',	'Koníčky'),
+  ('nonfiction',	'Naučná literatura'),
+  ('places',	'Místa'),
+  ('season',	'Roční období');
+
+ALTER TABLE `widget`
+  ADD `category` varchar(191) COLLATE 'utf8mb4_unicode_ci' NOT NULL COMMENT 'Kategorie';
+
+ALTER TABLE `widget`
+  ADD FOREIGN KEY (`category`) REFERENCES `widget_categories` (`category`) ON DELETE RESTRICT ON UPDATE CASCADE
+
+UPDATE `system` SET `value` = '113' WHERE `key`='DB_VERSION';

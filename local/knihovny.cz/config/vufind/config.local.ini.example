@@ -88,6 +88,10 @@ ziskej = "/var/www/cert.key"
 apiId        = app
 apiKey       = "A1BB2CCC3"
 
+[Summon]
+apiId        = knihovny
+apiKey       = "TiRVQ73xarf3ZG+Va/fT1OcoGuSkQr1ybCRYsPC0dEQ="
+
 [Filebeat]
 host = xx.xx.xx.xx
 port = xxxx
