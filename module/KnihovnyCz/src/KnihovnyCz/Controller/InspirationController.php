@@ -28,9 +28,6 @@
  */
 namespace KnihovnyCz\Controller;
 
-use Laminas\Db\Sql\Predicate\Like as LikePredicate;
-use Laminas\Db\Sql\Select;
-
 /**
  * Class Inspiration
  *
@@ -53,51 +50,36 @@ class InspirationController extends \VuFind\Controller\AbstractBase
             ->getFromConfig('content', 'Inspiration', 'content_block');
         $tableManager = $this->serviceLocator
             ->get(\VuFind\Db\Table\PluginManager::class);
-        $widgetsTable = $tableManager->get(\KnihovnyCz\Db\Table\Widget::class);
-        $widgetList = $widgetsTable->select();
-
         $blockManager = $this->serviceLocator
             ->get(\VuFind\ContentBlock\PluginManager::class);
-        $listType = 'Inspiration';
+
         $widgets = [];
-        foreach ($widgetList as $widget) {
-            $contentBlock = $blockManager->get($listType);
-            $contentBlock->setConfig($widget->name . ':0');
-            $widgets[$widget->category][] = $contentBlock->getContext();
-        }
         $userListTable = $tableManager->get(\VuFind\Db\Table\UserList::class);
-        $userLists = $userListTable->select(
-            function (Select $select) {
-                $select->join('user', 'user.id = user_list.user_id', [])
-                    ->where(
-                        [
-                            'user_list.public' => 1,
-                            new LikePredicate('user.major', '%widgets%')
-                        ]
-                    );
-            }
-        );
+        $userLists = $userListTable->getInspirationLists();
+
         $listType = 'UserList';
         foreach ($userLists as $userList) {
             $contentBlock = $blockManager->get($listType);
             $contentBlock->setConfig($userList->id . ':0');
             $widgets[$userList->category][] = $contentBlock->getContext();
         }
+
         $sorter = $this->serviceLocator->get(\VuFind\I18n\Sorter::class);
-        foreach ($widgets as $category => $widget) {
+        foreach (array_keys($widgets) as $category) {
             usort(
                 $widgets[$category],
-                function ($a, $b) use ($sorter) {
-                    $aTitle = $a['list']->title_cs ?? $a['list']->title ?? '';
-                    $bTitle = $b['list']->title_cs ?? $b['list']->title ?? '';
-                    return $sorter->compare($aTitle, $bTitle);
+                function ($first, $second) use ($sorter) {
+                    return $sorter->compare(
+                        $first['list']->title ?? '',
+                        $second['list']->title ?? ''
+                    );
                 }
             );
         }
         uasort(
             $widgets,
-            function ($a, $b) {
-                return -1 * (count($a) - count($b));
+            function ($first, $second) {
+                return count($second) - count($first);
             }
         );
 
@@ -122,6 +104,9 @@ class InspirationController extends \VuFind\Controller\AbstractBase
     public function showAction()
     {
         $list = $this->params()->fromRoute('list');
+        if (empty($list)) {
+            return $this->redirect()->toRoute('inspiration');
+        }
         $listData = $this->getListData($list);
         return $this->createViewModel($listData);
     }
@@ -137,11 +122,14 @@ class InspirationController extends \VuFind\Controller\AbstractBase
     {
         $blockManager = $this->serviceLocator
             ->get(\VuFind\ContentBlock\PluginManager::class);
-        $listType = 'Inspiration';
-        $slugParts = explode('-', $listId);
-        if (is_numeric($slugParts[0])) {
-            $listId = $slugParts[0];
-            $listType = 'UserList';
+        [$listId, ] = explode('-', $listId);
+        $listType = 'UserList';
+        if (!is_numeric($listId)) {
+            $tableManager
+                = $this->serviceLocator->get(\VuFind\Db\Table\PluginManager::class);
+            $listTable = $tableManager->get('UserList');
+            $listRow = $listTable->select(['old_name' => $listId])->current();
+            $listId = $listRow->id;
         }
         $contentBlock = $blockManager->get($listType);
         $contentBlock->setConfig($listId . ':50');

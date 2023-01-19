@@ -44,6 +44,17 @@
 
   <?=$this->flashmessages()?>
 
+  <?php if ($user && $user->couldManageInspirationLists() && $list): ?>
+    <form id="category-selector-form" method="POST">
+      <label for="list-category-selector"><?=$this->translate('list_category')?></label>:
+      <select id="list-category-selector" name="category">
+        <?php foreach ($this->categories as $category): ?>
+          <option value="<?=$category->category?>"<?=($list->category === $category->category) ? ' selected="selected"' : ''?>><?=$category->description?></option>
+        <?php endforeach; ?>
+      </select>
+    </form>
+  <?php endif; ?>
+
   <nav class="search-header hidden-print">
     <div class="search-stats">
       <?php if ($recordTotal > 0): ?>
@@ -110,3 +121,12 @@
     <?=$this->recommend($current)?>
   <?php endforeach; ?>
 </div>
+
+<?php
+$script = <<<JS
+  $('#list-category-selector').change(function changeCategory() {
+    $('#category-selector-form').submit();
+  });
+JS;
+?>
+<?=$this->inlineScript(\Laminas\View\Helper\HeadScript::SCRIPT, $script, 'SET'); ?>

@@ -335,7 +335,6 @@ INSERT INTO `inst_configs` (`source_id`, `key_id`, `array_key`, `value`) VALUES
 UPDATE `system` SET `value` = '112' WHERE `key`='DB_VERSION';
 
 -- Issue 714
-
 DROP TABLE IF EXISTS `widget_categories`;
 CREATE TABLE `widget_categories` (
   `category` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'Kategorie',
@@ -362,3 +361,51 @@ ALTER TABLE `widget`
   ADD FOREIGN KEY (`category`) REFERENCES `widget_categories` (`category`) ON DELETE RESTRICT ON UPDATE CASCADE
 
 UPDATE `system` SET `value` = '113' WHERE `key`='DB_VERSION';
+
+-- #738: Remove widgets
+ALTER TABLE `user_list`
+  ADD `category` varchar(191) COLLATE 'utf8mb4_unicode_ci' NOT NULL DEFAULT '',
+  ADD `old_name` varchar(40) COLLATE 'utf8mb4_unicode_ci' NOT NULL DEFAULT '';
+INSERT INTO `widget_categories` (`category`, `description`) VALUES ('', '');
+
+CREATE TABLE `user_list_categories` LIKE `widget_categories`;
+INSERT INTO `user_list_categories` SELECT * FROM `widget_categories`;
+
+ALTER TABLE `user_list`
+  ADD FOREIGN KEY (`category`) REFERENCES `user_list_categories` (`category`) ON DELETE RESTRICT ON UPDATE CASCADE;
+
+INSERT INTO user_list (user_id, title, description, public, category, old_name)
+SELECT (SELECT user_id FROM user_card WHERE cat_username="mzk.701") AS user_id, title_cs AS title, description AS description, 1 AS public, category AS category, `name` AS `old_name`
+FROM widget;
+
+INSERT INTO resource (record_id, source)
+SELECT value AS record_id, "Solr" AS source
+FROM widget_content;
+
+INSERT INTO user_resource (user_id, resource_id, list_id)
+SELECT
+  (SELECT user_id FROM user_card WHERE cat_username="mzk.701") AS user_id,
+  r.id AS resource_id,
+  ul.id AS list_id
+FROM resource r
+       JOIN widget_content wc ON r.record_id = wc.value
+       JOIN widget w ON wc.widget_id = w.id
+       JOIN user_list ul ON ul.title = w.title_cs;
+
+ALTER TABLE `config` ADD `widget_name` varchar(191) NOT NULL;
+
+UPDATE `config`
+SET `widget_name` = SUBSTRING_INDEX(SUBSTRING_INDEX(`value`, ':', 2), ':', -1)
+WHERE `value` LIKE 'Inspiration:%';
+
+UPDATE `config`
+  JOIN `widget`
+ON `widget`.`name` = `config`.`widget_name`
+  JOIN `user_list`
+  ON `widget`.`title_cs` = `user_list`.`title`
+  SET `config`.`value` = IF(SUBSTRING(`config`.`value`,  -3) LIKE "%:%", CONCAT('UserList:', `user_list`.`id`, ':', SUBSTRING_INDEX(`config`.`value`, ':', -1)), CONCAT('UserList:', `user_list`.`id`))
+WHERE `config`.`value` LIKE 'Inspiration:%';
+
+ALTER TABLE `config` DROP `widget_name`;
+
+UPDATE `system` SET `value` = '114' WHERE `key`='DB_VERSION';

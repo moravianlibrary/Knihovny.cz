@@ -357,4 +357,14 @@ class User extends Base
         $userSettings = $this->getDbTable('UserSettings');
         return $userSettings->getOrCreateByUserId($this->id);
     }
+
+    /**
+     * Return true if user has privileges to create/edit inspiration lists
+     *
+     * @return bool
+     */
+    public function couldManageInspirationLists(): bool
+    {
+        return str_contains($this->major, 'widgets');
+    }
 }

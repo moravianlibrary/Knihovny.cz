@@ -28,9 +28,12 @@
  */
 namespace KnihovnyCz\Controller;
 
+use KnihovnyCz\Db\Table\UserListCategories;
 use Laminas\ServiceManager\ServiceLocatorInterface;
 use Laminas\View\Model\ViewModel;
 use VuFind\Controller\MyResearchController as MyResearchControllerBase;
+use VuFind\Db\Table\PluginManager as TableManager;
+use VuFind\Db\Table\UserList;
 use VuFind\Exception\Auth as AuthException;
 use VuFind\Validator\CsrfInterface;
 
@@ -556,6 +559,32 @@ class MyResearchController extends MyResearchControllerBase
             break;
         }
         return $this->redirect()->toRoute('myresearch-profile');
+    }
+
+    /**
+     * Send user's saved favorites from a particular list to the view
+     *
+     * @return mixed
+     */
+    public function mylistAction()
+    {
+        $user = $this->getUser();
+        $tables = $this->serviceLocator->get(TableManager::class);
+        $category = $this->params()->fromPost('category', false);
+        if ($category && $user && $user->couldManageInspirationLists()) {
+            $listTable = $tables->get(UserList::class);
+            $listTable->update(
+                ['category' => $category],
+                ['id' => $this->params()->fromRoute('id')]
+            );
+        }
+        $parentView = parent::mylistAction();
+        if ($parentView instanceof \Laminas\View\Model\ViewModel) {
+            $categoriesTable = $tables->get(UserListCategories::class);
+            $categories = $categoriesTable->select();
+            $parentView->setVariable('categories', $categories);
+        }
+        return $parentView;
     }
 
     /**
