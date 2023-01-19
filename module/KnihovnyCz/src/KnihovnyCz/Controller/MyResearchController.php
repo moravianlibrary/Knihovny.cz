@@ -256,6 +256,10 @@ class MyResearchController extends MyResearchControllerBase
             $this->showException($ex);
         }
         $error = ($view == null || !($view instanceof ViewModel));
+        if (!$error) {
+            $transactions = $view->transactions ?? [];
+            $this->addDetailsFromOfflineHoldings($transactions);
+        }
         // active operation failed -> redirect to show checked out items
         if ($this->getRequest()->isPost() && $error) {
             $url = $this->url()->fromRoute('myresearch-checkedoutajax');
@@ -306,6 +310,8 @@ class MyResearchController extends MyResearchControllerBase
             $view = parent::historicloansAction();
             // disable sorting
             $view->sortList = false;
+            $transactions = $view->transactions ?? [];
+            $this->addDetailsFromOfflineHoldings($transactions);
         } catch (\Exception $ex) {
             $view = $this->createViewModel();
             $view->error = true;
