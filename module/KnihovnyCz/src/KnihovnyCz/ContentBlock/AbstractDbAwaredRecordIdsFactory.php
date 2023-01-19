@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Class InspirationFactory
+ * Class AbstractDbAwaredRecordIdsFactory
  *
  * PHP version 7
  *
@@ -34,7 +34,7 @@ use Laminas\ServiceManager\Factory\FactoryInterface;
 use Psr\Container\ContainerInterface;
 
 /**
- * Class InspirationFactory
+ * Class AbstractDbAwaredRecordIdsFactory
  *
  * PHP version 7
  *

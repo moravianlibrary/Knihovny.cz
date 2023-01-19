@@ -29,12 +29,10 @@ declare(strict_types=1);
  */
 namespace KnihovnyCz\AjaxHandler;
 
-use KnihovnyCz\Db\Table\Widget;
-use KnihovnyCz\Db\Table\WidgetContent;
+use KnihovnyCz\Db\Table\UserList;
 use Laminas\Db\Sql\Select;
 use Laminas\Mvc\Controller\Plugin\Params;
 use VuFind\AjaxHandler\AbstractBase;
-use VuFind\Db\Table\UserList;
 use VuFind\Db\Table\UserResource;
 
 /**
@@ -48,20 +46,6 @@ use VuFind\Db\Table\UserResource;
  */
 class HarvestWidgetsContents extends AbstractBase
 {
-    /**
-     * Widget table
-     *
-     * @var Widget
-     */
-    protected Widget $widgets;
-
-    /**
-     * Widget content table
-     *
-     * @var WidgetContent
-     */
-    protected WidgetContent $content;
-
     /**
      * User list table
      *
@@ -79,19 +63,11 @@ class HarvestWidgetsContents extends AbstractBase
     /**
      * Constructor
      *
-     * @param Widget        $widgets        Widget table
-     * @param WidgetContent $widgetContents Widget content table
-     * @param UserList      $userLists      User lists table
-     * @param UserResource  $resource       User resource table
+     * @param UserList     $userLists User lists table
+     * @param UserResource $resource  User resource table
      */
-    public function __construct(
-        Widget $widgets,
-        WidgetContent $widgetContents,
-        UserList $userLists,
-        UserResource $resource
-    ) {
-        $this->widgets = $widgets;
-        $this->content = $widgetContents;
+    public function __construct(UserList $userLists, UserResource $resource)
+    {
         $this->userList = $userLists;
         $this->resource = $resource;
     }
@@ -108,18 +84,8 @@ class HarvestWidgetsContents extends AbstractBase
     {
         $data = [];
 
-        /* Inspiration lists from widget tables */
-        $widgets = $this->widgets->select();
-        foreach ($widgets as $widget) {
-            $contents = $this->content->select(['widget_id' => $widget['id']]);
-            $data[] = [
-                'list' => $widget['name'],
-                'items' => array_column($contents->toArray(), 'value'),
-            ];
-        }
-
         /* Inspiration lists from user defined lists */
-        $lists = $this->userList->select(['public' => 1]);
+        $lists = $this->userList->getInspirationLists();
         foreach ($lists as $list) {
             $listId = $list['id'];
             $resources = $this->resource->select(

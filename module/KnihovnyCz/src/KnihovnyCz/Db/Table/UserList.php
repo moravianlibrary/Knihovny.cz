@@ -1,11 +1,12 @@
 <?php
+declare(strict_types=1);
 
 /**
- * Class Widget
+ * Class UserList
  *
- * PHP version 7
+ * PHP version 8
  *
- * Copyright (C) Moravian Library 2019.
+ * Copyright (C) Moravian Library 2023.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -20,7 +21,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  *
- * @category VuFind
+ * @category Knihovny.cz
  * @package  KnihovnyCz\Db\Table
  * @author   Josef Moravec <moravec@mzk.cz>
  * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
@@ -28,37 +29,38 @@
  */
 namespace KnihovnyCz\Db\Table;
 
-use Laminas\Db\Adapter\Adapter;
-use VuFind\Db\Row\RowGateway;
-use VuFind\Db\Table\PluginManager;
+use Laminas\Db\ResultSet\ResultSetInterface;
+use Laminas\Db\Sql\Predicate\Like as LikePredicate;
+use Laminas\Db\Sql\Select;
 
 /**
- * Class Widget
+ * Class UserList
  *
- * @category VuFind
+ * @category Knihovny.cz
  * @package  KnihovnyCz\Db\Table
  * @author   Josef Moravec <moravec@mzk.cz>
  * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://knihovny.cz Main Page
  */
-class Widget extends \VuFind\Db\Table\Gateway
+class UserList extends \VuFind\Db\Table\UserList
 {
     /**
-     * Constructor
+     * Get public lists usable as inspiration lists
      *
-     * @param Adapter       $adapter Database adapter
-     * @param PluginManager $tm      Table manager
-     * @param array         $cfg     Laminas configuration
-     * @param RowGateway    $rowObj  Row prototype object (null for default)
-     * @param string        $table   Name of database table to interface with
+     * @return ResultSetInterface
      */
-    public function __construct(
-        Adapter $adapter,
-        PluginManager $tm,
-        $cfg,
-        RowGateway $rowObj = null,
-        $table = 'widget'
-    ) {
-        parent::__construct($adapter, $tm, $cfg, $rowObj, $table);
+    public function getInspirationLists(): ResultSetInterface
+    {
+        return $this->select(
+            function (Select $select) {
+                $select->join('user', 'user.id = user_list.user_id', [])
+                    ->where(
+                        [
+                            'user_list.public' => 1,
+                            new LikePredicate('user.major', '%widgets%')
+                        ]
+                    );
+            }
+        );
     }
 }
