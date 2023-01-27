@@ -1,11 +1,12 @@
 <?php
+declare(strict_types=1);
 
 /**
- * Class ZiskejFactory
+ * Class Get Holding
  *
  * PHP version 7
  *
- * Copyright (C) Moravian Library 2019.
+ * Copyright (C) Moravian Library 2022.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -21,54 +22,47 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  *
  * @category VuFind
- * @package  KnihovnyCz\RecordTab
- * @author   Robert Sipek <sipek@mzk.cz>
+ * @package  KnihovnyCz\AjaxHandler
+ * @author   Robert Sipek <robert.sipek@mzk.cz>
  * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://knihovny.cz Main Page
  */
-namespace KnihovnyCz\RecordTab;
+namespace KnihovnyCz\AjaxHandler;
 
-use Laminas\ServiceManager\Exception\ServiceNotCreatedException;
-use Laminas\ServiceManager\Exception\ServiceNotFoundException;
 use Laminas\ServiceManager\Factory\FactoryInterface;
-use Psr\Container\ContainerExceptionInterface as ContainerException;
+use Mzk\ZiskejApi\Api;
 use Psr\Container\ContainerInterface;
 
 /**
- * Class ZiskejEddFactory
+ * Class Get Ziskej Edd Fee Factory
  *
  * @category VuFind
- * @package  KnihovnyCz\RecordTab
- * @author   Robert Sipek <sipek@mzk.cz>
+ * @package  KnihovnyCz\AjaxHandler
+ * @author   Robert Sipek <robert.sipek@mzk.cz>
  * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://knihovny.cz Main Page
  */
-class ZiskejEddFactory implements FactoryInterface
+class GetZiskejEddFeeFactory implements FactoryInterface
 {
     /**
      * Create an object
      *
-     * @param ContainerInterface $container     DI container
-     * @param string             $requestedName Service name
-     * @param array|null         $options       Service options
+     * @param \Psr\Container\ContainerInterface $container     DI container
+     * @param string                            $requestedName Service name
+     * @param array|null                        $options       Service options
      *
-     * @return \KnihovnyCz\RecordTab\ZiskejEdd
+     * @return \KnihovnyCz\AjaxHandler\GetZiskejEddFee
      *
-     * @throws ServiceNotFoundException if unable to resolve the service.
-     * @throws ServiceNotCreatedException if an exception is raised when
-     * creating a service.
-     * @throws ContainerException if any other error occurs
+     * @throws \Psr\Container\ContainerExceptionInterface
+     * @throws \Psr\Container\NotFoundExceptionInterface
      */
     public function __invoke(
         ContainerInterface $container,
         $requestedName,
         array $options = null
-    ): ZiskejEdd {
+    ): GetZiskejEddFee {
         return new $requestedName(
-            $container->get(\VuFind\Auth\Manager::class),
-            $container->get(\VuFind\ILS\Connection::class),
-            $container->get(\Mzk\ZiskejApi\Api::class),
-            $container->get(\KnihovnyCz\Ziskej\ZiskejEdd::class)
+            $container->get(Api::class)
         );
     }
 }

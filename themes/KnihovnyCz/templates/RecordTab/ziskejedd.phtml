@@ -15,6 +15,11 @@ $driver = $this->driver;
 $ziskejEddViewHelper = $this->ziskejEdd();
 
 /**
+ * @var ?\KnihovnyCz\Db\Row\User $user
+ */
+$user = $this->auth()->isLoggedIn();
+
+/**
  * @var \KnihovnyCz\Ziskej\ZiskejEdd $ziskejEdd
  */
 $ziskejEdd = $tab->getZiskejEdd();
@@ -30,23 +35,10 @@ $dedupedRecordIds = $tab->getDedupedRecordIds();
       <h3 class="panel-title"><?=$this->translate('Ziskej::ziskej_edd_desc_header') ?></h3>
     </div>
     <div class="panel-body">
-      <div class="col-md-10">
-        <p><?=$this->translate('Ziskej::ziskej_edd_desc') ?></p>
-        <?php if (!empty($ziskejEdd->getCurrentZiskejTechlibFrontUrl())): ?>
-          <form action="<?=$ziskejEdd->getCurrentZiskejTechlibFrontUrl() ?>/ticket_create" id="ziskejEddLogo" method="post" target="_blank">
-            <input type="hidden" name="service" value="edd">
-            <input type="hidden" name="edd_subtype" value="<?=$driver->getEddSubtype() ?>">
-            <input type="hidden" name="source_id" value="<?=$this->escapeHtmlAttr($tab->getServerName()) ?>">
-            <input type="hidden" name="doc_id" value="<?=$this->escapeHtmlAttr($driver->getUniqueID()) ?>">
-            <input type="hidden" name="entity_id" value="<?=$this->escapeHtmlAttr($tab->getEntityId()) ?>">
-            <?php foreach ($dedupedRecordIds as $id): ?>
-              <input type="hidden" name="doc_alt_ids[]" value="<?=$this->escapeHtmlAttr($id) ?>">
-            <?php endforeach; ?>
-            <button class="btn btn-primary" type="submit"><?=$this->translate('Ziskej::ziskej_edd_button') ?></button>
-          </form>
-        <?php endif; ?>
+      <div class="col-md-9">
+        <p><?=$this->translate('Ziskej::ziskej_edd_description') ?></p>
       </div>
-      <div class="col-md-2">
+      <div class="col-md-3">
         <?php if (!empty($ziskejEdd->getCurrentZiskejTechlibFrontUrl())): ?>
           <form action="<?=$ziskejEdd->getCurrentZiskejTechlibFrontUrl() ?>/ticket_create" id="ziskejEddButton" method="post" target="_blank">
             <input type="hidden" name="service" value="edd">
@@ -55,7 +47,7 @@ $dedupedRecordIds = $tab->getDedupedRecordIds();
             <input type="hidden" name="doc_id" value="<?=$this->escapeHtmlAttr($driver->getUniqueID()) ?>">
             <input type="hidden" name="entity_id" value="<?=$this->escapeHtmlAttr($tab->getEntityId()) ?>">
             <?php foreach ($dedupedRecordIds as $id): ?>
-                <input type="hidden" name="doc_alt_ids[]" value="<?=$this->escapeHtmlAttr($id) ?>">
+              <input type="hidden" name="doc_alt_ids[]" value="<?=$this->escapeHtmlAttr($id) ?>">
             <?php endforeach; ?>
             <input type="image" src="<?=$this->imageLink('logo-ziskej.png') ?>" alt="<?=$this->translate('Ziskej::ziskej_edd') ?>">
           </form>
@@ -67,6 +59,56 @@ $dedupedRecordIds = $tab->getDedupedRecordIds();
           <?php endif; ?>
         <?php endif; ?>
       </div>
+    </div>
+  </div>
+
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h4 class="panel-title"><?=$this->translate('Ziskej::connected_libraries') ?></h4>
+    </div>
+    <div class="panel-body">
+      <?php if ($user): ?>
+        <?php if ($tab->isZiskejActive()): ?>
+          <?php if (!empty($tab->getConnectedLibs())): ?>
+            <ul class="list-group">
+              <?php foreach ($tab->getConnectedLibs() as $libId => $data): ?>
+                <?php
+                /** @var \KnihovnyCz\Db\Row\UserCard $userCard */
+                $userCard = $data['userCard'];
+                /** @var \Mzk\ZiskejApi\ResponseModel\Reader $ziskejReader */
+                $ziskejReader = $data['ziskejReader'];
+                ?>
+                <li class="list-group-item clearfix">
+                  <?=$this->translate('Source::' . $libId) ?>
+                  <span class="pull-right">
+                    <a class="btn btn-primary ziskej-order-btn" data-lightbox href="<?=$this->url('ziskej-edd-order', ['id' => $driver->getUniqueId(), 'eppnDomain' => $userCard->getEppnDomain()]) ?>">
+                      <i class="fa fa-shopping-cart"></i> <?=$this->transEsc("Ziskej::btn_order_edd") ?>
+                    </a>
+                </span>
+                </li>
+              <?php endforeach; ?>
+            </ul>
+          <?php else: ?>
+            <div class="alert alert-warning text-center">
+              <?=$this->transEsc("Ziskej::alert_no_connected_libraries") ?>
+            </div>
+          <?php endif; ?>
+        <?php else: ?>
+          <div class="alert alert-warning text-center">
+            <?=$this->transEsc("Ziskej::warning_api_disconnected") ?>
+          </div>
+        <?php endif; ?>
+      <?php else: ?>
+        <div class="text-center">
+          <div class="alert alert-info text-center">
+            <?=$this->transEsc("Ziskej::alert_not_logged_in") ?>
+          </div>
+          <a class="btn btn-default" href="<?=$this->url('myresearch-userlogin')?>">
+            <i class="fa fa-sign-in"></i>
+            <?=$this->transEsc("Institutional Login") ?>
+          </a>
+        </div>
+      <?php endif; ?>
     </div>
   </div>
 

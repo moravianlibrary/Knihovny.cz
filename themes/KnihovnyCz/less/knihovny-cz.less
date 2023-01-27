@@ -13,6 +13,21 @@ ul {
   padding-inline-start: 1.5em;
 }
 
+label {
+  font-weight: 500;
+  margin-bottom: 2px;
+}
+
+.required {
+  label {
+    font-weight: 700;
+  }
+}
+
+.help-block {
+  font-size: 14px;
+}
+
 // overwrite parent theme styles
 @media (min-width: 768px) {
   .form-control {
@@ -1007,7 +1022,7 @@ div .library-card-ajax {
 }
 
 .template-dir-search.template-name-home .heading-permalink {
-  display:none;
+  display: none;
 }
 
 .emptyFacet {
@@ -1115,6 +1130,8 @@ form[action*="PtejteSeKnihovny"] {
   background-color: @state-danger-bg;
 }
 
+
+
 .helptext {
   border-bottom: 1px solid @input-border;
   margin-bottom: 1em;
@@ -1201,3 +1218,15 @@ img.signature {
   background-color: @primary-darken;
 }
 
+
+
+//@todo move to advanced-search.less
+@media (min-width: 768px) {
+  fieldset,
+  .fieldset {
+    float: none;
+    width: auto;
+    padding-right: 0;
+    padding-bottom: 0;
+  }
+}

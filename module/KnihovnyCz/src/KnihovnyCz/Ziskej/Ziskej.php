@@ -48,17 +48,13 @@ abstract class Ziskej
 
     /**
      * Cookie name
-     *
-     * @var string
      */
-    protected string $cookieName = '';
+    protected const COOKIE_NAME = 'ziskej_mode';
 
     /**
      * Default mode name
-     *
-     * @var string
      */
-    protected string $configDefaultModeName = '';
+    protected const CONFIG_DEFAULT_MODE_NAME = 'default_mode';
 
     /**
      * Main configuration
@@ -102,7 +98,7 @@ abstract class Ziskej
         $this->_configZiskej = $this->_config->get('Ziskej');
         $this->_cookieManager = $cookieManager;
 
-        $this->_defaultMode= $this->_configZiskej[$this->configDefaultModeName]
+        $this->_defaultMode= $this->_configZiskej[self::CONFIG_DEFAULT_MODE_NAME]
             ?: self::MODE_DISABLED;
     }
 
@@ -157,8 +153,8 @@ abstract class Ziskej
      */
     public function getCurrentMode(): string
     {
-        return !empty($this->_cookieManager->get($this->cookieName))
-            ? $this->_cookieManager->get($this->cookieName)
+        return !empty($this->_cookieManager->get(self::COOKIE_NAME))
+            ? $this->_cookieManager->get(self::COOKIE_NAME)
             : $this->_defaultMode;
     }
 
@@ -172,7 +168,7 @@ abstract class Ziskej
     public function setMode(string $mode): void
     {
         $cookieMode = $this->isMode($mode) ? $mode : self::MODE_DISABLED;
-        \setcookie($this->cookieName, $cookieMode, 0, '/');
+        \setcookie(self::COOKIE_NAME, $cookieMode, 0, '/');
     }
 
     /**

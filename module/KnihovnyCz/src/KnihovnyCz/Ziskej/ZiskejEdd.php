@@ -39,17 +39,4 @@ namespace KnihovnyCz\Ziskej;
  */
 class ZiskejEdd extends Ziskej
 {
-    /**
-     * Cookie name
-     *
-     * @var string
-     */
-    protected string $cookieName = 'ziskejEdd';
-
-    /**
-     * Default mode for electronic copy
-     *
-     * @var string
-     */
-    protected string $configDefaultModeName = 'default_mode_edd';
 }

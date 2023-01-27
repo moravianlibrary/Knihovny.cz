@@ -73,8 +73,7 @@ relative_path = ../../../base/config/vufind/config.ini
 
 [Ziskej]
 techlib_url = "https://ziskej.techlib.cz"
-default_mode_mvs = "test"
-default_mode_edd = "disabled"
+default_mode = "test"
 mode_urls["disabled"] = ""
 mode_urls["prod"] = "https://ziskej.techlib.cz:9080/api/v1"
 mode_urls["test"] = "https://ziskej-test.techlib.cz:9080/api/v1"

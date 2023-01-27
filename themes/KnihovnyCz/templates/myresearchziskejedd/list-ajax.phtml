@@ -1,0 +1,111 @@
+<?=$this->flashmessages()?>
+
+<?php
+/** @var \KnihovnyCz\Db\Row\UserCard $userCard */
+$userCard = $this->userCard;
+$error = ($this->error ?? false);
+?>
+<?php if ($userCard && $userCard->eppn): ?>
+  <?php if ($this->isZiskejModeEnabled): ?>
+    <?php if ($this->isLibraryInZiskej): ?>
+      <?php
+      /** @var \Mzk\ZiskejApi\ResponseModel\Reader|null $reader */
+      $reader = $this->reader;
+      ?>
+      <?php if ($reader): ?>
+        <div class="well">
+          <i class="fa fa-fw fa-user text-muted"></i> <?=$reader->getFirstName()?> <?=$reader->getLastName()?>
+          <br>
+          <i class="fa fa-fw fa-envelope text-muted"></i> <?=$reader->getEmail()?>
+        </div>
+        <?php if (is_countable($this->tickets) && count($this->tickets)): ?>
+          <?php
+          $dateLimit = new DateTime('-14 days');
+          $currentTickets = [];
+          $archivedTickets = [];
+          foreach ($this->tickets as $item) {
+            /** @var \Mzk\ZiskejApi\ResponseModel\Ticket $ticket */
+            $ticket = $item['ticket'];
+            switch ($ticket->getStatus()) {
+              case 'closed':
+              case 'cancelled':
+                $archivedTickets[] = $item;
+                break;
+              case 'rejected':
+                if ($ticket->getUpdatedAt() >= $dateLimit) {
+                  $currentTickets[] = $item;
+                } else {
+                  $archivedTickets[] = $item;
+                }
+                break;
+              default:
+                $currentTickets[] = $item;
+                break;
+            }
+          }
+          ?>
+          <div>
+            <ul class="nav nav-tabs" role="tablist">
+              <li role="presentation" class="active">
+                <a href="#current_<?=$userCard->card_name?>" aria-controls="current_<?=$userCard->card_name?>" role="tab" data-toggle="tab">
+                  <?=$this->transEsc('Ziskej::tab_active')?>
+                </a>
+              </li>
+              <li role="presentation">
+                <a href="#history_<?=$userCard->card_name?>" aria-controls="history_<?=$userCard->card_name?>" role="tab" data-toggle="tab">
+                  <?=$this->transEsc('Ziskej::tab_history')?>
+                </a>
+              </li>
+            </ul>
+            <div class="tab-content well">
+              <div role="tabpanel" class="tab-pane active" id="current_<?=$userCard->card_name?>">
+                <?php if (count($currentTickets)): ?>
+                  <?=$this->render('_ziskej-tickets-list.phtml', [
+                    'ticketsData' => $currentTickets,
+                    'userCard' => $userCard,
+                  ])?>
+                <?php else: ?>
+                  <div class="alert alert-info">
+                    <?=$this->transEsc('Ziskej::message_no_current_orders')?>
+                  </div>
+                <?php endif; ?>
+              </div>
+              <div role="tabpanel" class="tab-pane" id="history_<?=$userCard->card_name?>">
+                <?php if (count($archivedTickets)): ?>
+                  <?=$this->render('_ziskej-tickets-list.phtml', [
+                    'ticketsData' => $archivedTickets,
+                    'userCard' => $userCard,
+                  ])?>
+                <?php else: ?>
+                  <div class="alert alert-info">
+                    <?=$this->transEsc('Ziskej::message_no_history_orders')?>
+                  </div>
+                <?php endif; ?>
+              </div>
+            </div>
+          </div>
+        <?php elseif (!$error): ?>
+          <div class="alert alert-info">
+            <?=$this->transEsc('Ziskej::info_no_items')?>
+          </div>
+        <?php endif; ?>
+      <?php else: ?>
+        <div class="alert alert-danger">
+          <?=$this->transEsc('Ziskej::reader_disabled_in_ziskej')?>
+        </div>
+      <?php endif; ?>
+    <?php else: ?>
+      <div class="alert alert-danger">
+        <?=$this->transEsc('Ziskej::library_not_found_in_ziskej')?>
+      </div>
+    <?php endif; ?>
+  <?php else: ?>
+    <div class="alert alert-danger">
+      <?=$this->transEsc('Ziskej::mode_disabled')?>
+    </div>
+  <?php endif; ?>
+<?php else: ?>
+  <div class="alert alert-danger">
+    <?=$this->transEsc('Ziskej::user_card_not_found')?>
+  </div>
+<?php endif; ?>
