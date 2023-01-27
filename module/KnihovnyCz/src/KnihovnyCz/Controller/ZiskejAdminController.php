@@ -71,14 +71,9 @@ class ZiskejAdminController extends AbstractBase
         $cpkZiskejEdd = $this->serviceLocator->get(ZiskejEdd::class);
 
         if ($this->getRequest()->isPost()) {
-            if ($this->getRequest()->getPost('ziskejMvsMode')) {
+            if ($this->getRequest()->getPost('ziskejMode')) {
                 $cpkZiskejMvs->setMode(
-                    $this->getRequest()->getPost('ziskejMvsMode')
-                );
-            }
-            if ($this->getRequest()->getPost('ziskejEddMode')) {
-                $cpkZiskejEdd->setMode(
-                    $this->getRequest()->getPost('ziskejEddMode')
+                    $this->getRequest()->getPost('ziskejMode')
                 );
             }
             $this->flashMessenger()->addMessage(
@@ -98,7 +93,7 @@ class ZiskejAdminController extends AbstractBase
         }
         $view->setVariable('user', $user);
 
-        $userCards = $user->getLibraryCards();
+        $userCards = $user->getLibraryCardsWithILS();
 
         /**
          * MultiBackend ILS driver

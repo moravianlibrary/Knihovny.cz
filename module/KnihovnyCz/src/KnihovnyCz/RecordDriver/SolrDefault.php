@@ -45,8 +45,8 @@ class SolrDefault extends \VuFind\RecordDriver\SolrDefault
     use Feature\WikidataTrait;
     use \VuFind\Cache\CacheTrait;
 
-    private const EDD_SUBTYPE_ARTICLE = 'article';
-    private const EDD_SUBTYPE_SELECTION = 'selection';
+    public const EDD_SUBTYPE_ARTICLE = 'article';
+    public const EDD_SUBTYPE_SELECTION = 'selection';
 
     /**
      * These Solr fields should be used for snippets if available (listed in order
@@ -178,7 +178,7 @@ class SolrDefault extends \VuFind\RecordDriver\SolrDefault
      *
      * @return string
      */
-    public function getTitle()
+    public function getTitle(): string
     {
         return $this->fields['title_display'] ?? '';
     }
@@ -304,7 +304,7 @@ class SolrDefault extends \VuFind\RecordDriver\SolrDefault
      *
      * @return array
      */
-    public function getPublicationDates()
+    public function getPublicationDates(): array
     {
         return $this->fields['publishDate_display'] ?? [];
     }
@@ -441,6 +441,26 @@ class SolrDefault extends \VuFind\RecordDriver\SolrDefault
     }
 
     /**
+     * Return if Periodical type
+     *
+     * @return bool
+     */
+    public function isTypePeriodical(): bool
+    {
+        return in_array('0/PERIODICALS/', $this->getFormats());
+    }
+
+    /**
+     * Return if Book type
+     *
+     * @return bool
+     */
+    public function isTypeBook(): bool
+    {
+        return in_array('0/BOOKS/', $this->getFormats());
+    }
+
+    /**
      * Return an array of associative URL arrays with one or more of the following
      * keys:
      * - desc: URL description text to display (optional)
@@ -497,6 +517,8 @@ class SolrDefault extends \VuFind\RecordDriver\SolrDefault
      * Get parent record
      *
      * @return \VuFind\RecordDriver\AbstractBase|null
+     *
+     * @throws \Exception
      */
     public function getParentRecord()
     {
@@ -690,11 +712,13 @@ class SolrDefault extends \VuFind\RecordDriver\SolrDefault
     }
 
     /**
-     * Get the geo location
+     * Get the geolocation
      *
-     * @return array
+     * @return array|null
+     *
+     * @throws \Exception
      */
-    public function getGeoLocation()
+    public function getGeoLocation(): ?array
     {
         $geo = $this->fields['long_lat_display_mv'] ?? null;
         if ($geo == null && ($parent = $this->getParentRecord()) != null) {
@@ -754,6 +778,12 @@ class SolrDefault extends \VuFind\RecordDriver\SolrDefault
     }
 
     /**
+     * Get source title
+     *
+     * @return string|null
+     * @throws \Exception
+     */
+    /**
      * Get record data formatter key
      *
      * @return string
@@ -785,5 +815,107 @@ class SolrDefault extends \VuFind\RecordDriver\SolrDefault
     {
         $id = str_replace('.', '_', $this->getUniqueID());
         return 'record_' . $id . '_' . $suffix;
+    }
+
+    public function getSourceTitleFacet(): ?string
+    {
+        $parent = $this->getParentRecord();
+        return null !== $parent
+            ? ($parent->fields['source_title_facet'] ?? null)
+            : null;
+    }
+
+    /**
+     * Get place of publication place
+     *
+     * @return string|null
+     *
+     * @throws \Exception
+     */
+    public function getPlaceOfPublication(): ?string
+    {
+        $field = 'placeOfPublication_txt_mv';
+
+        if (isset($this->fields[$field])) {
+            $places = $this->fields[$field];
+            if (!empty($places[0])) {
+                return $places[0];
+            }
+        }
+
+        $parent = $this->getParentRecord();
+        if ($parent !== null && isset($parent->fields[$field])) {
+            $places = $parent->fields[$field];
+            if (!empty($places[0])) {
+                return $places[0];
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Get date published
+     *
+     * @return string|null
+     *
+     * @throws \Exception
+     */
+    public function getPublishDate(): ?string
+    {
+        $dates = $this->getPublicationDates();
+        if (!empty($dates[0])) {
+            return $dates[0];
+        }
+
+        $parent = $this->getParentRecord();
+        if ($parent !== null) {
+            $dates = $parent->getPublicationDates();
+            if (!empty($dates[0])) {
+                return $dates[0];
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Get place of publication and publish date
+     *
+     * @return string|null
+     *
+     * @throws \Exception
+     */
+    public function getPlaceOfPublicationAndPublishDate(): ?string
+    {
+        $place = $this->getPlaceOfPublication();
+        $date = $this->getPublishDate();
+
+        if (!empty($place) && !empty($date)) {
+            return sprintf('%s, %s', $place, $date);
+        }
+
+        return $place ?? $date ?? null;
+    }
+
+    /**
+     * Get primary authors
+     *
+     * @return string|null
+     */
+    public function getPrimaryAuthorsString(): ?string
+    {
+        $authors = $this->getPrimaryAuthors();
+        return count($authors) ? implode(', ', $authors) : null;
+    }
+
+    /**
+     * Get ISBN
+     *
+     * @return string|null
+     */
+    public function getIsbn(): ?string
+    {
+        return !empty($this->getCleanISBN()) ? (string)$this->getCleanISBN() : null;
     }
 }

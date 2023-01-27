@@ -39,17 +39,4 @@ namespace KnihovnyCz\Ziskej;
  */
 class ZiskejMvs extends Ziskej
 {
-    /**
-     * Cookie name
-     *
-     * @var string
-     */
-    protected string $cookieName = 'ziskejMvs';
-
-    /**
-     * Default ILL mode
-     *
-     * @var string
-     */
-    protected string $configDefaultModeName = 'default_mode_mvs';
 }

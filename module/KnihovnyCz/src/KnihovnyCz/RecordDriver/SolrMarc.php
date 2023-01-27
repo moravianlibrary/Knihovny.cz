@@ -378,4 +378,145 @@ class SolrMarc extends SolrDefault
             default => 'aba001',
         };
     }
+
+    /**
+     * Get citation (parsed from field 773)
+     *
+     * @return string|null
+     */
+    public function getFieldCitation(): ?string
+    {
+        return trim(
+            implode(
+                ", ",
+                array_map(
+                    function ($a): string {
+                        return implode(", ", $a);
+                    },
+                    $this->getField773()
+                )
+            )
+        );
+    }
+
+    /**
+     * Get ISSN (parsed from field 773)
+     *
+     * @return string|null
+     */
+    public function getIssnFromField773(): ?string
+    {
+        $f773 = $this->getField773();
+        return isset($f773[0]['x']) ? trim((string)$f773[0]['x']) : null;
+    }
+
+    /**
+     * Get ISSN field
+     *
+     * @return string|null
+     *
+     * @throws \Exception
+     */
+    public function getISSN(): ?string
+    {
+        $field = 'issn';
+
+        $array = [];
+
+        if (isset($this->fields[$field])) {
+            $array = $this->fields[$field];
+        }
+
+        $parent = $this->getParentRecord();
+        if ($parent !== null && isset($parent->fields[$field])) {
+            $array = $parent->fields[$field];
+        }
+
+        return $array[0] ?? $this->getIssnFromField773();
+    }
+
+    /**
+     * Get year (parsed from field 773)
+     *
+     * @return string|null
+     */
+    public function getYearFromField773(): ?string
+    {
+        $f773 = $this->getField773();
+        return isset($f773[0][9]) ? trim((string)$f773[0][9]) : null;
+    }
+
+    /**
+     * Get periodical volume (parsed from field 773)
+     *
+     * @return string|null
+     */
+    public function getPYearFromField773(): ?string
+    {
+        $f773 = $this->getField773();
+
+        if (isset($f773[0]['q'])) {
+            $f = trim((string)$f773[0]['q']);
+            if (preg_match('/(\d+):(\d+)/', $f)) {
+                [$volume, $issue] = explode(':', $f);
+                return $volume;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Get periodical issue (parsed from field 773)
+     *
+     * @return string|null
+     */
+    public function getPNumberFromField773(): ?string
+    {
+        $f773 = $this->getField773();
+
+        if (isset($f773[0]['q'])) {
+            $f = trim((string)$f773[0]['q']);
+            if (preg_match('/(\d+):(\d+)/', $f)) {
+                [$volume, $issue] = explode(':', $f);
+                return $issue;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Get page start (parsed from field 773)
+     *
+     * @return string|null
+     */
+    public function parsePageStartFromField773(): ?string
+    {
+        $f773 = $this->getField773();
+        if (isset($f773[0]['g'])) {
+            if (preg_match('/(s\.)\s(\d+)-(\d+)/', $f773[0]['g'], $matches)) {
+                return $matches[2] ?? null;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Get page end (parsed from field 773)
+     *
+     * @return string|null
+     */
+    public function parsePageEndFromField773(): ?string
+    {
+        $f773 = $this->getField773();
+        if (isset($f773[0]['g'])) {
+            if (preg_match('/(s\.)\s(\d+)-(\d+)/', $f773[0]['g'], $matches)) {
+                return $matches[3] ?? null;
+            }
+        }
+
+        return null;
+    }
 }

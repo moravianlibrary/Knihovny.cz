@@ -91,7 +91,7 @@ class SolrAuthority extends \KnihovnyCz\RecordDriver\SolrMarc
      *
      * @return string
      */
-    public function getTitle()
+    public function getTitle(): string
     {
         return $this->fields['personal_name_display'] ?? '';
     }

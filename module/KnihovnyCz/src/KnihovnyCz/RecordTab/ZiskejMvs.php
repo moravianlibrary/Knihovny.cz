@@ -39,12 +39,6 @@ namespace KnihovnyCz\RecordTab;
  */
 class ZiskejMvs extends ZiskejBase
 {
-    private \VuFind\Auth\Manager $_authManager;
-
-    private \VuFind\ILS\Connection $_ilsDriver;
-
-    private \Mzk\ZiskejApi\Api $_ziskejApi;
-
     private \KnihovnyCz\Ziskej\ZiskejMvs $_ziskejMvs;
 
     /**
@@ -61,9 +55,9 @@ class ZiskejMvs extends ZiskejBase
         \Mzk\ZiskejApi\Api $ziskejApi,
         \KnihovnyCz\Ziskej\ZiskejMvs $ziskejMvs
     ) {
-        $this->_authManager = $authManager;
-        $this->_ilsDriver = $ilsDriver;
-        $this->_ziskejApi = $ziskejApi;
+        $this->authManager = $authManager;
+        $this->ilsDriver = $ilsDriver;
+        $this->ziskejApi = $ziskejApi;
         $this->_ziskejMvs = $ziskejMvs;
 
         $this->isZiskejActive = $ziskejMvs->isEnabled();
@@ -78,7 +72,7 @@ class ZiskejMvs extends ZiskejBase
      */
     public function getDescription(): string
     {
-        return 'tab_title_ziskej';
+        return 'tab_title_ziskej_mvs';
     }
 
     /**
@@ -102,64 +96,5 @@ class ZiskejMvs extends ZiskejBase
     public function getZiskejMvs(): \KnihovnyCz\Ziskej\ZiskejMvs
     {
         return $this->_ziskejMvs;
-    }
-
-    /**
-     * Get libraries connected in Ziskej
-     *
-     * @return array[]
-     *
-     * @throws \Http\Client\Exception
-     * @throws \Mzk\ZiskejApi\Exception\ApiResponseException
-     * @throws \VuFind\Exception\LibraryCard
-     */
-    public function getConnectedLibs(): array
-    {
-        $connectedLibs = [];
-
-        $user = $this->_authManager->isLoggedIn();
-        if ($user) {
-            /**
-             * User library card
-             *
-             * @var \VuFind\Db\Row\UserCard $userCard
-             */
-            foreach ($user->getLibraryCards() as $userCard) {
-                $homeLibrary = $userCard->home_library ?? null;
-                if (!empty($homeLibrary) && !empty($userCard->eppn)) {
-                    if (in_array($homeLibrary, $this->getZiskejLibsIds())) {
-                        $connectedLibs[$homeLibrary]['userCard'] = $userCard;
-                        $connectedLibs[$homeLibrary]['ziskejReader']
-                            = $this->_ziskejApi->getReader($userCard->eppn);
-                    }
-                }
-            }
-        }
-
-        return $connectedLibs;
-    }
-
-    /**
-     * Get ids of active libraries in Ziskej
-     *
-     * @return string[][]
-     *
-     * @throws \Http\Client\Exception
-     * @throws \Mzk\ZiskejApi\Exception\ApiResponseException
-     */
-    public function getZiskejLibsIds(): array
-    {
-        $ziskejLibsIds = [];
-
-        $ziskejLibs = $this->_ziskejApi->getLibrariesActive()->getAll();
-
-        foreach ($ziskejLibs as $ziskejLib) {
-            /* @phpstan-ignore-next-line */
-            $id = $this->_ilsDriver->siglaToSource($ziskejLib->getSigla());
-            if (!empty($id)) {
-                $ziskejLibsIds[] = $id;
-            }
-        }
-        return $ziskejLibsIds;
     }
 }

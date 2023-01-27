@@ -38,7 +38,6 @@ use Mzk\ZiskejApi\RequestModel\Message;
 use VuFind\Controller\AjaxResponseTrait;
 use VuFind\Exception\LibraryCard;
 use VuFind\Log\LoggerAwareTrait;
-use VuFind\RecordDriver\AbstractBase as AbstractRecord;
 
 /**
  * Class MyResearchZiskejController
@@ -52,7 +51,7 @@ use VuFind\RecordDriver\AbstractBase as AbstractRecord;
  *
  * @method Plugin\FlashRedirect flashRedirect() Flash redirect controller plugin
  */
-class MyResearchZiskejController extends AbstractBase
+class MyResearchZiskejMvsController extends AbstractBase
 {
     use LoggerAwareTrait;
     use AjaxResponseTrait;
@@ -72,7 +71,7 @@ class MyResearchZiskejController extends AbstractBase
             return $this->forceLogin();
         }
         $view = $this->createViewModel();
-        $view->setTemplate('myresearchziskej/list-all');
+        $view->setTemplate('myresearchziskejmvs/list-all');
         return $view;
     }
 
@@ -145,13 +144,19 @@ class MyResearchZiskejController extends AbstractBase
             }
             $view->setVariable('reader', $reader);
 
+            $recordLoader = $this->getRecordLoader();
+
             $tickets = [];
-            foreach ($ziskejApi->getTickets($userCard->eppn)->getAll() as $ticket) {
+            foreach (
+                $ziskejApi->getTicketsMvs($userCard->eppn)->getAll() as $ticket
+            ) {
                 if ($ticket->getDocumentId() !== null) {
                     try {
                         $tickets[$ticket->getId()] = [
                             'ticket' => $ticket,
-                            'record' => $this->_getRecord($ticket->getDocumentId()),
+                            'record' => $recordLoader->load(
+                                $ticket->getDocumentId()
+                            ),
                         ];
                     } catch (\VuFind\Exception\RecordMissing $e) {
                         $tickets[$ticket->getId()] = [
@@ -173,7 +178,7 @@ class MyResearchZiskejController extends AbstractBase
                     ->addErrorMessage('ziskej_generic_error_message');
             }
         }
-        $view->setTemplate('myresearchziskej/list-ajax');
+        $view->setTemplate('myresearchziskejmvs/list-ajax');
         $result = $this->getViewRenderer()->render($view);
         return $this->getAjaxResponse('text/html', $result, null);
     }
@@ -212,12 +217,14 @@ class MyResearchZiskejController extends AbstractBase
         $ticket = $ziskejApi->getTicket($userCard->eppn, $ticketId);
         $messages = $ziskejApi->getMessages($userCard->eppn, $ticketId);
 
+        $recordLoader = $this->getRecordLoader();
+
         $driver = null;
         if ($ticket) {
             $documentId = $ticket->getDocumentId();
             if ($documentId) {
                 try {
-                    $driver = $this->_getRecord($documentId);
+                    $driver = $recordLoader->load($documentId);
                 } catch (\VuFind\Exception\RecordMissing $e) {
                 }
             }
@@ -363,22 +370,6 @@ class MyResearchZiskejController extends AbstractBase
                 'ticketId' => $ticketId,
             ]
         );
-    }
-
-    /**
-     * Get record from backend
-     *
-     * @param string $documentId Record identifier
-     *
-     * @return AbstractRecord
-     *
-     * @throws \Exception
-     */
-    private function _getRecord(string $documentId): AbstractRecord
-    {
-        $recordLoader = $this->getRecordLoader();
-
-        return $recordLoader->load($documentId);
     }
 
     /**

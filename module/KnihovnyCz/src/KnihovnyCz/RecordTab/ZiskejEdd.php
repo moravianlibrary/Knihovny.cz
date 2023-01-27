@@ -44,11 +44,20 @@ class ZiskejEdd extends ZiskejBase
     /**
      * Constructor
      *
-     * @param \KnihovnyCz\Ziskej\ZiskejEdd $ziskejEdd Ziskej ILL model
+     * @param \VuFind\Auth\Manager         $authManager Authentication manager
+     * @param \VuFind\ILS\Connection       $ilsDriver   ILS driver
+     * @param \Mzk\ZiskejApi\Api           $ziskejApi   Ziskej API connector
+     * @param \KnihovnyCz\Ziskej\ZiskejEdd $ziskejEdd   Ziskej ILL model
      */
     public function __construct(
+        \VuFind\Auth\Manager $authManager,
+        \VuFind\ILS\Connection $ilsDriver,
+        \Mzk\ZiskejApi\Api $ziskejApi,
         \KnihovnyCz\Ziskej\ZiskejEdd $ziskejEdd
     ) {
+        $this->authManager = $authManager;
+        $this->ilsDriver = $ilsDriver;
+        $this->ziskejApi = $ziskejApi;
         $this->_ziskejEdd = $ziskejEdd;
 
         $this->isZiskejActive = $ziskejEdd->isEnabled();

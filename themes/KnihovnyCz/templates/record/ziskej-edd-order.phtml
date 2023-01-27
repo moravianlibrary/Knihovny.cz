@@ -1,0 +1,409 @@
+<?php
+
+use KnihovnyCz\RecordDriver\SolrDefault;
+
+$this->layout()->searchbox = false;
+
+/** @var \KnihovnyCz\RecordDriver\SolrLocal $record */
+$record = $this->driver;
+
+/** @var bool|\KnihovnyCz\Db\Row\User $user */
+$user = $this->user;
+
+/** @var KnihovnyCz\Db\Row\UserCard $userCard */
+$userCard = $this->userCard;
+
+/** @var string[] $patron */
+$patron = $this->patron;
+
+/** @var \Mzk\ZiskejApi\ResponseModel\Reader $ziskejReader */
+$ziskejReader = $this->ziskejReader;
+
+$isArticle = $record->getEddSubtype() === SolrDefault::EDD_SUBTYPE_ARTICLE;
+$isSelection = $record->getEddSubtype() === SolrDefault::EDD_SUBTYPE_SELECTION;
+$isBook = $record->isTypeBook();
+$isPeriodical = $record->isTypePeriodical();
+
+if ($isArticle) {
+  $title = $this->translate('Ziskej::title_edd_article');
+} elseif ($isSelection) {
+  if ($isBook) {
+    $title = $this->translate('Ziskej::title_edd_selection_book');
+  } elseif ($isPeriodical) {
+    $title = $this->translate('Ziskej::title_edd_selection_periodical');
+  } else {
+    $title = $this->translate('Ziskej::title_edd_undefined');
+  }
+} else {
+  $title = $this->translate('Ziskej::title_edd_undefined');
+}
+
+$this->headTitle($title);
+
+?>
+
+<?php if ($user): ?>
+  <div>
+    <h2><?=$title?></h2>
+    <form class="form" id="ziskejEddOrderForm" data-lightbox-ignore action="<?=$this->url('ziskej-edd-order-post', ['id' => $record->getUniqueId()])?>" method="post">
+      <input type="hidden" name="ticket_type" id="ticket_type" value="edd">
+      <input type="hidden" name="ticket_doc_data_source" id="ticket_doc_data_source" value="auto">
+      <input type="hidden" name="edd_subtype" id="edd_subtype" value="<?=$record->getEddSubtype()?>">
+      <input type="hidden" name="source_id" value="<?=$this->serverName?>">
+      <input type="hidden" name="eppn" id="eppn" value="<?=$userCard->eppn?>">
+      <input type="hidden" name="doc_id" value="<?=$record->getUniqueID()?>">
+      <input type="hidden" name="entity_id" value="<?=$this->entityId?>">
+      <?php if ($isArticle): ?>
+        <input type="hidden" name="doc_citation" id="doc_citation" value="<?=$record->getFieldCitation()?>">
+      <?php endif; ?>
+      <?php foreach ($this->dedupedRecordIds as $id): ?>
+        <input type="hidden" name="doc_alt_ids[]" value="<?=$this->escapeHtmlAttr($id)?>">
+      <?php endforeach; ?>
+      <div class="row">
+        <div class="col-xs-12">
+          <fieldset>
+            <h4><?=$this->transEsc("Ziskej::fieldset_label_user")?></h4>
+            <div class="form-group required">
+              <label for="fullname"><?=$this->transEsc("Ziskej::label_fullname")?>:*</label>
+              <?php $fullName = $this->escapeHtml($patron['firstname']) . ' ' . $this->escapeHtml($patron['lastname']) ?>
+              <input type="text" name="fullname" id="fullname" value="<?=$fullName?>" class="form-control" readonly required>
+            </div>
+            <div class="form-group required">
+              <label for="email"><?=$this->transEsc("Ziskej::label_email")?>:*</label>
+              <input type="email" name="email" id="email" value="<?=!empty($ziskejReader) ? $ziskejReader->getEmail() : (!empty($patron['email']) ? $patron['email'] : '')?>" class="form-control" required>
+              <span class="help-block"><?=$this->transEsc("Ziskej::help_email")?></span>
+            </div>
+          </fieldset>
+          <fieldset>
+            <h4><?=$this->transEsc("Ziskej::fieldset_label_data")?></h4>
+            <div class="row">
+              <?php if ($isArticle): ?>
+                <div class="col-sm-12">
+                  <div class="form-group required">
+                    <label for="doc_title"><?=$this->transEsc("Ziskej::label_edd_article_doc_title")?>:*</label>
+                    <input type="text" name="doc_title" id="doc_title" value="<?=$this->escapeHtml($record->getTitle())?>" class="form-control" <?php if (!empty($record->getTitle())): ?>readonly<?php endif; ?> required>
+                  </div>
+                </div>
+              <?php endif; ?>
+              <?php if ($isSelection && $isPeriodical): ?>
+                <div class="col-sm-12">
+                  <div class="form-group required">
+                    <label for="doc_title"><?=$this->transEsc("Ziskej::label_edd_selection_periodical_doc_title")?>:*</label>
+                    <input type="text" name="doc_title" id="doc_title" value="" class="form-control" required>
+                  </div>
+                </div>
+              <?php endif; ?>
+              <?php if ($isSelection && $isBook): ?>
+                <div class="col-sm-12">
+                  <div class="form-group required">
+                    <label for="doc_title"><?=$this->transEsc("Ziskej::label_edd_selection_doc_title")?>:*</label>
+                    <input type="text" name="doc_title" id="doc_title" value="" class="form-control" required>
+                  </div>
+                </div>
+              <?php endif; ?>
+              <?php if ($isArticle): ?>
+                <div class="col-sm-12">
+                  <div class="form-group">
+                    <label for="doc_author"><?=$this->transEsc("Ziskej::label_doc_author")?>:</label>
+                    <input type="text" name="doc_author" id="doc_author" value="<?=$record->getPrimaryAuthorsString()?>" class="form-control" <?php if (!empty($record->getPrimaryAuthorsString())): ?>readonly<?php endif; ?>>
+                  </div>
+                </div>
+              <?php endif; ?>
+              <?php if ($isSelection && $isPeriodical): ?>
+                <div class="col-sm-12">
+                  <div class="form-group">
+                    <label for="doc_author"><?=$this->transEsc("Ziskej::label_periodical_doc_author")?>:</label>
+                    <input type="text" name="doc_author" id="doc_author" value="<?=$record->getPrimaryAuthorsString()?>" class="form-control" <?php if (!empty($record->getPrimaryAuthorsString())): ?>readonly<?php endif; ?>>
+                  </div>
+                </div>
+              <?php endif; ?>
+              <?php if ($isSelection && $isPeriodical): ?>
+                <div class="col-sm-6">
+                  <div class="form-group required">
+                    <label for="doc_number_year"><?=$this->transEsc("Ziskej::label_doc_number_year")?>:*</label>
+                    <input type="text" name="doc_number_year" id="doc_number_year" value="" class="form-control" required>
+                  </div>
+                </div>
+              <?php endif; ?>
+              <?php if ($isSelection && $isPeriodical): ?>
+                <div class="col-sm-6">
+                  <div class="form-group">
+                    <label for="doc_number_pyear"><?=$this->transEsc("Ziskej::label_doc_number_pyear")?>:</label>
+                    <input type="text" name="doc_number_pyear" id="doc_number_pyear" value="" class="form-control">
+                  </div>
+                </div>
+              <?php endif; ?>
+              <?php if ($isSelection && $isPeriodical): ?>
+                <div class="col-sm-6">
+                  <div class="form-group required">
+                    <label for="doc_number_pnumber"><?=$this->transEsc("Ziskej::label_doc_number_pnumber")?>:*</label>
+                    <input type="text" name="doc_number_pnumber" id="doc_number_pnumber" value="" class="form-control" required>
+                  </div>
+                </div>
+              <?php endif; ?>
+              <?php if ($isSelection && $isPeriodical): ?>
+                <div class="col-sm-6">
+                  <div class="form-group">
+                    <label for="doc_volume"><?=$this->transEsc("Ziskej::label_doc_volume")?>:</label>
+                    <input type="text" name="doc_volume" id="doc_volume" value="" class="form-control">
+                  </div>
+                </div>
+              <?php endif; ?>
+              <?php if ($isArticle): ?>
+                <div class="col-sm-3">
+                  <div class="form-group">
+                    <label for="pages_from"><?=$this->transEsc("Ziskej::label_pages_from")?>:</label>
+                    <input type="number" name="pages_from" id="pages_from" value="<?=$record->parsePageStartFromField773()?>" class="form-control" min="1" step="1">
+                  </div>
+                </div>
+              <?php endif; ?>
+              <?php if ($isArticle): ?>
+                <div class="col-sm-3">
+                  <div class="form-group">
+                    <label for="pages_to"><?=$this->transEsc("Ziskej::label_pages_to")?>:</label>
+                    <input type="number" name="pages_to" id="pages_to" value="<?=$record->parsePageEndFromField773()?>" class="form-control" min="1" step="1">
+                  </div>
+                </div>
+              <?php endif; ?>
+              <?php if ($isSelection): ?>
+                <div class="col-sm-3">
+                  <div class="form-group">
+                    <label for="pages_from"><?=$this->transEsc("Ziskej::label_pages_from")?>:</label>
+                    <input type="number" name="pages_from" id="pages_from" value="" class="form-control" min="1" step="1">
+                  </div>
+                </div>
+              <?php endif; ?>
+              <?php if ($isSelection): ?>
+                <div class="col-sm-3">
+                  <div class="form-group">
+                    <label for="pages_to"><?=$this->transEsc("Ziskej::label_pages_to")?>:</label>
+                    <input type="number" name="pages_to" id="pages_to" value="" class="form-control" min="1" step="1">
+                  </div>
+                </div>
+              <?php endif; ?>
+              <div class="col-sm-3">
+                <div class="form-group">
+                  <label>&nbsp;</label>
+                  <button type="button" class="btn btn-info" id="checkZiskejEddFee"><i class="fa fa-fw fa-refresh" ></i> <?=$this->transEsc("Ziskej::btn_count_fee")?></button>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-xs-12">
+                <div class="alert alert-info" id="ziskejEddFeeAlertPrice">
+                </div>
+                <div class="alert alert-danger" id="ziskejEddFeeAlertError">
+                  <?=$this->transEsc('Ziskej::error_get_edd_fee') ?>
+                </div>
+              </div>
+            </div>
+          </fieldset>
+          <fieldset>
+            <h4><?=$this->transEsc("Ziskej::fieldset_label_publication")?></h4>
+            <div class="row">
+              <?php if ($isArticle): ?>
+                <div class="col-sm-12">
+                  <div class="form-group required">
+                    <label for="doc_title_in"><?=$this->transEsc("Ziskej::label_edd_article_doc_title_in")?>:*</label>
+                    <input type="text" name="doc_title_in" id="doc_title_in" value="<?=$this->escapeHtml($record->getSourceTitleFacet())?>" class="form-control" <?php if (!empty($record->getSourceTitleFacet())): ?>readonly<?php endif; ?> required>
+                  </div>
+                </div>
+              <?php endif; ?>
+              <?php if ($isSelection): ?>
+                <div class="col-sm-12">
+                  <div class="form-group required">
+                    <label for="doc_title_in"><?=$this->transEsc("Ziskej::label_edd_selection_doc_title_in")?>:*</label>
+                    <input type="text" name="doc_title_in" id="doc_title_in" value="<?=$this->escapeHtml($record->getTitle())?>" class="form-control" <?php if (!empty($record->getTitle())): ?>readonly<?php endif; ?> required>
+                  </div>
+                </div>
+              <?php endif; ?>
+              <?php if ($isSelection && $isBook): ?>
+                <div class="col-sm-12">
+                  <div class="form-group">
+                    <label for="doc_author"><?=$this->transEsc("Ziskej::label_doc_author")?>:</label>
+                    <input type="text" name="doc_author" id="doc_author" value="<?=$record->getPrimaryAuthorsString()?>" class="form-control" <?php if (!empty($record->getPrimaryAuthorsString())): ?>readonly<?php endif; ?>>
+                  </div>
+                </div>
+              <?php endif; ?>
+              <?php if ($isArticle): ?>
+                <div class="col-sm-6">
+                  <div class="form-group">
+                    <label for="doc_issn"><?=$this->transEsc("Ziskej::label_doc_issn")?>:</label>
+                    <input type="text" name="doc_issn" id="doc_issn" value="<?=$record->getISSN()?>" class="form-control" <?php if (!empty($record->getISSN())): ?>readonly<?php endif; ?>>
+                  </div>
+                </div>
+              <?php endif; ?>
+              <?php if ($isArticle): ?>
+                <div class="col-sm-6">
+                  <div class="form-group">
+                    <label for="doc_number_year"><?=$this->transEsc("Ziskej::label_doc_number_year")?>:</label>
+                    <input type="text" name="doc_number_year" id="doc_number_year" value="<?=$record->getYearFromField773()?>" class="form-control" <?php if (!empty($record->getYearFromField773())): ?>readonly<?php endif; ?>>
+                  </div>
+                </div>
+              <?php endif; ?>
+              <?php if ($isSelection && $isPeriodical): ?>
+                <div class="col-sm-6">
+                  <div class="form-group">
+                    <label for="doc_issn"><?=$this->transEsc("Ziskej::label_doc_issn")?>:</label>
+                    <input type="text" name="doc_issn" id="doc_issn" value="<?=$record->getISSN()?>" class="form-control" <?php if (!empty($record->getISSN())): ?>readonly<?php endif; ?>>
+                  </div>
+                </div>
+              <?php endif; ?>
+              <?php if ($isArticle): ?>
+                <div class="col-sm-6">
+                  <div class="form-group">
+                    <label for="doc_number_pyear"><?=$this->transEsc("Ziskej::label_doc_number_pyear")?>:</label>
+                    <input type="text" name="doc_number_pyear" id="doc_number_pyear" value="<?=$record->getPYearFromField773()?>" class="form-control" <?php if (!empty($record->getPYearFromField773())): ?>readonly<?php endif; ?>>
+                  </div>
+                </div>
+              <?php endif; ?>
+              <?php if ($isArticle): ?>
+                <div class="col-sm-6">
+                  <div class="form-group">
+                    <label for="doc_number_pnumber"><?=$this->transEsc("Ziskej::label_doc_number_pnumber")?>:</label>
+                    <input type="text" name="doc_number_pnumber" id="doc_number_pnumber" value="<?=$record->getPNumberFromField773()?>" class="form-control" <?php if (!empty($record->getPNumberFromField773())): ?>readonly<?php endif; ?>>
+                  </div>
+                </div>
+              <?php endif; ?>
+              <?php if ($isSelection && $isBook): ?>
+                <div class="col-sm-6">
+                  <div class="form-group">
+                    <label for="doc_volume"><?=$this->transEsc("Ziskej::label_doc_volume")?>:</label>
+                    <input type="text" name="doc_volume" id="doc_volume" value="" class="form-control">
+                  </div>
+                </div>
+              <?php endif; ?>
+              <?php if ($isSelection && $isBook): ?>
+                <div class="col-sm-12">
+                  <div class="form-group">
+                    <label for="doc_issuer"><?=$this->transEsc("Ziskej::label_doc_issuer")?>:</label>
+                    <input type="text" name="doc_issuer" id="doc_issuer" value="<?=$record->getPlaceOfPublicationAndPublishDate()?>" class="form-control" <?php if (!empty($record->getPlaceOfPublicationAndPublishDate())): ?>readonly<?php endif; ?>>
+                  </div>
+                </div>
+              <?php endif; ?>
+              <?php if ($isSelection && $isBook): ?>
+                <div class="col-sm-6">
+                  <div class="form-group">
+                    <label for="doc_isbn"><?=$this->transEsc("Ziskej::label_doc_isbn")?>:</label>
+                    <input type="text" name="doc_isbn" id="doc_isbn" value="<?=$record->getIsbn()?>" class="form-control" <?php if (!empty($record->getIsbn())): ?>readonly<?php endif; ?>>
+                  </div>
+                </div>
+              <?php endif; ?>
+            </div>
+          </fieldset>
+          <fieldset>
+            <h4><?=$this->transEsc("Ziskej::fieldset_label_note")?></h4>
+            <div class="row">
+              <div class="col-sm-12">
+                <div class="form-group">
+                  <label for="doc_note"><?=$this->transEsc("Ziskej::label_doc_note")?>:</label>
+                  <textarea name="doc_note" id="doc_note" class="form-control"></textarea>
+                </div>
+              </div>
+            </div>
+          </fieldset>
+          <div class="row">
+            <div class="col-sm-12">
+              <div class="checkbox">
+                <label>
+                  <input type="checkbox" name="is_conditions" required>
+                  <?=$this->translate('Ziskej::checbox_is_conditions')?>
+                </label>
+              </div>
+              <div class="checkbox">
+                <label>
+                  <input type="checkbox" name="is_price" required>
+                  <?=$this->translate('Ziskej::checbox_is_price')?>
+                </label>
+              </div>
+              <p class="text-center">
+                <?=$this->translate('Ziskej::text_info_conditions')?>
+              </p>
+
+              <div class="alert alert-warning text-center">
+                <?=$this->translate('Ziskej::info_edd_fee')?>
+              </div>
+
+              <div class="text-center">
+                <p id="ziskejEddFeeInfo"></p>
+              </div>
+              <div class="text-center">
+                <input id="submit" type="submit" name="submit" class="btn btn-primary" value="<?=$this->translate('Ziskej::btn_finish_order')?>">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+<?php endif; ?>
+
+<?php
+$script = <<<JS
+  // ajax check Ziskej Edd fee
+  $(function () {
+    $('#ziskejEddFeeAlertPrice').hide();
+    $('#ziskejEddFeeAlertError').hide();
+    $('#checkZiskejEddFee i.fa-refresh').hide();
+
+    $('#checkZiskejEddFee').on('click', function (e) {
+      e.preventDefault();
+      $('#ziskejEddFeeAlertPrice').hide();
+      $('#ziskejEddFeeAlertError').hide();
+      $(this).removeAttr('disabled');
+      $('#checkZiskejEddFee i.fa-refresh').addClass('fa-spin').show();
+
+      $.ajax({
+        type: 'GET',
+        url: '/AJAX/JSON?method=getZiskejEddFee',
+        data: {
+          pages_from: $('#pages_from').val(),
+          pages_to: $('#pages_to').val(),
+          edd_subtype: $('#edd_subtype').val()
+        },
+        success: function (result) {
+          $('#checkZiskejEddFee i.fa-refresh').hide().removeClass('fa-spin');
+          $('#ziskejEddFeeAlertPrice').html(result.data['message_subtotal']).show();
+          $('#ziskejEddFeeInfo').html(result.data['message_total']);
+        },
+        error: function (result) {
+          console.log(result.responseJSON.data);
+          $('#checkZiskejEddFee i.fa-refresh').hide().removeClass('fa-spin');
+          $('#ziskejEddFeeAlertPrice').hide();
+          $('#ziskejEddFeeAlertError').text(result.responseJSON.data).show();
+        }
+      });
+    });
+  });
+
+  $(function () {
+    let empty = true;
+
+    $('form input').on('keyup change', function () {
+      $('form input').each(function () {
+        empty = $('input#pages_from').val().length === 0
+          || $('input#pages_to').val().length === 0;
+        setcheckZiskejEddFeeDisabled(empty);
+      });
+    });
+
+    setcheckZiskejEddFeeDisabled(empty);
+  });
+
+  function setcheckZiskejEddFeeDisabled(empty) {
+    if (empty) {
+      $('#checkZiskejEddFee').attr('disabled', 'disabled');
+    } else {
+      $('#checkZiskejEddFee').removeAttr('disabled');
+    }
+  }
+
+  $(function () {
+    if ($('input#pages_from').val().length !== 0
+      || $('input#pages_to').val().length !== 0) {
+      $('#checkZiskejEddFee').trigger("click");
+    }
+  });
+JS;
+?>
+<?=$this->inlineScript(\Laminas\View\Helper\HeadScript::SCRIPT, $script, 'SET')?>

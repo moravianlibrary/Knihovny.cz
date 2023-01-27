@@ -40,6 +40,15 @@
       <span class="ziskej-status status hidden"><?=$this->icon('spinner') ?></span>
     </a>
   <?php endif; ?>
+  <?php if ($this->ziskejMvs()->isEnabled()): ?>
+    <a href="<?=$this->url('myresearch-ziskej-edd-home')?>" class="flex ziskej<?=$this->active == 'ziskej-edd' ? ' active' : ''?>">
+      <span class="flex-col">
+        <?=$this->icon('user-ziskej-edd') ?>
+        <?=$this->transEsc('Ziskej::ziskej_edd')?>
+      </span>
+      <span class="ziskej-status status hidden"><?=$this->icon('spinner') ?></span>
+    </a>
+  <?php endif; ?>
   <?php if ($ilsOnline && $this->ils()->checkCapability('getMyHolds', $capabilityParams)): ?>
     <a href="<?=$this->url('holds-list')?>" class="flex<?=$this->active == 'holds' ? ' active' : ''?>">
       <span class="flex-col">

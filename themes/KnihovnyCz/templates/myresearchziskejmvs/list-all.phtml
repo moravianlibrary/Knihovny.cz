@@ -22,7 +22,7 @@ JS;
   <p>
     <?=$this->context($this)->renderInContext('librarycards/listcards.phtml', [
       'user' => $this->auth()->isLoggedIn(),
-      'action' => $this->url('myresearchziskej-listajax'),
+      'action' => $this->url('myresearchziskejmvs-listajax'),
       'callback' => 'loadZiskej',
     ]);
     ?>

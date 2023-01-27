@@ -119,7 +119,17 @@ $config = [
                  'options' => [
                      'route' => '/MyResearch/Ziskej',
                      'defaults' => [
-                         'controller' => 'MyResearchZiskej',
+                         'controller' => 'MyResearchZiskejMvs',
+                         'action' => 'Home'
+                     ],
+                 ],
+             ],
+             'myresearch-ziskej-edd-home' => [
+                 'type' => \Laminas\Router\Http\Segment::class,
+                 'options' => [
+                     'route' => '/MyResearch/ZiskejEdd',
+                     'defaults' => [
+                         'controller' => 'MyResearchZiskejEdd',
                          'action' => 'Home'
                      ],
                  ],
@@ -133,7 +143,21 @@ $config = [
                          'ticketId'     => '.*',
                      ],
                      'defaults' => [
-                         'controller' => 'MyResearchZiskej',
+                         'controller' => 'MyResearchZiskejMvs',
+                         'action' => 'Ticket'
+                     ],
+                 ],
+             ],
+             'myresearch-ziskej-edd-ticket' => [
+                 'type' => \Laminas\Router\Http\Segment::class,
+                 'options' => [
+                     'route' => '/MyResearch/ZiskejEddTicket/[:eppnDomain]/[:ticketId]',
+                     'constraints' => [
+                         'eppnDomain'     => '.*',
+                         'ticketId'     => '.*',
+                     ],
+                     'defaults' => [
+                         'controller' => 'MyResearchZiskejEdd',
                          'action' => 'Ticket'
                      ],
                  ],
@@ -147,7 +171,21 @@ $config = [
                          'ticketId'     => '.*',
                      ],
                      'defaults' => [
-                         'controller' => 'MyResearchZiskej',
+                         'controller' => 'MyResearchZiskejMvs',
+                         'action' => 'TicketCancel'
+                     ],
+                 ],
+             ],
+             'myresearch-ziskej-edd-ticket-cancel' => [
+                 'type' => \Laminas\Router\Http\Segment::class,
+                 'options' => [
+                     'route' => '/MyResearch/ZiskejEddTicket/[:eppnDomain]/[:ticketId]/Cancel',
+                     'constraints' => [
+                         'eppnDomain'     => '.*',
+                         'ticketId'     => '.*',
+                     ],
+                     'defaults' => [
+                         'controller' => 'MyResearchZiskejEdd',
                          'action' => 'TicketCancel'
                      ],
                  ],
@@ -161,7 +199,21 @@ $config = [
                          'ticketId'     => '.*',
                      ],
                      'defaults' => [
-                         'controller' => 'MyResearchZiskej',
+                         'controller' => 'MyResearchZiskejMvs',
+                         'action' => 'TicketMessage'
+                     ],
+                 ],
+             ],
+             'myresearch-ziskej-edd-message-post' => [
+                 'type' => \Laminas\Router\Http\Segment::class,
+                 'options' => [
+                     'route' => '/MyResearch/ZiskejEddTicket/[:eppnDomain]/[:ticketId]/Message',
+                     'constraints' => [
+                         'eppnDomain'     => '.*',
+                         'ticketId'     => '.*',
+                     ],
+                     'defaults' => [
+                         'controller' => 'MyResearchZiskejEdd',
                          'action' => 'TicketMessage'
                      ],
                  ],
@@ -180,6 +232,20 @@ $config = [
                      ],
                  ],
              ],
+             'ziskej-edd-order' => [
+                 'type' => \Laminas\Router\Http\Segment::class,
+                 'options' => [
+                     'route' => '/Record/[:id]/ZiskejEddOrder/:eppnDomain',
+                     'constraints' => [
+                         'id' => '.*',
+                         'eppnDomain' => '.*',
+                     ],
+                     'defaults' => [
+                         'controller' => 'Record',
+                         'action' => 'ZiskejEddOrder'
+                     ],
+                 ],
+             ],
              'ziskej-order-post' => [
                  'type' => \Laminas\Router\Http\Segment::class,
                  'options' => [
@@ -190,6 +256,19 @@ $config = [
                      'defaults' => [
                          'controller' => 'Record',
                          'action' => 'ZiskejOrderPost'
+                     ],
+                 ],
+             ],
+             'ziskej-edd-order-post' => [
+                 'type' => \Laminas\Router\Http\Segment::class,
+                 'options' => [
+                     'route' => '/Record/[:id]/ZiskejEddOrderPost',
+                     'constraints' => [
+                         'id' => '.*',
+                     ],
+                     'defaults' => [
+                         'controller' => 'Record',
+                         'action' => 'ZiskejEddOrderPost'
                      ],
                  ],
              ],
@@ -245,7 +324,8 @@ $config = [
             \KnihovnyCz\Controller\MyResearchController::class => \VuFind\Controller\AbstractBaseFactory::class,
             \KnihovnyCz\Controller\RecordController::class => \VuFind\Controller\AbstractBaseWithConfigFactory::class,
             \KnihovnyCz\Controller\SearchController::class => \VuFind\Controller\AbstractBaseFactory::class,
-            \KnihovnyCz\Controller\MyResearchZiskejController::class => \VuFind\Controller\AbstractBaseFactory::class,
+            \KnihovnyCz\Controller\MyResearchZiskejMvsController::class => \VuFind\Controller\AbstractBaseFactory::class,
+            \KnihovnyCz\Controller\MyResearchZiskejEddController::class => \VuFind\Controller\AbstractBaseFactory::class,
             \KnihovnyCz\Controller\ZiskejController::class => \VuFind\Controller\AbstractBaseFactory::class,
             \KnihovnyCz\Controller\ZiskejAdminController::class => \VuFind\Controller\AbstractBaseFactory::class,
             \KnihovnyCz\Controller\HoldsController::class => \VuFind\Controller\HoldsControllerFactory::class,
@@ -259,7 +339,8 @@ $config = [
             'LibraryCards' => \KnihovnyCz\Controller\LibraryCardsController::class,
             'ZiskejAdmin' => \KnihovnyCz\Controller\ZiskejAdminController::class,
             'Ziskej' => \KnihovnyCz\Controller\ZiskejController::class,
-            'MyResearchZiskej' => \KnihovnyCz\Controller\MyResearchZiskejController::class,
+            'MyResearchZiskejMvs' => \KnihovnyCz\Controller\MyResearchZiskejMvsController::class,
+            'MyResearchZiskejEdd' => \KnihovnyCz\Controller\MyResearchZiskejEddController::class,
             'MyResearch' => \KnihovnyCz\Controller\MyResearchController::class,
             \VuFind\Controller\RecordController::class => \KnihovnyCz\Controller\RecordController::class,
             \VuFind\Controller\SearchController::class => \KnihovnyCz\Controller\SearchController::class,
@@ -448,6 +529,7 @@ $config = [
                     \VuFind\AjaxHandler\GetUserHolds::class => \KnihovnyCz\AjaxHandler\AbstractIlsAndUserActionFactory::class,
                     \VuFind\AjaxHandler\GetUserFines::class => \KnihovnyCz\AjaxHandler\GetUserFinesFactory::class,
                     \KnihovnyCz\AjaxHandler\GetUserProfile::class => \KnihovnyCz\AjaxHandler\AbstractIlsAndUserActionFactory::class,
+                    \KnihovnyCz\AjaxHandler\GetZiskejEddFee::class => \KnihovnyCz\AjaxHandler\GetZiskejEddFeeFactory::class,
                 ],
                 'aliases' => [
                     'edd' => \KnihovnyCz\AjaxHandler\Edd::class,
@@ -460,6 +542,7 @@ $config = [
                     'sfx' => \KnihovnyCz\AjaxHandler\Sfx::class,
                     'saveInstitutionFilter' => \KnihovnyCz\AjaxHandler\SaveInstitutionFilter::class,
                     'getUserProfile' => \KnihovnyCz\AjaxHandler\GetUserProfile::class,
+                    'getZiskejEddFee' => \KnihovnyCz\AjaxHandler\GetZiskejEddFee::class,
                 ],
             ],
             'related' => [
@@ -625,7 +708,8 @@ $staticRoutes = [
     'MyResearch/ShortLoans' => 'MyResearch/ShortLoans',
     'MyResearch/ShortLoansAjax' => 'MyResearch/ShortLoansAjax',
     'Holds/ListAjax' => 'Holds/ListAjax',
-    'MyResearchZiskej/ListAjax' => 'MyResearchZiskej/ListAjax',
+    'MyResearchZiskejMvs/ListAjax' => 'MyResearchZiskejMvs/ListAjax',
+    'MyResearchZiskejEdd/ListAjax' => 'MyResearchZiskejEdd/ListAjax',
     'MyResearch/LogoutWarning' => 'MyResearch/LogoutWarning',
     'Search/Embedded' => 'Search/Embedded',
     'Cart/Cite' => 'Cart/Cite',

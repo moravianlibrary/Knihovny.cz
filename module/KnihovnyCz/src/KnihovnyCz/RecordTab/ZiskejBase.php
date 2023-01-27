@@ -40,6 +40,12 @@ namespace KnihovnyCz\RecordTab;
  */
 abstract class ZiskejBase extends \VuFind\RecordTab\AbstractBase
 {
+    protected \Mzk\ZiskejApi\Api $ziskejApi;
+
+    protected \VuFind\Auth\Manager $authManager;
+
+    protected \VuFind\ILS\Connection $ilsDriver;
+
     protected bool $isZiskejActive = false;
 
     /**
@@ -96,5 +102,64 @@ abstract class ZiskejBase extends \VuFind\RecordTab\AbstractBase
     public function getDedupedRecordIds(): array
     {
         return $this->driver->tryMethod('getDeduplicatedRecordIds', [], []);
+    }
+
+    /**
+     * Get libraries connected in Ziskej
+     *
+     * @return array[]
+     *
+     * @throws \Http\Client\Exception
+     * @throws \Mzk\ZiskejApi\Exception\ApiResponseException
+     * @throws \VuFind\Exception\LibraryCard
+     */
+    public function getConnectedLibs(): array
+    {
+        $connectedLibs = [];
+
+        $user = $this->authManager->isLoggedIn();
+        if ($user) {
+            /**
+             * User library card
+             *
+             * @var \VuFind\Db\Row\UserCard $userCard
+             */
+            foreach ($user->getLibraryCards() as $userCard) {
+                $homeLibrary = $userCard->home_library ?? null;
+                if (!empty($homeLibrary) && !empty($userCard->eppn)) {
+                    if (in_array($homeLibrary, $this->getZiskejLibsIds())) {
+                        $connectedLibs[$homeLibrary]['userCard'] = $userCard;
+                        $connectedLibs[$homeLibrary]['ziskejReader']
+                            = $this->ziskejApi->getReader($userCard->eppn);
+                    }
+                }
+            }
+        }
+
+        return $connectedLibs;
+    }
+
+    /**
+     * Get ids of active libraries in Ziskej
+     *
+     * @return string[][]
+     *
+     * @throws \Http\Client\Exception
+     * @throws \Mzk\ZiskejApi\Exception\ApiResponseException
+     */
+    public function getZiskejLibsIds(): array
+    {
+        $ziskejLibsIds = [];
+
+        $ziskejLibs = $this->ziskejApi->getLibrariesActive()->getAll();
+
+        foreach ($ziskejLibs as $ziskejLib) {
+            /* @phpstan-ignore-next-line */
+            $id = $this->ilsDriver->siglaToSource($ziskejLib->getSigla());
+            if (!empty($id)) {
+                $ziskejLibsIds[] = $id;
+            }
+        }
+        return $ziskejLibsIds;
     }
 }
