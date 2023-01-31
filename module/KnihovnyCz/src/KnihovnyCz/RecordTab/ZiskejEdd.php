@@ -1,7 +1,8 @@
 <?php
+declare(strict_types=1);
 
 /**
- * Record tab ZiskejEdd
+ * Record tab Ziskej Edd
  *
  * PHP version 7
  *
@@ -29,7 +30,7 @@
 namespace KnihovnyCz\RecordTab;
 
 /**
- * Record tab ZiskejEdd
+ * Record tab Ziskej Edd
  *
  * @category VuFind
  * @package  KnihovnyCz\RecordTab
@@ -96,5 +97,20 @@ class ZiskejEdd extends ZiskejBase
     public function getZiskejEdd(): \KnihovnyCz\Ziskej\ZiskejEdd
     {
         return $this->_ziskejEdd;
+    }
+
+    /**
+     * Get ids of active libraries in Ziskej
+     *
+     * @return string[][]
+     *
+     * @throws \Mzk\ZiskejApi\Exception\ApiResponseException
+     * @throws \Psr\Http\Client\ClientExceptionInterface
+     */
+    public function getZiskejLibsIds(): array
+    {
+        return $this->convertLibsFromZiskej(
+            $this->ziskejApi->getLibrariesEddActive()->getAll()
+        );
     }
 }

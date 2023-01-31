@@ -1,7 +1,8 @@
 <?php
+declare(strict_types=1);
 
 /**
- * Record tab Ziskej
+ * Record tab Ziskej MVS
  *
  * PHP version 7
  *
@@ -29,7 +30,7 @@
 namespace KnihovnyCz\RecordTab;
 
 /**
- * Record tab Ziskej
+ * Record tab Ziskej MVS
  *
  * @category VuFind
  * @package  KnihovnyCz\RecordTab
@@ -96,5 +97,20 @@ class ZiskejMvs extends ZiskejBase
     public function getZiskejMvs(): \KnihovnyCz\Ziskej\ZiskejMvs
     {
         return $this->_ziskejMvs;
+    }
+
+    /**
+     * Get ids of active libraries in Ziskej
+     *
+     * @return string[][]
+     *
+     * @throws \Mzk\ZiskejApi\Exception\ApiResponseException
+     * @throws \Psr\Http\Client\ClientExceptionInterface
+     */
+    public function getZiskejLibsIds(): array
+    {
+        return $this->convertLibsFromZiskej(
+            $this->ziskejApi->getLibrariesMvsActive()->getAll()
+        );
     }
 }
