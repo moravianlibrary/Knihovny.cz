@@ -77,6 +77,17 @@
   </a>
 </li>
 <?php endif; ?>
+<?php if ($this->ziskejEdd()->isEnabled()): ?>
+  <li class="<?=$this->active == 'ziskej-edd' ? 'active' : ''?>">
+    <a href="<?=$this->url('myresearch-ziskej-edd-home')?>" class="flex ziskej">
+    <span class="flex-col">
+      <?=$this->icon('user-ziskej-edd') ?>
+      <?=$this->transEsc('Ziskej::ziskej_edd')?>
+    </span>
+      <span class="ziskej-status status hidden"><?=$this->icon('spinner') ?></span>
+    </a>
+  </li>
+<?php endif; ?>
 <?php if ($ilsOnline && $this->ils()->checkCapability('getMyHolds', $capabilityParams)): ?>
 <li class="<?=$this->active == 'holds' ? 'active' : ''?>">
   <a href="<?=$this->url('holds-list')?>" class="flex">

@@ -40,7 +40,7 @@
       <span class="ziskej-status status hidden"><?=$this->icon('spinner') ?></span>
     </a>
   <?php endif; ?>
-  <?php if ($this->ziskejMvs()->isEnabled()): ?>
+  <?php if ($this->ziskejEdd()->isEnabled()): ?>
     <a href="<?=$this->url('myresearch-ziskej-edd-home')?>" class="flex ziskej<?=$this->active == 'ziskej-edd' ? ' active' : ''?>">
       <span class="flex-col">
         <?=$this->icon('user-ziskej-edd') ?>

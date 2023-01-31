@@ -8,7 +8,7 @@
     "require": {
         "php-http/guzzle6-adapter": "^2.0",
         "monolog/monolog": "^1.24",
-        "moravianlibrary/ziskej-api-php-client": "^6",
+        "moravianlibrary/ziskej-api-php-client": "^7",
         "lcobucci/jwt": "^4.1.5",
         "salsify/json-streaming-parser": "^8.2"
     },

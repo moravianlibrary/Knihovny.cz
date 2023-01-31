@@ -140,19 +140,15 @@ abstract class ZiskejBase extends \VuFind\RecordTab\AbstractBase
     }
 
     /**
-     * Get ids of active libraries in Ziskej
+     * Convert libraries from Ziskej to library codes
      *
-     * @return string[][]
-     *
-     * @throws \Http\Client\Exception
-     * @throws \Mzk\ZiskejApi\Exception\ApiResponseException
+     * @param  array $ziskejLibs Array of libraries from Ziskej
+     * 
+     * @return array Array of library codes
      */
-    public function getZiskejLibsIds(): array
+    protected function convertLibsFromZiskej(array $ziskejLibs): array
     {
         $ziskejLibsIds = [];
-
-        $ziskejLibs = $this->ziskejApi->getLibrariesActive()->getAll();
-
         foreach ($ziskejLibs as $ziskejLib) {
             /* @phpstan-ignore-next-line */
             $id = $this->ilsDriver->siglaToSource($ziskejLib->getSigla());
