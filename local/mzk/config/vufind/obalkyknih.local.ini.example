@@ -1,0 +1,6 @@
+[ObalkyKnih]
+; ObalkyKnih checker url, instance of https://github.com/VerosK/obalkyknih-checker
+;checkerUrl = 'https://some.local.url/'
+
+[Parent_Config]
+relative_path = ../../../base/config/vufind/obalkyknih.ini

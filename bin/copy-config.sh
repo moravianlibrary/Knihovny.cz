@@ -57,7 +57,7 @@ if [ ! -f "$CONFIG_PATH" ] ; then
   exit 1
 fi
 
-INSTANCES="knihovny.cz irel kiv mus tech"
+INSTANCES="knihovny.cz irel kiv mus tech mzk"
 PROJECT_PATH=`dirname $(readlink -nf $0)`/..
 BASE_CONFIG_DIR="$PROJECT_PATH/local/base/config/vufind/"
 CONFIG_FILE_EXT="${CONFIG_NAME##*.}"
