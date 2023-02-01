@@ -245,7 +245,7 @@ Deploy mus image:
 Deploy mzk image:
   extends: .deploy_image
   variables:
-    APP_IMAGE_TAG: 'branch-${CI_COMMIT_TAG}'
+    APP_IMAGE_TAG: 'branch-${CI_COMMIT_BRANCH}'
     DEPLOY_REPO_BRANCH: devel
     DEPLOY_REPO_DIR: mzk
 
