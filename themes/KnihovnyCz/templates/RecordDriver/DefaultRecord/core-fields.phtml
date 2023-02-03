@@ -1,0 +1,13 @@
+<?php
+  $formatter = $this->recordDataFormatter($this->driver);
+  $coreFields = $formatter->getData($formatter->getDefaults($this->defaults ?? 'core'));
+?>
+<?php if (!empty($coreFields)): ?>
+  <h4 class="sr-only"><?=$this->transEsc($this->caption ?? 'Bibliographic Details')?></h4>
+  <dl <?php if (!empty($this->tableId)): ?>id="<?=$this->tableId ?>" <?php endif; ?>class="dl-horizontal">
+    <?php foreach ($coreFields as $current): ?>
+      <dt><?=$this->transEsc($current['label'])?>:</dt>
+      <dd><?=$current['value']?></dd>
+    <?php endforeach; ?>
+  </table>
+<?php endif; ?>

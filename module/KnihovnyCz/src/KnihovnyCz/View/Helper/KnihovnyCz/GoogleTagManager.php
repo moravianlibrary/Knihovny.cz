@@ -40,7 +40,7 @@ use Laminas\View\Helper\AbstractHelper;
  * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://knihovny.cz Main Page
  */
-class GoogleTagManager extends AbstractHelper
+class GoogleTagManager extends \VuFind\View\Helper\Root\GoogleTagManager
 {
     /**
      * API key (false if disabled)
@@ -48,16 +48,6 @@ class GoogleTagManager extends AbstractHelper
      * @var string
      */
     protected $key;
-
-    /**
-     * Constructor
-     *
-     * @param string $key API key
-     */
-    public function __construct(string $key)
-    {
-        $this->key = $key;
-    }
 
     /**
      * Returns GTM Javascript code.

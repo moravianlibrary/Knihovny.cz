@@ -19,6 +19,7 @@ $gtmEnabled = $this->googleTagManager()->isEnabled();
     <?php $this->setupThemeResources(); ?>
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
     <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+    <?=$this->googleTagManager()->getHeadCode()?>
 
     <?php
       // Format the page title using the translation system:
@@ -184,6 +185,7 @@ JS;
       </div>
     </div>
     <div class="offcanvas-overlay" data-toggle="offcanvas"></div>
+    <?=$this->googleTagManager()->getBodyCode()?>
     <?=$this->googleanalytics()?>
     <?php foreach ($this->captcha()->js() as $jsInclude):?>
       <?=$this->inlineScript(\Laminas\View\Helper\HeadScript::FILE, $jsInclude, 'SET')?>
