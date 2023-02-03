@@ -69,19 +69,16 @@
     <?php endif; ?>
 
     <?php /* Display Main Details */ ?>
-    <?php
-      $formatter = $this->recordDataFormatter();
-      $coreFields = $formatter->getData($driver, $formatter->getDefaults($this->driver->tryMethod('getRecordDataFormatterKey') ?? 'core'));
+    <?=
+      $this->record($this->driver)->renderTemplate(
+          'core-fields.phtml',
+          [
+            'driver' => $this->driver,
+	    'defaults' => $this->driver->tryMethod('getRecordDataFormatterKey') ?? 'core',
+	    'caption' => $this->driver->tryMethod('getRecordDataTypeDescription') ?? 'Bibliographic Details',
+          ]
+      );
     ?>
-    <?php if (!empty($coreFields)): ?>
-      <h4 class="sr-only"><?=$this->transEsc($this->driver->tryMethod('getRecordDataTypeDescription') ?? 'Bibliographic Details')?></h4>
-      <dl class="dl-horizontal">
-        <?php foreach ($coreFields as $current): ?>
-          <dt><?=$this->transEsc($current['label'])?>:</dt>
-          <dd><?=$current['value']?></dd>
-        <?php endforeach; ?>
-      </dl>
-    <?php endif; ?>
     <?php /* End Main Details */ ?>
   </div>
 </div>
