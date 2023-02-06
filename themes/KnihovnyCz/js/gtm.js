@@ -292,19 +292,16 @@ $('form[name="placeHold"]').on('submit', function reportPlaceHold() {
   });
 });
 
-/* Kliky na otazníky s nápovědou
- * TODO: Doplnit až bude implementována nápověda */
-/*
-$('.questionmark-help').on('click', function reportHelpUsage() {
+/* Kliky na otazníky s nápovědou */
+$('.context-help-link').on('click', function reportHelpUsage() {
   dataLayer.push({
     'event': 'action.help',
     'actionContext': {
       'eventCategory': 'help',
       'eventAction': 'click',
-      'eventLabel': $(this).attr('data-target'),
+      'eventLabel': $(this).attr('href'),
       'eventValue': undefined,
       'nonInteraction': false
     }
   });
 });
-*/
