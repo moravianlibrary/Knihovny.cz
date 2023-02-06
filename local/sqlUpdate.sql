@@ -409,3 +409,28 @@ WHERE `config`.`value` LIKE 'Inspiration:%';
 ALTER TABLE `config` DROP `widget_name`;
 
 UPDATE `system` SET `value` = '114' WHERE `key`='DB_VERSION';
+
+-- Issue 777: Add ratings table
+CREATE TABLE `ratings` (
+    `id` int(11) NOT NULL AUTO_INCREMENT,
+    `user_id` int(11) DEFAULT NULL,
+    `resource_id` int(11) NOT NULL DEFAULT '0',
+    `rating` int(3) NOT NULL,
+    `created` datetime NOT NULL DEFAULT '2000-01-01 00:00:00',
+    PRIMARY KEY (`id`),
+    KEY `user_id` (`user_id`),
+    KEY `resource_id` (`resource_id`),
+    CONSTRAINT `ratings_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE SET NULL,
+    CONSTRAINT `ratings_ibfk_2` FOREIGN KEY (`resource_id`) REFERENCES `resource` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- Only for views db:
+CREATE VIEW `ratings` AS
+SELECT `vufind`.`ratings`.`id` AS `id`,
+       `vufind`.`ratings`.`user_id` AS `user_id`,
+       `vufind`.`ratings`.`resource_id` AS `resource_id`,
+       `vufind`.`ratings`.`rating` AS `rating`,
+       `vufind`.`ratings`.`created` AS `created`
+FROM `vufind`.`ratings`;
+
+UPDATE `system` SET `value` = '115' WHERE `key`='DB_VERSION';
