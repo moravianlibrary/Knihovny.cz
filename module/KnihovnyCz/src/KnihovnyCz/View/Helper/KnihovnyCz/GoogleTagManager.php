@@ -42,12 +42,6 @@ use Laminas\View\Helper\AbstractHelper;
  */
 class GoogleTagManager extends \VuFind\View\Helper\Root\GoogleTagManager
 {
-    /**
-     * API key (false if disabled)
-     *
-     * @var string
-     */
-    protected $key;
 
     /**
      * Returns GTM Javascript code.
@@ -71,7 +65,7 @@ class GoogleTagManager extends \VuFind\View\Helper\Root\GoogleTagManager
       var n = d.querySelector('[nonce]');
       n && j.setAttribute('nonce', n.nonce || n.getAttribute('nonce'));
       f.parentNode.insertBefore(j, f);
-    })(window, document, 'script', 'dataLayer', '{$this->key}');
+    })(window, document, 'script', 'dataLayer', '{$this->gtmContainerId}');
 JS;
     }
 
@@ -82,7 +76,7 @@ JS;
      */
     public function isEnabled(): bool
     {
-        return !empty($this->key);
+        return !empty($this->gtmContainerId);
     }
 
     /**
@@ -115,7 +109,7 @@ JS;
         }
         return <<<HTML
 <noscript>
-  <iframe src="https://www.googletagmanager.com/ns.html?id={$this->key}"
+  <iframe src="https://www.googletagmanager.com/ns.html?id={$this->gtmContainerId}"
           height="0" width="0" style="display:none;visibility:hidden"></iframe>
 </noscript>
 HTML;
