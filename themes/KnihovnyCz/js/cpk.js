@@ -66,6 +66,8 @@ function setupAutocomplete() {
       return false;
     };
   }
+  var requestId = 0;
+  var ajaxCalls = [];
   // Search autocomplete
   searchbox.autocomplete({
     rtl: $(document.body).hasClass("rtl"),
@@ -76,6 +78,10 @@ function setupAutocomplete() {
     callback: acCallback,
     // AJAX call for autocomplete results
     handler: function vufindACHandler(input, cb) {
+      ajaxCalls.forEach(function forEach(ajaxCall){
+        ajaxCall.abort();
+      });
+      ajaxCalls = [];
       var query = input.val();
       var searcher = extractClassParams(input);
       var hiddenFilters = [];
@@ -83,21 +89,46 @@ function setupAutocomplete() {
         function hiddenFiltersEach() {
           hiddenFilters.push($(this).val());
         });
-
-      $.fn.autocomplete.ajax({
-        url: VuFind.path + '/AJAX/JSON',
-        data: {
-          q: query,
-          method: 'getACSuggestions',
-          searcher: searcher.searcher,
-          type: searcher.type ? searcher.type : $('#searchForm_type').val(),
-          hiddenFilters: hiddenFilters
-        },
-        dataType: 'json',
-        success: function autocompleteJSON(json) {
-          cb(json.data);
-        }
+      const type = searcher.type ? searcher.type : $('#searchForm_type').val();
+      const searchTypes = {
+        'AllFields': ['Title', 'Author', 'Subject'],
+        'AllLibraries': ['Name', 'Town'],
+      };
+      const types = searchTypes[type] ? searchTypes[type] : [ type ];
+      const limit = (types.length > 1) ? 6 : 10;
+      types.forEach(function forEach(searchType){
+        var ajaxCall = $.ajax({
+          url: VuFind.path + '/AJAX/JSON',
+          data: {
+            q: query,
+            method: 'getACSuggestions',
+            searcher: searcher.searcher,
+            type: searchType,
+            limit: limit,
+            hiddenFilters: hiddenFilters
+          },
+          dataType: 'json',
+        });
+        ajaxCalls.push(ajaxCall);
       });
+      var onSuccess = function onSuccess(currentRequestId) {
+        return function newFunction() {
+          if (currentRequestId !== requestId) {
+            return;
+          }
+          var results = Array.isArray(this) ? Array.from(arguments) : [arguments];
+          var data = {
+            groups: []
+          };
+          results.forEach(function forEach(result) {
+            if (result[0].data.groups.length > 0) {
+              data.groups.push(result[0].data.groups[0]);
+            }
+          });
+          cb(data);
+        };
+      };
+      $.when.apply($, ajaxCalls).then(onSuccess(++requestId));
     }
   });
   $('#searchForm_lookfor').on("ac:select", function onSelect(event, item) {

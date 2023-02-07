@@ -590,8 +590,8 @@ $config = [
             ],
             'autocomplete' => [
                 'factories' => [
-                    \KnihovnyCz\Autocomplete\SolrPrefix::class => \KnihovnyCz\Autocomplete\SolrFactoryWithEscaper::class,
-                    \KnihovnyCz\Autocomplete\SolrPrefixSorted::class => \KnihovnyCz\Autocomplete\SolrFactoryWithEscaper::class,
+                    \KnihovnyCz\Autocomplete\SolrPrefix::class => \KnihovnyCz\Autocomplete\SolrFactoryWithFilter::class,
+                    \KnihovnyCz\Autocomplete\SolrPrefixSorted::class => \KnihovnyCz\Autocomplete\SolrFactoryWithFilter::class,
                     \KnihovnyCz\Autocomplete\SolrAuthorityEnricher::class => \KnihovnyCz\Autocomplete\SolrAuthorityEnricherFactory::class,
                 ],
                 'aliases' => [
@@ -656,6 +656,7 @@ $config = [
             \KnihovnyCz\Service\UserSettingsService::class => \KnihovnyCz\Service\UserSettingsServiceFactory::class,
             \KnihovnyCz\ILS\Logic\Holds::class => \VuFind\ILS\Logic\LogicFactory::class,
             \KnihovnyCz\Wikidata\SparqlService::class => \KnihovnyCz\Wikidata\SparqlServiceFactory::class,
+            \KnihovnyCz\Autocomplete\SuggestionFilter::class => \KnihovnyCz\Autocomplete\SuggestionFilterFactory::class,
         ],
         'aliases' => [
             'VuFind\Http' => 'VuFindHttp\HttpService',

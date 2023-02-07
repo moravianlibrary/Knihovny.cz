@@ -100,13 +100,8 @@ class Suggester implements \VuFind\I18n\Translator\TranslatorAwareInterface
         $type = $request->get($typeParam, '');
         $query = $request->get($queryParam, '');
         $types = $this->getTypes($type);
-        $limit = (count($types) > 1) ? 6 : 10;
-        $result = [
-            [
-                'label' => $this->translate('Autocomplete header'),
-                'items' => [],
-            ]
-        ];
+        $limit = $request->get('limit', ((count($types) > 1) ? 6 : 10));
+        $result = [];
         foreach ($types as $type) {
             $items = [];
             $suggestions = $this->getSuggestionsByType(

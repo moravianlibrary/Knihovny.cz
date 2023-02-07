@@ -41,7 +41,7 @@ use Psr\Container\ContainerInterface;
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://vufind.org/wiki/development Wiki
  */
-class SolrFactoryWithEscaper implements
+class SolrFactoryWithFilter implements
     \Laminas\ServiceManager\Factory\FactoryInterface
 {
     /**
@@ -67,7 +67,7 @@ class SolrFactoryWithEscaper implements
     ) {
         return new $requestedName(
             $container->get(\VuFind\Search\Results\PluginManager::class),
-            $container->get('ViewHelperManager')->get('escapeHtml')
+            $container->get(\KnihovnyCz\Autocomplete\SuggestionFilter::class)
         );
     }
 }
