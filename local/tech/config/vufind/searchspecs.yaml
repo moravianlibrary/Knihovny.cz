@@ -144,6 +144,7 @@ Author:
     - corporation_viz
     - author_additional
     - author_find
+    - authorCorporation_search_txt_mv
   DismaxParams:
     - [bq, "inspiration:top_results^1"]
     - [bf, "if(exists(merged_records_boolean),10000,0)" ]
@@ -357,6 +358,7 @@ AllFields:
     - format_search_txt_mv
     - obalky_annotation_txt_mv
     - occupation_txt_mv
+    - authorCorporation_search_txt_mv
   DismaxParams:
     - [bq, "inspiration:top_results^1"]
     - [bf, "if(exists(merged_records_boolean),10000,0)" ]

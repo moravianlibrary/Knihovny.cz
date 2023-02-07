@@ -50,11 +50,11 @@ class SolrPrefixSorted implements \VuFind\Autocomplete\AutocompleteInterface
     protected $resultsManager;
 
     /**
-     * Helper for escaping HTML
+     * Suggestion filter
      *
-     * @var \Laminas\View\Helper\EscapeHtml
+     * @var SuggestionFilter
      */
-    protected $escapeHtml;
+    protected $suggestionFilter;
 
     /**
      * Search object
@@ -108,15 +108,15 @@ class SolrPrefixSorted implements \VuFind\Autocomplete\AutocompleteInterface
     /**
      * Constructor
      *
-     * @param \VuFind\Search\Results\PluginManager $results    Results plugin manager
-     * @param \Laminas\View\Helper\EscapeHtml      $escapeHtml Escape HTML helper
+     * @param \VuFind\Search\Results\PluginManager $results Results plugin manager
+     * @param SuggestionFilter                     $filter  Escape HTML helper
      */
     public function __construct(
         \VuFind\Search\Results\PluginManager $results,
-        \Laminas\View\Helper\EscapeHtml $escapeHtml
+        SuggestionFilter $filter
     ) {
         $this->resultsManager = $results;
-        $this->escapeHtml = $escapeHtml;
+        $this->suggestionFilter = $filter;
     }
 
     /**
@@ -173,18 +173,13 @@ class SolrPrefixSorted implements \VuFind\Autocomplete\AutocompleteInterface
             if (isset($facets[$this->facetField]['list'])) {
                 foreach ($facets[$this->facetField]['list'] as $filter) {
                     $value = $filter['value'];
-                    $results[] = [
-                        'label' => $highlighter->highlight(
-                            ($this->escapeHtml)($value)
-                        ),
-                        'value' => $filter['value'],
-                    ];
+                    $results[] = $value;
                 }
             }
         } catch (\Exception $e) {
             // Ignore errors -- just return empty results if we must.
         }
-        return $results;
+        return $this->suggestionFilter->filter($query, $results);
     }
 
     /**

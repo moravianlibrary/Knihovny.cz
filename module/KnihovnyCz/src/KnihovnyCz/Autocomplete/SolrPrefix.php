@@ -28,7 +28,6 @@
  */
 namespace KnihovnyCz\Autocomplete;
 
-use Laminas\View\Helper\EscapeHtml;
 use VuFind\Search\Results\PluginManager as ResultsManager;
 
 /**
@@ -45,25 +44,24 @@ use VuFind\Search\Results\PluginManager as ResultsManager;
 class SolrPrefix extends \VuFind\Autocomplete\SolrPrefix
 {
     /**
-     * Helper for escaping HTML
+     * Filter for suggested terms
      *
-     * @var EscapeHtml
+     * @var SuggestionFilter
      */
-    protected $escapeHtml;
+    protected $suggestionFilter;
 
     /**
      * Constructor
      *
-     * @param ResultsManager $results    Results plugin manager
-     * @param EscapeHtml     $escapeHtml Escape HTML helper
+     * @param ResultsManager   $results Results plugin manager
+     * @param SuggestionFilter $filter  Suggestion filter
      */
     public function __construct(
         \VuFind\Search\Results\PluginManager $results,
-        \Laminas\View\Helper\EscapeHtml $escapeHtml
+        SuggestionFilter $filter
     ) {
         parent::__construct($results);
-        $this->resultsManager = $results;
-        $this->escapeHtml = $escapeHtml;
+        $this->suggestionFilter = $filter;
         $this->limit = 30;
     }
 
@@ -79,9 +77,9 @@ class SolrPrefix extends \VuFind\Autocomplete\SolrPrefix
      */
     public function getSuggestions($query)
     {
-        $result = parent::getSuggestions($query);
-        $result = $this->filter($query, $result);
-        return array_splice($result, 0, 10);
+        $results = parent::getSuggestions($query);
+        $results = $this->suggestionFilter->filter($query, $results);
+        return array_splice($results, 0, 10);
     }
 
     /**
@@ -103,62 +101,5 @@ class SolrPrefix extends \VuFind\Autocomplete\SolrPrefix
             $this->searchClassId = $configFields[2];
         }
         $this->initSearchObject();
-    }
-
-    /**
-     * Filter suggestions
-     *
-     * @param string $query   The user query
-     * @param array  $results Suggestions to filter
-     *
-     * @return array Filtered suggestions according to query
-     */
-    protected function filter($query, $results)
-    {
-        $highlighter = new Highlighter($query);
-        $filtered = [];
-        $normalizedQuery = $this->normalize($query);
-        $queryParts = (array)preg_split('/\s+/', trim($normalizedQuery));
-        $queryPartsCount = count($queryParts);
-
-        foreach ($results as $result) {
-            $matchedQueryParts = 0;
-            foreach ($queryParts as $queryPart) {
-                $resultParts = (array)preg_split(
-                    '/\s+/',
-                    $this->normalize($result)
-                );
-                foreach ($resultParts as $resultPart) {
-                    if (is_string($resultPart)
-                        && is_string($queryPart)
-                        && stripos($resultPart, $queryPart) !== false
-                    ) {
-                        $matchedQueryParts++;
-                    }
-                }
-            }
-            if ($matchedQueryParts == $queryPartsCount) {
-                $filtered[] = [
-                    'label' => $highlighter->highlight(
-                        ($this->escapeHtml)($result)
-                    ),
-                    'value' => $result,
-                ];
-            }
-        }
-
-        return $filtered;
-    }
-
-    /**
-     * Normalize query
-     *
-     * @param string $query query to normalize
-     *
-     * @return string normalized query with removed diacritic
-     */
-    protected function normalize($query)
-    {
-        return (string)iconv("UTF-8", "ASCII//TRANSLIT", $query);
     }
 }

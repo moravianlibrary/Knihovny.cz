@@ -29,7 +29,6 @@
 namespace KnihovnyCz\Autocomplete;
 
 use KnihovnyCz\View\Helper\KnihovnyCz\RecordLinker as RecordLinker;
-use Laminas\View\Helper\EscapeHtml;
 use Laminas\View\Renderer\PhpRenderer as Renderer;
 use VuFind\Search\Results\PluginManager as Results;
 use VuFindSearch\Command\SearchCommand;
@@ -78,13 +77,6 @@ class SolrAuthorityEnricher extends SolrPrefix
     protected $recordLinker;
 
     /**
-     * Escape html helper
-     *
-     * @var \Laminas\View\Helper\EscapeHtml
-     */
-    protected $escapeHtml;
-
-    /**
      * Renderer
      *
      * @var Renderer
@@ -115,20 +107,20 @@ class SolrAuthorityEnricher extends SolrPrefix
     /**
      * Constructor
      *
-     * @param Results       $results       Results plugin manager
-     * @param EscapeHtml    $escapeHtml    Escape HTML helper
-     * @param SearchService $searchService Search service plugin manager
-     * @param RecordLinker  $recordLinker  Record linker
-     * @param Renderer      $renderer      Renderer
+     * @param Results          $results       Results plugin manager
+     * @param SuggestionFilter $filter        Suggestion filter
+     * @param SearchService    $searchService Search service plugin manager
+     * @param RecordLinker     $recordLinker  Record linker
+     * @param Renderer         $renderer      Renderer
      */
     public function __construct(
         \VuFind\Search\Results\PluginManager $results,
-        \Laminas\View\Helper\EscapeHtml $escapeHtml,
+        SuggestionFilter $filter,
         \VuFindSearch\Service $searchService,
         \KnihovnyCz\View\Helper\KnihovnyCz\RecordLinker $recordLinker,
         \Laminas\View\Renderer\PhpRenderer $renderer
     ) {
-        parent::__construct($results, $escapeHtml);
+        parent::__construct($results, $filter);
         $this->searchService = $searchService;
         $this->recordLinker = $recordLinker;
         $this->renderer = $renderer;
@@ -172,7 +164,8 @@ class SolrAuthorityEnricher extends SolrPrefix
             if (!$this->isUnique($value)) {
                 continue;
             }
-            $query = $this->searchField . ':(' . $value . ')';
+            $escaped = str_replace(['(', ')'], ' ', $value);
+            $query = $this->searchField . ':(' . $escaped . ')';
             $query = new \VuFindSearch\Query\Query($query);
             $fullQuery->addQuery($query);
         }
