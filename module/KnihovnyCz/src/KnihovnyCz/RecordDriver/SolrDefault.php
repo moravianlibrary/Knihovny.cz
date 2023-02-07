@@ -266,6 +266,16 @@ class SolrDefault extends \VuFind\RecordDriver\SolrDefault
     }
 
     /**
+     * Get the main author of the record for sorting purposes.
+     *
+     * @return string|null
+     */
+    public function getPrimaryAuthorForSorting()
+    {
+        return $this->fields['author_sort_cz'] ?? null;
+    }
+
+    /**
      * Get an array of all secondary authors (complementing getPrimaryAuthor()).
      *
      * @return array
