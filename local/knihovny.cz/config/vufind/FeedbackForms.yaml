@@ -132,7 +132,7 @@ forms:
 
     onlyForLoggedUsers: false
     emailSubject: '%%subject%% - Knihovny.cz feedback'
-    response: Thank you for your feedback.
+    response: feedback_response
     senderNameRequired: false
     senderEmailRequired: true
 
