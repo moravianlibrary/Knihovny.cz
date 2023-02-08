@@ -439,7 +439,7 @@ AllFields:
       - [onephrase, ~]
     uniftitle_viz:
       - [onephrase, 100]
-  FilterQuery: "*:* NOT record_format:library"
+  FilterQuery: "*:* NOT (record_format:library OR record_format:authority)"
 
 adv_search_title_series:
   DismaxFields:

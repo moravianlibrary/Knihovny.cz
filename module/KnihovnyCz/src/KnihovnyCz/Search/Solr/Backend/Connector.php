@@ -29,9 +29,11 @@ declare(strict_types=1);
  */
 namespace KnihovnyCz\Search\Solr\Backend;
 
+use KnihovnyCz\Search\Solr\DeduplicationHelper;
 use Laminas\Http\Client as HttpClient;
 use Laminas\Http\PhpEnvironment\Request;
 use VuFindSearch\Backend\Exception\HttpErrorException;
+use VuFindSearch\ParamBag;
 
 /**
  * SOLR connector.
@@ -59,6 +61,13 @@ class Connector extends \VuFindSearch\Backend\Solr\Connector
     protected $performanceLogger = null;
 
     /**
+     * Is switching to parent query allowed?
+     *
+     * @var boolean
+     */
+    protected $switchToParentQuery = false;
+
+    /**
      * Set request
      *
      * @param Request $request request
@@ -80,6 +89,37 @@ class Connector extends \VuFindSearch\Backend\Solr\Connector
     public function setPerformanceLogger(PerformanceLogger $logger)
     {
         $this->performanceLogger = $logger;
+    }
+
+    /**
+     * Set switch to parent query
+     *
+     * @param bool $switchToParentQuery allow switch to parent query
+     *
+     * @return void
+     */
+    public function setSwitchToParentQuery(bool $switchToParentQuery)
+    {
+        $this->switchToParentQuery = $switchToParentQuery;
+    }
+
+    /**
+     * Execute a search.
+     *
+     * @param ParamBag $params Parameters
+     *
+     * @return string
+     */
+    public function search(ParamBag $params)
+    {
+        $switchToParentQuery = $this->switchToParentQuery &&
+            DeduplicationHelper::hasChildFilter($params) &&
+            !($params instanceof \KnihovnyCz\Search\ParamBag
+                && !$params->isMultiplyingDeduplicationListener());
+        if ($switchToParentQuery) {
+            $params = $this->switchToParentQuery($params);
+        }
+        return parent::search($params);
     }
 
     /**
@@ -119,5 +159,30 @@ class Connector extends \VuFindSearch\Backend\Solr\Connector
             throw HttpErrorException::createFromResponse($response);
         }
         return $response->getBody();
+    }
+
+    /**
+     * Switch to parent query
+     *
+     * @param \VuFindSearch\ParamBag $params Search parameters
+     *
+     * @return \VuFindSearch\ParamBag
+     */
+    protected function switchToParentQuery($params)
+    {
+        $qt = $params->get('qt');
+        $edismax = $qt != null && $qt[0] == 'edismax';
+        $query = $params->get('q');
+        $parentFilter = DeduplicationHelper::PARENT_FILTER;
+        $baseFilter = "{!child of='$parentFilter'} $parentFilter";
+        $newQuery = $baseFilter . ' AND {!type=lucene v=$parentQuery}';
+        if ($edismax) {
+            $newQuery = $baseFilter
+                . ' AND {!type=edismax qf=$qf bf=$bf bq=$bq v=$parentQuery}';
+        }
+        $params->set('q', $newQuery);
+        $params->set('parentQuery', $query);
+        $params->set('qt', 'standard');
+        return $params;
     }
 }

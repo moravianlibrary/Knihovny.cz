@@ -253,23 +253,30 @@ class JsonFacetListener implements \Laminas\Log\LoggerAwareInterface
     {
         $jsonFacetData = [];
         $remaining = [];
-        if ($params->get('facet.field')) {
-            foreach ($params->get('facet.field') as $facetField) {
-                $field = $facetField;
-                if (preg_match(self::SOLR_LOCAL_PARAMS, $field, $matches)) {
-                    $field = $matches[2];
-                }
-                $isNested = in_array($field, $this->nestedFacets);
-                if ($isNested || $this->enabledForAllFacets) {
-                    $jsonFacetData[$field] = $this->getFacetConfig(
-                        $field,
-                        $params,
-                        $nestedFilters,
-                        $isNested
-                    );
-                } else {
-                    $remaining[] = $facetField;
-                }
+        $hasChildDocFilter = DeduplicationHelper::hasChildFilter($params);
+        $facetFields = $params->get('facet.field') ?? [];
+        foreach ($facetFields as $facetField) {
+            $field = $facetField;
+            if (preg_match(self::SOLR_LOCAL_PARAMS, $field, $matches)) {
+                $field = $matches[2];
+            }
+            $type = 'default';
+            $nested = in_array($field, $this->nestedFacets);
+            if (!$hasChildDocFilter && $nested) {
+                $type = 'nested';
+            }
+            if ($hasChildDocFilter && !$nested) {
+                $type = 'parent';
+            }
+            if ($type != 'default' || $this->enabledForAllFacets) {
+                $jsonFacetData[$field] = $this->getFacetConfig(
+                    $field,
+                    $params,
+                    $nestedFilters,
+                    $type
+                );
+            } else {
+                $remaining[] = $facetField;
             }
         }
         if (empty($remaining)) {
@@ -321,11 +328,11 @@ class JsonFacetListener implements \Laminas\Log\LoggerAwareInterface
      * @param string                 $facetField field
      * @param \VuFindSearch\ParamBag $params     parameters
      * @param array                  $filters    filters to apply
-     * @param bool                   $nested     nested
+     * @param string                 $type       default, parent or nested
      *
      * @return array
      */
-    protected function getFacetConfig($facetField, $params, $filters, $nested)
+    protected function getFacetConfig($facetField, $params, $filters, $type)
     {
         $limit = $this->getFacetParameter(
             $facetField,
@@ -348,13 +355,18 @@ class JsonFacetListener implements \Laminas\Log\LoggerAwareInterface
             $facetConfig['mincount'] = 0;
         }
         $facetConfig['method'] = $this->facetMethod;
-        if (!$nested) {
+        $domain = [];
+        if ($this->isOrFacet($facetField)) {
+            $domain['excludeTags'] = [ $facetField . '_filter' ];
+        }
+        if ($type == 'default') {
+            if (!empty($domain)) {
+                $facetConfig['domain'] = $domain;
+            }
             return $facetConfig;
         }
-        if ($this->parentCount) {
-            $facetConfig['facet'] = [ 'count' => 'unique(_root_)' ];
-        }
-        $q = 'merged_child_boolean:true';
+        $q = null;
+        $nestedFilter = null;
         $appliedFilters = [];
         foreach ($filters as $field => $filter) {
             if ($facetField != $field) {
@@ -362,15 +374,36 @@ class JsonFacetListener implements \Laminas\Log\LoggerAwareInterface
             }
         }
         if (!empty($appliedFilters)) {
-            $q .= ' AND (' . implode(' AND ', $appliedFilters) . ')';
+            $nestedFilter = implode(' AND ', $appliedFilters);
         }
-        if ($this->childFilter != null) {
-            $q .= ' AND (' . $this->childFilter . ')';
+        if ($type == 'nested') {
+            $domain["blockChildren"] = DeduplicationHelper::PARENT_FILTER;
+            $q = DeduplicationHelper::CHILD_FILTER;
+            if ($nestedFilter != null) {
+                $q .= ' AND ' . $nestedFilter;
+            }
+            if ($this->parentCount) {
+                $facetConfig['facet'] = [ 'count' => 'unique(_root_)' ];
+            }
+        } elseif ($type == 'parent') {
+            $domain["blockParent"] = DeduplicationHelper::PARENT_FILTER;
+            $queryDomain = [
+                'blockChildren' => DeduplicationHelper::PARENT_FILTER,
+            ];
+            if ($nestedFilter != null) {
+                $queryDomain['filter'] = $nestedFilter;
+            }
+            $facetConfig['facet'] = [
+                'count' => [
+                    'type' => 'query',
+                    'domain' => $queryDomain,
+                ]
+            ];
         }
         return [
             'type'   => 'query',
             'q'      => $q,
-            'domain' => [ "blockChildren" => "merged_boolean:true" ],
+            'domain' => $domain,
             'facet'  => [
                 $facetField => $facetConfig
             ]
@@ -387,10 +420,16 @@ class JsonFacetListener implements \Laminas\Log\LoggerAwareInterface
     protected function transformFacetQueries($params)
     {
         $filters = [];
-        $fqs = $params->get('fq');
-        $newfqs = [];
+        $oldFilters = $params->get('fq') ?? [];
+        $newFilters = [];
         $nestedOrFacets = [];
-        foreach ($fqs as $fq) {
+        $hasChildDocFilter = DeduplicationHelper::hasChildFilter($params);
+        $parentFilter = DeduplicationHelper::PARENT_FILTER;
+        foreach ($oldFilters as $fq) {
+            if ($fq == DeduplicationHelper::CHILD_FILTER) {
+                $newFilters[] = $fq;
+                continue;
+            }
             [$field, $query] = explode(":", $fq, 2);
             $localParams = null;
             $matches = [];
@@ -401,26 +440,34 @@ class JsonFacetListener implements \Laminas\Log\LoggerAwareInterface
                     $fq = $localParams . ' (' . $field . ':' . $query . ')';
                 }
             }
-            if (in_array($field, $this->nestedFacets)) {
-                if ($this->isOrFacet($field)) {
-                    $nestedOrFacets[] = $fq;
-                }
+            $nested = in_array($field, $this->nestedFacets);
+            if ($nested && $hasChildDocFilter) {
+                $newFilters[] = $fq;
+                $filters[$field][] = $fq;
+            } elseif ($nested) {
                 $filter = $this->addToLocalParams(
                     $localParams,
-                    "parent which='merged_boolean:true'"
-                ) . ' '
-                    . $field . ':' . $query;
+                    "parent which='$parentFilter'"
+                ) . ' ' . $field . ':' . $query;
                 if ($this->childFilter != null) {
                     $filter .= ' AND (' . $this->childFilter . ')';
                 }
-                $newfqs[] = $filter;
-                $filters[$field][] = $query;
+                $newFilters[] = $filter;
+                $filters[$field][] = $fq;
+                if ($this->isOrFacet($field)) {
+                    $nestedOrFacets[] = $fq;
+                }
+            } elseif ($hasChildDocFilter) {
+                $newFilters[] = $this->addToLocalParams(
+                    $localParams,
+                    "child of='$parentFilter'"
+                ) . ' ' . $field . ':' . $query;
             } else {
-                $newfqs[] = $fq;
+                $newFilters[] = $fq;
             }
         }
         if (count($nestedOrFacets) > 1) {
-            $newfqs[] = "{!parent which='merged_boolean:true' " .
+            $newFilters[] = "{!parent which='$parentFilter' " .
                 "tag=nested_facet_filter}( " . implode(
                     ' AND ',
                     $nestedOrFacets
@@ -428,9 +475,9 @@ class JsonFacetListener implements \Laminas\Log\LoggerAwareInterface
         }
         $this->getLogger()->debug(
             "New fq parameters: " .
-            print_r($newfqs, true)
+            print_r($newFilters, true)
         );
-        $params->set('fq', $newfqs);
+        $params->set('fq', $newFilters);
         $nestedFilters = [];
         foreach ($filters as $field => $values) {
             $operator = $this->isOrFacet($field) ? 'OR' : 'AND';

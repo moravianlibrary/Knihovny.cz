@@ -71,17 +71,15 @@ class RecordCollection extends Base
                         $buckets = $facet['buckets'];
                     } elseif (isset($facet[$field]['buckets'])) {
                         $buckets = $facet[$field]['buckets'];
-                        // sort JSON facets by count
-                        usort(
-                            $buckets,
-                            function ($a, $b) {
-                                return $b['count'] <=> $a['count'];
-                            }
-                        );
                     }
+                    $results = [];
                     foreach ($buckets as $bucket) {
-                        $facets[$field][$bucket['val']] = $bucket['count'];
+                        $count = $bucket['count'];
+                        $count = is_array($count) ? $count['count'] : $count;
+                        $results[$bucket['val']] = $count;
                     }
+                    arsort($results);
+                    $facets[$field] = $results;
                 }
             }
         }

@@ -132,14 +132,15 @@ class ChildDocDeduplicationListener extends DeduplicationListener
             $childFilters = $searchConfig->ChildRecordFilters
                 ->toArray();
         }
-        foreach ($childFilters as $filter) {
-            $params->add('fq', $filter);
+        if (!empty($childFilters)) {
+            $childFilter = implode(' AND ', array_values($childFilters));
+            $params->add('fq', $childFilter);
         }
-        if ($this->hasChildFilter($params)) {
+        if (DeduplicationHelper::hasChildFilter($params)) {
             return;
         }
         $params->set('uniqueId', 'local_ids_str_mv');
-        $params->add('fq', '-merged_child_boolean:true');
+        $params->add('fq', '-' . DeduplicationHelper::CHILD_FILTER);
         $config = $this->serviceLocator->get('VuFind\Config');
         if (isset($searchConfig->RawHiddenFilters)) {
             $childFilters = array_merge(
@@ -150,12 +151,15 @@ class ChildDocDeduplicationListener extends DeduplicationListener
         $fl = $params->get('fl');
         if (empty($fl)) {
             $fl = $this->fieldList;
+        } else {
+            $fl = $fl[0];
         }
         $newFieldList = $fl . ", childs:[subquery]";
         $params->set('fl', $newFieldList);
         $params->set(
             'childs.q',
-            '{!term f=parent_id_str v=$row.id} merged_child_boolean:true'
+            '{!term f=parent_id_str v=$row.id} '
+            . DeduplicationHelper::CHILD_FILTER
         );
         $params->set('childs.fl', $this->getChildListOfFields($fl));
         $params->set('childs.rows', static::MAX_CHILD_DOCUMENTS);
