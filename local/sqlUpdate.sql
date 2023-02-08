@@ -673,3 +673,17 @@ CREATE TABLE `nkp_digitalization_requests` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 CREATE VIEW nkp_digitalization_requests AS SELECT * FROM vufind.nkp_digitalization_requests;
+
+-- #781
+--
+-- Enable updating holds for Koha driver
+--
+INSERT INTO `inst_configs` (`source_id`, `key_id`, `value`) VALUES
+  (
+    (SELECT `id` FROM `inst_sources` WHERE `source` = '!koha'),
+    (SELECT `id` FROM `inst_keys` WHERE `key_name` = 'updateFields'),
+    'frozen:frozenThrough:pickUpLocation'
+  );
+
+UPDATE `system` SET `value` = '131' WHERE `key`='DB_VERSION';
+
