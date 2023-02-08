@@ -105,13 +105,14 @@ class Loader extends LoaderBase
         $fields = $record->getRawData();
         $parentRecord = $fields['merged_boolean'] ?? false;
         if ($parentRecord && $this->filterChildRecords) {
-            $params = new \VuFindSearch\ParamBag(
+            $params = new \KnihovnyCz\Search\ParamBag(
                 [
                     'fq' => ['merged_child_boolean:true'],
                     'fl' => 'id',
                     'hl' => ['false'],
                 ]
             );
+            $params->setMultiplyingDeduplicationListener(false);
             $query = new \VuFindSearch\Query\Query('_root_' . ':' . $id);
             $command = new SearchCommand(
                 'Solr',

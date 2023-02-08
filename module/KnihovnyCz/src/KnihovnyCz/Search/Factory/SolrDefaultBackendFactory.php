@@ -35,6 +35,7 @@ use KnihovnyCz\Search\Solr\Backend\Response\Json\RecordCollection;
 use KnihovnyCz\Search\Solr\ChildDocDeduplicationListener;
 use KnihovnyCz\Search\Solr\DeduplicationListener;
 use KnihovnyCz\Search\Solr\JsonFacetListener;
+use KnihovnyCz\Search\Solr\MultiplyingDeduplicationListener;
 use KnihovnyCz\Search\Solr\OneChildDocDeduplicationListener;
 use VuFind\Search\Factory\SolrDefaultBackendFactory
     as ParentSolrDefaultBackendFactory;
@@ -118,12 +119,13 @@ class SolrDefaultBackendFactory extends ParentSolrDefaultBackendFactory
         $enabled
     ) {
         $class = DeduplicationListener::class;
-        $search = $this->config->get($this->searchConfig);
-        $type = $search->Records->deduplication_type ?? null;
+        $type = $this->getDeduplicationType();
         if ($type == 'child') {
             $class = ChildDocDeduplicationListener::class;
         } elseif ($type == 'one_child') {
             $class = OneChildDocDeduplicationListener::class;
+        } elseif ($type == 'multiplying') {
+            $class = MultiplyingDeduplicationListener::class;
         }
         return new $class(
             $backend,
@@ -153,6 +155,21 @@ class SolrDefaultBackendFactory extends ParentSolrDefaultBackendFactory
             $logger = new PerformanceLogger($perfLog, $baseUrl, $request);
             $connector->setPerformanceLogger($logger);
         }
+        if ($this->getDeduplicationType() == 'multiplying') {
+            $connector->setSwitchToParentQuery(true);
+        }
         return $connector;
+    }
+
+    /**
+     * Return deduplication type to use
+     *
+     * @return string|null
+     */
+    protected function getDeduplicationType()
+    {
+        $search = $this->config->get($this->searchConfig);
+        $type = $search->Records->deduplication_type ?? null;
+        return $type;
     }
 }

@@ -130,6 +130,7 @@ class SolrIdResolver
             ]
         );
         $params->setApplyChildFilter(false);
+        $params->setMultiplyingDeduplicationListener(false);
         $fullQuery = new \VuFindSearch\Query\QueryGroup('OR');
         $idMappings = [];
         foreach ($ids as $id) {
