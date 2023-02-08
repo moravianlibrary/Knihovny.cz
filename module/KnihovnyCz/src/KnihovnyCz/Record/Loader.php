@@ -112,7 +112,6 @@ class Loader extends LoaderBase
                     'hl' => ['false'],
                 ]
             );
-            $params->setMultiplyingDeduplicationListener(false);
             $query = new \VuFindSearch\Query\Query('_root_' . ':' . $id);
             $command = new SearchCommand(
                 'Solr',

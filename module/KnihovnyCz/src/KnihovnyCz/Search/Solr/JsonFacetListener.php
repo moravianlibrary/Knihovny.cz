@@ -48,8 +48,6 @@ class JsonFacetListener implements \Laminas\Log\LoggerAwareInterface
 {
     use \VuFind\Log\LoggerAwareTrait;
 
-    protected const SOLR_LOCAL_PARAMS = "/(\\{[^\\}]*\\})*(\S+)/";
-
     protected const DEFAULT_FACET_LIMIT = -1;
 
     /**
@@ -256,10 +254,7 @@ class JsonFacetListener implements \Laminas\Log\LoggerAwareInterface
         $hasChildDocFilter = DeduplicationHelper::hasChildFilter($params);
         $facetFields = $params->get('facet.field') ?? [];
         foreach ($facetFields as $facetField) {
-            $field = $facetField;
-            if (preg_match(self::SOLR_LOCAL_PARAMS, $field, $matches)) {
-                $field = $matches[2];
-            }
+            [$field, ] = DeduplicationHelper::parseField($facetField);
             $type = 'default';
             $nested = in_array($field, $this->nestedFacets);
             if (!$hasChildDocFilter && $nested) {
@@ -431,28 +426,24 @@ class JsonFacetListener implements \Laminas\Log\LoggerAwareInterface
                 continue;
             }
             [$field, $query] = explode(":", $fq, 2);
-            $localParams = null;
-            $matches = [];
-            if (preg_match(self::SOLR_LOCAL_PARAMS, $field, $matches)) {
-                $localParams = $matches[1];
-                $field = $matches[2];
-                if (!empty($localParams)) {
-                    $fq = $localParams . ' (' . $field . ':' . $query . ')';
-                }
+            [$field, $localParams] = DeduplicationHelper::parseField($field);
+            if ($localParams != null) {
+                $fq = $localParams . ' (' . $field . ':' . $query . ')';
             }
             $nested = in_array($field, $this->nestedFacets);
             if ($nested && $hasChildDocFilter) {
                 $newFilters[] = $fq;
                 $filters[$field][] = $fq;
             } elseif ($nested) {
-                $filter = $this->addToLocalParams(
+                $filter = $field . ':' . $query;
+                $newFilter = $this->addToLocalParams(
                     $localParams,
                     "parent which='$parentFilter'"
-                ) . ' ' . $field . ':' . $query;
-                if ($this->childFilter != null) {
-                    $filter .= ' AND (' . $this->childFilter . ')';
+                ) . ' (' . $filter . ')';
+                if ($this->childFilter != null && $filter != $this->childFilter) {
+                    $newFilter .= ' AND (' . $this->childFilter . ')';
                 }
-                $newFilters[] = $filter;
+                $newFilters[] = $newFilter;
                 $filters[$field][] = $fq;
                 if ($this->isOrFacet($field)) {
                     $nestedOrFacets[] = $fq;

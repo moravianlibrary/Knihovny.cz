@@ -50,6 +50,8 @@ use VuFindSearch\Service;
  */
 class MultiplyingDeduplicationListener
 {
+    protected const CONTEXTS = ['search', 'similar'];
+
     /**
      * Backend.
      *
@@ -70,6 +72,13 @@ class MultiplyingDeduplicationListener
      * @var string
      */
     protected $childFilter = null;
+
+    /**
+     * Results facets
+     *
+     * @var array
+     */
+    protected $facets = [];
 
     /**
      * List of fields to return from Solr
@@ -111,6 +120,10 @@ class MultiplyingDeduplicationListener
         }
         $this->listOfFields = $searchConfig->General->default_record_fields
             ?? '*,score';
+        $facetConfig = $config->get($facetCfg);
+        if (($facets = $facetConfig->Results) !== null) {
+            $this->facets = array_keys($facets->toArray());
+        }
     }
 
     /**
@@ -152,10 +165,15 @@ class MultiplyingDeduplicationListener
         $command = $event->getParam('command');
         if ($command->getTargetIdentifier() === $this->backend->getIdentifier()) {
             $params = $command->getSearchParameters();
+            $fetchRecords = true;
+            if ($command instanceof \VufindSearch\Command\SearchCommand) {
+                $arguments = $command->getArguments();
+                $fetchRecords = $arguments[2] > 0;
+            }
             $context = $command->getContext();
-            $enabled = in_array($context, ['search', 'similar', 'retrieve']);
+            $enabled = in_array($context, self::CONTEXTS);
             if ($enabled) {
-                $this->configureFilter($params);
+                $this->configureFilter($params, $fetchRecords);
             }
         }
         return $event;
@@ -164,16 +182,27 @@ class MultiplyingDeduplicationListener
     /**
      * Get filter for limiting results
      *
-     * @param \VuFindSearch\ParamBag $params Search parameters
+     * @param \VuFindSearch\ParamBag $params       Search parameters
+     * @param boolean                $fetchRecords fetch records
      *
      * @return void
      */
-    protected function configureFilter($params)
+    protected function configureFilter($params, $fetchRecords)
     {
         $fq = $params->get('fq') ?? [];
-        $enabled = !($params instanceof \KnihovnyCz\Search\ParamBag &&
-            !$params->isMultiplyingDeduplicationListener());
-        if ($enabled && !DeduplicationHelper::hasChildFilter($params)) {
+        $facetFields = $params->get('facet.field') ?? [];
+        $facetFields = array_map(
+            function ($field) {
+                [$field, ] = DeduplicationHelper::parseField($field);
+                return $field;
+            },
+            $facetFields
+        );
+        $facets = array_intersect($this->facets, $facetFields);
+        $switchToParentQuery = !DeduplicationHelper::hasChildFilter($params)
+            && ($fetchRecords || !empty($facets));
+        if ($switchToParentQuery) {
+            $params->set("switchToParentQuery", true);
             $fq[] = DeduplicationHelper::CHILD_FILTER;
             $fl = $params->get('fl');
             if (empty($fl)) {
@@ -214,8 +243,7 @@ class MultiplyingDeduplicationListener
             return $event;
         }
         $context = $command->getContext();
-        $contexts = ['search', 'similar', 'retrieve'];
-        if ($this->enabled && in_array($context, $contexts)) {
+        if ($this->enabled && in_array($context, self::CONTEXTS)) {
             $this->fetchLocalRecords($event);
         }
         return $event;

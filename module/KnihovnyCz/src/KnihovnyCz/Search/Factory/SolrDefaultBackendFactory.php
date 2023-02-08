@@ -155,9 +155,6 @@ class SolrDefaultBackendFactory extends ParentSolrDefaultBackendFactory
             $logger = new PerformanceLogger($perfLog, $baseUrl, $request);
             $connector->setPerformanceLogger($logger);
         }
-        if ($this->getDeduplicationType() == 'multiplying') {
-            $connector->setSwitchToParentQuery(true);
-        }
         return $connector;
     }
 
