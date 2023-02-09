@@ -58,17 +58,27 @@ class Holdings
     protected array $availability = [
         'Available On Shelf' => self::STATUS_AVAILABLE, // XCNCIP2
         'Available on Shelf' => self::STATUS_AVAILABLE, // XCNCIP2
+        'On Shelf' => self::STATUS_AVAILABLE, // Koha
         'Available For Pickup' => self::STATUS_TEMPORARY_NOT_AVAILABLE, // XCNCIP2
         'Available for Pickup' => self::STATUS_TEMPORARY_NOT_AVAILABLE, // XCNCIP2
         'On Loan' => self::STATUS_TEMPORARY_NOT_AVAILABLE, // XCNCIP2, Aleph
-        'On Order' => self::STATUS_TEMPORARY_NOT_AVAILABLE, /// XCNCIP2, Aleph
+        'Charged' => self::STATUS_TEMPORARY_NOT_AVAILABLE, // Koha
+        'Overdue' => self::STATUS_TEMPORARY_NOT_AVAILABLE, // Koha
+        'On Order' => self::STATUS_TEMPORARY_NOT_AVAILABLE, // XCNCIP2, Aleph
+        'On Hold' => self::STATUS_TEMPORARY_NOT_AVAILABLE, // Koha
+        'On Holdshelf' => self::STATUS_TEMPORARY_NOT_AVAILABLE, // Koha
         'In Process' => self::STATUS_TEMPORARY_NOT_AVAILABLE, // XCNCIP2
         'In Transit Between Library Locations'
             => self::STATUS_TEMPORARY_NOT_AVAILABLE, // XCNCIP2
+        'In Transit On Hold' => self::STATUS_TEMPORARY_NOT_AVAILABLE, // Koha
+        'In Transit' => self::STATUS_TEMPORARY_NOT_AVAILABLE, // Koha
         'Circulation Status Undefined' => self::STATUS_UNKNOWN, // XCNCIP2
         'available' => self::STATUS_AVAILABLE, // Aleph
         'Not For Loan' => self::STATUS_NOT_AVAILABLE, //XCNCIP2
         'Not Available' => self::STATUS_NOT_AVAILABLE, //XCNCIP2
+        'Withdrawn' => self::STATUS_NOT_AVAILABLE, // Koha
+        'Lost' => self::STATUS_NOT_AVAILABLE, //Koha
+        'No information available' => self::STATUS_UNDECIDABLE, // Koha
     ];
 
     /**
