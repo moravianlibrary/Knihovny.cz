@@ -40,16 +40,16 @@
           <?=$this->transEsc('Export')?>
         </button>
       <?php endif; ?>
-      <button type="submit" class="toolbar-btn dropdown-toggle" name="print" title="<?=$this->transEscAttr('print_selected')?>" value="1">
+      <button type="submit" class="toolbar-btn" name="print" title="<?=$this->transEscAttr('print_selected')?>" value="1">
         <?=$this->icon('print') ?>
         <?=$this->transEsc('Print')?>
       </button>
-      <button type="submit" class="toolbar-btn dropdown-toggle" name="cite" value="1" title="<?=$this->transEscAttr('cite_selected')?>" value="1">
+      <button type="submit" class="toolbar-btn" name="cite" value="1" title="<?=$this->transEscAttr('cite_selected')?>" value="1">
         <?=$this->icon('cite') ?>
         <?=$this->transEsc('Cite this')?>
       </button>
       <div class="btn-group" id="cartDelete">
-        <button type="submit" name="delete" class="toolbar-btn dropdown-toggle" data-toggle="dropdown" id="cart-delete-label" value="1">
+        <button type="submit" name="delete" class="toolbar-btn" data-toggle="dropdown" id="cart-delete-label" value="1">
           <?=$this->icon('cart-remove') ?>
           <?=$this->transEsc('Delete')?>
         </button>
@@ -59,7 +59,7 @@
         </ul>
       </div>
       <div class="btn-group">
-        <button type="submit" class="toolbar-btn dropdown-toggle" name="empty" data-toggle="dropdown" id="cart-empty-label" value="1">
+        <button type="submit" class="toolbar-btn" name="empty" data-toggle="dropdown" id="cart-empty-label" value="1">
           <?=$this->icon('cart-empty') ?>
           <?=$this->transEsc('Empty Book Bag')?>
         </button>
