@@ -1,0 +1,6 @@
+<?php $searchRoute = $this->searchOptions($this->driver->getSearchBackendIdentifier())->getSearchAction(); ?>
+<?=$this->url($searchRoute, [], ['query' => [
+  'join' => 'AND',
+  'type0' => ['adv_search_publisher'],
+  'lookfor0' => [$this->lookfor],
+]]);
