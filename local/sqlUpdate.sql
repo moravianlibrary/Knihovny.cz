@@ -437,3 +437,30 @@ UPDATE `system` SET `value` = '115' WHERE `key`='DB_VERSION';
 
 ALTER TABLE `resource` ADD COLUMN author_sort VARCHAR(255) COLLATE 'utf8mb4_czech_ci' NULL AFTER `author`;
 UPDATE `system` SET `value` = '116' WHERE `key`='DB_VERSION';
+
+-- #761
+INSERT INTO `inst_configs` (`source_id`, `key_id`, `value`)
+SELECT `id`,
+       (SELECT `inst_keys`.`id` FROM `inst_keys` JOIN `inst_sections` ON `inst_keys`.`section_id` = `inst_sections`.`id`
+        WHERE `inst_keys`.`key_name` = 'enabled' AND `inst_sections`.`section_name` = 'TransactionHistory'),
+       '1'
+FROM `inst_sources` WHERE `driver` = 'koha';
+
+INSERT INTO `inst_keys` (`key_name`, `section_id`) VALUES ('updateFields', (SELECT `id` FROM `inst_sections` WHERE `section_name` = 'Holds'));
+
+INSERT INTO `inst_configs` (`source_id`, `key_id`, `value`)
+  (
+    (SELECT `id` FROM `inst_sources` WHERE `source` = '!koha'),
+    (SELECT `id` FROM `inst_keys` WHERE `key_name` = 'HMACKeys'),
+    'item_id:holdtype:level'
+  );
+
+INSERT INTO `inst_configs` (`source_id`, `key_id`, `value`)
+  (
+    (SELECT `id` FROM `inst_sources` WHERE `source` = '!koha'),
+    (SELECT `id` FROM `inst_keys` WHERE `key_name` = 'extraHoldFields'),
+    'requiredByDate:pickUpLocation'
+  );
+
+UPDATE `system` SET `value` = '117' WHERE `key`='DB_VERSION';
+

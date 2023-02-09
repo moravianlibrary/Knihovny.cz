@@ -492,6 +492,7 @@ $config = [
             ],
             'ils_driver' => [
                 'factories' => [
+                    \KnihovnyCz\ILS\Driver\KohaRest::class => \VuFind\ILS\Driver\KohaRestFactory::class,
                     \KnihovnyCz\ILS\Driver\KohaRest1905::class => \VuFind\ILS\Driver\DriverWithDateConverterFactory::class,
                     \KnihovnyCz\ILS\Driver\MultiBackend::class => \KnihovnyCz\ILS\Driver\MultiBackendFactory::class,
                     \KnihovnyCz\ILS\Driver\XCNCIP2::class => \VuFind\ILS\Driver\DriverWithDateConverterFactory::class,
@@ -499,6 +500,7 @@ $config = [
                     \KnihovnyCz\ILS\Driver\NoILS::class => \VuFind\ILS\Driver\NoILSFactory::class,
                 ],
                 'aliases' => [
+                    'koharest' => \KnihovnyCz\ILS\Driver\KohaRest::class,
                     'koharest1905' => \KnihovnyCz\ILS\Driver\KohaRest1905::class,
                     'multibackend' => \KnihovnyCz\ILS\Driver\MultiBackend::class,
                     'xcncip2' => \KnihovnyCz\ILS\Driver\XCNCIP2::class,
