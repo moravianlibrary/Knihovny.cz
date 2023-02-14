@@ -78,7 +78,7 @@ function setupAutocomplete() {
     callback: acCallback,
     // AJAX call for autocomplete results
     handler: function vufindACHandler(input, cb) {
-      ajaxCalls.forEach(function forEach(ajaxCall){
+      ajaxCalls.forEach(function forEach(ajaxCall) {
         ajaxCall.abort();
       });
       ajaxCalls = [];
@@ -94,9 +94,12 @@ function setupAutocomplete() {
         'AllFields': ['Title', 'Author', 'Subject'],
         'AllLibraries': ['Name', 'Town'],
       };
-      const types = searchTypes[type] ? searchTypes[type] : [ type ];
+      var types = searchTypes[type] ? searchTypes[type] : [type];
+      if (type === 'AllFields' && query.trim().split(/\s+/).length > 1) {
+        types.push('AuthorTitle');
+      }
       const limit = (types.length > 1) ? 6 : 10;
-      types.forEach(function forEach(searchType){
+      types.forEach(function forEach(searchType) {
         var ajaxCall = $.ajax({
           url: VuFind.path + '/AJAX/JSON',
           data: {
@@ -107,6 +110,9 @@ function setupAutocomplete() {
             limit: limit,
             hiddenFilters: hiddenFilters
           },
+          context: {
+            type: searchType
+          },
           dataType: 'json',
         });
         ajaxCalls.push(ajaxCall);
@@ -116,15 +122,25 @@ function setupAutocomplete() {
           if (currentRequestId !== requestId) {
             return;
           }
+          var contexts = Array.isArray(this) ? this : [this];
           var results = Array.isArray(this) ? Array.from(arguments) : [arguments];
           var data = {
             groups: []
           };
-          results.forEach(function forEach(result) {
-            if (result[0].data.groups.length > 0) {
-              data.groups.push(result[0].data.groups[0]);
+          var suggestions = new Map();
+          results.forEach(function forEach(result, index) {
+            var hasSuggestions = result[0].data.groups.length > 0;
+            if (hasSuggestions) {
+              suggestions.set(contexts[index].type, result[0].data.groups[0]);
             }
           });
+          if (type === 'AllFields' && suggestions.has('Author')
+            && suggestions.has('Title')) {
+            suggestions.delete('AuthorTitle');
+          }
+          for (const [, value] of suggestions.entries()) {
+            data.groups.push(value);
+          }
           cb(data);
         };
       };
