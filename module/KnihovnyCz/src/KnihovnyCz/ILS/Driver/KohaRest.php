@@ -27,7 +27,6 @@ declare(strict_types=1);
  * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://knihovny.cz Main Page
  */
-
 namespace KnihovnyCz\ILS\Driver;
 
 use VuFind\Exception\ILS as ILSException;
