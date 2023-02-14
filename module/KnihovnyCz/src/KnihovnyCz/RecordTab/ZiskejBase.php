@@ -142,8 +142,8 @@ abstract class ZiskejBase extends \VuFind\RecordTab\AbstractBase
     /**
      * Convert libraries from Ziskej to library codes
      *
-     * @param  array $ziskejLibs Array of libraries from Ziskej
-     * 
+     * @param array $ziskejLibs Array of libraries from Ziskej
+     *
      * @return array Array of library codes
      */
     protected function convertLibsFromZiskej(array $ziskejLibs): array

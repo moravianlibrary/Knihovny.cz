@@ -74,8 +74,8 @@
           'core-fields.phtml',
           [
             'driver' => $this->driver,
-	    'defaults' => $this->driver->tryMethod('getRecordDataFormatterKey') ?? 'core',
-	    'caption' => $this->driver->tryMethod('getRecordDataTypeDescription') ?? 'Bibliographic Details',
+            'defaults' => $this->driver->tryMethod('getRecordDataFormatterKey') ?? 'core',
+            'caption' => $this->driver->tryMethod('getRecordDataTypeDescription') ?? 'Bibliographic Details',
           ]
       );
     ?>

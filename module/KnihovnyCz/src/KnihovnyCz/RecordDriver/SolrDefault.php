@@ -827,6 +827,11 @@ class SolrDefault extends \VuFind\RecordDriver\SolrDefault
         return 'record_' . $id . '_' . $suffix;
     }
 
+    /**
+     * Return title of source document
+     *
+     * @return ?string
+     */
     public function getSourceTitleFacet(): ?string
     {
         $parent = $this->getParentRecord();

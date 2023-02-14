@@ -29,8 +29,6 @@ declare(strict_types=1);
  */
 namespace KnihovnyCz\View\Helper\KnihovnyCz;
 
-use Laminas\View\Helper\AbstractHelper;
-
 /**
  * Class GoogleTagManager
  *
@@ -42,7 +40,6 @@ use Laminas\View\Helper\AbstractHelper;
  */
 class GoogleTagManager extends \VuFind\View\Helper\Root\GoogleTagManager
 {
-
     /**
      * Returns GTM Javascript code.
      *
