@@ -29,6 +29,7 @@ declare(strict_types=1);
  */
 namespace KnihovnyCz\Controller;
 
+use Laminas\Http\Header\ContentSecurityPolicy;
 use Laminas\ServiceManager\ServiceLocatorInterface;
 use Laminas\Stdlib\RequestInterface as Request;
 use Laminas\Stdlib\ResponseInterface as Response;
@@ -110,7 +111,15 @@ class SearchController extends \VuFind\Controller\SearchController
     {
         $this->disableSessionWrites();
         $headers = $this->getResponse()->getHeaders();
-        $headers->addHeaderLine('Content-Security-Policy', 'frame-ancestors *');
+        $cspHeader = $headers->get('Content-Security-Policy');
+        if ($cspHeader === false) {
+            $cspHeader = new ContentSecurityPolicy();
+            $headers->addHeader($cspHeader);
+        }
+        if (is_iterable($cspHeader)) {
+            $cspHeader = $cspHeader->current();
+        }
+        $cspHeader->setDirective('frame-ancestors', ['*']);
         $headers->addHeaderLine('X_FRAME_OPTIONS', 'ALLOWALL');
         $view = $this->createViewModel();
         $view->setTemplate('search/embedded');
