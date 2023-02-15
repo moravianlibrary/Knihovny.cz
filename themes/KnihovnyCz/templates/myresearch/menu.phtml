@@ -6,6 +6,7 @@
     $capabilityParams['user'] = $user;
   }
   $ilsOnline = ('ils-none' !== $this->ils()->getOfflineMode());
+  $showLibraryCards = $this->config()->get('config')->Catalog->show_library_cards ?? true;
 ?>
 <button class="close-offcanvas btn btn-link" data-toggle="offcanvas"><?=$this->transEsc('navigate_back') ?></button>
 <h3><?=$this->transEsc('Your Account')?></h3>
@@ -94,7 +95,7 @@
     <?=$this->transEsc('Profile')?>
     <span class="profile-status status hidden"><?=$this->icon('spinner') ?></span>
   </a>
-  <?php if ($ilsOnline && $user && $user->libraryCardsEnabled()): ?>
+  <?php if ($ilsOnline && $user && $user->libraryCardsEnabled() && $showLibraryCards): ?>
     <a href="<?=$this->url('librarycards-home')?>"<?=$this->active == 'librarycards' ? ' class="active"' : ''?>>
       <?=$this->icon('barcode') ?>
       <?=$this->transEsc('Library Cards')?>
