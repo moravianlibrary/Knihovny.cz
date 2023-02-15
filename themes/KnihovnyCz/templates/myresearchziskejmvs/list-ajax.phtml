@@ -66,7 +66,7 @@ $error = ($this->error ?? false);
                   ])?>
                 <?php else: ?>
                   <div class="alert alert-info">
-                    <?=$this->transEsc('Ziskej::message_no_current_orders')?>
+                    <?=$this->transEsc('Ziskej::message_no_current_orders_mvs')?>
                   </div>
                 <?php endif; ?>
               </div>
@@ -78,7 +78,7 @@ $error = ($this->error ?? false);
                   ])?>
                 <?php else: ?>
                   <div class="alert alert-info">
-                    <?=$this->transEsc('Ziskej::message_no_history_orders')?>
+                    <?=$this->transEsc('Ziskej::message_no_history_orders_mvs')?>
                   </div>
                 <?php endif; ?>
               </div>
@@ -91,12 +91,12 @@ $error = ($this->error ?? false);
         <?php endif; ?>
       <?php else: ?>
         <div class="alert alert-info">
-          <?=$this->transEsc('Ziskej::message_no_current_orders')?>
+          <?=$this->transEsc('Ziskej::message_no_current_orders_mvs')?>
         </div>
       <?php endif; ?>
     <?php else: ?>
       <div class="alert alert-danger">
-        <?=$this->transEsc('Ziskej::library_not_found_in_ziskej')?>
+        <?=$this->transEsc('Ziskej::library_not_found_in_ziskej_mvs')?>
       </div>
     <?php endif; ?>
   <?php else: ?>
