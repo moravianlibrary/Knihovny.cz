@@ -171,7 +171,7 @@ $this->headTitle($this->translate('Ziskej::header_order_ziskej_edd_num') . ' ' .
       <?php endif; ?>
 
       <?php if (in_array($ticket->getStatus(), ['created', 'paid'])): ?>
-        <a class="btn btn-info" href="<?=$this->url('myresearch-ziskej-edd-ticket-cancel', ['eppnDomain' => $userCard->getEppnDomain(), 'ticketId' => $ticket->getId()])?>" title="<?=$this->transEsc("Ziskej::btn_order_cancel_title")?>" onclick="return confirm('<?=$this->translate('Ziskej::btn_order_cancel_confirm', ['%orderId' => $ticket->getHid()]);?>')">
+        <a id="cancelButton" class="btn btn-info" href="<?=$this->url('myresearch-ziskej-edd-ticket-cancel', ['eppnDomain' => $userCard->getEppnDomain(), 'ticketId' => $ticket->getId()])?>" title="<?=$this->transEsc("Ziskej::btn_order_cancel_title")?>">
           <i class="fa fa-times"></i> <?=$this->transEsc("Ziskej::btn_order_cancel")?>
         </a>
       <?php endif; ?>
@@ -359,3 +359,12 @@ $this->headTitle($this->translate('Ziskej::header_order_ziskej_edd_num') . ' ' .
   </div>
 
 </div>
+
+<?php
+$confirmationText = $this->translate('Ziskej::btn_order_cancel_confirm', ['%orderId' => $ticket->getHid()]);
+$script = <<<JS
+  $('#cancelButton').click(function confirmCancelTicket() {
+    return confirm('$confirmationText');
+  });
+JS;
+echo $this->inlineScript(\Laminas\View\Helper\HeadScript::SCRIPT, $script, 'SET');

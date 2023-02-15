@@ -77,7 +77,7 @@
         <span class="facet-title"><?=$this->transEsc($facetName)?>
         <?php if ($field == $this->recommend->getInstitutionField() && $this->auth()->isLoggedIn()):?>
           <?php if (($myFilterLink = $this->recommend->getMyFilter()) !== false): ?>
-            <a href='<?=$myFilterLink?>' onclick='event.stopPropagation()'
+            <a href='<?=$myFilterLink?>'
                id='my-institution-filter'
                title="<?=$this->translate('my_institution_filter_load_title')?>">
               <?=$this->icon('load-institution-filter') ?>
@@ -127,3 +127,13 @@
 <?php if ($results->getResultTotal() > 0 || $hasVisibleCheckboxes): ?>
   </div>
 <?php endif; ?>
+
+<?php
+
+$script = <<<JS
+  $('#my-institution-filter').click(function myInstitutionFilterHandler(event) {
+    event.stopPropagation();
+  });
+JS;
+echo $this->inlineScript(\Laminas\View\Helper\HeadScript::SCRIPT, $script, 'SET');
+
