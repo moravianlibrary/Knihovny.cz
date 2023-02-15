@@ -441,6 +441,12 @@ AllFields:
       - [onephrase, 100]
   FilterQuery: "*:* NOT (record_format:library OR record_format:authority)"
 
+AuthorTitleAutocomplete:
+  DismaxFields:
+    - title_autocomplete
+    - author_autocomplete
+  FilterQuery: "*:* NOT (record_format:library OR record_format:authority)"
+
 adv_search_title_series:
   DismaxFields:
     - title_short^500
