@@ -43,6 +43,8 @@ class DeduplicationHelper
 
     public const PARENT_FILTER = 'merged_boolean:true';
 
+    protected const SOLR_LOCAL_PARAMS = "/(\\{[^\\}]*\\})*(\S+)/";
+
     /**
      * Check search parameters for child records filter
      *
@@ -54,5 +56,24 @@ class DeduplicationHelper
     {
         $filters = $params->get('fq') ?? [];
         return in_array(self::CHILD_FILTER, $filters);
+    }
+
+    /**
+     * Parse field and local parameters from faceting parameter
+     *
+     * @param $facet facet field
+     *
+     * @return array field name and local parameters
+     */
+    public static function parseField($facet)
+    {
+        $field = $facet;
+        $localParams = null;
+        $matches = [];
+        if (preg_match(self::SOLR_LOCAL_PARAMS, $field, $matches)) {
+            $localParams = $matches[1];
+            $field = $matches[2];
+        }
+        return [$field, $localParams];
     }
 }

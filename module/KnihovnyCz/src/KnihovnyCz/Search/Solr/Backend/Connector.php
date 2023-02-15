@@ -61,13 +61,6 @@ class Connector extends \VuFindSearch\Backend\Solr\Connector
     protected $performanceLogger = null;
 
     /**
-     * Is switching to parent query allowed?
-     *
-     * @var boolean
-     */
-    protected $switchToParentQuery = false;
-
-    /**
      * Set request
      *
      * @param Request $request request
@@ -92,18 +85,6 @@ class Connector extends \VuFindSearch\Backend\Solr\Connector
     }
 
     /**
-     * Set switch to parent query
-     *
-     * @param bool $switchToParentQuery allow switch to parent query
-     *
-     * @return void
-     */
-    public function setSwitchToParentQuery(bool $switchToParentQuery)
-    {
-        $this->switchToParentQuery = $switchToParentQuery;
-    }
-
-    /**
      * Execute a search.
      *
      * @param ParamBag $params Parameters
@@ -112,11 +93,9 @@ class Connector extends \VuFindSearch\Backend\Solr\Connector
      */
     public function search(ParamBag $params)
     {
-        $switchToParentQuery = $this->switchToParentQuery &&
-            DeduplicationHelper::hasChildFilter($params) &&
-            !($params instanceof \KnihovnyCz\Search\ParamBag
-                && !$params->isMultiplyingDeduplicationListener());
+        $switchToParentQuery = $params->contains('switchToParentQuery', true);
         if ($switchToParentQuery) {
+            $params->remove('switchToParentQuery');
             $params = $this->switchToParentQuery($params);
         }
         return parent::search($params);

@@ -46,14 +46,6 @@ class ParamBag extends \VuFindSearch\ParamBag
     protected $applyChildFilter = true;
 
     /**
-     * Is multiplying deduplication listener enabled? Default enabled, can be
-     * manually disabled in specific cases.
-     *
-     * @var bool
-     */
-    protected $multiplyingDeduplicationListener = true;
-
-    /**
      * Set appply child filter
      *
      * @param bool $applyChildFilter apply child filter
@@ -73,28 +65,5 @@ class ParamBag extends \VuFindSearch\ParamBag
     public function isApplyChildFilter()
     {
         return $this->applyChildFilter;
-    }
-
-    /**
-     * Is multiplying deduplication listener enabled?
-     *
-     * @return bool
-     */
-    public function isMultiplyingDeduplicationListener(): bool
-    {
-        return $this->multiplyingDeduplicationListener;
-    }
-
-    /**
-     * Set multiplying deduplication listener.
-     *
-     * @param bool $multiplyingDeduplicationListener enable
-     *
-     * @return void
-     */
-    public function setMultiplyingDeduplicationListener(
-        bool $multiplyingDeduplicationListener
-    ) {
-        $this->multiplyingDeduplicationListener = $multiplyingDeduplicationListener;
     }
 }

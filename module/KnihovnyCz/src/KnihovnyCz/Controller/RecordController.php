@@ -103,7 +103,6 @@ class RecordController extends \VuFind\Controller\RecordController
     public function redirectToLocalRecordAction()
     {
         $params = new \KnihovnyCz\Search\ParamBag();
-        $params->setMultiplyingDeduplicationListener(false);
         $record = $this->loadRecord($params);
         $recordId = $record->getUniqueID();
         $records = $record->tryMethod('getDeduplicatedRecords', [], []);
