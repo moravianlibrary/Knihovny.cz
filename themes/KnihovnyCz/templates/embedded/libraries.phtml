@@ -1,0 +1,144 @@
+<?php
+$alnum = new \Laminas\I18n\Filter\Alnum();
+
+/** @var string $selectedRegion */
+$selectedRegion = $this->selectedRegion;
+
+/** @var string $selectedDistrict */
+$selectedDistrict = $this->selectedDistrict;
+
+/** @var array $tree Array of libraries (region -> district -> library */
+$tree = $this->tree;
+
+/** @var string $color Html anchor color */
+$color = $this->color;
+
+$headTitle = $this->translate('EmbeddedLibraries::base_head_title');
+if (!empty($selectedRegion)) {
+  $headSubtitle = $selectedRegion;
+  if (!empty($selectedDistrict)) {
+    $headSubtitle = $selectedDistrict . ', ' . $headSubtitle;
+  }
+  $headTitle = $headTitle . ': ' . $headSubtitle;
+}
+?>
+<?=$this->doctype() ?>
+<html lang="<?=$this->layout()->userLang ?>"<?php if ($this->layout()->rtl): ?> dir="rtl"<?php endif; ?>>
+<head>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <?=$this->headTitle($headTitle) ?>
+  <?php $this->headLink()->appendStylesheet('vendor/bootstrap.min.css'); ?>
+  <?php $this->headLink()->appendStylesheet('vendor/font-awesome.min.css'); ?>
+  <?php $this->headLink()->appendStylesheet('embedded-libraries.css'); ?>
+  <?php $this->headScript()->appendFile('vendor/jquery.min.js'); ?>
+  <?php $this->headScript()->appendFile('vendor/bootstrap.min.js'); ?>
+  <?php $this->headScript()->appendFile('embedded-libraries.js'); ?>
+  <?php $this->headStyle()->appendStyle("
+    a {
+      color: $color !important;
+    }
+    a:hover {
+      filter: brightness(50%);
+    }
+    .text-primary {
+      color: $color !important;
+    }
+  "); ?>
+  <?=$this->headLink() ?>
+  <?=$this->headStyle() ?>
+  <?=$this->headScript() ?>
+</head>
+<body>
+<div>
+  <nav class="navbar navbar-default">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-xs-12">
+          <div class="input-group">
+            <div class="input-group-addon"><?= $this->icon('search') ?></div>
+            <input type="text" class="form-control" id="search" placeholder="<?= $this->translate('EmbeddedLibraries::search_input_placeholder') ?>">
+            <div class="input-group-btn hidden">
+              <button type="button" class="btn">Filter</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container-fluid">
+    <?php foreach ($tree as $region => $districts): ?>
+      <h2><?=$region ?></h2>
+      <?php foreach ($districts as $district => $libraries): ?>
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h3 class="panel-title" data-toggle="collapse" href="#collapse_<?=$alnum->filter($district); ?>">
+              <?=$district ?>
+            </h3>
+          </div>
+          <div id="collapse_<?=$alnum->filter($district); ?>" class="collapse in">
+            <div class="panel-body">
+              <?php if (count($libraries)): ?>
+                <div class="row display-flex">
+                  <?php foreach ($libraries as $library): ?>
+                    <?php if ($library['is_regional']): ?>
+                      <div class="col-xs-12 col-sm-6 col-md-6 col-lg-4 card-library">
+                        <div class="panel panel-default">
+                          <div class="panel-body">
+                            <h4>
+                              <span class="pull-right text-primary" title="<?=$this->translate('EmbeddedLibraries::function_regional_library') ?>"><?=$this->icon('regional-library-marker') ?></span>
+                              <a href="<?=$this->url('search2record', ['id' => $library['link']]) ?>" target="_blank" title="<?=$library['title'] ?>">
+                                <?=$library['title'] ?>
+                              </a>
+                            </h4>
+                            <span class="text-muted"><?=$this->icon('city-marker') ?> <?=$library['town'] ?></span>
+                          </div>
+                        </div>
+                      </div>
+                    <?php endif; ?>
+                  <?php endforeach; ?>
+
+                  <?php foreach ($libraries as $library): ?>
+                    <?php if (!$library['is_regional']): ?>
+                      <div class="col-xs-12 col-sm-6 col-md-6 col-lg-4 card-library">
+                        <div class="panel panel-default" data-filter="<?=$library['title'] ?> | <?=$library['town'] ?>">
+                          <div class="panel-body">
+                            <h4>
+                              <a href="<?=$this->url('search2record', ['id' => $library['link']]) ?>" target="_blank" title="<?=$library['title'] ?>">
+                                <?=$library['title'] ?>
+                              </a>
+                            </h4>
+                            <span class="text-muted"><?=$this->icon('city-marker') ?> <?=$library['town'] ?></span>
+                          </div>
+                        </div>
+                      </div>
+                    <?php endif; ?>
+                  <?php endforeach; ?>
+                </div>
+              <?php else: ?>
+                <div class="alert alert-info">
+                  <?=$this->translate('EmbeddedLibraries::no_items_region') ?>
+                </div>
+              <?php endif; ?>
+            </div>
+          </div>
+        </div>
+      <?php endforeach; ?>
+    <?php endforeach; ?>
+  </div>
+</div>
+<footer>
+  <div class="container-fluid">
+    <p class="text-center">
+      <a class="link-image lang-<?=$this->layout()->userLang ?>" href="<?=$this->url('home') ?>" target="_blank">
+        <img class="knihovny-logo" src="<?=$this->render('layout/logoimagelink.phtml');?>" alt="<?=$this->translate('logo_alt') ?>">
+      </a>
+    </p>
+    <p class="text-right">
+      <?=$this->translate('EmbeddedLibraries::data_by') ?>: <a href="https://www.nkp.cz/" target="_blank"><?=$this->translate('EmbeddedLibraries::nkp') ?></a>.
+    </p>
+  </div>
+</footer>
+</body>
+</html>

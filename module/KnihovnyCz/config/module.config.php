@@ -313,6 +313,20 @@ $config = [
                      ],
                  ],
              ],
+             'embedded-libraries' => [
+                 'type' => \Laminas\Router\Http\Segment::class,
+                 'options' => [
+                     'route' => '/Embedded/Libraries/[:region]/[:district]',
+                     'constraints' => [
+                         'region' => '.*',
+                         'district' => '.*',
+                     ],
+                     'defaults' => [
+                         'controller' => 'Embedded',
+                         'action' => 'Libraries'
+                     ],
+                 ],
+             ],
          ],
      ],
     'controllers' => [
@@ -331,6 +345,7 @@ $config = [
             \KnihovnyCz\Controller\HoldsController::class => \VuFind\Controller\HoldsControllerFactory::class,
             \KnihovnyCz\Controller\ContentController::class => \KnihovnyCz\Controller\ContentControllerFactory::class,
             \KnihovnyCz\Controller\CartController::class => \VuFind\Controller\CartControllerFactory::class,
+            \KnihovnyCz\Controller\EmbeddedController::class => \VuFind\Controller\AbstractBaseFactory::class,
         ],
         'aliases' => [
             'Inspiration' => \KnihovnyCz\Controller\InspirationController::class,
@@ -347,6 +362,7 @@ $config = [
             \VuFind\Controller\HoldsController::class => \KnihovnyCz\Controller\HoldsController::class,
             \VuFind\Controller\ContentController::class => \KnihovnyCz\Controller\ContentController::class,
             \VuFind\Controller\CartController::class => \KnihovnyCz\Controller\CartController::class,
+            'Embedded' => \KnihovnyCz\Controller\EmbeddedController::class,
         ],
     ],
     'controller_plugins' => [
@@ -717,6 +733,7 @@ $staticRoutes = [
     'MyResearchZiskejEdd/ListAjax' => 'MyResearchZiskejEdd/ListAjax',
     'MyResearch/LogoutWarning' => 'MyResearch/LogoutWarning',
     'Search/Embedded' => 'Search/Embedded',
+    'Search/EmbeddedLibraries' => 'Search/EmbeddedLibraries',
     'Cart/Cite' => 'Cart/Cite',
 ];
 

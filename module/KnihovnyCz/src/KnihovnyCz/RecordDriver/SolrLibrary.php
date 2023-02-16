@@ -624,4 +624,64 @@ SPARQL;
             'note2' => $this->getLibNote2(),
         ];
     }
+
+    /**
+     * Get library sigla
+     *
+     * @return string Library sigla
+     */
+    public function getSiglaSearchTxt(): string
+    {
+        return $this->fields['sigla_search_txt'] ?? '';
+    }
+
+    /**
+     * Get parent library sigla
+     *
+     * @return string Parent library sigla
+     */
+    public function getRegionalLibraryTxt(): string
+    {
+        return $this->fields['regional_library_txt'] ?? '';
+    }
+
+    /**
+     * Get library functions
+     *
+     * @return array List of functions
+     */
+    public function getFunctionSearchTxtMv(): array
+    {
+        return $this->fields['function_search_txt_mv'] ?? [];
+    }
+
+    /**
+     * Get library region name
+     *
+     * @return string Region name
+     */
+    public function getRegionSearchTxt(): string
+    {
+        return $this->fields['region_search_txt'] ?? '';
+    }
+
+    /**
+     * Get library district name
+     *
+     * @return string District name
+     */
+    public function getDistrictSearchTxt(): string
+    {
+        return $this->fields['district_search_txt'] ?? '';
+    }
+
+    /**
+     * Get library town name
+     *
+     * @return string Town name
+     */
+    public function getTownStr(): string
+    {
+        return $this->fields['town_str'] ?? '';
+    }
 }
