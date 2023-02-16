@@ -1,12 +1,21 @@
-module.exports = function(grunt) {
+module.exports = function (grunt) {
   grunt.registerTask("custom", function custom() {
-    var lessFileSettings = [{
-      expand: true,
-      src: "themes/*/less/embedded-search.less",
-      rename: function (dest, src) {
-        return src.replace('/less/', '/css/').replace('.less', '.css');
+    var lessFileSettings = [
+      {
+        expand: true,
+        src: "themes/*/less/embedded-search.less",
+        rename: function (dest, src) {
+          return src.replace('/less/', '/css/').replace('.less', '.css');
+        }
+      },
+      {
+        expand: true,
+        src: "themes/*/less/embedded-libraries.less",
+        rename: function (dest, src) {
+          return src.replace('/less/', '/css/').replace('.less', '.css');
+        }
       }
-    }];
+    ];
     grunt.initConfig({
       // LESS compilation
       less: {

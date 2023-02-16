@@ -81,6 +81,8 @@ return [
             'load-institution-filter' => 'FontAwesome:home:fa-fw',
             'user-settings' => 'FontAwesome:gear:fa-fw',
             'short-loans' => 'FontAwesome:calendar:fa-fw',
+            'city-marker' => 'FontAwesome:map-marker',
+            'regional-library-marker' => 'FontAwesome:dot-circle-o',
         ],
     ],
     'favicon' => 'icon-knihovny.png',
