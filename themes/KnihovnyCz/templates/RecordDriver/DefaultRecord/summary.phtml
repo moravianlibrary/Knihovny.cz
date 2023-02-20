@@ -1,4 +1,4 @@
-<?php $summary = $this->driver->getSummary(); $summary = isset($summary[0]) ? $this->escapeHtml($summary[0]) : false; ?>
+<?php $summary = $this->driver->getSummary(); $summary = $summary[0] ?? false; ?>
 <?php if ($summary): ?>
   <?php $splitText = $this->splitText($summary, 360); ?>
   <p>
