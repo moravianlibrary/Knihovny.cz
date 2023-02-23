@@ -47,6 +47,8 @@ class Aleph extends AlephBase implements TranslatorAwareInterface
 {
     use TranslatorAwareTrait;
 
+    protected const MAX_LOANS = 989;
+
     public const DATE_FORMATS = [
         '/^[0-9]{8}$/' => 'Ynd',
         '/^[0-9]+\/[A-Za-z]{3}\/[0-9]{4}$/' => 'd/M/Y',
@@ -271,18 +273,19 @@ class Aleph extends AlephBase implements TranslatorAwareInterface
             $alephParams['type'] = 'history';
         }
 
+        $itemsNoKey = $history && !isset($params['page']) ? 'no_loans'
+            : 'noItems';
+
         // total count without details is fast
         $totalCount = count(
             $this->doRestDLFRequest(
                 ['patron', $userId, 'circulationActions', 'loans'],
-                $alephParams
+                $alephParams + [$itemsNoKey => self::MAX_LOANS]
             )->xpath('//loan')
         );
 
         // with full details and paging
         $pageSize = $params['limit'] ?? 50;
-        $itemsNoKey = $history && !isset($params['page']) ? 'no_loans'
-            : 'noItems';
         $alephParams += [
             'view' => 'full',
             'startPos' => 1 + (isset($params['page'])
@@ -343,6 +346,12 @@ class Aleph extends AlephBase implements TranslatorAwareInterface
         }
 
         $key = ($history) ? 'transactions' : 'records';
+
+        // workaround for Aleph when it sometimes returns empty list
+        // for total count query
+        if ($totalCount == 0 && count($transList) == $pageSize) {
+            $totalCount = self::MAX_LOANS;
+        }
 
         return [
             'count' => $totalCount,
