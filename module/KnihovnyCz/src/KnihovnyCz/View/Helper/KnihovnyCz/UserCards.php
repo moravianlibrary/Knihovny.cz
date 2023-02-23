@@ -70,10 +70,12 @@ class UserCards extends AbstractHelper
     public function getSortedByLibraryName(): array
     {
         $return = [];
+        $index = 0;
         foreach ($this->_cards as $card) {
             $return[$this->getView()->translate(
                 'Source::' . $card['card_name']
-            )] = $card;
+            ) . ' ' . $index] = $card;
+            $index++;
         }
 
         uksort(
