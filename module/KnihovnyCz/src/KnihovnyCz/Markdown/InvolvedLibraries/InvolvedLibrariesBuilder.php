@@ -79,17 +79,7 @@ class InvolvedLibrariesBuilder implements ConfigurationAwareInterface
     public function onDocumentParsed(DocumentParsedEvent $event): void
     {
         $document = $event->getDocument();
-        $libraries = $this->generate();
-
-        if ($libraries === null) {
-            // No linkable headers exist, so no content could be generated
-            return;
-        }
-
-        // Add custom CSS class
-        $libraries->data->append('attributes/class', 'involved-libraries');
-
-        $this->replacePlaceholders($document, $libraries);
+        $this->replacePlaceholders($document, [$this, 'generate']);
     }
 
     /**
@@ -121,28 +111,32 @@ class InvolvedLibrariesBuilder implements ConfigurationAwareInterface
             }
             $involvedLibraries->appendChild($list);
         }
+        // Add custom CSS class
+        $involvedLibraries->data->append('attributes/class', 'involved-libraries');
         return $involvedLibraries;
     }
 
     /**
      * Replace placeholder with generated node tree
      *
-     * @param Document          $document  Main document
-     * @param InvolvedLibraries $libraries Generated node tree
+     * @param Document $document          Main document
+     * @param callable $librariesFunction Function which generates node tree
      *
      * @return void
      */
     protected function replacePlaceholders(
         Document $document,
-        InvolvedLibraries $libraries
+        callable $librariesFunction
     ): void {
         foreach ($document->iterator(NodeIterator::FLAG_BLOCKS_ONLY) as $node) {
             // Add the block once we find a placeholder
             if (! $node instanceof InvolvedLibrariesPlaceholder) {
                 continue;
             }
-
-            $node->replaceWith(clone $libraries);
+            $libraries = $librariesFunction();
+            if ($libraries !== null) {
+                $node->replaceWith(clone $libraries);
+            }
         }
     }
 
