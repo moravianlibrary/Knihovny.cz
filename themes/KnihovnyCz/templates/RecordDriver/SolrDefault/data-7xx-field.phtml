@@ -22,16 +22,26 @@ foreach ($data as $field) {
       $anchor .= '. -- ' . $field['g'];
     }
   }
-  $linkTemplate = '/Search/Results?join=AND&bool0[]=AND&lookfor0[]="%s"&type0[]=isn&bool1[]=NOT&lookfor1[]="%s"&type1[]=id&sort=title&view=list';
   if (!empty($field['x']) || !empty($field['z']) || !empty($field['t'])) {
-    $link = '';
+    $fieldName = 'adv_search_isbn_issn_ismn';
     if (!empty($field['x'])) {
-      $link = sprintf($linkTemplate, $field['x'], $id);
+      $fieldValue = $field['x'];
     } elseif (!empty($field['z'])) {
-      $link = sprintf($linkTemplate, $field['z'], $id);
-    } elseif (!empty($field['t'])) {
-      $link = sprintf($linkTemplate, $field['t'], $id);
+      $fieldValue = $field['z'];
+    } else {
+      $fieldName = 'adv_search_title_series';
+      $fieldValue = $field['t'];
     }
+    $searchParams = [
+      'join' => 'AND',
+      'bool0' => ['AND'],
+      'lookfor0' => [$fieldValue],
+      'type0' => [$fieldName],
+      'bool1' => ['NOT'],
+      'lookfor1' => [$id],
+      'type1' => ['adv_search_001'],
+    ];
+    $link = $this->url('search-results', [], ['query' => $searchParams]);
     ?>
     <a href='<?=$link?>' title="<?=$anchor?>"><?=$anchor?></a><br />
 <?php
