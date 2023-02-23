@@ -274,6 +274,7 @@ class MultiBackend extends \VuFind\ILS\Driver\MultiBackend
         $source = $this->getSource($patron['cat_username']);
         $sourceConfig = $this->getDriverConfig($source);
         $config = $sourceConfig['IdResolver'] ?? [];
+        $config['source'] = $source;
         return $this->idResolver->resolveIds($data, $config);
     }
 
