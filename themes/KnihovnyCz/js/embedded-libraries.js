@@ -1,4 +1,4 @@
-$(function () {
+$(function libraryListHandlers() {
   function showElement(e) {
     e.removeClass('hidden');
     e.addClass('show');
