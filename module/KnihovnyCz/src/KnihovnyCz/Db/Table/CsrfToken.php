@@ -89,30 +89,14 @@ class CsrfToken extends Gateway
     /**
      * Update the select statement to find records to delete.
      *
-     * @param Select $select  Select clause
-     * @param int    $daysOld Age in days of an "expired" record.
-     * @param int    $idFrom  Lowest id of rows to delete.
-     * @param int    $idTo    Highest id of rows to delete.
+     * @param Select $select    Select clause
+     * @param string $dateLimit Date threshold of an "expired" record in format
+     * 'Y-m-d H:i:s'.
      *
      * @return void
      */
-    protected function expirationCallback(
-        $select,
-        $daysOld,
-        $idFrom = null,
-        $idTo = null
-    ) {
-        $timestamp = strtotime(sprintf('-%d days', (int)$daysOld));
-        if ($timestamp === false) {
-            throw new \Exception('Could not parse timestamp');
-        }
-        $expireDate = date('Y-m-d', $timestamp);
-        $where = $select->where->lessThan('created', $expireDate);
-        if (null !== $idFrom) {
-            $where->and->greaterThanOrEqualTo('id', $idFrom);
-        }
-        if (null !== $idTo) {
-            $where->and->lessThanOrEqualTo('id', $idTo);
-        }
+    protected function expirationCallback($select, $dateLimit)
+    {
+        $select->where->lessThan('created', $dateLimit);
     }
 }
