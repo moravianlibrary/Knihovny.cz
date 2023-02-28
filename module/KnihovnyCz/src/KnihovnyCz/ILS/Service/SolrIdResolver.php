@@ -99,9 +99,12 @@ class SolrIdResolver
         }
         $resolved = $this->convertToIdUsingSolr($idsToResolve, $config);
         $results = [];
+        $source = $config['source'] ?? null;
         foreach ($recordsToResolve as $record) {
             $itemId = $record[$itemIdentifier] ?? null;
-            $record['id'] = $resolved[$itemId] ?? $record['id'];
+            // Set dummy record id with source when missing
+            $record['id'] = $resolved[$itemId] ?? $record['id']
+                ?? (isset($source) ? $source . '.' : null);
             $results[] = $record;
         }
         return $results;
