@@ -422,7 +422,11 @@ SPARQL;
         $data = $this->getWikidataData();
         foreach ($data as $link) {
             if (isset($link['signature']['value'])) {
-                return $link['signature']['value'];
+                return str_replace(
+                    'http://',
+                    'https://',
+                    $link['signature']['value']
+                );
             }
         }
 
@@ -441,7 +445,11 @@ SPARQL;
         $return = [];
         foreach ($data as $link) {
             if (isset($link['pronunciation']['value'])) {
-                $return['pronunciation'] = $link['pronunciation']['value'];
+                $return['pronunciation'] = str_replace(
+                    'http://',
+                    'https://',
+                    $link['pronunciation']['value']
+                );
             }
             if (isset($link['ipa']['value'])) {
                 $return['ipa'] = $link['ipa']['value'];
