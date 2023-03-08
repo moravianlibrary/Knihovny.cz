@@ -8,4 +8,6 @@
   <?php if ($this->overdrive()->showOverdriveAdminLink()):?>
     <a href="<?=$this->url('admin/overdrive')?>" class="list-group-item<?=strtolower($this->layout()->templateName) == "overdrive" ? ' active' : ''?>"><?=$this->transEsc('Overdrive API')?></a>
   <?php endif;?>
+  <a href="<?=$this->url('adminils')?>" class="list-group-item<?=strtolower($this->layout()->templateName) == "ils" ? ' active' : ''?>"><?=$this->transEsc('ILS drivers status')?></a>
+
 </div>
