@@ -327,6 +327,16 @@ $config = [
                      ],
                  ],
              ],
+             'adminils' => [
+                 'type' => 'Laminas\Router\Http\Segment',
+                 'options' => [
+                     'route'    => '/Admin/Ils/Status',
+                     'defaults' => [
+                         'controller' => 'AdminIls',
+                         'action'     => 'Status',
+                     ]
+                 ],
+             ],
          ],
      ],
     'controllers' => [
@@ -346,6 +356,7 @@ $config = [
             \KnihovnyCz\Controller\ContentController::class => \KnihovnyCz\Controller\ContentControllerFactory::class,
             \KnihovnyCz\Controller\CartController::class => \VuFind\Controller\CartControllerFactory::class,
             \KnihovnyCz\Controller\EmbeddedController::class => \VuFind\Controller\AbstractBaseFactory::class,
+            \KnihovnyCz\Controller\AdminIlsController::class => \VuFind\Controller\AbstractBaseFactory::class,
         ],
         'aliases' => [
             'Inspiration' => \KnihovnyCz\Controller\InspirationController::class,
@@ -363,6 +374,7 @@ $config = [
             \VuFind\Controller\ContentController::class => \KnihovnyCz\Controller\ContentController::class,
             \VuFind\Controller\CartController::class => \KnihovnyCz\Controller\CartController::class,
             'Embedded' => \KnihovnyCz\Controller\EmbeddedController::class,
+            'AdminIls' => \KnihovnyCz\Controller\AdminIlsController::class,
         ],
     ],
     'controller_plugins' => [
@@ -548,6 +560,7 @@ $config = [
                     \VuFind\AjaxHandler\GetUserFines::class => \KnihovnyCz\AjaxHandler\GetUserFinesFactory::class,
                     \KnihovnyCz\AjaxHandler\GetUserProfile::class => \KnihovnyCz\AjaxHandler\AbstractIlsAndUserActionFactory::class,
                     \KnihovnyCz\AjaxHandler\GetZiskejEddFee::class => \KnihovnyCz\AjaxHandler\GetZiskejEddFeeFactory::class,
+                    \KnihovnyCz\AjaxHandler\GetIlsDriverStatus::class => \KnihovnyCz\AjaxHandler\GetIlsDriverStatusFactory::class,
                 ],
                 'aliases' => [
                     'edd' => \KnihovnyCz\AjaxHandler\Edd::class,
@@ -561,6 +574,7 @@ $config = [
                     'saveInstitutionFilter' => \KnihovnyCz\AjaxHandler\SaveInstitutionFilter::class,
                     'getUserProfile' => \KnihovnyCz\AjaxHandler\GetUserProfile::class,
                     'getZiskejEddFee' => \KnihovnyCz\AjaxHandler\GetZiskejEddFee::class,
+                    'getIlsDriverStatus' => \KnihovnyCz\AjaxHandler\GetIlsDriverStatus::class,
                 ],
             ],
             'related' => [
