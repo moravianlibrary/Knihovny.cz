@@ -70,7 +70,6 @@ class EmbeddedController extends SearchController
             $cspHeader = $cspHeader->current();
         }
         $cspHeader->setDirective('frame-ancestors', ['*']);
-        $headers->addHeaderLine('X_FRAME_OPTIONS', 'ALLOWALL');
         $view = $this->createViewModel();
         $view->setTemplate('embedded/libraries');
         $view->setTerminal(true);
