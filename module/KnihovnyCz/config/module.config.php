@@ -316,10 +316,10 @@ $config = [
              'embedded-libraries' => [
                  'type' => \Laminas\Router\Http\Segment::class,
                  'options' => [
-                     'route' => '/Embedded/Libraries/[:region]/[:district]',
+                     'route' => '/Embedded/Libraries[/:region[/:district]]',
                      'constraints' => [
-                         'region' => '.*',
-                         'district' => '.*',
+                         'region' => '[^\/]+',
+                         'district' => '[^\/]+',
                      ],
                      'defaults' => [
                          'controller' => 'Embedded',
