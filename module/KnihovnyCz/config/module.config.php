@@ -702,7 +702,34 @@ $config = [
             \KnihovnyCz\Service\ZboziLinkService::class,
             \KnihovnyCz\ILS\Logic\Holdings::class,
             \KnihovnyCz\Geo\Parser::class,
-        ]
+            \KnihovnyCz\HeadersListener::class => \KnihovnyCz\HeadersListener::class,
+        ],
+    ],
+    'listeners' => [
+        \KnihovnyCz\HeadersListener::class,
+    ],
+    // Config http:
+    'http' => [
+        // Config http headers:
+        'headers' => [
+            // all routes:
+            '*' => [
+                'Permissions-Policy' => '',
+                'Referrer-Policy' => 'same-origin',
+                'Strict-Transport-Security' => 'max-age=31536000; includeSubDomains; preload',
+                'X-Content-Type-Options' => 'nosniff',
+                'X-Frame-Options' => 'deny',
+                'X-Permitted-Cross-Domain-Policies' => 'none',
+                'X-XSS-Protection' => '1; mode=block',
+            ],
+            // specific routes:
+            'embedded-libraries' => [
+                'X-Frame-Options' => 'allow',
+            ],
+            'search-embedded' => [
+                'X-Frame-Options' => 'allow',
+            ],
+        ],
     ],
 ];
 

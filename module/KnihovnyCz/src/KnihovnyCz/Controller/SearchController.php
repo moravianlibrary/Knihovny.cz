@@ -105,10 +105,17 @@ class SearchController extends \VuFind\Controller\SearchController
     /**
      * Show embedded search for use in HTML iframe
      *
-     * @return ViewModel
+     * @return \Laminas\View\Model\ViewModel|\Laminas\Stdlib\ResponseInterface
+     *
+     * @throws \Psr\Container\ContainerExceptionInterface
+     * @throws \Psr\Container\NotFoundExceptionInterface
      */
-    public function embeddedAction()
+    public function embeddedAction(): ViewModel|Response
     {
+        if ($this->params()->fromRoute('action') === 'embedded') {
+            return $this->redirect()->toRoute('search-embedded');
+        }
+
         $this->disableSessionWrites();
         $headers = $this->getResponse()->getHeaders();
         $cspHeader = $headers->get('Content-Security-Policy');
@@ -120,7 +127,6 @@ class SearchController extends \VuFind\Controller\SearchController
             $cspHeader = $cspHeader->current();
         }
         $cspHeader->setDirective('frame-ancestors', ['*']);
-        $headers->addHeaderLine('X_FRAME_OPTIONS', 'ALLOWALL');
         $view = $this->createViewModel();
         $view->setTemplate('search/embedded');
         $view->setTerminal(true);
