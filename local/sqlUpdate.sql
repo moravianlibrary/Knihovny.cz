@@ -464,3 +464,9 @@ INSERT INTO `inst_configs` (`source_id`, `key_id`, `value`)
 
 UPDATE `system` SET `value` = '117' WHERE `key`='DB_VERSION';
 
+-- #809
+ALTER TABLE `user_list`
+DROP FOREIGN KEY `user_list_ibfk_4`,
+ADD FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+
+UPDATE `system` SET `value` = '118' WHERE `key`='DB_VERSION';

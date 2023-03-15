@@ -365,6 +365,37 @@ class User extends Base
      */
     public function couldManageInspirationLists(): bool
     {
-        return str_contains($this->major, 'widgets');
+        return $this->hasPermission('widgets');
+    }
+
+    /**
+     * Return true if user has permission
+     *
+     * @param string $permission Permission, could be 'admin', 'widgets' or 'any'
+     *
+     * @return bool
+     */
+    public function hasPermission(string $permission): bool
+    {
+        if ($permission === 'any') {
+            return !empty($this->major);
+        }
+        return str_contains($this->major, $permission);
+    }
+
+    /**
+     * Destroy the user.
+     *
+     * @param bool $removeComments Whether to remove user's comments
+     * @param bool $removeRatings  Whether to remove user's ratings
+     *
+     * @return int The number of rows deleted.
+     */
+    public function delete($removeComments = true, $removeRatings = true): int
+    {
+        if ($this->hasPermission('any')) {
+            return 0;
+        }
+        return parent::delete($removeComments, $removeRatings);
     }
 }

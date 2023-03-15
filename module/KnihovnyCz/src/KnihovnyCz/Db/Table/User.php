@@ -79,7 +79,9 @@ class User extends \VuFind\Db\Table\User
      */
     protected function expirationCallback($select, $dateLimit)
     {
-        $select->where->lessThan('last_login', $dateLimit);
+        $where = $select->where;
+        $where->lessThan('last_login', $dateLimit);
+        $where->equalTo('major', '');
     }
 
     /**
