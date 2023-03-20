@@ -69,9 +69,19 @@ $dedupedRecordIds = $tab->getDedupedRecordIds();
     <div class="panel-body">
       <?php if ($user): ?>
         <?php if ($tab->isZiskejActive()): ?>
-          <?php if (!empty($tab->getConnectedLibs())): ?>
+          <?php
+            $libs = [];
+            try {
+              $libs = $tab->getConnectedLibs();
+            } catch (\Exception $e) {
+          ?>
+            <div class="alert alert-warning"><?=$this->transEsc("Ziskej::alert_api_error") ?></div>
+          <?php
+            }
+          ?>
+          <?php if (!empty($libs)): ?>
             <ul class="list-group">
-              <?php foreach ($tab->getConnectedLibs() as $libId => $data): ?>
+              <?php foreach ($libs as $libId => $data): ?>
                 <?php
                 /** @var \KnihovnyCz\Db\Row\UserCard $userCard */
                 $userCard = $data['userCard'];

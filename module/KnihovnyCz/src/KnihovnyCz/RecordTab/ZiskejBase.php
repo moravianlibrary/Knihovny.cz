@@ -111,7 +111,7 @@ abstract class ZiskejBase extends \VuFind\RecordTab\AbstractBase
      *
      * @throws \Http\Client\Exception
      * @throws \Mzk\ZiskejApi\Exception\ApiResponseException
-     * @throws \VuFind\Exception\LibraryCard
+     * @throws \VuFind\Exception\LibraryCard|\Psr\Http\Client\ClientExceptionInterface
      */
     public function getConnectedLibs(): array
     {
