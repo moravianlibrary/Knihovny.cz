@@ -2,7 +2,8 @@
   $this->headLink()->appendStylesheet('EDS.css');
   $accessLevel = $this->driver->getAccessLevel();
   $restrictedView = empty($accessLevel) ? false : true;
-  $coverDetails = $this->record($this->driver)->getCoverDetails('result-list', 'medium', $this->recordLinker()->getUrl($this->driver));
+  $recordLinker = $this->recordLinker($this->results);
+  $coverDetails = $this->record($this->driver)->getCoverDetails('result-list', 'medium', $recordLinker->getUrl($this->driver));
   $cover = $coverDetails['html'];
 ?>
 <?php
@@ -47,7 +48,7 @@
               <div class="resultItemLine1">
                 <p>
                   <?=$this->transEsc('This result is not displayed to guests')?>
-                  <br />
+		  <br />
                   <a class="login" href="<?=$this->url('myresearch-userlogin')?>">
                     <strong><?=$this->transEsc('Login for full access')?></strong>
                   </a>

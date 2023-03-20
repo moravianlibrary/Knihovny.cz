@@ -300,19 +300,6 @@ $config = [
                      ],
                  ],
              ],
-             'record-redirecttolocalrecord' => [
-                 'type' => \Laminas\Router\Http\Segment::class,
-                 'options' => [
-                     'route' => '/Record/[:id]/RedirectToLocalRecord',
-                     'constraints' => [
-                         'id' => '.*',
-                     ],
-                     'defaults' => [
-                         'controller' => 'Record',
-                         'action' => 'RedirectToLocalRecord'
-                     ],
-                 ],
-             ],
              'embedded-libraries' => [
                  'type' => \Laminas\Router\Http\Segment::class,
                  'options' => [

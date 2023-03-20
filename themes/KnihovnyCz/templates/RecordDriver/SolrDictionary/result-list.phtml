@@ -1,5 +1,6 @@
 <?php
-  $coverDetails = $this->record($this->driver)->getCoverDetails('result-list', 'medium', $this->recordLinker()->getUrl($this->driver));
+  $recordLinker = $this->recordLinker($this->results);
+  $coverDetails = $this->record($this->driver)->getCoverDetails('result-list', 'medium', $recordLinker->getUrl($this->driver));
   $cover = $coverDetails['html'];
   $thumbnail = false;
   $thumbnailAlignment = $this->record($this->driver)->getThumbnailAlignment('result');
@@ -22,7 +23,7 @@
       <div class="col-xs-12 col-sm-12 col-md-9">
         <div class="result-body">
           <h3 class="title">
-            <a href="<?=$this->escapeHtmlAttr($this->recordLinker()->getUrl($this->driver))?>" class="getFull" data-view="<?=$this->params->getOptions()->getListViewOption() ?>">
+            <a href="<?=$this->escapeHtmlAttr($recordLinker->getUrl($this->driver))?>" class="getFull" data-view="<?=$this->params->getOptions()->getListViewOption() ?>">
               <?=$this->record($this->driver)->getTitleHtml()?>
             </a>
           </h3>
@@ -42,7 +43,7 @@
                     </a>
                     <?php if (!empty($authRecordIds)): ?>
                       <a title="<?=$this->translate('Show person')?> <?=$this->escapeHtmlAttr($summAuthor)?>"
-                         href="<?=$this->escapeHtmlAttr($this->recordLinker()->getUrl($authRecordIds[0]))?>"
+                         href="<?=$this->escapeHtmlAttr($recordLinker->getUrl($authRecordIds[0]))?>"
                          class="author-link"><i class="fa fa-user-circle-o"></i>
                       </a>
                     <?php endif; ?>
@@ -57,7 +58,7 @@
                 <?php $containerSource = $this->driver->getSourceIdentifier(); ?>
                 <?php $containerID = $this->driver->getContainerRecordID(); ?>
                 <?php /* TODO: handle highlighting more elegantly here: */?>
-                <a href="<?=$this->escapeHtmlAttr(($containerID ? $this->recordLinker()->getUrl("$containerSource|$containerID") : $this->record($this->driver)->getLink('journaltitle', str_replace(['{{{{START_HILITE}}}}', '{{{{END_HILITE}}}}'], '', $journalTitle))))?>"><?=$this->highlight($journalTitle) ?></a>
+                <a href="<?=$this->escapeHtmlAttr(($containerID ? $recordLinker->getUrl("$containerSource|$containerID") : $this->record($this->driver)->getLink('journaltitle', str_replace(['{{{{START_HILITE}}}}', '{{{{END_HILITE}}}}'], '', $journalTitle))))?>"><?=$this->highlight($journalTitle) ?></a>
                 <?=!empty($summDate) ? ' (' . $this->escapeHtml($summDate[0]) . ')' : ''?>
               <?php elseif (!empty($summDate)): ?>
                 <p class="summDate"><span title="<?=$this->transEsc('Published')?>"><?=$this->escapeHtml($summDate[0])?></span></p>
@@ -146,7 +147,7 @@
           <?php if ($this->userlist()->getMode() !== 'disabled'): ?>
             <?php if ($this->permission()->allowDisplay('feature.Favorites')): ?>
               <?php /* Add to favorites */ ?>
-              <a href="<?=$this->escapeHtmlAttr($this->recordLinker()->getActionUrl($this->driver, 'Save'))?>" data-lightbox class="save-record" data-id="<?=$this->escapeHtmlAttr($this->driver->getUniqueId()) ?>">
+              <a href="<?=$this->escapeHtmlAttr($recordLinker->getActionUrl($this->driver, 'Save'))?>" data-lightbox class="save-record" data-id="<?=$this->escapeHtmlAttr($this->driver->getUniqueId()) ?>">
                 <i class="result-link-icon fa fa-fw fa-star" aria-hidden="true"></i>
                 <span class="result-link-label"><?=$this->transEsc('Add to favorites')?></span>
               </a><br/>
@@ -165,7 +166,7 @@
               <div class="hierarchyTreeLink">
                 <input type="hidden" value="<?=$this->escapeHtmlAttr($hierarchyID)?>" class="hiddenHierarchyId" />
                 <i class="result-link-icon fa fa-fw fa-sitemap" aria-hidden="true"></i>
-                <a class="hierarchyTreeLinkText result-link-label" data-lightbox href="<?=$this->escapeHtmlAttr($this->recordLinker()->getTabUrl($this->driver, 'HierarchyTree', ['hierarchy' => $hierarchyID]))?>#tabnav" title="<?=$this->transEsc('hierarchy_tree')?>" data-lightbox-href="<?=$this->escapeHtmlAttr($this->recordLinker()->getTabUrl($this->driver, 'AjaxTab', ['hierarchy' => $hierarchyID]))?>" data-lightbox-post="tab=hierarchytree">
+                <a class="hierarchyTreeLinkText result-link-label" data-lightbox href="<?=$this->escapeHtmlAttr($recordLinker->getTabUrl($this->driver, 'HierarchyTree', ['hierarchy' => $hierarchyID]))?>#tabnav" title="<?=$this->transEsc('hierarchy_tree')?>" data-lightbox-href="<?=$this->escapeHtmlAttr($recordLinker->getTabUrl($this->driver, 'AjaxTab', ['hierarchy' => $hierarchyID]))?>" data-lightbox-post="tab=hierarchytree">
                   <?=$this->transEsc('hierarchy_view_context')?><?php if (count($trees) > 1): ?>: <?=$this->escapeHtml($hierarchyTitle)?><?php endif; ?>
                 </a>
               </div>
@@ -196,13 +197,13 @@
                 <?php $i++; ?>
                 <?php if ($i === 1): ?>
                   <li class="currentSource">
-                    <a href="<?=$this->escapeHtmlAttr($this->recordLinker()->getUrl($this->driver))?>">
+                    <a href="<?=$this->escapeHtmlAttr($recordLinker->getUrl($this->driver))?>">
                       <?=$this->transEsc("Source::$source", [], $source)?>
                     </a>
                   </li>
                 <?php else: ?>
                   <li class="otherSource">
-                    <a href="<?=$this->escapeHtmlAttr($this->recordLinker()->getUrl($current['id']))?>">
+                    <a href="<?=$this->escapeHtmlAttr($recordLinker->getUrl($current['id']))?>">
                       <?=$this->transEsc("Source::$source", [], $source)?>
                     </a>
                   </li>
@@ -218,7 +219,7 @@
                 <ul class="dropdown-menu dropdown-menu-right">
                   <?php foreach (array_slice($dedupData, $maxInstitutionsShown) as $source => $current): ?>
                     <li class="otherSource">
-                      <a href="<?=$this->escapeHtmlAttr($this->recordLinker()->getUrl($current['id']))?>">
+                      <a href="<?=$this->escapeHtmlAttr($recordLinker->getUrl($current['id']))?>">
                         <?=$this->transEsc("Source::$source", [], $source)?>
                       </a>
                     </li>
