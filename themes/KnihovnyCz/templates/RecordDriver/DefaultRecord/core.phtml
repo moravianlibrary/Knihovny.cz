@@ -14,12 +14,12 @@
   <?php if ($QRCode || $cover || $preview || $rating): ?>
     <div class="media-left <?=$this->escapeHtmlAttr($coverDetails['size'])?> img-col">
       <?php /* Display thumbnail if appropriate: */ ?>
-      <?php if($cover): ?>
+      <?php if ($cover): ?>
         <?=$cover?>
       <?php endif; ?>
 
       <?php /* Display qrcode if appropriate: */ ?>
-      <?php if($QRCode): ?>
+      <?php if ($QRCode): ?>
         <span class="hidden-xs">
           <br/><img alt="<?=$this->transEscAttr('QR Code')?>" class="qrcode" src="<?=$this->escapeHtmlAttr($QRCode);?>"/>
         </span>
@@ -50,7 +50,7 @@
       </div>
     <?php endforeach; ?>
 
-    <?php if(!empty($this->extraControls)): ?>
+    <?php if (!empty($this->extraControls)): ?>
       <?=$this->extraControls['actionControls'] ?? ''?>
       <?=$this->extraControls['availabilityInfo'] ?? ''?>
     <?php endif; ?>

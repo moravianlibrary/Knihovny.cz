@@ -43,7 +43,7 @@
           <div class="btn-group">
             <?php if ($delete): ?>
               <a class="btn btn-link dropdown-toggle" data-toggle="dropdown" href="<?=$this->url('librarycards-deletecard') ?>?cardID=<?=urlencode($record['id'])?>">
-                <?=$this->icon('profile-card-delete') ?> <?=$this->transEsc('Disconnect identity')?>
+                <?=$this->icon('profile-card-delete', 'icon-link__icon') ?> <span class="icon-link__label"><?=$this->transEsc('Disconnect identity')?></span>
               </a>
             <?php endif; ?>
             <ul class="dropdown-menu">

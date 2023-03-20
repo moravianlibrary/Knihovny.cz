@@ -30,6 +30,7 @@ namespace KnihovnyCz\Controller\Plugin;
 use Laminas\Session\Container as SessionContainer;
 use Laminas\View\Renderer\RendererInterface;
 use VuFind\Controller\Plugin\ResultScroller as Base;
+use VuFind\Search\Memory as SearchMemory;
 use VuFind\Search\Results\PluginManager as ResultsManager;
 
 /**
@@ -51,43 +52,23 @@ class ResultScroller extends Base
     protected $renderer;
 
     /**
-     * Results
-     *
-     * @var \VuFind\Search\Base\Results|null
-     */
-    protected $lastSearch = null;
-
-    /**
      * Constructor. Create a new search result scroller.
      *
      * @param SessionContainer  $session  Session container
      * @param ResultsManager    $rm       Results manager
+     * @param SearchMemory      $sm       Search memory
      * @param RendererInterface $renderer Renderer
      * @param bool              $enabled  Is the scroller enabled?
      */
     public function __construct(
         SessionContainer $session,
         ResultsManager $rm,
+        SearchMemory $sm,
         RendererInterface $renderer,
         $enabled = true
     ) {
-        parent::__construct($session, $rm, $enabled);
+        parent::__construct($session, $rm, $sm, $enabled);
         $this->renderer = $renderer;
-    }
-
-    /**
-     * Initialize this result set scroller. This should only be called
-     * prior to displaying the results of a new search.
-     *
-     * @param \VuFind\Search\Base\Results $searchObject The search object that was
-     * used to execute the last search.
-     *
-     * @return bool
-     */
-    public function init($searchObject)
-    {
-        $this->lastSearch = null;
-        return parent::init($searchObject);
     }
 
     /**
@@ -104,7 +85,6 @@ class ResultScroller extends Base
      */
     public function getScrollData($driver)
     {
-        $this->initLastSearch();
         $driver = $driver->tryMethod('getParentRecord', [], null)
             ?? $driver;
         $result = parent::getScrollData($driver);
@@ -124,7 +104,7 @@ class ResultScroller extends Base
      */
     protected function getLinkToResults()
     {
-        if (($search = parent::restoreLastSearch()) == null) {
+        if (($search = $this->restoreLastSearch()) == null) {
             return null;
         }
         $action = $search->getOptions()->getSearchAction();
@@ -140,20 +120,8 @@ class ResultScroller extends Base
      */
     protected function restoreLastSearch()
     {
-        return $this->lastSearch;
-    }
-
-    /**
-     * Initialize the last saved search. Optimization to prevent restoring
-     * last search twice from this and parent class.
-     *
-     * @return void
-     */
-    protected function initLastSearch()
-    {
-        if ($this->enabled) {
-            $this->lastSearch = parent::restoreLastSearch();
-        }
+        $searchId = $this->searchMemory->getLastSearchId();
+        return parent::restoreSearch($searchId);
     }
 
     /**

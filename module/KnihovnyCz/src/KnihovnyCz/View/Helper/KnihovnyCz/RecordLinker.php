@@ -28,6 +28,7 @@
  */
 namespace KnihovnyCz\View\Helper\KnihovnyCz;
 
+use VuFind\RecordDriver\AbstractBase as BaseRecord;
 use VuFind\View\Helper\Root\RecordLinker as Base;
 
 /**
@@ -49,23 +50,33 @@ class RecordLinker extends Base
     protected $searchConfig;
 
     /**
+     * Record loader
+     *
+     * @var \VuFind\Record\Loader
+     */
+    protected $recordLoader;
+
+    /**
      * Constructor
      *
      * @param \VuFind\Record\Router  $router       Record router
      * @param \Laminas\Config\Config $searchConfig Search configuration
+     * @param \VuFind\Record\Loader  $recordLoader Record loader
      */
     public function __construct(
         \VuFind\Record\Router $router,
-        \Laminas\Config\Config $searchConfig
+        \Laminas\Config\Config $searchConfig,
+        \VuFind\Record\Loader $recordLoader
     ) {
         parent::__construct($router);
         $this->searchConfig = $searchConfig;
+        $this->recordLoader = $recordLoader;
     }
 
     /**
      * Return a link to main portal
      *
-     * @param \VuFind\RecordDriver\AbstractBase $driver Record driver
+     * @param BaseRecord $driver Record driver
      * representing record to link to
      *
      * @return string
@@ -83,31 +94,43 @@ class RecordLinker extends Base
      * Given a record driver, get a URL for that record that links to local
      * record.
      *
-     * @param \VuFind\RecordDriver\AbstractBase|string $driver Record driver
-     * representing record to link to, or source|id pipe-delimited string
+     * @param BaseRecord|string $record      Record driver representing record to
+     * link to, or source|id pipe-delimited string
+     * @param string|null       $institution Institution
      *
      * @return string
      */
-    public function getLinkToLocalRecord($driver)
-    {
-        $route = $this->getControllerName($driver);
-        if ($route === 'record') {
-            return $this->getActionUrl($driver, 'redirectToLocalRecord');
+    public function getLinkToLocalRecord(
+        BaseRecord|string $record,
+        ?string $institution = null
+    ): string {
+        if (!$record instanceof BaseRecord) {
+            $record = $this->loadRecord($record);
         }
-        return $this->getUrl($driver);
+        $recordId = $record->getUniqueID();
+
+        $records = $record->tryMethod('getDeduplicatedRecords');
+        if (!empty($records)) {
+            $first = reset($records);
+            if ($institution !== null && isset($records[$institution])) {
+                $first = $records[$institution];
+            }
+            $recordId = reset($first);
+        }
+
+        return $this->getUrl($recordId);
     }
 
     /**
-     * Given a record driver, get a controller for that record.
+     * Load record by given id.
      *
-     * @param \VuFind\RecordDriver\AbstractBase|string $driver Record driver
-     * representing record to link to, or source|id pipe-delimited string
+     * @param string $recordId Record id
      *
-     * @return string
+     * @return BaseRecord
      */
-    protected function getControllerName($driver)
+    protected function loadRecord(string $recordId)
     {
-        $details = $this->router->getRouteDetails($driver);
-        return $details['route'];
+        [$sourceId, $recordId] = explode('|', $recordId);
+        return $this->recordLoader->load($recordId, $sourceId);
     }
 }
