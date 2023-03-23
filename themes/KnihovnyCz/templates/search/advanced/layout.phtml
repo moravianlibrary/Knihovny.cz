@@ -101,12 +101,10 @@
           </select>
         </div>
       </div>
-      <span id="groupPlaceHolder" class="hidden">
-        <a href="#" role="button" class="icon-link hidden">
-          <?=$this->icon('ui-add', 'icon-link__icon') ?>
-          <span class="icon-link__label"><?= $this->transEsc('add_search_group') ?></span>
-        </a>
-      </span>
+      <a role="button" class="icon-link hidden" id="groupPlaceHolder" href="#">
+        <?=$this->icon('ui-add', 'icon-link__icon') ?>
+        <span class="icon-link__label"><?= $this->transEsc('add_search_group') ?></span>
+      </a>
       <?php /* fallback to a fixed set of search groups/fields if JavaScript is turned off */ ?>
       <div class="no-js">
         <?php if (!empty($this->formOverride)): ?>
