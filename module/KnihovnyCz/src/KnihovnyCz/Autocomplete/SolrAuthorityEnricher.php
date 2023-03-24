@@ -175,13 +175,14 @@ class SolrAuthorityEnricher extends SolrPrefix
         $searchResults = $this->searchService->invoke($command)->getResult();
         foreach ($searchResults->getRecords() as $record) {
             $fields = $record->getRawData();
-            foreach ($fields[$this->searchField] as $field) {
-                if (!isset($idsByAuthor[$field])) {
-                    $idsByAuthor[$field] = [];
+            $values = $fields[$this->searchField] ?? [];
+            foreach ($values as $value) {
+                if (!isset($idsByAuthor[$value])) {
+                    $idsByAuthor[$value] = [];
                 }
                 $recordIds = $fields[$this->recordIdField] ?? [];
                 if (!empty($recordIds)) {
-                    $idsByAuthor[$field][] = $fields[$this->recordIdField][0];
+                    $idsByAuthor[$value][] = $fields[$this->recordIdField][0];
                 }
             }
         }
