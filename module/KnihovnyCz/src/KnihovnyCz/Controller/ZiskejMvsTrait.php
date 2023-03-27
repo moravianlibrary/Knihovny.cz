@@ -280,7 +280,7 @@ trait ZiskejMvsTrait
                 'success'
             );
             return $this->redirect()->toRoute(
-                'myresearch-ziskej-ticket',
+                'myresearch-ziskej-mvs-ticket',
                 [
                     'eppnDomain' => $userCard->getEppnDomain(),
                     'ticketId' => $ticket->getId(),

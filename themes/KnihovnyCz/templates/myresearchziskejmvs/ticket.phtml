@@ -163,7 +163,7 @@ $this->headTitle($this->translate('ZiskejMvs::header_order_ziskej_num') . ' ' . 
         </a>
       <?php endif; ?>
       <?php if (in_array($ticket->getStatus(), ['created', 'paid'])): ?>
-        <a id="cancelButton" class="btn btn-info" href="<?=$this->url('myresearch-ziskej-ticket-cancel', ['eppnDomain' => $userCard->getEppnDomain(), 'ticketId' => $ticket->getId()]) ?>" title="<?=$this->transEsc("ZiskejMvs::btn_order_cancel_title") ?>">
+        <a id="cancelButton" class="btn btn-info" href="<?=$this->url('myresearch-ziskej-mvs-ticket-cancel', ['eppnDomain' => $userCard->getEppnDomain(), 'ticketId' => $ticket->getId()]) ?>" title="<?=$this->transEsc("ZiskejMvs::btn_order_cancel_title") ?>">
           <i class="fa fa-times"></i> <?=$this->transEsc("ZiskejMvs::btn_order_cancel") ?>
         </a>
       <?php endif; ?>
@@ -255,7 +255,7 @@ $this->headTitle($this->translate('ZiskejMvs::header_order_ziskej_num') . ' ' . 
         <div>
           <hr>
           <h4><?=$this->transEsc("ZiskejMvs::header_order_new_message") ?></h4>
-          <form method="post" action="<?=$this->url('myresearch-ziskej-message-post', ['eppnDomain' => $userCard->getEppnDomain(), 'ticketId' => $ticket->getId()]) ?>">
+          <form method="post" action="<?=$this->url('myresearch-ziskej-mvs-message-post', ['eppnDomain' => $userCard->getEppnDomain(), 'ticketId' => $ticket->getId()]) ?>">
             <div class="form-group">
               <label for="ticketMessage"><?=$this->transEsc("ZiskejMvs::label_ticketMessage") ?>:</label>
               <textarea name="ticketMessage" id="ticketMessage" class="form-control" rows="3" required></textarea>

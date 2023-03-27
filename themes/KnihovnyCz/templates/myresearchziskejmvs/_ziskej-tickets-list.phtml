@@ -87,7 +87,7 @@
                 <i class="fa fa-shopping-cart"></i> <?=$this->transEsc("ZiskejMvs::btn_order_pay")?>
               </a>
             <?php endif; ?>
-            <a class="btn btn-sm btn-primary" href="<?=$this->url('myresearch-ziskej-ticket', ['eppnDomain' => $userCard->getEppnDomain(), 'ticketId' => $ticket->getId()])?>" title="<?=$this->transEsc("ZiskejMvs::btn_order_detail_title")?>">
+            <a class="btn btn-sm btn-primary" href="<?=$this->url('myresearch-ziskej-mvs-ticket', ['eppnDomain' => $userCard->getEppnDomain(), 'ticketId' => $ticket->getId()])?>" title="<?=$this->transEsc("ZiskejMvs::btn_order_detail_title")?>">
               <i class="fa fa-search"></i> <?=$this->transEsc("ZiskejMvs::btn_order_detail")?>
             </a>
           </div>

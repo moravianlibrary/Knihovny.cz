@@ -19,7 +19,7 @@ $this->layout()->searchbox = false;
 <?= $this->flashmessages() ?>
 
 <p>
-  <a class="btn btn-sm btn-primary" href="<?= $this->url('myresearch-ziskej-ticket', ['eppnDomain' => $userCard->getEppnDomain(), 'ticketId' => $ticket->getId()]); ?>" title="<?= $this->translate("ZiskejMvs::btn_order_detail_title"); ?>">
+  <a class="btn btn-sm btn-primary" href="<?= $this->url('myresearch-ziskej-mvs-ticket', ['eppnDomain' => $userCard->getEppnDomain(), 'ticketId' => $ticket->getId()]); ?>" title="<?= $this->translate("ZiskejMvs::btn_order_detail_title"); ?>">
     <i class="fa fa-search"></i> <?= $this->translate("ZiskejMvs::btn_order_detail"); ?>
   </a>
   <a class="btn btn-sm btn-default" href="<?= $this->url('home'); ?>" title="<?= $this->translate("btn_homepage_title"); ?>">

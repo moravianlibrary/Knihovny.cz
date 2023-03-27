@@ -20,7 +20,7 @@ $ziskejReader = $this->ziskejReader;
 <?php if ($user): ?>
   <div>
     <h2><?=$this->transEsc("ZiskejMvs::order_title") ?></h2>
-    <form class="form" data-lightbox-ignore action="<?=$this->url('ziskej-order-post', ['id' => $recordDriver->getUniqueId()]) ?>" method="post">
+    <form class="form" data-lightbox-ignore action="<?=$this->url('ziskej-mvs-order-post', ['id' => $recordDriver->getUniqueId()]) ?>" method="post">
         <input type="hidden" name="source_id" value="<?=$this->serverName ?>">
         <input type="hidden" name="eppn" id="eppn" value="<?=$userCard->eppn ?>">
         <input type="hidden" name="doc_id" value="<?=$recordDriver->getUniqueID() ?>">

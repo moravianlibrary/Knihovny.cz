@@ -286,7 +286,7 @@ class MyResearchZiskejMvsController extends AbstractBase
         }
 
         return $this->redirect()->toRoute(
-            'myresearch-ziskej-ticket',
+            'myresearch-ziskej-mvs-ticket',
             ['eppnDomain' => $eppnDomain, 'ticketId' => $ticketId]
         );
     }
@@ -307,7 +307,7 @@ class MyResearchZiskejMvsController extends AbstractBase
 
         if (!$this->getRequest()->isPost()) {
             return $this->redirect()->toRoute(
-                'myresearch-ziskej-ticket',
+                'myresearch-ziskej-mvs-ticket',
                 [
                     'eppnDomain' => $eppnDomain,
                     'ticketId' => $ticketId,
@@ -333,7 +333,7 @@ class MyResearchZiskejMvsController extends AbstractBase
             );
 
             return $this->redirect()->toRoute(
-                'myresearch-ziskej-ticket',
+                'myresearch-ziskej-mvs-ticket',
                 [
                     'eppnDomain' => $eppnDomain,
                     'ticketId' => $ticketId,
@@ -364,7 +364,7 @@ class MyResearchZiskejMvsController extends AbstractBase
         }
 
         return $this->redirect()->toRoute(
-            'myresearch-ziskej-ticket',
+            'myresearch-ziskej-mvs-ticket',
             [
                 'eppnDomain' => $eppnDomain,
                 'ticketId' => $ticketId,
