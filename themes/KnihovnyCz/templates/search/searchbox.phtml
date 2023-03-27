@@ -123,8 +123,8 @@
       ?>
       <a href="<?=$advSearchLink?>" class="advanced-search-link btn btn-lg btn-link" rel="nofollow"><?=$this->transEsc("Advanced")?></a>
     <?php endif; ?>
-    <?php if ($geoUrl = $this->geocoords()->getSearchUrl($options)) : ?>
-        <a href="<?=$geoUrl ?>" class="btn btn-lg btn-link"><?=$this->transEsc('Geographic Search')?></a>
+    <?php if ($geoUrl = $this->geocoords()->getSearchUrl($options, $results)) : ?>
+      <a href="<?=$geoUrl?>" class="btn btn-lg btn-link"><?=$this->transEsc('Geographic Search')?></a>
     <?php endif; ?>
         </div>
       </div>
