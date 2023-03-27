@@ -161,7 +161,7 @@ trait ZiskejMvsTrait
         $eppn = $this->params()->fromPost('eppn');
         if (!$eppn) {
             $this->flashMessenger()->addMessage(
-                'Ziskej::error_eppn_missing',
+                'ZiskejMvs::error_eppn_missing',
                 'error'
             );
             return $this->_redirectToTabMvs();
@@ -175,7 +175,7 @@ trait ZiskejMvsTrait
         $email = $this->params()->fromPost('email');
         if (!$email) {
             $this->flashMessenger()->addMessage(
-                'Ziskej::error_email_missing',
+                'ZiskejMvs::error_email_missing',
                 'error'
             );
             return $this->_redirectToTabMvs();
@@ -184,7 +184,7 @@ trait ZiskejMvsTrait
         $emailValidator = new EmailAddress();
         if (!$emailValidator->isValid($email)) {
             $this->flashMessenger()->addMessage(
-                'Ziskej::error_email_wrong',
+                'ZiskejMvs::error_email_wrong',
                 'error'
             );
             return $this->_redirectToTabMvs();
@@ -192,7 +192,7 @@ trait ZiskejMvsTrait
 
         if (!$this->params()->fromPost('is_conditions')) {
             $this->flashMessenger()->addMessage(
-                'Ziskej::error_is_conditions',
+                'ZiskejMvs::error_is_conditions',
                 'error'
             );
             return $this->_redirectToTabMvs();
@@ -200,7 +200,7 @@ trait ZiskejMvsTrait
 
         if (!$this->params()->fromPost('is_price')) {
             $this->flashMessenger()->addMessage(
-                'Ziskej::error_is_price',
+                'ZiskejMvs::error_is_price',
                 'error'
             );
             return $this->_redirectToTabMvs();
@@ -216,7 +216,7 @@ trait ZiskejMvsTrait
         $userCard = $user->getCardByEppn($eppn);
         if (!$userCard) {
             $this->flashMessenger()->addMessage(
-                'Ziskej::error_account_not_active',
+                'ZiskejMvs::error_account_not_active',
                 'error'
             );
             return $this->_redirectToTabMvs();
@@ -242,7 +242,7 @@ trait ZiskejMvsTrait
                 : $ziskejApi->createReader($userCard->eppn, $requestReader);
         } catch (\Mzk\ZiskejApi\Exception\ApiResponseException $e) {
             $this->flashMessenger()->addMessage(
-                'Ziskej::failure_order_finished',
+                'ZiskejMvs::failure_order_finished',
                 'error'
             );
             $this->flashMessenger()->addMessage(
@@ -254,7 +254,7 @@ trait ZiskejMvsTrait
 
         if (!$ziskejReader->isActive()) {
             $this->flashMessenger()->addMessage(
-                'Ziskej::error_account_not_active',
+                'ZiskejMvs::error_account_not_active',
                 'warning'
             );
             return $this->_redirectToTabMvs();
@@ -269,14 +269,14 @@ trait ZiskejMvsTrait
 
             if (!$ticket) {
                 $this->flashMessenger()->addMessage(
-                    'Ziskej::failure_order_finished',
+                    'ZiskejMvs::failure_order_finished',
                     'error'
                 );
                 return $this->_redirectToTabMvs();
             }
 
             $this->flashMessenger()->addMessage(
-                'Ziskej::success_order_finished',
+                'ZiskejMvs::success_order_finished',
                 'success'
             );
             return $this->redirect()->toRoute(
@@ -288,7 +288,7 @@ trait ZiskejMvsTrait
             );
         } catch (\Mzk\ZiskejApi\Exception\ApiResponseException $e) {
             $this->flashMessenger()->addMessage(
-                'Ziskej::failure_order_finished',
+                'ZiskejMvs::failure_order_finished',
                 'error'
             );
             $this->flashMessenger()->addMessage(

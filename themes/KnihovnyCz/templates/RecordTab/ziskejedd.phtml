@@ -10,9 +10,9 @@ $tab = $this->tab;
 $driver = $this->driver;
 
 /**
- * @var \KnihovnyCz\View\Helper\KnihovnyCz\ZiskejEdd $ziskejEddViewHelper
+ * @var \KnihovnyCz\View\Helper\KnihovnyCz\ZiskejEdd $ziskejViewHelper
  */
-$ziskejEddViewHelper = $this->ziskejEdd();
+$ziskejViewHelper = $this->ziskejEdd();
 
 /**
  * @var ?\KnihovnyCz\Db\Row\User $user
@@ -29,14 +29,14 @@ $ziskejEdd = $tab->getZiskejEdd();
  */
 $dedupedRecordIds = $tab->getDedupedRecordIds();
 ?>
-<?php if ($ziskejEddViewHelper->isEnabled()): ?>
+<?php if ($ziskejViewHelper->isEnabled()): ?>
   <div class="panel panel-default">
     <div class="panel-heading">
-      <h3 class="panel-title"><?=$this->translate('Ziskej::ziskej_edd_desc_header') ?></h3>
+      <h3 class="panel-title"><?=$this->translate('ZiskejEdd::service_header') ?></h3>
     </div>
     <div class="panel-body">
       <div class="col-md-9">
-        <p><?=$this->translate('Ziskej::ziskej_edd_description') ?></p>
+        <p><?=$this->translate('ZiskejEdd::service_description') ?></p>
       </div>
       <div class="col-md-3">
         <?php if (!empty($ziskejEdd->getCurrentZiskejTechlibFrontUrl())): ?>
@@ -49,12 +49,12 @@ $dedupedRecordIds = $tab->getDedupedRecordIds();
             <?php foreach ($dedupedRecordIds as $id): ?>
               <input type="hidden" name="doc_alt_ids[]" value="<?=$this->escapeHtmlAttr($id) ?>">
             <?php endforeach; ?>
-            <input type="image" src="<?=$this->imageLink('logo-ziskej.png') ?>" alt="<?=$this->translate('Ziskej::ziskej_edd') ?>">
+            <input type="image" src="<?=$this->imageLink('logo-ziskej.png') ?>" alt="<?=$this->translate('ZiskejEdd::service_name') ?>">
           </form>
         <?php else: ?>
           <?php if (!empty($ziskejEdd->getZiskejTechlibUrl())): ?>
             <a href="<?=$ziskejEdd->getZiskejTechlibUrl() ?>" target="_blank">
-              <img src="<?=$this->imageLink('logo-ziskej.png') ?>" alt="<?=$this->translate('Ziskej::ziskej_edd') ?>">
+              <img src="<?=$this->imageLink('logo-ziskej.png') ?>" alt="<?=$this->translate('ZiskejEdd::service_name') ?>">
             </a>
           <?php endif; ?>
         <?php endif; ?>
@@ -64,7 +64,7 @@ $dedupedRecordIds = $tab->getDedupedRecordIds();
 
   <div class="panel panel-default">
     <div class="panel-heading">
-      <h4 class="panel-title"><?=$this->translate('Ziskej::connected_libraries') ?></h4>
+      <h4 class="panel-title"><?=$this->translate('ZiskejEdd::connected_libraries') ?></h4>
     </div>
     <div class="panel-body">
       <?php if ($user): ?>
@@ -75,7 +75,7 @@ $dedupedRecordIds = $tab->getDedupedRecordIds();
               $libs = $tab->getConnectedLibs();
             } catch (\Exception $e) {
           ?>
-            <div class="alert alert-warning"><?=$this->transEsc("Ziskej::alert_api_error") ?></div>
+            <div class="alert alert-warning"><?=$this->transEsc("ZiskejEdd::alert_api_error") ?></div>
           <?php
             }
           ?>
@@ -92,7 +92,7 @@ $dedupedRecordIds = $tab->getDedupedRecordIds();
                   <?=$this->translate('Source::' . $libId) ?>
                   <span class="pull-right">
                     <a class="btn btn-primary ziskej-order-btn" data-lightbox href="<?=$this->url('ziskej-edd-order', ['id' => $driver->getUniqueId(), 'eppnDomain' => $userCard->getEppnDomain()]) ?>">
-                      <i class="fa fa-shopping-cart"></i> <?=$this->transEsc("Ziskej::btn_order_edd") ?>
+                      <i class="fa fa-shopping-cart"></i> <?=$this->transEsc("ZiskejEdd::btn_order") ?>
                     </a>
                 </span>
                 </li>
@@ -100,18 +100,18 @@ $dedupedRecordIds = $tab->getDedupedRecordIds();
             </ul>
           <?php else: ?>
             <div class="alert alert-warning text-center">
-              <?=$this->transEsc("Ziskej::alert_no_connected_libraries_edd") ?>
+              <?=$this->transEsc("ZiskejEdd::alert_no_connected_libraries") ?>
             </div>
           <?php endif; ?>
         <?php else: ?>
           <div class="alert alert-warning text-center">
-            <?=$this->transEsc("Ziskej::warning_api_disconnected") ?>
+            <?=$this->transEsc("ZiskejEdd::warning_api_disconnected") ?>
           </div>
         <?php endif; ?>
       <?php else: ?>
         <div class="text-center">
           <div class="alert alert-info text-center">
-            <?=$this->transEsc("Ziskej::alert_not_logged_in") ?>
+            <?=$this->transEsc("ZiskejEdd::alert_not_logged_in") ?>
           </div>
           <a class="btn btn-default" href="<?=$this->url('myresearch-userlogin')?>">
             <i class="fa fa-sign-in"></i>
@@ -121,5 +121,4 @@ $dedupedRecordIds = $tab->getDedupedRecordIds();
       <?php endif; ?>
     </div>
   </div>
-
 <?php endif; ?>

@@ -28,6 +28,7 @@
  */
 namespace KnihovnyCz\View\Helper\KnihovnyCz;
 
+use KnihovnyCz\Ziskej;
 use Laminas\View\Helper\AbstractHelper;
 
 /**
@@ -42,20 +43,20 @@ use Laminas\View\Helper\AbstractHelper;
 class ZiskejEdd extends AbstractHelper
 {
     /**
-     * Ziskej electronic copy model
+     * Ziskej EDD model
      *
      * @var \KnihovnyCz\Ziskej\ZiskejEdd
      */
-    private $_cpkZiskejEdd;
+    private Ziskej\ZiskejEdd $_cpkZiskej;
 
     /**
      * Constructor
      *
-     * @param \KnihovnyCz\Ziskej\ZiskejEdd $cpkZiskej Ziskej electronic copy model
+     * @param \KnihovnyCz\Ziskej\ZiskejEdd $cpkZiskej Ziskej EDD model
      */
-    public function __construct(\KnihovnyCz\Ziskej\ZiskejEdd $cpkZiskej)
+    public function __construct(Ziskej\ZiskejEdd $cpkZiskej)
     {
-        $this->_cpkZiskejEdd = $cpkZiskej;
+        $this->_cpkZiskej = $cpkZiskej;
     }
 
     /**
@@ -65,7 +66,7 @@ class ZiskejEdd extends AbstractHelper
      */
     public function isEnabled(): bool
     {
-        return $this->_cpkZiskejEdd->isEnabled();
+        return $this->_cpkZiskej->isEnabled();
     }
 
     /**
@@ -75,7 +76,7 @@ class ZiskejEdd extends AbstractHelper
      */
     public function getCurrentMode(): string
     {
-        return $this->_cpkZiskejEdd->getCurrentMode();
+        return $this->_cpkZiskej->getCurrentMode();
     }
 
     /**
@@ -85,8 +86,8 @@ class ZiskejEdd extends AbstractHelper
      */
     public function isProduction(): bool
     {
-        return $this->_cpkZiskejEdd->getCurrentMode()
-            === \KnihovnyCz\Ziskej\ZiskejEdd::MODE_PRODUCTION;
+        return $this->_cpkZiskej->getCurrentMode()
+            === Ziskej\ZiskejEdd::MODE_PRODUCTION;
     }
 
     /**
@@ -94,8 +95,25 @@ class ZiskejEdd extends AbstractHelper
      *
      * @return string[]
      */
-    public function getModes()
+    public function getModes(): array
     {
-        return $this->_cpkZiskejEdd->getModes();
+        return $this->_cpkZiskej->getModes();
+    }
+
+    /**
+     * Get html class attribute
+     *
+     * @param string|null $status Ziskej ticket status
+     *
+     * @return string
+     */
+    public function getStatusClass(string $status = null): string
+    {
+        return match ($status) {
+            'created', 'paid' => 'warning',
+            'accepted', 'prepared', 'lent' => 'success',
+            'rejected' => 'danger',
+            default => 'default',
+        };
     }
 }

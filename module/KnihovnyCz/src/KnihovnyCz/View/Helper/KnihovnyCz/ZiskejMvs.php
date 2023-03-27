@@ -28,6 +28,7 @@
  */
 namespace KnihovnyCz\View\Helper\KnihovnyCz;
 
+use KnihovnyCz\Ziskej;
 use Laminas\View\Helper\AbstractHelper;
 
 /**
@@ -46,14 +47,14 @@ class ZiskejMvs extends AbstractHelper
      *
      * @var \KnihovnyCz\Ziskej\ZiskejMvs
      */
-    private $_cpkZiskej;
+    private Ziskej\ZiskejMvs $_cpkZiskej;
 
     /**
      * Constructor
      *
      * @param \KnihovnyCz\Ziskej\ZiskejMvs $cpkZiskej Ziskej ILL model
      */
-    public function __construct(\KnihovnyCz\Ziskej\ZiskejMvs $cpkZiskej)
+    public function __construct(Ziskej\ZiskejMvs $cpkZiskej)
     {
         $this->_cpkZiskej = $cpkZiskej;
     }
@@ -86,7 +87,7 @@ class ZiskejMvs extends AbstractHelper
     public function isProduction(): bool
     {
         return $this->_cpkZiskej->getCurrentMode()
-            === \KnihovnyCz\Ziskej\ZiskejMvs::MODE_PRODUCTION;
+            === Ziskej\ZiskejMvs::MODE_PRODUCTION;
     }
 
     /**

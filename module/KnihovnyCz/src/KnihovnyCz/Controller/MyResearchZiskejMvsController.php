@@ -275,12 +275,12 @@ class MyResearchZiskejMvsController extends AbstractBase
 
         if ($deleted) {
             $this->flashMessenger()->addMessage(
-                'Ziskej::message_ziskej_order_cancel_success',
+                'ZiskejMvs::message_ziskej_order_cancel_success',
                 'success'
             );
         } else {
             $this->flashMessenger()->addMessage(
-                'Ziskej::message_ziskej_order_cancel_fail',
+                'ZiskejMvs::message_ziskej_order_cancel_fail',
                 'error'
             );
         }
@@ -328,7 +328,7 @@ class MyResearchZiskejMvsController extends AbstractBase
         $ticketMessage = $this->params()->fromPost('ticketMessage');
         if (empty($ticketMessage)) {
             $this->flashMessenger()->addMessage(
-                'Ziskej::message_ziskej_message_required_ticketMessage',
+                'ZiskejMvs::message_ziskej_message_required_ticketMessage',
                 'error'
             );
 
@@ -353,12 +353,12 @@ class MyResearchZiskejMvsController extends AbstractBase
         $creaded = $ziskejApi->createMessage($userCard->eppn, $ticketId, $message);
         if ($creaded) {
             $this->flashMessenger()->addMessage(
-                'Ziskej::message_ziskej_message_send_success',
+                'ZiskejMvs::message_ziskej_message_send_success',
                 'success'
             );
         } else {
             $this->flashMessenger()->addMessage(
-                'Ziskej::message_ziskej_message_send_fail',
+                'ZiskejMvs::message_ziskej_message_send_fail',
                 'error'
             );
         }

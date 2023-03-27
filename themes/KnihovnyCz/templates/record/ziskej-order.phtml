@@ -19,7 +19,7 @@ $ziskejReader = $this->ziskejReader;
 
 <?php if ($user): ?>
   <div>
-    <h2><?=$this->transEsc("Ziskej::order_title") ?></h2>
+    <h2><?=$this->transEsc("ZiskejMvs::order_title") ?></h2>
     <form class="form" data-lightbox-ignore action="<?=$this->url('ziskej-order-post', ['id' => $recordDriver->getUniqueId()]) ?>" method="post">
         <input type="hidden" name="source_id" value="<?=$this->serverName ?>">
         <input type="hidden" name="eppn" id="eppn" value="<?=$userCard->eppn ?>">
@@ -30,41 +30,41 @@ $ziskejReader = $this->ziskejReader;
         <?php endforeach; ?>
         <div class="row">
           <div class="col-xs-12">
-            <h3><?=$this->transEsc("Ziskej::order_section_document_title") ?></h3>
+            <h3><?=$this->transEsc("ZiskejMvs::order_section_document_title") ?></h3>
             <p>
-              <strong><?=$this->transEsc("Ziskej::label_fullname") ?>:</strong>
+              <strong><?=$this->transEsc("ZiskejMvs::label_fullname") ?>:</strong>
               <br>
               <?=$this->escapeHtml($patron['firstname'] ?? '') ?>
               <?=$this->escapeHtml($patron['lastname'] ?? '') ?>
             </p>
             <div class="form-group">
-              <label for="email"><?=$this->transEsc("Ziskej::label_email") ?>:</label>
+              <label for="email"><?=$this->transEsc("ZiskejMvs::label_email") ?>:</label>
               <input type="email" name="email" id="email" value="<?=!empty($ziskejReader) ? $ziskejReader->getEmail() : (!empty($patron['email']) ? $patron['email'] : '') ?>" class="form-control" required>
-              <span class="help-block"><?=$this->transEsc("Ziskej::help_email") ?></span>
+              <span class="help-block"><?=$this->transEsc("ZiskejMvs::help_email") ?></span>
             </div>
             <div class="form-group">
-              <label for="text"><?=$this->transEsc("Ziskej::label_note") ?>:</label>
+              <label for="text"><?=$this->transEsc("ZiskejMvs::label_note") ?>:</label>
               <textarea name="text" class="form-control"></textarea>
-              <span class="help-block"><?=$this->transEsc("Ziskej::help_note") ?></span>
+              <span class="help-block"><?=$this->transEsc("ZiskejMvs::help_note") ?></span>
             </div>
             <div class="checkbox">
               <label>
                 <input type="checkbox" name="is_conditions" required>
-                <?=$this->translate('Ziskej::checbox_is_conditions') ?>
+                <?=$this->translate('ZiskejMvs::checbox_is_conditions') ?>
               </label>
             </div>
             <div class="checkbox">
               <label>
                 <input type="checkbox" name="is_price" required>
-                <?=$this->translate('Ziskej::checbox_is_price') ?>
+                <?=$this->translate('ZiskejMvs::checbox_is_price') ?>
               </label>
             </div>
             <p class="text-center">
-              <?=$this->translate('Ziskej::text_info_conditions') ?>
+              <?=$this->translate('ZiskejMvs::text_info_conditions') ?>
             </p>
             <div class="text-center">
-              <p><strong><?=$this->translate("Ziskej::service_price") ?></strong></p>
-              <input id="submit" type="submit" name="submit" class="btn btn-primary" value="<?=$this->transEsc("Ziskej::btn_order") ?>">
+              <p><strong><?=$this->translate("ZiskejMvs::service_price") ?></strong></p>
+              <input id="submit" type="submit" name="submit" class="btn btn-primary" value="<?=$this->transEsc("ZiskejMvs::btn_order") ?>">
             </div>
           </div>
         </div>

@@ -1,9 +1,9 @@
 <?php
 // Set up page title:
-$this->headTitle($this->translate('Ziskej::checked_out_items'));
+$this->headTitle($this->translate('ZiskejMvs::checked_out_items'));
 
 // Set up breadcrumbs:
-$this->layout()->breadcrumbs = '<li><a href="' . $this->url('myresearch-home') . '">' . $this->transEsc('Your Account') . '</a></li> <li class="active">' . $this->transEsc('Ziskej::checked_out_items') . '</li>';
+$this->layout()->breadcrumbs = '<li><a href="' . $this->url('myresearch-home') . '">' . $this->transEsc('Your Account') . '</a></li> <li class="active">' . $this->transEsc('ZiskejMvs::checked_out_items') . '</li>';
 
 $loadJs = <<<JS
   function loadZiskej(element) {
@@ -17,7 +17,7 @@ JS;
 </a>
 
 <div class="<?=$this->layoutClass('mainbody')?>">
-  <h2><?=$this->transEsc('Ziskej::checked_out_items')?></h2>
+  <h2><?=$this->transEsc('ZiskejMvs::checked_out_items')?></h2>
   <?=$this->flashmessages();?>
   <p>
     <?=$this->context($this)->renderInContext('librarycards/listcards.phtml', [
