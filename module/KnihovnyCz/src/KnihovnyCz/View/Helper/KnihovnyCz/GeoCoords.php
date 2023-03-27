@@ -31,6 +31,7 @@ declare(strict_types=1);
 namespace KnihovnyCz\View\Helper\KnihovnyCz;
 
 use VuFind\Search\Base\Options;
+use VuFind\Search\Base\Results;
 
 /**
  * Class GeoCoords
@@ -48,16 +49,19 @@ class GeoCoords extends \VuFind\View\Helper\Root\GeoCoords
      * false if disabled.
      *
      * @param Options $options Search options
+     * @param Results $results Results
      *
      * @return string|bool
      */
-    public function getSearchUrl(Options $options)
+    public function getSearchUrl(Options $options = null, Results $results = null)
     {
         // If the relevant module is disabled, bail out now:
         if (!$this->recommendationEnabled($options->getRecommendationSettings())) {
             return false;
         }
+        $queryParams = ($results) ? $results->getUrlQuery()->getParamArray() : [];
+        $queryParams['geographicSearch'] = true;
         $urlHelper = $this->getView()->plugin('url');
-        return $urlHelper('search-results') . '?geographicSearch=true';
+        return $urlHelper('search-results', [], ['query' => $queryParams]);
     }
 }
