@@ -107,7 +107,7 @@ trait ZiskejMvsTrait
                     $this->getRequest()->getServer('Shib-Identity-Provider'),
             ]
         );
-        $view->setTemplate('record/ziskej-order');
+        $view->setTemplate('record/ziskej-mvs-order');
 
         // getDeduplicatedRecordIds has to be placed after create view model:
         $view->setVariable(
