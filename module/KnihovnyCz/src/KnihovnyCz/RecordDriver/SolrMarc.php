@@ -261,7 +261,7 @@ class SolrMarc extends SolrDefault
             && $sigla = $this->ils->sourceToSigla($this->getSourceId())
         ) {
             $sigla = strtolower($this->remapSiglaForNkp($sigla));
-            $nbn['nbn'] = $sigla . '-' . $this->getLocalIdForObalkyKnih();
+            $nbn = ['nbn' => $sigla . '-' . $this->getLocalIdForObalkyKnih()];
         }
         return $nbn;
     }
