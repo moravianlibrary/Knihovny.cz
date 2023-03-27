@@ -33,7 +33,7 @@
         </div>
         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-9 similar-item content">
           <h5 class="list-group-item-heading">
-            <a href='<?=$this->escapeHtmlAttr($url)?>' title='<?=$this->escapeHtml($data->title)?> (<?=$this->translate($format)?>)'>
+            <a href='<?=$this->escapeHtmlAttr($url)?>' title='<?=$this->escapeHtml($data->title)?> (<?=$this->transEscWithPrefix("Format::", $format)?>)'>
               <strong><?=$this->escapeHtml($data->title)?></strong>
             </a>
           </h5>
