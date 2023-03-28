@@ -214,8 +214,8 @@ class MultiplyingDeduplicationListener
             $params->set('fl', $newFieldList);
             $params->set(
                 'parent.q',
-                '{!term f=id v=$row.parent_id_str} -'
-                . DeduplicationHelper::CHILD_FILTER
+                '{!term f=id v=$row.parent_id_str} '
+                . DeduplicationHelper::PARENT_FILTER
             );
         }
         if ($this->childFilter != null

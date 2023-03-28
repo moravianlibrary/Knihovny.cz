@@ -385,9 +385,11 @@ class JsonFacetListener implements \Laminas\Log\LoggerAwareInterface
             $queryDomain = [
                 'blockChildren' => DeduplicationHelper::PARENT_FILTER,
             ];
+            $queryDomainFilter = '({!lucene v=$childrenQuery})';
             if ($nestedFilter != null) {
-                $queryDomain['filter'] = $nestedFilter;
+                $queryDomainFilter .= ' AND (' . $nestedFilter . ')';
             }
+            $queryDomain['filter'] = $queryDomainFilter;
             $facetConfig['facet'] = [
                 'count' => [
                     'type' => 'query',

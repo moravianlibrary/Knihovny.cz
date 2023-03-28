@@ -108,14 +108,16 @@ class RecordLinker extends Base
             $record = $this->loadRecord($record);
         }
         $recordId = $record->getUniqueID();
-
-        $records = $record->tryMethod('getDeduplicatedRecords');
-        if (!empty($records)) {
-            $first = reset($records);
-            if ($institution !== null && isset($records[$institution])) {
-                $first = $records[$institution];
+        $dedupType = $this->searchConfig->Records->deduplication_type ?? '';
+        if ($dedupType != 'multiplying') {
+            $records = $record->tryMethod('getDeduplicatedRecords');
+            if (!empty($records)) {
+                $first = reset($records);
+                if ($institution !== null && isset($records[$institution])) {
+                    $first = $records[$institution];
+                }
+                $recordId = reset($first);
             }
-            $recordId = reset($first);
         }
 
         return $this->getUrl($recordId);

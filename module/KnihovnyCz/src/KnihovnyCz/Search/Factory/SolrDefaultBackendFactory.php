@@ -29,8 +29,10 @@ declare(strict_types=1);
  */
 namespace KnihovnyCz\Search\Factory;
 
-use KnihovnyCz\Search\Solr\Backend\Connector;
+use KnihovnyCz\Search\Solr\Backend\Backend as KnihovnyCzBackend;
+use KnihovnyCz\Search\Solr\Backend\Connector as KnihovnyCzConnector;
 use KnihovnyCz\Search\Solr\Backend\PerformanceLogger;
+use KnihovnyCz\Search\Solr\Backend\QueryBuilder;
 use KnihovnyCz\Search\Solr\Backend\Response\Json\RecordCollection;
 use KnihovnyCz\Search\Solr\ChildDocDeduplicationListener;
 use KnihovnyCz\Search\Solr\DeduplicationListener;
@@ -71,7 +73,14 @@ class SolrDefaultBackendFactory extends ParentSolrDefaultBackendFactory
      *
      * @var string
      */
-    protected $connectorClass = Connector::class;
+    protected $connectorClass = KnihovnyCzConnector::class;
+
+    /**
+     * Solr backend class
+     *
+     * @var string
+     */
+    protected $backendClass = KnihovnyCzBackend::class;
 
     /**
      * Create listeners.
@@ -156,6 +165,24 @@ class SolrDefaultBackendFactory extends ParentSolrDefaultBackendFactory
             $connector->setPerformanceLogger($logger);
         }
         return $connector;
+    }
+
+    /**
+     * Create the query builder.
+     *
+     * @return QueryBuilder
+     */
+    protected function createQueryBuilder()
+    {
+        $specs   = $this->loadSpecs();
+        $config = $this->config->get($this->mainConfig);
+        $defaultDismax = $config->Index->default_dismax_handler ?? 'dismax';
+        $builder = new QueryBuilder($specs, $defaultDismax);
+
+        // Configure builder:
+        $builder->setLuceneHelper($this->createLuceneSyntaxHelper());
+
+        return $builder;
     }
 
     /**

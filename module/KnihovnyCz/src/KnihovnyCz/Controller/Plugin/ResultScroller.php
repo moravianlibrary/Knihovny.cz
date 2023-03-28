@@ -27,6 +27,7 @@
  */
 namespace KnihovnyCz\Controller\Plugin;
 
+use Laminas\Config\Config;
 use Laminas\Session\Container as SessionContainer;
 use Laminas\View\Renderer\RendererInterface;
 use VuFind\Controller\Plugin\ResultScroller as Base;
@@ -51,23 +52,29 @@ class ResultScroller extends Base
      */
     protected $renderer;
 
+    protected $useParentRecord = true;
+
     /**
      * Constructor. Create a new search result scroller.
      *
-     * @param SessionContainer  $session  Session container
-     * @param ResultsManager    $rm       Results manager
-     * @param SearchMemory      $sm       Search memory
-     * @param RendererInterface $renderer Renderer
-     * @param bool              $enabled  Is the scroller enabled?
+     * @param SessionContainer  $session   Session container
+     * @param ResultsManager    $rm        Results manager
+     * @param SearchMemory      $sm        Search memory
+     * @param RendererInterface $renderer  Renderer
+     * @param Config            $searchCfg Search configuration
+     * @param bool              $enabled   Is the scroller enabled?
      */
     public function __construct(
         SessionContainer $session,
         ResultsManager $rm,
         SearchMemory $sm,
         RendererInterface $renderer,
+        \Laminas\Config\Config $searchCfg,
         $enabled = true
     ) {
         parent::__construct($session, $rm, $sm, $enabled);
+        $dedupType = $searchCfg->Records->deduplication_type ?? '';
+        $this->useParentRecord = ($dedupType != 'multiplying');
         $this->renderer = $renderer;
     }
 
@@ -85,8 +92,10 @@ class ResultScroller extends Base
      */
     public function getScrollData($driver)
     {
-        $driver = $driver->tryMethod('getParentRecord', [], null)
-            ?? $driver;
+        if ($this->useParentRecord) {
+            $driver = $driver->tryMethod('getParentRecord', [], null)
+                ?? $driver;
+        }
         $result = parent::getScrollData($driver);
         $result['linkToResults'] = null;
         if (isset($result['currentPosition'])
@@ -145,11 +154,15 @@ class ResultScroller extends Base
             if (!($record instanceof \VuFind\RecordDriver\AbstractBase)) {
                 return false;
             }
-            $retVal[] = $record->getSourceIdentifier() . '|' . $record->tryMethod(
-                'getParentRecordID',
-                [],
-                $record->getUniqueId()
-            );
+            $recordId = $record->getUniqueId();
+            if ($this->useParentRecord) {
+                $recordId = $record->tryMethod(
+                    'getParentRecordID',
+                    [],
+                    $record->getUniqueId()
+                );
+            }
+            $retVal[] = $record->getSourceIdentifier() . '|' . $recordId;
         }
         return $retVal;
     }

@@ -29,11 +29,9 @@ declare(strict_types=1);
  */
 namespace KnihovnyCz\Search\Solr\Backend;
 
-use KnihovnyCz\Search\Solr\DeduplicationHelper;
 use Laminas\Http\Client as HttpClient;
 use Laminas\Http\PhpEnvironment\Request;
 use VuFindSearch\Backend\Exception\HttpErrorException;
-use VuFindSearch\ParamBag;
 
 /**
  * SOLR connector.
@@ -85,23 +83,6 @@ class Connector extends \VuFindSearch\Backend\Solr\Connector
     }
 
     /**
-     * Execute a search.
-     *
-     * @param ParamBag $params Parameters
-     *
-     * @return string
-     */
-    public function search(ParamBag $params)
-    {
-        $switchToParentQuery = $params->contains('switchToParentQuery', true);
-        if ($switchToParentQuery) {
-            $params->remove('switchToParentQuery');
-            $params = $this->switchToParentQuery($params);
-        }
-        return parent::search($params);
-    }
-
-    /**
      * Send request the SOLR and return the response.
      *
      * @param HttpClient $client Prepared HTTP client
@@ -138,30 +119,5 @@ class Connector extends \VuFindSearch\Backend\Solr\Connector
             throw HttpErrorException::createFromResponse($response);
         }
         return $response->getBody();
-    }
-
-    /**
-     * Switch to parent query
-     *
-     * @param \VuFindSearch\ParamBag $params Search parameters
-     *
-     * @return \VuFindSearch\ParamBag
-     */
-    protected function switchToParentQuery($params)
-    {
-        $qt = $params->get('qt');
-        $edismax = $qt != null && $qt[0] == 'edismax';
-        $query = $params->get('q');
-        $parentFilter = DeduplicationHelper::PARENT_FILTER;
-        $baseFilter = "{!child of='$parentFilter'} $parentFilter";
-        $newQuery = $baseFilter . ' AND {!type=lucene v=$parentQuery}';
-        if ($edismax) {
-            $newQuery = $baseFilter
-                . ' AND {!type=edismax qf=$qf bf=$bf bq=$bq v=$parentQuery}';
-        }
-        $params->set('q', $newQuery);
-        $params->set('parentQuery', $query);
-        $params->set('qt', 'standard');
-        return $params;
     }
 }
