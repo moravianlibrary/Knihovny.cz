@@ -190,8 +190,8 @@
             <?php if ($this->permission()->allowDisplay('feature.Favorites')): ?>
               <?php /* Add to favorites */ ?>
               <a href="<?=$this->escapeHtmlAttr($recordLinker->getActionUrl($this->driver, 'Save'))?>" data-lightbox class="save-record" data-id="<?=$this->escapeHtmlAttr($this->driver->getUniqueId()) ?>">
-                <i class="result-link-icon fa fa-fw fa-star" aria-hidden="true"></i>
-                <span class="result-link-label"><?=$this->transEsc('Add to favorites')?></span>
+                <?=$this->icon('user-favorites', 'icon-link__icon') ?>
+                <span class="result-link-label icon-link__label"><?=$this->transEsc('Add to favorites')?></span>
               </a><br/>
             <?php elseif ($block = $this->permission()->getAlternateContent('feature.Favorites')): ?>
               <?=$block?>
