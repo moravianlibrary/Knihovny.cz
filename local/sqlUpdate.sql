@@ -477,3 +477,9 @@ ALTER TABLE `user_list` CHANGE `public` `public` tinyint(1) NOT NULL DEFAULT '0'
 
 UPDATE `system` SET `value` = '119' WHERE `key`='DB_VERSION';
 
+-- #752
+DROP TABLE `widget`;
+DROP TABLE `widget_categories`;
+DROP TABLE `widget_content`;
+
+UPDATE `system` SET `value` = '120' WHERE `key`='DB_VERSION';
