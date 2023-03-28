@@ -137,15 +137,29 @@
           <?php endif; ?>
 
           <?php if ($this->cart()->isActiveInSearch() && $this->params->getOptions()->supportsCart() && $this->cart()->isActive()): ?>
-            <?=$this->render('record/cart-buttons.phtml', ['id' => $this->driver->getUniqueId(), 'source' => $this->driver->getSourceIdentifier()]); ?><br/>
+            <?php $cart = $this->cart(); ?>
+            <?php if ($cart->isActive()): ?>
+              <?php $cartId = $this->source . '|' . $this->id; ?>
+              <span class="btn-bookbag-toggle" data-cart-id="<?=$this->escapeHtmlAttr($this->id)?>" data-cart-source="<?=$this->escapeHtmlAttr($this->source)?>">
+                <a href="#" class="cart-add result-link icon-link hidden<?php if (!$cart->contains($cartId)): ?> correct<?php endif ?>">
+                  <?=$this->icon('cart-add', 'icon-link__icon fa-fw') ?>
+                  <span class="icon-link__label"><?=$this->transEsc('Add to Book Bag') ?></span>
+                </a>
+                <a href="#" class="cart-remove result-link icon-link hidden<?php if ($cart->contains($cartId)): ?> correct<?php endif ?>">
+                  <?=$this->icon('cart-remove', 'icon-link__icon fa-fw') ?>
+                  <span class="icon-link__label"><?=$this->transEsc('Remove from Book Bag') ?></span>
+                </a>
+              </span>
+            <?php endif; ?>
           <?php endif; ?>
+          <br/>
 
           <?php if ($this->userlist()->getMode() !== 'disabled'): ?>
             <?php if ($this->permission()->allowDisplay('feature.Favorites')): ?>
               <?php /* Add to favorites */ ?>
               <a href="<?=$this->escapeHtmlAttr($recordLinker->getActionUrl($this->driver, 'Save'))?>" data-lightbox class="save-record" data-id="<?=$this->escapeHtmlAttr($this->driver->getUniqueId()) ?>">
-                <i class="result-link-icon fa fa-fw fa-star" aria-hidden="true"></i>
-                <span class="result-link-label"><?=$this->transEsc('Add to favorites')?></span>
+                <?=$this->icon('user-list-add', 'icon-link__icon') ?>
+                <span class="result-link-label icon-link__label"><?=$this->transEsc('Add to favorites')?></span>
               </a><br/>
             <?php elseif ($block = $this->permission()->getAlternateContent('feature.Favorites')): ?>
               <?=$block?>

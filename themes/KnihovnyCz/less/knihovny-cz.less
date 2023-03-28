@@ -89,9 +89,9 @@ fieldset, .fieldset {
 .nav > li > a:hover,
 .nav > li > a:focus {
   outline: none;
-  text-decoration: underline;
+  text-decoration: @link-hover-decoration;
   background: transparent;
-  color: @brand-primary;
+  color: @link-hover-color;
 }
 
 .nav-tabs {
@@ -1013,15 +1013,6 @@ div .library-card-ajax {
   color: #000000;
 }
 
-// components/js-tree.less:
-.jstree-clicked,
-.jstree-clicked:active,
-.jstree-clicked:focus,
-.jstree-clicked:hover {
-  color: @list-group-active-bg;
-  background-color: @list-group-active-color;
-}
-
 .template-dir-search.template-name-home .heading-permalink {
   display: none;
 }
@@ -1219,8 +1210,6 @@ img.signature {
   background-color: @primary-darken;
 }
 
-
-
 //@todo move to advanced-search.less
 @media (min-width: 768px) {
   fieldset,
@@ -1239,4 +1228,23 @@ img.signature {
 
 .primary-color {
   .text-emphasis-variant(@brand-primary);
+}
+
+a,
+.icon-link__label,
+.searchForm .advanced-search-link
+{
+  text-decoration: none;
+  &:hover {
+    color: @link-hover-color;
+    text-decoration: @link-hover-decoration;
+  }
+}
+
+.record-nav ul#export-options li a {
+  padding: 7px 15px;
+}
+
+.nav .dropdown-toggle .icon {
+  margin-left: 0;
 }
