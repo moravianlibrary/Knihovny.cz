@@ -114,7 +114,7 @@ $config = [
                      ],
                  ],
              ],
-             'myresearch-ziskej-home' => [
+             'myresearch-ziskej-mvs-home' => [
                  'type' => \Laminas\Router\Http\Segment::class,
                  'options' => [
                      'route' => '/MyResearch/Ziskej',
@@ -134,7 +134,7 @@ $config = [
                      ],
                  ],
              ],
-             'myresearch-ziskej-ticket' => [
+             'myresearch-ziskej-mvs-ticket' => [
                  'type' => \Laminas\Router\Http\Segment::class,
                  'options' => [
                      'route' => '/MyResearch/ZiskejTicket/[:eppnDomain]/[:ticketId]',
@@ -162,7 +162,7 @@ $config = [
                      ],
                  ],
              ],
-             'myresearch-ziskej-ticket-cancel' => [
+             'myresearch-ziskej-mvs-ticket-cancel' => [
                  'type' => \Laminas\Router\Http\Segment::class,
                  'options' => [
                      'route' => '/MyResearch/ZiskejTicket/[:eppnDomain]/[:ticketId]/Cancel',
@@ -190,7 +190,7 @@ $config = [
                      ],
                  ],
              ],
-             'myresearch-ziskej-message-post' => [
+             'myresearch-ziskej-mvs-message-post' => [
                  'type' => \Laminas\Router\Http\Segment::class,
                  'options' => [
                      'route' => '/MyResearch/ZiskejTicket/[:eppnDomain]/[:ticketId]/Message',
@@ -218,7 +218,7 @@ $config = [
                      ],
                  ],
              ],
-             'ziskej-order' => [
+             'ziskej-mvs-order' => [
                  'type' => \Laminas\Router\Http\Segment::class,
                  'options' => [
                      'route' => '/Record/[:id]/ZiskejOrder/:eppnDomain',
@@ -246,7 +246,7 @@ $config = [
                      ],
                  ],
              ],
-             'ziskej-order-post' => [
+             'ziskej-mvs-order-post' => [
                  'type' => \Laminas\Router\Http\Segment::class,
                  'options' => [
                      'route' => '/Record/[:id]/ZiskejOrderPost',
@@ -286,7 +286,7 @@ $config = [
                      ],
                  ],
              ],
-             'ziskej-order-finished' => [
+             'ziskej-mvs-order-finished' => [
                  'type' => \Laminas\Router\Http\Segment::class,
                  'options' => [
                      'route' => '/Ziskej/Finished/:eppnDomain/:ticketId',

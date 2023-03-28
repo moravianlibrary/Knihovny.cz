@@ -166,7 +166,7 @@ trait ZiskejEddTrait
         $eppn = $this->params()->fromPost('eppn');
         if (!$eppn) {
             $this->flashMessenger()->addMessage(
-                'Ziskej::error_eppn_missing',
+                'ZiskejEdd::error_eppn_missing',
                 'error'
             );
             return $this->_redirectToTabEdd();
@@ -180,7 +180,7 @@ trait ZiskejEddTrait
         $email = $this->params()->fromPost('email');
         if (!$email) {
             $this->flashMessenger()->addMessage(
-                'Ziskej::error_email_missing',
+                'ZiskejEdd::error_email_missing',
                 'error'
             );
             return $this->_redirectToTabEdd();
@@ -189,7 +189,7 @@ trait ZiskejEddTrait
         $emailValidator = new EmailAddress();
         if (!$emailValidator->isValid($email)) {
             $this->flashMessenger()->addMessage(
-                'Ziskej::error_email_wrong',
+                'ZiskejEdd::error_email_wrong',
                 'error'
             );
             return $this->_redirectToTabEdd();
@@ -205,7 +205,7 @@ trait ZiskejEddTrait
                 if ($totalPages > ZiskejSettings::EDD_SELECTION_MAX_PAGES) {
                     $this->flashMessenger()->addMessage(
                         [
-                            'msg' => 'Ziskej::error_max_total_pages_exceeded',
+                            'msg' => 'ZiskejEdd::error_max_total_pages_exceeded',
                             'tokens' => [
                                 '%%limit%%' =>
                                     ZiskejSettings::EDD_SELECTION_MAX_PAGES
@@ -220,7 +220,7 @@ trait ZiskejEddTrait
 
         if (!$this->params()->fromPost('is_conditions')) {
             $this->flashMessenger()->addMessage(
-                'Ziskej::error_is_conditions',
+                'ZiskejEdd::error_is_conditions',
                 'error'
             );
             return $this->_redirectToTabEdd();
@@ -228,7 +228,7 @@ trait ZiskejEddTrait
 
         if (!$this->params()->fromPost('is_price')) {
             $this->flashMessenger()->addMessage(
-                'Ziskej::error_is_price',
+                'ZiskejEdd::error_is_price',
                 'error'
             );
             return $this->_redirectToTabEdd();
@@ -244,7 +244,7 @@ trait ZiskejEddTrait
         $userCard = $user->getCardByEppn($eppn);
         if (!$userCard) {
             $this->flashMessenger()->addMessage(
-                'Ziskej::error_account_not_active',
+                'ZiskejEdd::error_account_not_active',
                 'error'
             );
             return $this->_redirectToTabEdd();
@@ -270,7 +270,7 @@ trait ZiskejEddTrait
                 : $ziskejApi->createReader($userCard->eppn, $requestReader);
         } catch (\Mzk\ZiskejApi\Exception\ApiResponseException $e) {
             $this->flashMessenger()->addMessage(
-                'Ziskej::failure_order_finished',
+                'ZiskejEdd::failure_order_finished',
                 'error'
             );
             $this->flashMessenger()->addMessage(
@@ -282,7 +282,7 @@ trait ZiskejEddTrait
 
         if (!$ziskejReader->isActive()) {
             $this->flashMessenger()->addMessage(
-                'Ziskej::error_account_not_active',
+                'ZiskejEdd::error_account_not_active',
                 'warning'
             );
             return $this->_redirectToTabEdd();
@@ -321,14 +321,14 @@ trait ZiskejEddTrait
 
             if (!$ticket) {
                 $this->flashMessenger()->addMessage(
-                    'Ziskej::failure_order_finished',
+                    'ZiskejEdd::failure_order_finished',
                     'error'
                 );
                 return $this->_redirectToTabEdd();
             }
 
             $this->flashMessenger()->addMessage(
-                'Ziskej::success_order_finished',
+                'ZiskejEdd::success_order_finished',
                 'success'
             );
             return $this->redirect()->toRoute(
@@ -340,7 +340,7 @@ trait ZiskejEddTrait
             );
         } catch (\Mzk\ZiskejApi\Exception\ApiResponseException $e) {
             $this->flashMessenger()->addMessage(
-                'Ziskej::failure_order_finished',
+                'ZiskejEdd::failure_order_finished',
                 'error'
             );
             $this->flashMessenger()->addMessage(

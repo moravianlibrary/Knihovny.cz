@@ -11,12 +11,12 @@ $ticket = $this->ticket;
 /** @var \Mzk\ZiskejApi\ResponseModel\MessageCollection $messages */
 $messages = $this->messages;
 
-/** @var \KnihovnyCz\View\Helper\KnihovnyCz\ZiskejMvs $viewHelperZiskej */
-$viewHelperZiskej = $this->ziskejMvs();
+/** @var \KnihovnyCz\View\Helper\KnihovnyCz\ZiskejEdd $viewHelperZiskej */
+$viewHelperZiskej = $this->ziskejEdd();
 ?>
 <?php
 // Set up page title:
-$this->headTitle($this->translate('Ziskej::header_order_ziskej_edd_num') . ' ' . $ticket->getHid());
+$this->headTitle($this->translate('ZiskejEdd::header_order_ziskej_num') . ' ' . $ticket->getHid());
 ?>
 
 <div class="row">
@@ -25,12 +25,12 @@ $this->headTitle($this->translate('Ziskej::header_order_ziskej_edd_num') . ' ' .
     <div class="clearfix">
 
       <h2 class="pull-left">
-        <?=$this->transEsc('Ziskej::header_order_ziskej_edd_num') . ' ' . $ticket->getHid()?>
+        <?=$this->transEsc('ZiskejEdd::header_order_ziskej_num') . ' ' . $ticket->getHid()?>
       </h2>
 
       <div class="pull-left h2-label">
         <span class="label label-<?=$viewHelperZiskej->getStatusClass($ticket->getStatus())?>">
-          <?=$this->translate('Ziskej::order_status_' . $ticket->getStatus())?>
+          <?=$this->translate('ZiskejEdd::order_status_' . $ticket->getStatus())?>
         </span>
       </div>
 
@@ -60,7 +60,7 @@ $this->headTitle($this->translate('Ziskej::header_order_ziskej_edd_num') . ' ' .
           <?php else: ?>
             <span class="text-icon text-muted"><i class="fa fa-times"></i></span>
           <?php endif; ?>
-          <?=$this->transEsc("Ziskej::order_status_created")?>
+          <?=$this->transEsc("ZiskejEdd::order_status_created")?>
           <?php if (isset($historyArray['created'])): ?>
             <small><?=$historyArray['created']?></small>
           <?php endif; ?>
@@ -72,7 +72,7 @@ $this->headTitle($this->translate('Ziskej::header_order_ziskej_edd_num') . ' ' .
             <?php else: ?>
               <span class="text-icon text-muted"><i class="fa fa-times"></i></span>
             <?php endif; ?>
-            <?=$this->transEsc("Ziskej::order_status_accepted")?>
+            <?=$this->transEsc("ZiskejEdd::order_status_accepted")?>
             <?php if (isset($historyArray['accepted'])): ?>
               <small><?=$historyArray['accepted']?></small>
             <?php endif; ?>
@@ -83,7 +83,7 @@ $this->headTitle($this->translate('Ziskej::header_order_ziskej_edd_num') . ' ' .
             <?php else: ?>
               <span class="text-icon text-muted"><i class="fa fa-times"></i></span>
             <?php endif; ?>
-            <?=$this->transEsc("Ziskej::order_status_unpaid")?>
+            <?=$this->transEsc("ZiskejEdd::order_status_unpaid")?>
             <?php if (isset($historyArray['unpaid'])): ?>
               <small><?=$historyArray['unpaid']?></small>
             <?php endif; ?>
@@ -94,7 +94,7 @@ $this->headTitle($this->translate('Ziskej::header_order_ziskej_edd_num') . ' ' .
             <?php else: ?>
               <span class="text-icon text-muted"><i class="fa fa-times"></i></span>
             <?php endif; ?>
-            <?=$this->transEsc("Ziskej::order_status_edd_prepared")?>
+            <?=$this->transEsc("ZiskejEdd::order_status_prepared")?>
             <?php if (isset($historyArray['prepared'])): ?>
               <small><?=$historyArray['prepared']?></small>
             <?php endif; ?>
@@ -105,7 +105,7 @@ $this->headTitle($this->translate('Ziskej::header_order_ziskej_edd_num') . ' ' .
             <?php else: ?>
               <span class="text-icon text-muted"><i class="fa fa-times"></i></span>
             <?php endif; ?>
-            <?=$this->transEsc("Ziskej::order_status_edd_lent")?>
+            <?=$this->transEsc("ZiskejEdd::order_status_lent")?>
             <?php if (isset($historyArray['lent'])): ?>
               <small><?=$historyArray['lent']?></small>
             <?php endif; ?>
@@ -116,7 +116,7 @@ $this->headTitle($this->translate('Ziskej::header_order_ziskej_edd_num') . ' ' .
             <?php else: ?>
               <span class="text-icon text-muted"><i class="fa fa-times"></i></span>
             <?php endif; ?>
-            <?=$this->transEsc("Ziskej::order_status_closed")?>
+            <?=$this->transEsc("ZiskejEdd::order_status_closed")?>
             <?php if (isset($historyArray['closed'])): ?>
               <small><?=$historyArray['closed']?></small>
             <?php endif; ?>
@@ -129,7 +129,7 @@ $this->headTitle($this->translate('Ziskej::header_order_ziskej_edd_num') . ' ' .
             <?php else: ?>
               <span class="text-icon text-muted"><i class="fa fa-times"></i></span>
             <?php endif; ?>
-            <?=$this->transEsc("Ziskej::order_status_cancelled")?>
+            <?=$this->transEsc("ZiskejEdd::order_status_cancelled")?>
             <?php if (isset($historyArray['cancelled'])): ?>
               <small><?=$historyArray['cancelled']?></small>
             <?php endif; ?>
@@ -142,7 +142,7 @@ $this->headTitle($this->translate('Ziskej::header_order_ziskej_edd_num') . ' ' .
             <?php else: ?>
               <span class="text-icon text-muted"><i class="fa fa-times"></i></span>
             <?php endif; ?>
-            <?=$this->transEsc("Ziskej::order_status_rejected")?>
+            <?=$this->transEsc("ZiskejEdd::order_status_rejected")?>
             <?php if (isset($historyArray['rejected'])): ?>
               <small><?=$historyArray['rejected']?></small>
             <?php endif; ?>
@@ -153,147 +153,147 @@ $this->headTitle($this->translate('Ziskej::header_order_ziskej_edd_num') . ' ' .
 
     <?php if ($ticket->getStatus() == 'created'): ?>
       <div class="alert alert-info">
-        <?=$this->transEsc("Ziskej::message_ziskej_message_wait_processing")?>
+        <?=$this->transEsc("ZiskejEdd::message_ziskej_message_wait_processing")?>
       </div>
     <?php endif; ?>
 
     <div class="text-center well border mb-1">
       <?php if ($ticket->getStatus() === 'unpaid' && $ticket->getDownloadUrl()): ?>
-        <a class="btn btn-warning" href="<?=$ticket->getDownloadUrl()?>" target="_blank" title="<?=$this->transEsc("Ziskej::btn_order_pay_title")?>">
-          <i class="fa fa-shopping-cart"></i> <?=$this->transEsc("Ziskej::btn_order_pay")?>
+        <a class="btn btn-warning" href="<?=$ticket->getDownloadUrl()?>" target="_blank" title="<?=$this->transEsc("ZiskejEdd::btn_order_pay_title")?>">
+          <i class="fa fa-shopping-cart"></i> <?=$this->transEsc("ZiskejEdd::btn_order_pay")?>
         </a>
       <?php endif; ?>
 
       <?php if (($ticket->getStatus() === 'prepared' || $ticket->getStatus() === 'lent') && $ticket->getDownloadUrl()): ?>
-        <a class="btn btn-info" href="<?=$ticket->getDownloadUrl()?>" target="_blank" title="<?=$this->transEsc("Ziskej::btn_order_download_title")?>">
-          <i class="fa fa-download"></i> <?=$this->transEsc("Ziskej::btn_order_download")?>
+        <a class="btn btn-info" href="<?=$ticket->getDownloadUrl()?>" target="_blank" title="<?=$this->transEsc("ZiskejEdd::btn_order_download_title")?>">
+          <i class="fa fa-download"></i> <?=$this->transEsc("ZiskejEdd::btn_order_download")?>
         </a>
       <?php endif; ?>
 
       <?php if (in_array($ticket->getStatus(), ['created', 'paid'])): ?>
-        <a id="cancelButton" class="btn btn-info" href="<?=$this->url('myresearch-ziskej-edd-ticket-cancel', ['eppnDomain' => $userCard->getEppnDomain(), 'ticketId' => $ticket->getId()])?>" title="<?=$this->transEsc("Ziskej::btn_order_cancel_title")?>">
-          <i class="fa fa-times"></i> <?=$this->transEsc("Ziskej::btn_order_cancel")?>
+        <a id="cancelButton" class="btn btn-info" href="<?=$this->url('myresearch-ziskej-edd-ticket-cancel', ['eppnDomain' => $userCard->getEppnDomain(), 'ticketId' => $ticket->getId()])?>" title="<?=$this->transEsc("ZiskejEdd::btn_order_cancel_title")?>">
+          <i class="fa fa-times"></i> <?=$this->transEsc("ZiskejEdd::btn_order_cancel")?>
         </a>
       <?php endif; ?>
 
       <?php if ($ticket->getStatus() == 'cancelled'): ?>
-        <div class="alert alert-info"><?=$this->transEsc("Ziskej::msg_order_canceled")?></div>
+        <div class="alert alert-info"><?=$this->transEsc("ZiskejEdd::msg_order_canceled")?></div>
       <?php endif; ?>
 
-      <a class="btn btn-default" href="https://ziskej-info.techlib.cz/reklamace" target="_blank" title="<?=$this->transEsc("Ziskej::btn_order_complaint_title")?>">
+      <a class="btn btn-default" href="https://ziskej-info.techlib.cz/reklamace" target="_blank" title="<?=$this->transEsc("ZiskejEdd::btn_order_complaint_title")?>">
         <i class="fa fa-exclamation-triangle"></i>
-        <?=$this->transEsc("Ziskej::btn_order_complaint")?>
+        <?=$this->transEsc("ZiskejEdd::btn_order_complaint")?>
       </a>
     </div>
 
-    <h3><?=$this->transEsc("Ziskej::header_order_detail")?></h3>
+    <h3><?=$this->transEsc("ZiskejEdd::header_order_detail")?></h3>
     <div class="well border">
 
       <dl class="dl-horizontal dl-left">
         <?php if (!empty($ticket->getCreatedAt())): ?>
-          <dt><?=$this->transEsc('Ziskej::date_ordered')?>:</dt>
+          <dt><?=$this->transEsc('ZiskejEdd::date_ordered')?>:</dt>
           <dd><?=$this->dateTime()->convertToDisplayDateAndTime('U', $ticket->getCreatedAt()->getTimestamp())?></dd>
         <?php endif; ?>
 
         <?php if (!empty($ticket->getUpdatedAt()) && ($ticket->getUpdatedAt()->getTimestamp() != $ticket->getCreatedAt()->getTimestamp())): ?>
-          <dt><?=$this->transEsc('Ziskej::date_updated')?>:</dt>
+          <dt><?=$this->transEsc('ZiskejEdd::date_updated')?>:</dt>
           <dd><?=$this->dateTime()->convertToDisplayDate('U', $ticket->getUpdatedAt()->getTimestamp())?></dd>
         <?php endif; ?>
 
         <?php if (!empty($ticket->getRequestedAt())): ?>
-          <dt><?=$this->transEsc('Ziskej::date_requested')?>:</dt>
+          <dt><?=$this->transEsc('ZiskejEdd::date_requested')?>:</dt>
           <dd><?=$this->dateTime()->convertToDisplayDate('U', $ticket->getRequestedAt()->getTimestamp())?></dd>
         <?php endif; ?>
 
         <?php if (!empty($ticket->getReturnAt())): ?>
-          <dt><?=$this->transEsc('Ziskej::label_date_return')?>:</dt>
+          <dt><?=$this->transEsc('ZiskejEdd::label_date_return')?>:</dt>
           <dd><?=$this->dateTime()->convertToDisplayDate('U', $ticket->getReturnAt()->getTimestamp())?></dd>
         <?php endif; ?>
 
         <?php if (!empty($ticket->getEddSubtype())): ?>
-          <dt><?=$this->transEsc('Ziskej::label_subtype')?>:</dt>
-          <dd><?=$this->transEsc('Ziskej::value_subtype_' . $ticket->getEddSubtype())?></dd>
+          <dt><?=$this->transEsc('ZiskejEdd::label_subtype')?>:</dt>
+          <dd><?=$this->transEsc('ZiskejEdd::value_subtype_' . $ticket->getEddSubtype())?></dd>
         <?php endif; ?>
 
         <?php if (!empty($ticket->getDocTitleIn())): ?>
-          <dt><?=$this->transEsc('Ziskej::label_edd_article_doc_title_in')?>:</dt>
+          <dt><?=$this->transEsc('ZiskejEdd::label_article_doc_title_in')?>:</dt>
           <dd><?=$ticket->getDocTitleIn()?></dd>
         <?php endif; ?>
 
         <?php if (!empty($ticket->getDocTitle())): ?>
-          <dt><?=$this->transEsc('Ziskej::label_edd_selection_doc_title')?>:</dt>
+          <dt><?=$this->transEsc('ZiskejEdd::label_selection_doc_title')?>:</dt>
           <dd><?=$ticket->getDocTitle()?></dd>
         <?php endif; ?>
 
         <?php if (!empty($ticket->getDocVolume())): ?>
-          <dt><?=$this->transEsc('Ziskej::label_doc_volume')?>:</dt>
+          <dt><?=$this->transEsc('ZiskejEdd::label_doc_volume')?>:</dt>
           <dd><?=$ticket->getDocVolume()?></dd>
         <?php endif; ?>
 
         <?php if (!empty($ticket->getDocNumberYear())): ?>
-          <dt><?=$this->transEsc('Ziskej::label_doc_number_year')?>:</dt>
+          <dt><?=$this->transEsc('ZiskejEdd::label_doc_number_year')?>:</dt>
           <dd><?=$ticket->getDocNumberYear()?></dd>
         <?php endif; ?>
 
         <?php if (!empty($ticket->getDocNumberPyear())): ?>
-          <dt><?=$this->transEsc('Ziskej::label_doc_number_pyear')?>:</dt>
+          <dt><?=$this->transEsc('ZiskejEdd::label_doc_number_pyear')?>:</dt>
           <dd><?=$ticket->getDocNumberPyear()?></dd>
         <?php endif; ?>
 
         <?php if (!empty($ticket->getDocNumberPnumber())): ?>
-          <dt><?=$this->transEsc('Ziskej::label_doc_number_pnumber')?>:</dt>
+          <dt><?=$this->transEsc('ZiskejEdd::label_doc_number_pnumber')?>:</dt>
           <dd><?=$ticket->getDocNumberPnumber()?></dd>
         <?php endif; ?>
 
         <?php if (!empty($ticket->getDocAuthor())): ?>
-          <dt><?=$this->transEsc('Ziskej::label_doc_author')?>:</dt>
+          <dt><?=$this->transEsc('ZiskejEdd::label_doc_author')?>:</dt>
           <dd><?=$ticket->getDocAuthor()?></dd>
         <?php endif; ?>
 
         <?php if (!empty($ticket->getDocIssuer())): ?>
-          <dt><?=$this->transEsc('Ziskej::label_doc_issuer')?>:</dt>
+          <dt><?=$this->transEsc('ZiskejEdd::label_doc_issuer')?>:</dt>
           <dd><?=$ticket->getDocIssuer()?></dd>
         <?php endif; ?>
 
         <?php if (!empty($ticket->getDocIsbn())): ?>
-          <dt><?=$this->transEsc('Ziskej::label_doc_isbn')?>:</dt>
+          <dt><?=$this->transEsc('ZiskejEdd::label_doc_isbn')?>:</dt>
           <dd><?=$ticket->getDocIsbn()?></dd>
         <?php endif; ?>
 
         <?php if (!empty($ticket->getDocIssn())): ?>
-          <dt><?=$this->transEsc('Ziskej::label_doc_issn')?>:</dt>
+          <dt><?=$this->transEsc('ZiskejEdd::label_doc_issn')?>:</dt>
           <dd><?=$ticket->getDocIssn()?></dd>
         <?php endif; ?>
 
         <?php if (!empty($ticket->getDocCitation())): ?>
-          <dt><?=$this->transEsc('Ziskej::label_doc_citation')?>:</dt>
+          <dt><?=$this->transEsc('ZiskejEdd::label_doc_citation')?>:</dt>
           <dd><?=$ticket->getDocCitation()?></dd>
         <?php endif; ?>
 
         <?php if (!empty($ticket->getPagesFrom())): ?>
-          <dt><?=$this->transEsc('Ziskej::label_pages_from')?>:</dt>
+          <dt><?=$this->transEsc('ZiskejEdd::label_pages_from')?>:</dt>
           <dd><?=$ticket->getPagesFrom()?></dd>
         <?php endif; ?>
 
         <?php if (!empty($ticket->getPagesTo())): ?>
-          <dt><?=$this->transEsc('Ziskej::label_pages_to')?>:</dt>
+          <dt><?=$this->transEsc('ZiskejEdd::label_pages_to')?>:</dt>
           <dd><?=$ticket->getPagesTo()?></dd>
         <?php endif; ?>
 
         <?php if (!empty($ticket->getDocNote())): ?>
-          <dt><?=$this->transEsc('Ziskej::label_doc_note')?>:</dt>
+          <dt><?=$this->transEsc('ZiskejEdd::label_doc_note')?>:</dt>
           <dd><?=$ticket->getDocNote()?></dd>
         <?php endif; ?>
 
       </dl>
     </div>
 
-    <h3><?=$this->transEsc("Ziskej::header_order_document")?></h3>
+    <h3><?=$this->transEsc("ZiskejEdd::header_order_document")?></h3>
     <div class="well border">
       <?php if ($this->driver): ?>
         <?=$this->render('_ziskejticket-core.phtml')?>
         <div class="text-right">
-          <a href="<?=$this->recordLinker()->getUrl($this->driver)?>" class="title" title="<?=$this->transEsc("Ziskej::btn_order_document_title")?>"><?=$this->transEsc("Ziskej::btn_order_document")?></a>
+          <a href="<?=$this->recordLinker()->getUrl($this->driver)?>" class="title" title="<?=$this->transEsc("ZiskejEdd::btn_order_document_title")?>"><?=$this->transEsc("ZiskejEdd::btn_order_document")?></a>
         </div>
       <?php else: ?>
         <div class="alert alert-warning">
@@ -304,7 +304,7 @@ $this->headTitle($this->translate('Ziskej::header_order_ziskej_edd_num') . ' ' .
 
     <div>
       <h3>
-        <?=$this->transEsc("Ziskej::header_order_messages")?>
+        <?=$this->transEsc("ZiskejEdd::header_order_messages")?>
         <?php if ($ticket->getCountMessages() > 0): ?>
           <span class="badge"><?=$ticket->getCountMessages()?></span>
         <?php endif; ?>
@@ -318,9 +318,9 @@ $this->headTitle($this->translate('Ziskej::header_order_ziskej_edd_num') . ' ' .
                 <div class="media-body">
                   <p class="media-heading">
                     <?php if ($message->getSender() == 'reader'): ?>
-                      <span title="<?=$this->transEsc("Ziskej::label_user")?>"><i class="fa fa-user"></i></span>
+                      <span title="<?=$this->transEsc("ZiskejEdd::label_user")?>"><i class="fa fa-user"></i></span>
                     <?php else: ?>
-                      <?=$this->transEsc("Ziskej::label_library")?>
+                      <?=$this->transEsc("ZiskejEdd::label_library")?>
                     <?php endif; ?>
                     <?=$this->dateTime()->convertToDisplayDateAndTime('U', $message->getCreatedAt()->getTimestamp())?>
                   </p>
@@ -333,19 +333,19 @@ $this->headTitle($this->translate('Ziskej::header_order_ziskej_edd_num') . ' ' .
           <?php endforeach; ?>
         <?php else: ?>
           <div class="alert alert-info">
-            <?=$this->transEsc("Ziskej::msg_order_no_messages")?>
+            <?=$this->transEsc("ZiskejEdd::msg_order_no_messages")?>
           </div>
         <?php endif; ?>
 
         <div>
           <hr>
-          <h4><?=$this->transEsc("Ziskej::header_order_new_message")?></h4>
+          <h4><?=$this->transEsc("ZiskejEdd::header_order_new_message")?></h4>
           <form method="post" action="<?=$this->url('myresearch-ziskej-edd-message-post', ['eppnDomain' => $userCard->getEppnDomain(), 'ticketId' => $ticket->getId()])?>">
             <div class="form-group">
-              <label for="ticketMessage"><?=$this->transEsc("Ziskej::label_ticketMessage")?>:</label>
+              <label for="ticketMessage"><?=$this->transEsc("ZiskejEdd::label_ticketMessage")?>:</label>
               <textarea name="ticketMessage" id="ticketMessage" class="form-control" rows="3" required></textarea>
             </div>
-            <button type="submit" class="btn btn-primary"><?=$this->transEsc("Ziskej::btn_message_send")?></button>
+            <button type="submit" class="btn btn-primary"><?=$this->transEsc("ZiskejEdd::btn_message_send")?></button>
           </form>
         </div>
       </div>
@@ -361,7 +361,7 @@ $this->headTitle($this->translate('Ziskej::header_order_ziskej_edd_num') . ' ' .
 </div>
 
 <?php
-$confirmationText = $this->translate('Ziskej::btn_order_cancel_confirm', ['%orderId' => $ticket->getHid()]);
+$confirmationText = $this->translate('ZiskejEdd::btn_order_cancel_confirm', ['%orderId' => $ticket->getHid()]);
 $script = <<<JS
   $('#cancelButton').click(function confirmCancelTicket() {
     return confirm('$confirmationText');

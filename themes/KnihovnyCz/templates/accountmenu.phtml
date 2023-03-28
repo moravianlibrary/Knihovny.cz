@@ -68,10 +68,10 @@
 <?php endif; ?>
 <?php if ($this->ziskejMvs()->isEnabled()): ?>
 <li class="<?=$this->active == 'ziskej' ? 'active' : ''?>">
-  <a href="<?=$this->url('myresearch-ziskej-home')?>" class="flex ziskej">
+  <a href="<?=$this->url('myresearch-ziskej-mvs-home')?>" class="flex ziskej">
     <span class="flex-col">
       <?=$this->icon('user-ziskej', 'icon-link__icon fa-fw') ?>
-      <span class="icon-link__label"><?=$this->transEsc('Ziskej::service_name')?></span>
+      <span class="icon-link__label"><?=$this->transEsc('ZiskejMvs::service_name')?></span>
     </span>
     <span class="ziskej-status status hidden"><?=$this->icon('spinner') ?></span>
   </a>
@@ -82,7 +82,7 @@
     <a href="<?=$this->url('myresearch-ziskej-edd-home')?>" class="flex ziskej">
     <span class="flex-col">
       <?=$this->icon('user-ziskej-edd', 'icon-link__icon fa-fw') ?>
-      <span class="icon-link__label"><?=$this->transEsc('Ziskej::ziskej_edd')?></span>
+      <span class="icon-link__label"><?=$this->transEsc('ZiskejEdd::service_name')?></span>
     </span>
       <span class="ziskej-status status hidden"><?=$this->icon('spinner') ?></span>
     </a>

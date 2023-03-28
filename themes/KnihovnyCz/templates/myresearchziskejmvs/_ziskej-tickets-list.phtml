@@ -53,42 +53,42 @@
                 </dd>
               <?php endif; ?>
               <?php if (is_countable($record->getFormats()) && count($record->getFormats()) > 0): ?>
-                <dt><?=$this->transEsc('Ziskej::label_document_type')?>:</dt>
+                <dt><?=$this->transEsc('ZiskejMvs::label_document_type')?>:</dt>
                 <dd><?=$this->record($record)->getFormatList()?></dd>
               <?php endif; ?>
             <?php endif; ?>
             <?php if ($ticket->getCreatedAt()): ?>
-              <dt><?=$this->transEsc('Ziskej::label_date_order')?>:</dt>
+              <dt><?=$this->transEsc('ZiskejMvs::label_date_order')?>:</dt>
               <dd><?=$this->dateTime()->convertToDisplayDate('U', $ticket->getCreatedAt()->getTimestamp())?></dd>
             <?php endif; ?>
             <?php if ($ticket->getRequestedAt()): ?>
-              <dt><?=$this->transEsc('Ziskej::label_date_deliver')?>:</dt>
+              <dt><?=$this->transEsc('ZiskejMvs::label_date_deliver')?>:</dt>
               <dd><?=$this->dateTime()->convertToDisplayDate('U', $ticket->getRequestedAt()->getTimestamp())?></dd>
             <?php endif; ?>
             <?php if ($ticket->getReturnAt()): ?>
-              <dt><?=$this->transEsc('Ziskej::label_date_return')?>:</dt>
+              <dt><?=$this->transEsc('ZiskejMvs::label_date_return')?>:</dt>
               <dd><?=$this->dateTime()->convertToDisplayDate('U', $ticket->getReturnAt()->getTimestamp())?></dd>
             <?php endif; ?>
-            <dt><?=$this->transEsc('Ziskej::label_order_number')?>:</dt>
+            <dt><?=$this->transEsc('ZiskejMvs::label_order_number')?>:</dt>
             <dd><?=$ticket->getHid()?></dd>
 
             <?php if ($ticket->getStatus()): ?>
-              <dt><?=$this->transEsc('Ziskej::label_order_status')?>:</dt>
+              <dt><?=$this->transEsc('ZiskejMvs::label_order_status')?>:</dt>
               <dd>
                 <span class="label label-<?=$this->ziskejMvs()->getStatusClass($ticket->getStatus())?>">
-                  <?=$this->transEsc('Ziskej::order_status_' . $ticket->getStatus())?>
+                  <?=$this->transEsc('ZiskejMvs::order_status_' . $ticket->getStatus())?>
                 </span>
               </dd>
             <?php endif; ?>
           </dl>
           <div class="text-right">
             <?php if ($ticket->getStatus() == 'created' && !empty($ticket->getPaymentUrl())): ?>
-              <a class="btn btn-sm btn-warning" href="<?=$ticket->getPaymentUrl()?>" target="_blank" title="<?=$this->transEsc("Ziskej::btn_order_pay_title")?>">
-                <i class="fa fa-shopping-cart"></i> <?=$this->transEsc("Ziskej::btn_order_pay")?>
+              <a class="btn btn-sm btn-warning" href="<?=$ticket->getPaymentUrl()?>" target="_blank" title="<?=$this->transEsc("ZiskejMvs::btn_order_pay_title")?>">
+                <i class="fa fa-shopping-cart"></i> <?=$this->transEsc("ZiskejMvs::btn_order_pay")?>
               </a>
             <?php endif; ?>
-            <a class="btn btn-sm btn-primary" href="<?=$this->url('myresearch-ziskej-ticket', ['eppnDomain' => $userCard->getEppnDomain(), 'ticketId' => $ticket->getId()])?>" title="<?=$this->transEsc("Ziskej::btn_order_detail_title")?>">
-              <i class="fa fa-search"></i> <?=$this->transEsc("Ziskej::btn_order_detail")?>
+            <a class="btn btn-sm btn-primary" href="<?=$this->url('myresearch-ziskej-mvs-ticket', ['eppnDomain' => $userCard->getEppnDomain(), 'ticketId' => $ticket->getId()])?>" title="<?=$this->transEsc("ZiskejMvs::btn_order_detail_title")?>">
+              <i class="fa fa-search"></i> <?=$this->transEsc("ZiskejMvs::btn_order_detail")?>
             </a>
           </div>
         </div>
