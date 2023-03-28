@@ -180,10 +180,12 @@ $this->headTitle($this->translate('ZiskejEdd::header_order_ziskej_num') . ' ' . 
         <div class="alert alert-info"><?=$this->transEsc("ZiskejEdd::msg_order_canceled")?></div>
       <?php endif; ?>
 
-      <a class="btn btn-default" href="https://ziskej-info.techlib.cz/reklamace" target="_blank" title="<?=$this->transEsc("ZiskejEdd::btn_order_complaint_title")?>">
+      <?php if (!empty($ticket->getDownloadUrl())): ?>
+      <a class="btn btn-default" href="<?=$ticket->getDownloadUrl()?>" target="_blank" title="<?=$this->transEsc("ZiskejEdd::btn_order_complaint_title")?>">
         <i class="fa fa-exclamation-triangle"></i>
         <?=$this->transEsc("ZiskejEdd::btn_order_complaint")?>
       </a>
+      <?php endif; ?>
     </div>
 
     <h3><?=$this->transEsc("ZiskejEdd::header_order_detail")?></h3>
