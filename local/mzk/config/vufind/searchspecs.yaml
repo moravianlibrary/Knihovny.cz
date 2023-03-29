@@ -751,6 +751,8 @@ adv_search_location:
   CustomMunge:
     withPrefix:
       - [preg_replace, "/['|\"]/m", ""]
+      - [preg_replace, "/[\\-\\/()*]/m", " "]
+      - [preg_replace, "/\\s+$/m", ""]
       - [preg_replace, "/(.+)/", "{!complexphrase inOrder=true df=local_location_txt_mv v='\"$1*\"'}"]
   QueryFields:
     local_location_txt_mv:
