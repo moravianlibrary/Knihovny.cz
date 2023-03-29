@@ -83,7 +83,7 @@ class GetZiskejEddFee extends \VuFind\AjaxHandler\AbstractBase
         if ($pagesTo < 1 || $pagesFrom < 1) {
             return $this->formatResponse(
                 $this->translate(
-                    'Ziskej::error_pages_limit_min',
+                    'ZiskejEdd::error_pages_limit_min',
                     ['%%count%%' => 1]
                 ),
                 self::STATUS_HTTP_ERROR
@@ -95,7 +95,7 @@ class GetZiskejEddFee extends \VuFind\AjaxHandler\AbstractBase
         if ($totalPages < 1) {
             return $this->formatResponse(
                 $this->translate(
-                    'Ziskej::error_pages_limit_min',
+                    'ZiskejEdd::error_pages_limit_min',
                     ['%%count%%' => 1]
                 ),
                 self::STATUS_HTTP_ERROR
@@ -106,7 +106,7 @@ class GetZiskejEddFee extends \VuFind\AjaxHandler\AbstractBase
             if ($totalPages > ZiskejSettings::EDD_SELECTION_MAX_PAGES) {
                 return $this->formatResponse(
                     $this->translate(
-                        'Ziskej::error_max_total_pages_exceeded',
+                        'ZiskejEdd::error_max_total_pages_exceeded',
                         ['%%limit%%' => ZiskejSettings::EDD_SELECTION_MAX_PAGES]
                     ),
                     self::STATUS_HTTP_ERROR
@@ -123,14 +123,14 @@ class GetZiskejEddFee extends \VuFind\AjaxHandler\AbstractBase
                     'is_valid' => $fee->isValid(),
                     'total_pages' => $totalPages,
                     'message_subtotal' => $this->translate(
-                        'Ziskej::message_subtotal_fee_info',
+                        'ZiskejEdd::message_subtotal_fee_info',
                         [
                             '%%price%%' => $fee->getFee(),
                             '%%pages%%' => $totalPages,
                         ]
                     ),
                     'message_total' => $this->translate(
-                        'Ziskej::message_total_fee_info',
+                        'ZiskejEdd::message_total_fee_info',
                         ['%%total%%' => $fee->getFee()]
                     ),
                 ]

@@ -2,7 +2,8 @@
   $this->headLink()->appendStylesheet('EDS.css');
   $accessLevel = $this->driver->getAccessLevel();
   $restrictedView = empty($accessLevel) ? false : true;
-  $coverDetails = $this->record($this->driver)->getCoverDetails('result-list', 'medium', $this->recordLinker()->getUrl($this->driver));
+  $recordLinker = $this->recordLinker($this->results);
+  $coverDetails = $this->record($this->driver)->getCoverDetails('result-list', 'medium', $recordLinker->getUrl($this->driver));
   $cover = $coverDetails['html'];
 ?>
 <?php
@@ -47,7 +48,7 @@
               <div class="resultItemLine1">
                 <p>
                   <?=$this->transEsc('This result is not displayed to guests')?>
-                  <br />
+		  <br />
                   <a class="login" href="<?=$this->url('myresearch-userlogin')?>">
                     <strong><?=$this->transEsc('Login for full access')?></strong>
                   </a>
@@ -103,7 +104,10 @@
 
           <?php if ($this->userlist()->getMode() !== 'disabled'): ?>
             <?php /* Add to favorites */ ?>
-            <a href="<?=$this->escapeHtmlAttr($this->recordLinker()->getActionUrl($this->driver, 'Save'))?>" class="save-record" data-lightbox id="<?=$this->driver->getUniqueId() ?>" title="<?=$this->transEscAttr('Add to favorites')?>"><?=$this->icon('user-list-add') ?> <span class="result-link-label"><?=$this->transEsc('Add to favorites')?></span></a><br/>
+            <a href="<?=$this->escapeHtmlAttr($this->recordLinker()->getActionUrl($this->driver, 'Save'))?>" class="save-record" data-lightbox id="<?=$this->driver->getUniqueId() ?>" title="<?=$this->transEscAttr('Add to favorites')?>"><?=$this->icon('user-list-add') ?>
+              <?=$this->icon('user-favorites', 'icon-link__icon') ?>
+              <span class="result-link-label icon-link__label"><?=$this->transEsc('Add to favorites')?></span>
+            </a><br/>
 
             <?php /* Saved lists */ ?>
             <div class="savedLists alert alert-info hidden">

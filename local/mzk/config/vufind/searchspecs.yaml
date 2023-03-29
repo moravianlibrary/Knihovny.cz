@@ -568,22 +568,6 @@ adv_search_isbn_issn_ismn:
       - [and, 50]
   FilterQuery: "*:* NOT record_format:library"
 
-adv_search_call_number:
-  Dismaxfields:
-    - callNumber_search_txt_mv
-  DismaxParams:
-    - [bq, "inspiration:top_results^1"]
-    - [bf, "if(exists(merged_records_boolean),10000,0)" ]
-    - [bq, "author_exact:\"@query\"^20000"]
-    - [bq, "title_exact:\"@query\"^10000"]
-    - [bf, ord(publishDateSort)^1]
-  DismaxHandler: edismax
-  QueryFields:
-    callNumber_search_txt_mv:
-      - [onephrase, 100]
-      - [and, 50]
-  FilterQuery: "*:* NOT record_format:library"
-
 adv_search_publisher:
   Dismaxfields:
     - publisher_search_txt_mv
@@ -726,4 +710,52 @@ adv_search_monographic_series:
   QueryFields:
     monographic_series_txt_mv:
       - [onephrase, 1]
+  FilterQuery: "*:* NOT record_format:library"
+
+adv_search_barcodes:
+  ChildrenQuery: true
+  CustomMunge:
+    removeSpaces:
+      - [preg_replace, '/\W+/', " "]
+  QueryFields:
+    barcodes:
+      - [removeSpaces, ~]
+  FilterQuery: "*:* NOT record_format:library"
+
+adv_search_sysno:
+  ChildrenQuery: true
+  CustomMunge:
+    addBases:
+      - [preg_replace, "/(.+)/", '("mzk.MZK01-$1" OR "mzk.MZK03-$1")']
+  QueryFields:
+    id:
+      - [addBases, ~]
+  FilterQuery: "*:* NOT record_format:library"
+
+adv_search_call_number:
+  ChildrenQuery: true
+  CustomMunge:
+    location_fuzzy:
+      - [uppercase]
+      - [preg_replace, '/[\s]+/m', ""]
+      - [preg_replace, '/\*/m', ""]
+      - [append, "* "]
+  QueryFields:
+    local_callnumber_str_mv:
+      - [onephrase, 1000]
+      - [location_fuzzy, ~]
+  FilterQuery: "*:* NOT record_format:library"
+
+adv_search_location:
+  ChildrenQuery: true
+  CustomMunge:
+    withPrefix:
+      - [preg_replace, "/['|\"]/m", ""]
+      - [preg_replace, "/[\\-\\/()*]/m", " "]
+      - [preg_replace, "/\\s+$/m", ""]
+      - [preg_replace, "/(.+)/", "{!complexphrase inOrder=true df=local_location_txt_mv v='\"$1*\"'}"]
+  QueryFields:
+    local_location_txt_mv:
+      - [onephrase, 1000]
+      - [withPrefix, ~]
   FilterQuery: "*:* NOT record_format:library"

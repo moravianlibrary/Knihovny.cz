@@ -25,17 +25,17 @@ $isBook = $record->isTypeBook();
 $isPeriodical = $record->isTypePeriodical();
 
 if ($isArticle) {
-  $title = $this->translate('Ziskej::title_edd_article');
+  $title = $this->translate('ZiskejEdd::title_article');
 } elseif ($isSelection) {
   if ($isBook) {
-    $title = $this->translate('Ziskej::title_edd_selection_book');
+    $title = $this->translate('ZiskejEdd::title_selection_book');
   } elseif ($isPeriodical) {
-    $title = $this->translate('Ziskej::title_edd_selection_periodical');
+    $title = $this->translate('ZiskejEdd::title_selection_periodical');
   } else {
-    $title = $this->translate('Ziskej::title_edd_undefined');
+    $title = $this->translate('ZiskejEdd::title_undefined');
   }
 } else {
-  $title = $this->translate('Ziskej::title_edd_undefined');
+  $title = $this->translate('ZiskejEdd::title_undefined');
 }
 
 $this->headTitle($title);
@@ -62,25 +62,25 @@ $this->headTitle($title);
       <div class="row">
         <div class="col-xs-12">
           <fieldset>
-            <h4><?=$this->transEsc("Ziskej::fieldset_label_user")?></h4>
+            <h4><?=$this->transEsc("ZiskejEdd::fieldset_label_user")?></h4>
             <div class="form-group required">
-              <label for="fullname"><?=$this->transEsc("Ziskej::label_fullname")?>:*</label>
+              <label for="fullname"><?=$this->transEsc("ZiskejEdd::label_fullname")?>:*</label>
               <?php $fullName = $this->escapeHtml($patron['firstname']) . ' ' . $this->escapeHtml($patron['lastname']) ?>
               <input type="text" name="fullname" id="fullname" value="<?=$fullName?>" class="form-control" readonly required>
             </div>
             <div class="form-group required">
-              <label for="email"><?=$this->transEsc("Ziskej::label_email")?>:*</label>
+              <label for="email"><?=$this->transEsc("ZiskejEdd::label_email")?>:*</label>
               <input type="email" name="email" id="email" value="<?=!empty($ziskejReader) ? $ziskejReader->getEmail() : (!empty($patron['email']) ? $patron['email'] : '')?>" class="form-control" required>
-              <span class="help-block"><?=$this->transEsc("Ziskej::help_email")?></span>
+              <span class="help-block"><?=$this->transEsc("ZiskejEdd::help_email")?></span>
             </div>
           </fieldset>
           <fieldset>
-            <h4><?=$this->transEsc("Ziskej::fieldset_label_data")?></h4>
+            <h4><?=$this->transEsc("ZiskejEdd::fieldset_label_data")?></h4>
             <div class="row">
               <?php if ($isArticle): ?>
                 <div class="col-sm-12">
                   <div class="form-group required">
-                    <label for="doc_title"><?=$this->transEsc("Ziskej::label_edd_article_doc_title")?>:*</label>
+                    <label for="doc_title"><?=$this->transEsc("ZiskejEdd::label_article_doc_title")?>:*</label>
                     <input type="text" name="doc_title" id="doc_title" value="<?=$this->escapeHtml($record->getTitle())?>" class="form-control" <?php if (!empty($record->getTitle())): ?>readonly<?php endif; ?> required>
                   </div>
                 </div>
@@ -88,7 +88,7 @@ $this->headTitle($title);
               <?php if ($isSelection && $isPeriodical): ?>
                 <div class="col-sm-12">
                   <div class="form-group required">
-                    <label for="doc_title"><?=$this->transEsc("Ziskej::label_edd_selection_periodical_doc_title")?>:*</label>
+                    <label for="doc_title"><?=$this->transEsc("ZiskejEdd::label_selection_periodical_doc_title")?>:*</label>
                     <input type="text" name="doc_title" id="doc_title" value="" class="form-control" required>
                   </div>
                 </div>
@@ -96,7 +96,7 @@ $this->headTitle($title);
               <?php if ($isSelection && $isBook): ?>
                 <div class="col-sm-12">
                   <div class="form-group required">
-                    <label for="doc_title"><?=$this->transEsc("Ziskej::label_edd_selection_doc_title")?>:*</label>
+                    <label for="doc_title"><?=$this->transEsc("ZiskejEdd::label_selection_doc_title")?>:*</label>
                     <input type="text" name="doc_title" id="doc_title" value="" class="form-control" required>
                   </div>
                 </div>
@@ -104,7 +104,7 @@ $this->headTitle($title);
               <?php if ($isArticle): ?>
                 <div class="col-sm-12">
                   <div class="form-group">
-                    <label for="doc_author"><?=$this->transEsc("Ziskej::label_doc_author")?>:</label>
+                    <label for="doc_author"><?=$this->transEsc("ZiskejEdd::label_doc_author")?>:</label>
                     <input type="text" name="doc_author" id="doc_author" value="<?=$record->getPrimaryAuthorsString()?>" class="form-control" <?php if (!empty($record->getPrimaryAuthorsString())): ?>readonly<?php endif; ?>>
                   </div>
                 </div>
@@ -112,7 +112,7 @@ $this->headTitle($title);
               <?php if ($isSelection && $isPeriodical): ?>
                 <div class="col-sm-12">
                   <div class="form-group">
-                    <label for="doc_author"><?=$this->transEsc("Ziskej::label_periodical_doc_author")?>:</label>
+                    <label for="doc_author"><?=$this->transEsc("ZiskejEdd::label_periodical_doc_author")?>:</label>
                     <input type="text" name="doc_author" id="doc_author" value="<?=$record->getPrimaryAuthorsString()?>" class="form-control" <?php if (!empty($record->getPrimaryAuthorsString())): ?>readonly<?php endif; ?>>
                   </div>
                 </div>
@@ -120,7 +120,7 @@ $this->headTitle($title);
               <?php if ($isSelection && $isPeriodical): ?>
                 <div class="col-sm-6">
                   <div class="form-group required">
-                    <label for="doc_number_year"><?=$this->transEsc("Ziskej::label_doc_number_year")?>:*</label>
+                    <label for="doc_number_year"><?=$this->transEsc("ZiskejEdd::label_doc_number_year")?>:*</label>
                     <input type="text" name="doc_number_year" id="doc_number_year" value="" class="form-control" required>
                   </div>
                 </div>
@@ -128,7 +128,7 @@ $this->headTitle($title);
               <?php if ($isSelection && $isPeriodical): ?>
                 <div class="col-sm-6">
                   <div class="form-group">
-                    <label for="doc_number_pyear"><?=$this->transEsc("Ziskej::label_doc_number_pyear")?>:</label>
+                    <label for="doc_number_pyear"><?=$this->transEsc("ZiskejEdd::label_doc_number_pyear")?>:</label>
                     <input type="text" name="doc_number_pyear" id="doc_number_pyear" value="" class="form-control">
                   </div>
                 </div>
@@ -136,7 +136,7 @@ $this->headTitle($title);
               <?php if ($isSelection && $isPeriodical): ?>
                 <div class="col-sm-6">
                   <div class="form-group required">
-                    <label for="doc_number_pnumber"><?=$this->transEsc("Ziskej::label_doc_number_pnumber")?>:*</label>
+                    <label for="doc_number_pnumber"><?=$this->transEsc("ZiskejEdd::label_doc_number_pnumber")?>:*</label>
                     <input type="text" name="doc_number_pnumber" id="doc_number_pnumber" value="" class="form-control" required>
                   </div>
                 </div>
@@ -144,7 +144,7 @@ $this->headTitle($title);
               <?php if ($isSelection && $isPeriodical): ?>
                 <div class="col-sm-6">
                   <div class="form-group">
-                    <label for="doc_volume"><?=$this->transEsc("Ziskej::label_doc_volume")?>:</label>
+                    <label for="doc_volume"><?=$this->transEsc("ZiskejEdd::label_doc_volume")?>:</label>
                     <input type="text" name="doc_volume" id="doc_volume" value="" class="form-control">
                   </div>
                 </div>
@@ -152,7 +152,7 @@ $this->headTitle($title);
               <?php if ($isArticle): ?>
                 <div class="col-sm-3">
                   <div class="form-group">
-                    <label for="pages_from"><?=$this->transEsc("Ziskej::label_pages_from")?>:</label>
+                    <label for="pages_from"><?=$this->transEsc("ZiskejEdd::label_pages_from")?>:</label>
                     <input type="number" name="pages_from" id="pages_from" value="<?=$record->parsePageStartFromField773()?>" class="form-control" min="1" step="1">
                   </div>
                 </div>
@@ -160,7 +160,7 @@ $this->headTitle($title);
               <?php if ($isArticle): ?>
                 <div class="col-sm-3">
                   <div class="form-group">
-                    <label for="pages_to"><?=$this->transEsc("Ziskej::label_pages_to")?>:</label>
+                    <label for="pages_to"><?=$this->transEsc("ZiskejEdd::label_pages_to")?>:</label>
                     <input type="number" name="pages_to" id="pages_to" value="<?=$record->parsePageEndFromField773()?>" class="form-control" min="1" step="1">
                   </div>
                 </div>
@@ -168,7 +168,7 @@ $this->headTitle($title);
               <?php if ($isSelection): ?>
                 <div class="col-sm-3">
                   <div class="form-group">
-                    <label for="pages_from"><?=$this->transEsc("Ziskej::label_pages_from")?>:</label>
+                    <label for="pages_from"><?=$this->transEsc("ZiskejEdd::label_pages_from")?>:</label>
                     <input type="number" name="pages_from" id="pages_from" value="" class="form-control" min="1" step="1">
                   </div>
                 </div>
@@ -176,7 +176,7 @@ $this->headTitle($title);
               <?php if ($isSelection): ?>
                 <div class="col-sm-3">
                   <div class="form-group">
-                    <label for="pages_to"><?=$this->transEsc("Ziskej::label_pages_to")?>:</label>
+                    <label for="pages_to"><?=$this->transEsc("ZiskejEdd::label_pages_to")?>:</label>
                     <input type="number" name="pages_to" id="pages_to" value="" class="form-control" min="1" step="1">
                   </div>
                 </div>
@@ -184,7 +184,7 @@ $this->headTitle($title);
               <div class="col-sm-3">
                 <div class="form-group">
                   <label>&nbsp;</label>
-                  <button type="button" class="btn btn-info" id="checkZiskejEddFee"><i class="fa fa-fw fa-refresh" ></i> <?=$this->transEsc("Ziskej::btn_count_fee")?></button>
+                  <button type="button" class="btn btn-info" id="checkZiskejEddFee"><i class="fa fa-fw fa-refresh" ></i> <?=$this->transEsc("ZiskejEdd::btn_count_fee")?></button>
                 </div>
               </div>
             </div>
@@ -193,18 +193,18 @@ $this->headTitle($title);
                 <div class="alert alert-info" id="ziskejEddFeeAlertPrice">
                 </div>
                 <div class="alert alert-danger" id="ziskejEddFeeAlertError">
-                  <?=$this->transEsc('Ziskej::error_get_edd_fee') ?>
+                  <?=$this->transEsc('ZiskejEdd::error_get_fee') ?>
                 </div>
               </div>
             </div>
           </fieldset>
           <fieldset>
-            <h4><?=$this->transEsc("Ziskej::fieldset_label_publication")?></h4>
+            <h4><?=$this->transEsc("ZiskejEdd::fieldset_label_publication")?></h4>
             <div class="row">
               <?php if ($isArticle): ?>
                 <div class="col-sm-12">
                   <div class="form-group required">
-                    <label for="doc_title_in"><?=$this->transEsc("Ziskej::label_edd_article_doc_title_in")?>:*</label>
+                    <label for="doc_title_in"><?=$this->transEsc("ZiskejEdd::label_article_doc_title_in")?>:*</label>
                     <input type="text" name="doc_title_in" id="doc_title_in" value="<?=$this->escapeHtml($record->getSourceTitleFacet())?>" class="form-control" <?php if (!empty($record->getSourceTitleFacet())): ?>readonly<?php endif; ?> required>
                   </div>
                 </div>
@@ -212,7 +212,7 @@ $this->headTitle($title);
               <?php if ($isSelection): ?>
                 <div class="col-sm-12">
                   <div class="form-group required">
-                    <label for="doc_title_in"><?=$this->transEsc("Ziskej::label_edd_selection_doc_title_in")?>:*</label>
+                    <label for="doc_title_in"><?=$this->transEsc("ZiskejEdd::label_selection_doc_title_in")?>:*</label>
                     <input type="text" name="doc_title_in" id="doc_title_in" value="<?=$this->escapeHtml($record->getTitle())?>" class="form-control" <?php if (!empty($record->getTitle())): ?>readonly<?php endif; ?> required>
                   </div>
                 </div>
@@ -220,7 +220,7 @@ $this->headTitle($title);
               <?php if ($isSelection && $isBook): ?>
                 <div class="col-sm-12">
                   <div class="form-group">
-                    <label for="doc_author"><?=$this->transEsc("Ziskej::label_doc_author")?>:</label>
+                    <label for="doc_author"><?=$this->transEsc("ZiskejEdd::label_doc_author")?>:</label>
                     <input type="text" name="doc_author" id="doc_author" value="<?=$record->getPrimaryAuthorsString()?>" class="form-control" <?php if (!empty($record->getPrimaryAuthorsString())): ?>readonly<?php endif; ?>>
                   </div>
                 </div>
@@ -228,7 +228,7 @@ $this->headTitle($title);
               <?php if ($isArticle): ?>
                 <div class="col-sm-6">
                   <div class="form-group">
-                    <label for="doc_issn"><?=$this->transEsc("Ziskej::label_doc_issn")?>:</label>
+                    <label for="doc_issn"><?=$this->transEsc("ZiskejEdd::label_doc_issn")?>:</label>
                     <input type="text" name="doc_issn" id="doc_issn" value="<?=$record->getISSN()?>" class="form-control" <?php if (!empty($record->getISSN())): ?>readonly<?php endif; ?>>
                   </div>
                 </div>
@@ -236,7 +236,7 @@ $this->headTitle($title);
               <?php if ($isArticle): ?>
                 <div class="col-sm-6">
                   <div class="form-group">
-                    <label for="doc_number_year"><?=$this->transEsc("Ziskej::label_doc_number_year")?>:</label>
+                    <label for="doc_number_year"><?=$this->transEsc("ZiskejEdd::label_doc_number_year")?>:</label>
                     <input type="text" name="doc_number_year" id="doc_number_year" value="<?=$record->getYearFromField773()?>" class="form-control" <?php if (!empty($record->getYearFromField773())): ?>readonly<?php endif; ?>>
                   </div>
                 </div>
@@ -244,7 +244,7 @@ $this->headTitle($title);
               <?php if ($isSelection && $isPeriodical): ?>
                 <div class="col-sm-6">
                   <div class="form-group">
-                    <label for="doc_issn"><?=$this->transEsc("Ziskej::label_doc_issn")?>:</label>
+                    <label for="doc_issn"><?=$this->transEsc("ZiskejEdd::label_doc_issn")?>:</label>
                     <input type="text" name="doc_issn" id="doc_issn" value="<?=$record->getISSN()?>" class="form-control" <?php if (!empty($record->getISSN())): ?>readonly<?php endif; ?>>
                   </div>
                 </div>
@@ -252,7 +252,7 @@ $this->headTitle($title);
               <?php if ($isArticle): ?>
                 <div class="col-sm-6">
                   <div class="form-group">
-                    <label for="doc_number_pyear"><?=$this->transEsc("Ziskej::label_doc_number_pyear")?>:</label>
+                    <label for="doc_number_pyear"><?=$this->transEsc("ZiskejEdd::label_doc_number_pyear")?>:</label>
                     <input type="text" name="doc_number_pyear" id="doc_number_pyear" value="<?=$record->getPYearFromField773()?>" class="form-control" <?php if (!empty($record->getPYearFromField773())): ?>readonly<?php endif; ?>>
                   </div>
                 </div>
@@ -260,7 +260,7 @@ $this->headTitle($title);
               <?php if ($isArticle): ?>
                 <div class="col-sm-6">
                   <div class="form-group">
-                    <label for="doc_number_pnumber"><?=$this->transEsc("Ziskej::label_doc_number_pnumber")?>:</label>
+                    <label for="doc_number_pnumber"><?=$this->transEsc("ZiskejEdd::label_doc_number_pnumber")?>:</label>
                     <input type="text" name="doc_number_pnumber" id="doc_number_pnumber" value="<?=$record->getPNumberFromField773()?>" class="form-control" <?php if (!empty($record->getPNumberFromField773())): ?>readonly<?php endif; ?>>
                   </div>
                 </div>
@@ -268,7 +268,7 @@ $this->headTitle($title);
               <?php if ($isSelection && $isBook): ?>
                 <div class="col-sm-6">
                   <div class="form-group">
-                    <label for="doc_volume"><?=$this->transEsc("Ziskej::label_doc_volume")?>:</label>
+                    <label for="doc_volume"><?=$this->transEsc("ZiskejEdd::label_doc_volume")?>:</label>
                     <input type="text" name="doc_volume" id="doc_volume" value="" class="form-control">
                   </div>
                 </div>
@@ -276,7 +276,7 @@ $this->headTitle($title);
               <?php if ($isSelection && $isBook): ?>
                 <div class="col-sm-12">
                   <div class="form-group">
-                    <label for="doc_issuer"><?=$this->transEsc("Ziskej::label_doc_issuer")?>:</label>
+                    <label for="doc_issuer"><?=$this->transEsc("ZiskejEdd::label_doc_issuer")?>:</label>
                     <input type="text" name="doc_issuer" id="doc_issuer" value="<?=$record->getPlaceOfPublicationAndPublishDate()?>" class="form-control" <?php if (!empty($record->getPlaceOfPublicationAndPublishDate())): ?>readonly<?php endif; ?>>
                   </div>
                 </div>
@@ -284,7 +284,7 @@ $this->headTitle($title);
               <?php if ($isSelection && $isBook): ?>
                 <div class="col-sm-6">
                   <div class="form-group">
-                    <label for="doc_isbn"><?=$this->transEsc("Ziskej::label_doc_isbn")?>:</label>
+                    <label for="doc_isbn"><?=$this->transEsc("ZiskejEdd::label_doc_isbn")?>:</label>
                     <input type="text" name="doc_isbn" id="doc_isbn" value="<?=$record->getIsbn()?>" class="form-control" <?php if (!empty($record->getIsbn())): ?>readonly<?php endif; ?>>
                   </div>
                 </div>
@@ -292,11 +292,11 @@ $this->headTitle($title);
             </div>
           </fieldset>
           <fieldset>
-            <h4><?=$this->transEsc("Ziskej::fieldset_label_note")?></h4>
+            <h4><?=$this->transEsc("ZiskejEdd::fieldset_label_note")?></h4>
             <div class="row">
               <div class="col-sm-12">
                 <div class="form-group">
-                  <label for="doc_note"><?=$this->transEsc("Ziskej::label_doc_note")?>:</label>
+                  <label for="doc_note"><?=$this->transEsc("ZiskejEdd::label_doc_note")?>:</label>
                   <textarea name="doc_note" id="doc_note" class="form-control"></textarea>
                 </div>
               </div>
@@ -307,28 +307,28 @@ $this->headTitle($title);
               <div class="checkbox">
                 <label>
                   <input type="checkbox" name="is_conditions" required>
-                  <?=$this->translate('Ziskej::checbox_is_conditions')?>
+                  <?=$this->translate('ZiskejEdd::checbox_is_conditions')?>
                 </label>
               </div>
               <div class="checkbox">
                 <label>
                   <input type="checkbox" name="is_price" required>
-                  <?=$this->translate('Ziskej::checbox_is_price')?>
+                  <?=$this->translate('ZiskejEdd::checbox_is_price')?>
                 </label>
               </div>
               <p class="text-center">
-                <?=$this->translate('Ziskej::text_info_conditions')?>
+                <?=$this->translate('ZiskejEdd::text_info_conditions')?>
               </p>
 
               <div class="alert alert-warning text-center">
-                <?=$this->translate('Ziskej::info_edd_fee')?>
+                <?=$this->translate('ZiskejEdd::info_fee')?>
               </div>
 
               <div class="text-center">
                 <p id="ziskejEddFeeInfo"></p>
               </div>
               <div class="text-center">
-                <input id="submit" type="submit" name="submit" class="btn btn-primary" value="<?=$this->translate('Ziskej::btn_finish_order')?>">
+                <input id="submit" type="submit" name="submit" class="btn btn-primary" value="<?=$this->translate('ZiskejEdd::btn_finish_order')?>">
               </div>
             </div>
           </div>

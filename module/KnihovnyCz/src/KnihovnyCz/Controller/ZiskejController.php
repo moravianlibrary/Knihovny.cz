@@ -54,7 +54,7 @@ class ZiskejController extends AbstractBase
         $ticketId = $this->params()->fromRoute('ticketId');
 
         return $this->redirect()->toRoute(
-            'myresearch-ziskej-ticket',
+            'myresearch-ziskej-mvs-ticket',
             [
                 'eppnDomain' => $eppnDomain,
                 'ticketId' => $ticketId,

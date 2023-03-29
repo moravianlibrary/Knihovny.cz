@@ -108,6 +108,10 @@ class InspirationController extends \VuFind\Controller\AbstractBase
             return $this->redirect()->toRoute('inspiration');
         }
         $listData = $this->getListData($list);
+        if (empty($listData)) {
+            $this->getResponse()->setStatusCode(404);
+            return $this->createViewModel();
+        }
         return $this->createViewModel($listData);
     }
 
@@ -122,13 +126,16 @@ class InspirationController extends \VuFind\Controller\AbstractBase
     {
         $blockManager = $this->serviceLocator
             ->get(\VuFind\ContentBlock\PluginManager::class);
-        [$listId, ] = explode('-', $listId);
+        [$userListId, ] = explode('-', $listId);
         $listType = 'UserList';
-        if (!is_numeric($listId)) {
+        if (!is_numeric($userListId)) {
             $tableManager
                 = $this->serviceLocator->get(\VuFind\Db\Table\PluginManager::class);
             $listTable = $tableManager->get('UserList');
             $listRow = $listTable->select(['old_name' => $listId])->current();
+            if (empty($listRow)) {
+                return [];
+            }
             $listId = $listRow->id;
         }
         $contentBlock = $blockManager->get($listType);

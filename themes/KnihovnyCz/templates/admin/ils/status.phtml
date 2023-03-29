@@ -1,0 +1,68 @@
+<?php
+// Set page title.
+$this->headTitle($this->translate('VuFind Administration - ILS drivers status'));
+?>
+<div class="<?=$this->layoutClass('mainbody')?>">
+  <h2><?=$this->translate('ILS status');?></h2>
+  <table class="table">
+    <thead>
+    <tr>
+        <th><?=$this->translate('ILS driver');?></th>
+        <th><?=$this->translate('Library name');?></th>
+        <th><?=$this->translate('Status');?></th>
+      </tr>
+    </thead>
+    <tbody>
+    <?php foreach ($this->drivers as $source => $driver): ?>
+      <tr class="data-row">
+        <td class="source"><?=$this->escapeHtml($source);?></td>
+        <td class="name"><?=$this->transEsc('Source::' . $source);?></td>
+        <td class="status" data-source="<?=$this->escapeHtmlAttr($source)?>">
+          <?=$this->icon('spinner', 'fa-spin spinner');?>
+          <span class="label"></span>
+          <br>
+          <span class="records"></span>
+        </td>
+    <?php endforeach; ?>
+    </tbody>
+  </table>
+</div>
+
+<div class="<?=$this->layoutClass('sidebar')?>">
+  <?=$this->render("admin/menu.phtml")?>
+</div>
+
+<?php
+$JS = <<<JS
+$(document).ready(function statusesTableHandler(){
+    $('tr.data-row').each(function loadStatuses() {
+      const row = $(this);
+      const status = $(this).find('.status');
+      const label = status.find('span.label');
+      const source = status.data('source');
+      $.getJSON('/AJAX/JSON', {method: 'getIlsDriverStatus', source: source}, function (data) {
+        data = data.data;
+        const records = data.testedRecords;
+        label.html(data.score + '/' + records.length);
+        if (data.OK) {
+          label.addClass('label-success');
+        } else {
+          label.addClass('label-danger');
+        }
+        if (data.OK && records.length > 0 && records.length == data.score) {
+          row.hide();
+        }
+        if (records.length > 0) {
+            let i = 0;
+            while (i < records.length) {
+                status.parent().find('.records').append('<a href="/Record/' + records[i] + '" target="_blank">' + records[i] + '</a><br />');
+                i++;
+            }
+        }
+        status.find('.spinner').remove();
+      });
+    });
+  });
+JS;
+?>
+<?=$this->inlineScript(\Laminas\View\Helper\HeadScript::SCRIPT, $JS, 'SET')?>

@@ -96,31 +96,6 @@ class RecordController extends \VuFind\Controller\RecordController
     }
 
     /**
-     * Redirect to local record
-     *
-     * @return mixed
-     */
-    public function redirectToLocalRecordAction()
-    {
-        $params = new \KnihovnyCz\Search\ParamBag();
-        $record = $this->loadRecord($params);
-        $recordId = $record->getUniqueID();
-        $records = $record->tryMethod('getDeduplicatedRecords', [], []);
-        if (!empty($records)) {
-            $institution = $this->params()->fromQuery('institution');
-            $first = reset($records);
-            if ($institution !== null && isset($records[$institution])) {
-                $first = $records[$institution];
-            }
-            $recordId = reset($first);
-        }
-        return $this->redirect()->toRoute(
-            'record',
-            ['id' => $recordId]
-        );
-    }
-
-    /**
      * Short loan action.
      *
      * @return \Laminas\View\Model\ViewModel

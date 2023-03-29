@@ -114,7 +114,7 @@ $config = [
                      ],
                  ],
              ],
-             'myresearch-ziskej-home' => [
+             'myresearch-ziskej-mvs-home' => [
                  'type' => \Laminas\Router\Http\Segment::class,
                  'options' => [
                      'route' => '/MyResearch/Ziskej',
@@ -134,7 +134,7 @@ $config = [
                      ],
                  ],
              ],
-             'myresearch-ziskej-ticket' => [
+             'myresearch-ziskej-mvs-ticket' => [
                  'type' => \Laminas\Router\Http\Segment::class,
                  'options' => [
                      'route' => '/MyResearch/ZiskejTicket/[:eppnDomain]/[:ticketId]',
@@ -162,7 +162,7 @@ $config = [
                      ],
                  ],
              ],
-             'myresearch-ziskej-ticket-cancel' => [
+             'myresearch-ziskej-mvs-ticket-cancel' => [
                  'type' => \Laminas\Router\Http\Segment::class,
                  'options' => [
                      'route' => '/MyResearch/ZiskejTicket/[:eppnDomain]/[:ticketId]/Cancel',
@@ -190,7 +190,7 @@ $config = [
                      ],
                  ],
              ],
-             'myresearch-ziskej-message-post' => [
+             'myresearch-ziskej-mvs-message-post' => [
                  'type' => \Laminas\Router\Http\Segment::class,
                  'options' => [
                      'route' => '/MyResearch/ZiskejTicket/[:eppnDomain]/[:ticketId]/Message',
@@ -218,7 +218,7 @@ $config = [
                      ],
                  ],
              ],
-             'ziskej-order' => [
+             'ziskej-mvs-order' => [
                  'type' => \Laminas\Router\Http\Segment::class,
                  'options' => [
                      'route' => '/Record/[:id]/ZiskejOrder/:eppnDomain',
@@ -246,7 +246,7 @@ $config = [
                      ],
                  ],
              ],
-             'ziskej-order-post' => [
+             'ziskej-mvs-order-post' => [
                  'type' => \Laminas\Router\Http\Segment::class,
                  'options' => [
                      'route' => '/Record/[:id]/ZiskejOrderPost',
@@ -286,7 +286,7 @@ $config = [
                      ],
                  ],
              ],
-             'ziskej-order-finished' => [
+             'ziskej-mvs-order-finished' => [
                  'type' => \Laminas\Router\Http\Segment::class,
                  'options' => [
                      'route' => '/Ziskej/Finished/:eppnDomain/:ticketId',
@@ -300,31 +300,28 @@ $config = [
                      ],
                  ],
              ],
-             'record-redirecttolocalrecord' => [
-                 'type' => \Laminas\Router\Http\Segment::class,
-                 'options' => [
-                     'route' => '/Record/[:id]/RedirectToLocalRecord',
-                     'constraints' => [
-                         'id' => '.*',
-                     ],
-                     'defaults' => [
-                         'controller' => 'Record',
-                         'action' => 'RedirectToLocalRecord'
-                     ],
-                 ],
-             ],
              'embedded-libraries' => [
                  'type' => \Laminas\Router\Http\Segment::class,
                  'options' => [
-                     'route' => '/Embedded/Libraries/[:region]/[:district]',
+                     'route' => '/Embedded/Libraries[/:region[/:district]]',
                      'constraints' => [
-                         'region' => '.*',
-                         'district' => '.*',
+                         'region' => '[^\/]+',
+                         'district' => '[^\/]+',
                      ],
                      'defaults' => [
                          'controller' => 'Embedded',
                          'action' => 'Libraries'
                      ],
+                 ],
+             ],
+             'adminils' => [
+                 'type' => 'Laminas\Router\Http\Segment',
+                 'options' => [
+                     'route'    => '/Admin/Ils/Status',
+                     'defaults' => [
+                         'controller' => 'AdminIls',
+                         'action'     => 'Status',
+                     ]
                  ],
              ],
          ],
@@ -346,6 +343,7 @@ $config = [
             \KnihovnyCz\Controller\ContentController::class => \KnihovnyCz\Controller\ContentControllerFactory::class,
             \KnihovnyCz\Controller\CartController::class => \VuFind\Controller\CartControllerFactory::class,
             \KnihovnyCz\Controller\EmbeddedController::class => \VuFind\Controller\AbstractBaseFactory::class,
+            \KnihovnyCz\Controller\AdminIlsController::class => \VuFind\Controller\AbstractBaseFactory::class,
         ],
         'aliases' => [
             'Inspiration' => \KnihovnyCz\Controller\InspirationController::class,
@@ -363,6 +361,7 @@ $config = [
             \VuFind\Controller\ContentController::class => \KnihovnyCz\Controller\ContentController::class,
             \VuFind\Controller\CartController::class => \KnihovnyCz\Controller\CartController::class,
             'Embedded' => \KnihovnyCz\Controller\EmbeddedController::class,
+            'AdminIls' => \KnihovnyCz\Controller\AdminIlsController::class,
         ],
     ],
     'controller_plugins' => [
@@ -548,6 +547,7 @@ $config = [
                     \VuFind\AjaxHandler\GetUserFines::class => \KnihovnyCz\AjaxHandler\GetUserFinesFactory::class,
                     \KnihovnyCz\AjaxHandler\GetUserProfile::class => \KnihovnyCz\AjaxHandler\AbstractIlsAndUserActionFactory::class,
                     \KnihovnyCz\AjaxHandler\GetZiskejEddFee::class => \KnihovnyCz\AjaxHandler\GetZiskejEddFeeFactory::class,
+                    \KnihovnyCz\AjaxHandler\GetIlsDriverStatus::class => \KnihovnyCz\AjaxHandler\GetIlsDriverStatusFactory::class,
                 ],
                 'aliases' => [
                     'edd' => \KnihovnyCz\AjaxHandler\Edd::class,
@@ -561,6 +561,7 @@ $config = [
                     'saveInstitutionFilter' => \KnihovnyCz\AjaxHandler\SaveInstitutionFilter::class,
                     'getUserProfile' => \KnihovnyCz\AjaxHandler\GetUserProfile::class,
                     'getZiskejEddFee' => \KnihovnyCz\AjaxHandler\GetZiskejEddFee::class,
+                    'getIlsDriverStatus' => \KnihovnyCz\AjaxHandler\GetIlsDriverStatus::class,
                 ],
             ],
             'related' => [
@@ -702,7 +703,34 @@ $config = [
             \KnihovnyCz\Service\ZboziLinkService::class,
             \KnihovnyCz\ILS\Logic\Holdings::class,
             \KnihovnyCz\Geo\Parser::class,
-        ]
+            \KnihovnyCz\HeadersListener::class => \KnihovnyCz\HeadersListener::class,
+        ],
+    ],
+    'listeners' => [
+        \KnihovnyCz\HeadersListener::class,
+    ],
+    // Config http:
+    'http' => [
+        // Config http headers:
+        'headers' => [
+            // all routes:
+            '*' => [
+                'Permissions-Policy' => '',
+                'Referrer-Policy' => 'same-origin',
+                'Strict-Transport-Security' => 'max-age=31536000; includeSubDomains; preload',
+                'X-Content-Type-Options' => 'nosniff',
+                'X-Frame-Options' => 'deny',
+                'X-Permitted-Cross-Domain-Policies' => 'none',
+                'X-XSS-Protection' => '1; mode=block',
+            ],
+            // specific routes:
+            'embedded-libraries' => [
+                'X-Frame-Options' => 'allow',
+            ],
+            'search-embedded' => [
+                'X-Frame-Options' => 'allow',
+            ],
+        ],
     ],
 ];
 

@@ -464,3 +464,22 @@ INSERT INTO `inst_configs` (`source_id`, `key_id`, `value`)
 
 UPDATE `system` SET `value` = '117' WHERE `key`='DB_VERSION';
 
+-- #809
+ALTER TABLE `user_list`
+DROP FOREIGN KEY `user_list_ibfk_4`,
+ADD FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+
+UPDATE `system` SET `value` = '118' WHERE `key`='DB_VERSION';
+
+-- #806
+ALTER TABLE `search` CHANGE `saved` `saved` tinyint(1) NOT NULL DEFAULT '0';
+ALTER TABLE `user_list` CHANGE `public` `public` tinyint(1) NOT NULL DEFAULT '0';
+
+UPDATE `system` SET `value` = '119' WHERE `key`='DB_VERSION';
+
+-- #752
+DROP TABLE `widget`;
+DROP TABLE `widget_categories`;
+DROP TABLE `widget_content`;
+
+UPDATE `system` SET `value` = '120' WHERE `key`='DB_VERSION';
