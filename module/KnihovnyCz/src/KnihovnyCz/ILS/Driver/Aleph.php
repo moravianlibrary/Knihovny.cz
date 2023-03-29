@@ -401,6 +401,7 @@ class Aleph extends AlephBase implements TranslatorAwareInterface
             $hold_item_id = (string)$z37->{'translate-change-active-library'}
                 . (string)$z37->{'z37-doc-number'}
                 . (string)$z37->{'z37-item-sequence'};
+            $cancel_item_id = substr($href[0], strrpos($href[0], '/') + 1);
             // remove superfluous spaces in status
             $status = preg_replace("/\s[\s]+/", " ", $item->status);
             $position = null;
@@ -423,6 +424,7 @@ class Aleph extends AlephBase implements TranslatorAwareInterface
                 'item_id' => $item_id,
                 'adm_id'   => $adm_id,
                 'hold_item_id' => $hold_item_id,
+                'cancel_item_id' => $cancel_item_id,
                 'location' => $location,
                 'title' => $title,
                 'author' => $author,
@@ -439,6 +441,25 @@ class Aleph extends AlephBase implements TranslatorAwareInterface
             ];
         }
         return $holdList;
+    }
+
+    /**
+     * Get Cancel Hold Details
+     *
+     * @param array $holdDetails A single hold array from getMyHolds
+     * @param array $patron      Patron information from patronLogin
+     *
+     * @return string Data for use in a form field
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    public function getCancelHoldDetails($holdDetails, $patron = [])
+    {
+        if ($holdDetails['delete']) {
+            return $holdDetails['cancel_item_id'];
+        } else {
+            return null;
+        }
     }
 
     /**
