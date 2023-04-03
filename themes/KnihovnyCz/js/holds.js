@@ -1,5 +1,5 @@
 /* exported loadHolds */
-/* global loadCovers */
+/* global loadCovers, VuFind, hideLibraryCardContent, showLibraryCardContent */
 function loadHolds(element) {
   loadCovers();
 
@@ -54,18 +54,22 @@ function loadHolds(element) {
 
   $(element).find("form").submit(function onSubmit(event) {
     event.preventDefault();
+    hideLibraryCardContent(element);
     var button = $(document.activeElement);
     var form = $(this);
     var url = $(element).data('action');
     var data = form.serialize() + '&' + button.attr('id') + '=' + button.val()
       + '&cardId=' + $(element).data('card-id');
+    var cache = $(this).attr("data-clear-account-cache");
     $.ajax({
       type: "POST",
       url: url,
       data: data,
       success: function onSuccess(content) {
-        $(element).html(content);
-        loadHolds(element);
+        showLibraryCardContent(element, content, function onComplete(){
+          loadHolds(element);
+          VuFind.account.notify(cache, 'undefined');
+        });
       }
     });
   });
