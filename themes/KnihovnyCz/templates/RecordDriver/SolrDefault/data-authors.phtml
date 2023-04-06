@@ -46,4 +46,8 @@ $formattedAuthors = [];
     ?>
   <?php endforeach; ?>
 <?php endif; ?>
-<?=implode(', ', $formattedAuthors)?>
+<?php $separator = '<br/>'; ?>
+<?php if (count($formattedAuthors) > 3): ?>
+  <?php $separator = ', '; ?>
+<?php endif; ?>
+<?=implode($separator, $formattedAuthors)?>
