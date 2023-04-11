@@ -30,7 +30,6 @@
       var form = $(this);
       var page = form.find('input[name="page"]').val();
       var url = $(element).data('action') + '?page=' + page;
-      console.log(url);
       var data = form.serialize() + '&' + button.attr('id') + '=' + button.val()
         + '&cardId=' + $(element).data('card-id');
       $.ajax({
