@@ -163,7 +163,7 @@ JS;
         <?php if (!$user): ?>
       <div class="alert alert-info">
         <?php $loginUrl = $this->escapeHtmlAttr($this->recordLinker()->getTabUrl($this->driver, 'Holdings', ['login' => 'true', 'catalogLogin' => 'true'])); ?>
-        <?=$this->translate("hold_login", ['%%url%%' => $loginUrl, '%%attributes%%' => 'data-lightbox'])?>
+        <?=$this->translate("hold_login", ['%%url%%' => $loginUrl])?>
       </div>
         <?php elseif (!$user->cat_username): ?>
       <div class="alert alert-info">
