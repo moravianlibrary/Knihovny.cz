@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 
 /**
  * Class Holds
@@ -27,6 +26,9 @@ declare(strict_types=1);
  * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://knihovny.cz Main Page
  */
+
+declare(strict_types=1);
+
 namespace KnihovnyCz\ILS\Logic;
 
 /**
@@ -59,7 +61,8 @@ class Holds extends \VuFind\ILS\Logic\Holds
                 if ($show) {
                     if ($holdConfig) {
                         // Is this copy holdable / linkable
-                        if (!$requestsBlocked
+                        if (
+                            !$requestsBlocked
                             && ($copy['addLink'] ?? false)
                             && ($copy['is_holdable'] ?? true)
                         ) {

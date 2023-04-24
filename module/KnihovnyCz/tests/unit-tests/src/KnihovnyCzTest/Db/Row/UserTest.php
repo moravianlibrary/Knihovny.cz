@@ -1,12 +1,11 @@
 <?php
-declare(strict_types=1);
 
 /**
- * Class User
+ * Class UserTest
  *
- * PHP version 7
+ * PHP version 8
  *
- * Copyright (C) Moravian Library 2019.
+ * Copyright (C) Moravian Library 2023.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -21,16 +20,28 @@ declare(strict_types=1);
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  *
- * @category VuFind
- * @package  KnihovnyCz\Db\Row
- * @author   Vaclav Rosecky <vaclav.rosecky@mzk.cz>
+ * @category Knihovny.cz
+ * @package  Tests
+ * @author   Josef Moravec <moravec@mzk.cz>
  * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://knihovny.cz Main Page
  */
+
+declare(strict_types=1);
+
 namespace KnihovnyCzTest\Db\Table;
 
 use KnihovnyCz\Db\Row\User;
 
+/**
+ * Class UserTest
+ *
+ * @category Knihovny.cz
+ * @package  Tests
+ * @author   Josef Moravec <moravec@mzk.cz>
+ * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
+ * @link     https://knihovny.cz Main Page
+ */
 class UserTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -72,12 +83,13 @@ class UserTest extends \PHPUnit\Framework\TestCase
     /**
      * Test hasPermission method
      *
-     * @dataProvider hasPermissionProvider
      * @param User   $user       User
      * @param string $permission Permission
      * @param bool   $expected   Expected result
      *
      * @return void
+     *
+     * @dataProvider hasPermissionProvider
      */
     public function testHasPermission(User $user, string $permission, bool $expected): void
     {
@@ -87,7 +99,7 @@ class UserTest extends \PHPUnit\Framework\TestCase
     /**
      * Mock user
      *
-     * @param array $params
+     * @param array $params User properties
      *
      * @return User
      */

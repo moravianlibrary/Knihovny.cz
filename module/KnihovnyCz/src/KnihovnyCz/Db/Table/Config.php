@@ -26,6 +26,7 @@
  * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://knihovny.cz Main Page
  */
+
 namespace KnihovnyCz\Db\Table;
 
 use Laminas\Config\Config as LaminasConfig;
@@ -92,7 +93,7 @@ class Config extends Gateway
                 } else { // We do not have array_key, just leave it on numbers
                     $data[$item->section][$item->item][] = $item->value;
                 }
-                // Type is string:
+            // Type is string:
             } else {
                 $data[$item->section][$item->item] = $item->value;
             }

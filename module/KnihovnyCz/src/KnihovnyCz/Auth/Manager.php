@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Wrapper class for handling logged-in user in session.
  *
@@ -26,6 +27,7 @@
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://vufind.org Main Page
  */
+
 namespace KnihovnyCz\Auth;
 
 use KnihovnyCz\Service\UserSettingsService as Restorer;

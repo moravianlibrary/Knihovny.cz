@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 
 /**
  * Record tab Ziskej Edd
@@ -27,6 +26,9 @@ declare(strict_types=1);
  * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://knihovny.cz Main Page
  */
+
+declare(strict_types=1);
+
 namespace KnihovnyCz\RecordTab;
 
 /**
@@ -40,7 +42,7 @@ namespace KnihovnyCz\RecordTab;
  */
 class ZiskejEdd extends ZiskejBase
 {
-    private \KnihovnyCz\Ziskej\ZiskejEdd $_ziskejEdd;
+    private \KnihovnyCz\Ziskej\ZiskejEdd $ziskejEdd;
 
     /**
      * Constructor
@@ -59,7 +61,7 @@ class ZiskejEdd extends ZiskejBase
         $this->authManager = $authManager;
         $this->ilsDriver = $ilsDriver;
         $this->ziskejApi = $ziskejApi;
-        $this->_ziskejEdd = $ziskejEdd;
+        $this->ziskejEdd = $ziskejEdd;
 
         $this->isZiskejActive = $ziskejEdd->isEnabled();
     }
@@ -96,7 +98,7 @@ class ZiskejEdd extends ZiskejBase
      */
     public function getZiskejEdd(): \KnihovnyCz\Ziskej\ZiskejEdd
     {
-        return $this->_ziskejEdd;
+        return $this->ziskejEdd;
     }
 
     /**

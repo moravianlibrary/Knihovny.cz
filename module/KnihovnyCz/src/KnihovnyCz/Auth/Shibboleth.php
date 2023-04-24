@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Shibboleth authentication module.
  *
@@ -26,6 +27,7 @@
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://vufind.org Main Page
  */
+
 namespace KnihovnyCz\Auth;
 
 use VuFind\Auth\Shibboleth as Base;
@@ -266,7 +268,8 @@ class Shibboleth extends Base
                     '.',
                     $libCard->cat_username
                 )[0];
-                if ($institution == $prefix
+                if (
+                    $institution == $prefix
                     && $eduPersonUniqueId != $libCard->edu_person_unique_id
                 ) {
                     throw new \VuFind\Exception\LibraryCard(
@@ -321,7 +324,8 @@ class Shibboleth extends Base
         }
         $card = $this->getUserCardTable()
             ->getByEduPersonPrincipalName($eppn);
-        if (!isset($card->edu_person_unique_id)
+        if (
+            !isset($card->edu_person_unique_id)
             || $card->edu_person_unique_id == null
         ) {
             return $card;

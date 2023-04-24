@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+
 /**
  * Class RecordDataFormatterFactory
  *
@@ -26,10 +26,15 @@ declare(strict_types=1);
  * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://knihovny.cz Main Page
  */
+
+declare(strict_types=1);
+
 namespace KnihovnyCz\View\Helper\KnihovnyCz;
 
 use Psr\Container\ContainerInterface;
 use VuFind\View\Helper\Root\RecordDataFormatter\SpecBuilder;
+use VuFind\View\Helper\Root\RecordDataFormatterFactory
+as RecordDataFormatterFactoryBase;
 
 /**
  * Class RecordDataFormatterFactory
@@ -40,8 +45,7 @@ use VuFind\View\Helper\Root\RecordDataFormatter\SpecBuilder;
  * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://knihovny.cz Main Page
  */
-class RecordDataFormatterFactory
-    extends \VuFind\View\Helper\Root\RecordDataFormatterFactory
+class RecordDataFormatterFactory extends RecordDataFormatterFactoryBase
 {
     /**
      * Create the helper.

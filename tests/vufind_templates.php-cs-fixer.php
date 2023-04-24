@@ -1,17 +1,17 @@
 <?php
 
 $finder = new PhpCsFixer\Finder();
-$finder->in(__DIR__ . '/../module');
+$finder->in(__DIR__ . '/../themes')
+    ->name('*.phtml');
 
 $rules = [
     'align_multiline_comment' => true,
     'array_syntax' => ['syntax' => 'short'],
     'binary_operator_spaces' => [
         'default' => 'single_space',
-        'operators' => ['=' => null, '=>' => null],
     ],
     'blank_line_after_namespace' => true,
-    'braces' => true,
+    //'braces' => true, // disabled because we don't want to create inconsistent indentation, but useful to normalize control structure spacing
     'cast_spaces' => ['space' => 'none'],
     'class_attributes_separation' => ['elements' => ['method' => 'one', 'property' => 'one']],
     'concat_space' => ['spacing' => 'one'],
@@ -25,7 +25,6 @@ $rules = [
     'indentation_type' => true,
     'is_null' => true,
     'line_ending' => true,
-    'linebreak_after_opening_tag' => true,
     'list_syntax' => ['syntax' => 'short'],
     'lowercase_cast' => true,
     'lowercase_keywords' => true,
@@ -34,8 +33,6 @@ $rules = [
     'native_function_casing' => true,
     'no_blank_lines_after_class_opening' => true,
     'no_blank_lines_after_phpdoc' => true,
-    'no_blank_lines_before_namespace' => true,
-    'no_closing_tag' => true,
     'no_empty_comment' => true,
     'no_empty_phpdoc' => true,
     'no_empty_statement' => true,
@@ -48,7 +45,6 @@ $rules = [
     'no_spaces_around_offset' => true,
     'no_spaces_inside_parenthesis' => true,
     'no_trailing_whitespace' => true,
-    'no_trailing_whitespace_in_comment' => true,
     'no_unneeded_control_parentheses' => true,
     'no_unneeded_curly_braces' => true,
     'no_unused_imports' => true,
@@ -58,11 +54,6 @@ $rules = [
     'non_printable_character' => true,
     'ordered_imports' => true,
     'phpdoc_no_access' => true,
-    'php_unit_dedicate_assert_internal_type' => true,
-    'php_unit_expectation' => true,
-    'php_unit_method_casing' => true,
-    'php_unit_mock' => true,
-    'php_unit_no_expectation_annotation' => true,
     'pow_to_exponentiation' => true,
     'single_blank_line_at_eof' => true,
     'single_class_element_per_statement' => true,
@@ -83,7 +74,7 @@ if (!is_dir($cacheDir)) {
 }
 
 $config = new PhpCsFixer\Config();
-return $config->setCacheFile($cacheDir . '/.code.cache')
+return $config->setCacheFile($cacheDir . '/.template.cache')
     ->setRiskyAllowed(true)
     ->setRules($rules)
     ->setFinder($finder);

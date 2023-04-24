@@ -26,6 +26,7 @@
  * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://knihovny.cz Main Page
  */
+
 namespace KnihovnyCzConsole\Command\Util;
 
 /**
@@ -37,8 +38,7 @@ namespace KnihovnyCzConsole\Command\Util;
  * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://knihovny.cz Main Page
  */
-class ExpireCsrfTokensCommand extends
-    \VuFindConsole\Command\Util\AbstractExpireCommand
+class ExpireCsrfTokensCommand extends \VuFindConsole\Command\Util\AbstractExpireCommand
 {
     /**
      * Help description for the command.

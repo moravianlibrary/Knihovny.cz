@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 
 /**
  * Class UserSettings
@@ -27,7 +26,13 @@ declare(strict_types=1);
  * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://knihovny.cz Main Page
  */
+
+declare(strict_types=1);
+
 namespace KnihovnyCz\Db\Row;
+
+use VuFind\Db\Row\RowGateway;
+use VuFind\Db\Table\DbTableAwareInterface;
 
 /**
  * Class UserSettings
@@ -42,8 +47,7 @@ namespace KnihovnyCz\Db\Row;
  * @property int     $user_id
  * @property string  $saved_institutions
  */
-class UserSettings extends \VuFind\Db\Row\RowGateway
-    implements \VuFind\Db\Table\DbTableAwareInterface
+class UserSettings extends RowGateway implements DbTableAwareInterface
 {
     use \VuFind\Db\Table\DbTableAwareTrait;
 

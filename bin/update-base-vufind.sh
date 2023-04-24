@@ -77,6 +77,11 @@ sed -i "s/\(\s*\)VUFIND_COMMIT_ID: \(.*\)/\1VUFIND_COMMIT_ID: ${REMOTE_VERSION}/
 
 merge_directory local/base/config/vufind config/vufind $OUR_VERSION $REMOTE_VERSION ${repository}
 merge_directory themes/KnihovnyCz/templates themes/bootstrap3/templates $OUR_VERSION $REMOTE_VERSION ${repository}
+merge_directory themes/irel/templates themes/bootstrap3/templates $OUR_VERSION $REMOTE_VERSION ${repository}
+merge_directory themes/kiv/templates themes/bootstrap3/templates $OUR_VERSION $REMOTE_VERSION ${repository}
+merge_directory themes/mus/templates themes/bootstrap3/templates $OUR_VERSION $REMOTE_VERSION ${repository}
+merge_directory themes/mzk/templates themes/bootstrap3/templates $OUR_VERSION $REMOTE_VERSION ${repository}
+merge_directory themes/tech/templates themes/bootstrap3/templates $OUR_VERSION $REMOTE_VERSION ${repository}
 merge_directory themes/KnihovnyCz/templates/searchapi themes/root/templates/searchapi $OUR_VERSION $REMOTE_VERSION ${repository}
 
 echo "Version was updated."

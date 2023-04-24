@@ -26,6 +26,7 @@
  * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://knihovny.cz Main Page
  */
+
 namespace KnihovnyCz\View\Helper\KnihovnyCz;
 
 use KnihovnyCz\Ziskej;
@@ -47,7 +48,7 @@ class ZiskejMvs extends AbstractHelper
      *
      * @var \KnihovnyCz\Ziskej\ZiskejMvs
      */
-    private Ziskej\ZiskejMvs $_cpkZiskej;
+    private Ziskej\ZiskejMvs $cpkZiskej;
 
     /**
      * Constructor
@@ -56,7 +57,7 @@ class ZiskejMvs extends AbstractHelper
      */
     public function __construct(Ziskej\ZiskejMvs $cpkZiskej)
     {
-        $this->_cpkZiskej = $cpkZiskej;
+        $this->cpkZiskej = $cpkZiskej;
     }
 
     /**
@@ -66,7 +67,7 @@ class ZiskejMvs extends AbstractHelper
      */
     public function isEnabled(): bool
     {
-        return $this->_cpkZiskej->isEnabled();
+        return $this->cpkZiskej->isEnabled();
     }
 
     /**
@@ -76,7 +77,7 @@ class ZiskejMvs extends AbstractHelper
      */
     public function getCurrentMode(): string
     {
-        return $this->_cpkZiskej->getCurrentMode();
+        return $this->cpkZiskej->getCurrentMode();
     }
 
     /**
@@ -86,7 +87,7 @@ class ZiskejMvs extends AbstractHelper
      */
     public function isProduction(): bool
     {
-        return $this->_cpkZiskej->getCurrentMode()
+        return $this->cpkZiskej->getCurrentMode()
             === Ziskej\ZiskejMvs::MODE_PRODUCTION;
     }
 
@@ -97,7 +98,7 @@ class ZiskejMvs extends AbstractHelper
      */
     public function getModes(): array
     {
-        return $this->_cpkZiskej->getModes();
+        return $this->cpkZiskej->getModes();
     }
 
     /**

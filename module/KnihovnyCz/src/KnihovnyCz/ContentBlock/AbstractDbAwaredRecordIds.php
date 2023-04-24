@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 
 /**
  * Class AbstractDbAwaredRecordIds
@@ -27,11 +26,15 @@ declare(strict_types=1);
  * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://knihovny.cz Main Page
  */
+
+declare(strict_types=1);
+
 namespace KnihovnyCz\ContentBlock;
 
 use Laminas\Db\ResultSet\ResultSetInterface;
 use Laminas\Db\Sql\Predicate\Expression;
 use Laminas\Db\Sql\Select;
+use VuFind\ContentBlock\ContentBlockInterface;
 use VuFind\Db\Row\RowGateway;
 use VuFind\Db\Table\PluginManager as TableManager;
 use VuFind\Record\Loader as RecordLoader;
@@ -45,8 +48,7 @@ use VuFind\Record\Loader as RecordLoader;
  * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://knihovny.cz Main Page
  */
-abstract class AbstractDbAwaredRecordIds
-    implements \VuFind\ContentBlock\ContentBlockInterface
+abstract class AbstractDbAwaredRecordIds implements ContentBlockInterface
 {
     /**
      * Search class ID to use for retrieving facets.

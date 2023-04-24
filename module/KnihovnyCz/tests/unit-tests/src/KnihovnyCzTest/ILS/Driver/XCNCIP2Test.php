@@ -3,7 +3,7 @@
 /**
  * Class XCNCIP2Test
  *
- * PHP version 7
+ * PHP version 8
  *
  * Copyright (C) Moravian Library 2020.
  *
@@ -20,12 +20,13 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  *
- * @category VuFind
- * @package  KnihovnyCzTest\ILS\Driver
+ * @category Knihovny.cz
+ * @package  Tests
  * @author   Josef Moravec <moravec@mzk.cz>
  * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://knihovny.cz Main Page
  */
+
 namespace KnihovnyCzTest\ILS\Driver;
 
 use InvalidArgumentException;
@@ -33,6 +34,15 @@ use KnihovnyCz\ILS\Driver\XCNCIP2;
 use Laminas\Http\Response as HttpResponse;
 use PHPUnit\Framework\ExpectationFailedException;
 
+/**
+ * Class XCNCIP2Test
+ *
+ * @category Knihovny.cz
+ * @package  Tests
+ * @author   Josef Moravec <moravec@mzk.cz>
+ * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
+ * @link     https://knihovny.cz Main Page
+ */
 class XCNCIP2Test extends \VuFindTest\ILS\Driver\XCNCIP2Test
 {
     /**
@@ -521,7 +531,8 @@ class XCNCIP2Test extends \VuFindTest\ILS\Driver\XCNCIP2Test
                     'item_agency_id' => 'ABA008',
                     'patronAgencyId' => 'Test agency',
                     'duedate' => '08-02-2025',
-                    'title' => 'Lékařská knihovna : : časopis pro odborné knihovny a informační střediska ve zdravotnictví',
+                    'title'
+                        => 'Lékařská knihovna : : časopis pro odborné knihovny a informační střediska ve zdravotnictví',
                     'item_id' => 'P220058',
                     'renewable' => true,
                 ],
@@ -1945,12 +1956,11 @@ class XCNCIP2Test extends \VuFindTest\ILS\Driver\XCNCIP2Test
 
     protected $requestTests = [];
 
-    /**
-     * @var array
-     */
     protected $notRenewableTransactionsTests = [];
 
     /**
+     * Test definitions for renewing when renewals are disabled
+     *
      * @var array
      */
     protected $renewMyItemsWithDisabledRenewals = [];
@@ -1959,6 +1969,11 @@ class XCNCIP2Test extends \VuFindTest\ILS\Driver\XCNCIP2Test
 
     protected $accountBlocksTests = [];
 
+    /**
+     * Test getStatuses
+     *
+     * @return void
+     */
     public function testGetStatuses()
     {
         $this->configureDriver();
@@ -1984,6 +1999,11 @@ class XCNCIP2Test extends \VuFindTest\ILS\Driver\XCNCIP2Test
         }
     }
 
+    /**
+     * Test getPickUpLocations
+     *
+     * @return void
+     */
     public function testGetPickupLocations()
     {
         // Test reading pickup locations from NCIP responder
@@ -2182,13 +2202,23 @@ class XCNCIP2Test extends \VuFindTest\ILS\Driver\XCNCIP2Test
     /**
      * Test getBib method
      *
+     * @return void
      * @throws \ReflectionException
      */
     public function testGetBib()
     {
     }
 
-    protected function loadResponse($filename)
+    /**
+     * Load NCIP response from file
+     *
+     * @param string $filename File name
+     *
+     * @return HttpResponse
+     *
+     * @throws \ReflectionException
+     */
+    protected function loadResponse($filename): HttpResponse
     {
         $file = realpath(
             __DIR__ .

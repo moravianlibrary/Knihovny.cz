@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Knihovny.cz solr default record driver
  *
@@ -25,6 +26,7 @@
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     http://github.com/moravianlibrary/Knihovny.cz Knihovny.cz
  */
+
 namespace KnihovnyCz\RecordDriver;
 
 use VuFind\Exception\RecordMissing as RecordMissingException;
@@ -536,7 +538,8 @@ class SolrDefault extends \VuFind\RecordDriver\SolrDefault
             $this->parentRecord = $this->recordFactory
                 ->getSolrRecord($this->fields['parent_data']);
         }
-        if ($this->parentRecord === null && $this->recordLoader !== null
+        if (
+            $this->parentRecord === null && $this->recordLoader !== null
             && ($parentRecordId = $this->getParentRecordID()) !== null
         ) {
             try {

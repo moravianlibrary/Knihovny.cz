@@ -26,12 +26,12 @@
  * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://knihovny.cz Main Page
  */
+
 namespace KnihovnyCzConsole\Command\Util;
 
 use KnihovnyCz\Db\Table\Resource as ResourceTable;
 use KnihovnyCz\Record\Loader as RecordLoader;
 use Symfony\Component\Console\Command\Command;
-
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use VuFind\Date\Converter;
@@ -88,7 +88,7 @@ class UpdateResourcesFromSolrCommand extends Command
         ResourceTable $table,
         RecordLoader $recordLoader,
         Converter $converter,
-        $name=null
+        $name = null
     ) {
         parent::__construct($name ?? self::$defaultName);
         $this->resourceTable = $table;

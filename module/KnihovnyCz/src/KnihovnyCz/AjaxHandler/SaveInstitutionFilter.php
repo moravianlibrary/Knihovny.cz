@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+
 /**
  * Save institution filter AJAX handler
  *
@@ -26,11 +26,16 @@ declare(strict_types=1);
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://vufind.org/wiki/development Wiki
  */
+
+declare(strict_types=1);
+
 namespace KnihovnyCz\AjaxHandler;
 
 use KnihovnyCz\Auth\Manager as AuthManager;
 use Laminas\Mvc\Controller\Plugin\Params;
+use VuFind\AjaxHandler\AbstractBase;
 use VuFind\I18n\Translator\TranslatorAwareInterface;
+use VuFind\I18n\Translator\TranslatorAwareTrait;
 use VuFind\Session\Settings as SessionSettings;
 
 /**
@@ -42,10 +47,9 @@ use VuFind\Session\Settings as SessionSettings;
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://vufind.org/wiki/development Wiki
  */
-class SaveInstitutionFilter extends \VuFind\AjaxHandler\AbstractBase
-    implements TranslatorAwareInterface
+class SaveInstitutionFilter extends AbstractBase implements TranslatorAwareInterface
 {
-    use \VuFind\I18n\Translator\TranslatorAwareTrait;
+    use TranslatorAwareTrait;
 
     /**
      * CitacePro service

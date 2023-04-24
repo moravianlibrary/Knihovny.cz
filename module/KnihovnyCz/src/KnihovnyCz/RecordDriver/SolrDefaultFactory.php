@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Knihovny.cz solr default record driver factory
  *
@@ -25,6 +26,7 @@
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     http://github.com/moravianlibrary/Knihovny.cz Knihovny.cz
  */
+
 namespace KnihovnyCz\RecordDriver;
 
 use Laminas\ServiceManager\Exception\ServiceNotCreatedException;

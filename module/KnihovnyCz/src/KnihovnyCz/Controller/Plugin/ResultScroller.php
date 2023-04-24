@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Class for managing "next" and "previous" navigation within result sets.
  *
@@ -25,6 +26,7 @@
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://vufind.org/wiki/development Wiki
  */
+
 namespace KnihovnyCz\Controller\Plugin;
 
 use Laminas\Config\Config;
@@ -98,7 +100,8 @@ class ResultScroller extends Base
         }
         $result = parent::getScrollData($driver);
         $result['linkToResults'] = null;
-        if (isset($result['currentPosition'])
+        if (
+            isset($result['currentPosition'])
             && $result['currentPosition'] != null
         ) {
             $result['linkToResults'] = $this->getLinkToResults();

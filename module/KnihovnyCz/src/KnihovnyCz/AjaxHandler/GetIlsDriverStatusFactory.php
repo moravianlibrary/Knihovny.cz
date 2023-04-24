@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+
 /**
  * Class Get ILS driver status factory
  *
@@ -26,6 +26,9 @@ declare(strict_types=1);
  * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://knihovny.cz Main Page
  */
+
+declare(strict_types=1);
+
 namespace KnihovnyCz\AjaxHandler;
 
 use Laminas\ServiceManager\Exception\ServiceNotCreatedException;
@@ -42,7 +45,7 @@ use Psr\Container\ContainerInterface;
  * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://knihovny.cz Main Page
  */
-class GetIlsDriverStatusFactory  implements
+class GetIlsDriverStatusFactory implements
     \Laminas\ServiceManager\Factory\FactoryInterface
 {
     /**

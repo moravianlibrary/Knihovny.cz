@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 
 /**
  * Class RouteGenerator
@@ -27,6 +26,9 @@ declare(strict_types=1);
  * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://knihovny.cz Main Page
  */
+
+declare(strict_types=1);
+
 namespace KnihovnyCz\Route;
 
 /**
@@ -51,7 +53,7 @@ class RouteGenerator extends \VuFind\Route\RouteGenerator
      * @return void
      */
     protected function addRecordRouteKnihovnyCz(
-        array & $config,
+        array &$config,
         string $routeBase,
         string $controller,
         string $route
@@ -99,7 +101,7 @@ class RouteGenerator extends \VuFind\Route\RouteGenerator
      *
      * @return void
      */
-    public function addRecordRoutes(& $config, $routes)
+    public function addRecordRoutes(&$config, $routes)
     {
         foreach ($routes as $routeBase => $routeData) {
             $this->addRecordRouteKnihovnyCz(
@@ -121,7 +123,7 @@ class RouteGenerator extends \VuFind\Route\RouteGenerator
      * @return void
      */
     protected function addStaticRouteKnihovnyCz(
-        array & $config,
+        array &$config,
         string $route,
         string $url
     ): void {
@@ -147,7 +149,7 @@ class RouteGenerator extends \VuFind\Route\RouteGenerator
      *
      * @return void
      */
-    public function addStaticRoutes(& $config, $routes)
+    public function addStaticRoutes(&$config, $routes)
     {
         foreach ($routes as $name => $route) {
             $this->addStaticRouteKnihovnyCz($config, $route, $name);

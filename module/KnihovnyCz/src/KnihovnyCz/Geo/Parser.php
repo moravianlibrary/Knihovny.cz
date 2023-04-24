@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Class Parser
  *
@@ -25,6 +26,7 @@
  * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://knihovny.cz Main Page
  */
+
 namespace KnihovnyCz\Geo;
 
 /**
@@ -87,7 +89,8 @@ class Parser
      */
     public function normalizeRange($from, $to)
     {
-        if ($from == null || $to == null
+        if (
+            $from == null || $to == null
             || !is_numeric($from) || !is_numeric($to)
         ) {
             return null;

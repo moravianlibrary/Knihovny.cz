@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 
 /**
  * Solr performance logger
@@ -27,6 +26,9 @@ declare(strict_types=1);
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://vufind.org
  */
+
+declare(strict_types=1);
+
 namespace KnihovnyCz\Search\Solr\Backend;
 
 use Laminas\Http\Client as HttpClient;

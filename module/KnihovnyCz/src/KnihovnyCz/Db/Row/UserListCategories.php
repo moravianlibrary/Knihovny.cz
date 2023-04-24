@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 
 /**
  * Class UserListCategories
@@ -27,7 +26,13 @@ declare(strict_types=1);
  * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://knihovny.cz Main Page
  */
+
+declare(strict_types=1);
+
 namespace KnihovnyCz\Db\Row;
+
+use VuFind\Db\Row\RowGateway;
+use VuFind\Db\Table\DbTableAwareInterface;
 
 /**
  * Class UserListCategories
@@ -38,8 +43,7 @@ namespace KnihovnyCz\Db\Row;
  * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://knihovny.cz Main Page
  */
-class UserListCategories extends \VuFind\Db\Row\RowGateway
-    implements \VuFind\Db\Table\DbTableAwareInterface
+class UserListCategories extends RowGateway implements DbTableAwareInterface
 {
     use \VuFind\Db\Table\DbTableAwareTrait;
 

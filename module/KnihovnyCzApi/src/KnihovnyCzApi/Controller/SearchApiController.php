@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 
 /**
  * Class SearchApiController
@@ -27,6 +26,9 @@ declare(strict_types=1);
  * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://knihovny.cz Main Page
  */
+
+declare(strict_types=1);
+
 namespace KnihovnyCzApi\Controller;
 
 use KnihovnyCz\ILS\Driver\MultiBackend;
@@ -161,7 +163,8 @@ class SearchApiController extends \VuFindApi\Controller\SearchApiController
             + $this->getRequest()->getPost()->toArray();
         $uriPath = $this->getRequest()->getUri()->getPath();
         $id = $request['id'] ?? '';
-        if (str_starts_with($id, 'library')
+        if (
+            str_starts_with($id, 'library')
             && str_starts_with($uriPath ?? '', '/api/v1/record')
         ) {
             $url = $this->url()->fromRoute('record2Apiv1');
@@ -291,7 +294,8 @@ class SearchApiController extends \VuFindApi\Controller\SearchApiController
     protected function getItemFieldList($request)
     {
         $fieldList = $this->defaultItemFields;
-        if (isset($request['field'])
+        if (
+            isset($request['field'])
             && !empty($request['field'])
             && is_array($request['field'])
         ) {

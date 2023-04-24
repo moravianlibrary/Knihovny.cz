@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+
 /**
  * Ziskej MVS trait
  *
@@ -26,6 +26,9 @@ declare(strict_types=1);
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://knihovny.cz Main Site
  */
+
+declare(strict_types=1);
+
 namespace KnihovnyCz\Controller;
 
 use Laminas\Stdlib\ResponseInterface as Response;
@@ -133,7 +136,7 @@ trait ZiskejMvsTrait
     public function ziskejOrderPostAction(): Response
     {
         if (!$this->getRequest()->isPost()) {
-            return $this->_redirectToTabMvs();
+            return $this->redirectToTabMvs();
         }
 
         /**
@@ -164,7 +167,7 @@ trait ZiskejMvsTrait
                 'ZiskejMvs::error_eppn_missing',
                 'error'
             );
-            return $this->_redirectToTabMvs();
+            return $this->redirectToTabMvs();
         }
 
         /**
@@ -178,7 +181,7 @@ trait ZiskejMvsTrait
                 'ZiskejMvs::error_email_missing',
                 'error'
             );
-            return $this->_redirectToTabMvs();
+            return $this->redirectToTabMvs();
         }
 
         $emailValidator = new EmailAddress();
@@ -187,7 +190,7 @@ trait ZiskejMvsTrait
                 'ZiskejMvs::error_email_wrong',
                 'error'
             );
-            return $this->_redirectToTabMvs();
+            return $this->redirectToTabMvs();
         }
 
         if (!$this->params()->fromPost('is_conditions')) {
@@ -195,7 +198,7 @@ trait ZiskejMvsTrait
                 'ZiskejMvs::error_is_conditions',
                 'error'
             );
-            return $this->_redirectToTabMvs();
+            return $this->redirectToTabMvs();
         }
 
         if (!$this->params()->fromPost('is_price')) {
@@ -203,7 +206,7 @@ trait ZiskejMvsTrait
                 'ZiskejMvs::error_is_price',
                 'error'
             );
-            return $this->_redirectToTabMvs();
+            return $this->redirectToTabMvs();
         }
 
         /**
@@ -219,7 +222,7 @@ trait ZiskejMvsTrait
                 'ZiskejMvs::error_account_not_active',
                 'error'
             );
-            return $this->_redirectToTabMvs();
+            return $this->redirectToTabMvs();
         }
 
         $user->activateCardByPrefix($userCard->card_name);
@@ -249,7 +252,7 @@ trait ZiskejMvsTrait
                 $e->getMessage(),
                 'error'
             );
-            return $this->_redirectToTabMvs();
+            return $this->redirectToTabMvs();
         }
 
         if (!$ziskejReader->isActive()) {
@@ -257,7 +260,7 @@ trait ZiskejMvsTrait
                 'ZiskejMvs::error_account_not_active',
                 'warning'
             );
-            return $this->_redirectToTabMvs();
+            return $this->redirectToTabMvs();
         }
 
         $ticketNew = new TicketMvsRequest($this->params()->fromPost('doc_id'));
@@ -272,7 +275,7 @@ trait ZiskejMvsTrait
                     'ZiskejMvs::failure_order_finished',
                     'error'
                 );
-                return $this->_redirectToTabMvs();
+                return $this->redirectToTabMvs();
             }
 
             $this->flashMessenger()->addMessage(
@@ -295,7 +298,7 @@ trait ZiskejMvsTrait
                 $e->getMessage(),
                 'error'
             );
-            return $this->_redirectToTabMvs();
+            return $this->redirectToTabMvs();
         }
     }
 
@@ -304,7 +307,7 @@ trait ZiskejMvsTrait
      *
      * @return \Laminas\Http\Response
      */
-    private function _redirectToTabMvs(): \Laminas\Http\Response
+    protected function redirectToTabMvs(): \Laminas\Http\Response
     {
         return $this->redirectToRecord('#ziskejmvs', 'Ziskej');
     }

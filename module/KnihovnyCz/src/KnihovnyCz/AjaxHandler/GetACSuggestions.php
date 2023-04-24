@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+
 /**
  * "Get Autocomplete Suggestions" AJAX handler
  *
@@ -26,6 +26,9 @@ declare(strict_types=1);
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://vufind.org/wiki/development Wiki
  */
+
+declare(strict_types=1);
+
 namespace KnihovnyCz\AjaxHandler;
 
 use KnihovnyCz\Autocomplete\Suggester;

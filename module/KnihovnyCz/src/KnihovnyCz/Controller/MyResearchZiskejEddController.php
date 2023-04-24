@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * Class MyResearchZiskejEddController
  *
@@ -29,6 +27,9 @@ declare(strict_types=1);
  * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://knihovny.cz Main Page
  */
+
+declare(strict_types=1);
+
 namespace KnihovnyCz\Controller;
 
 use KnihovnyCz\Ziskej\ZiskejEdd;
@@ -127,7 +128,7 @@ class MyResearchZiskejEddController extends AbstractBase
              */
             $ziskejApi = $this->serviceLocator->get('Mzk\ZiskejApi\Api');
 
-            $isLibraryInZiskej = $this->_isLibraryInZiskej(
+            $isLibraryInZiskej = $this->isLibraryInZiskej(
                 $ziskejApi,
                 $userCard->home_library
             );
@@ -383,7 +384,7 @@ class MyResearchZiskejEddController extends AbstractBase
      * @throws \Http\Client\Exception
      * @throws \Mzk\ZiskejApi\Exception\ApiResponseException
      */
-    private function _isLibraryInZiskej(
+    protected function isLibraryInZiskej(
         \Mzk\ZiskejApi\Api $ziskejApi,
         ?string $libraryCode
     ): bool {

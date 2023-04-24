@@ -1,6 +1,5 @@
 <?php
 
-declare(strict_types=1);
 /**
  * Class ZiskejController
  *
@@ -27,6 +26,9 @@ declare(strict_types=1);
  * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://knihovny.cz Main Page
  */
+
+declare(strict_types=1);
+
 namespace KnihovnyCz\Controller;
 
 use Laminas\Http\Response;

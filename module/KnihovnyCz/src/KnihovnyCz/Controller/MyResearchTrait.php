@@ -26,6 +26,7 @@
  * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://knihovny.cz Main Page
  */
+
 namespace KnihovnyCz\Controller;
 
 /**
@@ -83,7 +84,8 @@ trait MyResearchTrait
                     []
                 );
                 $ilsDetails['volume'] = $item['description'] ?? null;
-            } elseif (isset($ilsDetails['item_id'])
+            } elseif (
+                isset($ilsDetails['item_id'])
                 && str_contains($ilsDetails['item_id'], '.')
             ) {
                 [, $itemId] = explode('.', $ilsDetails['item_id']);

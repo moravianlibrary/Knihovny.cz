@@ -1,4 +1,5 @@
 <?php
+
 /**
  * EBSCO EDS API JSON parser
  *
@@ -25,6 +26,7 @@
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://vufind.org
  */
+
 namespace KnihovnyCz\Search\EDS\Backend;
 
 /**
@@ -52,7 +54,8 @@ class JsonListener extends \JsonStreamingParser\Listener\InMemoryListener
     public function value($value): void
     {
         $key = end($this->keys);
-        if (is_string($value) && strlen($value) > self::MAX_LENGTH
+        if (
+            is_string($value) && strlen($value) > self::MAX_LENGTH
             && in_array($key, $this->longFields)
         ) {
             $value = substr($value, 0, self::MAX_LENGTH);

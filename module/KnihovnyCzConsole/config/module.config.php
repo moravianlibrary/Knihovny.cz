@@ -1,4 +1,5 @@
 <?php
+
 namespace KnihovnyCzConsole\Module\Configuration;
 
 $config = [

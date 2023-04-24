@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 
 /**
  * Solr deduplication (merged records) listener.
@@ -29,6 +28,9 @@ declare(strict_types=1);
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     http://vufind.org   Main Site
  */
+
+declare(strict_types=1);
+
 namespace KnihovnyCz\Search\Solr;
 
 use Laminas\EventManager\EventInterface;

@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 
 /**
  * Class ContentController
@@ -27,10 +26,14 @@ declare(strict_types=1);
  * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://knihovny.cz Main Page
  */
+
+declare(strict_types=1);
+
 namespace KnihovnyCz\Controller;
 
 use Laminas\View\Model\ViewModel;
 use VuFind\Cache\CacheTrait;
+use VuFind\Controller\ContentController as ContentControllerBase;
 use VuFindHttp\HttpServiceAwareInterface;
 use VuFindHttp\HttpServiceAwareTrait;
 
@@ -43,8 +46,8 @@ use VuFindHttp\HttpServiceAwareTrait;
  * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://knihovny.cz Main Page
  */
-class ContentController extends \VuFind\Controller\ContentController
-    implements HttpServiceAwareInterface
+class ContentController extends ContentControllerBase implements
+    HttpServiceAwareInterface
 {
     use HttpServiceAwareTrait;
     use CacheTrait;

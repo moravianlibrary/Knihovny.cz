@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 
 /**
  * Simple JSON-based record collection.
@@ -27,6 +26,9 @@ declare(strict_types=1);
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://vufind.org
  */
+
+declare(strict_types=1);
+
 namespace KnihovnyCz\Search\Solr\Backend\Response\Json;
 
 use VuFindSearch\Backend\Solr\Response\Json\RecordCollection as Base;

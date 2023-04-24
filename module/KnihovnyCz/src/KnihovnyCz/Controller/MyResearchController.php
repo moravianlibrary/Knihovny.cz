@@ -26,6 +26,7 @@
  * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://knihovny.cz Main Page
  */
+
 namespace KnihovnyCz\Controller;
 
 use KnihovnyCz\Db\Table\UserListCategories;
@@ -198,7 +199,8 @@ class MyResearchController extends MyResearchControllerBase
             $this->showException($ex);
         }
         if ($view instanceof \Laminas\View\Model\ViewModel) {
-            if (isset($view->profile)
+            if (
+                isset($view->profile)
                 && isset($view->profile['expired'])
                 && $view->profile['expired']
             ) {
@@ -517,20 +519,19 @@ class MyResearchController extends MyResearchControllerBase
     {
         $status = $this->getRequest()->getQuery('status');
         switch ($status) {
-        case 'ok':
-            $this->flashMessenger()
-                ->addInfoMessage('online_payment_fine_proceed_ok');
-            break;
-        case 'nok':
-            $this->flashMessenger()
-                ->addErrorMessage('online_payment_fine_proceed_nok');
-            break;
-        case 'error':
-        default:
-            $this->flashMessenger()
-                ->addErrorMessage('online_payment_fine_proceed_error');
-            break;
-
+            case 'ok':
+                $this->flashMessenger()
+                    ->addInfoMessage('online_payment_fine_proceed_ok');
+                break;
+            case 'nok':
+                $this->flashMessenger()
+                    ->addErrorMessage('online_payment_fine_proceed_nok');
+                break;
+            case 'error':
+            default:
+                $this->flashMessenger()
+                    ->addErrorMessage('online_payment_fine_proceed_error');
+                break;
         }
         return $this->redirect()->toRoute('myresearch-fines');
     }
@@ -544,19 +545,19 @@ class MyResearchController extends MyResearchControllerBase
     {
         $status = $this->params()->fromQuery('status');
         switch ($status) {
-        case 'ok':
-            $this->flashMessenger()
-                ->addInfoMessage('online_prolongation_payment_ok');
-            break;
-        case 'nok':
-            $this->flashMessenger()
-                ->addErrorMessage('online_prolongation_payment_nok');
-            break;
-        case 'error':
-        default:
-            $this->flashMessenger()
-                ->addErrorMessage('online_prolongation_payment_error');
-            break;
+            case 'ok':
+                $this->flashMessenger()
+                    ->addInfoMessage('online_prolongation_payment_ok');
+                break;
+            case 'nok':
+                $this->flashMessenger()
+                    ->addErrorMessage('online_prolongation_payment_nok');
+                break;
+            case 'error':
+            default:
+                $this->flashMessenger()
+                    ->addErrorMessage('online_prolongation_payment_error');
+                break;
         }
         return $this->redirect()->toRoute('myresearch-profile');
     }

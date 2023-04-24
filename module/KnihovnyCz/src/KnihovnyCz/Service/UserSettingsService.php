@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Knihovny.cz User settings service
  *
@@ -25,6 +26,7 @@
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://vufind.org/wiki/development
  */
+
 namespace KnihovnyCz\Service;
 
 use KnihovnyCz\Db\Table\UserSettings;
@@ -103,7 +105,8 @@ class UserSettingsService
         $setting = $this->getUserSettings();
         $available = $this->getAvailableSettings();
         $availablePages = $available['recordsPerPage']['values'];
-        if ($setting->records_per_page != null
+        if (
+            $setting->records_per_page != null
             && in_array($setting->records_per_page, $availablePages)
         ) {
             foreach (['Solr', 'EDS', 'Search2'] as $searchClassId) {
@@ -115,7 +118,8 @@ class UserSettingsService
             }
         }
         $availableCitations = array_keys($available['citationStyle']['values']);
-        if ($setting->citation_style != null
+        if (
+            $setting->citation_style != null
             && in_array($setting->citation_style, $availableCitations)
         ) {
             $this->session->citationStyle = $setting->citation_style;
@@ -134,7 +138,8 @@ class UserSettingsService
         $settings = $this->getAvailableSettings();
         $availablePages = $settings['recordsPerPage']['values'];
         $availableCitations = array_keys($settings['citationStyle']['values']);
-        if (!in_array($preferences['recordsPerPage'], $availablePages)
+        if (
+            !in_array($preferences['recordsPerPage'], $availablePages)
             || !in_array($preferences['citationStyle'], $availableCitations)
         ) {
             return false;

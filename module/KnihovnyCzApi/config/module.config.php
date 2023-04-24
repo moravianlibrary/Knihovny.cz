@@ -1,4 +1,5 @@
 <?php
+
 namespace KnihovnyCzApi\Module\Configuration;
 
 $config = [

@@ -26,6 +26,7 @@
  * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://knihovny.cz Main Page
  */
+
 namespace KnihovnyCz\Service;
 
 use VuFindHttp\HttpServiceAwareInterface;
@@ -40,7 +41,8 @@ use VuFindHttp\HttpServiceAwareTrait;
  * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://knihovny.cz Main Page
  */
-abstract class LinkServiceAbstractBase implements LinkServiceInterface,
+abstract class LinkServiceAbstractBase implements
+    LinkServiceInterface,
     HttpServiceAwareInterface
 {
     use HttpServiceAwareTrait;

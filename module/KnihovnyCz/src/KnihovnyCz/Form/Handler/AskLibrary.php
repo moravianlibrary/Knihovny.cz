@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 
 /**
  * Class AskLibrary
@@ -27,6 +26,9 @@ declare(strict_types=1);
  * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://knihovny.cz Main Page
  */
+
+declare(strict_types=1);
+
 namespace KnihovnyCz\Form\Handler;
 
 use Laminas\Log\LoggerAwareInterface;
@@ -44,7 +46,9 @@ use VuFindHttp\HttpServiceAwareTrait;
  * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://knihovny.cz Main Page
  */
-class AskLibrary implements HandlerInterface, HttpServiceAwareInterface,
+class AskLibrary implements
+    HandlerInterface,
+    HttpServiceAwareInterface,
     LoggerAwareInterface
 {
     use HttpServiceAwareTrait;

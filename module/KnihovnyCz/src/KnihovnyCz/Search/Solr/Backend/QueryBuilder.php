@@ -1,4 +1,5 @@
 <?php
+
 /**
  * VuFind QueryBuilder.
  *
@@ -25,6 +26,7 @@
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://vufind.org
  */
+
 namespace KnihovnyCz\Search\Solr\Backend;
 
 use VuFindSearch\ParamBag;
@@ -84,7 +86,8 @@ class QueryBuilder extends \VuFindSearch\Backend\Solr\QueryBuilder
 
         if ($handler = $this->getSearchHandler($finalQuery->getHandler(), $string)) {
             $string = $handler->preprocessQueryString($string);
-            if (!$handler->hasExtendedDismax()
+            if (
+                !$handler->hasExtendedDismax()
                 && $this->getLuceneHelper()->containsAdvancedLuceneSyntax($string)
             ) {
                 $string = $this->createAdvancedInnerSearchString($string, $handler);
@@ -118,8 +121,7 @@ class QueryBuilder extends \VuFindSearch\Backend\Solr\QueryBuilder
             if (empty($extraParam['param']) || empty($extraParam['value'])) {
                 continue;
             }
-            if (!$this->checkParamConditions($query, $extraParam['conditions'] ?? [])
-            ) {
+            if (!$this->checkParamConditions($query, $extraParam['conditions'] ?? [])) {
                 continue;
             }
             foreach ((array)$extraParam['value'] as $value) {
@@ -127,8 +129,7 @@ class QueryBuilder extends \VuFindSearch\Backend\Solr\QueryBuilder
             }
         }
 
-        foreach ($this->externalQueryParameters->getParameters()
-                 as $key => $search) {
+        foreach ($this->externalQueryParameters->getParameters() as $key => $search) {
             $params->add($key, $search);
         }
         return $params;
