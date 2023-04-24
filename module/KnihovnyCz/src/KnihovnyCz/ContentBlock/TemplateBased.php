@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 
 /**
  * Class TemplateBased
@@ -27,9 +26,13 @@ declare(strict_types=1);
  * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://knihovny.cz Main Page
  */
+
+declare(strict_types=1);
+
 namespace KnihovnyCz\ContentBlock;
 
 use VuFind\Cache\CacheTrait;
+use VuFind\ContentBlock\TemplateBased as TemplateBasedBase;
 use VuFindHttp\HttpServiceAwareInterface;
 use VuFindHttp\HttpServiceAwareTrait;
 
@@ -42,8 +45,7 @@ use VuFindHttp\HttpServiceAwareTrait;
  * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://knihovny.cz Main Page
  */
-class TemplateBased extends \VuFind\ContentBlock\TemplateBased
-    implements HttpServiceAwareInterface
+class TemplateBased extends TemplateBasedBase implements HttpServiceAwareInterface
 {
     use HttpServiceAwareTrait;
     use CacheTrait;

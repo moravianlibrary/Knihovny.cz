@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Catalog Connection Class
  *
@@ -28,6 +29,7 @@
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://vufind.org/wiki/development:plugins:ils_drivers Wiki
  */
+
 namespace KnihovnyCz\ILS;
 
 use VuFind\Exception\ILS as ILSException;
@@ -154,7 +156,7 @@ class MultiConnection extends Connection
      *
      * @return array
      */
-    protected function callAll($method, $params = [], $merge=true)
+    protected function callAll($method, $params = [], $merge = true)
     {
         $allResults = [];
         $user = $this->getAuthManager()->isLoggedIn();

@@ -26,6 +26,7 @@
  * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://knihovny.cz Main Page
  */
+
 namespace KnihovnyCzConsole\Command\Util;
 
 use GlobIterator;
@@ -102,7 +103,7 @@ class ClearCacheCommand extends \Symfony\Component\Console\Command\Command
             $flags = GlobIterator::SKIP_DOTS | GlobIterator::CURRENT_AS_PATHNAME;
             $cacheDir = $baseCacheDir . $cacheName . "s";
             $clearFolder = null;
-            $clearFolder = function ($dir) use (& $clearFolder, $flags) {
+            $clearFolder = function ($dir) use (&$clearFolder, $flags) {
                 $it = new GlobIterator($dir . DIRECTORY_SEPARATOR . '*', $flags);
                 foreach ($it as $pathname) {
                     if ($it->isDir()) {

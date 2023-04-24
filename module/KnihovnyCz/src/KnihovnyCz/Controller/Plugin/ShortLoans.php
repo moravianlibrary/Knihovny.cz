@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Support class for time slots
  *
@@ -25,6 +26,7 @@
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://vufind.org/wiki/development Wiki
  */
+
 namespace KnihovnyCz\Controller\Plugin;
 
 use VuFind\Validator\CsrfInterface;
@@ -222,7 +224,8 @@ class ShortLoans extends \Laminas\Mvc\Controller\Plugin\AbstractPlugin
             $emptySlots = [];
             $prevSlot = null;
             foreach ($daySlots as &$slot) {
-                if ($prevSlot != null && $prevSlot['end_time'] != $slot['start_time']
+                if (
+                    $prevSlot != null && $prevSlot['end_time'] != $slot['start_time']
                 ) {
                     $emptySlots[] = $this->createEmptySlot(
                         $prevSlot['end_time'],

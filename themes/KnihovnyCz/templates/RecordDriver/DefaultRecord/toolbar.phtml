@@ -5,8 +5,8 @@
   }
   $this->headScript()->appendFile('https://unpkg.com/share-api-polyfill/dist/share-min.js');
 ?>
-<nav class="record-nav">
-  <ul class="nav nav-pills nav-stacked" aria-label="<?=$this->transEscAttr('ajaxview_label_tools'); ?>">
+<nav class="record-nav" aria-label="<?=$this->transEscAttr('ajaxview_label_tools'); ?>">
+  <ul class="nav nav-pills nav-stacked">
     <?php if (count($this->driver->getCitationFormats()) > 0): ?>
       <li role="none">
         <a class="cite-record" data-lightbox href="<?=$this->escapeHtmlAttr($this->recordLinker()->getActionUrl($this->driver, 'Cite'))?>" rel="nofollow">

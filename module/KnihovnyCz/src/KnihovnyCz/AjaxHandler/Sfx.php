@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+
 /**
  * SFX AJAX handler
  *
@@ -26,6 +26,9 @@ declare(strict_types=1);
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://vufind.org/wiki/development Wiki
  */
+
+declare(strict_types=1);
+
 namespace KnihovnyCz\AjaxHandler;
 
 use GuzzleHttp\Promise\Utils;
@@ -44,8 +47,8 @@ use VuFind\AjaxHandler\AbstractBase;
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://vufind.org/wiki/development Wiki
  */
-class Sfx extends AbstractBase
-    implements \VuFind\I18n\Translator\TranslatorAwareInterface,
+class Sfx extends AbstractBase implements
+    \VuFind\I18n\Translator\TranslatorAwareInterface,
     \Laminas\Log\LoggerAwareInterface
 {
     use \VuFind\I18n\Translator\TranslatorAwareTrait;
@@ -189,7 +192,8 @@ class Sfx extends AbstractBase
                 continue;
             }
             // PHP is replacing . by _ in parameter name
-            if (($key != 'rft_val_fmt'
+            if (
+                ($key != 'rft_val_fmt'
                 && substr($key, 0, 4) == 'rft_')
             ) {
                 $key = str_replace('_', '.', $key);

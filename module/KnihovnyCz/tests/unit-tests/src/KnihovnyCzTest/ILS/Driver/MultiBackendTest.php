@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 
 /**
  * Class MutiBackendTest
@@ -27,6 +26,9 @@ declare(strict_types=1);
  * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://knihovny.cz Main Page
  */
+
+declare(strict_types=1);
+
 namespace KnihovnyCzTest\ILS\Driver;
 
 use KnihovnyCz\Db\Table\InstConfigs;
@@ -50,6 +52,7 @@ class MultiBackendTest extends \PHPUnit\Framework\TestCase
     /**
      * Test siglaToSource method
      *
+     * @return void
      * @throws \VuFind\Exception\ILS
      */
     public function testSiglaToSource(): void
@@ -88,6 +91,7 @@ class MultiBackendTest extends \PHPUnit\Framework\TestCase
     /**
      * Test sourceToSigla method
      *
+     * @return void
      * @throws \VuFind\Exception\ILS
      */
     public function testSourceToSigla(): void
@@ -153,6 +157,11 @@ class MultiBackendTest extends \PHPUnit\Framework\TestCase
         return $driver;
     }
 
+    /**
+     * Method to get a mock of InstConfigs
+     *
+     * @return InstConfigs A mocked instance of InstConfigs
+     */
     protected function getMockInstConfigs(): InstConfigs
     {
         $mock = $this->getMockBuilder(InstConfigs::class)
@@ -161,6 +170,11 @@ class MultiBackendTest extends \PHPUnit\Framework\TestCase
         return $mock;
     }
 
+    /**
+     * Method to get a mock of InstSources
+     *
+     * @return InstSources A mocked instance of InstSources
+     */
     protected function getMockInstSources(): InstSources
     {
         $mock = $this->getMockBuilder(InstSources::class)
@@ -169,6 +183,11 @@ class MultiBackendTest extends \PHPUnit\Framework\TestCase
         return $mock;
     }
 
+    /**
+     * Method to get a mock of Solr id resolver
+     *
+     * @return SolrIdResolver A mocked instance of SolrIdResolver
+     */
     protected function getMockSolrIdResolver(): SolrIdResolver
     {
         $mock = $this->getMockBuilder(SolrIdResolver::class)

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Catalog Connection Class
  *
@@ -28,6 +29,7 @@
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://vufind.org/wiki/development:plugins:ils_drivers Wiki
  */
+
 namespace KnihovnyCz\ILS;
 
 use VuFind\Exception\ILS as ILSException;
@@ -67,7 +69,7 @@ class Connection extends ConnectionBase
      * @return mixed On success, an associative array with specific function keys
      * and values; on failure, false.
      */
-    public function checkFunction($method, $params=[])
+    public function checkFunction($method, $params = [])
     {
         foreach ($this->getCapabilityParams($method, $params) as $param) {
             if ($result = parent::checkFunction($method, $param)) {
@@ -108,10 +110,11 @@ class Connection extends ConnectionBase
      */
     protected function getCapabilityParams($method, $params)
     {
-        if (!(isset($params['user']) && in_array(
-            $method,
-            SELF::CHECKED_METHODS
-        ))
+        if (
+            !(isset($params['user']) && in_array(
+                $method,
+                self::CHECKED_METHODS
+            ))
         ) {
             return [ $params ];
         }
@@ -184,10 +187,11 @@ class Connection extends ConnectionBase
         $functionConfig,
         $params
     ) {
-        if (parent::checkCapability(
-            'getMyProlongRegistrationLink',
-            [$params ?: []]
-        )
+        if (
+            parent::checkCapability(
+                'getMyProlongRegistrationLink',
+                [$params ?: []]
+            )
         ) {
             return true;
         }

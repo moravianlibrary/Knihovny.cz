@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Class Get Holding
  *
@@ -25,10 +26,14 @@
  * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://knihovny.cz Main Page
  */
+
 namespace KnihovnyCz\AjaxHandler;
 
 use KnihovnyCz\ILS\Logic\Holdings as HoldingsLogic;
 use Laminas\Mvc\Controller\Plugin\Params;
+use VuFind\AjaxHandler\AbstractBase;
+use VuFind\I18n\Translator\TranslatorAwareInterface;
+use VuFind\I18n\Translator\TranslatorAwareTrait;
 use VuFind\ILS\Connection;
 use VuFind\ILS\Logic\Holds as Holds;
 use VuFind\Session\Settings as SessionSettings;
@@ -43,10 +48,9 @@ use VuFind\View\Helper\Root\RecordLinker as RecordLinker;
  * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://knihovny.cz Main Page
  */
-class GetHolding extends \VuFind\AjaxHandler\AbstractBase
-    implements \VuFind\I18n\Translator\TranslatorAwareInterface
+class GetHolding extends AbstractBase implements TranslatorAwareInterface
 {
-    use \VuFind\I18n\Translator\TranslatorAwareTrait;
+    use TranslatorAwareTrait;
 
     /**
      * ILS connection

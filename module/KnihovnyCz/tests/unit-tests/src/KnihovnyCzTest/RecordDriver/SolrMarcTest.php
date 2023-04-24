@@ -1,10 +1,9 @@
 <?php
-declare(strict_types=1);
 
 /**
  * Class SolrMarcTest
  *
- * PHP version 7
+ * PHP version 8
  *
  * Copyright (C) Moravian Library 2021.
  *
@@ -22,15 +21,21 @@ declare(strict_types=1);
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  *
  * @category Knihovny.cz
+ * @package  Tests
  * @author   Josef Moravec <moravec@mzk.cz>
  * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://knihovny.cz Main Page
  */
 
+declare(strict_types=1);
+
+namespace KnihovnyCzTest\RecordDriver;
+
 /**
  * Class SolrMarcTest
  *
  * @category Knihovny.cz
+ * @package  Tests
  * @author   Josef Moravec <moravec@mzk.cz>
  * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://knihovny.cz Main Page

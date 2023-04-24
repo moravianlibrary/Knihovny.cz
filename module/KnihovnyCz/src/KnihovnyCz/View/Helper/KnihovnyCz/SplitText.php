@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+
 /**
  * Class SplitText
  *
@@ -26,6 +26,9 @@ declare(strict_types=1);
  * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://knihovny.cz Main Page
  */
+
+declare(strict_types=1);
+
 namespace KnihovnyCz\View\Helper\KnihovnyCz;
 
 use Laminas\View\Helper\AbstractHelper;
@@ -41,9 +44,9 @@ use Laminas\View\Helper\AbstractHelper;
  */
 class SplitText extends AbstractHelper
 {
-    private ?string $_first;
+    private ?string $first;
 
-    private ?string $_last;
+    private ?string $last;
 
     /**
      * Invoke function
@@ -59,11 +62,11 @@ class SplitText extends AbstractHelper
         $strpos = (int)strpos($string, ' ', $length);
 
         if ($strpos < $length) {
-            $this->_first = $string;
-            $this->_last = null;
+            $this->first = $string;
+            $this->last = null;
         } else {
-            $this->_first = substr($string, 0, $strpos) ?: null;
-            $this->_last = substr($string, $strpos, strlen($string) - $strpos)
+            $this->first = substr($string, 0, $strpos) ?: null;
+            $this->last = substr($string, $strpos, strlen($string) - $strpos)
                 ?: null;
         }
 
@@ -77,7 +80,7 @@ class SplitText extends AbstractHelper
      */
     public function first(): ?string
     {
-        return $this->_first;
+        return $this->first;
     }
 
     /**
@@ -87,6 +90,6 @@ class SplitText extends AbstractHelper
      */
     public function last(): ?string
     {
-        return $this->_last;
+        return $this->last;
     }
 }

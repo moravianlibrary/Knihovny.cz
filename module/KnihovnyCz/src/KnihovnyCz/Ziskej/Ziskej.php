@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+
 /**
  * Class ZiskejApiFactory
  *
@@ -26,6 +26,9 @@ declare(strict_types=1);
  * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://knihovny.cz Main Page
  */
+
+declare(strict_types=1);
+
 namespace KnihovnyCz\Ziskej;
 
 use Laminas\Config\Config;
@@ -61,28 +64,28 @@ abstract class Ziskej
      *
      * @var Config
      */
-    private Config $_config;
+    private Config $config;
 
     /**
      * Ziskej configuration
      *
      * @var Config
      */
-    private Config $_configZiskej;
+    private Config $configZiskej;
 
     /**
      * Cookie manager
      *
      * @var CookieManager
      */
-    private CookieManager $_cookieManager;
+    private CookieManager $cookieManager;
 
     /**
      * Default execution mode
      *
      * @var string
      */
-    private string $_defaultMode;
+    private string $defaultMode;
 
     /**
      * Constructor
@@ -94,11 +97,11 @@ abstract class Ziskej
         Config $config,
         CookieManager $cookieManager
     ) {
-        $this->_config = $config;
-        $this->_configZiskej = $this->_config->get('Ziskej');
-        $this->_cookieManager = $cookieManager;
+        $this->config = $config;
+        $this->configZiskej = $this->config->get('Ziskej');
+        $this->cookieManager = $cookieManager;
 
-        $this->_defaultMode= $this->_configZiskej[self::CONFIG_DEFAULT_MODE_NAME]
+        $this->defaultMode = $this->configZiskej[self::CONFIG_DEFAULT_MODE_NAME]
             ?: self::MODE_DISABLED;
     }
 
@@ -119,8 +122,8 @@ abstract class Ziskej
      */
     public function getUrls(): array
     {
-        return !empty($this->_configZiskej['mode_urls'])
-            ? $this->_configZiskej['mode_urls']->toArray()
+        return !empty($this->configZiskej['mode_urls'])
+            ? $this->configZiskej['mode_urls']->toArray()
             : [];
     }
 
@@ -153,9 +156,9 @@ abstract class Ziskej
      */
     public function getCurrentMode(): string
     {
-        return !empty($this->_cookieManager->get(self::COOKIE_NAME))
-            ? $this->_cookieManager->get(self::COOKIE_NAME)
-            : $this->_defaultMode;
+        return !empty($this->cookieManager->get(self::COOKIE_NAME))
+            ? $this->cookieManager->get(self::COOKIE_NAME)
+            : $this->defaultMode;
     }
 
     /**
@@ -189,7 +192,7 @@ abstract class Ziskej
      */
     public function getPrivateKeyFileLocation(): string
     {
-        $keyFile = $this->_config->get('Certs')['ziskej'];
+        $keyFile = $this->config->get('Certs')['ziskej'];
 
         if (!$keyFile || !is_readable($keyFile)) {
             throw new \Exception('Certificate file to generate token not found');
@@ -205,7 +208,7 @@ abstract class Ziskej
      */
     public function getZiskejTechlibUrl(): ?string
     {
-        return $this->_configZiskej['techlib_url'];
+        return $this->configZiskej['techlib_url'];
     }
 
     /**
@@ -215,7 +218,7 @@ abstract class Ziskej
      */
     public function getCurrentZiskejTechlibFrontUrl(): ?string
     {
-        $modeUrls = $this->_config->get('ZiskejTechlibFrontUrl')->toArray();
+        $modeUrls = $this->config->get('ZiskejTechlibFrontUrl')->toArray();
 
         return $modeUrls[$this->getCurrentMode()] ?? null;
     }

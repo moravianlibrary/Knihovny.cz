@@ -42,7 +42,7 @@
             <?php
               $apiKey = $this->config()->get('config')->GoogleMaps->apikey;
               $addresses = $this->driver->getLibraryAddress();
-              $address = !(empty($addresses))? $addresses[0] : null;
+              $address = !(empty($addresses)) ? $addresses[0] : null;
               $coordinates = [
                   [
                       'title' => $this->driver->getTitle(),

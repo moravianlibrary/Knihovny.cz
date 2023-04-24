@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+
 /**
  * Ziskej EDD trait
  *
@@ -26,6 +26,9 @@ declare(strict_types=1);
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://knihovny.cz Main Site
  */
+
+declare(strict_types=1);
+
 namespace KnihovnyCz\Controller;
 
 use Laminas\Stdlib\ResponseInterface as Response;
@@ -138,7 +141,7 @@ trait ZiskejEddTrait
     public function ziskejEddOrderPostAction(): Response
     {
         if (!$this->getRequest()->isPost()) {
-            return $this->_redirectToTabEdd();
+            return $this->redirectToTabEdd();
         }
 
         /**
@@ -169,7 +172,7 @@ trait ZiskejEddTrait
                 'ZiskejEdd::error_eppn_missing',
                 'error'
             );
-            return $this->_redirectToTabEdd();
+            return $this->redirectToTabEdd();
         }
 
         /**
@@ -183,7 +186,7 @@ trait ZiskejEddTrait
                 'ZiskejEdd::error_email_missing',
                 'error'
             );
-            return $this->_redirectToTabEdd();
+            return $this->redirectToTabEdd();
         }
 
         $emailValidator = new EmailAddress();
@@ -192,7 +195,7 @@ trait ZiskejEddTrait
                 'ZiskejEdd::error_email_wrong',
                 'error'
             );
-            return $this->_redirectToTabEdd();
+            return $this->redirectToTabEdd();
         }
 
         $pagesFrom = $this->params()->fromPost('pages_from');
@@ -213,7 +216,7 @@ trait ZiskejEddTrait
                         ],
                         'error'
                     );
-                    return $this->_redirectToTabEdd();
+                    return $this->redirectToTabEdd();
                 }
             }
         }
@@ -223,7 +226,7 @@ trait ZiskejEddTrait
                 'ZiskejEdd::error_is_conditions',
                 'error'
             );
-            return $this->_redirectToTabEdd();
+            return $this->redirectToTabEdd();
         }
 
         if (!$this->params()->fromPost('is_price')) {
@@ -231,7 +234,7 @@ trait ZiskejEddTrait
                 'ZiskejEdd::error_is_price',
                 'error'
             );
-            return $this->_redirectToTabEdd();
+            return $this->redirectToTabEdd();
         }
 
         /**
@@ -247,7 +250,7 @@ trait ZiskejEddTrait
                 'ZiskejEdd::error_account_not_active',
                 'error'
             );
-            return $this->_redirectToTabEdd();
+            return $this->redirectToTabEdd();
         }
 
         $user->activateCardByPrefix($userCard->card_name);
@@ -277,7 +280,7 @@ trait ZiskejEddTrait
                 $e->getMessage(),
                 'error'
             );
-            return $this->_redirectToTabEdd();
+            return $this->redirectToTabEdd();
         }
 
         if (!$ziskejReader->isActive()) {
@@ -285,7 +288,7 @@ trait ZiskejEddTrait
                 'ZiskejEdd::error_account_not_active',
                 'warning'
             );
-            return $this->_redirectToTabEdd();
+            return $this->redirectToTabEdd();
         }
 
         $ticketRequest = new TicketEddRequest(
@@ -324,7 +327,7 @@ trait ZiskejEddTrait
                     'ZiskejEdd::failure_order_finished',
                     'error'
                 );
-                return $this->_redirectToTabEdd();
+                return $this->redirectToTabEdd();
             }
 
             $this->flashMessenger()->addMessage(
@@ -347,7 +350,7 @@ trait ZiskejEddTrait
                 $e->getMessage(),
                 'error'
             );
-            return $this->_redirectToTabEdd();
+            return $this->redirectToTabEdd();
         }
     }
 
@@ -356,7 +359,7 @@ trait ZiskejEddTrait
      *
      * @return \Laminas\Http\Response
      */
-    private function _redirectToTabEdd(): \Laminas\Http\Response
+    protected function redirectToTabEdd(): \Laminas\Http\Response
     {
         return $this->redirectToRecord('#ziskejedd', 'ZiskejEdd');
     }

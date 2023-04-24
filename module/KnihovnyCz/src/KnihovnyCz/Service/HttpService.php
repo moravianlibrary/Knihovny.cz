@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Knihovny.cz HTTP service class file.
  *
@@ -25,6 +26,7 @@
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://vufind.org/wiki/development
  */
+
 namespace KnihovnyCz\Service;
 
 /**
@@ -65,7 +67,8 @@ class HttpService extends \VuFindHttp\HttpService
     protected function setCurlProxyOptions($adapter)
     {
         parent::setCurlProxyOptions($adapter);
-        if (!empty($this->proxyConfig['proxy_user'])
+        if (
+            !empty($this->proxyConfig['proxy_user'])
             && !empty($this->proxyConfig['proxy_pass'])
         ) {
             $adapter

@@ -26,6 +26,7 @@
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://vufind.org/wiki/development Wiki
  */
+
 namespace KnihovnyCz\Service;
 
 use Laminas\ServiceManager\Exception\ServiceNotCreatedException;
@@ -43,7 +44,7 @@ use Psr\Container\ContainerInterface;
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://vufind.org/wiki/development Wiki
  */
-class GuzzleHttpServiceFactory  implements FactoryInterface
+class GuzzleHttpServiceFactory implements FactoryInterface
 {
     /**
      * Create an object

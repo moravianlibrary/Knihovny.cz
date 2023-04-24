@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 
 /**
  * Factory for the default EDS backend.
@@ -27,11 +26,14 @@ declare(strict_types=1);
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://vufind.org Main Site
  */
+
+declare(strict_types=1);
+
 namespace KnihovnyCz\Search\Factory;
 
 use KnihovnyCz\Search\EDS\Backend\Connector;
 use VuFind\Search\Factory\EdsBackendFactory
-    as ParentEdsBackendFactory;
+as ParentEdsBackendFactory;
 
 /**
  * Factory for the default EDS backend.

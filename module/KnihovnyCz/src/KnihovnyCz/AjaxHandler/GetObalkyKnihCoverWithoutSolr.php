@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 
 /**
  * Class GetObalkyKnihCoverWithoutSolr
@@ -27,6 +26,9 @@ declare(strict_types=1);
  * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://knihovny.cz Main Page
  */
+
+declare(strict_types=1);
+
 namespace KnihovnyCz\AjaxHandler;
 
 use Laminas\Mvc\Controller\Plugin\Params;
@@ -47,8 +49,8 @@ use VuFindCode\ISMN;
  * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://knihovny.cz Main Page
  */
-class GetObalkyKnihCoverWithoutSolr extends AbstractBase
-    implements AjaxHandlerInterface
+class GetObalkyKnihCoverWithoutSolr extends AbstractBase implements
+    AjaxHandlerInterface
 {
     /**
      * Obálky knih cover handler
@@ -117,7 +119,8 @@ class GetObalkyKnihCoverWithoutSolr extends AbstractBase
         $format = $params->fromQuery('format', '');
         $ids = ['recordid' => $recordId];
         $idWithoutPrefix = substr($recordId, strpos($recordId, '.') + 1);
-        if (substr($idWithoutPrefix, 0, 5) === 'uuid:'
+        if (
+            substr($idWithoutPrefix, 0, 5) === 'uuid:'
             && empty($ids['uuid'] ?? null)
         ) {
             $ids['uuid'] = $idWithoutPrefix;

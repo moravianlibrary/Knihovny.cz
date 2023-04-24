@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+
 /**
  * "Get Autocomplete Suggestions" AJAX handler
  *
@@ -26,11 +26,16 @@ declare(strict_types=1);
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://vufind.org/wiki/development Wiki
  */
+
+declare(strict_types=1);
+
 namespace KnihovnyCz\AjaxHandler;
 
 use Laminas\Mvc\Controller\Plugin\Params;
 use Laminas\Stdlib\Parameters;
 use VuFind\AjaxHandler\AbstractBase;
+use VuFind\I18n\Translator\TranslatorAwareInterface;
+use VuFind\I18n\Translator\TranslatorAwareTrait;
 use VuFind\Search\Results\PluginManager as ResultsManager;
 
 /**
@@ -42,10 +47,10 @@ use VuFind\Search\Results\PluginManager as ResultsManager;
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://vufind.org/wiki/development Wiki
  */
-class GetLibrariesACSuggestions extends AbstractBase
-    implements \VuFind\I18n\Translator\TranslatorAwareInterface
+class GetLibrariesACSuggestions extends AbstractBase implements
+    TranslatorAwareInterface
 {
-    use \VuFind\I18n\Translator\TranslatorAwareTrait;
+    use TranslatorAwareTrait;
 
     /**
      * ResultsManager

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * VuFind Flash Redirect
  *
@@ -25,6 +26,7 @@
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://vufind.org Main Page
  */
+
 namespace KnihovnyCz\Controller\Plugin;
 
 use GuzzleHttp\Psr7\Query;

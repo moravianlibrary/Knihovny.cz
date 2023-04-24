@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 
 /**
  * Class RecordController
@@ -28,6 +27,9 @@ declare(strict_types=1);
  * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://knihovny.cz Main Page
  */
+
+declare(strict_types=1);
+
 namespace KnihovnyCz\Controller;
 
 use Laminas\Config\Config;
@@ -84,7 +86,8 @@ class RecordController extends \VuFind\Controller\RecordController
      */
     public function dispatch(Request $request, Response $response = null)
     {
-        if ($this->redirectToLibrary
+        if (
+            $this->redirectToLibrary
             && str_starts_with($this->params()->fromRoute('id'), 'library')
         ) {
             return $this->redirect()->toRoute(
@@ -214,7 +217,8 @@ class RecordController extends \VuFind\Controller\RecordController
                     || count($requestGroups) > 1));
 
         $pickupDetails = $gatheredDetails;
-        if (!$requestGroupNeeded && !empty($requestGroups)
+        if (
+            !$requestGroupNeeded && !empty($requestGroups)
             && count($requestGroups) == 1
         ) {
             // Request group selection is not required, but we have a single request
@@ -262,7 +266,8 @@ class RecordController extends \VuFind\Controller\RecordController
                 // if successful, we will redirect and can stop here.
 
                 // Pass start date to the driver only if it's in the future:
-                if (!empty($gatheredDetails['startDate'])
+                if (
+                    !empty($gatheredDetails['startDate'])
                     && $dateValidationResults['startDateTS'] < strtotime('+1 day')
                 ) {
                     $gatheredDetails['startDate'] = '';

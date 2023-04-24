@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 
 /**
  * Class Get Holding
@@ -27,12 +26,18 @@ declare(strict_types=1);
  * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://knihovny.cz Main Page
  */
+
+declare(strict_types=1);
+
 namespace KnihovnyCz\AjaxHandler;
 
 use Laminas\Mvc\Controller\Plugin\Params;
 use Mzk\ZiskejApi\Api;
 use Mzk\ZiskejApi\Enum\TicketEddSubtype;
 use Mzk\ZiskejApi\Enum\ZiskejSettings;
+use VuFind\AjaxHandler\AbstractBase;
+use VuFind\I18n\Translator\TranslatorAwareInterface;
+use VuFind\I18n\Translator\TranslatorAwareTrait;
 
 /**
  * Class Get Ziskej Edd Fee
@@ -43,10 +48,9 @@ use Mzk\ZiskejApi\Enum\ZiskejSettings;
  * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://knihovny.cz Main Page
  */
-class GetZiskejEddFee extends \VuFind\AjaxHandler\AbstractBase
-    implements \VuFind\I18n\Translator\TranslatorAwareInterface
+class GetZiskejEddFee extends AbstractBase implements TranslatorAwareInterface
 {
-    use \VuFind\I18n\Translator\TranslatorAwareTrait;
+    use TranslatorAwareTrait;
 
     /**
      * Ziskej API

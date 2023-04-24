@@ -26,6 +26,7 @@
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://vufind.org
  */
+
 namespace KnihovnyCz\Search\Solr\Backend;
 
 use KnihovnyCz\Search\Solr\Backend\SearchQueryParameters as Parameters;

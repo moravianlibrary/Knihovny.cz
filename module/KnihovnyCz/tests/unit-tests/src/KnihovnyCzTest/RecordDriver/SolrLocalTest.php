@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 
 /**
  * Class SolrLocalTest
@@ -22,15 +21,21 @@ declare(strict_types=1);
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  *
  * @category Knihovny.cz
+ * @package  Tests
  * @author   Josef Moravec <moravec@mzk.cz>
  * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://knihovny.cz Main Page
  */
 
+declare(strict_types=1);
+
+namespace KnihovnyCzTest\RecordDriver;
+
 /**
  * Class SolrLocalTest
  *
  * @category Knihovny.cz
+ * @package  Tests
  * @author   Josef Moravec <moravec@mzk.cz>
  * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://knihovny.cz Main Page
@@ -41,6 +46,8 @@ class SolrLocalTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Test getOfflineHoldings method
+     *
+     * @return void
      */
     public function testGetOfflineHoldings(): void
     {
@@ -110,6 +117,8 @@ class SolrLocalTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Test hasOfflineHoldings method
+     *
+     * @return void
      */
     public function testHasOfflineHoldings(): void
     {

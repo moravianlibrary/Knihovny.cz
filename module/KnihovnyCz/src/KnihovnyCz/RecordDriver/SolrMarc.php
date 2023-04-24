@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Knihovny.cz solr marc record driver
  *
@@ -25,6 +26,7 @@
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     http://github.com/moravianlibrary/Knihovny.cz Knihovny.cz
  */
+
 namespace KnihovnyCz\RecordDriver;
 
 /**
@@ -257,7 +259,8 @@ class SolrMarc extends SolrDefault
     public function getCleanNBN()
     {
         $nbn = $this->getCleanNBNMarc();
-        if (empty($nbn) && $this->ils != null
+        if (
+            empty($nbn) && $this->ils != null
             && $sigla = $this->ils->sourceToSigla($this->getSourceId())
         ) {
             $sigla = strtolower($this->remapSiglaForNkp($sigla));
@@ -283,7 +286,8 @@ class SolrMarc extends SolrDefault
             foreach ($field['subfields'] as $subfield) {
                 $sf[$subfield['code']] = $subfield['data'];
             }
-            if (isset($sf['i']) && trim($sf['i']) == 'Recenze na:'
+            if (
+                isset($sf['i']) && trim($sf['i']) == 'Recenze na:'
                 && isset($sf['t']) && isset($sf['d'])
             ) {
                 $reviews[] = (isset($sf['a']) ? $sf['a'] . '. ' : '') .
@@ -306,7 +310,8 @@ class SolrMarc extends SolrDefault
             return strtolower(str_replace('-', '', $id));
         }
         // NKP, NLK, ARL and Verbis libraries use 001 as identifiers in obalky knih
-        if ($sigla === 'aba001'
+        if (
+            $sigla === 'aba001'
             || $sigla === 'aba008'
             || $this->isArl()
             || $this->isVerbis()

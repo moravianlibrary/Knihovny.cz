@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+
 /**
  * View helper to work with user cards
  *
@@ -26,6 +26,9 @@ declare(strict_types=1);
  * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://knihovny.cz Main Page
  */
+
+declare(strict_types=1);
+
 namespace KnihovnyCz\View\Helper\KnihovnyCz;
 
 use Laminas\Db\ResultSet\AbstractResultSet;
@@ -47,7 +50,7 @@ class UserCards extends AbstractHelper
      *
      * @var \Laminas\Db\ResultSet\AbstractResultSet
      */
-    private AbstractResultSet $_cards;
+    private AbstractResultSet $cards;
 
     /**
      * Invoke function
@@ -58,7 +61,7 @@ class UserCards extends AbstractHelper
      */
     public function __invoke(AbstractResultSet $cards): self
     {
-        $this->_cards = $cards;
+        $this->cards = $cards;
         return $this;
     }
 
@@ -71,7 +74,7 @@ class UserCards extends AbstractHelper
     {
         $return = [];
         $index = 0;
-        foreach ($this->_cards as $card) {
+        foreach ($this->cards as $card) {
             $return[$this->getView()->translate(
                 'Source::' . $card['card_name']
             ) . ' ' . $index] = $card;

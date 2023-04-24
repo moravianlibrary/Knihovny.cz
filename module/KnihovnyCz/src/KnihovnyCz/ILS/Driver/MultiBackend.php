@@ -26,6 +26,7 @@
  * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://knihovny.cz Main Page
  */
+
 namespace KnihovnyCz\ILS\Driver;
 
 use KnihovnyCz\Date\Converter as DateConverter;
@@ -232,7 +233,8 @@ class MultiBackend extends \VuFind\ILS\Driver\MultiBackend
     public function getMyProfile($patron)
     {
         $profile = parent::getMyProfile($patron);
-        if (isset($profile['expiration_date'])
+        if (
+            isset($profile['expiration_date'])
             && $this->isExpired($profile['expiration_date'])
         ) {
             $profile['expired'] = true;
@@ -396,7 +398,8 @@ class MultiBackend extends \VuFind\ILS\Driver\MultiBackend
     protected function processOverdueTransactions($details)
     {
         foreach ($details as &$detail) {
-            if (isset($detail['duedate'])
+            if (
+                isset($detail['duedate'])
                 && $this->isExpired($detail['duedate'])
                 && !isset($detail['dueStatus'])
             ) {

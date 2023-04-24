@@ -26,6 +26,7 @@
  * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://knihovny.cz Main Page
  */
+
 namespace KnihovnyCz\RecordDriver\Feature;
 
 use VuFind\Content\ObalkyKnihService;
@@ -62,8 +63,14 @@ trait ObalkyKnihTrait
         if (!is_array($ids)) {
             return null;
         }
-        if (isset($ids['isbn'])) {
-            $ids['isbn'] = new ISBN($ids['isbn']);
+        if (!empty($ids['isbns'])) {
+            $ids['isbns'] = array_map(
+                function ($isbn) {
+                    return new ISBN($isbn);
+                },
+                $ids['isbns']
+            );
+            $ids['isbn'] = $ids['isbns'][0];
         }
         if (isset($ids['ismn'])) {
             $ids['ismn'] = new ISMN($ids['ismn']);

@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 
 /**
  * Class InvolvedLibrariesParser
@@ -27,6 +26,9 @@ declare(strict_types=1);
  * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://knihovny.cz Main Page
  */
+
+declare(strict_types=1);
+
 namespace KnihovnyCz\Markdown\InvolvedLibraries;
 
 use KnihovnyCz\Markdown\InvolvedLibraries\Node\InvolvedLibrariesPlaceholder;
@@ -98,8 +100,7 @@ class InvolvedLibrariesParser extends AbstractBlockContinueParser
      */
     public static function blockStartParser(): BlockStartParserInterface
     {
-        return new class () implements BlockStartParserInterface,
-            ConfigurationAwareInterface {
+        return new class () implements BlockStartParserInterface, ConfigurationAwareInterface {
             protected ConfigurationInterface $config;
 
             /**

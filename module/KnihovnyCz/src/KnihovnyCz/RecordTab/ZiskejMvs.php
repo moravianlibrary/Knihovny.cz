@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 
 /**
  * Record tab Ziskej MVS
@@ -27,6 +26,9 @@ declare(strict_types=1);
  * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://knihovny.cz Main Page
  */
+
+declare(strict_types=1);
+
 namespace KnihovnyCz\RecordTab;
 
 /**
@@ -40,7 +42,7 @@ namespace KnihovnyCz\RecordTab;
  */
 class ZiskejMvs extends ZiskejBase
 {
-    private \KnihovnyCz\Ziskej\ZiskejMvs $_ziskejMvs;
+    private \KnihovnyCz\Ziskej\ZiskejMvs $ziskejMvs;
 
     /**
      * Constructor
@@ -59,7 +61,7 @@ class ZiskejMvs extends ZiskejBase
         $this->authManager = $authManager;
         $this->ilsDriver = $ilsDriver;
         $this->ziskejApi = $ziskejApi;
-        $this->_ziskejMvs = $ziskejMvs;
+        $this->ziskejMvs = $ziskejMvs;
 
         $this->isZiskejActive = $ziskejMvs->isEnabled();
     }
@@ -96,7 +98,7 @@ class ZiskejMvs extends ZiskejBase
      */
     public function getZiskejMvs(): \KnihovnyCz\Ziskej\ZiskejMvs
     {
-        return $this->_ziskejMvs;
+        return $this->ziskejMvs;
     }
 
     /**

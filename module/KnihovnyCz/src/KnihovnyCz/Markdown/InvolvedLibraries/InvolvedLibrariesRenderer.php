@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 
 /**
  * Class InvolvedLibrariesRenderer
@@ -27,6 +26,9 @@ declare(strict_types=1);
  * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://knihovny.cz Main Page
  */
+
+declare(strict_types=1);
+
 namespace KnihovnyCz\Markdown\InvolvedLibraries;
 
 use League\CommonMark\Node\Node;
@@ -43,7 +45,8 @@ use League\CommonMark\Xml\XmlNodeRendererInterface;
  * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://knihovny.cz Main Page
  */
-class InvolvedLibrariesRenderer implements NodeRendererInterface,
+class InvolvedLibrariesRenderer implements
+    NodeRendererInterface,
     XmlNodeRendererInterface
 {
     /**

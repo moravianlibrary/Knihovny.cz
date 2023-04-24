@@ -1,4 +1,5 @@
 <?php
+
 namespace KnihovnyCzCronApi\Module\Configuration;
 
 $secret = getenv('CRONJOB_SECRET');

@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 
 /**
  * Factory for the default SOLR backend.
@@ -27,6 +26,9 @@ declare(strict_types=1);
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://vufind.org Main Site
  */
+
+declare(strict_types=1);
+
 namespace KnihovnyCz\Search\Factory;
 
 use KnihovnyCz\Search\Solr\Backend\Backend as KnihovnyCzBackend;
@@ -40,7 +42,7 @@ use KnihovnyCz\Search\Solr\JsonFacetListener;
 use KnihovnyCz\Search\Solr\MultiplyingDeduplicationListener;
 use KnihovnyCz\Search\Solr\OneChildDocDeduplicationListener;
 use VuFind\Search\Factory\SolrDefaultBackendFactory
-    as ParentSolrDefaultBackendFactory;
+as ParentSolrDefaultBackendFactory;
 use VuFindSearch\Backend\Solr\Backend;
 
 /**

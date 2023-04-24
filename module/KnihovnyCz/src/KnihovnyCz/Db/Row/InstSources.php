@@ -26,7 +26,11 @@
  * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://knihovny.cz Main Page
  */
+
 namespace KnihovnyCz\Db\Row;
+
+use VuFind\Db\Row\RowGateway;
+use VuFind\Db\Table\DbTableAwareInterface;
 
 /**
  * Class InstSources
@@ -37,8 +41,7 @@ namespace KnihovnyCz\Db\Row;
  * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://knihovny.cz Main Page
  */
-class InstSources extends \VuFind\Db\Row\RowGateway
-    implements \VuFind\Db\Table\DbTableAwareInterface
+class InstSources extends RowGateway implements DbTableAwareInterface
 {
     use \VuFind\Db\Table\DbTableAwareTrait;
 

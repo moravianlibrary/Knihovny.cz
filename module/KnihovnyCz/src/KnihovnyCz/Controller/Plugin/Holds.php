@@ -1,4 +1,5 @@
 <?php
+
 /**
  * VuFind Action Helper - Holds Support Methods
  *
@@ -25,6 +26,7 @@
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://vufind.org Main Page
  */
+
 namespace KnihovnyCz\Controller\Plugin;
 
 use VuFind\Controller\Plugin\Holds as HoldsBase;

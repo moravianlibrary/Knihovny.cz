@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 
 /**
  * Class PageLocator
@@ -27,9 +26,13 @@ declare(strict_types=1);
  * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://knihovny.cz Main Page
  */
+
+declare(strict_types=1);
+
 namespace KnihovnyCz\Content;
 
 use VuFind\Cache\CacheTrait;
+use VuFind\Content\PageLocator as PageLocatorBase;
 use VuFindHttp\HttpServiceAwareInterface;
 use VuFindHttp\HttpServiceAwareTrait;
 
@@ -42,8 +45,7 @@ use VuFindHttp\HttpServiceAwareTrait;
  * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://knihovny.cz Main Page
  */
-class PageLocator extends \VuFind\Content\PageLocator
-    implements HttpServiceAwareInterface
+class PageLocator extends PageLocatorBase implements HttpServiceAwareInterface
 {
     use HttpServiceAwareTrait;
     use CacheTrait;

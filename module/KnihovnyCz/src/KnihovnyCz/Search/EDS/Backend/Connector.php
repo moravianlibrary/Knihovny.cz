@@ -1,4 +1,5 @@
 <?php
+
 /**
  * EBSCO EDS API Connector
  *
@@ -25,6 +26,7 @@
  * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://vufind.org
  */
+
 namespace KnihovnyCz\Search\EDS\Backend;
 
 use VuFindSearch\Backend\EDS\ApiException;

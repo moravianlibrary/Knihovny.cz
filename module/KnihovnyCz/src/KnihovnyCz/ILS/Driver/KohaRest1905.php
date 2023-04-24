@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+
 /**
  * VuFind Driver for Koha, using REST API
  *
@@ -29,6 +29,9 @@ declare(strict_types=1);
  * @link     https://vufind.org/wiki/vufind2:building_an_ils_driver Wiki
  * @link     https://knihovny.cz Main Page
  */
+
+declare(strict_types=1);
+
 namespace KnihovnyCz\ILS\Driver;
 
 use VuFind\Date\DateException;
@@ -48,7 +51,8 @@ use VuFind\ILS\Driver\AbstractBase;
  * @link     https://vufind.org/wiki/development:plugins:ils_drivers Wiki
  * @link     https://knihovny.cz Main Page
  */
-class KohaRest1905 extends AbstractBase implements \Laminas\Log\LoggerAwareInterface,
+class KohaRest1905 extends AbstractBase implements
+    \Laminas\Log\LoggerAwareInterface,
     \VuFind\I18n\Translator\TranslatorAwareInterface,
     \VuFindHttp\HttpServiceAwareInterface
 {
@@ -623,7 +627,8 @@ class KohaRest1905 extends AbstractBase implements \Laminas\Log\LoggerAwareInter
         $excluded = isset($this->config['Holds']['excludePickupLocations'])
             ? explode(':', $this->config['Holds']['excludePickupLocations']) : [];
         foreach ($libraries as $location) {
-            if (!$location['pickup_location']
+            if (
+                !$location['pickup_location']
                 || in_array($location['library_id'], $excluded)
             ) {
                 continue;
@@ -997,7 +1002,8 @@ class KohaRest1905 extends AbstractBase implements \Laminas\Log\LoggerAwareInter
         // Handle errors as complete failures only if the API call didn't return
         // valid JSON that the caller can handle
         $decodedResult = json_decode($result, true);
-        if (!$response->isSuccess()
+        if (
+            !$response->isSuccess()
             && (null === $decodedResult || !empty($decodedResult['error']))
         ) {
             $params = $method == 'GET'
@@ -1053,7 +1059,8 @@ class KohaRest1905 extends AbstractBase implements \Laminas\Log\LoggerAwareInter
                     'library_id' => $this->getDefaultPickUpLocation($patron)
                 ]
             );
-            if ($holdability['code'] == '200'
+            if (
+                $holdability['code'] == '200'
                 && $holdability['data']['allows_hold'] == false
             ) {
                 $holdable = 'N';
@@ -1321,31 +1328,31 @@ class KohaRest1905 extends AbstractBase implements \Laminas\Log\LoggerAwareInter
     {
         $config = [];
         switch ($function) {
-        case 'Holds':
-            $holdsConfig = $this->config['Holds'] ?? [];
-            $defaults = [
-                "HMACKeys" => "id:item_id",
-                "extraHoldFields" => "comments:requiredByDate:pickUpLocation",
-                "defaultRequiredDate" => "0:0:1",
-            ];
-            return $holdsConfig + $defaults;
-        case 'IllRequests':
-            $config = [ "HMACKeys" => "id:item_id" ];
-            break;
-        case 'getMyTransactionHistory':
-        case 'getMyTransactions':
-            $config = [
-                'max_results' => '200',
-                'default_page_size' => '20',
-                'sort' => [
-                    '-checkout_date' => 'sort_checkout_date_desc',
-                    '+checkout_date' => 'sort_checkout_date_asc',
-                    '-checkin_date' => 'sort_return_date_desc',
-                    '+checkin_date' => 'sort_return_date_asc',
-                ],
-                'default_sort' => '-checkout_date',
-            ];
-            break;
+            case 'Holds':
+                $holdsConfig = $this->config['Holds'] ?? [];
+                $defaults = [
+                    "HMACKeys" => "id:item_id",
+                    "extraHoldFields" => "comments:requiredByDate:pickUpLocation",
+                    "defaultRequiredDate" => "0:0:1",
+                ];
+                return $holdsConfig + $defaults;
+            case 'IllRequests':
+                $config = [ "HMACKeys" => "id:item_id" ];
+                break;
+            case 'getMyTransactionHistory':
+            case 'getMyTransactions':
+                $config = [
+                    'max_results' => '200',
+                    'default_page_size' => '20',
+                    'sort' => [
+                        '-checkout_date' => 'sort_checkout_date_desc',
+                        '+checkout_date' => 'sort_checkout_date_asc',
+                        '-checkin_date' => 'sort_return_date_desc',
+                        '+checkin_date' => 'sort_return_date_asc',
+                    ],
+                    'default_sort' => '-checkout_date',
+                ];
+                break;
         }
         return $config;
     }

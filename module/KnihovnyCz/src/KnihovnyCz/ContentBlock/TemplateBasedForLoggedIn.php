@@ -1,5 +1,4 @@
 <?php
-declare(strict_types=1);
 
 /**
  * Class TemplateBasedForLoggedIn
@@ -27,6 +26,9 @@ declare(strict_types=1);
  * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://knihovny.cz Main Page
  */
+
+declare(strict_types=1);
+
 namespace KnihovnyCz\ContentBlock;
 
 use KnihovnyCz\Content\PageLocator;
@@ -47,7 +49,7 @@ class TemplateBasedForLoggedIn extends TemplateBased
      *
      * @var bool
      */
-    private bool $_isLoggedIn;
+    protected bool $isLoggedIn;
 
     /**
      * TemplateBasedHiddenForLoggedIn constructor
@@ -59,7 +61,7 @@ class TemplateBasedForLoggedIn extends TemplateBased
         PageLocator $pageLocator,
         bool $isLoggedIn = false
     ) {
-        $this->_isLoggedIn = $isLoggedIn;
+        $this->isLoggedIn = $isLoggedIn;
 
         parent::__construct($pageLocator);
     }
@@ -78,7 +80,7 @@ class TemplateBasedForLoggedIn extends TemplateBased
         $page = null,
         $pattern = null
     ): array {
-        if (!$this->_isLoggedIn) {
+        if (!$this->isLoggedIn) {
             return [
                 'template' => 'ContentBlock/TemplateBased/markdown',
                 'data' => ''
