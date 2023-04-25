@@ -90,6 +90,7 @@ return [
             'github' => 'FontAwesome:github-square',
             'facebook' => 'FontAwesome:facebook-square',
             'instagram' => 'FontAwesome:instagram',
+            'order-messages' => 'FontAwesome:comments'
         ],
     ],
     'favicon' => 'icon-knihovny.png',
