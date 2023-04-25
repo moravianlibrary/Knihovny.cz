@@ -163,13 +163,16 @@ $this->headTitle($this->translate('ZiskejMvs::header_order_ziskej_num') . ' ' . 
         </a>
       <?php endif; ?>
       <?php if (in_array($ticket->getStatus(), ['created', 'paid'])): ?>
-        <a id="cancelButton" class="btn btn-info" href="<?=$this->url('myresearch-ziskej-mvs-ticket-cancel', ['eppnDomain' => $userCard->getEppnDomain(), 'ticketId' => $ticket->getId()]) ?>" title="<?=$this->transEsc("ZiskejMvs::btn_order_cancel_title") ?>">
+        <a id="cancelButton" class="btn btn-warning" href="<?=$this->url('myresearch-ziskej-mvs-ticket-cancel', ['eppnDomain' => $userCard->getEppnDomain(), 'ticketId' => $ticket->getId()]) ?>" title="<?=$this->transEsc("ZiskejMvs::btn_order_cancel_title") ?>">
           <i class="fa fa-times"></i> <?=$this->transEsc("ZiskejMvs::btn_order_cancel") ?>
         </a>
       <?php endif; ?>
       <?php if ($ticket->getStatus() == 'cancelled'): ?>
         <div class="alert alert-info"><?=$this->transEsc("ZiskejMvs::msg_order_canceled") ?></div>
       <?php endif; ?>
+      <a class="btn btn-info" href="#messages" title="<?=$this->transEsc("ZiskejMvs::btn_order_goto_messages_title") ?>">
+        <?=$this->icon('order-messages') ?> <?=$this->transEsc("ZiskejMvs::btn_order_goto_messages") ?>
+      </a>
       <a class="btn btn-default" href="https://ziskej-info.techlib.cz/reklamace" target="_blank" title="<?=$this->transEsc("ZiskejMvs::btn_order_complaint_title") ?>">
         <i class="fa fa-exclamation-triangle"></i>
         <?=$this->transEsc("ZiskejMvs::btn_order_complaint") ?>
@@ -217,7 +220,7 @@ $this->headTitle($this->translate('ZiskejMvs::header_order_ziskej_num') . ' ' . 
       <?php endif; ?>
     </div>
 
-    <div>
+    <div id="messages">
       <h3>
         <?=$this->transEsc("ZiskejMvs::header_order_messages") ?>
         <?php if ($ticket->getCountMessages() > 0): ?>
