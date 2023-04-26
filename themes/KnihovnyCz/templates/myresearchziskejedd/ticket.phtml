@@ -182,7 +182,7 @@ $this->headTitle($this->translate('ZiskejEdd::header_order_ziskej_num') . ' ' . 
       <a class="btn btn-info" href="#messages" title="<?=$this->transEsc("ZiskejMvs::btn_order_goto_messages_title") ?>">
         <?=$this->icon('order-messages') ?> <?=$this->transEsc("ZiskejMvs::btn_order_goto_messages") ?>
       </a>
-      <?php if (!empty($ticket->getDownloadUrl())): ?>
+      <?php if (in_array($ticket->getStatus(), ['prepared', 'lent']) && !empty($ticket->getDownloadUrl())): ?>
       <a class="btn btn-default" href="<?=$ticket->getDownloadUrl()?>" target="_blank" title="<?=$this->transEsc("ZiskejEdd::btn_order_complaint_title")?>">
         <i class="fa fa-exclamation-triangle"></i>
         <?=$this->transEsc("ZiskejEdd::btn_order_complaint")?>
