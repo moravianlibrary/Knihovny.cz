@@ -51,6 +51,7 @@ class SolrLibrary extends \KnihovnyCz\RecordDriver\SolrMarc
         'github' => 'P2037',
         'twitter' => 'P2002',
         'instagram' => 'P2003',
+        'orgcode' => 'P3234',
     ];
 
     protected array $socialSites = [
@@ -399,7 +400,7 @@ class SolrLibrary extends \KnihovnyCz\RecordDriver\SolrMarc
      */
     public function hasAdditionalInfo()
     {
-        return !empty($this->getSigla()) || !empty($this->getLastUpdated());
+        return !empty($this->getSigla()) || !empty($this->getLastUpdated()) || !empty($this->getOrgCode());
     }
 
     /**
@@ -599,6 +600,19 @@ SPARQL;
     {
         $data = $this->getWikidataData();
         return $this->formatLinks($data, ['isds']);
+    }
+
+    /**
+     * Get information about Code List for Cultural Heritage Organizations
+     * (currated by Library of Congress)
+     *
+     * @return array
+     * @throws \Psr\Http\Client\ClientExceptionInterface
+     */
+    public function getOrgCode(): array
+    {
+        $data = $this->getWikidataData();
+        return $this->formatLinks($data, ['orgcode']);
     }
 
     /**
