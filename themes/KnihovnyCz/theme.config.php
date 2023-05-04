@@ -19,6 +19,8 @@ return [
             KnihovnyCz\View\Helper\KnihovnyCz\RecordLinker::class => \KnihovnyCz\View\Helper\KnihovnyCz\RecordLinkerFactory::class,
             \KnihovnyCz\View\Helper\KnihovnyCz\GoogleTagManager::class => \KnihovnyCz\View\Helper\KnihovnyCz\GoogleTagManagerFactory::class,
             \KnihovnyCz\View\Helper\KnihovnyCz\GeoCoords::class => \VuFind\View\Helper\Root\GeoCoordsFactory::class,
+            \KnihovnyCz\View\Helper\KnihovnyCz\SetupEmbeddedThemeResources::class =>
+                KnihovnyCz\View\Helper\KnihovnyCz\SetupEmbeddedThemeResourcesFactory::class,
         ],
         'invokables' => [
             \KnihovnyCz\View\Helper\KnihovnyCz\FooterLink::class,
@@ -44,6 +46,7 @@ return [
             'geocoords' => \KnihovnyCz\View\Helper\KnihovnyCz\GeoCoords::class,
             'userCards' => KnihovnyCz\View\Helper\KnihovnyCz\UserCards::class,
             'contextHelp' => KnihovnyCz\View\Helper\KnihovnyCz\ContextHelp::class,
+            'setupEmbeddedThemeResources' => KnihovnyCz\View\Helper\KnihovnyCz\SetupEmbeddedThemeResources::class,
         ],
     ],
     'icons' => [

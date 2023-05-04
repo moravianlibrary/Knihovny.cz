@@ -1,0 +1,23 @@
+<?php
+/**
+ * @var Laminas\View\Renderer\PhpRenderer $this
+ */
+?>
+<?php
+$this->headTitle($this->title);
+$this->headLink()->appendStylesheet('embedded-search.css');
+$center = $this->position == 'top' ? 'center' : '';
+$language = $this->language ?? $this->layout()->userLang;
+$logo = $this->render('layout/logoimagelink.phtml', ['language' => $language]);
+?>
+<?php if (!empty($logo)): ?>
+  <a href="<?=$this->baseUrl ?>" title="<?=$this->transEsc($this->title) ?>">
+    <img class="logo <?=$center ?>" src="<?=$logo ?>" alt="<?=$this->translate('logo_alt') ?>">
+  </a>
+<?php endif; ?>
+<form action="<?=$this->escapeHtmlAttr($this->link) ?>" method="get" class="search-body <?=$center ?>" target="_top">
+  <input class="form-control lookfor <?=$center ?>" type="text" name="lookfor" value="<?=$this->lookfor ?>">
+  <input type="hidden" name="type" value="<?=$this->escapeHtmlAttr($this->type) ?>">
+  <input type="hidden" name="lng" value="<?=$this->escapeHtmlAttr($language) ?>">
+  <input class="form-control find-button" type="submit" value="<?=$this->translate('Find') ?>">
+</form>
