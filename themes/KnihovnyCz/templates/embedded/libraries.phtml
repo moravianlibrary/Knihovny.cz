@@ -1,4 +1,9 @@
 <?php
+/**
+ * @var Laminas\View\Renderer\PhpRenderer $this
+ */
+?>
+<?php
 $alnum = new \Laminas\I18n\Filter\Alnum();
 
 /** @var string $selectedRegion */
@@ -21,20 +26,17 @@ if (!empty($selectedRegion)) {
   }
   $headTitle = $headTitle . ': ' . $headSubtitle;
 }
-?>
-<?=$this->doctype() ?>
-<html lang="<?=$this->layout()->userLang ?>"<?php if ($this->layout()->rtl): ?> dir="rtl"<?php endif; ?>>
-<head>
-  <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
-  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-  <?=$this->headTitle($headTitle) ?>
-  <?php $this->headLink()->appendStylesheet('vendor/bootstrap.min.css'); ?>
-  <?php $this->headLink()->appendStylesheet('vendor/font-awesome.min.css'); ?>
-  <?php $this->headLink()->appendStylesheet('embedded-libraries.css'); ?>
-  <?php $this->headScript()->appendFile('vendor/jquery.min.js'); ?>
-  <?php $this->headScript()->appendFile('vendor/bootstrap.min.js'); ?>
-  <?php $this->headScript()->appendFile('embedded-libraries.js'); ?>
-  <?php $this->headStyle()->appendStyle("
+$this->headTitle($headTitle);
+
+$this->headLink()->appendStylesheet('vendor/bootstrap.min.css');
+$this->headLink()->appendStylesheet('vendor/font-awesome.min.css');
+$this->headLink()->appendStylesheet('embedded-libraries.css');
+
+$this->headScript()->appendFile('vendor/jquery.min.js');
+$this->headScript()->appendFile('vendor/bootstrap.min.js');
+$this->headScript()->appendFile('embedded-libraries.js');
+
+$this->headStyle()->appendStyle("
     a {
       color: $color !important;
     }
@@ -44,19 +46,15 @@ if (!empty($selectedRegion)) {
     .text-primary {
       color: $color !important;
     }
-  "); ?>
-  <?=$this->headLink() ?>
-  <?=$this->headStyle() ?>
-  <?=$this->headScript() ?>
-</head>
-<body>
+  ");
+?>
 <div>
   <nav class="navbar navbar-default">
     <div class="container-fluid">
       <div class="row">
         <div class="col-xs-12">
           <div class="input-group">
-            <div class="input-group-addon"><?= $this->icon('search') ?></div>
+            <div class="input-group-addon"><i class="fa fa-search" aria-hidden="true"></i></div>
             <input type="text" class="form-control" id="search" placeholder="<?= $this->translate('EmbeddedLibraries::search_input_placeholder') ?>">
             <div class="input-group-btn hidden">
               <button type="button" class="btn">Filter</button>
@@ -87,12 +85,13 @@ if (!empty($selectedRegion)) {
                         <div class="panel panel-default">
                           <div class="panel-body">
                             <h4>
-                              <span class="pull-right text-primary" title="<?=$this->translate('EmbeddedLibraries::function_regional_library') ?>"><?=$this->icon('regional-library-marker') ?></span>
+                              <span class="pull-right text-primary" title="<?=$this->translate('EmbeddedLibraries::function_regional_library') ?>"><i class="fa fa-dot-circle-o" aria-hidden="true"></i>
+</span>
                               <a href="<?=$this->url('search2record', ['id' => $library['link']]) ?>" target="_blank" title="<?=$library['title'] ?>">
                                 <?=$library['title'] ?>
                               </a>
                             </h4>
-                            <span class="text-muted"><?=$this->icon('city-marker') ?> <?=$library['town'] ?></span>
+                            <span class="text-muted"><i class="fa fa-map-marker" aria-hidden="true"></i> <?=$library['town'] ?></span>
                           </div>
                         </div>
                       </div>
@@ -109,7 +108,7 @@ if (!empty($selectedRegion)) {
                                 <?=$library['title'] ?>
                               </a>
                             </h4>
-                            <span class="text-muted"><?=$this->icon('city-marker') ?> <?=$library['town'] ?></span>
+                            <span class="text-muted"><i class="fa fa-map-marker" aria-hidden="true"></i> <?=$library['town'] ?></span>
                           </div>
                         </div>
                       </div>
@@ -140,5 +139,3 @@ if (!empty($selectedRegion)) {
     </p>
   </div>
 </footer>
-</body>
-</html>

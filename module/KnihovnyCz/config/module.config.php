@@ -310,8 +310,28 @@ $config = [
                          'district' => '[^\/]+',
                      ],
                      'defaults' => [
-                         'controller' => 'Embedded',
-                         'action' => 'Libraries'
+                         'controller' => 'EmbeddedLibraries',
+                         'action' => 'Index'
+                     ],
+                 ],
+             ],
+             'embedded-search' => [
+                 'type' => \Laminas\Router\Http\Segment::class,
+                 'options' => [
+                     'route' => '/Search/Embedded',
+                     'defaults' => [
+                         'controller' => 'EmbeddedSearch',
+                         'action' => 'Index'
+                     ],
+                 ],
+             ],
+             'embedded-search-lowercased' => [
+                 'type' => \Laminas\Router\Http\Segment::class,
+                 'options' => [
+                     'route' => '/Search/embedded',
+                     'defaults' => [
+                         'controller' => 'EmbeddedSearch',
+                         'action' => 'Index'
                      ],
                  ],
              ],
@@ -344,6 +364,8 @@ $config = [
             \KnihovnyCz\Controller\ContentController::class => \KnihovnyCz\Controller\ContentControllerFactory::class,
             \KnihovnyCz\Controller\CartController::class => \VuFind\Controller\CartControllerFactory::class,
             \KnihovnyCz\Controller\EmbeddedController::class => \VuFind\Controller\AbstractBaseFactory::class,
+            \KnihovnyCz\Controller\EmbeddedLibrariesController::class => \VuFind\Controller\AbstractBaseFactory::class,
+            \KnihovnyCz\Controller\EmbeddedSearchController::class => \VuFind\Controller\AbstractBaseFactory::class,
             \KnihovnyCz\Controller\AdminIlsController::class => \VuFind\Controller\AbstractBaseFactory::class,
         ],
         'aliases' => [
@@ -362,6 +384,8 @@ $config = [
             \VuFind\Controller\ContentController::class => \KnihovnyCz\Controller\ContentController::class,
             \VuFind\Controller\CartController::class => \KnihovnyCz\Controller\CartController::class,
             'Embedded' => \KnihovnyCz\Controller\EmbeddedController::class,
+            'EmbeddedLibraries' => \KnihovnyCz\Controller\EmbeddedLibrariesController::class,
+            'EmbeddedSearch' => \KnihovnyCz\Controller\EmbeddedSearchController::class,
             'AdminIls' => \KnihovnyCz\Controller\AdminIlsController::class,
         ],
     ],
@@ -728,7 +752,7 @@ $config = [
             'embedded-libraries' => [
                 'X-Frame-Options' => 'allow',
             ],
-            'search-embedded' => [
+            'embedded-search' => [
                 'X-Frame-Options' => 'allow',
             ],
         ],
@@ -761,8 +785,6 @@ $staticRoutes = [
     'MyResearchZiskejMvs/ListAjax' => 'MyResearchZiskejMvs/ListAjax',
     'MyResearchZiskejEdd/ListAjax' => 'MyResearchZiskejEdd/ListAjax',
     'MyResearch/LogoutWarning' => 'MyResearch/LogoutWarning',
-    'Search/Embedded' => 'Search/Embedded',
-    'Search/EmbeddedLibraries' => 'Search/EmbeddedLibraries',
     'Cart/Cite' => 'Cart/Cite',
 ];
 
