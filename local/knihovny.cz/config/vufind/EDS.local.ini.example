@@ -1,8 +1,0 @@
-[EBSCO_Account]
-user_name = vufind-test
-password  = vufind-test
-; Keep default
-profile   = wsapi
-
-[Parent_Config]
-relative_path = ../../../base/config/vufind/EDS.ini

@@ -7,6 +7,7 @@ Sitemap: https://www.knihovny.cz/sitemapIndex.xml
 Allow: /
 Disallow: /Search/Results
 Disallow: /EDS/Search
+Disallow: /Summon/Search
 Disallow: /Libraries/Results
 Disallow: /AJAX/JSON?method=getSaveStatuses*
 Disallow: /AJAX/JSON?method=getItemStatuses*
