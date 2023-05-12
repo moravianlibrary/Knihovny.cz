@@ -43,6 +43,8 @@ use VuFind\Date\DateException;
  */
 class Converter extends \VuFind\Date\Converter
 {
+    public const SOLR_DATE_FORMAT = "Y-m-d\TH:i:s.u\Z";
+
     /**
      * Public method for conversion of an admin defined date string
      * to a PHP DateTime
@@ -59,5 +61,37 @@ class Converter extends \VuFind\Date\Converter
             $displayDate,
             $this->timezone
         );
+    }
+
+    /**
+     * Public method for conversion of an admin defined date string
+     * to a PHP DateTime
+     *
+     * @param string $solrDate Date from solr
+     *
+     * @throws DateException
+     * @return DateTime|false     Parsed date
+     */
+    public function parseDateFromSolr($solrDate)
+    {
+        return DateTime::createFromFormat(
+            self::SOLR_DATE_FORMAT,
+            $solrDate,
+            $this->timezone
+        );
+    }
+
+    /**
+     * Public method for conversion of an date string from Solr
+     * to a PHP DateTime
+     *
+     * @param string $displayDate The display formatted date string
+     *
+     * @throws DateException
+     * @return DateTime|false     Parsed date
+     */
+    public function convertToDisplayDateFromSolr($displayDate)
+    {
+        return $this->convertToDisplayDate(self::SOLR_DATE_FORMAT, $displayDate);
     }
 }

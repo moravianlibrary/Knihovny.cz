@@ -1,11 +1,11 @@
 <?php
 
 /**
- * Factory for Solr search params objects.
+ * Class NewItemsFactory
  *
  * PHP version 7
  *
- * Copyright (C) Moravian Library 2022.
+ * Copyright (C) Moravian Library 2023.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2,
@@ -20,30 +20,33 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  *
- * @category VuFind
- * @package  Search_Solr
+ * @category Knihovny.cz
+ * @package  KnihovnyCz\Recommend
  * @author   Václav Rosecký <vaclav.rosecky@mzk.cz>
- * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
- * @link     https://vufind.org/wiki/development Wiki
+ * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
+ * @link     https://knihovny.cz Main Page
  */
 
-namespace KnihovnyCz\Search\Solr;
+declare(strict_types=1);
+
+namespace KnihovnyCz\Recommend;
 
 use Laminas\ServiceManager\Exception\ServiceNotCreatedException;
 use Laminas\ServiceManager\Exception\ServiceNotFoundException;
+use Laminas\ServiceManager\Factory\FactoryInterface;
 use Psr\Container\ContainerInterface;
 use Psr\Container\Exception\ContainerException;
 
 /**
- * Factory for Solr search params objects.
+ * Class NewItemsFactory
  *
- * @category VuFind
- * @package  Search_Solr
+ * @category Knihovny.cz
+ * @package  KnihovnyCz\Recommend
  * @author   Václav Rosecký <vaclav.rosecky@mzk.cz>
- * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
- * @link     https://vufind.org/wiki/development Wiki
+ * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
+ * @link     https://knihovny.cz Main Page
  */
-class ParamsFactory extends \VuFind\Search\Params\ParamsFactory
+class NewItemsFactory implements FactoryInterface
 {
     /**
      * Create an object
@@ -58,6 +61,8 @@ class ParamsFactory extends \VuFind\Search\Params\ParamsFactory
      * @throws ServiceNotCreatedException if an exception is raised when
      * creating a service.
      * @throws ContainerException&\Throwable if any other error occurs
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __invoke(
         ContainerInterface $container,
@@ -65,20 +70,10 @@ class ParamsFactory extends \VuFind\Search\Params\ParamsFactory
         array $options = null
     ) {
         if (!empty($options)) {
-            throw new \Exception('Unexpected options sent to factory.');
+            throw new \Exception('Unexpected options passed to factory.');
         }
-        $helper = $container
-            ->get(\VuFind\Search\Solr\HierarchicalFacetHelper::class);
-        $parser = $container->get(\KnihovnyCz\Geo\Parser::class);
-        $dateConverter = $container->get(\KnihovnyCz\Date\Converter::class);
-        return parent::__invoke(
-            $container,
-            $requestedName,
-            [
-                $helper,
-                $parser,
-                $dateConverter
-            ]
-        );
+        $translator = $container
+            ->get(\Laminas\Mvc\I18n\Translator::class);
+        return new $requestedName($translator);
     }
 }
