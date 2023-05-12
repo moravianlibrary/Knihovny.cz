@@ -31,8 +31,6 @@ declare(strict_types=1);
 
 namespace KnihovnyCz\RecordTab;
 
-use KnihovnyCz\Ziskej\Ziskej;
-
 /**
  * Record tab Ziskej Edd
  *
@@ -44,7 +42,29 @@ use KnihovnyCz\Ziskej\Ziskej;
  */
 class ZiskejEdd extends ZiskejBase
 {
-    protected const TYPE = 'edd';
+    private \KnihovnyCz\Ziskej\ZiskejEdd $ziskejEdd;
+
+    /**
+     * Constructor
+     *
+     * @param \VuFind\Auth\Manager         $authManager Authentication manager
+     * @param \VuFind\ILS\Connection       $ilsDriver   ILS driver
+     * @param \Mzk\ZiskejApi\Api           $ziskejApi   Ziskej API connector
+     * @param \KnihovnyCz\Ziskej\ZiskejEdd $ziskejEdd   Ziskej ILL model
+     */
+    public function __construct(
+        \VuFind\Auth\Manager $authManager,
+        \VuFind\ILS\Connection $ilsDriver,
+        \Mzk\ZiskejApi\Api $ziskejApi,
+        \KnihovnyCz\Ziskej\ZiskejEdd $ziskejEdd
+    ) {
+        $this->authManager = $authManager;
+        $this->ilsDriver = $ilsDriver;
+        $this->ziskejApi = $ziskejApi;
+        $this->ziskejEdd = $ziskejEdd;
+
+        $this->isZiskejActive = $ziskejEdd->isEnabled();
+    }
 
     /**
      * Get the on-screen description for this tab.
@@ -59,35 +79,40 @@ class ZiskejEdd extends ZiskejBase
     }
 
     /**
-     * Is this tab active?
+     * Is this tab visible?
      *
      * @return bool
      *
      * @throws \Exception
-     * @throws \Psr\Http\Client\ClientExceptionInterface
      */
     public function isActive(): bool
     {
-        return $this->isActiveLibraries();
-    }
-
-    /**
-     * Get Ziskej type (MVS or EDD)
-     *
-     * @return string
-     */
-    public function getType(): string
-    {
-        return self::TYPE;
+        return $this->isZiskejActive()
+            && $this->getRecordDriver()->tryMethod('getEddBoolean');
     }
 
     /**
      * Get ZiskejEdd class
      *
-     * @return \KnihovnyCz\Ziskej\Ziskej
+     * @return \KnihovnyCz\Ziskej\ZiskejEdd
      */
-    public function getZiskejEdd(): Ziskej
+    public function getZiskejEdd(): \KnihovnyCz\Ziskej\ZiskejEdd
     {
-        return $this->ziskej;
+        return $this->ziskejEdd;
+    }
+
+    /**
+     * Get ids of active libraries in Ziskej
+     *
+     * @return string[][]
+     *
+     * @throws \Mzk\ZiskejApi\Exception\ApiResponseException
+     * @throws \Psr\Http\Client\ClientExceptionInterface
+     */
+    public function getZiskejLibsIds(): array
+    {
+        return $this->convertLibsFromZiskej(
+            $this->ziskejApi->getLibrariesEddActive()->getAll()
+        );
     }
 }
