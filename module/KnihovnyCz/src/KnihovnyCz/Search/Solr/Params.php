@@ -44,12 +44,26 @@ use VuFindSearch\ParamBag;
  */
 class Params extends \VuFind\Search\Solr\Params
 {
+    public const SOLR_DATE_FORMAT = 'Y-m-d\TH:i:s.z\Z';
+
+    protected const TREAT_AS_NON_HIERARCHICAL = [
+        'region_institution_facet_mv',
+        'local_region_institution_facet_mv'
+    ];
+
     /**
      * Array of functions for boosting the query
      *
      * @var \KnihovnyCz\Geo\Parser
      */
     protected $parser;
+
+    /**
+     * Date converter
+     *
+     * @var \KnihovnyCz\Date\Converter
+     */
+    protected $dateConverter;
 
     /**
      * Array of functions for boosting the query
@@ -72,15 +86,18 @@ class Params extends \VuFind\Search\Solr\Params
      * @param \VuFind\Config\PluginManager $configLoader Config loader
      * @param HierarchicalFacetHelper      $facetHelper  Hierarchical facet helper
      * @param \KnihovnyCz\Geo\Parser       $parser       Geo parser
+     * @param \KnihovnyCz\Date\Converter   $converter    Date converter
      */
     public function __construct(
         $options,
         \VuFind\Config\PluginManager $configLoader,
         HierarchicalFacetHelper $facetHelper = null,
-        \KnihovnyCz\Geo\Parser $parser = null
+        \KnihovnyCz\Geo\Parser $parser = null,
+        \KnihovnyCz\Date\Converter $converter = null
     ) {
         parent::__construct($options, $configLoader, $facetHelper);
         $this->parser = $parser;
+        $this->dateConverter = $converter;
     }
 
     /**
@@ -141,10 +158,7 @@ class Params extends \VuFind\Search\Solr\Params
      */
     protected function formatFilterListEntry($field, $value, $operator, $translate)
     {
-        $rawDisplayText = $this->getFacetValueRawDisplayText($field, $value);
-        $displayText = $translate
-            ? $this->translateFacetValue($field, $rawDisplayText)
-            : $rawDisplayText;
+        $displayText = null;
         if ($field == 'scale_int_facet_mv') {
             $range = $this->parser->parseRangeQuery($value);
             if ($range != null) {
@@ -152,11 +166,56 @@ class Params extends \VuFind\Search\Solr\Params
                 $to = $this->translate('map_scale_to');
                 $displayText = "1:$min $to 1:$max";
             }
-        }
-        if ($field == 'long_lat') {
+        } elseif ($field == 'long_lat') {
             $displayText = $this->parser->parseBoundingBoxForDisplay($value)
                 ?? $value;
+        } elseif (str_ends_with($field, '_date')) {
+            $displayText = $this->displayDateRange($value);
+        } elseif (in_array($field, self::TREAT_AS_NON_HIERARCHICAL)) {
+            $rawDisplayText = $this->getFacetValueRawDisplayText($field, $value);
+            $displayText = $translate
+                ? $this->translateFacetValue($field, $rawDisplayText)
+                : $rawDisplayText;
         }
-        return compact('value', 'displayText', 'field', 'operator');
+        if ($displayText != null) {
+            return compact('value', 'displayText', 'field', 'operator');
+        }
+        return parent::formatFilterListEntry($field, $value, $operator, $translate);
+    }
+
+    /**
+     * Parse data range for display format
+     *
+     * @param string $value value
+     *
+     * @return string
+     */
+    protected function displayDateRange($value)
+    {
+        if (preg_match('/\\[([^ ]+) TO ([^ ]+)\\]/', $value, $match)) {
+            $from = $this->parseSolrDate($match[1]);
+            $to = $this->parseSolrDate($match[2]);
+            return "$from - $to";
+        }
+        return $value;
+    }
+
+    /**
+     * Parse solr date
+     *
+     * @param string $value value
+     *
+     * @return \DateTime|false
+     */
+    protected function parseSolrDate($value)
+    {
+        if ($value == '*') {
+            return $value;
+        }
+        try {
+            return $this->dateConverter->convertToDisplayDateFromSolr($value);
+        } catch (\VuFind\Date\DateException $ex) {
+            return $value;
+        }
     }
 }

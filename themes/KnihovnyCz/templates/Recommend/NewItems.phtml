@@ -1,0 +1,33 @@
+<?php if ($this->recommend->isActive()) :?>
+  <?php
+    $dateRanges = $this->recommend->getDateRanges();
+    $dateField = $this->recommend->getDateField();
+    $loadJs = <<<JS
+$(document).ready(function onReady() {
+  $('#newItemsFilter select').on('change', function onChange() {
+    $('#newItemsFilter').submit();
+  });
+});
+JS;
+  ?>
+
+  <div class="authorbox">
+    <form name='newItemsFilter' id='newItemsFilter' class='form-inline' method='get'>
+      <?=$results->getUrlQuery()->asHiddenFields(['page' => "/./", 'filter' => "/^{$dateField}:.*/"])?>
+      <label for="<?=$this->escapeHtml($dateField)?>">
+        <?=$this->translate('New items since')?>:&nbsp;
+      </label>
+      <select id="<?=$this->escapeHtml($dateField)?>" name="filter[]" class="jumpMenu form-control">
+        <option value="" selected disabled hidden></option>
+        <?php foreach($dateRanges as $key => $val):?>
+          <option value="<?=$this->escapeHtml($val['filter'])?>" <?php if ($val['selected']):?> selected <?php endif; ?>><?=$this->escapeHtml($key);?> </option>
+        <?php endforeach;?>
+      </select>
+      <noscript>
+        <input type="submit" class="btn btn-default">
+      </noscript>
+      <?=$this->inlineScript(\Laminas\View\Helper\HeadScript::SCRIPT, $loadJs, 'SET')?>
+    </form>
+  </div>
+  <br/>
+<?php endif; ?>

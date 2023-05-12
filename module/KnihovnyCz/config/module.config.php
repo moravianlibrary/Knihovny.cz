@@ -650,11 +650,13 @@ $config = [
                 'factories' => [
                     \KnihovnyCz\Recommend\RecommendOtherPortals::class => \VuFind\Recommend\InjectConfigManagerFactory::class,
                     \KnihovnyCz\Recommend\MapSelection::class => \KnihovnyCz\Recommend\MapSelectionFactory::class,
+                    \KnihovnyCz\Recommend\NewItems::class => \KnihovnyCz\Recommend\NewItemsFactory::class,
                     \KnihovnyCz\Recommend\SideFacetsDeferred::class => \KnihovnyCz\Recommend\SideFacetsDeferredFactory::class,
                 ],
                 'aliases' => [
                     'recommendotherportals' => \KnihovnyCz\Recommend\RecommendOtherPortals::class,
                     'mapselection' => \KnihovnyCz\Recommend\MapSelection::class,
+                    'newitems' => \KnihovnyCz\Recommend\NewItems::class,
                     'sidefacetsdeferred' => \KnihovnyCz\Recommend\SideFacetsDeferred::class,
                 ],
             ],
