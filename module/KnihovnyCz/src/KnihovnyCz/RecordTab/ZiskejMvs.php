@@ -31,8 +31,6 @@ declare(strict_types=1);
 
 namespace KnihovnyCz\RecordTab;
 
-use KnihovnyCz\Ziskej\Ziskej;
-
 /**
  * Record tab Ziskej MVS
  *
@@ -44,7 +42,29 @@ use KnihovnyCz\Ziskej\Ziskej;
  */
 class ZiskejMvs extends ZiskejBase
 {
-    protected const TYPE = 'mvs';
+    private \KnihovnyCz\Ziskej\ZiskejMvs $ziskejMvs;
+
+    /**
+     * Constructor
+     *
+     * @param \VuFind\Auth\Manager         $authManager Authentication manager
+     * @param \VuFind\ILS\Connection       $ilsDriver   ILS driver
+     * @param \Mzk\ZiskejApi\Api           $ziskejApi   Ziskej API connector
+     * @param \KnihovnyCz\Ziskej\ZiskejMvs $ziskejMvs   Ziskej ILL model
+     */
+    public function __construct(
+        \VuFind\Auth\Manager $authManager,
+        \VuFind\ILS\Connection $ilsDriver,
+        \Mzk\ZiskejApi\Api $ziskejApi,
+        \KnihovnyCz\Ziskej\ZiskejMvs $ziskejMvs
+    ) {
+        $this->authManager = $authManager;
+        $this->ilsDriver = $ilsDriver;
+        $this->ziskejApi = $ziskejApi;
+        $this->ziskejMvs = $ziskejMvs;
+
+        $this->isZiskejActive = $ziskejMvs->isEnabled();
+    }
 
     /**
      * Get the on-screen description for this tab.
@@ -59,35 +79,40 @@ class ZiskejMvs extends ZiskejBase
     }
 
     /**
-     * Is this tab active?
+     * Is this tab visible?
      *
      * @return bool
      *
      * @throws \Exception
-     * @throws \Psr\Http\Client\ClientExceptionInterface
      */
     public function isActive(): bool
     {
-        return $this->isActiveLibraries();
-    }
-
-    /**
-     * Get Ziskej type (MVS or EDD)
-     *
-     * @return string
-     */
-    public function getType(): string
-    {
-        return self::TYPE;
+        return $this->isZiskejActive()
+            && $this->getRecordDriver()->tryMethod('getZiskejBoolean');
     }
 
     /**
      * Get ZiskejMvs class
      *
-     * @return \KnihovnyCz\Ziskej\Ziskej
+     * @return \KnihovnyCz\Ziskej\ZiskejMvs
      */
-    public function getZiskejMvs(): Ziskej
+    public function getZiskejMvs(): \KnihovnyCz\Ziskej\ZiskejMvs
     {
-        return $this->ziskej;
+        return $this->ziskejMvs;
+    }
+
+    /**
+     * Get ids of active libraries in Ziskej
+     *
+     * @return string[][]
+     *
+     * @throws \Mzk\ZiskejApi\Exception\ApiResponseException
+     * @throws \Psr\Http\Client\ClientExceptionInterface
+     */
+    public function getZiskejLibsIds(): array
+    {
+        return $this->convertLibsFromZiskej(
+            $this->ziskejApi->getLibrariesMvsActive()->getAll()
+        );
     }
 }

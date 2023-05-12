@@ -69,7 +69,6 @@ class ZiskejMvsFactory implements FactoryInterface
             $container->get(\VuFind\Auth\Manager::class),
             $container->get(\VuFind\ILS\Connection::class),
             $container->get(\Mzk\ZiskejApi\Api::class),
-            $container->get(\VuFind\Cache\Manager::class)->getCache('object'),
             $container->get(\KnihovnyCz\Ziskej\ZiskejMvs::class)
         );
     }
