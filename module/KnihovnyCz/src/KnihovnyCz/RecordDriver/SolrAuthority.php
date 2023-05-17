@@ -357,7 +357,7 @@ class SolrAuthority extends \KnihovnyCz\RecordDriver\SolrMarc
 SPARQL;
 
         $queryPattern = <<<SPARQL
-SELECT ?wikidata ?wikidataLabel %s %s ?signature ?pronunciation ?ipa
+SELECT ?wikidata ?wikidataLabel %s %s ?signature ?pronunciation ?natLangPronunciation ?ipa ?natLangIpa
 WHERE
 {
 	?wikidata wdt:P691|wdt:P9299 "%s" .
@@ -372,7 +372,15 @@ WHERE
     }
 
     OPTIONAL {
+        ?wikidata p:P1559 [pq:P443 ?natLangPronunciation].
+    }
+
+    OPTIONAL {
         ?wikidata wdt:P898 ?ipa .
+    }
+
+    OPTIONAL {
+        ?wikidata p:P1559 [pq:P898 ?natLangIpa].
     }
 
 	SERVICE wikibase:label { bd:serviceParam wikibase:language "%s". }
@@ -446,15 +454,17 @@ SPARQL;
         $data = $this->getWikidataData();
         $return = [];
         foreach ($data as $link) {
-            if (isset($link['pronunciation']['value'])) {
+            $pronunciation = $link['natLangPronunciation']['value'] ?? $link['pronunciation']['value'] ?? null;
+            if ($pronunciation) {
                 $return['pronunciation'] = str_replace(
                     'http://',
                     'https://',
-                    $link['pronunciation']['value']
+                    $pronunciation
                 );
             }
-            if (isset($link['ipa']['value'])) {
-                $return['ipa'] = $link['ipa']['value'];
+            $ipa = $link['natLangIpa']['value'] ?? $link['ipa']['value'] ?? null;
+            if ($ipa) {
+                $return['ipa'] = $ipa;
             }
         }
 
