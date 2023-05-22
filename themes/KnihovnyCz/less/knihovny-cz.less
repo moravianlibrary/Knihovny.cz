@@ -410,12 +410,6 @@ footer {
   }
 }
 
-.template-dir-inspiration.template-name-home {
-  .col-md-4.widget:nth-child(3n+1) {
-    clear: left;
-  }
-}
-
 .buy-links a.btn {
   font-weight: bold;
 }
@@ -685,8 +679,25 @@ h6:hover .heading-permalink {
   /*width: auto;*/
 }
 
-.record .media-left, .result .media-left, .record .media-right, .result .media-right {
+
+.record .media {
+  padding-left: 0;
+  padding-right: 0;
+
+
+  @media (max-width: @screen-xs) {
+    flex-direction: column;
+  }
+}
+
+.record .media-left {
   width: 25%;
+  margin-right: 7px;
+
+  @media (max-width: @screen-xs) {
+    width: 100%;
+    max-width: 100%;
+  }
 }
 
 #content {
@@ -889,32 +900,68 @@ body.ziskej-mode-dev {
   box-shadow: 1px 0 3px @gray-lighter, -1px 0 3px @gray-lighter, 0 1px 3px @gray-lighter, 0 1px 3px @gray-lighter;
 }
 
-.template-dir-inspiration.template-name-home {
-  .home-facet .js-tree-container-ul {
-    padding-left: 0;
-    margin-bottom: 20px;
-  }
+// Inspirations
+.template-dir-inspiration {
 
-  li.jstree-node {
-    display: block;
-    padding: 5px 15px;
-    margin-bottom: -1px;
-    background-color: #fff;
-    border: 1px solid #ddd;
+  // Home inspirations page
+  &.template-name-home {
+    .col-md-4.widget:nth-child(3n+1) {
+      clear: left;
+    }
+
+    .home-facet .js-tree-container-ul {
+      padding-left: 0;
+      margin-bottom: 20px;
+    }
 
     li.jstree-node {
-      border-left: 0;
-      border-right: 0;
+      display: block;
+      padding: 5px 15px;
+      margin-bottom: -1px;
+      background-color: #fff;
+      border: 1px solid #ddd;
 
-      .jstree-icon::before {
-        display: none;
+      li.jstree-node {
+        border-left: 0;
+        border-right: 0;
+
+        .jstree-icon::before {
+          display: none;
+        }
       }
     }
   }
-}
 
-.template-dir-inspiration.template-name-show .content h4 {
-  margin-top: 0;
+  // List inspirations page
+  &.template-name-show {
+    .media {
+      .media-body {
+        h4 {
+          margin-top: 0.4em;
+        }
+      }
+    }
+
+    @media (min-width: @screen-md-min) {
+      .row {
+        display: flex;
+        flex-flow: row wrap;
+
+        .col-md-6 {
+          flex: 1 50%;
+          max-width: 50%;
+        }
+      }
+
+      .well {
+        height: calc(100% - 20px);
+      }
+
+      .record {
+        height: 100%;
+      }
+    }
+  }
 }
 
 div .library-card-ajax {
@@ -1248,3 +1295,4 @@ a,
 .nav .dropdown-toggle .icon {
   margin-left: 0;
 }
+

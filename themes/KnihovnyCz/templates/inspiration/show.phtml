@@ -14,12 +14,10 @@ $listUrl = $this->url($searchAction) . "?" . http_build_query(
     ]
 );
 ?>
-
 <h1><?=$listName?></h1>
-<p>
-  <?=$this->list->description ?? ''?>
-</p>
-
+<?php if (!empty($this->list->description)): ?>
+  <p><?=$this->list->description?></p>
+<?php endif; ?>
 <div class="row">
   <?php $i = 0; ?>
   <?php foreach ($this->items as $item):?>
