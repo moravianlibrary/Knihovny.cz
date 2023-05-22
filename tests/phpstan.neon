@@ -1,5 +1,5 @@
 parameters:
-    phpVersion: 80000
+    phpVersion: 80100
     scanDirectories:
         - /var/www/knihovny-cz/module
     paths:
