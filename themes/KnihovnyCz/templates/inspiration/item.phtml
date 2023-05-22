@@ -12,53 +12,50 @@ if ($cover):
   <?php ob_end_clean(); ?>
 <?php endif; ?>
 <?php $itemUrl = $this->recordLinker()->getUrl($this->item); ?>
-<div class='col-xs-12 col-md-6' style='margin-bottom: 1em'>
-  <div class='row'>
-    <?php
-    $formats = $this->item->getFormats(); ?>
-    <div class='col-xs-3 col-sm-2 col-md-3'>
-      <?php if ($thumbnail): ?>
-        <?=$thumbnail?>
-      <?php elseif (!empty($formats)): ?>
-        <div class='iconlabel'>
-          <i class='cover-icon <?= $this->record($this->item)->getFormatClass(end($formats)) ?>'></i>
-        </div>
-      <?php else: ?>
-        <img class='recordcover'
-             src='<?= $this->url('cover-unavailable') ?>'
-             alt='<?= $this->transEsc('No Cover Image') ?>'>
-      <?php endif; ?>
-    </div>
-
-    <div class='col-xs-9 col-sm-10 col-md-9 content'>
-      <div class='col-xs-12 content'>
-        <a href='<?=$this->escapeHtmlAttr($itemUrl) ?>'>
-          <h4>
-            <?=$this->item->getTitle() ?>
-          </h4>
-        </a>
-        <p>
-          <?php $authors = $this->item->getPrimaryAuthors(); if (!empty($authors)): ?>
-            <em><?=$authors[0] ?></em>
-          <?php else: ?>
-            <?php $corpAuthors = $this->item->getCorporateAuthors(); if (!empty($corpAuthors)): ?>
-              <em><?=$corpAuthors[0] ?></em>
-            <?php endif; ?>
-          <?php endif; ?>
-        </p>
-        <p>
-          <?=$this->record($this->item)->getFormatList($this->item->getFormats()) ?>
-        </p>
-        <?php $summary = $this->item->getSummary(); $summary = isset($summary[0]) ? $this->escapeHtml($summary[0]) : false; ?>
-        <?php if ($summary): ?>
-          <?php $splitText = $this->splitText($summary, 200); ?>
-          <p><?=$this->escapeHtml($splitText->first())?><?php if ($splitText->last()):?> …<?php endif;?></p>
+<div class="col-xs-12 col-md-6">
+  <div class="record">
+    <div class="well">
+      <div class="media">
+        <?php $formats = $this->item->getFormats(); ?>
+        <?php if ($thumbnail): ?>
+          <?=$thumbnail?>
+        <?php elseif (!empty($formats)): ?>
+          <div class="iconlabel">
+            <i class="cover-icon <?= $this->record($this->item)->getFormatClass(end($formats)) ?>"></i>
+          </div>
+        <?php else: ?>
+          <img class="recordcover"
+               src="<?= $this->url('cover-unavailable') ?>"
+               alt="<?= $this->transEsc('No Cover Image') ?>">
         <?php endif; ?>
-        <?php $links = $this->item->getLinks(); if (!empty($links)): ?>
-          <?php $online = array_filter($links, function ($link) { return $link['status'] == 'online'; }); ?>
-          <?php $dnnt = array_filter($links, function ($link) { return $link['status'] == 'dnnt'; }); ?>
-          <?php if (!empty($online)): ?>
-            <?php
+        <div class="media-body">
+          <h4>
+            <a href="<?=$this->escapeHtmlAttr($itemUrl) ?>">
+              <?=$this->item->getTitle() ?>
+            </a>
+          </h4>
+          <p>
+            <?php $authors = $this->item->getPrimaryAuthors(); if (!empty($authors)): ?>
+              <em><?=$authors[0] ?></em>
+            <?php else: ?>
+              <?php $corpAuthors = $this->item->getCorporateAuthors(); if (!empty($corpAuthors)): ?>
+                <em><?=$corpAuthors[0] ?></em>
+              <?php endif; ?>
+            <?php endif; ?>
+          </p>
+          <p>
+            <?=$this->record($this->item)->getFormatList($this->item->getFormats()) ?>
+          </p>
+          <?php $summary = $this->item->getSummary(); $summary = $summary[0] ?? false; ?>
+          <?php if ($summary): ?>
+            <?php $splitText = $this->splitText($summary, 200); ?>
+            <p><?=$this->escapeHtml($splitText->first())?><?php if ($splitText->last()):?>…<?php endif;?></p>
+          <?php endif; ?>
+          <?php $links = $this->item->getLinks(); if (!empty($links)): ?>
+            <?php $online = array_filter($links, function ($link) { return $link['status'] == 'online'; }); ?>
+            <?php $dnnt = array_filter($links, function ($link) { return $link['status'] == 'dnnt'; }); ?>
+            <?php if (!empty($online)): ?>
+              <?php
               foreach($online as $onlineLink) {
                 if (str_ends_with($onlineLink['url'], 'pdf')) {
                   $link = $onlineLink;
@@ -66,16 +63,17 @@ if ($cover):
                 }
               }
               $link = $link ?? array_shift($online); ?>
-            <p>
-              <a class="btn btn-primary" target="_blank" href='<?=$this->escapeHtmlAttr($link['url']) ?>'><?=$this->transEsc('read_online') ?></a>
-            </p>
-          <?php elseif (!empty($dnnt)): ?>
-            <?php $link = array_shift($dnnt); ?>
-            <p>
-              <a class="btn btn-primary" target="_blank" href='<?=$this->escapeHtmlAttr($link['url']) ?>'><?=$this->transEsc('read_online_dnnt') ?></a>
-            </p>
+              <div class="text-right">
+                <a class="btn btn-primary" target="_blank" href="<?=$this->escapeHtmlAttr($link['url']) ?>"><?=$this->transEsc('read_online') ?></a>
+              </div>
+            <?php elseif (!empty($dnnt)): ?>
+              <?php $link = array_shift($dnnt); ?>
+              <div class="text-right">
+                <a class="btn btn-primary" target="_blank" href="<?=$this->escapeHtmlAttr($link['url']) ?>"><?=$this->transEsc('read_online_dnnt') ?></a>
+              </div>
+            <?php endif; ?>
           <?php endif; ?>
-        <?php endif; ?>
+        </div>
       </div>
     </div>
   </div>
