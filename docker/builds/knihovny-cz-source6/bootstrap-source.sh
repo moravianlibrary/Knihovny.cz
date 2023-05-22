@@ -34,20 +34,6 @@ init_config_local() {
         "$CONFIG_LOCAL"
 }
 
-init_eds_config() {
-    if [ -z "$PARAM_VUFIND_EDS_LOGIN" ]; then
-        return 0
-    fi;
-
-    CONFIG_EDS="${PARAM_VUFIND_CONFIG_ABS_DIR}/config/vufind/EDS.local.ini"
-    cp /tmp/EDS.local.template.ini "$CONFIG_EDS"
-    sed -i \
-        -e "s#PARAM_VUFIND_EDS_LOGIN#${PARAM_VUFIND_EDS_LOGIN}#g" \
-        -e "s#PARAM_VUFIND_EDS_PASSWD#${PARAM_VUFIND_EDS_PASSWD}#g" \
-        -e "s#PARAM_VUFIND_EDS_PROFILE#${PARAM_VUFIND_EDS_PROFILE}#g" \
-        "$CONFIG_EDS"
-}
-
 init_search2_config() {
     CONFIG_SEARCH2="${PARAM_VUFIND_CONFIG_ABS_DIR}/config/vufind/Search2.local.ini"
 
@@ -74,7 +60,6 @@ init_obalkyknih_config() {
 }
 
 init_config_local "$@"
-init_eds_config "$@"
 init_search2_config "$@"
 init_content_config "$@"
 init_obalkyknih_config "$@"

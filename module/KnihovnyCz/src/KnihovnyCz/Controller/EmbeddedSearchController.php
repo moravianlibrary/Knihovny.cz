@@ -76,7 +76,7 @@ final class EmbeddedSearchController extends EmbeddedController
                 'type' => 'AllFields',
             ],
             'eds' => [
-                'url' => '/EDS/Search',
+                'url' => '/Summon/Search',
                 'type' => 'AllFields',
             ],
             'libraries' => [

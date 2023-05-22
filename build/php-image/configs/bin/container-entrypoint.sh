@@ -48,7 +48,6 @@ if [ -z "$VUFIND_LOCAL_DIR" ]; then
 fi
 
 envsubst.a8m -no-unset -i /etc/vufind/config.local.ini -o ${VUFIND_LOCAL_DIR}/config/vufind/config.local.ini
-envsubst.a8m -no-unset -i /etc/vufind/EDS.local.ini -o ${VUFIND_LOCAL_DIR}/config/vufind/EDS.local.ini
 envsubst.a8m -no-unset -i /etc/vufind/Search2.local.ini -o ${VUFIND_LOCAL_DIR}/config/vufind/Search2.local.ini
 envsubst.a8m -no-unset -i /etc/vufind/content.local.ini -o ${VUFIND_LOCAL_DIR}/config/vufind/content.local.ini
 envsubst.a8m -no-unset -i /etc/vufind/obalkyknih.local.ini -o ${VUFIND_LOCAL_DIR}/config/vufind/obalkyknih.local.ini

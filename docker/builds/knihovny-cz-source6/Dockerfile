@@ -14,7 +14,6 @@ ENV PARAM_VUFIND_ROBOTS_TXT=${PARAM_VUFIND_ROBOTS_TXT}
 
 COPY ./knihovny-cz-install.sh /usr/local/bin/knihovny-cz-install.sh
 COPY ./config.local.template.ini /tmp/
-COPY ./EDS.local.template.ini /tmp/
 COPY ./Search2.local.template.ini /tmp/
 COPY ./content.local.template.ini /tmp/
 COPY ./obalkyknih.local.template.ini /tmp/
