@@ -141,6 +141,9 @@ class InspirationController extends \VuFind\Controller\AbstractBase
         }
         $contentBlock = $blockManager->get($listType);
         $contentBlock->setConfig($listId . ':500');
+        if (!$contentBlock->validateSlug($listId)) {
+            $this->redirect()->toUrl($contentBlock->getListUrl());
+        }
         return $contentBlock->getContext();
     }
 }

@@ -282,7 +282,7 @@ abstract class AbstractDbAwaredRecordIds implements ContentBlockInterface
      *
      * @return string
      */
-    protected function getListUrl(): string
+    public function getListUrl(): string
     {
         return $this->url->__invoke('inspiration-show', ['list' => $this->getSlug()]);
     }
@@ -312,5 +312,17 @@ abstract class AbstractDbAwaredRecordIds implements ContentBlockInterface
             "",
             "list$suffix"
         );
+    }
+
+    /**
+     * Validate slug
+     *
+     * @param string $slug
+     *
+     * @return bool
+     */
+    public function validateSlug(string $slug): bool
+    {
+        return $slug === $this->getSlug();
     }
 }
