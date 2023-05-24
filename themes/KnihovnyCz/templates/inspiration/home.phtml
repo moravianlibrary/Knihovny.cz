@@ -17,14 +17,7 @@ $this->layout()->breadcrumbs = false;
       <h3><?=$this->translate('widget_category_' . $category)?></h3>
       <?php
         foreach ($list as $widget):
-          $options = $this->searchOptions($widget['searchClassId']);
-          $searchAction = $options->getSearchAction();
-          $listUrl = $this->url($searchAction) . "?" . http_build_query(
-              [
-                'lookfor' => $widget['facetField'] . ':"' . $widget['slug'] . '"',
-                'type' => $widget['searchType'],
-              ]
-          );
+          $listUrl = $widget['searchUrl'];
           $title = $widget['list']->title_cs ?? $widget['list']->title ?? '';
       ?>
         <a href="<?=$listUrl?>" title="<?=$title?>"><?=$title?></a><br />

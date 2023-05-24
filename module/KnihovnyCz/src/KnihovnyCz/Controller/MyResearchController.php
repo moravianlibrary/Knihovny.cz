@@ -572,11 +572,12 @@ class MyResearchController extends MyResearchControllerBase
         $user = $this->getUser();
         $tables = $this->serviceLocator->get(TableManager::class);
         $category = $this->params()->fromPost('category', false);
+        $listId = $this->params()->fromRoute('id');
         if ($category && $user && $user->couldManageInspirationLists()) {
             $listTable = $tables->get(UserList::class);
             $listTable->update(
                 ['category' => $category],
-                ['id' => $this->params()->fromRoute('id')]
+                ['id' => $listId]
             );
         }
         $parentView = parent::mylistAction();
@@ -584,6 +585,13 @@ class MyResearchController extends MyResearchControllerBase
             $categoriesTable = $tables->get(UserListCategories::class);
             $categories = $categoriesTable->select();
             $parentView->setVariable('categories', $categories);
+            if ($user && $user->couldManageInspirationLists()) {
+                $blockManager = $this->serviceLocator
+                    ->get(\VuFind\ContentBlock\PluginManager::class);
+                $contentBlock = $blockManager->get('UserList');
+                $contentBlock->setConfig($listId . ':0');
+                $parentView->setVariable('listBlock', $contentBlock->getContext());
+            }
         }
         return $parentView;
     }

@@ -34,10 +34,12 @@ namespace KnihovnyCz\ContentBlock;
 use Laminas\Db\ResultSet\ResultSetInterface;
 use Laminas\Db\Sql\Predicate\Expression;
 use Laminas\Db\Sql\Select;
+use Laminas\View\Helper\Url;
 use VuFind\ContentBlock\ContentBlockInterface;
 use VuFind\Db\Row\RowGateway;
 use VuFind\Db\Table\PluginManager as TableManager;
 use VuFind\Record\Loader as RecordLoader;
+use VuFind\Search\Options\PluginManager as SearchOptionsManager;
 
 /**
  * Class AbstractDbAwaredRecordIds
@@ -70,20 +72,6 @@ abstract class AbstractDbAwaredRecordIds implements ContentBlockInterface
      * @var string
      */
     protected string $searchType = 'AllFields';
-
-    /**
-     * Table manager
-     *
-     * @var TableManager
-     */
-    protected TableManager $tableManager;
-
-    /**
-     * Record loader
-     *
-     * @var RecordLoader
-     */
-    protected RecordLoader $recordLoader;
 
     /**
      * List row
@@ -130,19 +118,23 @@ abstract class AbstractDbAwaredRecordIds implements ContentBlockInterface
     /**
      * Constructor
      *
-     * @param TableManager $tables Table manager
-     * @param RecordLoader $loader Record loader
+     * @param TableManager         $tableManager  Table manager
+     * @param RecordLoader         $recordLoader  Record loader
+     * @param Url                  $url           Url helper
+     * @param SearchOptionsManager $searchOptions Search options plugin manager
      */
-    public function __construct(TableManager $tables, RecordLoader $loader)
-    {
-        $this->tableManager = $tables;
-        $this->recordLoader = $loader;
+    public function __construct(
+        protected readonly TableManager $tableManager,
+        protected readonly RecordLoader $recordLoader,
+        protected readonly Url $url,
+        protected readonly SearchOptionsManager $searchOptions
+    ) {
     }
 
     /**
      * Load records in batch
      *
-     * @param array $ids recod identifiers
+     * @param array $ids record identifiers
      *
      * @return array
      * @throws \Exception
@@ -177,7 +169,7 @@ abstract class AbstractDbAwaredRecordIds implements ContentBlockInterface
      *
      * @return array
      */
-    public function getItems()
+    public function getItems(): array
     {
         if ($this->items === null) {
             $this->items = [];
@@ -211,12 +203,10 @@ abstract class AbstractDbAwaredRecordIds implements ContentBlockInterface
     public function getContext()
     {
         return [
-            'searchClassId' => $this->searchClassId,
-            'facetField' => $this->facetField,
-            'searchType' => $this->searchType,
             'list' => $this->getList(),
-            'slug' => $this->getSlug(),
             'items' => $this->getItems(),
+            'searchUrl' => $this->getSearchUrl(),
+            'listUrl' => $this->getListUrl(),
         ];
     }
 
@@ -237,4 +227,31 @@ abstract class AbstractDbAwaredRecordIds implements ContentBlockInterface
      * @return void
      */
     abstract protected function setSelect(Select $select): void;
+
+    /**
+     * Get search URL
+     *
+     * @return string
+     */
+    protected function getSearchUrl(): string
+    {
+        $options = $this->searchOptions->get($this->searchClassId);
+        $searchAction = $options->getSearchAction();
+        return $this->url->__invoke($searchAction) . "?" . http_build_query(
+            [
+                'lookfor' => $this->facetField . ':"' . $this->getSlug() . '"',
+                'type' => $this->searchType,
+            ]
+        );
+    }
+
+    /**
+     * Get list URL
+     *
+     * @return string
+     */
+    protected function getListUrl(): string
+    {
+        return $this->url->__invoke('inspiration-show', ['list' => $this->getSlug()]);
+    }
 }
