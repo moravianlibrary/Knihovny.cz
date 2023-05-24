@@ -1,14 +1,7 @@
 <?php if ($this->list): ?>
   <?php
     // Load search actions and settings (if any):
-    $options = $this->searchOptions($this->searchClassId);
-    $searchAction = $options->getSearchAction();
-    $listUrl = $this->url($searchAction) . "?" . http_build_query(
-        [
-          'lookfor' => $this->facetField . ':"' . $this->slug . '"',
-          'type' => $this->searchType,
-        ]
-    );
+    $listUrl = $this->searchUrl;
   ?>
 
   <div class='col-md-4 widget'>

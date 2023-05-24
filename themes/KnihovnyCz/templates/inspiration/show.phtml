@@ -4,15 +4,6 @@ $listName = $this->list->title_cs ?? $this->list->title ?? '';
 $this->headTitle($listName);
 $this->layout()->breadcrumbs .= '<li class="active">' . $this->escapeHtml($listName) . '</li>';
 $this->layout()->searchbox = false;
-// Load search actions and settings (if any):
-$options = $this->searchOptions($this->searchClassId);
-$searchAction = $options->getSearchAction();
-$listUrl = $this->url($searchAction) . "?" . http_build_query(
-    [
-      'lookfor' => $this->facetField . ':"' . $this->slug . '"',
-      'type' => $this->searchType,
-    ]
-);
 ?>
 <h1><?=$listName?></h1>
 <?php if (!empty($this->list->description)): ?>

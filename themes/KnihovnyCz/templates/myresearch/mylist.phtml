@@ -100,6 +100,46 @@
   <?php if (!empty($listTags)): ?>
     <div><strong><?=$this->transEsc('Tags')?>:</strong> <span class="list-tags"><?=implode(', ', array_map([$this, 'escapeHtml'], $listTags))?></span></div>
   <?php endif; ?>
+  <?php if ($this->listBlock && $list && $list->public): ?>
+    <a href="#" id="show-list-search-url" class="btn btn-primary" data-toggle="modal" data-target="#modal-search"><?=$this->translate('list-show-search-url')?></a>
+    <a href="#" id="show-list-detail-url" class="btn btn-primary" data-toggle="modal" data-target="#modal-detail  "><?=$this->translate('list-show-detail-url')?></a>
+    <div id="modal-search" class="modal fade hidden-print" tabindex="-1" role="dialog" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">
+              <?=$this->icon('lightbox-close', ['aria-label' => $this->transEscAttr('Close')]) ?>
+            </button>
+          </div>
+          <div class="modal-body">
+            <h2><?=$this->transEsc('list-search-url') ?></h2>
+            <p>
+              <pre id="searchUrl"><?=$this->escapeHtml($this->serverUrl() . $this->listBlock['searchUrl'])?></pre>
+            </p>
+            <?=$this->copyToClipboardButton('#searchUrl');?>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="modal-detail" class="modal fade hidden-print" tabindex="-1" role="dialog" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">
+              <?=$this->icon('lightbox-close', ['aria-label' => $this->transEscAttr('Close')]) ?>
+            </button>
+          </div>
+          <div class="modal-body">
+            <h2><?=$this->transEsc('list-detail-url') ?></h2>
+            <p>
+            <pre id="listUrl"><?=$this->escapeHtml($this->serverUrl() . $this->listBlock['listUrl'])?></pre>
+            </p>
+            <?=$this->copyToClipboardButton('#listUrl');?>
+          </div>
+        </div>
+      </div>
+    </div>
+  <?php endif; ?>
   <?php if ($recordTotal > 0): ?>
     <form class="form-inline" method="post" name="bulkActionForm" action="<?=$this->url('cart-myresearchbulk')?>" data-lightbox data-lightbox-onsubmit="bulkFormHandler">
       <?=$this->context($this)->renderInContext('myresearch/bulk-action-buttons.phtml', ['idPrefix' => '', 'list' => $list ?? null, 'account' => $this->account])?>

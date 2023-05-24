@@ -72,6 +72,8 @@ class AbstractDbAwaredRecordIdsFactory implements FactoryInterface
 
         $tablesManager = $container->get(\VuFind\Db\Table\PluginManager::class);
         $recordLoader = $container->get(\VuFind\Record\Loader::class);
-        return new $requestedName($tablesManager, $recordLoader);
+        $helperManager = $container->get('ViewHelperManager');
+        $searchOptionsManager = $container->get(\VuFind\Search\Options\PluginManager::class);
+        return new $requestedName($tablesManager, $recordLoader, $helperManager->get('url'), $searchOptionsManager);
     }
 }
