@@ -72,8 +72,17 @@ class AbstractDbAwaredRecordIdsFactory implements FactoryInterface
 
         $tablesManager = $container->get(\VuFind\Db\Table\PluginManager::class);
         $recordLoader = $container->get(\VuFind\Record\Loader::class);
-        $helperManager = $container->get('ViewHelperManager');
+        $urlHelper = $container->get('ViewHelperManager')->get('url');
         $searchOptionsManager = $container->get(\VuFind\Search\Options\PluginManager::class);
-        return new $requestedName($tablesManager, $recordLoader, $helperManager->get('url'), $searchOptionsManager);
+
+        $contentBlock =  new $requestedName($tablesManager, $recordLoader, $urlHelper, $searchOptionsManager);
+
+        // Populate cache storage if a setCacheStorage method is present:
+        if (method_exists($contentBlock, 'setCacheStorage')) {
+            $contentBlock->setCacheStorage(
+                $container->get(\VuFind\Cache\Manager::class)->getCache('object')
+            );
+        }
+        return $contentBlock;
     }
 }

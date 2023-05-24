@@ -140,7 +140,7 @@ class InspirationController extends \VuFind\Controller\AbstractBase
             $listId = $listRow->id;
         }
         $contentBlock = $blockManager->get($listType);
-        $contentBlock->setConfig($listId . ':50');
+        $contentBlock->setConfig($listId . ':500');
         return $contentBlock->getContext();
     }
 }
