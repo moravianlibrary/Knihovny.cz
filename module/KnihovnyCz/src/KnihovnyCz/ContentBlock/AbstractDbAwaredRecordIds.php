@@ -35,6 +35,7 @@ use Laminas\Db\ResultSet\ResultSetInterface;
 use Laminas\Db\Sql\Predicate\Expression;
 use Laminas\Db\Sql\Select;
 use Laminas\View\Helper\Url;
+use VuFind\Cache\CacheTrait;
 use VuFind\ContentBlock\ContentBlockInterface;
 use VuFind\Db\Row\RowGateway;
 use VuFind\Db\Table\PluginManager as TableManager;
@@ -52,6 +53,8 @@ use VuFind\Search\Options\PluginManager as SearchOptionsManager;
  */
 abstract class AbstractDbAwaredRecordIds implements ContentBlockInterface
 {
+    use CacheTrait;
+
     /**
      * Search class ID to use for retrieving facets.
      *
@@ -129,6 +132,7 @@ abstract class AbstractDbAwaredRecordIds implements ContentBlockInterface
         protected readonly Url $url,
         protected readonly SearchOptionsManager $searchOptions
     ) {
+        $this->cacheLifetime = 3600;
     }
 
     /**
@@ -141,13 +145,39 @@ abstract class AbstractDbAwaredRecordIds implements ContentBlockInterface
      */
     protected function loadRecords(array $ids): array
     {
-        $ids = array_map(
-            function ($id) {
-                return $this->searchClassId . '|' . $id;
-            },
-            $ids
-        );
-        return $this->recordLoader->loadBatch($ids, true);
+        $ids = array_map($this->formatId(...), $ids);
+        $records = [];
+        $idsToLoad = [];
+        foreach ($ids as $id) {
+            $record = $this->getCachedData($id);
+            if ($record !== null) {
+                $records[] = $record;
+                continue;
+            }
+            $idsToLoad[] = $id;
+        }
+        $recordsFromSolr = $this->recordLoader->loadBatch($idsToLoad, true);
+        foreach ($recordsFromSolr as $record) {
+            if ($record instanceof \VuFind\RecordDriver\Missing) {
+                continue;
+            }
+            $this->putCachedData($this->formatId($record->getUniqueID()), $record);
+        }
+        $records = array_merge($records, $recordsFromSolr);
+        shuffle($records);
+        return $records;
+    }
+
+    /**
+     * Format record identifier
+     *
+     * @param string $id Record identifier
+     *
+     * @return string
+     */
+    protected function formatId(string $id): string
+    {
+        return $this->searchClassId . '|' . $id;
     }
 
     /**
@@ -181,7 +211,6 @@ abstract class AbstractDbAwaredRecordIds implements ContentBlockInterface
             $select = $itemsTable->getSql()->select();
             $this->setSelect($select);
             $select->limit($this->limit);
-            $select->order(new Expression('RAND()'));
             $items = $itemsTable->selectWith($select);
             $this->items = $this->loadRecords($this->getIds($items));
         }
@@ -202,6 +231,9 @@ abstract class AbstractDbAwaredRecordIds implements ContentBlockInterface
      */
     public function getContext()
     {
+        if ($this->isEmpty()) {
+            return [];
+        }
         return [
             'list' => $this->getList(),
             'items' => $this->getItems(),
@@ -253,5 +285,32 @@ abstract class AbstractDbAwaredRecordIds implements ContentBlockInterface
     protected function getListUrl(): string
     {
         return $this->url->__invoke('inspiration-show', ['list' => $this->getSlug()]);
+    }
+
+    /**
+     * Is list empty?
+     *
+     * @return bool
+     */
+    public function isEmpty(): bool
+    {
+        return $this->getList() === null;
+    }
+
+    /**
+     * Method to ensure uniform cache keys for cached VuFind objects.
+     *
+     * @param string|null $suffix Optional suffix that will get appended to the
+     * object class name calling getCacheKey()
+     *
+     * @return string
+     */
+    protected function getCacheKey($suffix = null)
+    {
+        return preg_replace(
+            "/([^a-z0-9_\+\-])+/Di",
+            "",
+            "list$suffix"
+        );
     }
 }
