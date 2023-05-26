@@ -114,20 +114,23 @@ SPARQL;
     /**
      * Get data for this authority record from wikidata
      *
+     * @param string $queryMethod Method to get query
+     *
      * @return array
      * @throws \Psr\Http\Client\ClientExceptionInterface
      */
-    protected function getWikidataData(): array
+    protected function getWikidataData(string $queryMethod = 'getWikidataQuery'): array
     {
-        $data = $this->getCachedData('wikidata');
+        $cacheKey = $queryMethod . '_' . $this->getTranslatorLocale();
+        $data = $this->getCachedData($cacheKey);
         if (empty($data)) {
-            $queryData = $this->tryMethod('getWikidataQuery');
+            $queryData = $this->tryMethod($queryMethod);
             if (empty($queryData)) {
                 return [];
             }
             [$query, $prefixes] = $queryData;
             $data = $this->sparqlService->query($query, $prefixes);
-            $this->putCachedData('wikidata', $data);
+            $this->putCachedData($cacheKey, $data);
         }
         return $data;
     }

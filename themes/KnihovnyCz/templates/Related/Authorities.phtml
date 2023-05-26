@@ -1,0 +1,21 @@
+<?php $authorities = $this->related->getRelatedAuthorities(); if (!empty($authorities)):?>
+  <h2><?=$this->transEsc('related_authorities')?></h2>
+  <ul class="external-links">
+    <?php foreach ($authorities as $authority): ?>
+      <?php
+        $firstChar = mb_substr($authority['label'], 0, 1);
+        $otherChars = mb_substr($authority['label'], 1);
+        $label = mb_strtoupper($firstChar) . $otherChars;
+      ?>
+      <li><?=$label?>:
+        <a href="<?=$this->recordLinker()->getUrl($authority['record'])?>"><?=$authority['record']->getTitle()?></a>
+      </li>
+    <?php endforeach; ?>
+  </ul>
+  <ul class="external-links">
+    <li>
+      <img src="<?=$this->imageLink('externalLogos/wikidata.ico');?>">
+      <?=$this->translate('source_data_item', ['%%href%%' => $this->driver->getWikidataId()])?></li>
+  </ul>
+
+<?php endif; ?>
