@@ -61,7 +61,7 @@ class Authorities implements \VuFind\Related\RelatedInterface
      */
     public function init($settings, $driver)
     {
-        $this->relatedAuthorities = $driver->tryMethod('getRelatedAuthorities');
+        $this->relatedAuthorities = $driver->tryMethod('getRelatedAuthorities') ?? [];
     }
 
     /**
