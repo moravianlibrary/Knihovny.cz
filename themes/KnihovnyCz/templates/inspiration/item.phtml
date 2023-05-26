@@ -43,14 +43,19 @@ if ($cover):
               <?php endif; ?>
             <?php endif; ?>
           </p>
+
+          <?php $field773Data = $this->item->getField773(); if (!empty($field773Data)): ?>
+            <p>
+              <span><?=$this->transEsc('field773')?></span>: <?=$this->record($this->item)->renderTemplate('data-7xx-field.phtml', ['data' => $field773Data, 'driver' => $this->item])?>
+            </p>
+          <?php endif; ?>
+
           <p>
             <?=$this->record($this->item)->getFormatList($this->item->getFormats()) ?>
           </p>
-          <?php $summary = $this->item->getSummary(); $summary = $summary[0] ?? false; ?>
-          <?php if ($summary): ?>
-            <?php $splitText = $this->splitText($summary, 200); ?>
-            <p><?=$this->escapeHtml($splitText->first())?><?php if ($splitText->last()):?>…<?php endif;?></p>
-          <?php endif; ?>
+
+          <?=$this->record($this->item)->renderTemplate('summary.phtml', ['driver' => $this->item, 'length' => 200, 'expandable' => false])?>
+
           <?php $links = $this->item->getLinks(); if (!empty($links)): ?>
             <?php $online = array_filter($links, function ($link) { return $link['status'] == 'online'; }); ?>
             <?php $dnnt = array_filter($links, function ($link) { return $link['status'] == 'dnnt'; }); ?>
