@@ -591,10 +591,12 @@ $config = [
             ],
             'related' => [
                 'invokables' => [
+                    \KnihovnyCz\Related\Authorities::class,
                     \KnihovnyCz\Related\SolrField::class,
                     \KnihovnyCz\Related\Links::class,
                 ],
                 'aliases' => [
+                    'authorities' => \KnihovnyCz\Related\Authorities::class,
                     'solrfield' => \KnihovnyCz\Related\SolrField::class,
                     'links' => \KnihovnyCz\Related\Links::class,
                 ],

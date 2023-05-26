@@ -507,4 +507,99 @@ SPARQL;
     {
         return $this->getExternalLinksByType('identifiers');
     }
+
+    /**
+     * Get query for related people
+     *
+     * @return array
+     */
+    protected function getRelatedQuery(): array
+    {
+        $id = $this->getCombinedAuthorityId();
+        $lang = $this->getTranslatorLocale();
+        $queryPattern = <<<SPARQL
+SELECT DISTINCT ?relatedId ?propLabel WHERE {
+  {
+    SELECT ?prop ?relatedId {
+      ?item wdt:P691|wdt:P9299 "%s" .
+      ?related wdt:P691|wdt:P9299 ?relatedId .
+      ?item ?prop ?related .
+      ?item wdt:P31 wd:Q5 .
+      ?related wdt:P31 wd:Q5 .
+    } LIMIT 100
+  }
+  ?property wikibase:directClaim ?prop .
+  optional { ?property rdfs:label ?propLabel filter(lang(?propLabel)="%s"). }
+}
+SPARQL;
+        return [
+            sprintf($queryPattern, addslashes($id), $lang),
+            ['rdfs', 'wikibase', 'wdt', 'wd']
+        ];
+    }
+
+    /**
+     * Helper method to get authority record by either NKCR AUT ID and Osobnostiregionu id
+     *
+     * @param string $id NKCR AUT ID or Osobnostiregionu id
+     *
+     * @return SolrDefault|null
+     * @throws \Exception
+     */
+    protected function getRecordById(string $id): ?SolrDefault
+    {
+        if (is_numeric($id)) {
+            return $this->recordLoader->load('osobnosti.' . $id);
+        }
+        $searchQuery = new \VuFindSearch\Query\Query('id_authority:' . $id);
+        $command = new SearchCommand($this->getSearchBackendIdentifier(), $searchQuery, 0, 1);
+        $searchResults = $this->searchService->invoke($command)->getResult();
+        foreach ($searchResults->getRecords() as $record) {
+            return $record;
+        }
+        return null;
+    }
+
+    /**
+     * Get related people
+     *
+     * @return array
+     * @throws \Psr\Http\Client\ClientExceptionInterface
+     */
+    protected function getRelatedAuthorities(): array
+    {
+        $data = $this->getWikidataData('getRelatedQuery');
+        $return = [];
+        foreach ($data as $authority) {
+            $id = $authority['relatedId']['value'] ?? '';
+            if (!empty($id)) {
+                try {
+                    $record = $this->getRecordById($id);
+                } catch (\Exception $e) {
+                    continue;
+                }
+                $return[] = [
+                    'record' => $record,
+                    'label' => $authority['propLabel']['value'] ?? ''
+                ];
+            }
+        }
+        return $return;
+    }
+
+    /**
+     * Return Wikidata item id (in form uf URI)
+     *
+     * @return string
+     */
+    public function getWikidataId(): string
+    {
+        $data = array_filter(
+            $this->getExternalLinksByType('identifiers'),
+            function ($link) {
+                return $link['label'] === 'wikidata';
+            }
+        );
+        return $data[0]['value'] ?? '';
+    }
 }
