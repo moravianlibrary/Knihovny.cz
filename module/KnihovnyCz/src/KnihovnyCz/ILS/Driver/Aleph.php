@@ -464,6 +464,23 @@ class Aleph extends AlephBase implements TranslatorAwareInterface
     }
 
     /**
+     * Get profile information using X-server.
+     *
+     * @param array $user The patron array
+     *
+     * @throws ILSException
+     * @return array      Array of the patron's profile data on success.
+     */
+    public function getMyProfileX($user): ?array
+    {
+        $result = parent::getMyProfileX($user);
+        if (isset($result['expire'])) {
+            $result['expiration_date'] = $this->parseDate($result['expire']);
+        }
+        return $result;
+    }
+
+    /**
      * Get profile information using DLF service.
      *
      * @param array $user The patron array
@@ -761,10 +778,13 @@ class Aleph extends AlephBase implements TranslatorAwareInterface
      *
      * @param array $patron patron
      *
-     * @return string
+     * @return string|null
      */
-    public function getMyProlongRegistrationLink($patron)
+    public function getMyProlongRegistrationLink($patron): ?string
     {
+        if (!isset($patron['expiration_date'])) {
+            return null;
+        }
         $url = $this->config['ProlongRegistration']['url'] ?? null;
         if ($url == null) {
             return null;
