@@ -32,7 +32,6 @@ declare(strict_types=1);
 namespace KnihovnyCz\ContentBlock;
 
 use Laminas\Db\ResultSet\ResultSetInterface;
-use Laminas\Db\Sql\Predicate\Expression;
 use Laminas\Db\Sql\Select;
 use Laminas\View\Helper\Url;
 use VuFind\Cache\CacheTrait;
@@ -40,6 +39,7 @@ use VuFind\ContentBlock\ContentBlockInterface;
 use VuFind\Db\Row\RowGateway;
 use VuFind\Db\Table\PluginManager as TableManager;
 use VuFind\Record\Loader as RecordLoader;
+use VuFind\RecordDriver\PluginManager as RecordFactory;
 use VuFind\Search\Options\PluginManager as SearchOptionsManager;
 
 /**
@@ -125,12 +125,14 @@ abstract class AbstractDbAwaredRecordIds implements ContentBlockInterface
      * @param RecordLoader         $recordLoader  Record loader
      * @param Url                  $url           Url helper
      * @param SearchOptionsManager $searchOptions Search options plugin manager
+     * @param RecordFactory        $recordFactory Record driver plugin manager
      */
     public function __construct(
         protected readonly TableManager $tableManager,
         protected readonly RecordLoader $recordLoader,
         protected readonly Url $url,
-        protected readonly SearchOptionsManager $searchOptions
+        protected readonly SearchOptionsManager $searchOptions,
+        protected readonly RecordFactory $recordFactory
     ) {
         $this->cacheLifetime = 3600;
     }
@@ -149,7 +151,11 @@ abstract class AbstractDbAwaredRecordIds implements ContentBlockInterface
         $records = [];
         $idsToLoad = [];
         foreach ($ids as $id) {
-            $record = $this->getCachedData($id);
+            $record = null;
+            $recordData = $this->getCachedData($id);
+            if ($recordData !== null) {
+                $record = $this->recordFactory->getSolrRecord($recordData);
+            }
             if ($record !== null) {
                 $records[] = $record;
                 continue;
@@ -161,7 +167,7 @@ abstract class AbstractDbAwaredRecordIds implements ContentBlockInterface
             if ($record instanceof \VuFind\RecordDriver\Missing) {
                 continue;
             }
-            $this->putCachedData($this->formatId($record->getUniqueID()), $record);
+            $this->putCachedData($this->formatId($record->getUniqueID()), $record->getRawData());
         }
         $records = array_merge($records, $recordsFromSolr);
         shuffle($records);
@@ -317,7 +323,7 @@ abstract class AbstractDbAwaredRecordIds implements ContentBlockInterface
     /**
      * Validate slug
      *
-     * @param string $slug
+     * @param string $slug Slug to validate
      *
      * @return bool
      */

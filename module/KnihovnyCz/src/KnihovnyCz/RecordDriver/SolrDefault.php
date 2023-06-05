@@ -936,35 +936,4 @@ class SolrDefault extends \VuFind\RecordDriver\SolrDefault
     {
         return !empty($this->getCleanISBN()) ? (string)$this->getCleanISBN() : null;
     }
-
-    /**
-     * Serialize object
-     *
-     * @return array
-     */
-    public function __serialize(): array
-    {
-        return [
-            'fields' => $this->getRawData(),
-            'mainConfig' => $this->mainConfig,
-            'recordConfig' => $this->recordConfig,
-            'sourceIdentifier' => $this->sourceIdentifier,
-            'searchBackendIdentifier' => $this->searchBackendIdentifier,
-        ];
-    }
-
-    /**
-     * Unserialize object
-     *
-     * @param array $data Serialized data
-     *
-     * @return void
-     */
-    public function __unserialize(array $data): void
-    {
-        $this->mainConfig = $data['mainConfig'];
-        $this->recordConfig = $data['recordConfig'];
-        $this->setRawdata($data['fields'] ?? []);
-        $this->setSourceIdentifiers($data['sourceIdentifier'] ?? '', $data['searchBackendIdentifier'] ?? '');
-    }
 }

@@ -70,12 +70,13 @@ class AbstractDbAwaredRecordIdsFactory implements FactoryInterface
             throw new \Exception('Unexpected options sent to factory.');
         }
 
-        $tablesManager = $container->get(\VuFind\Db\Table\PluginManager::class);
-        $recordLoader = $container->get(\VuFind\Record\Loader::class);
-        $urlHelper = $container->get('ViewHelperManager')->get('url');
-        $searchOptionsManager = $container->get(\VuFind\Search\Options\PluginManager::class);
-
-        $contentBlock =  new $requestedName($tablesManager, $recordLoader, $urlHelper, $searchOptionsManager);
+        $contentBlock = new $requestedName(
+            $container->get(\VuFind\Db\Table\PluginManager::class),
+            $container->get(\VuFind\Record\Loader::class),
+            $container->get('ViewHelperManager')->get('url'),
+            $container->get(\VuFind\Search\Options\PluginManager::class),
+            $container->get(\VuFind\RecordDriver\PluginManager::class)
+        );
 
         // Populate cache storage if a setCacheStorage method is present:
         if (method_exists($contentBlock, 'setCacheStorage')) {
