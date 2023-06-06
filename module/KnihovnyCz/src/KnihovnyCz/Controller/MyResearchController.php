@@ -36,6 +36,7 @@ use VuFind\Controller\MyResearchController as MyResearchControllerBase;
 use VuFind\Db\Table\PluginManager as TableManager;
 use VuFind\Db\Table\UserList;
 use VuFind\Exception\Auth as AuthException;
+use VuFind\Exception\Forbidden as ForbiddenException;
 use VuFind\Validator\CsrfInterface;
 
 /**
@@ -419,6 +420,14 @@ class MyResearchController extends MyResearchControllerBase
         if (!$this->getUser()) {
             return $this->forceLogin();
         }
+
+        // Fail if user settings are disabled.
+        $check = $this->serviceLocator
+            ->get(\KnihovnyCz\Config\AccountCapabilities::class);
+        if (!$check->isUserSettingsEnabled()) {
+            throw new ForbiddenException('User settings disabled.');
+        }
+
         /**
          * User setting service
          *
