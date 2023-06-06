@@ -17,7 +17,7 @@ $this->layout()->breadcrumbs = false;
       <h3><?=$this->translate('widget_category_' . $category)?></h3>
       <?php
         foreach ($list as $widget):
-          $listUrl = $widget['searchUrl'];
+          $listUrl = $widget['listUrl'];
           $title = $widget['list']->title_cs ?? $widget['list']->title ?? '';
       ?>
         <a href="<?=$listUrl?>" title="<?=$title?>"><?=$title?></a><br />
