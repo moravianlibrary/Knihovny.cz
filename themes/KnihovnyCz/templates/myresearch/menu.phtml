@@ -103,10 +103,12 @@
       <span class="icon-link__label"><?=$this->transEsc('Search History')?></span>
     </a>
   <?php endif; ?>
+  <?php if ($this->accountCapabilities()->isUserSettingsEnabled()): ?>
     <a href="<?=$this->url('myresearch-usersettings')?>?require_login" class="icon-link <?=$this->active == 'usersettings' ? ' active' : ''?>">
       <?=$this->icon('user-settings', 'icon-link__icon fa-fw') ?>
       <span class="icon-link__label"><?=$this->transEsc('User settings')?></span>
     </a>
+  <?php endif; ?>
   <?php if ($user): ?>
     <a href="<?=$this->url('myresearch-logout')?>" class="icon-link">
       <?=$this->icon('sign-out', 'icon-link__icon fa-fw') ?>
