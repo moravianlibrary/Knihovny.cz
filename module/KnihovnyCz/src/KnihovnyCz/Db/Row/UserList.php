@@ -62,10 +62,10 @@ class UserList extends \VuFind\Db\Row\UserList implements TranslatorAwareInterfa
      */
     public function getSlug(): string
     {
-        $title = $this['title'];
-        $title = preg_replace("/ /", '-', $title);
-        $title = preg_replace("/[^A-Za-z0-9-]/", '', $title);
-        return $this['id'] . '-' . $title;
+        $transliterator = \Transliterator::create('Any-Latin; Latin-ASCII');
+        $title = $transliterator->transliterate($this['title']);
+        $title = str_replace(" ", '-', $title);
+        return $this['id'] . '-' . urlencode($title);
     }
 
     /**
