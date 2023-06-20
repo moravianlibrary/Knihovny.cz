@@ -130,8 +130,6 @@ $gtmEnabled = $this->googleTagManager()->isEnabled();
           $this->headScript()->appendFile("covers.js");
       }
     ?>
-    <?php $this->headScript()->appendFile("lib/cookieconsent.min.js", 'text/javascript', ['defer' => true]) ?>
-    <?php $this->headScript()->appendFile("cookieconsent-init.js", 'text/javascript', ['defer' => true]) ?>
     <?php $this->headScript()->appendFile("cpk.js") ?>
     <?php if ($gtmEnabled): ?>
       <?php $this->headScript()->appendFile("gtm.js", 'text/javascript', ['defer' => true]) ?>
