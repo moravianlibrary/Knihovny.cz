@@ -18,8 +18,6 @@ themes/*/templates/ContentBlock/TemplateBased
 themes/*/templates/content/*
 !themes/KnihovnyCz/templates/content/content.phtml
 !themes/KnihovnyCz/templates/content/markdown.phtml
-themes/KnihovnyCz/css/cookieconsent.min.css
-themes/KnihovnyCz/css/cookieconsent.min.css.map
 vendor
 .php_cs_cache
 .commit

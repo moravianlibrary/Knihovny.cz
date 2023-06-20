@@ -1,0 +1,130 @@
+---
+# Cookie consent configuration.
+#
+# Note that there are a couple of settings in the Cookies section of config.ini that
+# can be used to enable the functionality and select categories to display.
+#
+# Settings:
+#
+#   CookieExpiration  Days before the consent cookie expires. Default is 182 days
+#                     (half a year). One year is another typical value.
+#   Categories        Cookie categories (groups) that bring together a set of
+#                     cookies. The user can choose their consent for each group
+#                     apart from essential cookies. See below for documentation.
+#
+# Cookie category configuration (see the VuFind wiki for additional examples:
+# https://vufind.org/wiki/configuration:cookie_consent)
+#
+#   Title             Category title displayed in the category heading
+#   Description       A longer description text
+#   DefaultEnabled    Whether the category defaults to enabled (true/false, default
+#                     is false)
+#   Essential         Whether the category contains only cookies essential for the
+#                     service and cannot be disabled (true/false, default is false)
+#   ControlVuFindServices Links a category consent with VuFind services so that a
+#                     consent allows the service to be controlled. The following
+#                     services are currently supported:
+#                       matomo
+#   Cookies           List of cookies and their descriptions:
+#
+#     Name              Cookie name (translatable text, no functionality)
+#     Domain            Cookie domain (translatable text, no functionality)
+#     Description       Description for the cookie (translatable text, no
+#                       functionality)
+#     Expiration        Expiration time for the cookie (number or "session")
+#     ExpirationUnit    Unit of expiration for translation when Expiration is a
+#                       numeric value. Out of the box supported values are "days" and
+#                       "months".
+#     ThirdParty        Whether the cookie comes from a third party (true/false,
+#                       default is false)
+#
+#   AutoClearCookies  A list of cookies that should be automatically removed if
+#                     consent for a category is withdrawn:
+#
+#     Name              A regular expression to match cookie names that should be
+#                       cleared
+#
+#
+# You can use e.g. https://cookiedatabase.org/ to find out the cookies used by most
+# popular services.
+#
+# All textual strings are translatable. The following placeholders can be used in
+# settings and translated texts:
+#
+# {{consent_cookie_name}}         Name of the consent cookie (default cc_cookie)
+# {{consent_cookie_expiration}}   Consent cookie expiration time
+# {{current_host_name}}           Server name of the VuFind server
+# {{vufind_cookie_domain}}        Domain for VuFind's cookies
+# {{vufind_session_cookie}}       VuFind session cookie name
+#
+CookieConsent:
+  CookieExpiration: 365
+  Categories:
+    essential:
+      Title: CookieConsent::essential_cookies_title_html
+      Description: CookieConsent::essential_cookies_description_html
+      DefaultEnabled: true
+      Essential: true
+      Cookies:
+        - Name: '{{vufind_session_cookie}}' # __Host-KNIHOVNY_CZ_SESSION:
+          Domain: '{{vufind_cookie_domain}}'
+          Description: CookieConsent::cookie_description_session_html
+          Expiration: session
+        - Name: '_shibsession_*'
+          Domain: '{{vufind_cookie_domain}}'
+          Description: CookieConsent::cookie_description_shibsession_html
+          Expiration: session
+        - Name: 'cc_*'
+          Domain: '{{vufind_cookie_domain}}'
+          Description: CookieConsent::cookie_description_consent_html
+          Expiration: '{{consent_cookie_expiration}}'
+          ExpirationUnit: days
+        - Name: language
+          Domain: '{{vufind_cookie_domain}}'
+          Description: CookieConsent::cookie_description_language_html
+          Expiration: session
+        - Name: loggedOut
+          Domain: '{{vufind_cookie_domain}}'
+          Description: CookieConsent::cookie_description_loggedout_html
+          Expiration: session
+        - Name: sidefacet-* (session storage)
+          Domain: '{{vufind_cookie_domain}}'
+          Description: CookieConsent::cookie_description_sidefacet_html
+          Expiration: session
+        - Name: ui
+          Domain: '{{vufind_cookie_domain}}'
+          Description: CookieConsent::cookie_description_ui_html
+          Expiration: session
+        - Name: vufind_cart
+          Domain: '{{vufind_cookie_domain}}'
+          Description: CookieConsent::cookie_description_cart_html
+          Expiration: session
+        - Name: vufind_cart_src
+          Domain: '{{vufind_cookie_domain}}'
+          Description: CookieConsent::cookie_description_cart_html
+          Expiration: session
+        - Name: ziskej_mode
+          Domain: '{{vufind_cookie_domain}}'
+          Description: CookieConsent::cookie_description_ziskejmode_html
+          Expiration: session
+    analytics:
+      Title: CookieConsent::analytics_cookies_title_html
+      Description: CookieConsent::analytics_cookies_description_html
+      DefaultEnabled: true
+      Essential: false
+      Cookies:
+        - Name: '_dc_gtm_UA-*'
+          Domain: '{{current_host_name}}'
+          Description: "Google Analytics"
+          Expiration: 1
+          ExpirationUnit: minute
+        - Name: '_ga_*'
+          Domain: '{{current_host_name}}'
+          Description: "Google Analytics"
+          Expiration: 1
+          ExpirationUnit: year
+        - Name: '_gid'
+          Domain: '{{current_host_name}}'
+          Description: "Google Analytics"
+          Expiration: 1
+          ExpirationUnit: day
