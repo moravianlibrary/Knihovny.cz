@@ -74,3 +74,39 @@ a.link-image:hover {
   flex-direction: column;
   padding: 0 9px;
 }
+
+.mb-0 {
+  margin-bottom: 0 !important;
+}
+
+// Nav pills
+.nav-pills {
+  > li {
+    + li {
+      margin-left: 4px;
+    }
+
+    > a {
+      color: #333333 !important;
+      padding: 8px 15px;
+      border: 1px solid #555555;
+
+      &:hover,
+      &:focus {
+        color: #ffffff !important;
+        background-color: #555555;
+        filter: none !important;
+      }
+    }
+
+    // Active state
+    &.active > a {
+      &,
+      &:hover,
+      &:focus {
+        color: #ffffff !important;
+        background-color: #555555;
+      }
+    }
+  }
+}
