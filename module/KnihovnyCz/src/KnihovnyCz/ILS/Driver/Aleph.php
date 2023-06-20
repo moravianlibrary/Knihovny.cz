@@ -814,6 +814,19 @@ class Aleph extends AlephBase implements TranslatorAwareInterface
     }
 
     /**
+     * Convert a barcode to an item ID.
+     *
+     * @param string $barcode Barcode
+     *
+     * @return string|null
+     */
+    public function barcodeToID($barcode)
+    {
+        // we use SolrIdResolver instead
+        return null;
+    }
+
+    /**
      * Extract holdings for items from XML response
      *
      * @param $xml xml to process
