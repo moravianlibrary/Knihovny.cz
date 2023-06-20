@@ -68,14 +68,30 @@ $this->headStyle()->appendStyle("
   <div class="container-fluid">
     <?php foreach ($tree as $region => $districts): ?>
       <h2><?=$region ?></h2>
+      <?php if ($selectedRegion): ?>
+        <ul class="nav nav-pills mb-0">
+          <?php if ($selectedDistrict): ?>
+            <li class="nav-item">
+              <a class="nav-link" href="<?=$this->url('embedded-libraries', ['region' => $selectedRegion], ['query' => ['color' => $color]]) ?>">&laquo; <?=$this->translate('EmbeddedLibraries::btn_all_districts') ?></a>
+            </li>
+          <?php endif; ?>
+          <?php foreach ($districts as $district => $libraries): ?>
+            <li class="nav-item <?=($district === $selectedDistrict) ? 'active' : '' ?>">
+              <a class="nav-link" href="<?=$this->url('embedded-libraries', ['region' => $selectedRegion, 'district' => $district], ['query' => ['color' => $color]]) ?>"><?=$district ?></a>
+            </li>
+          <?php endforeach; ?>
+        </ul>
+        <hr>
+      <?php endif; ?>
+
       <?php foreach ($districts as $district => $libraries): ?>
         <div class="panel panel-default">
           <div class="panel-heading">
-            <h3 class="panel-title" data-toggle="collapse" href="#collapse_<?=$alnum->filter($district); ?>">
+            <h3 class="panel-title" data-toggle="collapse" href="#collapse_<?=$alnum->filter($district) ?>">
               <?=$district ?>
             </h3>
           </div>
-          <div id="collapse_<?=$alnum->filter($district); ?>" class="collapse in">
+          <div id="collapse_<?=$alnum->filter($district) ?>" class="collapse in">
             <div class="panel-body">
               <?php if (count($libraries)): ?>
                 <div class="row display-flex">
@@ -131,7 +147,7 @@ $this->headStyle()->appendStyle("
   <div class="container-fluid">
     <p class="text-center">
       <a class="link-image lang-<?=$this->layout()->userLang ?>" href="<?=$this->url('home') ?>" target="_blank">
-        <img class="knihovny-logo" src="<?=$this->render('layout/logoimagelink.phtml');?>" alt="<?=$this->translate('logo_alt') ?>">
+        <img class="knihovny-logo" src="<?=$this->render('layout/logoimagelink.phtml') ?>" alt="<?=$this->translate('logo_alt') ?>">
       </a>
     </p>
     <p class="text-right">
