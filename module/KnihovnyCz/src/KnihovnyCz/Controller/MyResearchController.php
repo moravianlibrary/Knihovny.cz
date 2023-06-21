@@ -606,6 +606,21 @@ class MyResearchController extends MyResearchControllerBase
     }
 
     /**
+     * Front page login action
+     *
+     * @return \Laminas\Http\Response
+     */
+    public function frontPageLoginAction(): \Laminas\Http\Response
+    {
+        if (!$this->getUser()) {
+            $urlHelper = $this->serviceLocator->get('ViewHelperManager')->get('url');
+            $query = ['lbreferer' => $urlHelper('myresearch-home') ];
+            return $this->redirect()->toRoute('myresearch-userlogin', [], [ 'query' => $query]);
+        }
+        return $this->redirect()->toRoute('myresearch-home');
+    }
+
+    /**
      * Process an authentication error.
      *
      * @param AuthException $e Exception to process.
