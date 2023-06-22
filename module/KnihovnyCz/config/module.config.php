@@ -791,6 +791,7 @@ $staticRoutes = [
     'MyResearchZiskejMvs/ListAjax' => 'MyResearchZiskejMvs/ListAjax',
     'MyResearchZiskejEdd/ListAjax' => 'MyResearchZiskejEdd/ListAjax',
     'MyResearch/LogoutWarning' => 'MyResearch/LogoutWarning',
+    'MyResearch/FrontPageLogin' => 'MyResearch/FrontPageLogin',
     'Cart/Cite' => 'Cart/Cite',
 ];
 
