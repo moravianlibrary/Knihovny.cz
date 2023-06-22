@@ -792,6 +792,7 @@ $staticRoutes = [
     'MyResearchZiskejEdd/ListAjax' => 'MyResearchZiskejEdd/ListAjax',
     'MyResearch/LogoutWarning' => 'MyResearch/LogoutWarning',
     'MyResearch/FrontPageLogin' => 'MyResearch/FrontPageLogin',
+    'LibraryCards/NotSupported' => 'LibraryCards/NotSupported',
     'Cart/Cite' => 'Cart/Cite',
 ];
 
