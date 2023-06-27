@@ -259,7 +259,7 @@ function setLibraryAutoComplete(element, data) {
   }
   traverse(data);
 
-  var input = $('<input></input>').addClass('autocomplete-institutions')
+  var input = $('<input></input>').addClass('autocomplete-institutions form-control')
     .attr('placeholder', VuFind.translate('Autocomplete institutions placeholder'));
   function normalizeString(str) {
     return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();

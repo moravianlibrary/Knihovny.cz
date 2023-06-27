@@ -94,12 +94,12 @@ fieldset, .fieldset {
 }
 
 .nav-tabs {
-  background: #f6f6f6;
+  background: @body-bg;
 }
 
 .nav-tabs > li > a {
   padding: 12px 15px 9px;
-  color: #555555;
+  color: @gray;
   background-color: #e8e8e8;
 }
 
@@ -710,7 +710,7 @@ h6:hover .heading-permalink {
   right: 0;
   bottom: 0;
   z-index: 2030;
-  background: #fc6501;
+  background: #c95101;
   color: white;
   padding: 7px;
   text-align: center;
@@ -725,7 +725,11 @@ h6:hover .heading-permalink {
   a {
     color: #ffffff;
     text-decoration: underline;
+    &:hover {
+      color: #150007;
+    }
   }
+
 }
 
 body.ziskej-mode-test,
@@ -1295,3 +1299,6 @@ a,
   margin-left: 0;
 }
 
+.copybar .text-muted {
+  color: #828282;
+}

@@ -15,9 +15,9 @@
 @gray-lighter:           lighten(@gray-base, 93.5%); // #eee
 
 @brand-primary:         #e5004b; // #337ab7
-@brand-success:         #5cb85c;
-@brand-info:            #2986c4;
-@brand-warning:         #f0ad4e;
+@brand-success:         #428542;
+@brand-info:            #267cb5;
+@brand-warning:         #996e32;
 @brand-danger:          #d9534f;
 
 @primary-darken:        darken(@brand-primary, 10%);
@@ -28,7 +28,7 @@
 //## Settings for some of the most global styles.
 
 //** Background color for `<body>`.
-@body-bg:               #f6f6f6;
+@body-bg:               #fafafa;
 //** Global text color on `<body>`.
 @text-color:            @gray-dark;
 
@@ -118,7 +118,7 @@
 //** Default background color used for all tables.
 @table-bg:                      transparent;
 //** Background color used for `.table-striped`.
-@table-bg-accent:               #f9f9f9;
+@table-bg-accent:               @body-bg;
 //** Background color used for `.table-hover`.
 @table-bg-hover:                #f5f5f5;
 @table-bg-active:               @table-bg-hover;
@@ -194,7 +194,7 @@
 @input-border-focus:             #66afe9;
 
 //** Placeholder text color
-@input-color-placeholder:        #999;
+@input-color-placeholder:        #757575;
 
 //** Default `.form-control` height
 @input-height-base:              (@line-height-computed + (@padding-base-vertical * 2) + 2);
@@ -492,7 +492,7 @@
 @state-success-border:           darken(spin(@state-success-bg, -10), 5%);
 
 @state-info-text:                #31708f;
-@state-info-bg:                  #d9edf7;
+@state-info-bg:                  #e8feff;
 @state-info-border:              darken(spin(@state-info-bg, -10), 7%);
 
 @state-warning-text:             #8a6d3b;
@@ -556,7 +556,7 @@
 //##
 
 //** Default label background color
-@label-default-bg:            @gray-light;
+@label-default-bg:            #757575;
 //** Primary label background color
 @label-primary-bg:            @brand-primary;
 //** Success label background color
@@ -684,7 +684,7 @@
 //** Text color for content within disabled list items
 @list-group-disabled-text-color: @list-group-disabled-color;
 
-@list-group-link-color:         #555;
+@list-group-link-color:         @gray;
 @list-group-link-hover-color:   @list-group-link-color;
 @list-group-link-heading-color: #333;
 
@@ -839,7 +839,7 @@
 //** Horizontal offset for forms and lists.
 @component-offset-horizontal: 180px;
 //** Text muted color
-@text-muted:                  @gray-light;
+@text-muted:                  #757575;
 //** Abbreviations and acronyms border color
 @abbr-border-color:           @gray-light;
 //** Headings small color
