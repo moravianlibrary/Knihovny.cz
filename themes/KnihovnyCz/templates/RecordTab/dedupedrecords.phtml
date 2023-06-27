@@ -36,6 +36,10 @@
     $prev = &$rec;
   }
 ?>
+<?php if (!empty($results)): ?>
+  <h3 class="mt-0"><?=$this->transEsc('Institutions')?></h3>
+  <ul>
+<?php endif; ?>
 <?php foreach ($results as $record): ?>
   <li>
     <a class="hover-overlay" href="<?=$this->escapeHtmlAttr($this->recordLinker()->getUrl($record['id']))?>">
@@ -49,3 +53,6 @@
     </a>
   </li>
 <?php endforeach; ?>
+<?php if (!empty($results)): ?>
+  </ul>
+<?php endif; ?>
