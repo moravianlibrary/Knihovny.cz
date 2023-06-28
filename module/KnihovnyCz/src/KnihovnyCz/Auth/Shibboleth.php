@@ -45,6 +45,8 @@ use VuFind\Exception\Auth as AuthException;
  */
 class Shibboleth extends Base
 {
+    protected const MULTIVALUED_ATTRIBUTES = [ 'mail' ];
+
     /**
      * Check for duplicities in library cards - only one library card for
      * institution
@@ -185,6 +187,7 @@ class Shibboleth extends Base
         $userInfo['lastname'] = $user->lastname;
         $userInfo['email'] = $user->email;
         $userInfo['safeLogout'] = $shib['safeLogout'] ?? 'global';
+
         $session = new \Laminas\Session\Container(
             'Account',
             $this->sessionManager
@@ -308,6 +311,24 @@ class Shibboleth extends Base
     public function getUserCardTable()
     {
         return $this->getDbTableManager()->get('UserCard');
+    }
+
+    /**
+     * Extract attribute from request.
+     *
+     * @param \Laminas\Http\PhpEnvironment\Request $request   Request object
+     * @param string                               $attribute Attribute name
+     *
+     * @return ?string attribute value
+     */
+    protected function getAttribute($request, $attribute): ?string
+    {
+        $value = parent::getAttribute($request, $attribute);
+        if ($value == null || !in_array($attribute, self::MULTIVALUED_ATTRIBUTES)) {
+            return $value;
+        }
+        $values = explode(';', $value);
+        return $values[0];
     }
 
     /**
