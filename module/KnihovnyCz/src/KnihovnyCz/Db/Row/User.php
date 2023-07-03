@@ -298,18 +298,45 @@ class User extends Base
     public function getLibraryCardsWithILS(): ResultSet
     {
         $cards = [];
+        $filter = [];
+        if (isset($this->config->LibraryCards->filter)) {
+            $filter = $this->config->LibraryCards->filter->toArray();
+        }
         foreach ($this->getLibraryCards() as $card) {
             [$prefix, $username] = explode(
                 '.',
                 $card['cat_username'] ?? '',
                 2
             );
+            if (!empty($filter) && !in_array($prefix, $filter)) {
+                continue;
+            }
             if (!empty($username)) {
                 $cards[] = $card;
             }
         }
         $resultSet = new ResultSet();
         return $resultSet->initialize($cards);
+    }
+
+    /**
+     * Is enabled only single card?
+     *
+     * @return bool
+     */
+    public function isSingleCard(): bool
+    {
+        return (bool)($this->config->LibraryCards->singleCard ?? false);
+    }
+
+    /**
+     * Is library card filter used?
+     *
+     * @return bool
+     */
+    public function hasLibraryCardsFilter(): bool
+    {
+        return isset($this->config->LibraryCards->filter);
     }
 
     /**

@@ -29,6 +29,7 @@
 
 namespace KnihovnyCz\Controller;
 
+use Laminas\Mvc\MvcEvent;
 use Laminas\View\Model\ViewModel;
 use VuFind\Controller\LibraryCardsController as LibraryCardsControllerBase;
 
@@ -75,6 +76,62 @@ class LibraryCardsController extends LibraryCardsControllerBase
             // Redirect to MyResearch library cards
             return $this->redirect()->toRoute('librarycards-home');
         }
+    }
+
+    /**
+     * Not supported action.
+     *
+     * @return \Laminas\Http\Response
+     */
+    public function notSupportedAction(): \Laminas\Http\Response
+    {
+        $this->flashMessenger()->addErrorMessage(
+            "Library cards are not supported in this view"
+        );
+        return $this->redirect()->toRoute('myresearch-home');
+    }
+
+    /**
+     * Check if library cards are enabled.
+     *
+     * @param \Laminas\Mvc\MvcEvent $e Event
+     *
+     * @return void
+     */
+    public function validateLibraryCardsEnabled(MvcEvent $e): void
+    {
+        $notSupportedRoute = 'librarycards-notsupported';
+        $route = $e->getRouteMatch()->getMatchedRouteName();
+        if ($route == $notSupportedRoute) {
+            return;
+        }
+        if (!($user = $this->getUser())) {
+            return;
+        }
+        if (
+            !$user->libraryCardsEnabled()
+            || $user->isSingleCard() || $user->hasLibraryCardsFilter()
+        ) {
+            // flash messenger does not work in dispatch, so redirect
+            // to separate action
+            $e->setResponse($this->redirect()->toRoute($notSupportedRoute));
+        }
+    }
+
+    /**
+     * Register the default events for this controller
+     *
+     * @return void
+     */
+    protected function attachDefaultListeners(): void
+    {
+        parent::attachDefaultListeners();
+        $events = $this->getEventManager();
+        $events->attach(
+            MvcEvent::EVENT_DISPATCH,
+            [$this, 'validateLibraryCardsEnabled'],
+            1000
+        );
     }
 
     /**

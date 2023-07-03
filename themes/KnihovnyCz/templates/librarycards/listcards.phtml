@@ -41,21 +41,27 @@ JS;
 
 ?>
 <?php if ($this->user): ?>
+  <?php
+    $cards = $this->userCards($this->user->getLibraryCardsWithILS())->getSortedByLibraryName();
+    $singleCard = $this->user->isSingleCard() && count($cards) == 1;
+    $libraryCardEnabled = !($this->user->isSingleCard() || $this->user->hasLibraryCardsFilter());
+    $i = 1;
+  ?>
   <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
-    <?php $i = 1; ?>
-    <?php $cards = $this->userCards($this->user->getLibraryCardsWithILS())->getSortedByLibraryName(); ?>
     <?php foreach ($cards as $card): ?>
-      <?php
-      $institution = $card->home_library;
-      $imageLink = sprintf('institutions/logos/%s/%s_small.png', $institution, $institution);
-      ?>
       <div class="panel panel-default">
-        <div class="panel-heading panel-heading-with-img bg-white clearfix pointer" role="tab" data-toggle="collapse" data-target="#card_<?=$i ?>">
-          <h3 class="panel-title pull-left">
-            <?=$this->transEsc('Source::' . $institution) ?>
-          </h3>
-          <img class="pull-right" height="30" src="<?=$this->imageLink($imageLink)?>" alt="<?=$this->transEsc("Source::" . $institution) ?>">
-        </div>
+        <?php if (!$singleCard): ?>
+          <?php
+            $institution = $card->home_library;
+            $imageLink = sprintf('institutions/logos/%s/%s_small.png', $institution, $institution);
+          ?>
+          <div class="panel-heading panel-heading-with-img bg-white clearfix pointer" role="tab" data-toggle="collapse" data-target="#card_<?=$i ?>">
+            <h3 class="panel-title pull-left">
+              <?=$this->transEsc('Source::' . $institution) ?>
+            </h3>
+            <img class="pull-right" height="30" src="<?=$this->imageLink($imageLink)?>" alt="<?=$this->transEsc("Source::" . $institution) ?>">
+          </div>
+        <?php endif;?>
 
         <div id="card_<?=$i ?>" class="panel-collapse collapse in" role="tabpanel">
           <div class="panel-body">
@@ -69,15 +75,21 @@ JS;
     <?php $i++ ?>
     <?php endforeach; ?>
   </div>
-  <?php if ($this->user && $this->user->isSocial()): ?>
-    <p class="alert alert-warning" role="alert">
-      <?=$this->translate("notif_you_have_user_dummy", ['%%url%%' => $this->url('librarycards-home')])?>
-    </p>
-    <div class="btn-group">
-      <a href="<?=$this->url('librarycards-home') ?>" class="btn btn-primary" role="button" aria-pressed="true">
-        <?=$this->transEsc('Library Cards')?>
-      </a>
-    </div>
+  <?php if ($this->user->isSocial()): ?>
+    <?php if ($libraryCardEnabled): ?>
+      <p class="alert alert-warning" role="alert">
+        <?=$this->translate("notif_you_have_user_dummy", ['%%url%%' => $this->url('librarycards-home')])?>
+      </p>
+      <div class="btn-group">
+        <a href="<?=$this->url('librarycards-home') ?>" class="btn btn-primary" role="button" aria-pressed="true">
+          <?=$this->transEsc('Library Cards')?>
+        </a>
+      </div>
+    <?php else: ?>
+      <p class="alert alert-warning" role="alert">
+        <?=$this->translate("notif_you_have_user_dummy_no_library_cards")?>
+      </p>
+    <?php endif; ?>
   <?php endif; ?>
 <?php endif; ?>
 
