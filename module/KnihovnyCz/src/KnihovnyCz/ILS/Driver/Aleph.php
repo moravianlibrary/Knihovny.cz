@@ -61,6 +61,8 @@ class Aleph extends AlephBase implements TranslatorAwareInterface
 
     protected const TIME_FORMAT = '/^[0-2][0-9][0-6][0-9]$/';
 
+    protected const ILL_BLANK_FORM_LABEL_PREFIX = 'ill_blank_form_';
+
     /**
      * Public Function which retrieves historic loan, renew, hold and cancel
      * settings from the driver ini file.
@@ -108,6 +110,12 @@ class Aleph extends AlephBase implements TranslatorAwareInterface
         if ($method == 'getMyProlongRegistrationLink') {
             return !empty($this->config['ProlongRegistration']['url']);
         }
+        if ($method == 'ILLRequests') {
+            return !empty($this->config['ILLRequests']['enabled']);
+        }
+        if ($method == 'getBlankIllRequestTypes') {
+            return !empty($this->config['ILLRequests']['placingEnabled']);
+        }
         return parent::supportsMethod($method, $params);
     }
 
@@ -143,10 +151,10 @@ class Aleph extends AlephBase implements TranslatorAwareInterface
             $items = [];
         }
         foreach ($items as $item) {
-            $item_status_code    = (string)$item->{'z30-item-status-code'}; // $isc
+            $item_status_code = (string)$item->{'z30-item-status-code'}; // $isc
             // $ipsc:
             $item_process_status = (string)$item->{'z30-item-process-status-code'};
-            $sub_library_code    = (string)$item->{'z30-sub-library-code'}; // $slc
+            $sub_library_code = (string)$item->{'z30-sub-library-code'}; // $slc
             $z30 = $item->z30;
             /* @phpstan-ignore-next-line */
             if ($this->alephTranslator) {
@@ -157,9 +165,9 @@ class Aleph extends AlephBase implements TranslatorAwareInterface
                 );
             } else {
                 $item_status = [
-                    'opac'         => 'Y',
-                    'request'      => 'C',
-                    'desc'         => (string)$z30->{'z30-item-status'},
+                    'opac' => 'Y',
+                    'request' => 'C',
+                    'desc' => (string)$z30->{'z30-item-status'},
                     'sub_lib_desc' => (string)$z30->{'z30-sub-library'}
                 ];
             }
@@ -210,7 +218,7 @@ class Aleph extends AlephBase implements TranslatorAwareInterface
             }
             $item_id = $item->attributes()->href;
             $item_id = substr($item_id, strrpos($item_id, '/') + 1);
-            $note    = (string)$z30->{'z30-note-opac'};
+            $note = (string)$z30->{'z30-note-opac'};
             $fullStatus = !empty($duedate)
                 ? $this->translate('holding_due_date') . ' ' . $duedate
                 : '';
@@ -222,30 +230,30 @@ class Aleph extends AlephBase implements TranslatorAwareInterface
                     : implode(" ; ", [$fullStatus, $status]);
             }
             $holding[] = [
-                'id'                  => $id,
-                'item_id'             => $item_id,
-                'holdtype'            => $holdType,
-                'availability'        => $availability,
+                'id' => $id,
+                'item_id' => $item_id,
+                'holdtype' => $holdType,
+                'availability' => $availability,
                 'availability_status' => (string)$z30->{'z30-item-status'},
-                'status'              => $fullStatus,
-                'location'            => (string)$z30->{'z30-sub-library'},
-                'reserve'             => 'N',
-                'callnumber'          => (string)$z30->{'z30-call-no'},
-                'number'              => (string)$z30->{'z30-inventory-number'},
-                'barcode'             => (string)$z30->{'z30-barcode'},
-                'description'         => (string)$z30->{'z30-description'},
-                'notes'               => ($note == null) ? null : [$note],
-                'is_holdable'         => true,
-                'addLink'             => $addLink,
+                'status' => $fullStatus,
+                'location' => (string)$z30->{'z30-sub-library'},
+                'reserve' => 'N',
+                'callnumber' => (string)$z30->{'z30-call-no'},
+                'number' => (string)$z30->{'z30-inventory-number'},
+                'barcode' => (string)$z30->{'z30-barcode'},
+                'description' => (string)$z30->{'z30-description'},
+                'notes' => ($note == null) ? null : [$note],
+                'is_holdable' => true,
+                'addLink' => $addLink,
                 /* below are optional attributes*/
-                'collection'          => (string)$collection,
+                'collection' => (string)$collection,
                 /* @phpstan-ignore-next-line */
-                'collection_desc'     => (string)$collection_desc['desc'],
-                'callnumber_second'   => (string)$z30->{'z30-call-no-2'},
+                'collection_desc' => (string)$collection_desc['desc'],
+                'callnumber_second' => (string)$z30->{'z30-call-no-2'},
                 /* @phpstan-ignore-next-line */
-                'sub_lib_desc'        => (string)$item_status['sub_lib_desc'],
-                'no_of_loans'         => (string)$z30->{'$no_of_loans'},
-                'requested'           => (string)$requested
+                'sub_lib_desc' => (string)$item_status['sub_lib_desc'],
+                'no_of_loans' => (string)$z30->{'$no_of_loans'},
+                'requested' => (string)$requested
             ];
         }
         return $holding;
@@ -261,9 +269,9 @@ class Aleph extends AlephBase implements TranslatorAwareInterface
      * @param array   $params  Parameters
      * @param boolean $history History
      *
-     * @throws DateException
-     * @throws ILSException
      * @return array        Array of the patron's transactions on success.
+     * @throws ILSException
+     * @throws DateException
      */
     public function getMyTransactions($user, $params = [], $history = false)
     {
@@ -290,7 +298,7 @@ class Aleph extends AlephBase implements TranslatorAwareInterface
         $alephParams += [
             'view' => 'full',
             'startPos' => 1 + (isset($params['page'])
-                ? ($params['page'] - 1) * $pageSize : 0),
+                    ? ($params['page'] - 1) * $pageSize : 0),
             $itemsNoKey => $pageSize,
         ];
 
@@ -326,7 +334,7 @@ class Aleph extends AlephBase implements TranslatorAwareInterface
 
             $transaction = [
                 'id' => $this->barcodeToID($barcode),
-                'adm_id'   => $adm_id,
+                'adm_id' => $adm_id,
                 'item_id' => $group,
                 'location' => $location,
                 'title' => $title,
@@ -367,9 +375,9 @@ class Aleph extends AlephBase implements TranslatorAwareInterface
      *
      * @param array $user The patron array from patronLogin
      *
-     * @throws DateException
-     * @throws ILSException
      * @return array      Array of the patron's holds on success.
+     * @throws ILSException
+     * @throws DateException
      */
     public function getMyHolds($user)
     {
@@ -423,7 +431,7 @@ class Aleph extends AlephBase implements TranslatorAwareInterface
             $holdList[] = [
                 'type' => $type,
                 'item_id' => $item_id,
-                'adm_id'   => $adm_id,
+                'adm_id' => $adm_id,
                 'hold_item_id' => $hold_item_id,
                 'cancel_item_id' => $cancel_item_id,
                 'location' => $location,
@@ -464,12 +472,29 @@ class Aleph extends AlephBase implements TranslatorAwareInterface
     }
 
     /**
-     * Get profile information using X-server.
+     * Get Patron Profile
+     *
+     * This is responsible for retrieving the profile for a specific patron.
      *
      * @param array $user The patron array
      *
      * @throws ILSException
      * @return array      Array of the patron's profile data on success.
+     */
+    public function getMyProfile($user)
+    {
+        return $this->getMyProfileDLF($user);
+    }
+
+    /**
+     * Get profile information using X-server.
+     *
+     * This is responsible for retrieving the profile for a specific patron.
+     *
+     * @param array $user The patron array
+     *
+     * @return array      Array of the patron's profile data on success.
+     * @throws ILSException
      */
     public function getMyProfileX($user): ?array
     {
@@ -827,6 +852,261 @@ class Aleph extends AlephBase implements TranslatorAwareInterface
     }
 
     /**
+     * Get Patron ILL requests
+     *
+     * This is responsible for retrieving all ILL requests by a specific patron.
+     *
+     * @param array $user The patron array from patronLogin
+     *
+     * @throws ILSException
+     * @return array           Array of the patron's ILL requests
+     */
+    public function getMyILLRequests($user): array
+    {
+        $userId = $user['id'];
+        $params = ["view" => "full", "type" => "active"];
+        $count = 0;
+        $xml = $this->doRestDLFRequest(
+            ['patron', $userId,
+            'circulationActions', 'requests', 'ill'],
+            $params
+        );
+        $loans = [];
+        $formats = $this->config['ILLRequestMapping']['format'] ?? [];
+        foreach ($xml->xpath('//ill-request') as $item) {
+            $z13 = $item->z13;
+            $z410 = $item->z410;
+            $create = (string)$z410->{'z410-open-date'};
+            $expire = (string)$z410->{'z410-last-interest-date'};
+            $media = (string)$z410->{'z410-media'};
+            $format = $formats[$media] ?? 'Unknown';
+            $loans[] = [
+                'format' => $format,
+                'docno' => (string)$z13->{'z13-doc-number'},
+                'author' => (string)$z13->{'z13-author'},
+                'title' => (string)$z13->{'z13-title'},
+                'imprint' => (string)$z13->{'z13-imprint'},
+                'article_title' => (string)$item->{'title-of-article'},
+                'article_author' => (string)$item->{'author-of-article'},
+                'price' => (string)$item->{'z13u-additional-bib-info-1'},
+                'pickup_location' => (string)$z410->{'z410-pickup-location'},
+                'media' => $media,
+                'create' => $this->parseDate($create),
+                'expire' => $this->parseDate($expire),
+            ];
+        }
+        return $loans;
+    }
+
+    /**
+     * Get supported blank ILL request types
+     *
+     * @return string[]
+     */
+    public function getBlankIllRequestTypes(): array
+    {
+        return [
+            'monography',
+            'serial'
+        ];
+    }
+
+    /**
+     * Get forms for ILL Request
+     *
+     * This is responsible for retrieving all ILL request forms
+     *
+     * @param array  $patron The patron array from patronLogin
+     * @param string $type   Request type - monography or serial
+     *
+     * @throws ILSException
+     * @return array           forms
+     */
+    public function getFormForBlankILLRequest($patron, $type): array
+    {
+        $recordType = null;
+        if ($type == 'monography') {
+            $recordType = 'MN';
+        } elseif ($type == 'serial') {
+            $recordType = 'SE';
+        }
+        $patronId = $patron['id'];
+        $path = ['patron', $patronId, 'record', $recordType, 'ill'];
+        $result = $this->doRestDLFRequest($path);
+        $form = [];
+        foreach ($result->{'ill-information'}->children() as $element) {
+            $field = $element->getName();
+            $attributes = $element->attributes();
+            $required = ($attributes['usage'] ?? null) == 'Mandatory';
+            if ($element->count() == 0) {
+                $form[$field] = [
+                    'type'     => ($field != 'last-interest-date') ? 'text' : 'future_date',
+                    'label'    => self::ILL_BLANK_FORM_LABEL_PREFIX . $field,
+                    'required' => $required
+                ];
+            } elseif ($field == 'ill-unit') {
+                $options = [];
+                foreach ($element->{'pickup-locations'}->{'pickup-location'} as $location) {
+                    $locAttributes = $location->attributes();
+                    $code = (string)$locAttributes['code'];
+                    $text = (string)$location[0];
+                    $options[$code] = $text;
+                }
+                $form[$field] = $this->createIllFormElementFromOptions($field, $required, $options);
+            } else {
+                $childs = $element->children();
+                $field = $childs[0]->getName();
+                $options = [];
+                foreach ($childs as $child) {
+                    $code = null;
+                    $text = null;
+                    foreach ($child->children() as $subChild) {
+                        if (str_ends_with($subChild->getName(), '-code')) {
+                            $code = (string)$subChild->xpath('text()')[0];
+                        }
+                        if (str_ends_with($subChild->getName(), '-text')) {
+                            $text = (string)$subChild->xpath('text()')[0];
+                        }
+                    }
+                    if ($code != null && $text != null) {
+                        $options[$code] = $text;
+                    }
+                }
+                $form[$field] = $this->createIllFormElementFromOptions($field, $required, $options);
+            }
+        }
+        $fieldsConfig = $this->config['BlankILLRequestFor' . ucfirst($type) . 'Fields'];
+        foreach ($fieldsConfig['fields'] as $id => $config) {
+            $options = $fieldsConfig[$id] ?? null;
+            $form[$id] = $this->createIllFormElementFromConfig($config, $options);
+        }
+        $groupsConfig = $this->config['BlankILLRequestFor' . ucfirst($type) . 'Groups'];
+        $groups = [];
+        foreach ($groupsConfig as $id => $group) {
+            $result = [
+                'heading' => $group['heading'] ?? null,
+                'text' => $group['text'] ?? null,
+            ];
+            if (isset($group['fields'])) {
+                $fields = explode(',', $group['fields']);
+                $fieldSet = [];
+                foreach ($fields as $field) {
+                    $fieldSet[$field] = $form[$field];
+                }
+                $result['fields'] = $fieldSet;
+            }
+            $groups[$id] = $result;
+        }
+        $hiddenFields = [];
+        foreach ($form as $id => $config) {
+            if ($config['type'] == 'hidden') {
+                $hiddenFields[$id] = $config;
+            }
+        }
+        $groups['hidden'] = [
+            'fields' => $hiddenFields
+        ];
+        return $groups;
+    }
+
+    /**
+     * Place blank ILL request
+     *
+     * @param array $patron patron
+     * @param array $data   data
+     *
+     * @return array result
+     * @throws DateException
+     * @throws ILSException
+     */
+    public function placeBlankILLRequest($patron, $data): array
+    {
+        $type = $data['type'];
+        $form = $this->getFormForBlankILLRequest($patron, $type);
+        $patronId = $patron['id'];
+        $illDom = new \DOMDocument('1.0', 'UTF-8');
+        $illRoot = $illDom->createElement('ill-parameters');
+        $illRootNode = $illDom->appendChild($illRoot);
+        $variableFields = [];
+        foreach ($form as $id => $group) {
+            $fields = $group['fields'] ?? [];
+            foreach ($fields as $key => $config) {
+                $value = $data[$key] ?? null;
+                if ($config['type'] == 'hidden') {
+                    $value = $config['value'];
+                }
+                if ($value == null) {
+                    continue;
+                }
+                $target = $config['target'] ?? 'xml';
+                if ($target == 'none') {
+                    continue;
+                }
+                if ($config['type'] == 'date' || $config['type'] == 'future_date') {
+                    $value = $this->dateConverter->convertFromDisplayDate('Ymd', $value);
+                }
+                if ($target == 'variableField' && isset($config['variableField'])) {
+                    $variableFields[] = [
+                        'variableField' => $config['variableField'],
+                        'value' =>  $value,
+                    ];
+                    continue;
+                }
+                $element = $illDom->createElement($key);
+                $element->appendChild($illDom->createTextNode($this->escapeTextNode($value)));
+                $illRootNode->appendChild($element);
+            }
+        }
+        $xml = $illDom->saveXML();
+        $this->getLogger()->debug($xml);
+        try {
+            $request = ($type == 'serial') ? 'SE' : 'MN';
+            $path = ['patron', $patronId, 'record', $request, 'ill'];
+            $result = $this->doRestDLFRequest(
+                $path,
+                null,
+                'PUT',
+                'post_xml=' . $xml
+            );
+        } catch (\Exception $ex) {
+            return ['success' => false, 'sysMessage' => $ex->getMessage()];
+        }
+        $baseAndDocNumber = $result->{'create-ill'}->{'request-number'};
+        $base = substr($baseAndDocNumber, 0, 5);
+        $docNum = substr($baseAndDocNumber, 5);
+        if (empty($variableFields)) {
+            return ['success' => true, 'id' => $docNum];
+        }
+        $findDocParams = ['base' => $base, 'doc_num' => $docNum];
+        $document = $this->doXRequest('find-doc', $findDocParams, true);
+        foreach ($variableFields as $variableField) {
+            $target = $variableField['variableField'];
+            $value = $variableField['value'];
+            $id = substr($target, 0, 3);
+            $i1 = substr($target, 3, 1) ?: ' ';
+            $i2 = substr($target, 4, 1) ?: ' ';
+            $label = substr($target, 5, 1) ?: 'a';
+            $variableField = $document->{'record'}->{'metadata'}->{'oai_marc'}->addChild('varfield');
+            $variableField->addAttribute('id', $id);
+            $variableField->addAttribute('i1', $i1);
+            $variableField->addAttribute('i2', $i2);
+            $subfield = $variableField->addChild('subfield', $value);
+            $subfield->addAttribute('label', $label);
+        }
+        $updateDocParams = ['library' => $base, 'doc_num' => $docNum];
+        $xml = $document->asXml();
+        $updateDocParams['xml_full_req'] = $xml;
+        $this->getLogger()->debug($xml);
+        $updateDocParams['doc_action'] = 'UPDATE';
+        try {
+            $update = $this->doXRequestUsingPost('update-doc', $updateDocParams, true);
+        } catch (\Exception $ex) {
+            return ['success' => false, 'sysMessage' => $ex->getMessage()];
+        }
+        return ['success' => true, 'id' => $docNum];
+    }
+
+    /**
      * Extract holdings for items from XML response
      *
      * @param $xml xml to process
@@ -936,5 +1216,130 @@ class Aleph extends AlephBase implements TranslatorAwareInterface
             }
         }
         throw new \Exception("Invalid date: $date");
+    }
+
+    /**
+     * Escape text node for Aleph
+     *
+     * @param string $text text to escape
+     *
+     * @return string
+     */
+    protected function escapeTextNode($text)
+    {
+        if ($text == null) {
+            return '';
+        }
+        return str_replace('&', ' AND ', $text);
+    }
+
+    /**
+     * Perform an XServer request.
+     *
+     * @param string $op     Operation
+     * @param array  $params Parameters
+     * @param bool   $auth   Include authentication?
+     *
+     * @return \SimpleXMLElement
+     */
+    protected function doXRequestUsingPost($op, $params, $auth = true)
+    {
+        $url = "http://$this->host:$this->xport/X?";
+        $body = '';
+        $sep = '';
+        $params['op'] = $op;
+        if ($auth) {
+            $params['user_name'] = $this->wwwuser;
+            $params['user_password'] = $this->wwwpasswd;
+        }
+        foreach ($params as $key => $value) {
+            $body .= $sep . $key . '=' . urlencode($value);
+            $sep = '&';
+        }
+        $result = $this->doHTTPRequest($url, 'POST', $body);
+        if ($result->error) {
+            if (
+                $op == 'update-doc' && preg_match(
+                    '/Document: [0-9]+ was updated successfully\\./',
+                    trim($result->error)
+                ) === 1
+            ) {
+                return $result;
+            }
+            if ($this->debug_enabled) {
+                $this->debug("XServer error, URL is $url, error message: $result->error.");
+            }
+            throw new ILSException("XServer error: $result->error.");
+        }
+        return $result;
+    }
+
+    /**
+     * Create form element from options - convert select with only one option to
+     * hidden element
+     *
+     * @param string $field    Field name
+     * @param bool   $required Required
+     * @param array  $options  Options
+     *
+     * @return array
+     */
+    protected function createIllFormElementFromOptions($field, $required, $options)
+    {
+        if (count($options) == 1) {
+            return [
+                'type'     => 'hidden',
+                'label'    => self::ILL_BLANK_FORM_LABEL_PREFIX . $field,
+                'value'  => array_key_first($options)
+            ];
+        }
+        return [
+            'type'     => 'select',
+            'label'    => $field,
+            'required' => $required,
+            'options'  => $options
+        ];
+    }
+
+    /**
+     * Create form element from configuration
+     *
+     * @param array      $config  configuration of element
+     * @param array|null $options options for select
+     *
+     * @return array
+     */
+    protected function createIllFormElementFromConfig($config, $options)
+    {
+        $config = explode(':', $config);
+        $type = $config[0];
+        $label = $config[1];
+        $spec = $config[2] ?? 'optional';
+        $target = $config[3] ?? 'xml';
+        $value = null;
+        if ($type == 'hidden') {
+            $value = $config[4] ?? null;
+        }
+        $variableField = null;
+        if ($target == 'variableField') {
+            $variableField = $config[4] ?? null;
+        }
+        $result = [
+            'type'     => $type,
+            'label'    => $label,
+            'required' => $spec == 'required',
+            'options'  => $options,
+            'target'   => $target,
+        ];
+        if (!empty($options)) {
+            $result['options'] = $options;
+        }
+        if ($variableField != null) {
+            $result['variableField'] = $variableField;
+        }
+        if ($value != null) {
+            $result['value'] = $value;
+        }
+        return $result;
     }
 }

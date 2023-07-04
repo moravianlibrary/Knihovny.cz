@@ -1,0 +1,84 @@
+<?php
+  $groups = $this->groups;
+  $form = $this->form;
+  $form->prepare();
+  $form->setAttribute('class', 'dynamic-form');
+  $form->setAttribute('data-clear-account-cache', 'illRequests');
+  $form->setAttribute('data-disable-on-submit', true);
+  $formLabel = $this->plugin('formLabel');
+  $institution = $this->card->home_library;
+  $imageLink = sprintf('institutions/logos/%s/%s_small.png', $institution, $institution);
+?>
+
+<?=$this->flashmessages()?>
+
+<h2>
+  <?=$this->transEsc('ill_blank_form_' . $this->type . '_main_heading') ?>
+  -
+  <?=$this->transEsc('Source::' . $institution) ?>
+  <img class="pull-right" height="30" src="<?=$this->imageLink($imageLink)?>" alt="<?=$this->transEsc("Source::" . $institution) ?>">
+</h2>
+
+<?=$this->form()->openTag($form);?>
+<div class="control-group form-group">
+  <?php $csrf = $this->form->get('csrf'); ?>
+  <?=$this->formHidden($csrf);?>
+  <?=$this->formElementErrors()->render($csrf, ['class' => 'form-text error']) ?>
+  <?php foreach($groups as $id => $group): ?>
+    <?php if (isset($group['heading'])):?>
+      <h2><?=$this->transEsc($group['heading']);?></h2>
+    <?php endif; ?>
+    <?php if (isset($group['text'])):?>
+      <div><?=$this->transEsc($group['text']);?></div>
+    <?php endif; ?>
+    <?php foreach($group['fields'] ?? [] as $name => $field): ?>
+      <div class='form-group'>
+        <?php
+          $field = $this->form->get($name);
+          $required = $field->getOption('required') ?? false;
+          if ($required) {
+            $field->setAttributes(['required' => true]);
+          }
+        ?>
+        <?php $label = ''; if ($field->getOption('label') != null):?>
+          <?php
+            $attributes = [
+                'class' => 'control-label'
+            ];
+            $required = $field->getOption('required') ?? false;
+            if ($required) {
+              $attributes['class'] .= ' required';
+            }
+            ob_start();
+          ?>
+          <?=$formLabel->openTag($attributes)?>
+          <?=$this->transEsc($field->getOption('label'));?>:
+          <?=$formLabel->closeTag();?>
+          <?php $label = ob_get_contents(); ob_end_clean(); ?>
+        <?php endif; ?>
+        <?php if($field instanceof \Laminas\Form\Element\Select): ?>
+          <?=$label?>
+          <?php $field->setAttribute('class', 'form-control'); ?>
+          <?=$this->formSelect($field);?>
+        <?php elseif($field instanceof \Laminas\Form\Element\Checkbox): ?>
+          <?=$this->formCheckbox($field);?>
+          <?=$label?>
+        <?php elseif($field instanceof \Laminas\Form\Element\Hidden): ?>
+          <?=$this->formHidden($field);?>
+        <?php elseif($field instanceof \Laminas\Form\Element\Text): ?>
+          <?php $field->setAttribute('class', 'form-control'); ?>
+          <?=$label?>
+          <?=$this->formInput($field);?>
+          <?php if(in_array($field->getOption('type'), ['date', 'future_date'])):?>
+            (<?=$this->dateTime()->getDisplayDateFormat()?>)
+          <?php endif; ?>
+        <?php endif; ?>
+        <div>
+          <?=$this->formElementErrors()->render($field, ['class' => 'form-text error']) ?>
+        </div>
+      </div>
+    <?php endforeach; ?>
+  <?php endforeach; ?>
+  <?=$this->formSubmit($this->form->get('submit'));?>
+</div>
+<?=$this->form()->closeTag();?>

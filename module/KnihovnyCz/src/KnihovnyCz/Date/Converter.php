@@ -64,6 +64,16 @@ class Converter extends \VuFind\Date\Converter
     }
 
     /**
+     * Return display date format
+     *
+     * @return string
+     */
+    public function getDisplayDateFormat()
+    {
+        return $this->displayDateFormat;
+    }
+
+    /**
      * Public method for conversion of an admin defined date string
      * to a PHP DateTime
      *
