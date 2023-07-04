@@ -126,16 +126,19 @@ class DatabaseCsrf implements CsrfInterface
      * getMessages() will return an array of messages that explain why the
      * validation failed.
      *
-     * @param string $value token value
+     * @param string $value  token value
+     * @param bool   $delete delete token after successful validation
      *
      * @return bool
      */
-    public function isValid($value)
+    public function isValid($value, $delete = true): bool
     {
         $this->messages = [];
         $token = $this->csrfToken->findBySessionAndHash($this->sessionId, $value);
         if ($token != null) {
-            $token->delete();
+            if ($delete) {
+                $token->delete();
+            }
             return true;
         }
         $this->messages['NOT_SAME'] = self::NOT_SAME;

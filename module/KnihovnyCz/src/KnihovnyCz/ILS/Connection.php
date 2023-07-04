@@ -55,6 +55,7 @@ class Connection extends ConnectionBase
     public const CHECKED_METHODS = [
         'getMyTransactionHistory',
         'getMyShortLoans',
+        'ILLRequests',
     ];
 
     /**
@@ -193,6 +194,45 @@ class Connection extends ConnectionBase
                 [$params ?: []]
             )
         ) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Check getMyILLRequests
+     *
+     * A support method for checkFunction(). This is responsible for checking
+     * the driver configuration to determine if the system supports getMyILLRequests.
+     *
+     * @param array $functionConfig The ILL request configuration values
+     * @param array $params         An array of function-specific params (or null)
+     *
+     * @return bool if driver capability is supported
+     */
+    protected function checkMethodILLRequests($functionConfig, $params)
+    {
+        if (parent::checkCapability('getMyILLRequests', [$params ?: []])) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Check getFormsForILLRequest
+     *
+     * A support method for checkFunction(). This is responsible for checking
+     * the driver configuration to determine if the system supports
+     * getFormsForILLRequest.
+     *
+     * @param array $functionConfig The ILL request configuration values
+     * @param array $params         An array of function-specific params (or null)
+     *
+     * @return bool if driver capability is supported
+     */
+    protected function checkMethodgetBlankIllRequestTypes($functionConfig, $params)
+    {
+        if (parent::checkCapability('getBlankIllRequestTypes', [$params ?: []])) {
             return true;
         }
         return false;

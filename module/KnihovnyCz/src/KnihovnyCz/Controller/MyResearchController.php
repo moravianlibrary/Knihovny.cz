@@ -31,6 +31,7 @@ namespace KnihovnyCz\Controller;
 
 use KnihovnyCz\Db\Table\UserListCategories;
 use Laminas\ServiceManager\ServiceLocatorInterface;
+use Laminas\Stdlib\ResponseInterface as Response;
 use Laminas\View\Model\ViewModel;
 use VuFind\Controller\MyResearchController as MyResearchControllerBase;
 use VuFind\Db\Table\PluginManager as TableManager;
@@ -64,6 +65,13 @@ class MyResearchController extends MyResearchControllerBase
      * @var \KnihovnyCz\Date\Converter
      */
     protected $dateConverter = null;
+
+    /**
+     * Feedback form class
+     *
+     * @var string
+     */
+    protected $illFormClass = \KnihovnyCz\Form\IllForm::class;
 
     /**
      * Constructor
@@ -614,10 +622,151 @@ class MyResearchController extends MyResearchControllerBase
     {
         if (!$this->getUser()) {
             $urlHelper = $this->serviceLocator->get('ViewHelperManager')->get('url');
-            $query = ['lbreferer' => $urlHelper('myresearch-home') ];
-            return $this->redirect()->toRoute('myresearch-userlogin', [], [ 'query' => $query]);
+            $query = ['lbreferer' => $urlHelper('myresearch-home')];
+            return $this->redirect()->toRoute('myresearch-userlogin', [], ['query' => $query]);
         }
         return $this->redirect()->toRoute('myresearch-home');
+    }
+
+    /**
+     * Send list of ill requests to view
+     *
+     * @return mixed
+     */
+    public function illRequestsAction(): ViewModel|Response
+    {
+        // Force login:
+        if (!($user = $this->getUser())) {
+            return $this->forceLogin();
+        }
+        $view = $this->createViewModel();
+        $new = $this->getRequest()->getQuery('new');
+        if ($new == null) {
+            $view->setTemplate('myresearch/illrequests-all');
+            return $view;
+        }
+        // Stop now if the user does not have valid catalog credentials available:
+        if (!is_array($patron = $this->catalogLogin())) {
+            return $patron;
+        }
+        $hasForms = $this->getILS()->checkFunction(
+            'getBlankIllRequestTypes',
+            compact('patron')
+        );
+        if (!$hasForms) {
+            $this->flashMessenger()->addErrorMessage(
+                $this->translate('ils_action_unavailable')
+            );
+            return $this->redirect()->toRoute('myresearch-illrequests');
+        }
+        $view->type = $new;
+        $view->setTemplate('myresearch/illrequests-new');
+        $catalog = $this->getILS();
+        $formFields = $catalog->getFormForBlankILLRequest($patron, $new);
+        if ($formFields == null) {
+            $this->flashMessenger()->addErrorMessage(
+                $this->translate('ill_blank_unknown_request_type')
+            );
+            return $this->redirect()->toRoute('myresearch-illrequests');
+        }
+        $form = $this->serviceLocator->get($this->illFormClass);
+        $form->init($formFields);
+        if ($this->getRequest()->isPost()) {
+            $data = $this->getRequest()->getPost()->toArray();
+            $form->setData($data);
+            if ($form->isValid()) {
+                $data['type'] = $new;
+                $result = $catalog->placeBlankILLRequest($patron, $data);
+                if ($result['success'] == false) {
+                    $this->flashMessenger()->addErrorMessage('ill_blank_request_failed');
+                } else {
+                    $this->flashMessenger()->addInfoMessage('ill_blank_request_created');
+                    return $this->redirect()->toRoute('myresearch-illrequests');
+                }
+            } else {
+                $this->flashMessenger()->addErrorMessage('ill_blank_request_form_validation_error');
+            }
+        }
+        $view->form = $form;
+        $view->card = $user->getLibraryCard((int)$this->getCardId());
+        $view->groups = $formFields;
+        return $view;
+    }
+
+    /**
+     * Send list of ILL requests to view as HTML for rendering in AJAX
+     *
+     * @return mixed
+     */
+    public function illRequestsAjaxAction(): ViewModel|Response
+    {
+        $view = null;
+        try {
+            if (!is_array($patron = $this->catalogLogin())) {
+                return $patron;
+            }
+            $this->flashRedirect()->restore();
+            $catalog = $this->getILS();
+            $functionConfig = $catalog->checkFunction('ILLRequests', $patron);
+            if ($functionConfig !== false) {
+                $view = parent::illRequestsAction();
+                $forms = [];
+                $hasForms = $catalog->checkFunction(
+                    'getBlankIllRequestTypes',
+                    compact('patron')
+                );
+                if ($hasForms) {
+                    $result = $catalog->getBlankIllRequestTypes($patron);
+                    foreach ($result as $name) {
+                        $options = [
+                            'query' => [
+                                'new' => $name,
+                                'cardId' => $this->getCardId()
+                            ]
+                        ];
+                        $label = 'ill_blank_new_request_for_' . $name;
+                        $forms[$label] = $this->url()->fromRoute('myresearch-illrequests', [], $options);
+                    }
+                }
+                $view->setVariable('forms', $forms);
+            } else {
+                $this->flashMessenger()->addErrorMessage('ils_action_unavailable');
+            }
+        } catch (\Exception $ex) {
+            $this->showException($ex);
+        }
+
+        if (!($view instanceof \Laminas\View\Model\ViewModel)) {
+            $view = $this->createViewModel(
+                [
+                    'error' => 'ils_offline_home_message'
+                ]
+            );
+        }
+
+        if ($this->flashMessenger()->hasCurrentMessages('error')) {
+            $view->error = true;
+        }
+        $view->setTemplate('myresearch/illrequests-ajax');
+        $view->setVariable('cardId', $this->getCardId());
+        $params = $view->getVariable('params', []);
+        $params['cardId'] = $this->getCardId();
+        $view->setVariable('params', $params);
+        $result = $this->getViewRenderer()->render($view);
+        return $this->getAjaxResponse('text/html', $result, null);
+    }
+
+    /**
+     * Create new ILL request
+     *
+     * @return mixed
+     */
+    public function illRequestNewAction(): ViewModel|Response
+    {
+        $view = $this->createViewModel();
+        $form = $this->serviceLocator->get($this->illFormClass);
+        $view->form = $form;
+        return $view;
     }
 
     /**
