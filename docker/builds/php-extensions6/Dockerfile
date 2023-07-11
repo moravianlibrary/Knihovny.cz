@@ -47,7 +47,7 @@ RUN apt-get update && apt-get install -y \
     && apt-get autoremove -y
 
 # NODEJS, NPM \
-RUN curl -fsSL https://deb.nodesource.com/setup_14.x | bash - \
+RUN curl -fsSL https://deb.nodesource.com/setup_16.x | bash - \
     && apt-get install -y nodejs
 
 # Set Czech locales

@@ -232,7 +232,7 @@ class RecordDataFormatterFactory extends RecordDataFormatterFactoryBase
             null,
             [
                 'itemPrefix' => '<img class="signature" src="',
-                'itemSuffix' => '"/>'
+                'itemSuffix' => '">'
             ]
         );
 

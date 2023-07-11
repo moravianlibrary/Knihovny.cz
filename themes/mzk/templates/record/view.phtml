@@ -43,8 +43,8 @@
 <div class="record source<?=$this->escapeHtmlAttr($this->driver->getSourceIdentifier())?>">
   <?php $sidebarList = $this->related()->getList($this->driver); ?>
   <div class="solo">
-    <input type="hidden" value="<?=$this->escapeHtmlAttr($this->driver->getUniqueId())?>" class="hiddenId" />
-    <input type="hidden" value="<?=$this->escapeHtmlAttr($this->driver->getSourceIdentifier())?>" class="hiddenSource" />
+    <input type="hidden" value="<?=$this->escapeHtmlAttr($this->driver->getUniqueId())?>" class="hiddenId">
+    <input type="hidden" value="<?=$this->escapeHtmlAttr($this->driver->getSourceIdentifier())?>" class="hiddenSource">
     <?=$this->flashmessages()?>
     <div class="well">
     <?=$this->record($this->driver)->getCoreMetadata()?>

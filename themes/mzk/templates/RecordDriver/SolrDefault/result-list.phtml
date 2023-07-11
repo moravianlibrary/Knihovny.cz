@@ -12,8 +12,8 @@
     <?php $thumbnail = ob_get_contents(); ?>
   <?php ob_end_clean(); ?>
 <?php endif; ?>
-<input type="hidden" value="<?=$this->escapeHtmlAttr($this->driver->getUniqueID())?>" class="hiddenId" />
-<input type="hidden" value="<?=$this->escapeHtmlAttr($this->driver->getSourceIdentifier())?>" class="hiddenSource" />
+<input type="hidden" value="<?=$this->escapeHtmlAttr($this->driver->getUniqueID())?>" class="hiddenId">
+<input type="hidden" value="<?=$this->escapeHtmlAttr($this->driver->getSourceIdentifier())?>" class="hiddenSource">
 <div class="media">
   <?php if ($thumbnail && $thumbnailAlignment == 'left'): ?>
     <?=$thumbnail ?>
@@ -96,7 +96,7 @@
                 <strong><?=$this->transEsc($snippet['caption']) ?>:</strong>
               <?php endif; ?>
               <?php if (!empty($snippet['snippet'])): ?>
-                <?=$this->translate('highlight_snippet_html', ['%%snippet%%' => $this->highlight($snippet['snippet'])]) ?><br/>
+                <?=$this->translate('highlight_snippet_html', ['%%snippet%%' => $this->highlight($snippet['snippet'])]) ?><br>
               <?php endif; ?>
             <?php endif; ?>
           <?php endif; ?>
@@ -105,7 +105,7 @@
             <?php if ($this->driver->supportsAjaxStatus()): ?>
               <strong class="hideIfDetailed"><?=$this->transEsc('Call Number')?>:</strong>
               <span class="callnumber ajax-availability hidden">
-            <?=$this->transEsc('loading_ellipsis')?><br/>
+            <?=$this->transEsc('loading_ellipsis')?><br>
           </span>
               <strong><?=$this->transEsc('Located')?>:</strong>
               <span class="location ajax-availability hidden">
@@ -132,17 +132,17 @@
 
           if ($openUrlActive || $doiActive || !empty($urls)): ?>
             <?php if ($openUrlActive): ?>
-              <br/>
+              <br>
               <?=$openUrl->renderTemplate()?>
             <?php endif; ?>
             <?php if ($doiActive): ?>
-              <br/>
+              <br>
               <?=$doi->renderTemplate()?>
             <?php endif; ?>
             <?php if (!is_array($urls)) $urls = [];
             if(!$this->driver->isCollection()):
               foreach ($urls as $current): ?>
-                <a href="<?=$this->escapeHtmlAttr($this->proxyUrl($current['url']))?>" class="fulltext" target="new"><i class="fa fa-external-link" aria-hidden="true"></i> <?=($current['url'] == $current['desc']) ? $this->transEsc('Get full text') : $this->escapeHtml($current['desc'])?></a><br/>
+                <a href="<?=$this->escapeHtmlAttr($this->proxyUrl($current['url']))?>" class="fulltext" target="new"><i class="fa fa-external-link" aria-hidden="true"></i> <?=($current['url'] == $current['desc']) ? $this->transEsc('Get full text') : $this->escapeHtml($current['desc'])?></a><br>
               <?php endforeach; ?>
             <?php endif; ?>
           <?php endif; ?>
@@ -176,9 +176,9 @@
           <i class="fa fa-fw fa-qrcode" aria-hidden="true"></i> <a href="<?=$this->escapeHtmlAttr($QRCode);?>" class="qrcodeLink"><?=$this->transEsc('qrcode_show')?></a>
           <div class="qrcode hidden">
             <script type="text/template" class="qrCodeImgTag">
-              <img alt="<?=$this->transEsc('QR Code')?>" src="<?=$this->escapeHtmlAttr($QRCode);?>"/>
+              <img alt="<?=$this->transEsc('QR Code')?>" src="<?=$this->escapeHtmlAttr($QRCode);?>">
             </script>
-          </div><br/>
+          </div><br>
         </span>
           <?php endif; ?>
 
@@ -186,7 +186,7 @@
           <?php $trees = $this->driver->tryMethod('getHierarchyTrees'); if (!empty($trees)): ?>
             <?php foreach ($trees as $hierarchyID => $hierarchyTitle): ?>
               <div class="hierarchyTreeLink">
-                <input type="hidden" value="<?=$this->escapeHtmlAttr($hierarchyID)?>" class="hiddenHierarchyId" />
+                <input type="hidden" value="<?=$this->escapeHtmlAttr($hierarchyID)?>" class="hiddenHierarchyId">
                 <i class="result-link-icon fa fa-fw fa-sitemap" aria-hidden="true"></i>
                 <a class="hierarchyTreeLinkText result-link-label" data-lightbox href="<?=$this->escapeHtmlAttr($recordLinker->getTabUrl($this->driver, 'HierarchyTree', ['hierarchy' => $hierarchyID]))?>#tabnav" title="<?=$this->transEsc('hierarchy_tree')?>" data-lightbox-href="<?=$this->escapeHtmlAttr($recordLinker->getTabUrl($this->driver, 'AjaxTab', ['hierarchy' => $hierarchyID]))?>" data-lightbox-post="tab=hierarchytree">
                   <?=$this->transEsc('hierarchy_view_context')?><?php if (count($trees) > 1): ?>: <?=$this->escapeHtml($hierarchyTitle)?><?php endif; ?>
@@ -201,7 +201,7 @@
 
       <div class="col-xs-12 col-sm-12 col-md-3">
         <?php if ($this->cart()->isActiveInSearch() && $this->params->getOptions()->supportsCart() && $this->cart()->isActive()): ?>
-            <?=$this->render('record/cart-buttons.phtml', ['id' => $this->driver->getUniqueId(), 'source' => $this->driver->getSourceIdentifier()]); ?><br/>
+            <?=$this->render('record/cart-buttons.phtml', ['id' => $this->driver->getUniqueId(), 'source' => $this->driver->getSourceIdentifier()]); ?><br>
         <?php endif; ?>
 
         <?php if ($this->userlist()->getMode() !== 'disabled'): ?>
@@ -210,7 +210,7 @@
             <a href="<?=$this->escapeHtmlAttr($recordLinker->getActionUrl($this->driver, 'Save'))?>" data-lightbox class="save-record" data-id="<?=$this->escapeHtmlAttr($this->driver->getUniqueId()) ?>">
               <?=$this->icon('user-favorites', 'icon-link__icon') ?>
               <span class="result-link-label icon-link__label"><?=$this->transEsc('Add to favorites')?></span>
-            </a><br/>
+            </a><br>
             <?php elseif ($block = $this->permission()->getAlternateContent('feature.Favorites')): ?>
               <?=$block?>
           <?php endif; ?>

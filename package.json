@@ -9,10 +9,30 @@
   "bugs": {
     "url": "https://github.com/moravianlibrary/Knihovny.cz/issues"
   },
+  "scripts": {
+    "build": "npm run build:css",
+
+    "build:css": "npm run build:less",
+    "watch:css": "npm run watch:less",
+
+    "build:less": "grunt less custom",
+    "lessdev": "grunt lessdev",
+    "watch:less": "grunt watch:less",
+    "watch:lessdev": "grunt watch:lessdev",
+
+    "build:scss": "grunt scss",
+    "watch:scss": "grunt watch:scss",
+
+    "lessToSass": "grunt lessToSass",
+    "watch:lessToSass": "grunt watch:lessToSass"
+  },
   "dependencies": {
+    "autocomplete.js": "vufind-org/autocomplete.js#v1.x",
     "grunt": "^1.0.4",
     "grunt-contrib-less": "^2.0.0",
-    "jit-grunt": "^0.10.0"
+    "jit-grunt": "^0.10.0",
+    "jstree": "3.3.15",
+    "vanilla-cookieconsent": "3.0.0-rc.13"
   },
   "devDependencies": {
     "eslint": "^8.15.0",

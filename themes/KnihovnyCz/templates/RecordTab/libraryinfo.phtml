@@ -11,7 +11,7 @@
 <!-- Code of Cultural Heritage Organization-->
 <?php $orgcode = $this->driver->getOrgCode(); if (!empty($orgcode)): ?>
   <h2><i class="fa fa-circle-thin"></i> <?=$this->translate('cultural_heritage_organization_code')?></h2>
-  <?php foreach ($orgcode as $code): ?><a href="<?=$this->escapeHtmlAttr($code['url'])?>"><?=$this->escapeHtml($code['value'])?></a><br/><?php endforeach; ?>
+  <?php foreach ($orgcode as $code): ?><a href="<?=$this->escapeHtmlAttr($code['url'])?>"><?=$this->escapeHtml($code['value'])?></a><br><?php endforeach; ?>
 <?php endif; ?>
 
 <?php $lastupdated = $this->driver->getLastUpdated(); if (!empty($lastupdated)): ?>

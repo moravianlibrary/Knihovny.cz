@@ -13,13 +13,13 @@
 <?php if (!empty($this->recordList)): ?>
   <?php if ($this->cancelForm): ?>
     <form name="updateForm" class="inline" method="post" action="<?=$this->escapeHtmlAttr($this->url('myresearch-shortloans'))?>" id="update_short_loans" data-clear-account-cache="shortloans" data-lightbox>
-    <input type="hidden" value="<?=$this->escapeHtmlAttr($this->auth()->getManager()->getCsrfHash())?>" name="csrf"/>
-    <input type="hidden" id="submitType" name="cancelSelected" value="1"/>
-    <input type="hidden" id="cancelConfirm" name="confirm" value="0"/>
+    <input type="hidden" value="<?=$this->escapeHtmlAttr($this->auth()->getManager()->getCsrfHash())?>" name="csrf">
+    <input type="hidden" id="submitType" name="cancelSelected" value="1">
+    <input type="hidden" id="cancelConfirm" name="confirm" value="0">
     <div class="toolbar">
       <div class="checkbox">
         <label>
-          <input type="checkbox" name="selectAll" class="checkbox-select-all"/>
+          <input type="checkbox" name="selectAll" class="checkbox-select-all">
             <?=$this->transEsc('select_page')?>
         </label>
         <?php if ($this->cancelForm || true): ?>
@@ -59,7 +59,7 @@
           <div>
             <?php if ($this->cancelForm && isset($ilsDetails['cancel_details'])): ?>
               <?php $checkboxId = $this->escapeElementId('checkbox_' . $ilsDetails['cancel_details']); ?>
-              <input type="hidden" name="cancelAllIDS[]" value="<?=$this->escapeHtmlAttr($ilsDetails['cancel_details']) ?>" />
+              <input type="hidden" name="cancelAllIDS[]" value="<?=$this->escapeHtmlAttr($ilsDetails['cancel_details']) ?>">
                 <label>
                   <input type="checkbox" name="selectedIDS[]" value="<?=$this->escapeHtmlAttr($ilsDetails['cancel_details']) ?>" id="<?=$checkboxId?>" class="checkbox-select-item">
                 </label>

@@ -4,14 +4,14 @@
 <div class="map-scale">
   <form class="map-scale-range-form" name="<?=$this->escapeHtmlAttr($this->mapScaleField)?>Filter" id="<?=$this->escapeHtmlAttr($this->mapScaleField)?>Filter">
     <?=$results->getUrlQuery()->asHiddenFields(['page' => "/./", 'filter' => "/^{$this->mapScaleField}:.*/"])?>
-    <input type="hidden" name="mapScalerange[]" value="<?=$this->escapeHtmlAttr($this->mapScaleField)?>"/>
+    <input type="hidden" name="mapScalerange[]" value="<?=$this->escapeHtmlAttr($this->mapScaleField)?>">
     <div class="map-scale-from">
       <label for="<?=$this->escapeHtmlAttr($this->mapScaleField)?>from">
         <?=$this->transEsc('map_scale_from')?>
       </label>
       1:
       <span class="map-scale-input">
-        <input type="text" size="10" class="form-control" name="<?=$this->escapeHtmlAttr($this->mapScaleField)?>from" id="<?=$this->escapeHtmlAttr($this->mapScaleField)?>from" value="<?=$this->escapeHtmlAttr($min)?>"/>
+        <input type="text" size="10" class="form-control" name="<?=$this->escapeHtmlAttr($this->mapScaleField)?>from" id="<?=$this->escapeHtmlAttr($this->mapScaleField)?>from" value="<?=$this->escapeHtmlAttr($min)?>">
       </span>
     </div>
     <div class="map-scale-to">
@@ -20,11 +20,11 @@
       </label>
       1:
       <span class="map-scale-input">
-        <input type="text" size="10" class="form-control" name="<?=$this->escapeHtmlAttr($this->mapScaleField)?>to" id="<?=$this->escapeHtmlAttr($this->mapScaleField)?>to" value="<?=$this->escapeHtmlAttr($max)?>"/>
+        <input type="text" size="10" class="form-control" name="<?=$this->escapeHtmlAttr($this->mapScaleField)?>to" id="<?=$this->escapeHtmlAttr($this->mapScaleField)?>to" value="<?=$this->escapeHtmlAttr($max)?>">
       </span>
     </div>
-    <div class="slider-container"><input type="text" class="hidden" id="<?=$this->escapeHtmlAttr($this->mapScaleField)?>scaleSlider"/></div>
-    <input class="btn btn-default" type="submit" value="<?=$this->transEscAttr('Set')?>"/>
+    <div class="slider-container"><input type="text" class="hidden" id="<?=$this->escapeHtmlAttr($this->mapScaleField)?>scaleSlider"></div>
+    <input class="btn btn-default" type="submit" value="<?=$this->transEscAttr('Set')?>">
   </form>
 </div>
   <?php $this->headScript()->appendFile('vendor/bootstrap-slider.min.js'); ?>

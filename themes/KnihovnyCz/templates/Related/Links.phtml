@@ -9,7 +9,7 @@
         $imageUrl = $this->imageLink('externalLogos/' . $link['label'] . '.png');
       }
       ?>
-      <li><img class="" src="<?=$imageUrl?>"/><a href="<?=$this->escapeHtmlAttr($link['url'])?>" title="<?=$label?>" target="_blank"><?=$label?></a></li>
+      <li><img class="" src="<?=$imageUrl?>"><a href="<?=$this->escapeHtmlAttr($link['url'])?>" title="<?=$label?>" target="_blank"><?=$label?></a></li>
     <?php endforeach; ?>
   </ul>
 <?php endif; ?>
