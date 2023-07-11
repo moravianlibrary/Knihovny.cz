@@ -20,7 +20,7 @@ $this->layout()->breadcrumbs = false;
           $listUrl = $widget['listUrl'];
           $title = $widget['list']->title_cs ?? $widget['list']->title ?? '';
       ?>
-        <a href="<?=$listUrl?>" title="<?=$title?>"><?=$title?></a><br />
+        <a href="<?=$listUrl?>" title="<?=$title?>"><?=$title?></a><br>
       <?php endforeach; ?>
     </div>
     <?php if ($categoryIterator % 3 == 0): ?>

@@ -23,7 +23,7 @@
 
 <div class="short-loan-form">
   <form class="form-record-shortloan form-inline" method="post" name="shortLoan" id="shortLoan">
-    <input type="hidden" name="csrf" value="<?=$this->escapeHtmlAttr($this->auth()->getManager()->getCsrfHash())?>" />
+    <input type="hidden" name="csrf" value="<?=$this->escapeHtmlAttr($this->auth()->getManager()->getCsrfHash())?>">
     <table class="table table-striped responsive-table table-bordered table-condensed">
       <tr class="visible-md visible-lg">
         <th style="width: 150px;"><?=$this->translate('Date')?></th>
@@ -43,16 +43,16 @@
             <?php if ($slot['available']):?>
               <td class="short-loan-free" colspan='<?=$colspan?>'>
                 <div class="form-group">
-                  <input type="checkbox" name="slot[]" value="<?=$this->escapeHtmlAttr($slot['slot'])?>" id="<?=$this->escapeHtmlAttr('slot' . $slot['slot'])?>"/>
+                  <input type="checkbox" name="slot[]" value="<?=$this->escapeHtmlAttr($slot['slot'])?>" id="<?=$this->escapeHtmlAttr('slot' . $slot['slot'])?>">
                   <label for="<?=$this->escapeHtmlAttr('slot' . $slot['slot'])?>">
                     <?=$slot['start_time'] . ' - ' . $slot['end_time']?>
                   </label>
                 </div>
               </td>
             <?php elseif ($slot['virtual'] ?? false):?>
-              <td class="short-loan-virtual" colspan='<?=$colspan?>'/>
+              <td class="short-loan-virtual" colspan='<?=$colspan?>'>
             <?php else:?>
-              <td class="short-loan-reserved" colspan='<?=$colspan?>'/>
+              <td class="short-loan-reserved" colspan='<?=$colspan?>'>
             <?php endif; ?>
           <?php endforeach;?>
         </tr>
@@ -60,7 +60,7 @@
     </table>
 
     <div class="control-group">
-      <input class="btn btn-primary" type="submit" name="placeHold" value="<?=$this->transEsc('short_loan_reguest_submit_text')?>"/>
+      <input class="btn btn-primary" type="submit" name="placeHold" value="<?=$this->transEsc('short_loan_reguest_submit_text')?>">
     </div>
 
   </form>

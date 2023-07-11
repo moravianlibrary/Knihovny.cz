@@ -19,7 +19,7 @@ ENV PARAM_VUFIND_GOOGLE_API_KEY=${PARAM_VUFIND_GOOGLE_API_KEY}
 ENV PARAM_VUFIND_CAPTCHA_SITE_KEY=${PARAM_VUFIND_CAPTCHA_SITE_KEY}
 ENV PARAM_VUFIND_CAPTCHA_SECRET_KEY=${PARAM_VUFIND_CAPTCHA_SECRET_KEY}
 ENV PARAM_VUFIND_MYSQL_URL=${PARAM_VUFIND_MYSQL_URL}
-ENV PARAM_VUFIND_COMMIT="f6eb1b0393c76874f8b3abe8918df2b214e19b78"
+ENV PARAM_VUFIND_COMMIT="c2aefdbe84f80618f473b0dd712ef64d7384cd37"
 ENV PARAM_PORTAL_PAGES_BRANCH=${PARAM_PORTAL_PAGES_BRANCH}
 ENV PARAM_VUFIND_ROBOTS_TXT=${PARAM_VUFIND_ROBOTS_TXT}
 ENV PARAM_VUFIND_SUMMON_API_ID=${PARAM_VUFIND_SUMMON_API_ID}
@@ -63,5 +63,11 @@ COPY phpunit.xml /var/www/knihovny-cz/
 # Install npm and grunt
 COPY package.json /var/www/knihovny-cz/
 RUN npm install -g grunt-cli && npm install
+
+# Copy node modules
+RUN cp ./node_modules/autocomplete.js/autocomplete.js ./themes/bootstrap3/js/vendor/
+RUN cp ./node_modules/jstree/dist/jstree.min.js ./themes/bootstrap3/js/vendor/jsTree/
+RUN cp -r ./node_modules/jstree/dist/themes ./themes/bootstrap3/js/vendor/jsTree/themes
+RUN cp ./node_modules/vanilla-cookieconsent/dist/cookieconsent.umd.js ./themes/bootstrap3/js/vendor/
 
 CMD ["knihovny-cz-foreground"]

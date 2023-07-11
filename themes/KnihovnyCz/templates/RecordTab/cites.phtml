@@ -15,6 +15,6 @@ $data = $this->driver->getCitedDocuments();
     );
     $authors = implode(', ', array_unique($document['authors'] ?? []));
   ?>
-  <?=$authors?>: <br />
-  <a href="<?=$url?>"><?=$document['title']?></a><br /><br />
+  <?=$authors?>: <br>
+  <a href="<?=$url?>"><?=$document['title']?></a><br><br>
 <?php endforeach; ?>

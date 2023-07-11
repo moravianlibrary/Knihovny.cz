@@ -80,11 +80,11 @@
                       map: map,
                       title: 'name of library'
                     });
-                    var content = $("<div/>", {id: "content", "class": "marker-info"});
-                    content.append($("<div/>").attr('class', 'marker-title')
+                    var content = $("<div>", {id: "content", "class": "marker-info"});
+                    content.append($("<div>").attr('class', 'marker-title')
                       .text(coord.title));
                     if (coord.address != null) {
-                      content.append($("<div/>").attr('class', 'marker-subtitle')
+                      content.append($("<div>").attr('class', 'marker-subtitle')
                         .text(coord.address));
                     }
                     info[index] = new google.maps.InfoWindow({ content: content.prop('outerHTML') });

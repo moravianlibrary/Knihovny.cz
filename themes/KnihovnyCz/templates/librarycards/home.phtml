@@ -70,7 +70,7 @@
     </div>
   <?php endif;?>
 
-  <br/>
+  <br>
 
   <div class="btn-group" style="margin-top: 15px">
     <a class="btn btn-link dropdown-toggle" data-toggle="dropdown" href="<?=$this->url('myresearch-deleteuser') ?>">
@@ -81,8 +81,8 @@
       <pre><?=$this->translate('delete_user_account_confirm')?></pre>
       <li>
         <form action="<?=$this->url('myresearch-deleteuser') ?>" method="post">
-          <input type='hidden' name='csrf' value="<?=$this->escapeHtml($this->csrfHash)?>"/>
-          <input type='hidden' name='confirm' value='1'/>
+          <input type='hidden' name='csrf' value="<?=$this->escapeHtml($this->csrfHash)?>">
+          <input type='hidden' name='confirm' value='1'>
           <button type='submit' class="btn btn-link"><?=$this->transEscAttr('confirm_dialog_yes') ?></button>
         </form>
       </li>
