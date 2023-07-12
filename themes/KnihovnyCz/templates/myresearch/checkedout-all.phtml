@@ -23,6 +23,29 @@
       form.find('.checkbox-select-all').prop('checked', this.checked);
       $('.checkbox-select-all[form="' + form.attr('id') + '"]').prop('checked', this.checked);
     });
+
+    var confirmRenewRequest = function confirmRenewRequest(link, action) {
+      $(element).find('#cancelConfirm').val(1);
+      $(element).find('#submitType').attr('name', action);
+      $(link).parents('form').submit();
+    };
+
+    $(element).find('#confirm_renew_selected_yes').click(function cancelSelectedRequests(e) {
+      e.preventDefault();
+      confirmRenewRequest(this, 'renewSelected');
+    });
+    $(element).find('#confirm_renew_all_yes').click(function cancelAllRequests(e) {
+      e.preventDefault();
+      confirmRenewRequest(this, 'renewAll');
+    });
+    $(element).find('.confirm_renew_no').click(function doNotCancelRequest(e) {
+      e.preventDefault();
+    });
+    $(element).find('#update_selected').click(function updateSelected() {
+      // Change submitType to indicate that this is not a cancel request:
+      $(element).find('#submitType').attr('name', 'updateSelected');
+    });
+
     $(element).find("form").submit(function onSubmit(event) {
       event.preventDefault();
       hideLibraryCardContent(element);
