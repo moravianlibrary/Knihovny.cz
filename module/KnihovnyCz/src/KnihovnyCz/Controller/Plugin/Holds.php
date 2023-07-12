@@ -29,7 +29,11 @@
 
 namespace KnihovnyCz\Controller\Plugin;
 
+use Laminas\Session\SessionManager;
 use VuFind\Controller\Plugin\Holds as HoldsBase;
+use VuFind\Crypt\HMAC;
+use VuFind\Date\Converter as DateConverter;
+use VuFind\Validator\CsrfInterface;
 
 /**
  * Action helper to perform holds-related actions
@@ -42,6 +46,31 @@ use VuFind\Controller\Plugin\Holds as HoldsBase;
  */
 class Holds extends HoldsBase
 {
+    /**
+     * Session data
+     *
+     * @var CsrfInterface
+     */
+    protected $csrfValidator;
+
+    /**
+     * Constructor
+     *
+     * @param HMAC           $hmac           HMAC generator
+     * @param SessionManager $sessionManager Session manager
+     * @param DateConverter  $dateConverter  Date converter
+     * @param CsrfInterface  $csrfValidator  CSRF validator
+     */
+    public function __construct(
+        HMAC $hmac,
+        SessionManager $sessionManager,
+        DateConverter $dateConverter,
+        CsrfInterface $csrfValidator
+    ) {
+        parent::__construct($hmac, $sessionManager, $dateConverter);
+        $this->csrfValidator = $csrfValidator;
+    }
+
     /**
      * Process cancellation requests.
      *
@@ -74,6 +103,14 @@ class Holds extends HoldsBase
             // No button pushed -- no action needed
             return [];
         }
+
+        if (!$this->csrfValidator->isValid($params->fromPost('csrf'), true)) {
+            $flashMsg->addErrorMessage('csrf_validation_failed');
+            return [];
+        }
+        // After successful token verification, clear list to shrink session
+        // and prevent double submit:
+        $this->csrfValidator->trimTokenList(0);
 
         if (!empty($details)) {
             // Confirm?
