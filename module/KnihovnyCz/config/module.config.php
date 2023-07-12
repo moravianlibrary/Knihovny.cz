@@ -394,7 +394,7 @@ $config = [
             \KnihovnyCz\Controller\Plugin\ShortLoans::class => \KnihovnyCz\Controller\Plugin\ShortLoans::class,
         ],
         'factories' => [
-            'KnihovnyCz\Controller\Plugin\Holds' => 'VuFind\Controller\Plugin\AbstractRequestBaseFactory',
+            'KnihovnyCz\Controller\Plugin\Holds' => \KnihovnyCz\Controller\Plugin\HoldsFactory::class,
             'KnihovnyCz\Controller\Plugin\FlashRedirect' => 'VuFind\Controller\Plugin\AbstractRequestBaseFactory',
             'KnihovnyCz\Controller\Plugin\ResultScroller' => \KnihovnyCz\Controller\Plugin\ResultScrollerFactory::class,
         ],

@@ -7,6 +7,7 @@
     <form name="updateForm" class="inline" method="post" action="<?=$this->escapeHtmlAttr($this->url('holds-list'))?>" id="update_holds" data-clear-account-cache="holds" data-lightbox>
     <input type="hidden" id="submitType" name="cancelSelected" value="1">
     <input type="hidden" id="cancelConfirm" name="confirm" value="0">
+    <input type="hidden" name="csrf" value="<?=$this->escapeHtmlAttr($this->auth()->getManager()->getCsrfHash())?>">
     <div class="toolbar">
       <div class="checkbox">
         <label>
