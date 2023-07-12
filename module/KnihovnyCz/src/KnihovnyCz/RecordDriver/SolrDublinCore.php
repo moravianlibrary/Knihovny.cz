@@ -84,7 +84,7 @@ class SolrDublinCore extends SolrDefault
      *
      * @return string
      */
-    public function getTitle()
+    public function getTitle(): string
     {
         return $this->fields['title'] ?? '';
     }
