@@ -324,6 +324,7 @@ class Aleph extends AlephBase implements TranslatorAwareInterface
                 . (string)$z36->{$prefix . 'sequence'};
 
             $due = (string)$z36->{$prefix . 'due-date'};
+            $checkoutDate = (string)$z36->{$prefix . 'loan-date'};
             $title = (string)$z13->{'z13-title'};
             $author = (string)$z13->{'z13-author'};
             $isbn = (string)$z13->{'z13-isbn-issn'};
@@ -343,12 +344,11 @@ class Aleph extends AlephBase implements TranslatorAwareInterface
                 'reqnum' => $reqnum,
                 'barcode' => $barcode,
                 'duedate' => $this->parseDate($due),
+                'checkoutDate'  => $this->parseDate($checkoutDate),
                 'renewable' => $renew[0] == "Y",
             ];
             if ($history) {
-                $issued = (string)$z36->{$prefix . 'loan-date'};
                 $returned = (string)$z36->{$prefix . 'returned-date'};
-                $transaction['checkoutDate'] = $this->parseDate($issued);
                 $transaction['returnDate'] = $this->parseDate($returned);
             }
             $transList[] = $transaction;
