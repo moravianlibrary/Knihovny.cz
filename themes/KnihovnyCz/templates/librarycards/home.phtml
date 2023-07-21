@@ -63,9 +63,9 @@
     <p><?=$this->translate('Library card connect warning 2')?></p>
     <p><?=$this->translate('Library card connect warning 3')?></p>
     <div class="btn-group">
-      <a href="<?=$this->url('librarycards-connectcardlogin') ?>" id="connectCardInitializeBtn" class="btn btn-primary" role="button" aria-pressed="true">
-        <?=$this->icon('ui-add') ?>
-        <?=$this->transEsc('Add a Library Card using login')?>
+      <a href="<?=$this->url('librarycards-connectcardlogin') ?>" id="connectCardInitializeBtn" class="add-card-login btn btn-primary" role="button" aria-pressed="true">
+        <?=$this->icon('ui-add', 'icon-link__icon') ?>
+        <span class="icon-link__label"><?=$this->transEsc('Add a Library Card using login')?></span>
       </a>
     </div>
   <?php endif;?>
@@ -92,7 +92,7 @@
 
 </div>
 
-<div class="<?=$this->layoutClass('sidebar')?>">
+<div class="<?=$this->layoutClass('sidebar')?>" id="myresearch-sidebar" role="navigation" aria-label="<?=$this->transEsc('account_menu_label')?>">
   <?=$this->context($this)->renderInContext("myresearch/menu.phtml", ['active' => 'librarycards'])?>
 </div>
 

@@ -19,7 +19,7 @@ ENV PARAM_VUFIND_GOOGLE_API_KEY=${PARAM_VUFIND_GOOGLE_API_KEY}
 ENV PARAM_VUFIND_CAPTCHA_SITE_KEY=${PARAM_VUFIND_CAPTCHA_SITE_KEY}
 ENV PARAM_VUFIND_CAPTCHA_SECRET_KEY=${PARAM_VUFIND_CAPTCHA_SECRET_KEY}
 ENV PARAM_VUFIND_MYSQL_URL=${PARAM_VUFIND_MYSQL_URL}
-ENV PARAM_VUFIND_COMMIT="c2aefdbe84f80618f473b0dd712ef64d7384cd37"
+ENV PARAM_VUFIND_COMMIT="3a2eafe70ea201a9cab8a8dded0df1aef2627454"
 ENV PARAM_PORTAL_PAGES_BRANCH=${PARAM_PORTAL_PAGES_BRANCH}
 ENV PARAM_VUFIND_ROBOTS_TXT=${PARAM_VUFIND_ROBOTS_TXT}
 ENV PARAM_VUFIND_SUMMON_API_ID=${PARAM_VUFIND_SUMMON_API_ID}
@@ -27,7 +27,6 @@ ENV PARAM_VUFIND_SUMMON_API_KEY=${PARAM_VUFIND_SUMMON_API_KEY}
 
 ## Install base VuFind
 
-RUN echo "${PARAM_VUFIND_COMMIT}"
 # Take a vufind source at given state
 RUN curl "https://github.com/vufind-org/vufind/archive/${PARAM_VUFIND_COMMIT}.zip" -L -o /tmp/vufind.zip
 
@@ -50,6 +49,7 @@ RUN rm /var/www/knihovny-cz/composer.lock
 # Install composer dependencies
 RUN composer config --no-plugins allow-plugins.php-http/discovery true
 RUN composer install --no-interaction -q
+RUN composer update --no-interaction -q
 
 #TODO: sentry/sentry still missing
 

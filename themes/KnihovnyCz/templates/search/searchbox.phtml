@@ -128,7 +128,8 @@
     <?php endif; ?>
         </div>
       </div>
-    <?php $shards = $options->getShards(); if ($options->showShardCheckboxes() && !empty($shards)): ?>
+    <?php $shards = $options->getShards(); ?>
+    <?php if ($options->showShardCheckboxes() && !empty($shards)): ?>
       <?php
       $selectedShards = $this->selectedShards ?? $options->getDefaultSelectedShards();
       ?>

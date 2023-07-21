@@ -36,7 +36,7 @@ JS;
   <p>
     <?=$this->context($this)->renderInContext('librarycards/listcards.phtml', [
         'user' => $this->auth()->isLoggedIn(),
-        'action' => $this->url('myresearch-historicloansajax'),
+        'action' => $this->url('checkouts-historyajax'),
         'callback' => 'loadHistoricLoans',
     ]);
     ?>

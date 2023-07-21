@@ -21,6 +21,13 @@
         <i class="fa fa-hand-paper-o mr-05"></i><?=$this->transEsc('Want it') ?>
       </a>
     </p>
+
+    <?php if ($this->driver->getExtraDetail('cached_record') && !$this->translationEmpty('cached_record_warning')): ?>
+      <div class="alert alert-warning">
+        <?=$this->transEsc('cached_record_warning')?>
+      </div>
+    <?php endif; ?>
+
     <table class="table table-striped">
       <caption class="sr-only"><?=$this->transEsc('Bibliographic Details')?></caption>
       <?php foreach ($items as $key => $item): ?>
@@ -79,8 +86,9 @@
       <?php endforeach; ?>
     <?php endif; ?>
 
-    <?php $doi = $this->doi($this->driver, 'record'); if ($doi->isActive()): ?>
-        <div><?=$doi->renderTemplate()?></div>
+    <?php $doi = $this->doi($this->driver, 'record'); ?>
+    <?php if ($doi->isActive()): ?>
+      <div><?=$doi->renderTemplate()?></div>
     <?php endif; ?>
 
     </div>

@@ -367,6 +367,7 @@ $config = [
             \KnihovnyCz\Controller\EmbeddedLibrariesController::class => \VuFind\Controller\AbstractBaseFactory::class,
             \KnihovnyCz\Controller\EmbeddedSearchController::class => \VuFind\Controller\AbstractBaseFactory::class,
             \KnihovnyCz\Controller\AdminIlsController::class => \VuFind\Controller\AbstractBaseFactory::class,
+            \KnihovnyCz\Controller\CheckoutsController::class => \VuFind\Controller\CheckoutsControllerFactory::class,
         ],
         'aliases' => [
             'Inspiration' => \KnihovnyCz\Controller\InspirationController::class,
@@ -387,6 +388,7 @@ $config = [
             'EmbeddedLibraries' => \KnihovnyCz\Controller\EmbeddedLibrariesController::class,
             'EmbeddedSearch' => \KnihovnyCz\Controller\EmbeddedSearchController::class,
             'AdminIls' => \KnihovnyCz\Controller\AdminIlsController::class,
+            \VuFind\Controller\CheckoutsController::class => \KnihovnyCz\Controller\CheckoutsController::class,
         ],
     ],
     'controller_plugins' => [
@@ -786,7 +788,7 @@ $staticRoutes = [
     'MyResearch/FinesAjax' => 'MyResearch/FinesAjax',
     'MyResearch/ProfileAjax' => 'MyResearch/ProfileAjax',
     'MyResearch/CheckedoutAjax' => 'MyResearch/CheckedoutAjax',
-    'MyResearch/HistoricloansAjax' => 'MyResearch/HistoricloansAjax',
+    'Checkouts/HistoryAjax' => 'Checkouts/HistoryAjax',
     'MyResearch/UserSettings' => 'MyResearch/UserSettings',
     'MyResearch/ShortLoans' => 'MyResearch/ShortLoans',
     'MyResearch/ShortLoansAjax' => 'MyResearch/ShortLoansAjax',

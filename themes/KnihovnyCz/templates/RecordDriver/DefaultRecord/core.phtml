@@ -43,7 +43,17 @@
   <?php endif; ?>
   <div class="media-body">
     <h1 property="name" class="record-title" data-sigla="<?=$sigla ?: 'undefined' ?>"><?=$this->escapeHtml($this->driver->getShortTitle())?></h1>
+
+    <?php if ($this->driver->getExtraDetail('cached_record') && !$this->translationEmpty('cached_record_warning')): ?>
+
+      <div class="alert alert-warning">
+        <?=$this->transEsc('cached_record_warning')?>
+      </div>
+    <?php endif; ?>
+
+
     <?=$this->record($this->driver)->renderTemplate('wantit.phtml');?>
+
     <?php foreach ($this->driver->tryMethod('getFullTitlesAltScript', [], []) as $altTitle): ?>
       <div class="title-alt">
         <?=$this->escapeHtml($altTitle)?>
