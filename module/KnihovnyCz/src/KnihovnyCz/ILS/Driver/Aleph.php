@@ -110,7 +110,7 @@ class Aleph extends AlephBase implements TranslatorAwareInterface
         if ($method == 'getMyProlongRegistrationLink') {
             return !empty($this->config['ProlongRegistration']['url']);
         }
-        if ($method == 'ILLRequests') {
+        if ($method == 'getMyILLRequests') {
             return !empty($this->config['ILLRequests']['enabled']);
         }
         if ($method == 'getBlankIllRequestTypes') {
