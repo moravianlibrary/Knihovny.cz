@@ -297,60 +297,6 @@ class MyResearchController extends MyResearchControllerBase
     }
 
     /**
-     * Send list of historic loans to view
-     *
-     * @return mixed
-     */
-    public function historicloansAction()
-    {
-        // Force login:
-        if (!$this->getUser()) {
-            return $this->forceLogin();
-        }
-        $view = $this->createViewModel();
-        $view->setTemplate('myresearch/historicloans-all');
-        return $view;
-    }
-
-    /**
-     * Send list of historic loans to view
-     *
-     * @return mixed
-     */
-    public function historicloansAjaxAction()
-    {
-        try {
-            $this->flashRedirect()->restore();
-            $view = parent::historicloansAction();
-            // disable sorting
-            $view->sortList = false;
-            $transactions = $view->transactions ?? [];
-            $this->addDetailsFromOfflineHoldings($transactions);
-        } catch (\Exception $ex) {
-            $view = $this->createViewModel();
-            $view->error = true;
-            $this->showException($ex);
-        }
-        if (!($view instanceof \Laminas\View\Model\ViewModel)) {
-            $view = $this->createViewModel(
-                [
-                    'error' => 'ils_offline_home_message'
-                ]
-            );
-        }
-        if ($this->flashMessenger()->hasCurrentMessages('error')) {
-            $view->error = true;
-        }
-        $view->setTemplate('myresearch/historicloans-ajax');
-        $view->setVariable('cardId', $this->getCardId());
-        $params = $view->getVariable('params', []);
-        $params['cardId'] = $this->getCardId();
-        $view->setVariable('params', $params);
-        $result = $this->getViewRenderer()->render($view);
-        return $this->getAjaxResponse('text/html', $result, null);
-    }
-
-    /**
      * Logout Action
      *
      * @return mixed

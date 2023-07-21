@@ -152,7 +152,7 @@ JS;
 
 <?php if (!empty($holdings['blocks'])):?>
   <div id="account-block-msg" class="alert alert-danger">
-    <?=$this->transEsc('account_block_options_missing', ['%%details%%' => implode('; ', $holdings['blocks'])]) ?>
+    <?=$this->transEsc('account_block_options_missing', ['%%details%%' => implode('; ', array_map([$this, 'translate'], $holdings['blocks']))]) ?>
   </div>
 <?php endif; ?>
 
@@ -179,7 +179,8 @@ JS;
         <?php endif; ?>
     <?php endif; ?>
 <?php endif; ?>
-<?php $holdingTitleHold = $this->driver->tryMethod('getRealTimeTitleHold'); if (!empty($holdingTitleHold)): ?>
+<?php $holdingTitleHold = $this->driver->tryMethod('getRealTimeTitleHold'); ?>
+<?php if (!empty($holdingTitleHold)): ?>
   <a class="placehold icon-link" data-lightbox title="<?=$this->transEscAttr('request_place_text')?>" href="<?=$this->escapeHtmlAttr($this->recordLinker()->getRequestUrl($holdingTitleHold))?>">
     <?=$this->icon('place-hold', 'icon-link__icon') ?>
     <span class="icon-link__label"><?=$this->transEsc('title_hold_place')?></span>

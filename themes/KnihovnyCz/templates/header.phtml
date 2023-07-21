@@ -8,7 +8,7 @@
 ?>
 <div class="banner container navbar">
   <div class="navbar-header">
-    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#header-collapse" aria-hidden="true">
+    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#header-collapse" aria-label="<?=$this->transEscAttr("mobile_toggle_navigation_text")?>">
       <?=$this->icon('ui-menu', 'fa-fw') ?>
     </button>
     <a class="navbar-brand lang-<?=$this->layout()->userLang ?>" href="<?=$this->url('home') ?>">
@@ -30,7 +30,8 @@
               </a>
             </li>
           <?php endif; ?>
-          <?php $cart = $this->cart(); if ($cart->isActive()): ?>
+          <?php $cart = $this->cart(); ?>
+          <?php if ($cart->isActive()): ?>
             <li id="cartSummary">
               <a id="cartItems" class="icon-link"  title="<?=$this->transEscAttr('View Book Bag')?>" href="<?=$this->url('cart-home')?>">
                 <span role="status"><span class="sr-only"><?=$this->transEsc('Book Bag')?>:</span>

@@ -93,8 +93,7 @@ class Config extends Gateway
                 } else { // We do not have array_key, just leave it on numbers
                     $data[$item->section][$item->item][] = $item->value;
                 }
-            // Type is string:
-            } else {
+            } else { // Type is string:
                 $data[$item->section][$item->item] = $item->value;
             }
         }

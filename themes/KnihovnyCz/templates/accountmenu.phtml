@@ -11,7 +11,7 @@
     'myresearch' => [
       'checkedout-all' => 'checkedout',
       'shortloans-all' => 'shortloans',
-      'historicloans-all' => 'historicloans',
+      'history-all' => 'historicloans',
       'illrequests-all' => 'ILLRequests',
       'fines-all' => 'fines',
       'profile-all' => 'profile',
@@ -59,7 +59,7 @@
 <?php endif; ?>
 <?php if ($ilsOnline && $this->ils()->checkFunction('getMyTransactionHistory', $capabilityParams)): ?>
 <li class="<?=$this->active == 'historicloans' ? 'active' : ''?>">
-  <a href="<?=$this->url('myresearch-historicloans')?>" class="flex">
+  <a href="<?=$this->url('checkouts-history')?>" class="flex">
     <span class="flex-col">
       <?=$this->icon('user-loan-history', 'icon-link__icon fa-fw') ?>
       <span class="icon-link__label"><?=$this->transEsc('Loan History')?></span>

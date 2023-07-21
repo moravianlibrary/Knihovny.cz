@@ -3,7 +3,6 @@ FROM docker.io/alpine:3.18 AS vufind-src
 ARG PARAM_VUFIND_COMMIT_ID
 
 RUN apk add --no-cache curl unzip
-RUN echo "PARAM_VUFIND_COMMIT_ID=$PARAM_VUFIND_COMMIT_ID"
 # Take a vufind source at given state
 RUN curl "https://github.com/vufind-org/vufind/archive/${PARAM_VUFIND_COMMIT_ID}.zip" -L -o /tmp/vufind.zip
 RUN mkdir -p /src/vufind
@@ -56,6 +55,7 @@ USER vufind
 WORKDIR ${VUFIND_ROOT}
 RUN /usr/local/bin/composer config --no-plugins allow-plugins.php-http/discovery true
 RUN /usr/local/bin/composer install --no-dev
+RUN /usr/local/bin/composer update --no-dev
 
 ########### final image
 FROM localhost/knihovny-php:latest
