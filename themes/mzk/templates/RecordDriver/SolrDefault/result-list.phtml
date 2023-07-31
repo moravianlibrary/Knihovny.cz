@@ -44,7 +44,7 @@
                     <?php if (!empty($authRecordIds)): ?>
                       <a title="<?=$this->translate('Show person')?> <?=$this->escapeHtmlAttr($summAuthor)?>"
                          href="<?=$this->escapeHtmlAttr($recordLinker->getUrl($authRecordIds[0]))?>"
-                         class="author-link"><i class="fa fa-user-circle-o"></i>
+                         class="author-link"><?=$this->icon('authority-person')?>
                       </a>
                     <?php endif; ?>
                     <?=$i + 1 < $authorCount ? '<br>' : ''?>
@@ -142,7 +142,7 @@
             <?php if (!is_array($urls)) $urls = [];
             if(!$this->driver->isCollection()):
               foreach ($urls as $current): ?>
-                <a href="<?=$this->escapeHtmlAttr($this->proxyUrl($current['url']))?>" class="fulltext" target="new"><i class="fa fa-external-link" aria-hidden="true"></i> <?=($current['url'] == $current['desc']) ? $this->transEsc('Get full text') : $this->escapeHtml($current['desc'])?></a><br>
+                <a href="<?=$this->escapeHtmlAttr($this->proxyUrl($current['url']))?>" class="fulltext" target="new"><?=$this->icon('external-link')?> <?=($current['url'] == $current['desc']) ? $this->transEsc('Get full text') : $this->escapeHtml($current['desc'])?></a><br>
               <?php endforeach; ?>
             <?php endif; ?>
           <?php endif; ?>
@@ -173,7 +173,7 @@
             $this->jsTranslations()->addStrings(['qrcode_hide' => 'qrcode_hide', 'qrcode_show' => 'qrcode_show']);
             ?>
             <span class="hidden-xs">
-          <i class="fa fa-fw fa-qrcode" aria-hidden="true"></i> <a href="<?=$this->escapeHtmlAttr($QRCode);?>" class="qrcodeLink"><?=$this->transEsc('qrcode_show')?></a>
+          <?=$this->icon('qrcode')?> <a href="<?=$this->escapeHtmlAttr($QRCode);?>" class="qrcodeLink"><?=$this->transEsc('qrcode_show')?></a>
           <div class="qrcode hidden">
             <script type="text/template" class="qrCodeImgTag">
               <img alt="<?=$this->transEsc('QR Code')?>" src="<?=$this->escapeHtmlAttr($QRCode);?>">
@@ -187,9 +187,9 @@
             <?php foreach ($trees as $hierarchyID => $hierarchyTitle): ?>
               <div class="hierarchyTreeLink">
                 <input type="hidden" value="<?=$this->escapeHtmlAttr($hierarchyID)?>" class="hiddenHierarchyId">
-                <i class="result-link-icon fa fa-fw fa-sitemap" aria-hidden="true"></i>
-                <a class="hierarchyTreeLinkText result-link-label" data-lightbox href="<?=$this->escapeHtmlAttr($recordLinker->getTabUrl($this->driver, 'HierarchyTree', ['hierarchy' => $hierarchyID]))?>#tabnav" title="<?=$this->transEsc('hierarchy_tree')?>" data-lightbox-href="<?=$this->escapeHtmlAttr($recordLinker->getTabUrl($this->driver, 'AjaxTab', ['hierarchy' => $hierarchyID]))?>" data-lightbox-post="tab=hierarchytree">
-                  <?=$this->transEsc('hierarchy_view_context')?><?php if (count($trees) > 1): ?>: <?=$this->escapeHtml($hierarchyTitle)?><?php endif; ?>
+                <a class="hierarchyTreeLinkText result-link-label icon-link" data-lightbox href="<?=$this->escapeHtmlAttr($recordLinker->getTabUrl($this->driver, 'HierarchyTree', ['hierarchy' => $hierarchyID]))?>#tabnav" title="<?=$this->transEscAttr('hierarchy_tree')?>" data-lightbox-href="<?=$this->escapeHtmlAttr($recordLinker->getTabUrl($this->driver, 'AjaxTab', ['hierarchy' => $hierarchyID]))?>" data-lightbox-post="tab=hierarchytree">
+                  <?=$this->icon('tree-context', 'icon-link__icon') ?>
+                  <span class="icon-link__label"><?=$this->transEsc('hierarchy_view_context')?><?php if (count($trees) > 1): ?>: <?=$this->escapeHtml($hierarchyTitle)?><?php endif; ?></span>
                 </a>
               </div>
             <?php endforeach; ?>

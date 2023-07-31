@@ -184,7 +184,7 @@ $this->headTitle($title);
               <div class="col-sm-3">
                 <div class="form-group">
                   <label>&nbsp;</label>
-                  <button type="button" class="btn btn-info" id="checkZiskejEddFee"><i class="fa fa-fw fa-refresh" ></i> <?=$this->transEsc("ZiskejEdd::btn_count_fee")?></button>
+                  <button type="button" class="btn btn-info" id="checkZiskejEddFee"><?=$this->icon('ziskej-count-fee', ['ziskej-count-fee-icon fa-fw'])?> <?=$this->transEsc("ZiskejEdd::btn_count_fee")?></button>
                 </div>
               </div>
             </div>
@@ -344,14 +344,14 @@ $script = <<<JS
   $(function () {
     $('#ziskejEddFeeAlertPrice').hide();
     $('#ziskejEddFeeAlertError').hide();
-    $('#checkZiskejEddFee i.fa-refresh').hide();
+    $('#checkZiskejEddFee .ziskej-count-fee-icon').hide();
 
     $('#checkZiskejEddFee').on('click', function (e) {
       e.preventDefault();
       $('#ziskejEddFeeAlertPrice').hide();
       $('#ziskejEddFeeAlertError').hide();
       $(this).removeAttr('disabled');
-      $('#checkZiskejEddFee i.fa-refresh').addClass('fa-spin').show();
+      $('#checkZiskejEddFee .ziskej-count-fee-icon').addClass('fa-spin').show();
 
       $.ajax({
         type: 'GET',
@@ -362,13 +362,13 @@ $script = <<<JS
           edd_subtype: $('#edd_subtype').val()
         },
         success: function (result) {
-          $('#checkZiskejEddFee i.fa-refresh').hide().removeClass('fa-spin');
+          $('#checkZiskejEddFee .ziskej-count-fee-icon').hide().removeClass('fa-spin');
           $('#ziskejEddFeeAlertPrice').html(result.data['message_subtotal']).show();
           $('#ziskejEddFeeInfo').html(result.data['message_total']);
         },
         error: function (result) {
           console.log(result.responseJSON.data);
-          $('#checkZiskejEddFee i.fa-refresh').hide().removeClass('fa-spin');
+          $('#checkZiskejEddFee .ziskej-count-fee-icon').hide().removeClass('fa-spin');
           $('#ziskejEddFeeAlertPrice').hide();
           $('#ziskejEddFeeAlertError').text(result.responseJSON.data).show();
         }

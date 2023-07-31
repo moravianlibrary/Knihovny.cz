@@ -4,18 +4,18 @@
 ?>
 
 <?php $sigla = $this->driver->getSigla(); if (!empty($sigla)): ?>
-    <h2><i class="fa fa-circle-thin"></i> <?=$this->translate('Sigla')?></h2>
+    <h2><?=$this->icon('library-general-info')?> <?=$this->translate('Sigla')?></h2>
     <p><?=$this->escapeHtml($sigla)?></p>
 <?php endif; ?>
 
 <!-- Code of Cultural Heritage Organization-->
 <?php $orgcode = $this->driver->getOrgCode(); if (!empty($orgcode)): ?>
-  <h2><i class="fa fa-circle-thin"></i> <?=$this->translate('cultural_heritage_organization_code')?></h2>
+  <h2><?=$this->icon('library-general-info')?> <?=$this->translate('cultural_heritage_organization_code')?></h2>
   <?php foreach ($orgcode as $code): ?><a href="<?=$this->escapeHtmlAttr($code['url'])?>"><?=$this->escapeHtml($code['value'])?></a><br><?php endforeach; ?>
 <?php endif; ?>
 
 <?php $lastupdated = $this->driver->getLastUpdated(); if (!empty($lastupdated)): ?>
-    <h2><i class="fa fa-circle-thin"></i> <?=$this->translate('LastUpdated')?></h2>
+    <h2><?=$this->icon('library-general-info')?> <?=$this->translate('LastUpdated')?></h2>
     <?php $lastUpdatedDate = \DateTime::createFromFormat("Ymd", $lastupdated);?>
     <p><span title="<?=$lastupdated?>"><?=$lastUpdatedDate->format('j. n. Y')?></span></p>
 <?php endif;

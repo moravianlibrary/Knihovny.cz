@@ -14,9 +14,9 @@ $error = ($this->error ?? false);
       ?>
       <?php if ($reader): ?>
         <div class="well">
-          <i class="fa fa-fw fa-user text-muted"></i> <?=$reader->getFirstName()?> <?=$reader->getLastName()?>
+          <?=$this->icon('profile', 'fa-fw text-muted')?> <?=$reader->getFirstName()?> <?=$reader->getLastName()?>
           <br>
-          <i class="fa fa-fw fa-envelope text-muted"></i> <?=$reader->getEmail()?>
+          <?=$this->icon('profile-email', 'fa-fw text-muted')?> <?=$reader->getEmail()?>
         </div>
         <?php if (is_countable($this->tickets) && count($this->tickets)): ?>
           <?php

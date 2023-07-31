@@ -20,9 +20,9 @@ $this->layout()->searchbox = false;
 
 <p>
   <a class="btn btn-sm btn-primary" href="<?= $this->url('myresearch-ziskej-mvs-ticket', ['eppnDomain' => $userCard->getEppnDomain(), 'ticketId' => $ticket->getId()]); ?>" title="<?= $this->translate("ZiskejMvs::btn_order_detail_title"); ?>">
-    <i class="fa fa-search"></i> <?= $this->translate("ZiskejMvs::btn_order_detail"); ?>
+    <?=$this->icon('ziskej-order-detail')?> <?= $this->translate("ZiskejMvs::btn_order_detail"); ?>
   </a>
   <a class="btn btn-sm btn-default" href="<?= $this->url('home'); ?>" title="<?= $this->translate("btn_homepage_title"); ?>">
-    <i class="fa fa-home"></i> <?= $this->translate("btn_homepage"); ?>
+    <?=$this->icon('home')?> <?= $this->translate("btn_homepage"); ?>
   </a>
 </p>

@@ -22,12 +22,12 @@
             <table class="table table-striped">
                 <caption class="sr-only"><?=$this->transEsc('Library Details')?></caption>
                 <?php foreach ($coreFields as $current): ?>
-                  <?php if($current['context']['heading']):?>
-                    <h2><i class="<?=$current['context']['icon']?>"></i> <?=$this->transEsc($current['label'])?></h2>
+                  <?php if ($current['context']['heading']):?>
+                    <h2><?=$this->icon($current['context']['icon'])?> <?=$this->transEsc($current['label'])?></h2>
                     <p>
                   <?php else: ?>
                     <h2 class="hidden"><?=$this->transEsc($current['label'])?></h2>
-                    <p class="<?=$current['context']['content-class']?>"><i class="<?=$current['context']['icon']?>"></i>
+                    <p class="<?=$current['context']['content-class']?>"><?=$this->icon($current['context']['icon'])?>
                   <?php endif; ?>
                   <?=$current['value']?></p>
                 <?php endforeach; ?>
