@@ -15,6 +15,8 @@ $this->headMeta()->setProperty('og:image:secure_url', $imageUrl);
 $this->headMeta()->setProperty('og:image:type', 'image/png');
 $this->headMeta()->setProperty('og:image:width', '1200');
 $this->headMeta()->setProperty('og:image:height', '630');
+$this->headMeta()->setProperty('apple-mobile-web-app-title', $this->translate('web_app_name'));
+$this->headMeta()->setProperty('application-name', $this->translate('web_app_name'));
 // Disable automatic telephone number detection and link creation on Safari
 $this->headMeta()->appendName('format-detection', 'telephone=no');
 $gtmEnabled = $this->googleTagManager()->isEnabled();
