@@ -55,9 +55,9 @@ $this->headTitle($this->translate('ZiskejMvs::header_order_ziskej_num') . ' ' . 
       <ul class="nav-wizard row">
         <li class="part col-md-2">
           <?php if (isset($historyArray['created'])): ?>
-            <span class="text-icon text-success"><i class="fa fa-check"></i></span>
+            <span class="text-icon text-success"><?=$this->icon('ziskej-done')?></span>
           <?php else: ?>
-            <span class="text-icon text-muted"><i class="fa fa-times"></i></span>
+            <span class="text-icon text-muted"><?=$this->icon('ziskej-waiting')?></span>
           <?php endif; ?>
           <?=$this->transEsc("ZiskejMvs::order_status_created") ?>
           <?php if (isset($historyArray['created'])): ?>
@@ -66,9 +66,9 @@ $this->headTitle($this->translate('ZiskejMvs::header_order_ziskej_num') . ' ' . 
         </li>
         <li class="part col-md-2">
           <?php if (isset($historyArray['paid'])): ?>
-            <span class="text-icon text-success"><i class="fa fa-check"></i></span>
+            <span class="text-icon text-success"><?=$this->icon('ziskej-done')?></span>
           <?php else: ?>
-            <span class="text-icon text-muted"><i class="fa fa-times"></i></span>
+            <span class="text-icon text-muted"><?=$this->icon('ziskej-waiting')?></span>
           <?php endif; ?>
           <?=$this->transEsc("ZiskejMvs::order_status_paid") ?>
           <?php if (isset($historyArray['paid'])): ?>
@@ -78,9 +78,9 @@ $this->headTitle($this->translate('ZiskejMvs::header_order_ziskej_num') . ' ' . 
         <?php if (in_array($ticket->getStatus(), ['created', 'paid', 'accepted', 'prepared', 'lent', 'closed'])) : ?>
           <li class="part col-md-2">
             <?php if (isset($historyArray['accepted'])): ?>
-              <span class="text-icon text-success"><i class="fa fa-check"></i></span>
+              <span class="text-icon text-success"><?=$this->icon('ziskej-done')?></span>
             <?php else: ?>
-              <span class="text-icon text-muted"><i class="fa fa-times"></i></span>
+              <span class="text-icon text-muted"><?=$this->icon('ziskej-waiting')?></span>
             <?php endif; ?>
             <?=$this->transEsc("ZiskejMvs::order_status_accepted") ?>
             <?php if (isset($historyArray['accepted'])): ?>
@@ -89,9 +89,9 @@ $this->headTitle($this->translate('ZiskejMvs::header_order_ziskej_num') . ' ' . 
           </li>
           <li class="part col-md-2">
             <?php if (isset($historyArray['prepared'])): ?>
-              <span class="text-icon text-success"><i class="fa fa-check"></i></span>
+              <span class="text-icon text-success"><?=$this->icon('ziskej-done')?></span>
             <?php else: ?>
-              <span class="text-icon text-muted"><i class="fa fa-times"></i></span>
+              <span class="text-icon text-muted"><?=$this->icon('ziskej-waiting')?></span>
             <?php endif; ?>
             <?=$this->transEsc("ZiskejMvs::order_status_prepared") ?>
             <?php if (isset($historyArray['prepared'])): ?>
@@ -100,9 +100,9 @@ $this->headTitle($this->translate('ZiskejMvs::header_order_ziskej_num') . ' ' . 
           </li>
           <li class="part col-md-2">
             <?php if (isset($historyArray['lent'])): ?>
-              <span class="text-icon text-success"><i class="fa fa-check"></i></span>
+              <span class="text-icon text-success"><?=$this->icon('ziskej-done')?></span>
             <?php else: ?>
-              <span class="text-icon text-muted"><i class="fa fa-times"></i></span>
+              <span class="text-icon text-muted"><?=$this->icon('ziskej-waiting')?></span>
             <?php endif; ?>
             <?=$this->transEsc("ZiskejMvs::order_status_lent") ?>
             <?php if (isset($historyArray['lent'])): ?>
@@ -111,9 +111,9 @@ $this->headTitle($this->translate('ZiskejMvs::header_order_ziskej_num') . ' ' . 
           </li>
           <li class="part col-md-2">
             <?php if (isset($historyArray['closed'])): ?>
-              <span class="text-icon text-success"><i class="fa fa-check"></i></span>
+              <span class="text-icon text-success"><?=$this->icon('ziskej-done')?></span>
             <?php else: ?>
-              <span class="text-icon text-muted"><i class="fa fa-times"></i></span>
+              <span class="text-icon text-muted"><?=$this->icon('ziskej-waiting')?></span>
             <?php endif; ?>
             <?=$this->transEsc("ZiskejMvs::order_status_closed") ?>
             <?php if (isset($historyArray['closed'])): ?>
@@ -124,9 +124,9 @@ $this->headTitle($this->translate('ZiskejMvs::header_order_ziskej_num') . ' ' . 
         <?php if ($ticket->getStatus() == 'cancelled') : ?>
           <li class="part col-md-2">
             <?php if (isset($historyArray['cancelled'])): ?>
-              <span class="text-icon text-success"><i class="fa fa-check"></i></span>
+              <span class="text-icon text-success"><?=$this->icon('ziskej-done')?></span>
             <?php else: ?>
-              <span class="text-icon text-muted"><i class="fa fa-times"></i></span>
+              <span class="text-icon text-muted"><?=$this->icon('ziskej-waiting')?></span>
             <?php endif; ?>
             <?=$this->transEsc("ZiskejMvs::order_status_cancelled") ?>
             <?php if (isset($historyArray['cancelled'])): ?>
@@ -137,9 +137,9 @@ $this->headTitle($this->translate('ZiskejMvs::header_order_ziskej_num') . ' ' . 
         <?php if ($ticket->getStatus() == 'rejected') : ?>
           <li class="part col-md-2">
             <?php if (isset($historyArray['rejected'])): ?>
-              <span class="text-icon text-success"><i class="fa fa-check"></i></span>
+              <span class="text-icon text-success"><?=$this->icon('ziskej-done')?></span>
             <?php else: ?>
-              <span class="text-icon text-muted"><i class="fa fa-times"></i></span>
+              <span class="text-icon text-muted"><?=$this->icon('ziskej-waiting')?></span>
             <?php endif; ?>
             <?=$this->transEsc("ZiskejMvs::order_status_rejected") ?>
             <?php if (isset($historyArray['rejected'])): ?>
@@ -159,22 +159,22 @@ $this->headTitle($this->translate('ZiskejMvs::header_order_ziskej_num') . ' ' . 
     <div class="text-center well border mb-1">
       <?php if ($ticket->getStatus() == 'created'): ?>
         <a class="btn btn-primary" href="<?=$ticket->getPaymentUrl() ?>?lang=<?=$this->layout()->userLang ?>" title="<?=$this->transEsc("ZiskejMvs::btn_order_pay_title") ?>">
-          <i class="fa fa-shopping-cart"></i> <?=$this->transEsc("ZiskejMvs::btn_order_pay") ?>
+          <?=$this->icon('ziskej-order')?> <?=$this->transEsc("ZiskejMvs::btn_order_pay") ?>
         </a>
       <?php endif; ?>
       <?php if (in_array($ticket->getStatus(), ['created', 'paid'])): ?>
         <a id="cancelButton" class="btn btn-warning" href="<?=$this->url('myresearch-ziskej-mvs-ticket-cancel', ['eppnDomain' => $userCard->getEppnDomain(), 'ticketId' => $ticket->getId()]) ?>" title="<?=$this->transEsc("ZiskejMvs::btn_order_cancel_title") ?>">
-          <i class="fa fa-times"></i> <?=$this->transEsc("ZiskejMvs::btn_order_cancel") ?>
+          <?=$this->icon('ui-remove')?> <?=$this->transEsc("ZiskejMvs::btn_order_cancel") ?>
         </a>
       <?php endif; ?>
       <?php if ($ticket->getStatus() == 'cancelled'): ?>
         <div class="alert alert-info"><?=$this->transEsc("ZiskejMvs::msg_order_canceled") ?></div>
       <?php endif; ?>
       <a class="btn btn-info" href="#messages" title="<?=$this->transEsc("ZiskejMvs::btn_order_goto_messages_title") ?>">
-        <?=$this->icon('order-messages') ?> <?=$this->transEsc("ZiskejMvs::btn_order_goto_messages") ?>
+        <?=$this->icon('ziskej-order-messages') ?> <?=$this->transEsc("ZiskejMvs::btn_order_goto_messages") ?>
       </a>
       <a class="btn btn-default" href="https://ziskej-info.techlib.cz/reklamace" target="_blank" title="<?=$this->transEsc("ZiskejMvs::btn_order_complaint_title") ?>">
-        <i class="fa fa-exclamation-triangle"></i>
+        <?=$this->icon('ziskej-warning')?>
         <?=$this->transEsc("ZiskejMvs::btn_order_complaint") ?>
       </a>
     </div>
@@ -236,7 +236,7 @@ $this->headTitle($this->translate('ZiskejMvs::header_order_ziskej_num') . ' ' . 
                 <div class="media-body">
                   <p class="media-heading">
                     <?php if ($message->getSender() == 'reader'): ?>
-                      <span title="<?=$this->transEsc("ZiskejMvs::label_user") ?>"><i class="fa fa-user"></i></span>
+                      <span title="<?=$this->transEsc("ZiskejMvs::label_user") ?>"><?=$this->icon('profile')?></span>
                     <?php else: ?>
                       <?=$this->transEsc("ZiskejMvs::label_library") ?>
                     <?php endif; ?>

@@ -20,7 +20,7 @@
       <nav>
         <ul class="nav navbar-nav navbar-right flip">
           <li>
-            <a href="<?=$this->url('inspiration') ?>"><i class="fa fa-fw fa-compass" aria-hidden="true"></i> <?=$this->transEsc("Inspiration") ?></a>
+            <a href="<?=$this->url('inspiration') ?>"><?=$this->icon('inspiration', 'fa-fw')?> <?=$this->transEsc("Inspiration") ?></a>
           </li>
           <?php if ($this->feedback()->tabEnabled()): ?>
             <li>

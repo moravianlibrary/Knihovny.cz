@@ -84,11 +84,11 @@
           <div class="text-right">
             <?php if ($ticket->getStatus() == 'created' && !empty($ticket->getPaymentUrl())): ?>
               <a class="btn btn-sm btn-warning" href="<?=$ticket->getPaymentUrl()?>" target="_blank" title="<?=$this->transEsc("ZiskejMvs::btn_order_pay_title")?>">
-                <i class="fa fa-shopping-cart"></i> <?=$this->transEsc("ZiskejMvs::btn_order_pay")?>
+                <?=$this->icon('ziskej-order')?> <?=$this->transEsc("ZiskejMvs::btn_order_pay")?>
               </a>
             <?php endif; ?>
             <a class="btn btn-sm btn-primary" href="<?=$this->url('myresearch-ziskej-mvs-ticket', ['eppnDomain' => $userCard->getEppnDomain(), 'ticketId' => $ticket->getId()])?>" title="<?=$this->transEsc("ZiskejMvs::btn_order_detail_title")?>">
-              <i class="fa fa-search"></i> <?=$this->transEsc("ZiskejMvs::btn_order_detail")?>
+              <?=$this->icon('ziskej-order-detail')?> <?=$this->transEsc("ZiskejMvs::btn_order_detail")?>
             </a>
           </div>
         </div>

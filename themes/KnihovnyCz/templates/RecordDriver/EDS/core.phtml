@@ -16,11 +16,8 @@
   </div>
   <div class="media-body info-col">
     <h1 property="name"><?=$this->driver->getTitle()?></h1>
-    <p>
-      <a class="btn btn-primary" href="#tabnav" data-scrollto-target="[name='tabnav']">
-        <i class="fa fa-hand-paper-o mr-05"></i><?=$this->transEsc('Want it') ?>
-      </a>
-    </p>
+
+    <?=$this->record($this->driver)->renderTemplate('wantit.phtml');?>
 
     <?php if ($this->driver->getExtraDetail('cached_record') && !$this->translationEmpty('cached_record_warning')): ?>
       <div class="alert alert-warning">

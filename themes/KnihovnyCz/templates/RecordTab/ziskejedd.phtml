@@ -92,7 +92,7 @@ $dedupedRecordIds = $tab->getDedupedRecordIds();
                   <?=$this->translate('Source::' . $libId) ?>
                   <span class="pull-right">
                     <a class="btn btn-primary ziskej-order-btn" data-lightbox href="<?=$this->url('ziskej-edd-order', ['id' => $driver->getUniqueId(), 'eppnDomain' => $userCard->getEppnDomain()]) ?>">
-                      <i class="fa fa-shopping-cart"></i> <?=$this->transEsc("ZiskejEdd::btn_order") ?>
+                      <?=$this->icon('ziskej-order')?> <?=$this->transEsc("ZiskejEdd::btn_order") ?>
                     </a>
                 </span>
                 </li>
@@ -114,7 +114,7 @@ $dedupedRecordIds = $tab->getDedupedRecordIds();
             <?=$this->transEsc("ZiskejEdd::alert_not_logged_in") ?>
           </div>
           <a class="btn btn-default" href="<?=$this->url('myresearch-userlogin')?>">
-            <i class="fa fa-sign-in"></i>
+            <?=$this->icon('sign-in')?>
             <?=$this->transEsc("Institutional Login") ?>
           </a>
         </div>

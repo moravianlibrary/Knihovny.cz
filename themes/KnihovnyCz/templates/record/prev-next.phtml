@@ -6,8 +6,8 @@
     <?php if ($this->scrollData['linkToResults']): ?>
       <li role="none" class="backToResults">
         <a href="<?=$this->scrollData['linkToResults']?>" aria-label="<?=$this->transEscAttr('Back to search results')?>" rel="nofollow">
-          <i class="fa fa-long-arrow-left" aria-hidden="true"></i>
-          <?=$this->transEsc('Back to search results')?>
+          <?=$this->icon('back-to-results', 'icon-link__icon')?>
+          <span class="icon-link__label"><?=$this->transEsc('Back to search results')?></span>
         </a>
       </li>
     <?php endif; ?>

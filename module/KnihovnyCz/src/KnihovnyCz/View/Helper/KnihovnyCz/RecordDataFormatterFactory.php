@@ -115,7 +115,7 @@ class RecordDataFormatterFactory extends RecordDataFormatterFactoryBase
             $key,
             $dataMethod,
             $template = null,
-            $icon = 'fa fa-circle-thin',
+            $icon = 'library-general-info',
             $heading = true,
             $contentClass = ''
         ) use (&$fields) {
@@ -133,14 +133,14 @@ class RecordDataFormatterFactory extends RecordDataFormatterFactoryBase
             'Book search',
             'getBookSearchFilter',
             'search_in_library_link.phtml',
-            'fa fa-search',
+            'search',
             false
         );
         $setLine(
             'Address',
             'getLibraryAddress',
             null,
-            'fa fa-map-marker',
+            'map-marker',
             false,
             'library-large'
         );
@@ -148,7 +148,7 @@ class RecordDataFormatterFactory extends RecordDataFormatterFactoryBase
             'Opening hours',
             'getLibraryHours',
             'opening_hours.phtml',
-            'fa fa-clock-o'
+            'opening-hours'
         );
         $setLine('Additional information', 'getLibNote');
         $setLine('Additional information2', 'getLibNote2');
@@ -156,7 +156,7 @@ class RecordDataFormatterFactory extends RecordDataFormatterFactoryBase
             'Web sites',
             'getWebsites',
             'library_websites.phtml',
-            'fa fa-globe'
+            'website'
         );
         $setLine('Library type', 'getType');
         $setLine('Regional library', 'getRegLibrary', 'regional_library.phtml');
