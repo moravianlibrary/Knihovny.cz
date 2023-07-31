@@ -25,7 +25,7 @@ document.addEventListener('DOMContentLoaded', function runObserver() {
   observer.observe(targetNode, config);
 }, false);
 
-jQuery(document).ready(function jQueryReady($) {
+$(function jQueryReady($) {
 
   // Scroll to target by data attribute
   $('*[data-scrollto-target]').on('click', function scrollToTarget() {
@@ -62,7 +62,7 @@ function setupAutocomplete() {
         return true;
       }
       input.val(item.value);
-      $("#searchForm").submit();
+      $("#searchForm").trigger("submit");
       return false;
     };
   }
@@ -151,7 +151,7 @@ function setupAutocomplete() {
     $('#searchForm_type').val(item.type);
   });
   // Update autocomplete on type change
-  $('#searchForm_type').change(function searchTypeChange() {
+  $('#searchForm_type').on("change", function searchTypeChange() {
     searchbox.autocomplete().clearCache();
   });
 }
@@ -165,7 +165,7 @@ function setupOpenUrl() {
       method: "GET",
       success: function sfx(json){
         $(element).empty();
-        $(element).unbind('click');
+        $(element).off('click');
         let links = json.data;
         let header = 'Fulltext is available for users of these institutions';
         if (links.length === 0) {
@@ -224,7 +224,7 @@ function setupOpenUrl() {
     };
     var lazy = $(element).data('lazy');
     if (lazy) {
-      $(element).click(function onClick() {
+      $(element).on("click", function onClick() {
         $(element).empty().append(VuFind.spinner('fa-3x fa-fw'));
         $.ajax(ajaxCall);
       });
@@ -234,7 +234,7 @@ function setupOpenUrl() {
   });
 }
 
-jQuery(document).ready(function openUrl() {
+$(function openUrl() {
   setupOpenUrl();
 });
 
@@ -325,7 +325,7 @@ VuFind.listen('VuFind.sidefacets.buildtree', function onLoaded(event){
   setLibraryAutoComplete(element, data);
 });
 
-jQuery(document).ready(function saveInstitutionFilter() {
+$(function saveInstitutionFilter() {
   var element = $('#my-institution-filter-save');
   var hidePopover = function hidePopover(){
     var callback = null;
@@ -383,7 +383,7 @@ if (typeof buildFacetTree === 'function') {
   })(buildFacetTree);
 }
 
-jQuery(document).ready(function coverImageLoadError($) {
+$(function coverImageLoadError($) {
   $('.ajaxcover img').on('error', function showCoverIconOnError() {
     const format = $(this).data('format');
     $(this).parent().append('<i class="cover-icon ' + format + '"></i>');
@@ -391,7 +391,7 @@ jQuery(document).ready(function coverImageLoadError($) {
   });
 });
 
-$(document).ready(function registerAccountAjax() {
+$(function registerAccountAjax() {
   VuFind.account.register("profile", {
     selector: ".profile-status",
     ajaxMethod: "getUserProfile",

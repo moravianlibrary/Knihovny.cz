@@ -54,4 +54,4 @@ function loadObalkyKnih() {
     loadObalkyKnihByElement(data, $(this));
   });
 }
-$(document).ready(loadObalkyKnih);
+$(loadObalkyKnih);
