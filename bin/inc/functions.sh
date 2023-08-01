@@ -17,6 +17,11 @@ function echo_debug {
   [[ "$debug" ]] && echo "$1"
 }
 
+# $1 Local directory to merge
+# $2 Equivalent directory in upstream code
+# $3 Version to update from (commit hash)
+# $4 Version to update to (commit hash)
+# $5 Repository name
 function merge_directory
 {
     echo_debug "merge_directory $1 $2 $3 $4 $5"
@@ -38,24 +43,40 @@ function merge_directory
           coreEquivalent=${coreEquivalent%*/}
           merge_directory "$current" "$coreEquivalent" "$old_commit" "$new_commit" "$repository"
         else
-          local oldOriginalFile="/tmp/tmp-merge-old-original-`basename "$coreEquivalent"`"
-          local updatedOriginalFile="/tmp/tmp-merge-old-updated-`basename "$coreEquivalent"`"
-          local mergedFile="/tmp/tmp-merge-merged-`basename "$coreEquivalent"`"
-          curl -s "$baseApiUrl/$old_commit/$coreEquivalent" > $oldOriginalFile
-          status=$(head -c 14 $oldOriginalFile)
-          if [ "$status" != "404: Not Found" ]
-          then
-            curl -s "$baseApiUrl/$new_commit/$coreEquivalent" > $updatedOriginalFile
-            diff3 -m "$current" "$oldOriginalFile" "$updatedOriginalFile" > "$mergedFile"
-            if [ $? == 1 ]
-            then
-              echo -e "\e[1;31mCONFLICT: $current\e[0m"
-            fi
-            cp $mergedFile $current
-          else
-            echo_debug "Skipping $current; no equivalent in core code."
-          fi
+          merge_file "$current" "$coreEquivalent" "$old_commit" "$new_commit" "$repository"
         fi
     done
+}
+
+# $1 Filename to update
+# $2 Core equivalent name
+# $3 Version to update from (commit hash)
+# $4 Version to update to (commit hash)
+# $5 Repository name
+function merge_file
+{
+    echo_debug "merge_file $1 $2 $3 $4 $5"
+    local filename=$1
+    local coreEquivalent=$2
+    local oldCommit=$3
+    local newCommit=$4
+    local repository=$5
+    local baseApiUrl="https://raw.githubusercontent.com/$repository"
+    local oldOriginalFile="/tmp/tmp-merge-old-original-`basename "$coreEquivalent"`"
+    local updatedOriginalFile="/tmp/tmp-merge-old-updated-`basename "$coreEquivalent"`"
+    local mergedFile="/tmp/tmp-merge-merged-`basename "$coreEquivalent"`"
+    curl -s -f "$baseApiUrl/$oldCommit/$coreEquivalent" > $oldOriginalFile
+    if [ $? -eq 0 ]
+    then
+        curl -s "$baseApiUrl/$newCommit/$coreEquivalent" > $updatedOriginalFile
+        diff3 -L 'Our original' -L 'Upstream original' -L 'Upstream updated' -m "$filename" "$oldOriginalFile" "$updatedOriginalFile" > "$mergedFile"
+        if [ $? == 1 ]
+        then
+          echo -e "\e[1;31mCONFLICT: $filename\e[0m"
+        fi
+        cp $mergedFile $filename
+    else
+        echo_debug "Skipping $filename; no equivalent in core code."
+    fi
 }
 
