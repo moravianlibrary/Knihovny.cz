@@ -148,16 +148,19 @@ class MyResearchZiskejEddController extends AbstractBase
             $recordLoader = $this->getRecordLoader();
 
             $tickets = [];
+            $records = [];
             foreach (
                 $ziskejApi->getTicketsEdd($userCard->eppn)->getAll() as $ticket
             ) {
                 if ($ticket->getDocumentId() !== null) {
+                    $recordId = $ticket->getDocumentId();
+                    if (!isset($records[$recordId])) {
+                        $records[$recordId] = $recordLoader->load($recordId);
+                    }
                     try {
                         $tickets[$ticket->getId()] = [
                             'ticket' => $ticket,
-                            'record' => $recordLoader->load(
-                                $ticket->getDocumentId()
-                            ),
+                            'record' => $records[$recordId],
                         ];
                     } catch (\VuFind\Exception\RecordMissing $e) {
                         $tickets[$ticket->getId()] = [
