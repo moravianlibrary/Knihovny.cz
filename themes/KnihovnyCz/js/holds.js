@@ -19,21 +19,21 @@ function loadHolds(element) {
   var confirmCancelRequest = function confirmCancelRequest(link, action) {
     $(element).find('#cancelConfirm').val(1);
     $(element).find('#submitType').attr('name', action);
-    $(link).parents('form').submit();
+    $(link).parents('form').trigger("submit");
   };
 
-  $(element).find('#confirm_cancel_selected_yes').click(function cancelSelectedRequests(e) {
+  $(element).find('#confirm_cancel_selected_yes').on("click", function cancelSelectedRequests(e) {
     e.preventDefault();
     confirmCancelRequest(this, 'cancelSelected');
   });
-  $(element).find('#confirm_cancel_all_yes').click(function cancelAllRequests(e) {
+  $(element).find('#confirm_cancel_all_yes').on("click", function cancelAllRequests(e) {
     e.preventDefault();
     confirmCancelRequest(this, 'cancelAll');
   });
-  $(element).find('.confirm_cancel_no').click(function doNotCancelRequest(e) {
+  $(element).find('.confirm_cancel_no').on("click", function doNotCancelRequest(e) {
     e.preventDefault();
   });
-  $(element).find('#update_selected').click(function updateSelected() {
+  $(element).find('#update_selected').on("click", function updateSelected() {
     // Change submitType to indicate that this is not a cancel request:
     $(element).find('#submitType').attr('name', 'updateSelected');
   });
@@ -52,7 +52,7 @@ function loadHolds(element) {
   $(element).find('#update_selected').removeClass('hidden');
   checkCheckboxes();
 
-  $(element).find("form").submit(function onSubmit(event) {
+  $(element).find("form").on("submit", function onSubmit(event) {
     event.preventDefault();
     hideLibraryCardContent(element);
     var button = $(document.activeElement);
