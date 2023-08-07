@@ -1,4 +1,4 @@
-/* exported setupAutocomplete, buildFacetNodes */
+/* exported setupAutocomplete, buildFacetNodes, initDatePicker */
 /* global VuFind, extractClassParams, htmlEncode */
 
 // We only need to observe change of type childList
@@ -408,3 +408,19 @@ $(document).ready(function registerAccountAjax() {
     }
   });
 });
+
+function initDatePicker(form) {
+  const target = form || document;
+  $(target).find("input[data-type='date']").each(function onEach() {
+    let options = { changeMonth: true, changeYear: true };
+    const min = $(this).attr('min');
+    if (min != null) {
+      options.minDate = new Date(Date.parse(min));
+    }
+    const max = $(this).attr('max');
+    if (max != null) {
+      options.maxDate = new Date(Date.parse(max));
+    }
+    $(this).datepicker(options);
+  });
+}

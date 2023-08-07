@@ -1,0 +1,33 @@
+<?php
+  $configureDatePicker = null;
+  if (!$this->initialized) {
+    $lang = $this->layout()->userLang;
+    $this->headLink()->appendStylesheet('vendor/jquery-ui.min.css');
+    $this->headScript()->appendFile("lib/jquery-ui/jquery-ui.min.js");
+    $this->headScript()->appendFile("lib/jquery-ui/jquery-ui-i18n-datepicker-$lang.js");
+    $dateFormat = $this->dateTime()->getDisplayDateFormatForJQuery();
+    $configureDatePicker = <<<JS
+      $(function jQueryReady($) {
+        var options = $.extend(
+          {},
+          $.datepicker.regional["$lang"],
+          { dateFormat: "$dateFormat" }
+        );
+        $.datepicker.setDefaults(options);
+      });
+    JS;
+  }
+  $formName = $this->formName ?? null;
+  $selector = json_encode(($formName != null) ? "form[name='$formName']" : null);
+?>
+<?php if ($configureDatePicker != null): ?>
+  <?=$this->inlineScript(\Laminas\View\Helper\HeadScript::SCRIPT, $configureDatePicker, 'SET');?>
+<?php endif; ?>
+<?php
+  $loadJs = <<<JS
+  $(function jQueryReady($) {
+    initDatePicker($selector);
+  });
+JS;
+?>
+<?=$this->inlineScript(\Laminas\View\Helper\HeadScript::SCRIPT, $loadJs, 'SET')?>

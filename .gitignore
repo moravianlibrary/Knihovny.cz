@@ -19,5 +19,6 @@ themes/*/templates/content/*
 !themes/KnihovnyCz/templates/content/content.phtml
 !themes/KnihovnyCz/templates/content/markdown.phtml
 vendor
+!themes/KnihovnyCz/css/vendor/images/*
 .php_cs_cache
 .commit
