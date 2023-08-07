@@ -39,6 +39,17 @@
           if ($required) {
             $field->setAttributes(['required' => true]);
           }
+          $type = $field->getOption('type');
+          $isDate = in_array($type, ['date', 'future_date']);
+          if ($isDate) {
+            $field->setAttribute('data-type', 'date');
+          }
+          if ($type == 'future_date') {
+            $field->setAttribute('min', $this->dateTime()->getDisplayDate(
+                new DateTime(),
+                \KnihovnyCz\Date\Converter::ISO8601_ONLY_DATE_FORMAT
+            ));
+          }
         ?>
         <?php $label = ''; if ($field->getOption('label') != null):?>
           <?php
@@ -56,20 +67,20 @@
           <?=$formLabel->closeTag();?>
           <?php $label = ob_get_contents(); ob_end_clean(); ?>
         <?php endif; ?>
-        <?php if($field instanceof \Laminas\Form\Element\Select): ?>
+        <?php if ($field instanceof \Laminas\Form\Element\Select): ?>
           <?=$label?>
           <?php $field->setAttribute('class', 'form-control'); ?>
           <?=$this->formSelect($field);?>
-        <?php elseif($field instanceof \Laminas\Form\Element\Checkbox): ?>
+        <?php elseif ($field instanceof \Laminas\Form\Element\Checkbox): ?>
           <?=$this->formCheckbox($field);?>
           <?=$label?>
-        <?php elseif($field instanceof \Laminas\Form\Element\Hidden): ?>
+        <?php elseif ($field instanceof \Laminas\Form\Element\Hidden): ?>
           <?=$this->formHidden($field);?>
-        <?php elseif($field instanceof \Laminas\Form\Element\Text): ?>
+        <?php elseif ($field instanceof \Laminas\Form\Element\Text): ?>
           <?php $field->setAttribute('class', 'form-control'); ?>
           <?=$label?>
           <?=$this->formInput($field);?>
-          <?php if(in_array($field->getOption('type'), ['date', 'future_date'])):?>
+          <?php if ($isDate):?>
             (<?=$this->dateTime()->getDisplayDateFormat()?>)
           <?php endif; ?>
         <?php endif; ?>
@@ -82,3 +93,4 @@
   <?=$this->formSubmit($this->form->get('submit'));?>
 </div>
 <?=$this->form()->closeTag();?>
+<?=$this->datePicker('illForm');?>

@@ -21,6 +21,8 @@ return [
             \KnihovnyCz\View\Helper\KnihovnyCz\GeoCoords::class => \VuFind\View\Helper\Root\GeoCoordsFactory::class,
             \KnihovnyCz\View\Helper\KnihovnyCz\SetupEmbeddedThemeResources::class =>
                 KnihovnyCz\View\Helper\KnihovnyCz\SetupEmbeddedThemeResourcesFactory::class,
+            \KnihovnyCz\View\Helper\KnihovnyCz\DateTime::class =>
+                \VuFind\View\Helper\Root\DateTimeFactory::class,
         ],
         'invokables' => [
             \KnihovnyCz\View\Helper\KnihovnyCz\FooterLink::class,
@@ -30,6 +32,7 @@ return [
             \KnihovnyCz\View\Helper\KnihovnyCz\TextFormatter::class,
             KnihovnyCz\View\Helper\KnihovnyCz\UserCards::class,
             KnihovnyCz\View\Helper\KnihovnyCz\ContextHelp::class,
+            KnihovnyCz\View\Helper\KnihovnyCz\DatePicker::class,
         ],
         'aliases' => [
             'footerLink' => \KnihovnyCz\View\Helper\KnihovnyCz\FooterLink::class,
@@ -47,6 +50,8 @@ return [
             'userCards' => KnihovnyCz\View\Helper\KnihovnyCz\UserCards::class,
             'contextHelp' => KnihovnyCz\View\Helper\KnihovnyCz\ContextHelp::class,
             'setupEmbeddedThemeResources' => KnihovnyCz\View\Helper\KnihovnyCz\SetupEmbeddedThemeResources::class,
+            'dateTime' => \KnihovnyCz\View\Helper\KnihovnyCz\DateTime::class,
+            'datePicker' => KnihovnyCz\View\Helper\KnihovnyCz\DatePicker::class,
         ],
     ],
     'icons' => [

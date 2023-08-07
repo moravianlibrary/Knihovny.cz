@@ -45,6 +45,8 @@ class Converter extends \VuFind\Date\Converter
 {
     public const SOLR_DATE_FORMAT = "Y-m-d\TH:i:s.u\Z";
 
+    public const ISO8601_ONLY_DATE_FORMAT = 'Y-m-d';
+
     /**
      * Public method for conversion of an admin defined date string
      * to a PHP DateTime
@@ -54,13 +56,29 @@ class Converter extends \VuFind\Date\Converter
      * @throws DateException
      * @return DateTime|false     Parsed date
      */
-    public function parseDisplayDate($displayDate)
+    public function parseDisplayDate(string $displayDate)
     {
         return DateTime::createFromFormat(
             $this->displayDateFormat,
             $displayDate,
             $this->timezone
         );
+    }
+
+    /**
+     * Get display date
+     *
+     * @param DateTime    $date   date
+     * @param string|null $format format to use (null for default)
+     *
+     * @return string
+     */
+    public function getDisplayDate(DateTime $date, ?string $format = null): string
+    {
+        if ($format == null) {
+            $format = $this->getDisplayDateFormat();
+        }
+        return $date->format($format);
     }
 
     /**
