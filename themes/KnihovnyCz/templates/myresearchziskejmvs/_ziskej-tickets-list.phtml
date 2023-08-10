@@ -1,13 +1,16 @@
 <ul class="media-list">
   <?php
+
+  use Mzk\ZiskejApi\Enum\StatusName;
+
   $itemIndex = 1;
   foreach ($ticketsData as $item):
-    /** @var \Mzk\ZiskejApi\ResponseModel\Ticket $ticket */
+    /** @var \Mzk\ZiskejApi\ResponseModel\TicketMvs $ticket */
     $ticket = $item['ticket'];
     /** @var ?\KnihovnyCz\RecordDriver\SolrLocal $record */
     $record = $item['record'];
     ?>
-    <li class="media well" id="record_<?=$ticket->getHid()?>" data-ziskej="<?=$ticket->getHid()?>">
+    <li class="media well" id="record_<?=$ticket->hid?>" data-ziskej="<?=$ticket->hid?>">
       <strong class="pull-left order"><?= $itemIndex++ ?>.</strong>
       <?php
       $thumbnail = false;
@@ -57,37 +60,37 @@
                 <dd><?=$this->record($record)->getFormatList()?></dd>
               <?php endif; ?>
             <?php endif; ?>
-            <?php if ($ticket->getCreatedAt()): ?>
+            <?php if ($ticket->createdAt): ?>
               <dt><?=$this->transEsc('ZiskejMvs::label_date_order')?>:</dt>
-              <dd><?=$this->dateTime()->convertToDisplayDate('U', $ticket->getCreatedAt()->getTimestamp())?></dd>
+              <dd><?=$this->dateTime()->convertToDisplayDate('U', $ticket->createdAt->getTimestamp())?></dd>
             <?php endif; ?>
-            <?php if ($ticket->getRequestedAt()): ?>
+            <?php if ($ticket->requestedAt): ?>
               <dt><?=$this->transEsc('ZiskejMvs::label_date_deliver')?>:</dt>
-              <dd><?=$this->dateTime()->convertToDisplayDate('U', $ticket->getRequestedAt()->getTimestamp())?></dd>
+              <dd><?=$this->dateTime()->convertToDisplayDate('U', $ticket->requestedAt->getTimestamp())?></dd>
             <?php endif; ?>
-            <?php if ($ticket->getReturnAt()): ?>
+            <?php if ($ticket->returnAt): ?>
               <dt><?=$this->transEsc('ZiskejMvs::label_date_return')?>:</dt>
-              <dd><?=$this->dateTime()->convertToDisplayDate('U', $ticket->getReturnAt()->getTimestamp())?></dd>
+              <dd><?=$this->dateTime()->convertToDisplayDate('U', $ticket->returnAt->getTimestamp())?></dd>
             <?php endif; ?>
             <dt><?=$this->transEsc('ZiskejMvs::label_order_number')?>:</dt>
-            <dd><?=$ticket->getHid()?></dd>
+            <dd><?=$ticket->hid?></dd>
 
-            <?php if ($ticket->getStatus()): ?>
+            <?php if ($ticket->status): ?>
               <dt><?=$this->transEsc('ZiskejMvs::label_order_status')?>:</dt>
               <dd>
-                <span class="label label-<?=$this->ziskejMvs()->getStatusClass($ticket->getStatus())?>">
-                  <?=$this->transEsc('ZiskejMvs::order_status_' . $ticket->getStatus())?>
+                <span class="label label-<?=$this->ziskejMvs()->getStatusClass($ticket->status)?>">
+                  <?=$this->transEsc('ZiskejMvs::order_status_' . $ticket->status->value)?>
                 </span>
               </dd>
             <?php endif; ?>
           </dl>
           <div class="text-right">
-            <?php if ($ticket->getStatus() == 'created' && !empty($ticket->getPaymentUrl())): ?>
-              <a class="btn btn-sm btn-warning" href="<?=$ticket->getPaymentUrl()?>" target="_blank" title="<?=$this->transEsc("ZiskejMvs::btn_order_pay_title")?>">
+            <?php if ($ticket->status == StatusName::CREATED && !empty($ticket->paymentUrl)): ?>
+              <a class="btn btn-sm btn-warning" href="<?=$ticket->paymentUrl->getAbsoluteUrl()?>" target="_blank" title="<?=$this->transEsc("ZiskejMvs::btn_order_pay_title")?>">
                 <?=$this->icon('ziskej-order')?> <?=$this->transEsc("ZiskejMvs::btn_order_pay")?>
               </a>
             <?php endif; ?>
-            <a class="btn btn-sm btn-primary" href="<?=$this->url('myresearch-ziskej-mvs-ticket', ['eppnDomain' => $userCard->getEppnDomain(), 'ticketId' => $ticket->getId()])?>" title="<?=$this->transEsc("ZiskejMvs::btn_order_detail_title")?>">
+            <a class="btn btn-sm btn-primary" href="<?=$this->url('myresearch-ziskej-mvs-ticket', ['eppnDomain' => $userCard->getEppnDomain(), 'ticketId' => $ticket->id])?>" title="<?=$this->transEsc("ZiskejMvs::btn_order_detail_title")?>">
               <?=$this->icon('ziskej-order-detail')?> <?=$this->transEsc("ZiskejMvs::btn_order_detail")?>
             </a>
           </div>

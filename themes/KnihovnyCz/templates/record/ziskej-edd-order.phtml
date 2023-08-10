@@ -70,7 +70,7 @@ $this->headTitle($title);
             </div>
             <div class="form-group required">
               <label for="email"><?=$this->transEsc("ZiskejEdd::label_email")?>:*</label>
-              <input type="email" name="email" id="email" value="<?=!empty($ziskejReader) ? $ziskejReader->getEmail() : (!empty($patron['email']) ? $patron['email'] : '')?>" class="form-control" required>
+              <input type="email" name="email" id="email" value="<?=!empty($ziskejReader) ? $ziskejReader->email : (!empty($patron['email']) ? $patron['email'] : '')?>" class="form-control" required>
               <span class="help-block"><?=$this->transEsc("ZiskejEdd::help_email")?></span>
             </div>
           </fieldset>

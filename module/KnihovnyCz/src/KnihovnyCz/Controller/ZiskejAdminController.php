@@ -121,7 +121,7 @@ class ZiskejAdminController extends AbstractBase
 
             $ziskejLibs = $ziskejApi->getLibrariesAll();
             foreach ($ziskejLibs->getAll() as $ziskejLib) {
-                $id = $multiBackend->siglaToSource($ziskejLib->getSigla());
+                $id = $multiBackend->siglaToSource($ziskejLib->sigla);
                 if (!empty($id)) {
                     $ziskejLibsCodes[] = $id;
                 }
@@ -147,7 +147,7 @@ class ZiskejAdminController extends AbstractBase
                     $ziskejReader = $ziskejApi->getReader($eppn);
                     $data[$eppn]['reader'] = $ziskejReader;
 
-                    if ($ziskejReader && $ziskejReader->isActive()) {
+                    if ($ziskejReader && $ziskejReader->isActive) {
                         $tickets = $ziskejApi->getTickets($eppn)->getAll();
                         $data[$eppn]['tickets'] = [];
                         /**
@@ -156,10 +156,10 @@ class ZiskejAdminController extends AbstractBase
                          * @var Ticket $ticket
                          */
                         foreach ($tickets as $ticket) {
-                            $ticketId = $ticket->getId();
+                            $ticketId = $ticket->id;
                             $data[$eppn]['tickets'][$ticketId]['ticket'] = $ticket;
                             $data[$eppn]['tickets'][$ticketId]['messages']
-                                = $ziskejApi->getMessages($eppn, $ticket->getId())
+                                = $ziskejApi->getMessages($eppn, $ticket->id)
                                 ->getAll();
                         }
                     }

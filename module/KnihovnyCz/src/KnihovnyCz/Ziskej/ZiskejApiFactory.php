@@ -63,7 +63,8 @@ class ZiskejApiFactory implements FactoryInterface
      * @param array|null         $options       Service options
      *
      * @return \Mzk\ZiskejApi\Api
-     * @throws \Exception
+     * @throws \Psr\Container\ContainerExceptionInterface
+     * @throws \Psr\Container\NotFoundExceptionInterface
      */
     public function __invoke(
         ContainerInterface $container,

@@ -76,13 +76,13 @@ class GetZiskejEddFee extends AbstractBase implements TranslatorAwareInterface
      * @param Params $params Parameter helper from controller
      *
      * @return array
-     * @throws \Http\Client\Exception
+     * @throws \Psr\Http\Client\ClientExceptionInterface
      */
     public function handleRequest(Params $params): array
     {
         $pagesFrom = (int)$params->fromQuery('pages_from');
         $pagesTo = (int)$params->fromQuery('pages_to');
-        $eddSubtype = (string)$params->fromQuery('edd_subtype');
+        $eddSubtype = TicketEddSubtype::tryFrom((string)$params->fromQuery('edd_subtype', ''));
 
         if ($pagesTo < 1 || $pagesFrom < 1) {
             return $this->formatResponse(
@@ -106,7 +106,7 @@ class GetZiskejEddFee extends AbstractBase implements TranslatorAwareInterface
             );
         }
 
-        if ($eddSubtype === TicketEddSubtype::SELECTION) {
+        if ($eddSubtype == TicketEddSubtype::SELECTION) {
             if ($totalPages > ZiskejSettings::EDD_SELECTION_MAX_PAGES) {
                 return $this->formatResponse(
                     $this->translate(
@@ -123,19 +123,19 @@ class GetZiskejEddFee extends AbstractBase implements TranslatorAwareInterface
 
             return $this->formatResponse(
                 [
-                    'fee' => $fee->getFee(),
-                    'is_valid' => $fee->isValid(),
+                    'fee' => $fee->fee,
+                    'is_valid' => $fee->isValid,
                     'total_pages' => $totalPages,
                     'message_subtotal' => $this->translate(
                         'ZiskejEdd::message_subtotal_fee_info',
                         [
-                            '%%price%%' => $fee->getFee(),
+                            '%%price%%' => $fee->fee,
                             '%%pages%%' => $totalPages,
                         ]
                     ),
                     'message_total' => $this->translate(
                         'ZiskejEdd::message_total_fee_info',
-                        ['%%total%%' => $fee->getFee()]
+                        ['%%total%%' => $fee->fee]
                     ),
                 ]
             );
