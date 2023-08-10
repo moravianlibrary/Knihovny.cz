@@ -708,6 +708,7 @@ $config = [
             \KnihovnyCz\Record\Loader::class => \KnihovnyCz\Record\LoaderFactory::class,
             \KnihovnyCz\Search\SearchRunner::class => \VuFind\Search\SearchRunnerFactory::class,
             \KnihovnyCz\Markdown\InvolvedLibraries\InvolvedLibrariesExtension::class => \KnihovnyCz\Markdown\InvolvedLibraries\InvolvedLibrariesExtensionFactory::class,
+            \KnihovnyCz\Markdown\InvolvedLibrariesCount\InvolvedLibrariesCountExtension::class => \KnihovnyCz\Markdown\InvolvedLibrariesCount\InvolvedLibrariesCountExtensionFactory::class,
             \KnihovnyCz\Content\InvolvedLibrariesService::class => \KnihovnyCz\Content\InvolvedLibrariesServiceFactory::class,
             \KnihovnyCz\Service\UserSettingsService::class => \KnihovnyCz\Service\UserSettingsServiceFactory::class,
             \KnihovnyCz\ILS\Logic\Holds::class => \VuFind\ILS\Logic\LogicFactory::class,

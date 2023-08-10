@@ -54,6 +54,8 @@ class InvolvedLibrariesService implements \VuFind\I18n\HasSorterInterface
      */
     protected ResultsManager $resultsManager;
 
+    protected array $libraries;
+
     /**
      * Constructor
      *
@@ -70,6 +72,36 @@ class InvolvedLibrariesService implements \VuFind\I18n\HasSorterInterface
      * @return array
      */
     public function getInvolvedLibraries(): array
+    {
+        if (!isset($this->libraries)) {
+            $this->libraries = $this->searchInvolvedLibraries();
+        }
+        return $this->libraries;
+    }
+
+    /**
+     * Get number of libraries involved in project Knihovny.cz
+     *
+     * @return int
+     */
+    public function getInvolvedLibrariesCount(): int
+    {
+        $libraries = $this->getInvolvedLibraries();
+        $count = 0;
+        foreach ($libraries as $region) {
+            $count += count($region);
+        }
+        return $count;
+    }
+
+    /**
+     * Search for involved libraries in solr index
+     *
+     * @return array
+     *
+     * @throws \VuFind\Exception\BadConfig
+     */
+    protected function searchInvolvedLibraries(): array
     {
         $filters = ["portal_facet_mv:\"KNIHOVNYCZ_YES\""];
         /**
