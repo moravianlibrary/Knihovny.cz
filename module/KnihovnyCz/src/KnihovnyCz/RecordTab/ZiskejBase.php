@@ -224,7 +224,7 @@ abstract class ZiskejBase extends AbstractBase
     /**
      * Convert libraries from Ziskej to library codes
      *
-     * @param array $ziskejLibs Array of libraries from Ziskej
+     * @param \Mzk\ZiskejApi\ResponseModel\Library[] $ziskejLibs Array of libraries from Ziskej
      *
      * @return array Array of library codes
      */
@@ -233,7 +233,7 @@ abstract class ZiskejBase extends AbstractBase
         $ziskejLibsIds = [];
         foreach ($ziskejLibs as $ziskejLib) {
             /* @phpstan-ignore-next-line */
-            $id = $this->ilsDriver->siglaToSource($ziskejLib->getSigla());
+            $id = $this->ilsDriver->siglaToSource($ziskejLib->sigla);
             if (!empty($id)) {
                 $ziskejLibsIds[] = $id;
             }

@@ -1,3 +1,8 @@
+<?php
+
+use Mzk\ZiskejApi\Enum\StatusName;
+
+?>
 <?=$this->flashmessages()?>
 
 <?php
@@ -14,9 +19,9 @@ $error = ($this->error ?? false);
       ?>
       <?php if ($reader): ?>
         <div class="well">
-          <?=$this->icon('profile', 'fa-fw text-muted')?> <?=$reader->getFirstName()?> <?=$reader->getLastName()?>
+          <?=$this->icon('profile', 'fa-fw text-muted')?> <?=$reader->firstName?> <?=$reader->lastName?>
           <br>
-          <?=$this->icon('profile-email', 'fa-fw text-muted')?> <?=$reader->getEmail()?>
+          <?=$this->icon('profile-email', 'fa-fw text-muted')?> <?=$reader->email?>
         </div>
         <?php if (is_countable($this->tickets) && count($this->tickets)): ?>
           <?php
@@ -24,15 +29,15 @@ $error = ($this->error ?? false);
           $currentTickets = [];
           $archivedTickets = [];
           foreach ($this->tickets as $item) {
-            /** @var \Mzk\ZiskejApi\ResponseModel\Ticket $ticket */
+            /** @var \Mzk\ZiskejApi\ResponseModel\TicketMvs $ticket */
             $ticket = $item['ticket'];
-            switch ($ticket->getStatus()) {
-              case 'closed':
-              case 'cancelled':
+            switch ($ticket->status) {
+              case StatusName::CLOSED:
+              case StatusName::CANCELLED:
                 $archivedTickets[] = $item;
                 break;
-              case 'rejected':
-                if ($ticket->getUpdatedAt() >= $dateLimit) {
+              case StatusName::REJECTED:
+                if ($ticket->updatedAt >= $dateLimit) {
                   $currentTickets[] = $item;
                 } else {
                   $archivedTickets[] = $item;

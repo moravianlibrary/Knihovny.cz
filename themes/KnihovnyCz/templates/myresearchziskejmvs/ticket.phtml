@@ -1,10 +1,13 @@
 <?php
+
+use Mzk\ZiskejApi\Enum\StatusName;
+
 $this->layout()->searchbox = false;
 
 /** @var \VuFind\Db\Row\UserCard $userCard */
 $userCard = $this->userCard;
 
-/** @var \Mzk\ZiskejApi\ResponseModel\Ticket $ticket */
+/** @var \Mzk\ZiskejApi\ResponseModel\TicketMvs $ticket */
 $ticket = $this->ticket;
 
 /** @var \Mzk\ZiskejApi\ResponseModel\MessageCollection $messages */
@@ -15,7 +18,7 @@ $viewHelperZiskej = $this->ziskejMvs();
 ?>
 <?php
 // Set up page title:
-$this->headTitle($this->translate('ZiskejMvs::header_order_ziskej_num') . ' ' . $ticket->getHid());
+$this->headTitle($this->translate('ZiskejMvs::header_order_ziskej_num') . ' ' . $ticket->hid);
 ?>
 
 <div class="row">
@@ -24,12 +27,12 @@ $this->headTitle($this->translate('ZiskejMvs::header_order_ziskej_num') . ' ' . 
     <div class="clearfix">
 
       <h2 class="pull-left">
-        <?=$this->transEsc('ZiskejMvs::header_order_ziskej_num') . ' ' . $ticket->getHid() ?>
+        <?=$this->transEsc('ZiskejMvs::header_order_ziskej_num') . ' ' . $ticket->hid ?>
       </h2>
 
       <div class="pull-left h2-label">
-        <span class="label label-<?=$viewHelperZiskej->getStatusClass($ticket->getStatus()) ?>">
-          <?=$this->translate('ZiskejMvs::order_status_' . $ticket->getStatus()) ?>
+        <span class="label label-<?=$viewHelperZiskej->getStatusClass($ticket->status) ?>">
+          <?=$this->translate('ZiskejMvs::order_status_' . $ticket->status->value) ?>
         </span>
       </div>
 
@@ -38,11 +41,10 @@ $this->headTitle($this->translate('ZiskejMvs::header_order_ziskej_num') . ' ' . 
     <?=$this->flashmessages() ?>
 
     <?php
-    $status = $ticket->getStatus();
-    $histories = $ticket->getStatusHistory();
+    $histories = $ticket->statusHistory;
     $historyArray = [];
     foreach ($histories as $history) {
-      $historyArray[$history->getName()] = $this->dateTime()->convertToDisplayDate('U', $history->getCreatedAt()->getTimestamp());
+      $historyArray[$history->statusName->value] = $this->dateTime()->convertToDisplayDate('U', $history->createdAt->getTimestamp());
     }
 
     $classDone = 'visited';
@@ -54,120 +56,128 @@ $this->headTitle($this->translate('ZiskejMvs::header_order_ziskej_num') . ' ' . 
     <div class="well">
       <ul class="nav-wizard row">
         <li class="part col-md-2">
-          <?php if (isset($historyArray['created'])): ?>
+          <?php if (isset($historyArray[StatusName::CREATED->value])): ?>
             <span class="text-icon text-success"><?=$this->icon('ziskej-done')?></span>
           <?php else: ?>
             <span class="text-icon text-muted"><?=$this->icon('ziskej-waiting')?></span>
           <?php endif; ?>
           <?=$this->transEsc("ZiskejMvs::order_status_created") ?>
-          <?php if (isset($historyArray['created'])): ?>
-            <small><?=$historyArray['created'] ?></small>
+          <?php if (isset($historyArray[StatusName::CREATED->value])): ?>
+            <small><?=$historyArray[StatusName::CREATED->value] ?></small>
           <?php endif; ?>
         </li>
         <li class="part col-md-2">
-          <?php if (isset($historyArray['paid'])): ?>
+          <?php if (isset($historyArray[StatusName::PAID->value])): ?>
             <span class="text-icon text-success"><?=$this->icon('ziskej-done')?></span>
           <?php else: ?>
             <span class="text-icon text-muted"><?=$this->icon('ziskej-waiting')?></span>
           <?php endif; ?>
           <?=$this->transEsc("ZiskejMvs::order_status_paid") ?>
-          <?php if (isset($historyArray['paid'])): ?>
-            <small><?=$historyArray['paid'] ?></small>
+          <?php if (isset($historyArray[StatusName::PAID->value])): ?>
+            <small><?=$historyArray[StatusName::PAID->value] ?></small>
           <?php endif; ?>
         </li>
-        <?php if (in_array($ticket->getStatus(), ['created', 'paid', 'accepted', 'prepared', 'lent', 'closed'])) : ?>
+        <?php
+        if (in_array($ticket->status->value, [
+          StatusName::CREATED->value,
+          StatusName::PAID->value,
+          StatusName::ACCEPTED->value,
+          StatusName::PREPARED->value,
+          StatusName::LENT->value,
+          StatusName::CLOSED->value,
+        ])): ?>
           <li class="part col-md-2">
-            <?php if (isset($historyArray['accepted'])): ?>
+            <?php if (isset($historyArray[StatusName::ACCEPTED->value])): ?>
               <span class="text-icon text-success"><?=$this->icon('ziskej-done')?></span>
             <?php else: ?>
               <span class="text-icon text-muted"><?=$this->icon('ziskej-waiting')?></span>
             <?php endif; ?>
             <?=$this->transEsc("ZiskejMvs::order_status_accepted") ?>
-            <?php if (isset($historyArray['accepted'])): ?>
-              <small><?=$historyArray['accepted'] ?></small>
+            <?php if (isset($historyArray[StatusName::ACCEPTED->value])): ?>
+              <small><?=$historyArray[StatusName::ACCEPTED->value] ?></small>
             <?php endif; ?>
           </li>
           <li class="part col-md-2">
-            <?php if (isset($historyArray['prepared'])): ?>
+            <?php if (isset($historyArray[StatusName::PREPARED->value])): ?>
               <span class="text-icon text-success"><?=$this->icon('ziskej-done')?></span>
             <?php else: ?>
               <span class="text-icon text-muted"><?=$this->icon('ziskej-waiting')?></span>
             <?php endif; ?>
             <?=$this->transEsc("ZiskejMvs::order_status_prepared") ?>
-            <?php if (isset($historyArray['prepared'])): ?>
-              <small><?=$historyArray['prepared'] ?></small>
+            <?php if (isset($historyArray[StatusName::PREPARED->value])): ?>
+              <small><?=$historyArray[StatusName::PREPARED->value] ?></small>
             <?php endif; ?>
           </li>
           <li class="part col-md-2">
-            <?php if (isset($historyArray['lent'])): ?>
+            <?php if (isset($historyArray[StatusName::LENT->value])): ?>
               <span class="text-icon text-success"><?=$this->icon('ziskej-done')?></span>
             <?php else: ?>
               <span class="text-icon text-muted"><?=$this->icon('ziskej-waiting')?></span>
             <?php endif; ?>
             <?=$this->transEsc("ZiskejMvs::order_status_lent") ?>
-            <?php if (isset($historyArray['lent'])): ?>
-              <small><?=$historyArray['lent'] ?></small>
+            <?php if (isset($historyArray[StatusName::LENT->value])): ?>
+              <small><?=$historyArray[StatusName::LENT->value] ?></small>
             <?php endif; ?>
           </li>
           <li class="part col-md-2">
-            <?php if (isset($historyArray['closed'])): ?>
+            <?php if (isset($historyArray[StatusName::CLOSED->value])): ?>
               <span class="text-icon text-success"><?=$this->icon('ziskej-done')?></span>
             <?php else: ?>
               <span class="text-icon text-muted"><?=$this->icon('ziskej-waiting')?></span>
             <?php endif; ?>
             <?=$this->transEsc("ZiskejMvs::order_status_closed") ?>
-            <?php if (isset($historyArray['closed'])): ?>
-              <small><?=$historyArray['closed'] ?></small>
+            <?php if (isset($historyArray[StatusName::CLOSED->value])): ?>
+              <small><?=$historyArray[StatusName::CLOSED->value] ?></small>
             <?php endif; ?>
           </li>
         <?php endif; ?>
-        <?php if ($ticket->getStatus() == 'cancelled') : ?>
+        <?php if ($ticket->status == StatusName::CANCELLED) : ?>
           <li class="part col-md-2">
-            <?php if (isset($historyArray['cancelled'])): ?>
+            <?php if (isset($historyArray[StatusName::CANCELLED->value])): ?>
               <span class="text-icon text-success"><?=$this->icon('ziskej-done')?></span>
             <?php else: ?>
               <span class="text-icon text-muted"><?=$this->icon('ziskej-waiting')?></span>
             <?php endif; ?>
             <?=$this->transEsc("ZiskejMvs::order_status_cancelled") ?>
-            <?php if (isset($historyArray['cancelled'])): ?>
-              <small><?=$historyArray['cancelled'] ?></small>
+            <?php if (isset($historyArray[StatusName::CANCELLED->value])): ?>
+              <small><?=$historyArray[StatusName::CANCELLED->value] ?></small>
             <?php endif; ?>
           </li>
         <?php endif; ?>
-        <?php if ($ticket->getStatus() == 'rejected') : ?>
+        <?php if ($ticket->status == StatusName::REJECTED) : ?>
           <li class="part col-md-2">
-            <?php if (isset($historyArray['rejected'])): ?>
+            <?php if (isset($historyArray[StatusName::REJECTED->value])): ?>
               <span class="text-icon text-success"><?=$this->icon('ziskej-done')?></span>
             <?php else: ?>
               <span class="text-icon text-muted"><?=$this->icon('ziskej-waiting')?></span>
             <?php endif; ?>
             <?=$this->transEsc("ZiskejMvs::order_status_rejected") ?>
-            <?php if (isset($historyArray['rejected'])): ?>
-              <small><?=$historyArray['rejected'] ?></small>
+            <?php if (isset($historyArray[StatusName::REJECTED->value])): ?>
+              <small><?=$historyArray[StatusName::REJECTED->value] ?></small>
             <?php endif; ?>
           </li>
         <?php endif; ?>
       </ul>
     </div>
 
-    <?php if ($ticket->getStatus() == 'created'): ?>
+    <?php if ($ticket->status == StatusName::CREATED): ?>
       <div class="alert alert-warning">
         <?=$this->translate('ZiskejMvs::message_ziskej_message_wait_payment') ?>
       </div>
     <?php endif; ?>
 
     <div class="text-center well border mb-1">
-      <?php if ($ticket->getStatus() == 'created'): ?>
-        <a class="btn btn-primary" href="<?=$ticket->getPaymentUrl() ?>?lang=<?=$this->layout()->userLang ?>" title="<?=$this->transEsc("ZiskejMvs::btn_order_pay_title") ?>">
+      <?php if ($ticket->status == StatusName::CREATED): ?>
+        <a class="btn btn-primary" href="<?=$ticket->paymentUrl ?>?lang=<?=$this->layout()->userLang ?>" title="<?=$this->transEsc("ZiskejMvs::btn_order_pay_title") ?>">
           <?=$this->icon('ziskej-order')?> <?=$this->transEsc("ZiskejMvs::btn_order_pay") ?>
         </a>
       <?php endif; ?>
-      <?php if (in_array($ticket->getStatus(), ['created', 'paid'])): ?>
-        <a id="cancelButton" class="btn btn-warning" href="<?=$this->url('myresearch-ziskej-mvs-ticket-cancel', ['eppnDomain' => $userCard->getEppnDomain(), 'ticketId' => $ticket->getId()]) ?>" title="<?=$this->transEsc("ZiskejMvs::btn_order_cancel_title") ?>">
+      <?php if (in_array($ticket->status->value, [StatusName::CREATED->value, StatusName::PAID->value])): ?>
+        <a id="cancelButton" class="btn btn-warning" href="<?=$this->url('myresearch-ziskej-mvs-ticket-cancel', ['eppnDomain' => $userCard->getEppnDomain(), 'ticketId' => $ticket->id]) ?>" title="<?=$this->transEsc("ZiskejMvs::btn_order_cancel_title") ?>">
           <?=$this->icon('ui-remove')?> <?=$this->transEsc("ZiskejMvs::btn_order_cancel") ?>
         </a>
       <?php endif; ?>
-      <?php if ($ticket->getStatus() == 'cancelled'): ?>
+      <?php if ($ticket->status == StatusName::CANCELLED): ?>
         <div class="alert alert-info"><?=$this->transEsc("ZiskejMvs::msg_order_canceled") ?></div>
       <?php endif; ?>
       <a class="btn btn-info" href="#messages" title="<?=$this->transEsc("ZiskejMvs::btn_order_goto_messages_title") ?>">
@@ -183,25 +193,25 @@ $this->headTitle($this->translate('ZiskejMvs::header_order_ziskej_num') . ' ' . 
     <div class="well border">
 
       <dl class="dl-horizontal dl-left">
-        <?php if (!empty($ticket->getCreatedAt())): ?>
+        <?php if (!empty($ticket->createdAt)): ?>
           <dt><?=$this->transEsc('ZiskejMvs::date_ordered') ?>:</dt>
-          <dd><?=$this->dateTime()->convertToDisplayDateAndTime('U', $ticket->getCreatedAt()->getTimestamp()) ?></dd>
+          <dd><?=$this->dateTime()->convertToDisplayDateAndTime('U', $ticket->createdAt->getTimestamp()) ?></dd>
         <?php endif; ?>
 
-        <?php if (!empty($ticket->getUpdatedAt())
-          && ($ticket->getUpdatedAt()->getTimestamp() != $ticket->getCreatedAt()->getTimestamp())): ?>
+        <?php if (!empty($ticket->updatedAt)
+          && ($ticket->updatedAt->getTimestamp() != $ticket->createdAt->getTimestamp())): ?>
           <dt><?=$this->transEsc('ZiskejMvs::date_updated') ?>:</dt>
-          <dd><?=$this->dateTime()->convertToDisplayDate('U', $ticket->getUpdatedAt()->getTimestamp()) ?></dd>
+          <dd><?=$this->dateTime()->convertToDisplayDate('U', $ticket->updatedAt->getTimestamp()) ?></dd>
         <?php endif; ?>
 
-        <?php if (!empty($ticket->getRequestedAt())): ?>
+        <?php if (!empty($ticket->requestedAt)): ?>
           <dt><?=$this->transEsc('ZiskejMvs::date_requested') ?>:</dt>
-          <dd><?=$this->dateTime()->convertToDisplayDate('U', $ticket->getRequestedAt()->getTimestamp()) ?></dd>
+          <dd><?=$this->dateTime()->convertToDisplayDate('U', $ticket->requestedAt->getTimestamp()) ?></dd>
         <?php endif; ?>
 
-        <?php if (!empty($ticket->getReturnAt())): ?>
+        <?php if (!empty($ticket->returnAt)): ?>
           <dt><?=$this->transEsc('ZiskejMvs::label_date_return') ?>:</dt>
-          <dd><?=$this->dateTime()->convertToDisplayDate('U', $ticket->getReturnAt()->getTimestamp()) ?></dd>
+          <dd><?=$this->dateTime()->convertToDisplayDate('U', $ticket->returnAt->getTimestamp()) ?></dd>
         <?php endif; ?>
       </dl>
     </div>
@@ -223,8 +233,8 @@ $this->headTitle($this->translate('ZiskejMvs::header_order_ziskej_num') . ' ' . 
     <div id="messages">
       <h3>
         <?=$this->transEsc("ZiskejMvs::header_order_messages") ?>
-        <?php if ($ticket->getCountMessages() > 0): ?>
-          <span class="badge"><?=$ticket->getCountMessages() ?></span>
+        <?php if ($ticket->countMessages > 0): ?>
+          <span class="badge"><?=$ticket->countMessages ?></span>
         <?php endif; ?>
       </h3>
       <div class="well border">
@@ -235,15 +245,15 @@ $this->headTitle($this->translate('ZiskejMvs::header_order_ziskej_num') . ' ' . 
               <li class="media">
                 <div class="media-body">
                   <p class="media-heading">
-                    <?php if ($message->getSender() == 'reader'): ?>
+                    <?php if ($message->sender == 'reader'): //@todo create enum from 'reader' ?>
                       <span title="<?=$this->transEsc("ZiskejMvs::label_user") ?>"><?=$this->icon('profile')?></span>
                     <?php else: ?>
                       <?=$this->transEsc("ZiskejMvs::label_library") ?>
                     <?php endif; ?>
-                    <?=$this->dateTime()->convertToDisplayDateAndTime('U', $message->getCreatedAt()->getTimestamp()) ?>
+                    <?=$this->dateTime()->convertToDisplayDateAndTime('U', $message->createdAt->getTimestamp()) ?>
                   </p>
                   <div>
-                    <?=$message->getText() ?>
+                    <?=$message->text ?>
                   </div>
                 </div>
               </li>
@@ -258,7 +268,7 @@ $this->headTitle($this->translate('ZiskejMvs::header_order_ziskej_num') . ' ' . 
         <div>
           <hr>
           <h4><?=$this->transEsc("ZiskejMvs::header_order_new_message") ?></h4>
-          <form method="post" action="<?=$this->url('myresearch-ziskej-mvs-message-post', ['eppnDomain' => $userCard->getEppnDomain(), 'ticketId' => $ticket->getId()]) ?>">
+          <form method="post" action="<?=$this->url('myresearch-ziskej-mvs-message-post', ['eppnDomain' => $userCard->getEppnDomain(), 'ticketId' => $ticket->id]) ?>">
             <div class="form-group">
               <label for="ticketMessage"><?=$this->transEsc("ZiskejMvs::label_ticketMessage") ?>:</label>
               <textarea name="ticketMessage" id="ticketMessage" class="form-control" rows="3" required></textarea>
@@ -278,7 +288,7 @@ $this->headTitle($this->translate('ZiskejMvs::header_order_ziskej_num') . ' ' . 
 
 </div>
 <?php
-$confirmationText = $this->translate('ZiskejMvs::btn_order_cancel_confirm', ['%orderId' => $ticket->getHid()]);
+$confirmationText = $this->translate('ZiskejMvs::btn_order_cancel_confirm', ['%orderId' => $ticket->hid]);
 $script = <<<JS
   $('#cancelButton').click(function confirmCancelTicket() {
     return confirm('$confirmationText');

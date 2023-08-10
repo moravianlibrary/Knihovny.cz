@@ -54,8 +54,8 @@ USER vufind
 
 WORKDIR ${VUFIND_ROOT}
 RUN /usr/local/bin/composer config --no-plugins allow-plugins.php-http/discovery true
-RUN /usr/local/bin/composer install --no-dev
-RUN /usr/local/bin/composer update --no-dev
+RUN /usr/local/bin/composer install --no-dev --ignore-platform-req=php
+RUN /usr/local/bin/composer update --no-dev --ignore-platform-req=php
 
 ########### final image
 FROM localhost/knihovny-php:latest

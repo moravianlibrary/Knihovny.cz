@@ -2,24 +2,24 @@
 /** @var \KnihovnyCz\Db\Row\UserCard $userCard */
 $userCard = $this->userCard;
 
-/** @var \Mzk\ZiskejApi\ResponseModel\Ticket $ticket */
+/** @var \Mzk\ZiskejApi\ResponseModel\TicketMvs|\Mzk\ZiskejApi\ResponseModel\TicketEdd $ticket */
 $ticket = $this->ticket;
 
 // Set page title.
-$this->headTitle($this->translate('ZiskejMvs::header_order_ziskej_finished', ['%order_id' => $ticket->getHid()]));
+$this->headTitle($this->translate('ZiskejMvs::header_order_ziskej_finished', ['%order_id' => $ticket->hid]));
 
 // Disable search box
 $this->layout()->searchbox = false;
 ?>
 
 <h2>
-  <?= $this->translate('ZiskejMvs::header_order_ziskej_finished', ['%order_id' => $ticket->getHid()]); ?>
+  <?= $this->translate('ZiskejMvs::header_order_ziskej_finished', ['%order_id' => $ticket->hid]); ?>
 </h2>
 
 <?= $this->flashmessages() ?>
 
 <p>
-  <a class="btn btn-sm btn-primary" href="<?= $this->url('myresearch-ziskej-mvs-ticket', ['eppnDomain' => $userCard->getEppnDomain(), 'ticketId' => $ticket->getId()]); ?>" title="<?= $this->translate("ZiskejMvs::btn_order_detail_title"); ?>">
+  <a class="btn btn-sm btn-primary" href="<?= $this->url('myresearch-ziskej-mvs-ticket', ['eppnDomain' => $userCard->getEppnDomain(), 'ticketId' => $ticket->id]); ?>" title="<?= $this->translate("ZiskejMvs::btn_order_detail_title"); ?>">
     <?=$this->icon('ziskej-order-detail')?> <?= $this->translate("ZiskejMvs::btn_order_detail"); ?>
   </a>
   <a class="btn btn-sm btn-default" href="<?= $this->url('home'); ?>" title="<?= $this->translate("btn_homepage_title"); ?>">

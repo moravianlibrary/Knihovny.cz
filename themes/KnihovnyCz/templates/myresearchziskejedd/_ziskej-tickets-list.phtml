@@ -1,13 +1,16 @@
 <ul class="media-list">
   <?php
+
+  use Mzk\ZiskejApi\Enum\StatusName;
+
   $itemIndex = 1;
   foreach ($ticketsData as $item):
-    /** @var \Mzk\ZiskejApi\ResponseModel\Ticket $ticket */
+    /** @var \Mzk\ZiskejApi\ResponseModel\TicketEdd $ticket */
     $ticket = $item['ticket'];
     /** @var ?\KnihovnyCz\RecordDriver\SolrLocal $record */
     $record = $item['record'];
     ?>
-    <li class="media well" id="record_<?=$ticket->getHid()?>" data-ziskej="<?=$ticket->getHid()?>">
+    <li class="media well" id="record_<?=$ticket->hid?>" data-ziskej="<?=$ticket->hid?>">
       <strong class="pull-left order"><?= $itemIndex++ ?>.</strong>
       <?php
       $thumbnail = false;
@@ -57,76 +60,76 @@
                 <dd><?=$this->record($record)->getFormatList()?></dd>
               <?php endif; ?>
             <?php endif; ?>
-            <?php if ($ticket->getCreatedAt()): ?>
+            <?php if ($ticket->createdAt): ?>
               <dt><?=$this->transEsc('ZiskejEdd::label_date_order')?>:</dt>
-              <dd><?=$this->dateTime()->convertToDisplayDate('U', $ticket->getCreatedAt()->getTimestamp())?></dd>
+              <dd><?=$this->dateTime()->convertToDisplayDate('U', $ticket->createdAt->getTimestamp())?></dd>
             <?php endif; ?>
-            <?php if ($ticket->getRequestedAt()): ?>
+            <?php if ($ticket->requestedAt): ?>
               <dt><?=$this->transEsc('ZiskejEdd::label_date_deliver')?>:</dt>
-              <dd><?=$this->dateTime()->convertToDisplayDate('U', $ticket->getRequestedAt()->getTimestamp())?></dd>
+              <dd><?=$this->dateTime()->convertToDisplayDate('U', $ticket->requestedAt->getTimestamp())?></dd>
             <?php endif; ?>
-            <?php if ($ticket->getReturnAt()): ?>
+            <?php if ($ticket->returnAt): ?>
               <dt><?=$this->transEsc('ZiskejEdd::label_date_return')?>:</dt>
-              <dd><?=$this->dateTime()->convertToDisplayDate('U', $ticket->getReturnAt()->getTimestamp())?></dd>
+              <dd><?=$this->dateTime()->convertToDisplayDate('U', $ticket->returnAt->getTimestamp())?></dd>
             <?php endif; ?>
             <dt><?=$this->transEsc('ZiskejEdd::label_order_number')?>:</dt>
-            <dd><?=$ticket->getHid()?></dd>
-            <?php if ($ticket->getStatus()): ?>
+            <dd><?=$ticket->hid?></dd>
+            <?php if ($ticket->status): ?>
               <dt><?=$this->transEsc('ZiskejEdd::label_order_status')?>:</dt>
               <dd>
-                <span class="label label-<?=$this->ziskejEdd()->getStatusClass($ticket->getStatus())?>">
-                  <?=$this->transEsc('ZiskejEdd::order_status_' . $ticket->getStatus())?>
+                <span class="label label-<?=$this->ziskejEdd()->getStatusClass($ticket->status)?>">
+                  <?=$this->transEsc('ZiskejEdd::order_status_' . $ticket->status->value)?>
                 </span>
               </dd>
             <?php endif; ?>
-            <?php if (!empty($ticket->getReturnAt())): ?>
+            <?php if (!empty($ticket->returnAt)): ?>
               <dt><?=$this->transEsc('ZiskejEdd::label_date_return')?>:</dt>
-              <dd><?=$this->dateTime()->convertToDisplayDate('U', $ticket->getReturnAt()->getTimestamp())?></dd>
+              <dd><?=$this->dateTime()->convertToDisplayDate('U', $ticket->returnAt->getTimestamp())?></dd>
             <?php endif; ?>
-            <?php if (!empty($ticket->getEddSubtype())): ?>
+            <?php if (!empty($ticket->eddSubtype)): ?>
               <dt><?=$this->transEsc('ZiskejEdd::label_subtype')?>:</dt>
-              <dd><?=$this->transEsc('ZiskejEdd::value_subtype_' . $ticket->getEddSubtype())?></dd>
+              <dd><?=$this->transEsc('ZiskejEdd::value_subtype_' . $ticket->eddSubtype->value)?></dd>
             <?php endif; ?>
-            <?php if (!empty($ticket->getDocTitleIn())): ?>
+            <?php if (!empty($ticket->docTitleIn)): ?>
               <dt><?=$this->transEsc('ZiskejEdd::label_article_doc_title_in')?>:</dt>
-              <dd><?=$ticket->getDocTitleIn()?></dd>
+              <dd><?=$ticket->docTitleIn?></dd>
             <?php endif; ?>
-            <?php if (!empty($ticket->getDocTitle())): ?>
+            <?php if (!empty($ticket->docTitle)): ?>
               <dt><?=$this->transEsc('ZiskejEdd::label_selection_doc_title')?>:</dt>
-              <dd><?=$ticket->getDocTitle()?></dd>
+              <dd><?=$ticket->docTitle?></dd>
             <?php endif; ?>
-            <?php if (!empty($ticket->getDocVolume())): ?>
+            <?php if (!empty($ticket->docVolume)): ?>
               <dt><?=$this->transEsc('ZiskejEdd::label_doc_volume')?>:</dt>
-              <dd><?=$ticket->getDocVolume()?></dd>
+              <dd><?=$ticket->docVolume?></dd>
             <?php endif; ?>
-            <?php if (!empty($ticket->getDocNumberYear())): ?>
+            <?php if (!empty($ticket->docNumberYear)): ?>
               <dt><?=$this->transEsc('ZiskejEdd::label_doc_number_year')?>:</dt>
-              <dd><?=$ticket->getDocNumberYear()?></dd>
+              <dd><?=$ticket->docNumberYear?></dd>
             <?php endif; ?>
-            <?php if (!empty($ticket->getDocNumberPyear())): ?>
+            <?php if (!empty($ticket->docNumberPyear)): ?>
               <dt><?=$this->transEsc('ZiskejEdd::label_doc_number_pyear')?>:</dt>
-              <dd><?=$ticket->getDocNumberPyear()?></dd>
+              <dd><?=$ticket->docNumberPyear?></dd>
             <?php endif; ?>
-            <?php if (!empty($ticket->getDocNumberPnumber())): ?>
+            <?php if (!empty($ticket->docNumberPnumber)): ?>
               <dt><?=$this->transEsc('ZiskejEdd::label_doc_number_pnumber')?>:</dt>
-              <dd><?=$ticket->getDocNumberPnumber()?></dd>
+              <dd><?=$ticket->docNumberPnumber?></dd>
             <?php endif; ?>
-            <?php if (!empty($ticket->getDocAuthor())): ?>
+            <?php if (!empty($ticket->docAuthor)): ?>
               <dt><?=$this->transEsc('ZiskejEdd::label_doc_author')?>:</dt>
-              <dd><?=$ticket->getDocAuthor()?></dd>
+              <dd><?=$ticket->docAuthor?></dd>
             <?php endif; ?>
-            <?php if (!empty($ticket->getDocIssuer())): ?>
+            <?php if (!empty($ticket->docIssuer)): ?>
               <dt><?=$this->transEsc('ZiskejEdd::label_doc_issuer')?>:</dt>
-              <dd><?=$ticket->getDocIssuer()?></dd>
+              <dd><?=$ticket->docIssuer?></dd>
             <?php endif; ?>
           </dl>
           <div class="text-right">
-            <?php if ($ticket->getStatus() == 'unpaid' && !empty($ticket->getDownloadUrl())): ?>
-              <a class="btn btn-sm btn-warning" href="<?=$ticket->getDownloadUrl()?>" target="_blank" title="<?=$this->transEsc("ZiskejEdd::btn_order_pay_title")?>">
+            <?php if ($ticket->status == StatusName::UNPAID && !empty($ticket->downloadUrl)): ?>
+              <a class="btn btn-sm btn-warning" href="<?=$ticket->downloadUrl->getAbsoluteUrl()?>" target="_blank" title="<?=$this->transEsc("ZiskejEdd::btn_order_pay_title")?>">
                 <?=$this->icon('ziskej-order')?> <?=$this->transEsc("ZiskejEdd::btn_order_pay")?>
               </a>
             <?php endif; ?>
-            <a class="btn btn-sm btn-primary" href="<?=$this->url('myresearch-ziskej-edd-ticket', ['eppnDomain' => $userCard->getEppnDomain(), 'ticketId' => $ticket->getId()])?>" title="<?=$this->transEsc("ZiskejEdd::btn_order_detail_title")?>">
+            <a class="btn btn-sm btn-primary" href="<?=$this->url('myresearch-ziskej-edd-ticket', ['eppnDomain' => $userCard->getEppnDomain(), 'ticketId' => $ticket->id])?>" title="<?=$this->transEsc("ZiskejEdd::btn_order_detail_title")?>">
               <?=$this->icon('ziskej-order-detail')?> <?=$this->transEsc("ZiskejEdd::btn_order_detail")?>
             </a>
           </div>

@@ -31,6 +31,7 @@ namespace KnihovnyCz\View\Helper\KnihovnyCz;
 
 use KnihovnyCz\Ziskej;
 use Laminas\View\Helper\AbstractHelper;
+use Mzk\ZiskejApi\Enum\StatusName;
 
 /**
  * Ziskej Edd View Helper
@@ -104,16 +105,16 @@ class ZiskejEdd extends AbstractHelper
     /**
      * Get html class attribute
      *
-     * @param string|null $status Ziskej ticket status
+     * @param StatusName|null $status Ziskej ticket status
      *
      * @return string
      */
-    public function getStatusClass(string $status = null): string
+    public function getStatusClass(StatusName $status = null): string
     {
         return match ($status) {
-            'created', 'paid' => 'warning',
-            'accepted', 'prepared', 'lent' => 'success',
-            'rejected' => 'danger',
+            StatusName::CREATED, StatusName::PAID => 'warning',
+            StatusName::ACCEPTED, StatusName::PREPARED, StatusName::LENT => 'success',
+            StatusName::REJECTED => 'danger',
             default => 'default',
         };
     }

@@ -48,8 +48,8 @@ RUN rm /var/www/knihovny-cz/composer.lock
 
 # Install composer dependencies
 RUN composer config --no-plugins allow-plugins.php-http/discovery true
-RUN composer install --no-interaction -q
-RUN composer update --no-interaction -q
+RUN composer install --no-interaction -q --ignore-platform-req=php
+RUN composer update --no-interaction -q --ignore-platform-req=php
 
 #TODO: sentry/sentry still missing
 

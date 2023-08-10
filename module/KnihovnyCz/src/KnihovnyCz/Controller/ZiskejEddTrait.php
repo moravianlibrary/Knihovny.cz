@@ -34,7 +34,7 @@ namespace KnihovnyCz\Controller;
 use Laminas\Stdlib\ResponseInterface as Response;
 use Laminas\Validator\EmailAddress;
 use Laminas\View\Model\ViewModel;
-use Mzk\ZiskejApi\Enum\TicketEddDocDataSource;
+use Mzk\ZiskejApi\Enum\TicketDataSource;
 use Mzk\ZiskejApi\Enum\TicketEddSubtype;
 use Mzk\ZiskejApi\Enum\ZiskejSettings;
 use Mzk\ZiskejApi\RequestModel\Reader;
@@ -283,7 +283,7 @@ trait ZiskejEddTrait
             return $this->redirectToTabEdd();
         }
 
-        if (!$ziskejReader->isActive()) {
+        if (!$ziskejReader->isActive) {
             $this->flashMessenger()->addMessage(
                 'ZiskejEdd::error_account_not_active',
                 'warning'
@@ -292,34 +292,32 @@ trait ZiskejEddTrait
         }
 
         $ticketRequest = new TicketEddRequest(
-            TicketEddDocDataSource::AUTO,
-            $this->params()->fromPost('edd_subtype'),
-            $this->params()->fromPost('doc_title_in'),
-            $this->params()->fromPost('doc_title'),
-            $this->params()->fromPost('doc_id')
+            ticketDocDataSource: TicketDataSource::AUTO,
+            eddSubtype: TicketEddSubtype::from($this->params()->fromPost('edd_subtype')),
+            docTitleIn: $this->params()->fromPost('doc_title_in'),
+            docTitle: $this->params()->fromPost('doc_title'),
+            documentId: $this->params()->fromPost('doc_id'),
+            documentAltIds: $this->params()->fromPost('doc_alt_ids'),
+            docNumberYear: $this->params()->fromPost('doc_number_year'),
+            docNumberPyear: $this->params()->fromPost('doc_number_pyear'),
+            docNumberPnumber: $this->params()->fromPost('doc_number_pnumber'),
+            docVolume: $this->params()->fromPost('doc_volume'),
+            pagesFrom: (int)$this->params()->fromPost('pages_from'),
+            pagesTo: (int)$this->params()->fromPost('pages_to'),
+            docAuthor: $this->params()->fromPost('doc_author'),
+            docIssuer: $this->params()->fromPost('doc_issuer'),
+            docISSN: $this->params()->fromPost('doc_issn'),
+            docISBN: $this->params()->fromPost('doc_isbn'),
+            docCitation: $this->params()->fromPost('doc_citation'),
+            docNote: $this->params()->fromPost('doc_note')
         );
-        $ticketRequest->setDocumentAltIds($this->params()->fromPost('doc_alt_ids'));
-        $ticketRequest->setDocCitation($this->params()->fromPost('doc_citation'));
-        $ticketRequest->setDocAuthor($this->params()->fromPost('doc_author'));
-        $ticketRequest->setDocVolume($this->params()->fromPost('doc_volume'));
-        $ticketRequest->setDocIssuer($this->params()->fromPost('doc_issuer'));
-        $ticketRequest->setPagesFrom((int)$this->params()->fromPost('pages_from'));
-        $ticketRequest->setPagesTo((int)$this->params()->fromPost('pages_to'));
-        $ticketRequest->setDocISSN($this->params()->fromPost('doc_issn'));
-        $ticketRequest->setDocISBN($this->params()->fromPost('doc_isbn'));
-        $ticketRequest->setDocNumberYear(
-            $this->params()->fromPost('doc_number_year')
-        );
-        $ticketRequest->setDocNumberPyear(
-            $this->params()->fromPost('doc_number_pyear')
-        );
-        $ticketRequest->setDocNumberPnumber(
-            $this->params()->fromPost('doc_number_pnumber')
-        );
-        $ticketRequest->setDocNote($this->params()->fromPost('doc_note'));
-        $ticketRequest->setDateRequested(new \DateTimeImmutable('+3 day'));
 
         try {
+            /**
+             * Ticket response model
+             *
+             * @var \Mzk\ZiskejApi\ResponseModel\TicketEdd $ticket
+             */
             $ticket = $ziskejApi->createTicket($eppn, $ticketRequest);
 
             if (!$ticket) {
@@ -338,7 +336,7 @@ trait ZiskejEddTrait
                 'myresearch-ziskej-edd-ticket',
                 [
                     'eppnDomain' => $userCard->getEppnDomain(),
-                    'ticketId' => $ticket->getId(),
+                    'ticketId' => $ticket->id,
                 ]
             );
         } catch (\Mzk\ZiskejApi\Exception\ApiResponseException $e) {

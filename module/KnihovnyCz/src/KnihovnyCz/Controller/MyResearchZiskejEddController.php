@@ -139,7 +139,7 @@ class MyResearchZiskejEddController extends AbstractBase
             }
 
             $reader = $ziskejApi->getReader($userCard->eppn);
-            if (!$reader || !$reader->isActive()) {
+            if (!$reader || !$reader->isActive) {
                 $ignoreError = true;
                 throw new \Exception('Reader is not active in Ziskej');
             }
@@ -149,21 +149,27 @@ class MyResearchZiskejEddController extends AbstractBase
 
             $tickets = [];
             $records = [];
+
+            /**
+             * Ticket response model
+             *
+             * @var \Mzk\ZiskejApi\ResponseModel\TicketMvs|\Mzk\ZiskejApi\ResponseModel\TicketEdd $ticket
+             */
             foreach (
                 $ziskejApi->getTicketsEdd($userCard->eppn)->getAll() as $ticket
             ) {
-                if ($ticket->getDocumentId() !== null) {
-                    $recordId = $ticket->getDocumentId();
+                if ($ticket->documentId !== null) {
+                    $recordId = $ticket->documentId;
                     if (!isset($records[$recordId])) {
                         $records[$recordId] = $recordLoader->load($recordId);
                     }
                     try {
-                        $tickets[$ticket->getId()] = [
+                        $tickets[$ticket->id] = [
                             'ticket' => $ticket,
                             'record' => $records[$recordId],
                         ];
                     } catch (\VuFind\Exception\RecordMissing $e) {
-                        $tickets[$ticket->getId()] = [
+                        $tickets[$ticket->id] = [
                             'ticket' => $ticket,
                             'record' => null,
                         ];
@@ -218,6 +224,11 @@ class MyResearchZiskejEddController extends AbstractBase
          */
         $ziskejApi = $this->serviceLocator->get('Mzk\ZiskejApi\Api');
 
+        /**
+         * Ticket response model
+         *
+         * @var \Mzk\ZiskejApi\ResponseModel\TicketEdd $ticket
+         */
         $ticket = $ziskejApi->getTicket($userCard->eppn, $ticketId);
         $messages = $ziskejApi->getMessages($userCard->eppn, $ticketId);
 
@@ -225,7 +236,7 @@ class MyResearchZiskejEddController extends AbstractBase
 
         $driver = null;
         if ($ticket) {
-            $documentId = $ticket->getDocumentId();
+            $documentId = $ticket->documentId;
             if ($documentId) {
                 try {
                     $driver = $recordLoader->load($documentId);

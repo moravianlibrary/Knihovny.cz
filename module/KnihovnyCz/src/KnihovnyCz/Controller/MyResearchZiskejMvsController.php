@@ -139,7 +139,7 @@ class MyResearchZiskejMvsController extends AbstractBase
             }
 
             $reader = $ziskejApi->getReader($userCard->eppn);
-            if (!$reader || !$reader->isActive()) {
+            if (!$reader || !$reader->isActive) {
                 $ignoreError = true;
                 throw new \Exception('Reader is not active in Ziskej');
             }
@@ -148,19 +148,25 @@ class MyResearchZiskejMvsController extends AbstractBase
             $recordLoader = $this->getRecordLoader();
 
             $tickets = [];
+
+            /**
+             * Ticket response model
+             *
+             * @var \Mzk\ZiskejApi\ResponseModel\TicketMvs $ticket
+             */
             foreach (
                 $ziskejApi->getTicketsMvs($userCard->eppn)->getAll() as $ticket
             ) {
-                if ($ticket->getDocumentId() !== null) {
+                if ($ticket->documentId !== null) {
                     try {
-                        $tickets[$ticket->getId()] = [
+                        $tickets[$ticket->id] = [
                             'ticket' => $ticket,
                             'record' => $recordLoader->load(
-                                $ticket->getDocumentId()
+                                $ticket->documentId
                             ),
                         ];
                     } catch (\VuFind\Exception\RecordMissing $e) {
-                        $tickets[$ticket->getId()] = [
+                        $tickets[$ticket->id] = [
                             'ticket' => $ticket,
                             'record' => null,
                         ];
@@ -216,13 +222,14 @@ class MyResearchZiskejMvsController extends AbstractBase
         $ziskejApi = $this->serviceLocator->get('Mzk\ZiskejApi\Api');
 
         $ticket = $ziskejApi->getTicket($userCard->eppn, $ticketId);
+
         $messages = $ziskejApi->getMessages($userCard->eppn, $ticketId);
 
         $recordLoader = $this->getRecordLoader();
 
         $driver = null;
         if ($ticket) {
-            $documentId = $ticket->getDocumentId();
+            $documentId = $ticket->documentId;
             if ($documentId) {
                 try {
                     $driver = $recordLoader->load($documentId);

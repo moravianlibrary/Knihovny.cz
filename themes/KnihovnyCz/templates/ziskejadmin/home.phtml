@@ -93,7 +93,7 @@ $this->layout()->searchbox = false;
               $reader = !empty($row['reader']) ? $row['reader'] : null;
               ?>
               <?php if ($reader): ?>
-                <?php if (!$reader->isActive()): ?>
+                <?php if (!$reader->isActive): ?>
                   <div class="alert alert-warning text-center">
                     <?=$this->translate('Ziskej::settings_alert_reader_not_active') ?>
                   </div>
@@ -107,27 +107,27 @@ $this->layout()->searchbox = false;
                       <div class="col-md-6">
                         <dl class="dl-horizontal">
                           <dt><?=$this->translate('Ziskej::settings_label_is_active') ?></dt>
-                          <dd><?=$reader->isActive() ? $this->translate('Ziskej::yes') : $this->translate('Ziskej::no') ?></dd>
+                          <dd><?=$reader->isActive ? $this->translate('Ziskej::yes') : $this->translate('Ziskej::no') ?></dd>
                           <dt><?=$this->translate('Ziskej::settings_label_eppn') ?>:</dt>
                           <dd><?=$eppn ?></dd>
                           <dt><?=$this->translate('Ziskej::settings_label_sigla') ?></dt>
-                          <dd><?=$reader->getSigla() ?></dd>
+                          <dd><?=$reader->sigla ?></dd>
                         </dl>
                       </div>
                       <div class="col-md-6">
                         <dl class="dl-horizontal">
                           <dt><?=$this->translate('Ziskej::settings_label_name_first') ?>:</dt>
-                          <dd><?=$reader->getFirstName() ?></dd>
+                          <dd><?=$reader->firstName ?></dd>
                           <dt><?=$this->translate('Ziskej::settings_label_name_last') ?>:</dt>
-                          <dd><?=$reader->getLastName() ?></dd>
+                          <dd><?=$reader->lastName ?></dd>
                           <dt><?=$this->translate('Ziskej::settings_label_email') ?>:</dt>
-                          <dd><?=$reader->getEmail() ?></dd>
+                          <dd><?=$reader->email ?></dd>
                         </dl>
                       </div>
                     </div>
                   </div>
                 </div>
-                <?php if ($reader->isActive()): ?>
+                <?php if ($reader->isActive): ?>
                   <?php
                   /** @var array $tickets */
                   $tickets = $row['tickets'];
@@ -140,16 +140,16 @@ $this->layout()->searchbox = false;
                       <?php if (is_countable($tickets) && count($tickets)): ?>
                         <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
                           <?php
-                          /** @var \Mzk\ZiskejApi\ResponseModel\Ticket $ticket */
+                          /** @var \Mzk\ZiskejApi\ResponseModel\TicketMvs|\Mzk\ZiskejApi\ResponseModel\TicketEdd $ticket */
                           foreach ($tickets as $ticketDuo):
                             $ticket = $ticketDuo['ticket'];
                             ?>
                             <div class="panel panel-default">
                               <div class="panel-heading" role="tab">
                                 <h4 class="panel-title">
-                                  <a role="button" data-toggle="collapse" href="#ticket_<?=$ticket->getHid() ?>">
-                                    <?=$this->dateTime()->convertToDisplayDateAndTime('U', $ticket->getCreatedAt()->getTimestamp()) ?>
-                                    | <?=$ticket->getId() ?>
+                                  <a role="button" data-toggle="collapse" href="#ticket_<?=$ticket->hid ?>">
+                                    <?=$this->dateTime()->convertToDisplayDateAndTime('U', $ticket->createdAt->getTimestamp()) ?>
+                                    | <?=$ticket->id ?>
                                     <span class="pull-right">
                                       <?php if (is_countable($ticketDuo['messages']) && count($ticketDuo['messages'])): ?>
                                         <span class="badge"><?=$this->translate('Ziskej::settings_label_count_messages') ?>: <?=count($ticketDuo['messages']) ?></span>
@@ -158,40 +158,40 @@ $this->layout()->searchbox = false;
                                   </a>
                                 </h4>
                               </div>
-                              <div id="ticket_<?=$ticket->getHid() ?>" class="panel-collapse collapse out" role="tabpanel">
+                              <div id="ticket_<?=$ticket->hid ?>" class="panel-collapse collapse out" role="tabpanel">
                                 <div class="panel-body">
                                   <div class="row">
                                     <div class="col-md-6">
                                       <dl class="dl-horizontal">
                                         <dt><?=$this->translate('Ziskej::settings_label_id') ?>:</dt>
-                                        <dd><?=$ticket->getId() ?></dd>
+                                        <dd><?=$ticket->id ?></dd>
                                         <dt><?=$this->translate('Ziskej::settings_label_hid') ?>:</dt>
-                                        <dd><?=$ticket->getHid() ?></dd>
+                                        <dd><?=$ticket->hid ?></dd>
                                         <dt><?=$this->translate('Ziskej::settings_label_is_open') ?>:</dt>
-                                        <dd><?=$ticket->isOpen() ?></dd>
+                                        <dd><?=$ticket->isOpen ?></dd>
                                         <dt><?=$this->translate('Ziskej::settings_label_doc_id') ?>:</dt>
-                                        <dd><?=$ticket->getDocumentId() ?></dd>
+                                        <dd><?=$ticket->documentId ?></dd>
                                         <dt><?=$this->translate('Ziskej::settings_label_sigla') ?>:</dt>
-                                        <dd><?=$ticket->getSigla() ?></dd>
+                                        <dd><?=$ticket->sigla ?></dd>
                                         <dt><?=$this->translate('Ziskej::settings_label_status_reader') ?>:</dt>
-                                        <dd><?=$ticket->getStatus() ?></dd>
+                                        <dd><?=$ticket->status->value ?></dd>
                                       </dl>
                                     </div>
                                     <div class="col-md-6">
                                       <dl>
                                         <dt><?=$this->translate('Ziskej::settings_label_date_created') ?>:</dt>
-                                        <dd><?=$this->dateTime()->convertToDisplayDateAndTime('U', $ticket->getCreatedAt()->getTimestamp()) ?></dd>
+                                        <dd><?=$this->dateTime()->convertToDisplayDateAndTime('U', $ticket->createdAt->getTimestamp()) ?></dd>
                                         <dt><?=$this->translate('Ziskej::settings_label_date_requested') ?>:</dt>
                                         <dd>
-                                          <?=!empty($ticket->getRequestedAt())
-                                            ? $this->dateTime()->convertToDisplayDate('U', $ticket->getRequestedAt()->getTimestamp())
+                                          <?=!empty($ticket->requestedAt)
+                                            ? $this->dateTime()->convertToDisplayDate('U', $ticket->requestedAt->getTimestamp())
                                             : '–'
                                           ?>
                                         </dd>
                                         <dt><?=$this->translate('Ziskej::settings_label_date_return') ?>:</dt>
                                         <dd>
-                                          <?=!empty($ticket->getReturnAt())
-                                            ? $this->dateTime()->convertToDisplayDate('U', $ticket->getReturnAt()->getTimestamp())
+                                          <?=!empty($ticket->returnAt)
+                                            ? $this->dateTime()->convertToDisplayDate('U', $ticket->returnAt->getTimestamp())
                                             : '–'
                                           ?>
                                         </dd>

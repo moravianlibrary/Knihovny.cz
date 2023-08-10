@@ -255,7 +255,7 @@ trait ZiskejMvsTrait
             return $this->redirectToTabMvs();
         }
 
-        if (!$ziskejReader->isActive()) {
+        if (!$ziskejReader->isActive) {
             $this->flashMessenger()->addMessage(
                 'ZiskejMvs::error_account_not_active',
                 'warning'
@@ -263,11 +263,18 @@ trait ZiskejMvsTrait
             return $this->redirectToTabMvs();
         }
 
-        $ticketNew = new TicketMvsRequest($this->params()->fromPost('doc_id'));
-        $ticketNew->setDocumentAltIds($this->params()->fromPost('doc_alt_ids'));
-        $ticketNew->setNote($this->params()->fromPost('text'));
+        $ticketNew = new TicketMvsRequest(
+            documentId: $this->params()->fromPost('doc_id'),
+            documentAltIds: $this->params()->fromPost('doc_alt_ids'),
+            readerNote: $this->params()->fromPost('text')
+        );
 
         try {
+            /**
+             * Ticket response model
+             *
+             * @var \Mzk\ZiskejApi\ResponseModel\TicketMvs $ticket
+             */
             $ticket = $ziskejApi->createTicket($eppn, $ticketNew);
 
             if (!$ticket) {
@@ -286,7 +293,7 @@ trait ZiskejMvsTrait
                 'myresearch-ziskej-mvs-ticket',
                 [
                     'eppnDomain' => $userCard->getEppnDomain(),
-                    'ticketId' => $ticket->getId(),
+                    'ticketId' => $ticket->id,
                 ]
             );
         } catch (\Mzk\ZiskejApi\Exception\ApiResponseException $e) {
