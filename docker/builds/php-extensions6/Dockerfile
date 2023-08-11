@@ -1,7 +1,7 @@
 FROM php:8.1-apache-buster
 LABEL maintainer="Moravian Library <cpk-dev@mzk.cz>"
 LABEL version="2.0"
-LABEL description="Based on the 'php:8.0-apache-buster' build with appended modules to php & apache2 + productivity tools included (vim, mc, htop, ping, traceroute, dig, ssh, mysql-client, locate, git, curl, bash-completion)"
+LABEL description="Based on the 'php:8.1-apache-buster' build with appended modules to php & apache2 + productivity tools included (vim, mc, htop, ping, traceroute, dig, ssh, mysql-client, locate, git, curl, bash-completion)"
 
 #
 # See the docs for the php docker image:
@@ -22,11 +22,11 @@ ARG TMP_DEV_PKGS=" \
         libzip-dev"
 
 # Install all libraries needed + basic productivity & debug tools
-#  NOTE: sorted alphabetically
 RUN apt-get update && apt-get install -y \
         bash-completion \
         coreutils \
         curl \
+        default-mysql-client \
         dnsutils \
         git \
         htop \
@@ -34,21 +34,20 @@ RUN apt-get update && apt-get install -y \
         iputils-tracepath \
         libapache2-mod-rpaf \
         libapache2-mod-shib \
+        locales \
         mc \
         mlocate \
-        default-mysql-client \
         net-tools \
+        python \
         ssh \
         vim \
-        locales \
-        python \
         ${TMP_DEV_PKGS} \
     && apt-get clean \
     && apt-get autoremove -y
 
-# NODEJS, NPM \
-RUN curl -fsSL https://deb.nodesource.com/setup_16.x | bash - \
-    && apt-get install -y nodejs
+# nodejs, npm \
+RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - && \
+    apt-get install -y nodejs
 
 # Set Czech locales
 RUN sed -i -e 's/# cs_CZ.UTF-8 UTF-8/cs_CZ.UTF-8 UTF-8/' /etc/locale.gen && \
