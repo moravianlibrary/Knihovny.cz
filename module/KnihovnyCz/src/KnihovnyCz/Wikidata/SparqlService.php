@@ -133,6 +133,7 @@ class SparqlService
         string $query,
         array $prefixes = ['schema', 'wikibase', 'wdt']
     ): array {
+        return [];
         $format = 'json';
         $query = $this->formatPrefixes($prefixes) . "\n" . $query;
         $url = '?' . http_build_query(compact(['query', 'format']));
