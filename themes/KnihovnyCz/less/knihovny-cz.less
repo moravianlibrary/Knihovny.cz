@@ -509,40 +509,6 @@ h6:hover .heading-permalink {
   }
 }
 
-// bootstrap 4 input group
-.b4-input-group {
-  width: 100%;
-
-  .form-control {
-    margin-bottom: 3px;
-  }
-
-  .b4-input-group-append {
-  }
-}
-
-@media (min-width: @screen-md) {
-  .b4-input-group {
-    position: relative;
-    display: flex;
-    flex-wrap: wrap;
-    align-items: stretch;
-
-    .form-control {
-      position: relative;
-      flex: 1 1 auto;
-      width: 1%;
-      min-width: 0;
-      margin-right: 3px;
-      margin-bottom: 0;
-    }
-
-    .b4-input-group-append {
-      display: flex;
-    }
-  }
-}
-
 .active-filters {
   .filters {
     .filter-value {
@@ -1314,4 +1280,52 @@ a,
 
 #records-in-groups-container .input-group {
   width: 100%;
+}
+
+.searchForm-query #searchForm-reset {
+  right: 4px;
+  top: 7px;
+}
+
+#searchForm .tab-content.well {
+  width: 100%;
+  > * {
+    margin-bottom: 3px;
+  }
+}
+
+#searchForm {
+  width: 100%;
+}
+
+@media (min-width: @screen-md) {
+  #searchForm .tab-content.well {
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: stretch;
+    width: 100%;
+
+    #searchForm_lookfor {
+      width: 100%;
+    }
+
+    > * {
+      flex: 0 1 auto;
+      position: relative;
+      margin-right: 3px;
+      margin-bottom: 0;
+      min-width: 0;
+    }
+
+    > .searchForm-query {
+      flex: 2 1 auto;
+    }
+  }
+}
+
+@media (max-width: @screen-sm) {
+  #searchForm .searchForm-query {
+    width: 100%;
+  }
 }
