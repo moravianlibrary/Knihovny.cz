@@ -70,13 +70,14 @@
     <?php if (!empty($tabs)): ?></div><?php endif; ?>
   </div>
 <?php else: ?>
-  <form id="searchForm" class="searchForm" method="get" action="<?=$this->url($basicSearch)?>" name="searchForm" autocomplete="off">
+  <form id="searchForm" class="searchForm navbar-form navbar-left flip" method="get" action="<?=$this->url($basicSearch)?>" name="searchForm" autocomplete="off">
     <?= $this->context($this)->renderInContext('search/searchTabs', ['searchTabs' => $tabConfig['tabs'], 'showCounts' => $tabConfig['showCounts']]); ?>
     <div class="tab-content well">
     <?php $placeholder = $this->searchbox()->getPlaceholderText($tabConfig['selected']['id'] ?? null); ?>
-      <div class="b4-input-group">
-    <input id="searchForm_lookfor" class="searchForm_lookfor form-control input-lg search-query<?php if ($this->searchbox()->autocompleteEnabled($this->searchClassId)):?> autocomplete searcher:<?=$this->escapeHtmlAttr($this->searchClassId) ?><?=$this->searchbox()->autocompleteAutoSubmit($this->searchClassId) ? ' ac-auto-submit' : '' ?><?php endif ?>" type="search" name="lookfor" value="<?=$this->escapeHtmlAttr($this->lookfor)?>"<?php if ($placeholder): ?> placeholder="<?=$this->transEscAttr($placeholder) ?>"<?php endif ?> aria-label="<?=$this->transEscAttr("search_terms")?>">
-        <div class="b4-input-group-append">
+    <div class="searchForm-query">
+      <input id="searchForm_lookfor" class="searchForm_lookfor form-control input-lg search-query<?php if ($this->searchbox()->autocompleteEnabled($this->searchClassId)):?> autocomplete searcher:<?=$this->escapeHtmlAttr($this->searchClassId) ?><?=$this->searchbox()->autocompleteAutoSubmit($this->searchClassId) ? ' ac-auto-submit' : '' ?><?php endif ?>" type="search" name="lookfor" value="<?=$this->escapeHtmlAttr($this->lookfor)?>"<?php if ($placeholder): ?> placeholder="<?=$this->transEscAttr($placeholder) ?>"<?php endif ?> aria-label="<?=$this->transEscAttr("search_terms")?>">
+      <button id="searchForm-reset" class="searchForm-reset" type="reset" tabindex="-1" aria-label="<?=$this->transEsc('searchform_reset_button')?>"><?=$this->icon('ui-reset-search');?></button>
+    </div>
     <?php if ($handlerCount > 1): ?>
       <select id="searchForm_type" class="searchForm_type form-control input-lg" name="type" data-native-menu="false" aria-label="<?=$this->transEscAttr("Search type")?>">
         <?php $currentGroup = $insideGroup = false; ?>
@@ -126,8 +127,6 @@
     <?php if ($geoUrl = $this->geocoords()->getSearchUrl($options, $results)) : ?>
       <a href="<?=$geoUrl?>" class="btn btn-lg btn-link"><?=$this->transEsc('Geographic Search')?></a>
     <?php endif; ?>
-        </div>
-      </div>
     <?php $shards = $options->getShards(); ?>
     <?php if ($options->showShardCheckboxes() && !empty($shards)): ?>
       <?php
@@ -181,4 +180,3 @@
     </div>
   </form>
 <?php endif; ?>
-
