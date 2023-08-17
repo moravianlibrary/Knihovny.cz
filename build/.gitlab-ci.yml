@@ -258,6 +258,22 @@ Deploy mzk image:
     name: mzk
     url: $MZK_ENVIRONMENT_URL
 
+Deploy geo image:
+  extends: .deploy_image
+  variables:
+    APP_IMAGE_TAG: 'branch-${CI_COMMIT_BRANCH}'
+    DEPLOY_REPO_BRANCH: devel
+    DEPLOY_REPO_DIR: geo
+
+  rules:
+    - if: # deploy on dev branch
+        ( $CI_PIPELINE_SOURCE == "push" )  &&
+        ( $CI_COMMIT_BRANCH == "dev" )
+
+  environment:
+    name: geo
+    url: $GEO_ENVIRONMENT_URL
+
 Debug CI:
   stage: test
   rules:
