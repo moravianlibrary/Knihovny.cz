@@ -75,12 +75,12 @@ trait WikidataTrait
         array $identifiersAndProperties
     ): array {
         $urlQueryPattern = <<<SPARQL
-    OPTIONAL {
-        wd:%s wdt:P1630 ?%sFormatter .
-        ?%s wdt:%s ?%s .
-    }
+                OPTIONAL {
+                    wd:%s wdt:P1630 ?%sFormatter .
+                    ?%s wdt:%s ?%s .
+                }
 
-SPARQL;
+            SPARQL;
         $subquery = '';
         foreach ($identifiersAndProperties as $externalIdentifier => $property) {
             $subquery .= sprintf(
@@ -196,21 +196,21 @@ SPARQL;
         }
         $doi = strtoupper($doi);
         $queryPattern = <<<SPARQL
-SELECT ?item ?cite ?citeLabel ?authorLabel ?authorStringLabel ?doi
-WHERE
-{
-  ?item wdt:P356 "%s" ;
-        wdt:P2860 ?cite .
-  ?cite wdt:P356 ?doi .
-  OPTIONAL {
-    ?cite wdt:P50 ?author .
-  }
-  OPTIONAL {
-    ?cite wdt:P2093 ?authorString .
-  }
-  SERVICE wikibase:label { bd:serviceParam wikibase:language "%s". }
-}
-SPARQL;
+            SELECT ?item ?cite ?citeLabel ?authorLabel ?authorStringLabel ?doi
+            WHERE
+            {
+              ?item wdt:P356 "%s" ;
+                    wdt:P2860 ?cite .
+              ?cite wdt:P356 ?doi .
+              OPTIONAL {
+                ?cite wdt:P50 ?author .
+              }
+              OPTIONAL {
+                ?cite wdt:P2093 ?authorString .
+              }
+              SERVICE wikibase:label { bd:serviceParam wikibase:language "%s". }
+            }
+            SPARQL;
         $lang = ($this->getTranslatorLocale() === 'cs') ? 'cs,en' : 'en,cs';
         $query = sprintf($queryPattern, $doi, $lang);
         $data = $this->sparqlService->query($query, ['wdt', 'wd', 'wikibase']);

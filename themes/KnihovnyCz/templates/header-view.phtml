@@ -28,7 +28,8 @@ if ($user && $user->firstname && $user->lastname) {
               </a>
             </li>
           <?php endif; ?>
-          <?php $cart = $this->cart(); if ($cart->isActive()): ?>
+          <?php $cart = $this->cart();
+          if ($cart->isActive()): ?>
             <li id="cartSummary">
               <a id="cartItems" title="<?=$this->transEscAttr('View Book Bag')?>" href="<?=$this->url('cart-home')?>">
                 <span role="status"><span class="sr-only"><?=$this->transEsc('Book Bag')?>:</span>

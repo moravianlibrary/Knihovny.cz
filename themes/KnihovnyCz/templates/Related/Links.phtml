@@ -1,4 +1,5 @@
-<?php $links = $this->related->getLinks(); if (!empty($links)):?>
+<?php $links = $this->related->getLinks();
+if (!empty($links)):?>
   <h2><?=$this->transEsc($this->related->getLabel())?></h2>
   <ul class="external-links">
     <?php foreach ($links as $link): ?>

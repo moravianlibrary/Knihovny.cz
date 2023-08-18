@@ -347,70 +347,70 @@ $this->headTitle($title);
 
 <?php
 $script = <<<JS
-  // ajax check Ziskej Edd fee
-  $(function () {
-    $('#ziskejEddFeeAlertPrice').hide();
-    $('#ziskejEddFeeAlertError').hide();
-    $('#checkZiskejEddFee .ziskej-count-fee-icon').hide();
+      // ajax check Ziskej Edd fee
+      $(function () {
+        $('#ziskejEddFeeAlertPrice').hide();
+        $('#ziskejEddFeeAlertError').hide();
+        $('#checkZiskejEddFee .ziskej-count-fee-icon').hide();
 
-    $('#checkZiskejEddFee').on('click', function (e) {
-      e.preventDefault();
-      $('#ziskejEddFeeAlertPrice').hide();
-      $('#ziskejEddFeeAlertError').hide();
-      $(this).removeAttr('disabled');
-      $('#checkZiskejEddFee .ziskej-count-fee-icon').addClass('fa-spin').show();
-
-      $.ajax({
-        type: 'GET',
-        url: '/AJAX/JSON?method=getZiskejEddFee',
-        data: {
-          pages_from: $('#pages_from').val(),
-          pages_to: $('#pages_to').val(),
-          edd_subtype: $('#edd_subtype').val()
-        },
-        success: function (result) {
-          $('#checkZiskejEddFee .ziskej-count-fee-icon').hide().removeClass('fa-spin');
-          $('#ziskejEddFeeAlertPrice').html(result.data['message_subtotal']).show();
-          $('#ziskejEddFeeInfo').html(result.data['message_total']);
-        },
-        error: function (result) {
-          console.log(result.responseJSON.data);
-          $('#checkZiskejEddFee .ziskej-count-fee-icon').hide().removeClass('fa-spin');
+        $('#checkZiskejEddFee').on('click', function (e) {
+          e.preventDefault();
           $('#ziskejEddFeeAlertPrice').hide();
-          $('#ziskejEddFeeAlertError').text(result.responseJSON.data).show();
-        }
+          $('#ziskejEddFeeAlertError').hide();
+          $(this).removeAttr('disabled');
+          $('#checkZiskejEddFee .ziskej-count-fee-icon').addClass('fa-spin').show();
+
+          $.ajax({
+            type: 'GET',
+            url: '/AJAX/JSON?method=getZiskejEddFee',
+            data: {
+              pages_from: $('#pages_from').val(),
+              pages_to: $('#pages_to').val(),
+              edd_subtype: $('#edd_subtype').val()
+            },
+            success: function (result) {
+              $('#checkZiskejEddFee .ziskej-count-fee-icon').hide().removeClass('fa-spin');
+              $('#ziskejEddFeeAlertPrice').html(result.data['message_subtotal']).show();
+              $('#ziskejEddFeeInfo').html(result.data['message_total']);
+            },
+            error: function (result) {
+              console.log(result.responseJSON.data);
+              $('#checkZiskejEddFee .ziskej-count-fee-icon').hide().removeClass('fa-spin');
+              $('#ziskejEddFeeAlertPrice').hide();
+              $('#ziskejEddFeeAlertError').text(result.responseJSON.data).show();
+            }
+          });
+        });
       });
-    });
-  });
 
-  $(function () {
-    let empty = true;
+      $(function () {
+        let empty = true;
 
-    $('form input').on('keyup change', function () {
-      $('form input').each(function () {
-        empty = $('input#pages_from').val().length === 0
-          || $('input#pages_to').val().length === 0;
+        $('form input').on('keyup change', function () {
+          $('form input').each(function () {
+            empty = $('input#pages_from').val().length === 0
+              || $('input#pages_to').val().length === 0;
+            setcheckZiskejEddFeeDisabled(empty);
+          });
+        });
+
         setcheckZiskejEddFeeDisabled(empty);
       });
-    });
 
-    setcheckZiskejEddFeeDisabled(empty);
-  });
+      function setcheckZiskejEddFeeDisabled(empty) {
+        if (empty) {
+          $('#checkZiskejEddFee').attr('disabled', 'disabled');
+        } else {
+          $('#checkZiskejEddFee').removeAttr('disabled');
+        }
+      }
 
-  function setcheckZiskejEddFeeDisabled(empty) {
-    if (empty) {
-      $('#checkZiskejEddFee').attr('disabled', 'disabled');
-    } else {
-      $('#checkZiskejEddFee').removeAttr('disabled');
-    }
-  }
-
-  $(function () {
-    if ($('input#pages_from').val().length !== 0
-      || $('input#pages_to').val().length !== 0) {
-      $('#checkZiskejEddFee').trigger("click");
-    }
-  });
-JS;
+      $(function () {
+        if ($('input#pages_from').val().length !== 0
+          || $('input#pages_to').val().length !== 0) {
+          $('#checkZiskejEddFee').trigger("click");
+        }
+      });
+    JS;
 ?>
 <?=$this->inlineScript(\Laminas\View\Helper\HeadScript::SCRIPT, $script, 'SET')?>

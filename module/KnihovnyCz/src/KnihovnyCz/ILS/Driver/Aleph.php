@@ -532,7 +532,7 @@ class Aleph extends AlephBase implements TranslatorAwareInterface
         // parse the fullname into last and first name
         $fullName = $profile['fullname'];
         if ($fullName != null) {
-            if (strpos($fullName, ',') === false) {
+            if (!str_contains($fullName, ',')) {
                 $profile['lastname'] = $fullName;
                 $profile['firstname'] = '';
             } else {

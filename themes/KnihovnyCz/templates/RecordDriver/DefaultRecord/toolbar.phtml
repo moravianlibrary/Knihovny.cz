@@ -119,32 +119,32 @@ $text = isset($text[0]) ? $this->escapeJs($text[0]) : '';
 $url = $this->escapeJs($this->serverUrl() . $this->recordLinker()->getUrl($this->driver));
 $language = $this->escapeJs($this->layout()->userLang);
 $js = <<<JS
-const shareData = {
-  title: '$title',
-  text: '$text',
-  url: '$url'
-}
-const polyfillSettings = {
-    copy: false,
-    email: true,
-    print: true,
-    sms: false,
-    messenger: true,
-    facebook: true,
-    whatsapp: true,
-    twitter: true,
-    linkedin: false,
-    telegram: false,
-    skype: false,
-    pinterest: false,
-    language: '$language'
-  }
-const link = document.querySelector('.share-record');
+    const shareData = {
+      title: '$title',
+      text: '$text',
+      url: '$url'
+    }
+    const polyfillSettings = {
+        copy: false,
+        email: true,
+        print: true,
+        sms: false,
+        messenger: true,
+        facebook: true,
+        whatsapp: true,
+        twitter: true,
+        linkedin: false,
+        telegram: false,
+        skype: false,
+        pinterest: false,
+        language: '$language'
+      }
+    const link = document.querySelector('.share-record');
 
-link.addEventListener('click', async () => {
-    await navigator.share(shareData, polyfillSettings);
-});
-JS;
+    link.addEventListener('click', async () => {
+        await navigator.share(shareData, polyfillSettings);
+    });
+    JS;
 ?>
 <?=$this->inlineScript(\Laminas\View\Helper\HeadScript::SCRIPT, $js, 'SET')?>
 

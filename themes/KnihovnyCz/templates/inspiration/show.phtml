@@ -17,7 +17,7 @@ $this->layout()->searchbox = false;
 <div class="row">
   <?php $i = 0; ?>
   <?php foreach ($this->items as $item):?>
-    <?php if (get_class($item) === \VuFind\RecordDriver\Missing::class): ?>
+    <?php if ($item::class === \VuFind\RecordDriver\Missing::class): ?>
       <?php continue; ?>
     <?php endif; ?>
     <?php $i++; ?>

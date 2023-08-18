@@ -3,7 +3,8 @@
   $this->headTitle($this->translate('Branches') . ': ' . $this->driver->getBreadcrumb());
 ?>
 <!-- BranchUrl-->
-<?php $branchurls = $this->driver->getBranchUrl(); if (!empty($branchurls)): ?>
+<?php $branchurls = $this->driver->getBranchUrl();
+if (!empty($branchurls)): ?>
   <h2><?=$this->icon('library-general-info')?> <?=$this->translate('Branch info')?></h2>
   <?php foreach ($branchurls as $branchurl): ?>
     <p><a href="<?=$this->escapeHtml($branchurl)?>" target="_blank"><?=$this->escapeHtml($branchurl)?></a></p>
@@ -11,7 +12,8 @@
 <?php endif; ?>
 
 <!-- Branches-->
-<?php $branches = $this->driver->getBranches(); if (!empty($branches)): ?>
+<?php $branches = $this->driver->getBranches();
+if (!empty($branches)): ?>
   <h2><?=$this->icon('home')?> <?=$this->translate('Departments')?></h2>
   <?php foreach ($branches as $branch): ?>
     <h3><?=$this->escapeHtml($branch['title'])?></h3>

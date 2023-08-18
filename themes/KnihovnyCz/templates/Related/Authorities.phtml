@@ -1,4 +1,5 @@
-<?php $authorities = $this->related->getRelatedAuthorities(); if (!empty($authorities)):?>
+<?php $authorities = $this->related->getRelatedAuthorities();
+if (!empty($authorities)):?>
   <h2><?=$this->transEsc('related_authorities')?></h2>
   <ul class="external-links">
     <?php foreach ($authorities as $authority): ?>

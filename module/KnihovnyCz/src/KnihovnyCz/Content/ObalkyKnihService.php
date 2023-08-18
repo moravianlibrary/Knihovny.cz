@@ -103,7 +103,7 @@ class ObalkyKnihService extends \VuFind\Content\ObalkyKnihService
         try {
             $response = $client->send();
         } catch (\Exception $e) {
-            $this->logError('Unexpected ' . get_class($e) . ': ' . $e->getMessage());
+            $this->logError('Unexpected ' . $e::class . ': ' . $e->getMessage());
             return null;
         }
         return $response->isSuccess() ? json_decode($response->getBody())[0] : null;

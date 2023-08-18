@@ -164,9 +164,9 @@
 
 <?php
 $script = <<<JS
-  $('#list-category-selector').change(function changeCategory() {
-    $('#category-selector-form').submit();
-  });
-JS;
+              $('#list-category-selector').change(function changeCategory() {
+                $('#category-selector-form').submit();
+              });
+            JS;
 ?>
 <?=$this->inlineScript(\Laminas\View\Helper\HeadScript::SCRIPT, $script, 'SET'); ?>

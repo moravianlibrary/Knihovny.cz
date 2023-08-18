@@ -34,35 +34,35 @@ $this->headTitle($this->translate('VuFind Administration - ILS drivers status'))
 
 <?php
 $JS = <<<JS
-$(document).ready(function statusesTableHandler(){
-    $('tr.data-row').each(function loadStatuses() {
-      const row = $(this);
-      const status = $(this).find('.status');
-      const label = status.find('span.label');
-      const source = status.data('source');
-      $.getJSON('/AJAX/JSON', {method: 'getIlsDriverStatus', source: source}, function (data) {
-        data = data.data;
-        const records = data.testedRecords;
-        label.html(data.score + '/' + records.length);
-        if (data.OK) {
-          label.addClass('label-success');
-        } else {
-          label.addClass('label-danger');
-        }
-        if (data.OK && records.length > 0 && records.length == data.score) {
-          row.hide();
-        }
-        if (records.length > 0) {
-            let i = 0;
-            while (i < records.length) {
-                status.parent().find('.records').append('<a href="/Record/' + records[i] + '" target="_blank">' + records[i] + '</a><br>');
-                i++;
+    $(document).ready(function statusesTableHandler(){
+        $('tr.data-row').each(function loadStatuses() {
+          const row = $(this);
+          const status = $(this).find('.status');
+          const label = status.find('span.label');
+          const source = status.data('source');
+          $.getJSON('/AJAX/JSON', {method: 'getIlsDriverStatus', source: source}, function (data) {
+            data = data.data;
+            const records = data.testedRecords;
+            label.html(data.score + '/' + records.length);
+            if (data.OK) {
+              label.addClass('label-success');
+            } else {
+              label.addClass('label-danger');
             }
-        }
-        status.find('.spinner').remove();
+            if (data.OK && records.length > 0 && records.length == data.score) {
+              row.hide();
+            }
+            if (records.length > 0) {
+                let i = 0;
+                while (i < records.length) {
+                    status.parent().find('.records').append('<a href="/Record/' + records[i] + '" target="_blank">' + records[i] + '</a><br>');
+                    i++;
+                }
+            }
+            status.find('.spinner').remove();
+          });
+        });
       });
-    });
-  });
-JS;
+    JS;
 ?>
 <?=$this->inlineScript(\Laminas\View\Helper\HeadScript::SCRIPT, $JS, 'SET')?>

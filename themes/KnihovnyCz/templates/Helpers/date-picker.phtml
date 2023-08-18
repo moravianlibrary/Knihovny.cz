@@ -7,15 +7,15 @@
     $this->headScript()->appendFile("lib/jquery-ui/jquery-ui-i18n-datepicker-$lang.js");
     $dateFormat = $this->dateTime()->getDisplayDateFormatForJQuery();
     $configureDatePicker = <<<JS
-      $(function jQueryReady($) {
-        var options = $.extend(
-          {},
-          $.datepicker.regional["$lang"],
-          { dateFormat: "$dateFormat" }
-        );
-        $.datepicker.setDefaults(options);
-      });
-    JS;
+          $(function jQueryReady($) {
+            var options = $.extend(
+              {},
+              $.datepicker.regional["$lang"],
+              { dateFormat: "$dateFormat" }
+            );
+            $.datepicker.setDefaults(options);
+          });
+        JS;
   }
   $formName = $this->formName ?? null;
   $selector = json_encode(($formName != null) ? "form[name='$formName']" : null);
@@ -25,9 +25,9 @@
 <?php endif; ?>
 <?php
   $loadJs = <<<JS
-  $(function jQueryReady($) {
-    initDatePicker($selector);
-  });
-JS;
+        $(function jQueryReady($) {
+          initDatePicker($selector);
+        });
+      JS;
 ?>
 <?=$this->inlineScript(\Laminas\View\Helper\HeadScript::SCRIPT, $loadJs, 'SET')?>

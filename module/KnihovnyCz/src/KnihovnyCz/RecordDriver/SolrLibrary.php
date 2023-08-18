@@ -553,18 +553,18 @@ class SolrLibrary extends \KnihovnyCz\RecordDriver\SolrMarc
         $id = $this->getSigla();
 
         $queryPattern = <<<SPARQL
-SELECT ?wikidata ?wikidataLabel ?wheelchair ?wheelchairLabel %s
-WHERE
-{
-    ?wikidata wdt:P9559 "%s" .
-    OPTIONAL {
-        ?wikidata wdt:P2846 ?wheelchair .
-    }
-%s
+            SELECT ?wikidata ?wikidataLabel ?wheelchair ?wheelchairLabel %s
+            WHERE
+            {
+                ?wikidata wdt:P9559 "%s" .
+                OPTIONAL {
+                    ?wikidata wdt:P2846 ?wheelchair .
+                }
+            %s
 
-    SERVICE wikibase:label { bd:serviceParam wikibase:language "%s". }
-}
-SPARQL;
+                SERVICE wikibase:label { bd:serviceParam wikibase:language "%s". }
+            }
+            SPARQL;
 
         $subquery = $this->createExternalIdentifiersSubquery(
             'wikidata',

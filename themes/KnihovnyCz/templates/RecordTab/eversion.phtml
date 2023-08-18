@@ -12,18 +12,19 @@
   );
 ?>
 <?php endif; ?>
-<?php $links = $this->driver->getLinks(); if (!empty($links)): ?>
+<?php $links = $this->driver->getLinks();
+if (!empty($links)): ?>
   <?=$this->render('RecordTab/links-table.phtml', ['links' => $links]);?>
 <?php endif; ?>
 
 <?php
 $js = <<<JS
-  $(document).ready(function eversionTabReady() {
-    if ($('li.record-tab.holdings').length === 0) {
-        $('div.alert.hidden').removeClass('hidden');
-    }
-  })
-JS;
+      $(document).ready(function eversionTabReady() {
+        if ($('li.record-tab.holdings').length === 0) {
+            $('div.alert.hidden').removeClass('hidden');
+        }
+      })
+    JS;
 ?>
 <?=$this->inlineScript(\Laminas\View\Helper\HeadScript::SCRIPT, $js, 'SET'); ?>
 

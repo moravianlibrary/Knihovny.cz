@@ -165,7 +165,7 @@ class ChildDocDeduplicationListener extends DeduplicationListener
         $params->set('childs.fl', $this->getChildListOfFields($fl));
         $params->set('childs.rows', static::MAX_CHILD_DOCUMENTS);
         if (!empty($childFilters)) {
-            $params->set('childs.fq', join(' AND ', $childFilters));
+            $params->set('childs.fq', implode(' AND ', $childFilters));
         }
     }
 

@@ -348,45 +348,45 @@ class SolrAuthority extends \KnihovnyCz\RecordDriver\SolrMarc
         $id = $this->getCombinedAuthorityId();
 
         $siteLinksQueryPattern = <<<SPARQL
-	OPTIONAL {
-		?%s schema:about ?wikidata .
-		?%s schema:inLanguage "%s".
-		?%s schema:isPartOf/wikibase:wikiGroup "%s" .
-	}
+            	OPTIONAL {
+            		?%s schema:about ?wikidata .
+            		?%s schema:inLanguage "%s".
+            		?%s schema:isPartOf/wikibase:wikiGroup "%s" .
+            	}
 
-SPARQL;
+            SPARQL;
 
         $queryPattern = <<<SPARQL
-SELECT ?wikidata ?wikidataLabel %s %s ?signature ?pronunciation ?natLangPronunciation ?ipa ?natLangIpa
-WHERE
-{
-	?wikidata wdt:P691|wdt:P9299 "%s" .
-%s
-%s
-    OPTIONAL {
-        ?wikidata wdt:P109 ?signature .
-    }
+            SELECT ?wikidata ?wikidataLabel %s %s ?signature ?pronunciation ?natLangPronunciation ?ipa ?natLangIpa
+            WHERE
+            {
+            	?wikidata wdt:P691|wdt:P9299 "%s" .
+            %s
+            %s
+                OPTIONAL {
+                    ?wikidata wdt:P109 ?signature .
+                }
 
-    OPTIONAL {
-        ?wikidata wdt:P443 ?pronunciation .
-    }
+                OPTIONAL {
+                    ?wikidata wdt:P443 ?pronunciation .
+                }
 
-    OPTIONAL {
-        ?wikidata p:P1559 [pq:P443 ?natLangPronunciation].
-    }
+                OPTIONAL {
+                    ?wikidata p:P1559 [pq:P443 ?natLangPronunciation].
+                }
 
-    OPTIONAL {
-        ?wikidata wdt:P898 ?ipa .
-    }
+                OPTIONAL {
+                    ?wikidata wdt:P898 ?ipa .
+                }
 
-    OPTIONAL {
-        ?wikidata p:P1559 [pq:P898 ?natLangIpa].
-    }
+                OPTIONAL {
+                    ?wikidata p:P1559 [pq:P898 ?natLangIpa].
+                }
 
-	SERVICE wikibase:label { bd:serviceParam wikibase:language "%s". }
-}
-LIMIT 1
-SPARQL;
+            	SERVICE wikibase:label { bd:serviceParam wikibase:language "%s". }
+            }
+            LIMIT 1
+            SPARQL;
         $siteLinksFields = array_map(
             function ($siteField) {
                 return '?' . $siteField;
@@ -518,20 +518,20 @@ SPARQL;
         $id = $this->getCombinedAuthorityId();
         $lang = $this->getTranslatorLocale();
         $queryPattern = <<<SPARQL
-SELECT DISTINCT ?relatedId ?propLabel WHERE {
-  {
-    SELECT ?prop ?relatedId {
-      ?item wdt:P691|wdt:P9299 "%s" .
-      ?related wdt:P691|wdt:P9299 ?relatedId .
-      ?item ?prop ?related .
-      ?item wdt:P31 wd:Q5 .
-      ?related wdt:P31 wd:Q5 .
-    } LIMIT 100
-  }
-  ?property wikibase:directClaim ?prop .
-  optional { ?property rdfs:label ?propLabel filter(lang(?propLabel)="%s"). }
-}
-SPARQL;
+            SELECT DISTINCT ?relatedId ?propLabel WHERE {
+              {
+                SELECT ?prop ?relatedId {
+                  ?item wdt:P691|wdt:P9299 "%s" .
+                  ?related wdt:P691|wdt:P9299 ?relatedId .
+                  ?item ?prop ?related .
+                  ?item wdt:P31 wd:Q5 .
+                  ?related wdt:P31 wd:Q5 .
+                } LIMIT 100
+              }
+              ?property wikibase:directClaim ?prop .
+              optional { ?property rdfs:label ?propLabel filter(lang(?propLabel)="%s"). }
+            }
+            SPARQL;
         return [
             sprintf($queryPattern, addslashes($id), $lang),
             ['rdfs', 'wikibase', 'wdt', 'wd'],

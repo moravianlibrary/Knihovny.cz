@@ -177,7 +177,7 @@ class MyResearchZiskejMvsController extends AbstractBase
         } catch (\Exception $e) {
             if (!$ignoreError) {
                 $this->logError(
-                    'Unexpected ' . get_class($e) . ': ' . $e->getMessage()
+                    'Unexpected ' . $e::class . ': ' . $e->getMessage()
                 );
                 $view->setVariable('tickets', []);
                 $view->error = true;

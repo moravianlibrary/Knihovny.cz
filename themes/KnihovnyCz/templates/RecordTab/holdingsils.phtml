@@ -14,130 +14,130 @@
     $recordIdJson = json_encode($this->driver->getUniqueID(), JSON_HEX_QUOT);
     $isCaslin = (int)str_starts_with($this->driver->getUniqueID(), 'caslin');
     $loadJs = <<<JS
-  const statusUnknownHtml = '<span class="label label-default">' + VuFind.translate('status_unknown_message') + '</span>';
-  const isCaslin = $isCaslin;
-  const showRequestLink = $showRequestLink;
-  function updateHoldingsTable() {
-    $('.status-loader').remove();
-    ['availability', 'request','collection_desc', 'callnumber_second', 'description', 'callnumber'].forEach(function hideTableColumn(column) {
-      if ($('td[data-type="' + column + '"]').text().trim() === '') {
-        $('th[data-type="' + column + '"], td[data-type="' + column + '"]').hide();
-      }
-    });
-    $('td[data-type="status"]').each(function removeEmpty() {
-      if ($(this).text().trim() === '') {
-        $(this).html(statusUnknownHtml);
-      }
-    });
-  }
-  var _ajaxStatus = function _ajaxStatus(id) {
-    $.ajax({
-      url: VuFind.path + '/AJAX/JSON?method=getHolding',
-      method: 'POST',
-      data: {'id': id },
-      dataType: 'json',
-    })
-      .done(function ajaxLookupDone(response) {
-        var holds = $("table[id='holding_items']");
-        response.data.holding.forEach(function (item) {
-          var elm = null;
-          if (item.item_id) {
-            elm = holds.find('tr[data-item-id="' + item.item_id + '"]');
-          } else if (item.number) {
-            elm = holds.find('tr[data-copy-number="' + item.number.trim() + '"]');
-          } else {
-            return;
+          const statusUnknownHtml = '<span class="label label-default">' + VuFind.translate('status_unknown_message') + '</span>';
+          const isCaslin = $isCaslin;
+          const showRequestLink = $showRequestLink;
+          function updateHoldingsTable() {
+            $('.status-loader').remove();
+            ['availability', 'request','collection_desc', 'callnumber_second', 'description', 'callnumber'].forEach(function hideTableColumn(column) {
+              if ($('td[data-type="' + column + '"]').text().trim() === '') {
+                $('th[data-type="' + column + '"], td[data-type="' + column + '"]').hide();
+              }
+            });
+            $('td[data-type="status"]').each(function removeEmpty() {
+              if ($(this).text().trim() === '') {
+                $(this).html(statusUnknownHtml);
+              }
+            });
           }
-          if (item.hasOwnProperty('availability_status') && item.availability_status) {
-            elm.find('td[data-type="availability"] > div').text(item.availability_status);
+          var _ajaxStatus = function _ajaxStatus(id) {
+            $.ajax({
+              url: VuFind.path + '/AJAX/JSON?method=getHolding',
+              method: 'POST',
+              data: {'id': id },
+              dataType: 'json',
+            })
+              .done(function ajaxLookupDone(response) {
+                var holds = $("table[id='holding_items']");
+                response.data.holding.forEach(function (item) {
+                  var elm = null;
+                  if (item.item_id) {
+                    elm = holds.find('tr[data-item-id="' + item.item_id + '"]');
+                  } else if (item.number) {
+                    elm = holds.find('tr[data-copy-number="' + item.number.trim() + '"]');
+                  } else {
+                    return;
+                  }
+                  if (item.hasOwnProperty('availability_status') && item.availability_status) {
+                    elm.find('td[data-type="availability"] > div').text(item.availability_status);
+                  }
+
+                  if (item.hasOwnProperty('status') && item.status) {
+                    if (item.label !== '') {
+                      elm.find('td[data-type="status"]').html(
+                        '<span class="status label label-' + item.label + '">'
+                        + htmlEncode(item.status) + '</span>'
+                      );
+                    } else {
+                      elm.find('td[data-type="status"]').html(
+                        '<span class="status">' + htmlEncode(item.status) + '</span>'
+                      );
+                    }
+                    if (item.hasOwnProperty('duedate') && item.duedate ) {
+                      elm.find('td[data-type="status"]').append(
+                        ' ' + VuFind.translate('Due') + ' ' + htmlEncode(item.duedate)
+                      );
+                    }
+                  } else {
+                    elm.find('td[data-type="status"]').html(statusUnknownHtml);
+                  }
+
+                  if (item.hasOwnProperty('location') && item.location) {
+                    elm.find('td[data-type="location"]').text(item.location);
+                  }
+                  if (item.hasOwnProperty('collection_desc') && item.collection_desc) {
+                    elm.find('td[data-type="collection_desc"]').text(item.collection_desc);
+                  }
+                  if (item.hasOwnProperty('callnumber_second') && item.callnumber_second ) {
+                    elm.find('td[data-type="callnumber_second"]').text(item.callnumber_second);
+                  }
+                  if (item.hasOwnProperty('description') && item.description) {
+                    elm.find('td[data-type="description"]').text(item.description);
+                  }
+                  if (item.hasOwnProperty('callnumber') && item.callnumber) {
+                    elm.find('td[data-type="callnumber"]').text(item.callnumber);
+                  }
+                  if (item.link && showRequestLink) {
+                    elm.find('td[data-type="request"]')
+                      .html('<a href="' + item.link + '">' + VuFind.translate('Place a Hold') + '</a>');
+                  }
+                  const possiblyDuplicateData = [
+                    { primary: 'callnumber', secondary: 'callnumber_second' },
+                    { primary: 'location', secondary: 'collection_desc' }
+                  ];
+                  possiblyDuplicateData.forEach(function removeDuplicates(columns) {
+                    if (elm.find('td[data-type="' + columns.primary + '"]').text().trim()
+                      === elm.find('td[data-type="' + columns.secondary + '"]').text().trim()
+                    ) {
+                        elm.find('td[data-type="' + columns.secondary + '"]').text('');
+                    }
+                  });
+                });
+                updateHoldingsTable();
+              })
+              .fail(function ajaxLookupFail() {
+                $('#holding_items').find('td[data-type="status"]').html(statusUnknownHtml);
+                updateHoldingsTable();
+              });
+          };
+          if (isCaslin) {
+            updateHoldingsTable();
+          } else {
+            _ajaxStatus({$recordIdJson});
           }
 
-          if (item.hasOwnProperty('status') && item.status) {
-            if (item.label !== '') {
-              elm.find('td[data-type="status"]').html(
-                '<span class="status label label-' + item.label + '">'
-                + htmlEncode(item.status) + '</span>'
-              );
-            } else {
-              elm.find('td[data-type="status"]').html(
-                '<span class="status">' + htmlEncode(item.status) + '</span>'
-              );
-            }
-            if (item.hasOwnProperty('duedate') && item.duedate ) {
-              elm.find('td[data-type="status"]').append(
-                ' ' + VuFind.translate('Due') + ' ' + htmlEncode(item.duedate)
-              );
-            }
-          } else {
-            elm.find('td[data-type="status"]').html(statusUnknownHtml);
-          }
+          var _filterHoldings = function _filterHoldings(key, value) {
+            var rows = $('#holding_items>tbody>tr');
+            rows.each(function filterRow() {
+              var show = (value == 'ALL') || $(this).data(key) == value;
+              (show)? $(this).show() : $(this).hide();
+            });
+          };
 
-          if (item.hasOwnProperty('location') && item.location) {
-            elm.find('td[data-type="location"]').text(item.location);
-          }
-          if (item.hasOwnProperty('collection_desc') && item.collection_desc) {
-            elm.find('td[data-type="collection_desc"]').text(item.collection_desc);
-          }
-          if (item.hasOwnProperty('callnumber_second') && item.callnumber_second ) {
-            elm.find('td[data-type="callnumber_second"]').text(item.callnumber_second);
-          }
-          if (item.hasOwnProperty('description') && item.description) {
-            elm.find('td[data-type="description"]').text(item.description);
-          }
-          if (item.hasOwnProperty('callnumber') && item.callnumber) {
-            elm.find('td[data-type="callnumber"]').text(item.callnumber);
-          }
-          if (item.link && showRequestLink) {
-            elm.find('td[data-type="request"]')
-              .html('<a href="' + item.link + '">' + VuFind.translate('Place a Hold') + '</a>');
-          }
-          const possiblyDuplicateData = [
-            { primary: 'callnumber', secondary: 'callnumber_second' },
-            { primary: 'location', secondary: 'collection_desc' }
-          ];
-          possiblyDuplicateData.forEach(function removeDuplicates(columns) {
-            if (elm.find('td[data-type="' + columns.primary + '"]').text().trim()
-              === elm.find('td[data-type="' + columns.secondary + '"]').text().trim()
-            ) {
-                elm.find('td[data-type="' + columns.secondary + '"]').text('');
-            }
+          $('select.holding_filter').each(function addListener() {
+            $(this).on('change', function onChange() {
+              var key = $(this).attr('name');
+              $('select.holding_filter').each(function switchOtherSelect() {
+                if ($(this).attr('name') !== key) {
+                  $(this).val('ALL');
+                }
+              });
+              var value = $(this).find(":selected").attr('value');
+              _filterHoldings(key, value);
+            });
           });
-        });
-        updateHoldingsTable();
-      })
-      .fail(function ajaxLookupFail() {
-        $('#holding_items').find('td[data-type="status"]').html(statusUnknownHtml);
-        updateHoldingsTable();
-      });
-  };
-  if (isCaslin) {
-    updateHoldingsTable();
-  } else {
-    _ajaxStatus({$recordIdJson});
-  }
 
-  var _filterHoldings = function _filterHoldings(key, value) {
-    var rows = $('#holding_items>tbody>tr');
-    rows.each(function filterRow() {
-      var show = (value == 'ALL') || $(this).data(key) == value;
-      (show)? $(this).show() : $(this).hide();
-    });
-  };
-
-  $('select.holding_filter').each(function addListener() {
-    $(this).on('change', function onChange() {
-      var key = $(this).attr('name');
-      $('select.holding_filter').each(function switchOtherSelect() {
-        if ($(this).attr('name') !== key) {
-          $(this).val('ALL');
-        }
-      });
-      var value = $(this).find(":selected").attr('value');
-      _filterHoldings(key, value);
-    });
-  });
-
-JS;
+        JS;
 
 ?>
 

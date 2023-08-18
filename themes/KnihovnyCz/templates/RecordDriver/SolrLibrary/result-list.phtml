@@ -25,7 +25,8 @@
               <?=$this->record($this->driver)->getTitleHtml()?>
             </a>
           </h3>
-          <?php $addresses = $this->driver->getLibraryAddress(); if (!empty($addresses)): ?>
+          <?php $addresses = $this->driver->getLibraryAddress();
+          if (!empty($addresses)): ?>
             <?php foreach ($addresses as $address): ?>
               <p><?=$this->icon('map-marker', 'fa-fw')?> <?=$address?></p>
             <?php endforeach; ?>
@@ -34,7 +35,8 @@
             <?php if($this->driver->isCollection()): ?>
               <?=implode('<br>', array_map([$this, 'escapeHtml'], $this->driver->getSummary())); ?>
             <?php else: ?>
-              <?php $summAuthors = $this->driver->getPrimaryAuthorsWithHighlighting(); if (!empty($summAuthors)): ?>
+              <?php $summAuthors = $this->driver->getPrimaryAuthorsWithHighlighting();
+              if (!empty($summAuthors)): ?>
                 <?php $authRecordIds = $this->driver->tryMethod('getPrimaryAuthorsIds'); ?>
                 <?php $authorCount = count($summAuthors); ?>
                 <p class="authors">
@@ -54,7 +56,8 @@
                 </p>
               <?php endif; ?>
 
-              <?php $journalTitle = $this->driver->getContainerTitle(); $summDate = $this->driver->getPublicationDates(); ?>
+              <?php $journalTitle = $this->driver->getContainerTitle();
+              $summDate = $this->driver->getPublicationDates(); ?>
               <?php if (!empty($journalTitle)): ?>
                 <?=$this->transEsc('Published in')?>
                 <?php $containerSource = $this->driver->getSourceIdentifier(); ?>
@@ -65,7 +68,8 @@
               <?php elseif (!empty($summDate)): ?>
                 <p class="summDate"><span title="<?=$this->transEsc('Published')?>"><?=$this->escapeHtml($summDate[0])?></span></p>
               <?php endif; ?>
-              <?php $summInCollection = $this->driver->getContainingCollections(); if (!empty($summInCollection)): ?>
+              <?php $summInCollection = $this->driver->getContainingCollections();
+              if (!empty($summInCollection)): ?>
                 <?php foreach ($summInCollection as $collId => $collText): ?>
                   <div>
                     <b><?=$this->transEsc('in_collection_label')?></b>
@@ -78,7 +82,8 @@
             <?php endif; ?>
           </div>
 
-          <?php $summary = $this->driver->getSummary(); $summary = isset($summary[0]) ? $this->escapeHtml($summary[0]) : false; ?>
+          <?php $summary = $this->driver->getSummary();
+          $summary = isset($summary[0]) ? $this->escapeHtml($summary[0]) : false; ?>
           <?php if ($summary): ?>
             <p>
               <?=explode('\n', wordwrap($summary, 200, '\n'))[0]?><?=strlen($summary) > 200 ? ' …' : ''?>
@@ -96,7 +101,8 @@
             <?php endif; ?>
           <?php endif; ?>
 
-          <?php $searchFilter = $this->driver->getBookSearchFilter(); if (!empty($searchFilter)): ?>
+          <?php $searchFilter = $this->driver->getBookSearchFilter();
+          if (!empty($searchFilter)): ?>
             <?=$this->icon('search', 'fa-fw')?> <?=$this->render('RecordDriver/SolrLibrary/search_in_library_link.phtml', ['data' => $searchFilter]); ?>
           <?php endif; ?>
 
@@ -112,7 +118,8 @@
           </span>
               <div class="locationDetails"></div>
             <?php else: ?>
-              <?php $summCallNo = $this->driver->getCallNumber(); if (!empty($summCallNo)): ?>
+              <?php $summCallNo = $this->driver->getCallNumber();
+              if (!empty($summCallNo)): ?>
                 <strong><?=$this->transEsc('Call Number')?>:</strong> <?=$this->escapeHtml($summCallNo)?>
               <?php endif; ?>
             <?php endif; ?>
@@ -171,7 +178,8 @@
           <?php endif; ?>
 
           <?php /* Hierarchy tree link */ ?>
-          <?php $trees = $this->driver->tryMethod('getHierarchyTrees'); if (!empty($trees)): ?>
+          <?php $trees = $this->driver->tryMethod('getHierarchyTrees');
+          if (!empty($trees)): ?>
             <?php foreach ($trees as $hierarchyID => $hierarchyTitle): ?>
               <div class="hierarchyTreeLink">
                 <input type="hidden" value="<?=$this->escapeHtmlAttr($hierarchyID)?>" class="hiddenHierarchyId">

@@ -133,8 +133,8 @@
 <?php
 
 $script = <<<JS
-  $('#my-institution-filter').click(function myInstitutionFilterHandler(event) {
-    event.stopPropagation();
-  });
-JS;
+      $('#my-institution-filter').click(function myInstitutionFilterHandler(event) {
+        event.stopPropagation();
+      });
+    JS;
 echo $this->inlineScript(\Laminas\View\Helper\HeadScript::SCRIPT, $script, 'SET');

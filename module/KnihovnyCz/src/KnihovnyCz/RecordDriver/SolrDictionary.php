@@ -137,19 +137,19 @@ class SolrDictionary extends \KnihovnyCz\RecordDriver\SolrMarc
     {
         [, $id] = explode('.', $this->getUniqueID());
         $queryPattern = <<<SPARQL
-SELECT ?tdkiv ?tdkivLabel ?article
-WHERE
-{
-	?tdkiv wdt:P5398 "%s" .
-	OPTIONAL {
-		?article schema:about ?tdkiv .
-		?article schema:inLanguage "%s".
-		?article schema:isPartOf/wikibase:wikiGroup "wikipedia" .
-	}
+            SELECT ?tdkiv ?tdkivLabel ?article
+            WHERE
+            {
+            	?tdkiv wdt:P5398 "%s" .
+            	OPTIONAL {
+            		?article schema:about ?tdkiv .
+            		?article schema:inLanguage "%s".
+            		?article schema:isPartOf/wikibase:wikiGroup "wikipedia" .
+            	}
 
-	SERVICE wikibase:label { bd:serviceParam wikibase:language "%s". }
-}
-SPARQL;
+            	SERVICE wikibase:label { bd:serviceParam wikibase:language "%s". }
+            }
+            SPARQL;
         $query = sprintf(
             $queryPattern,
             addslashes($id),

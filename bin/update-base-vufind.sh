@@ -84,6 +84,8 @@ merge_directory themes/mzk/templates themes/bootstrap3/templates $OUR_VERSION $R
 merge_directory themes/tech/templates themes/bootstrap3/templates $OUR_VERSION $REMOTE_VERSION ${repository}
 merge_directory themes/KnihovnyCz/templates/searchapi themes/root/templates/searchapi $OUR_VERSION $REMOTE_VERSION ${repository}
 merge_file package.json package.json $OUR_VERSION $REMOTE_VERSION ${repository}
+merge_file tests/vufind.php-cs-fixer.php tests/vufind.php-cs-fixer.php $OUR_VERSION $REMOTE_VERSION ${repository}
+merge_file tests/vufind_templates.php-cs-fixer.php tests/vufind_templates.php-cs-fixer.php $OUR_VERSION $REMOTE_VERSION ${repository}
 
 echo "Version was updated."
 echo "Please commit with command: "

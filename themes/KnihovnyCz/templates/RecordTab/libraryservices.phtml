@@ -4,7 +4,8 @@
 ?>
 
 <!-- Services -->
-<?php $services = $this->driver->getService(); if (!empty($services)): ?>
+<?php $services = $this->driver->getService();
+if (!empty($services)): ?>
     <h2><?=$this->icon('library-general-info')?> <?=$this->translate('Services')?></h2>
     <ul>
         <?php foreach ($services as $service): ?><li><?=$this->escapeHtml($service)?></li><?php endforeach; ?>
@@ -12,7 +13,8 @@
 <?php endif; ?>
 
 <!-- Functions -->
-<?php $functions = $this->driver->getFunction(); if (!empty($functions)): ?>
+<?php $functions = $this->driver->getFunction();
+if (!empty($functions)): ?>
     <h2><?=$this->icon('library-general-info')?> <?=$this->translate('Functions')?></h2>
     <ul>
         <?php foreach ($functions as $function): ?><li><?=$this->escapeHtml($function)?></li><?php endforeach; ?>
@@ -20,7 +22,8 @@
 <?php endif; ?>
 
 <!-- Projects -->
-<?php $projects = $this->driver->getProject(); if (!empty($projects)): ?>
+<?php $projects = $this->driver->getProject();
+if (!empty($projects)): ?>
     <h2><?=$this->icon('library-general-info')?> <?=$this->translate('Projects')?></h2>
     <ul>
         <?php foreach ($projects as $project): ?><li><?=$this->escapeHtml($project)?></li><?php endforeach; ?>
