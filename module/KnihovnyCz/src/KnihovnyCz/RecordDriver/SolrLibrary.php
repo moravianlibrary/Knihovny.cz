@@ -30,6 +30,7 @@
 namespace KnihovnyCz\RecordDriver;
 
 use KnihovnyCz\RecordDriver\Feature\WikidataTrait;
+use KnihovnyCz\Wikidata\WheelchairAccessibility;
 
 /**
  * Knihovny.cz solr library record driver
@@ -552,15 +553,17 @@ class SolrLibrary extends \KnihovnyCz\RecordDriver\SolrMarc
         $id = $this->getSigla();
 
         $queryPattern = <<<SPARQL
-SELECT ?wikidata ?wikidataLabel %s
+SELECT ?wikidata ?wikidataLabel ?wheelchair ?wheelchairLabel %s
 WHERE
 {
-	?wikidata wdt:P9559 "%s" .
+    ?wikidata wdt:P9559 "%s" .
+    OPTIONAL {
+        ?wikidata wdt:P2846 ?wheelchair .
+    }
 %s
 
-	SERVICE wikibase:label { bd:serviceParam wikibase:language "%s". }
+    SERVICE wikibase:label { bd:serviceParam wikibase:language "%s". }
 }
-LIMIT 1
 SPARQL;
 
         $subquery = $this->createExternalIdentifiersSubquery(
@@ -699,5 +702,23 @@ SPARQL;
     public function getTownStr(): string
     {
         return $this->fields['town_str'] ?? '';
+    }
+
+    /**
+     * Get wheelchair accessibility information about library building
+     *
+     * @return WheelchairAccessibility[]
+     */
+    public function getWheelchairAccessibility(): array
+    {
+        $data = $this->getWikidataData();
+        $accessibilities = [];
+        foreach ($data as $line) {
+            if (!empty($line['wheelchair']['value'] ?? null)) {
+                $accessibilities[$line['wheelchair']['value']]
+                    = WheelchairAccessibility::from($line['wheelchair']['value']);
+            }
+        }
+        return $accessibilities;
     }
 }

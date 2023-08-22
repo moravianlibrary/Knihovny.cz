@@ -1,0 +1,3 @@
+<?php foreach ($this->data as $accessibility): ?>
+  <?=$this->icon($accessibility->getIcon())?> <?=$this->transEsc($accessibility->getDescription())?><br>
+<?php endforeach;
