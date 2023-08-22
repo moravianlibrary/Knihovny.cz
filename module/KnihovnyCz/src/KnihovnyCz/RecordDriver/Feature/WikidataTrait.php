@@ -117,7 +117,6 @@ SPARQL;
      * @param string $queryMethod Method to get query
      *
      * @return array
-     * @throws \Psr\Http\Client\ClientExceptionInterface
      */
     protected function getWikidataData(string $queryMethod = 'getWikidataQuery'): array
     {
@@ -158,7 +157,7 @@ SPARQL;
                             $link[$formatter]['value']
                         );
                     }
-                    $links[] = [
+                    $links[$field] = [
                         'url' => $url,
                         'label' => $field,
                         'value' => $link[$field]['value'],

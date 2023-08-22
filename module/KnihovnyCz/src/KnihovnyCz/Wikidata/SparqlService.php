@@ -43,8 +43,10 @@ use KnihovnyCz\Service\GuzzleHttpService;
  * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://knihovny.cz Main Page
  */
-class SparqlService
+class SparqlService implements \Laminas\Log\LoggerAwareInterface
 {
+    use \VuFind\Log\LoggerAwareTrait;
+
     protected array $prefixes = [
         'bd' => 'http://www.bigdata.com/rdf#',
         'cc' => 'http://creativecommons.org/ns#',
@@ -113,9 +115,9 @@ class SparqlService
     /**
      * Get HTTP client
      *
-     * @return \Http\Client\HttpClient
+     * @return \Psr\Http\Client\ClientInterface
      */
-    protected function getHttpClient(): \Http\Client\HttpClient
+    protected function getHttpClient(): \Psr\Http\Client\ClientInterface
     {
         return $this->httpService->createClient(['base_uri' => $this->sparqlUrl]);
     }
@@ -127,7 +129,6 @@ class SparqlService
      * @param array  $prefixes Prefixes to be added to query
      *
      * @return array
-     * @throws \Psr\Http\Client\ClientExceptionInterface
      */
     public function query(
         string $query,
@@ -137,7 +138,12 @@ class SparqlService
         $query = $this->formatPrefixes($prefixes) . "\n" . $query;
         $url = '?' . http_build_query(compact(['query', 'format']));
         $request = new Request('GET', $url, $this->getHeaders());
-        $response = $this->getHttpClient()->sendRequest($request);
+        try {
+            $response = $this->getHttpClient()->sendRequest($request);
+        } catch (\Psr\Http\Client\ClientExceptionInterface $exception) {
+            $this->logError($exception->getMessage());
+            return [];
+        }
         $body = $response->getBody()->getContents();
         $data = json_decode($body, true);
         return $data['results']['bindings'] ?? [];

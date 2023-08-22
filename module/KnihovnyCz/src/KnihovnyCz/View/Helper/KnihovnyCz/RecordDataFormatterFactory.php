@@ -161,6 +161,7 @@ class RecordDataFormatterFactory extends RecordDataFormatterFactoryBase
         $setLine('Library type', 'getType');
         $setLine('Regional library', 'getRegLibrary', 'regional_library.phtml');
         $setLine('Interlibrary loan', 'getMvs');
+        $setLine('Wheelchair accessibility', 'getWheelchairAccessibility', 'wheelchair-accessibility.phtml');
 
         return $fields;
     }
