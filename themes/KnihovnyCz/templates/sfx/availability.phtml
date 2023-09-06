@@ -1,6 +1,9 @@
 <?php
 $openUrl = $this->driver->getOpenUrl();
 $fullTextLinks = $this->driver->getFullTextLinks($this->recordLinker());
+$dataFulltext = (!empty($fullTextLinks)) ? 'true' : 'false';
+$dataLazy = ($this->lazy) ? 'true' : 'false';
+$dataDropdown = ($this->dropdown) ? 'true' : 'false';
 ?>
 <div class="context-help">
   <h5 class="context-text mt-0"><?=$this->transEsc('sfx_availability')?>:</h5>
@@ -8,7 +11,7 @@ $fullTextLinks = $this->driver->getFullTextLinks($this->recordLinker());
 </div>
 <?php if(!empty($fullTextLinks)): ?>
   <div class="records-in-libraries-title">
-    <strong><?=$this->transEsc('Fulltext is free')?></strong>
+    <strong class="header"><?=$this->transEsc('Fulltext is free')?></strong>
     <?php foreach($fullTextLinks as $label => $url): ?>
       <ul class="list-unstyled">
         <li>
@@ -17,16 +20,15 @@ $fullTextLinks = $this->driver->getFullTextLinks($this->recordLinker());
       </ul>
     <?php endforeach; ?>
   </div>
-<?php else: ?>
-  <div class='dedupInformation'>
-    <span class="openurl" data-lazy="<?=($this->lazy) ? 'true' : 'false'?>" data-dropdown="<?=($this->dropdown) ? 'true' : 'false'?>" data-openurl="<?=$this->escapeHtml($openUrl)?>">
-      <?php if($this->lazy): ?>
-        <button type="button" class="btn btn-primary">
-          <strong><?=$this->transEsc("Check fulltext availability")?></strong>
-        </button>
-      <?php else: ?>
-        <?=$this->icon('spinner')?>
-      <?php endif; ?>
-    </span>
-  </div>
 <?php endif; ?>
+<div class='dedupInformation'>
+  <span class="openurl" data-fulltext="<?=$dataFulltext?>" data-lazy="<?=$dataLazy?>" data-dropdown="<?=$dataDropdown?>" data-openurl="<?=$this->escapeHtml($openUrl)?>">
+    <?php if($this->lazy): ?>
+      <button type="button" class="btn btn-primary">
+        <strong><?=$this->transEsc("Check fulltext availability")?></strong>
+      </button>
+    <?php else: ?>
+      <?=$this->icon('spinner')?>
+    <?php endif; ?>
+  </span>
+</div>

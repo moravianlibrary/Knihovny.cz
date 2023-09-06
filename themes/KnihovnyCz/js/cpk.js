@@ -159,6 +159,7 @@ function setupAutocomplete() {
 function setupOpenUrl() {
   $('.openurl').each(function onEachOpenUrl() {
     var element = this;
+    var hasFulltext = $(element).data('fulltext');
     var ajaxCall = {
       dataType: "json",
       url: "/AJAX/JSON?method=sfx&" + $(element).data('openurl'),
@@ -167,25 +168,30 @@ function setupOpenUrl() {
         $(element).empty();
         $(element).off('click');
         let links = json.data;
-        let header = 'Fulltext is available for users of these institutions';
-        if (links.length === 0) {
-          header = 'Fulltext not found';
-        } else if (links.default) {
-          header = 'Fulltext is free';
-        } else if (links.length === 1) {
+        let header = null;
+        let noOfLinks = Object.keys(links).length;
+        if (links.default) {
+          header = (!hasFulltext) ? 'Fulltext is free' : null;
+        } else if (noOfLinks === 1) {
           header = 'Fulltext is available for users of this institution';
+        } else if (noOfLinks > 1) {
+          header = 'Fulltext is available for users of these institutions';
+        } else if (noOfLinks === 0 && !hasFulltext) {
+          header = 'Fulltext not found';
         }
-        $(element).append($('<div>', {
-          class: 'records-in-libraries-title',
-          html: $('<strong>', { text: VuFind.translate(header) }),
-        }));
+        if (header != null) {
+          $(element).append($('<div>', {
+            class: 'records-in-libraries-title',
+            html: $('<strong>', { text: VuFind.translate(header) }),
+          }));
+        }
         let list = $('<ul>', {
           class: 'list-unstyled'
         });
         let dropDownMenu = null;
         let dropDownList = null;
         let dropdown = $(element).data('dropdown');
-        if (dropdown && Object.keys(links).length > 3) {
+        if (dropdown && noOfLinks > 3) {
           dropDownMenu = $('<div>', {class: 'dropdown'});
           let button = $('<a>', {
             type: 'button',
