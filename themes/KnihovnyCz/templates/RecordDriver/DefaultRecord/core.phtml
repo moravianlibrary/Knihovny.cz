@@ -90,5 +90,19 @@
       );
     ?>
     <?php /* End Main Details */ ?>
+
+    <?php if (($link = $this->driver->tryMethod('getEodLink', [], null)) != null): ?>
+      <?php
+        $lang = $this->layout()->userLang;
+        $imageLink = "externalLogos/eod_button_$lang.png";
+      ?>
+      <div>
+        <a href="<?=$link?>">
+          <img src="<?=$this->imageLink($imageLink);?>" alt="<?=$this->transEsc('eod_link_alt_text')?>">
+        </a>
+      </div>
+    <?php endif; ?>
+
   </div>
+
 </div>
