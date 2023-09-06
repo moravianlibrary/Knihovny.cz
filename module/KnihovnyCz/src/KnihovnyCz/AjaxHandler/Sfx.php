@@ -121,7 +121,7 @@ class Sfx extends AbstractBase implements
             $link = ($directLink) ? $defaultLinks[0] :
                 $this->getSfxUrl($default, $queryParams);
             $results['default'] = [
-                'label' => $this->translate('Fulltext'),
+                'label' => $this->translate('sfx_fulltext_link'),
                 'url'   => $link,
             ];
         } else {
