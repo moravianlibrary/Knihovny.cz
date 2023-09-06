@@ -45,6 +45,7 @@ class SolrDefault extends \VuFind\RecordDriver\SolrDefault
     use Feature\BuyLinksTrait;
     use Feature\ObalkyKnihTrait;
     use Feature\WikidataTrait;
+    use Feature\EodLinkTrait;
     use \VuFind\Cache\CacheTrait;
 
     public const EDD_SUBTYPE_ARTICLE = 'article';
