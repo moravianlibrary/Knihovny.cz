@@ -42,6 +42,13 @@ $this->headTitle($title);
 
 ?>
 
+<?php if ($this->layout()->getTemplate() !== 'layout/lightbox'): ?>
+  <a href="<?=$this->recordLinker()->getTabUrl($this->driver, 'ZiskejEdd')?>" class="backToRecord">
+    <?= $this->icon('back-to-record'); ?>
+    <?= $this->transEsc('Back to record'); ?>
+  </a>
+<?php endif; ?>
+
 <?php if ($user): ?>
   <div>
     <h2><?=$title?></h2>

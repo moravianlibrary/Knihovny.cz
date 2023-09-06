@@ -369,4 +369,71 @@ class RecordController extends \VuFind\Controller\RecordController
         $view->setTemplate('record/hold');
         return $view;
     }
+
+    /**
+     * Display a particular tab.
+     *
+     * @param string $tab  Name of tab to display
+     * @param bool   $ajax Are we in AJAX mode?
+     *
+     * @return mixed
+     */
+    protected function showTab($tab, $ajax = false)
+    {
+        $isLogin = $this->params()->fromQuery('login', 'false') == 'true';
+        if ($isLogin) {
+            // already logged - redirect to new URL without login parameter
+            if ($this->getUser()) {
+                $serverUrl = $this->getServerUrl();
+                $serverUrl = str_replace(
+                    [ '?login=true', '&login=true'],
+                    [ '?', '&'],
+                    $serverUrl
+                );
+                return $this->redirect()->toUrl($serverUrl);
+            } else {
+                return $this->forceLogin(null, [], false);
+            }
+        }
+        return parent::showTab($tab, $ajax);
+    }
+
+    /**
+     * Redirect the user to the login screen.
+     *
+     * @param string $msg     Flash message to display on login screen
+     * @param array  $extras  Associative array of extra fields to store
+     * @param bool   $forward True to forward, false to redirect
+     *
+     * @return mixed
+     */
+    public function forceLogin($msg = null, $extras = [], $forward = true)
+    {
+        // Set default message if necessary.
+        if (null === $msg) {
+            $msg = 'You must be logged in first';
+        }
+
+        // We don't want to return to the lightbox
+        $serverUrl = $this->getServerUrl();
+        $serverUrl = str_replace(
+            ['?layout=lightbox', '&layout=lightbox'],
+            ['?', '&'],
+            $serverUrl
+        );
+
+        // Store the current URL as a login followup action
+        $this->followup()->store($extras, $serverUrl);
+        if (!empty($msg) && $forward) {
+            $this->flashMessenger()->addMessage($msg, 'error');
+        }
+
+        // Set a flag indicating that we are forcing login:
+        $this->getRequest()->getPost()->set('forcingLogin', true);
+
+        if ($forward) {
+            return $this->forwardTo('MyResearch', 'Login');
+        }
+        return $this->redirect()->toRoute('myresearch-directlogin');
+    }
 }
