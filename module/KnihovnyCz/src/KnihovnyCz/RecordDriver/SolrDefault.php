@@ -51,6 +51,8 @@ class SolrDefault extends \VuFind\RecordDriver\SolrDefault
     public const EDD_SUBTYPE_ARTICLE = 'article';
     public const EDD_SUBTYPE_SELECTION = 'selection';
 
+    protected const KRAMERIUS_AVAILABLE_STATUSES = ['online', 'dnnt'];
+
     /**
      * These Solr fields should be used for snippets if available (listed in order
      * of preference).
@@ -109,6 +111,34 @@ class SolrDefault extends \VuFind\RecordDriver\SolrDefault
      * @var \VuFind\Auth\Manager
      */
     protected $authManager;
+
+    /**
+     * Institution filter
+     *
+     * @var array
+     */
+    protected $recordLinksFilter = [];
+
+    /**
+     * Constructor
+     *
+     * @param \Laminas\Config\Config $mainConfig     VuFind main configuration (omit
+     * for built-in defaults)
+     * @param \Laminas\Config\Config $recordConfig   Record-specific configuration
+     * file (omit to use $mainConfig as $recordConfig)
+     * @param \Laminas\Config\Config $searchSettings Search-specific configuration
+     * file
+     */
+    public function __construct(
+        $mainConfig = null,
+        $recordConfig = null,
+        $searchSettings = null
+    ) {
+        parent::__construct($mainConfig, $recordConfig, $searchSettings);
+        if (isset($mainConfig->RecordLinks->filter)) {
+            $this->recordLinksFilter = $mainConfig->RecordLinks->filter->toArray();
+        }
+    }
 
     /**
      * Get the publishers of the record.
@@ -523,7 +553,11 @@ class SolrDefault extends \VuFind\RecordDriver\SolrDefault
      */
     protected function has856Links(): bool
     {
-        return (bool)($this->fields['url'] ?? false);
+        if (empty($this->recordLinksFilter)) {
+            return (bool)($this->fields['url'] ?? false);
+        }
+        $links = $this->get856Links();
+        return !empty($links);
     }
 
     /**
@@ -774,18 +808,32 @@ class SolrDefault extends \VuFind\RecordDriver\SolrDefault
     protected function getLinksFromSolrField(string $field = 'url'): array
     {
         $rawLinks = $this->fields[$field] ?? [];
+        $hasFilter = !empty($this->recordLinksFilter);
         $links = [];
         foreach ($rawLinks as $rawLink) {
             $parts = explode("|", $rawLink);
-            $destination = (substr($parts[0], 0, 4) === 'kram')
+            $source = $parts[0];
+            $status = $parts[1];
+            $isKramerius = (substr($source, 0, 5) === 'kram-');
+            if ($hasFilter && $isKramerius) {
+                $kramSource = substr($source, 5, PHP_INT_MAX);
+                $addLink = in_array($kramSource, $this->recordLinksFilter)
+                    || in_array($status, self::KRAMERIUS_AVAILABLE_STATUSES);
+                if (!$addLink) {
+                    continue;
+                }
+            } elseif ($hasFilter && !in_array($source, $this->recordLinksFilter)) {
+                continue;
+            }
+            $destination = ($isKramerius)
                 ? 'Digital library'
                 : ($parts[3] == 'catalog_serial_link' ? 'Library catalogue' : 'Web');
             $links[] = [
                 'destination' => $destination,
-                'status' => $parts[1] != '' ? $parts[1] : null,
+                'status' => $status != '' ? $status : null,
                 'url' => $parts[2] != '' ? $parts[2] : null,
                 'desc' => $parts[3] != '' ? $parts[3] : null,
-                'source' => $parts[0] != '' ? $parts[0] : null
+                'source' => $source != '' ? $source : null
             ];
         }
         return $links;
