@@ -21,6 +21,12 @@
 
 <div id="popupMessages"><?=$this->flashmessages()?></div>
 
+<?php if (($info = $this->transEsc('short_loan_request_info_text', [], '')) != ''): ?>
+  <div class="alert alert-info">
+    <?=$info?>
+  </div>
+<?php endif; ?>
+
 <div class="short-loan-form">
   <form class="form-record-shortloan form-inline" method="post" name="shortLoan" id="shortLoan">
     <input type="hidden" name="csrf" value="<?=$this->escapeHtmlAttr($this->auth()->getManager()->getCsrfHash())?>">
