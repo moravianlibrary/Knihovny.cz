@@ -541,6 +541,7 @@ $config = [
                     \KnihovnyCz\ILS\Driver\MultiBackend::class => \KnihovnyCz\ILS\Driver\MultiBackendFactory::class,
                     \KnihovnyCz\ILS\Driver\XCNCIP2::class => \VuFind\ILS\Driver\DriverWithDateConverterFactory::class,
                     \KnihovnyCz\ILS\Driver\Aleph::class => \VuFind\ILS\Driver\AlephFactory::class,
+                    \KnihovnyCz\ILS\Driver\AlephMzk::class => \VuFind\ILS\Driver\AlephFactory::class,
                     \KnihovnyCz\ILS\Driver\NoILS::class => \VuFind\ILS\Driver\NoILSFactory::class,
                 ],
                 'aliases' => [
@@ -549,6 +550,7 @@ $config = [
                     'multibackend' => \KnihovnyCz\ILS\Driver\MultiBackend::class,
                     'xcncip2' => \KnihovnyCz\ILS\Driver\XCNCIP2::class,
                     'aleph' => \KnihovnyCz\ILS\Driver\Aleph::class,
+                    'alephmzk' => \KnihovnyCz\ILS\Driver\AlephMzk::class,
                     'noils' => \KnihovnyCz\ILS\Driver\NoILS::class,
                 ],
             ],
