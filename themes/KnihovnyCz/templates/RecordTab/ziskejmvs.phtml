@@ -30,6 +30,14 @@ $ziskejMvs = $tab->getZiskejMvs();
 $dedupedRecordIds = $tab->getDedupedRecordIds();
 ?>
 <?php if ($ziskejViewHelper->isEnabled()): ?>
+
+  <?php if (!$user): ?>
+    <div class="alert alert-info">
+      <?php $loginUrl = $this->escapeHtmlAttr($this->recordLinker()->getTabUrl($this->driver, 'ZiskejMvs', ['login' => 'true'])); ?>
+      <?=$this->translate('Ziskej::alert_not_logged_in', ['%%url%%' => $loginUrl])?>
+    </div>
+  <?php endif; ?>
+
   <div class="panel panel-default">
     <div class="panel-heading">
       <h3 class="panel-title"><?=$this->translate('ZiskejMvs::service_header') ?></h3>
@@ -63,12 +71,12 @@ $dedupedRecordIds = $tab->getDedupedRecordIds();
     </div>
   </div>
 
-  <div class="panel panel-default">
-    <div class="panel-heading">
-      <h4 class="panel-title"><?=$this->translate('ZiskejMvs::connected_libraries') ?></h4>
-    </div>
-    <div class="panel-body">
-      <?php if ($user): ?>
+  <?php if ($user): ?>
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h4 class="panel-title"><?=$this->translate('ZiskejMvs::connected_libraries') ?></h4>
+      </div>
+      <div class="panel-body">
         <?php if ($tab->isZiskejActive()): ?>
           <?php
             $libs = [];
@@ -109,17 +117,7 @@ $dedupedRecordIds = $tab->getDedupedRecordIds();
             <?=$this->transEsc("ZiskejMvs::warning_api_disconnected") ?>
           </div>
         <?php endif; ?>
-      <?php else: ?>
-        <div class="text-center">
-          <div class="alert alert-info text-center">
-            <?=$this->transEsc("ZiskejMvs::alert_not_logged_in") ?>
-          </div>
-          <a class="btn btn-default" href="<?=$this->url('myresearch-userlogin')?>">
-            <?=$this->icon('sign-in')?>
-            <?=$this->transEsc("Institutional Login") ?>
-          </a>
-        </div>
-      <?php endif; ?>
+      </div>
     </div>
-  </div>
+  <?php endif; ?>
 <?php endif; ?>

@@ -17,6 +17,13 @@ $patron = $this->patron;
 $ziskejReader = $this->ziskejReader;
 ?>
 
+<?php if ($this->layout()->getTemplate() !== 'layout/lightbox'): ?>
+  <a href="<?=$this->recordLinker()->getTabUrl($this->driver, 'ZiskejMvs')?>" class="backToRecord">
+    <?= $this->icon('back-to-record'); ?>
+    <?= $this->transEsc('Back to record'); ?>
+  </a>
+<?php endif; ?>
+
 <?php if ($user): ?>
   <div>
     <h2><?=$this->transEsc("ZiskejMvs::order_title") ?></h2>

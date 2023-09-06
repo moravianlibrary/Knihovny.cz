@@ -716,6 +716,23 @@ class MyResearchController extends MyResearchControllerBase
     }
 
     /**
+     * Direct login action.
+     *
+     * @return mixed
+     */
+    public function directloginAction(): ViewModel|Response
+    {
+        // Don't log in if already logged in!
+        if ($this->getAuthManager()->isLoggedIn()) {
+            return $this->redirect()->toRoute('home');
+        }
+        if ($si = $this->getSessionInitiator()) {
+            return $this->redirect()->toUrl($si);
+        }
+        return $this->forwardTo('MyResearch', 'Login');
+    }
+
+    /**
      * Process an authentication error.
      *
      * @param AuthException $e Exception to process.
