@@ -338,7 +338,7 @@ class SolrMarc extends SolrDefault
     protected function isAleph(): bool
     {
         return $this->hasILS()
-            && $this->ils->getDriverName($this->getUniqueID()) === 'Aleph';
+            && is_subclass_of($this->ils->getDriverName($this->getUniqueID()), '\VuFind\ILS\Driver\Aleph');
     }
 
     /**
