@@ -125,12 +125,12 @@
           </dl>
           <div class="text-right">
             <?php if ($ticket->status == StatusName::UNPAID && !empty($ticket->downloadUrl)): ?>
-              <a class="btn btn-sm btn-warning" href="<?=$ticket->downloadUrl->getAbsoluteUrl()?>" target="_blank" title="<?=$this->transEsc("ZiskejEdd::btn_order_pay_title")?>">
-                <?=$this->icon('ziskej-order')?> <?=$this->transEsc("ZiskejEdd::btn_order_pay")?>
+              <a class="btn btn-sm btn-warning" href="<?=$ticket->downloadUrl->getAbsoluteUrl()?>" target="_blank" title="<?=$this->transEsc('ZiskejEdd::btn_order_pay_title')?>">
+                <?=$this->icon('ziskej-order')?> <?=$this->transEsc('ZiskejEdd::btn_order_pay')?>
               </a>
             <?php endif; ?>
-            <a class="btn btn-sm btn-primary" href="<?=$this->url('myresearch-ziskej-edd-ticket', ['eppnDomain' => $userCard->getEppnDomain(), 'ticketId' => $ticket->id])?>" title="<?=$this->transEsc("ZiskejEdd::btn_order_detail_title")?>">
-              <?=$this->icon('ziskej-order-detail')?> <?=$this->transEsc("ZiskejEdd::btn_order_detail")?>
+            <a class="btn btn-sm btn-primary" href="<?=$this->url('myresearch-ziskej-edd-ticket', ['eppnDomain' => $userCard->getEppnDomain(), 'ticketId' => $ticket->id])?>" title="<?=$this->transEsc('ZiskejEdd::btn_order_detail_title')?>">
+              <?=$this->icon('ziskej-order-detail')?> <?=$this->transEsc('ZiskejEdd::btn_order_detail')?>
             </a>
           </div>
         </div>

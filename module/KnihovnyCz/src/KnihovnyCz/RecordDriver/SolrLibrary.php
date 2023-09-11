@@ -137,9 +137,9 @@ class SolrLibrary extends \KnihovnyCz\RecordDriver\SolrMarc
         $result = [];
         $hours = $this->fields['hours_display'] ?? '';
         if (!empty($hours)) {
-            $days = explode("|", $hours);
+            $days = explode('|', $hours);
             foreach ($days as $day) {
-                $parts = explode(" ", trim($day), 2);
+                $parts = explode(' ', trim($day), 2);
                 $result[$parts[0]] = $parts[1];
             }
         }
@@ -215,7 +215,7 @@ class SolrLibrary extends \KnihovnyCz\RecordDriver\SolrMarc
     {
         $urls = $this->fields['url_display_mv'] ?? [];
         $filter = function ($url) {
-            $parts = explode("|", $url, 2);
+            $parts = explode('|', $url, 2);
             $parts = array_map('trim', $parts);
             return [
                 'url' => $parts[0] ?? null,
@@ -347,8 +347,8 @@ class SolrLibrary extends \KnihovnyCz\RecordDriver\SolrMarc
             if ($coordinates != null) {
                 [$lat, $lng] = explode(' ', $coordinates);
                 $branch['coordinates'] = [
-                    "lat" => floatval($lat),
-                    "lng" => floatval($lng),
+                    'lat' => floatval($lat),
+                    'lng' => floatval($lng),
                 ];
             }
             $result[] = $branch;
@@ -388,7 +388,7 @@ class SolrLibrary extends \KnihovnyCz\RecordDriver\SolrMarc
         if ($gps != '') {
             [$coords['lat'], $coords['lng']] = array_map(
                 'floatval',
-                explode(" ", $gps, 2)
+                explode(' ', $gps, 2)
             );
         }
         return $coords;

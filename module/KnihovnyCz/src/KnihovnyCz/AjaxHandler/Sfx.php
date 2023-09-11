@@ -215,7 +215,7 @@ class Sfx extends AbstractBase implements
     {
         $client = $this->httpService->createClient();
         $url = $this->getSfxUrl($sfxUrl, $query);
-        $this->logWarning("Calling SFX: " . $url);
+        $this->logWarning('Calling SFX: ' . $url);
         $request = new Request('GET', $url);
         return $client->sendAsyncRequest($request);
     }

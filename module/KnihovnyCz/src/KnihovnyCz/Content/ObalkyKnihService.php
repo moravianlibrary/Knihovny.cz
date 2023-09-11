@@ -57,7 +57,7 @@ class ObalkyKnihService extends \VuFind\Content\ObalkyKnihService
         parent::__construct($config);
         if (!isset($config->authority_endpoint)) {
             throw new \Exception(
-                "Configuration for ObalkyKnih.cz service is not valid"
+                'Configuration for ObalkyKnih.cz service is not valid'
             );
         }
 

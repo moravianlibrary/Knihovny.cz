@@ -25,7 +25,7 @@ $dataDropdown = ($this->dropdown) ? 'true' : 'false';
   <span class="openurl" data-fulltext="<?=$dataFulltext?>" data-lazy="<?=$dataLazy?>" data-dropdown="<?=$dataDropdown?>" data-openurl="<?=$this->escapeHtml($openUrl)?>">
     <?php if($this->lazy): ?>
       <button type="button" class="btn btn-primary">
-        <strong><?=$this->transEsc("Check fulltext availability")?></strong>
+        <strong><?=$this->transEsc('Check fulltext availability')?></strong>
       </button>
     <?php else: ?>
       <?=$this->icon('spinner')?>

@@ -101,14 +101,14 @@ class KohaRest1905 extends AbstractBase implements
      * @var array
      */
     protected $finesMappings = [
-        "A" => "koha_charge_renewal",
-        "L" => "koha_charge_book_replacement",
-        "M" => "koha_charge_other",
-        "N" => "koha_charge_card_replacement",
-        "OVERDUE" => "koha_charge_reminder",
-        "Rent" => "koha_charge_rental",
-        "Rep" => "koha_charge_book_replacement",
-        "Res" => "koha_charge_reservation",
+        'A' => 'koha_charge_renewal',
+        'L' => 'koha_charge_book_replacement',
+        'M' => 'koha_charge_other',
+        'N' => 'koha_charge_card_replacement',
+        'OVERDUE' => 'koha_charge_reminder',
+        'Rent' => 'koha_charge_rental',
+        'Rep' => 'koha_charge_book_replacement',
+        'Res' => 'koha_charge_reservation',
     ];
 
     /**
@@ -549,7 +549,7 @@ class KohaRest1905 extends AbstractBase implements
                 'in_transit' => !empty($entry['status']) && $entry['status'] == 'T',
                 'volume' => $biblio['part_number'] ?? '',
                 'publication_year' => $biblio['copyright_date']
-                    ?? $biblio["publication_year"] ?? '',
+                    ?? $biblio['publication_year'] ?? '',
                 'title' => $biblio['title'] ?? '',
                 'isbn' => $biblio['isbn'] ?? '',
                 'issn' => $biblio['issn'] ?? '',
@@ -1331,13 +1331,13 @@ class KohaRest1905 extends AbstractBase implements
             case 'Holds':
                 $holdsConfig = $this->config['Holds'] ?? [];
                 $defaults = [
-                    "HMACKeys" => "id:item_id",
-                    "extraHoldFields" => "comments:requiredByDate:pickUpLocation",
-                    "defaultRequiredDate" => "0:0:1",
+                    'HMACKeys' => 'id:item_id',
+                    'extraHoldFields' => 'comments:requiredByDate:pickUpLocation',
+                    'defaultRequiredDate' => '0:0:1',
                 ];
                 return $holdsConfig + $defaults;
             case 'IllRequests':
-                $config = [ "HMACKeys" => "id:item_id" ];
+                $config = [ 'HMACKeys' => 'id:item_id' ];
                 break;
             case 'getMyTransactionHistory':
             case 'getMyTransactions':
@@ -1444,7 +1444,7 @@ class KohaRest1905 extends AbstractBase implements
             }
         } catch (ILSException $exception) {
             $this->logError(
-                "Koha API: error getting data" . $exception->getMessage()
+                'Koha API: error getting data' . $exception->getMessage()
             );
             return [];
         }

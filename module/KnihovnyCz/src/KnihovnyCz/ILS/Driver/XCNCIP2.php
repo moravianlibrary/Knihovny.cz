@@ -245,7 +245,7 @@ class XCNCIP2 extends \VuFind\ILS\Driver\XCNCIP2
                 );
                 // Hack to account for bibs from other non-local institutions
                 // temporarily until consortial functionality is enabled.
-                $bibId = !empty($bibId) ? (string)$bibId[0] : "1";
+                $bibId = !empty($bibId) ? (string)$bibId[0] : '1';
             }
             if ($itemAgencyId === null) {
                 /* @phpstan-ignore-next-line */
@@ -378,7 +378,7 @@ class XCNCIP2 extends \VuFind\ILS\Driver\XCNCIP2
             'ns1:BibliographicDescription/ns1:BibliographicRecordId/' .
             'ns1:BibliographicRecordIdentifier'
         );
-        $bibId = !empty($bibId) ? (string)$bibId[0] : "1";
+        $bibId = !empty($bibId) ? (string)$bibId[0] : '1';
 
         $status = $itemResponse->xpath(
             'ns1:LookupItemResponse/ns1:ItemOptionalFields/ns1:CirculationStatus'

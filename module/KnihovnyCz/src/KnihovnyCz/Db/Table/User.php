@@ -139,11 +139,11 @@ class User extends \VuFind\Db\Table\User
          * Table names which contain user_id as a relation to user.id foreign key
          */
         $tables = [
-            "user_card",
-            "comments",
-            "user_resource",
-            "user_list",
-            "search"
+            'user_card',
+            'comments',
+            'user_resource',
+            'user_list',
+            'search'
         ];
 
         foreach ($tables as $table) {

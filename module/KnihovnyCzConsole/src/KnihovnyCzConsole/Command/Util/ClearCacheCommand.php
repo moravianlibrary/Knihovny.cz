@@ -101,7 +101,7 @@ class ClearCacheCommand extends \Symfony\Component\Console\Command\Command
         $baseCacheDir = $this->cacheManager->getCacheDir(false);
         foreach ($caches as $cacheName) {
             $flags = GlobIterator::SKIP_DOTS | GlobIterator::CURRENT_AS_PATHNAME;
-            $cacheDir = $baseCacheDir . $cacheName . "s";
+            $cacheDir = $baseCacheDir . $cacheName . 's';
             $clearFolder = null;
             $clearFolder = function ($dir) use (&$clearFolder, $flags) {
                 $it = new GlobIterator($dir . DIRECTORY_SEPARATOR . '*', $flags);

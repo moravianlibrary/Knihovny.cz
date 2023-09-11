@@ -64,7 +64,7 @@ class UserList extends \VuFind\Db\Row\UserList implements TranslatorAwareInterfa
     {
         $transliterator = \Transliterator::create('Any-Latin; Latin-ASCII');
         $title = $transliterator->transliterate($this['title']);
-        $title = str_replace(" ", '-', $title);
+        $title = str_replace(' ', '-', $title);
         return $this['id'] . '-' . urlencode($title);
     }
 

@@ -50,12 +50,12 @@ class DateTime extends Base
     public function getDisplayDateFormatForJquery(): string
     {
         $dueDateHelpString
-            = $this->converter->convertToDisplayDate("m-d-y", "11-22-3333");
-        $search = ["11", "22", "3333"];
+            = $this->converter->convertToDisplayDate('m-d-y', '11-22-3333');
+        $search = ['11', '22', '3333'];
         $replace = [
-            $this->getView()->translate("mm"),
-            $this->getView()->translate("dd"),
-            $this->getView()->translate("yy"),
+            $this->getView()->translate('mm'),
+            $this->getView()->translate('dd'),
+            $this->getView()->translate('yy'),
         ];
         return str_replace($search, $replace, $dueDateHelpString);
     }

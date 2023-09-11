@@ -27,7 +27,7 @@
 </div>
 
 <div class="<?=$this->layoutClass('sidebar')?>" id="myresearch-sidebar">
-  <?=$this->context($this)->renderInContext("myresearch/menu.phtml", ['active' => 'profile'])?>
+  <?=$this->context($this)->renderInContext('myresearch/menu.phtml', ['active' => 'profile'])?>
 </div>
 
 <?=$this->render('myresearch/notify-account-status.phtml', ['method' => 'fines', 'accountStatus' => $this->accountStatus]); ?>

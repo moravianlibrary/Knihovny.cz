@@ -204,7 +204,7 @@ class MultiplyingDeduplicationListener
         $switchToParentQuery = !DeduplicationHelper::hasChildFilter($params)
             && ($fetchRecords || !empty($facets));
         if ($switchToParentQuery) {
-            $params->set("switchToParentQuery", true);
+            $params->set('switchToParentQuery', true);
             $fq[] = DeduplicationHelper::CHILD_FILTER;
             $fl = $params->get('fl');
             if (empty($fl)) {
@@ -212,7 +212,7 @@ class MultiplyingDeduplicationListener
             } else {
                 $fl = $fl[0];
             }
-            $newFieldList = $fl . ", parent:[subquery]";
+            $newFieldList = $fl . ', parent:[subquery]';
             $params->set('fl', $newFieldList);
             $params->set(
                 'parent.q',

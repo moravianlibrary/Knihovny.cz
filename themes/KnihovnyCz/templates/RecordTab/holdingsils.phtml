@@ -156,18 +156,18 @@ JS;
   </div>
 <?php endif; ?>
 
-<?=($offlineMode == "ils-offline") ? $this->render('Helpers/ils-offline.phtml', ['offlineModeMsg' => 'ils_offline_holdings_message']) : ''?>
+<?=($offlineMode == 'ils-offline') ? $this->render('Helpers/ils-offline.phtml', ['offlineModeMsg' => 'ils_offline_holdings_message']) : ''?>
 
 <?php if (($this->ils()->getHoldsMode() == 'driver' && !empty($holdings['holdings'])) || $this->ils()->getTitleHoldsMode() == 'driver'): ?>
     <?php if ($account->loginEnabled() && $offlineMode != 'ils-offline'): ?>
         <?php if (!$user): ?>
       <div class="alert alert-info">
         <?php $loginUrl = $this->escapeHtmlAttr($this->recordLinker()->getTabUrl($this->driver, 'Holdings', ['login' => 'true'])); ?>
-        <?=$this->translate("hold_login", ['%%url%%' => $loginUrl])?>
+        <?=$this->translate('hold_login', ['%%url%%' => $loginUrl])?>
       </div>
         <?php elseif (!$user->cat_username): ?>
       <div class="alert alert-info">
-        <?=$this->translate("hold_profile_html", ['%%url%%' => $this->escapeHtmlAttr($this->recordLinker()->getTabUrl($this->driver, 'Holdings', ['catalogLogin' => 'true']))])?>
+        <?=$this->translate('hold_profile_html', ['%%url%%' => $this->escapeHtmlAttr($this->recordLinker()->getTabUrl($this->driver, 'Holdings', ['catalogLogin' => 'true']))])?>
       </div>
         <?php elseif (!$showRequestLink): ?>
           <?=
@@ -218,14 +218,14 @@ JS;
   <table class="table table-striped responsive-table" id="holding_items">
     <thead>
       <tr>
-        <th data-type="availability"><?=$this->transEsc("Availability")?></th>
-        <th data-type="status"><?=$this->transEsc("Status")?></th>
+        <th data-type="availability"><?=$this->transEsc('Availability')?></th>
+        <th data-type="status"><?=$this->transEsc('Status')?></th>
         <th data-type="request"></th>
-        <th data-type="location"><?=$this->transEsc("Department")?></th>
-        <th data-type="collection_desc"><?=$this->transEsc("Collection")?></th>
-        <th data-type="callnumber_second"><?=$this->transEsc("Location")?></th>
-        <th data-type="description"><?=$this->transEsc("Description")?></th>
-        <th data-type="callnumber"><?=$this->transEsc("callnumber_abbrev")?></th>
+        <th data-type="location"><?=$this->transEsc('Department')?></th>
+        <th data-type="collection_desc"><?=$this->transEsc('Collection')?></th>
+        <th data-type="callnumber_second"><?=$this->transEsc('Location')?></th>
+        <th data-type="description"><?=$this->transEsc('Description')?></th>
+        <th data-type="callnumber"><?=$this->transEsc('callnumber_abbrev')?></th>
       </tr>
     </thead>
     <tbody>
@@ -251,7 +251,7 @@ JS;
 <?php endif; ?>
 <?php $history = $this->driver->getRealTimeHistory(); ?>
 <?php if (is_array($history) && !empty($history)): ?>
-  <h3><?=$this->transEsc("Most Recent Received Issues")?></h3>
+  <h3><?=$this->transEsc('Most Recent Received Issues')?></h3>
   <table class="table table-striped">
     <?php foreach ($history as $row): ?>
       <tr><td><?=$this->escapeHtml($row['issue'])?></td></tr>

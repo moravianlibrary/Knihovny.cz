@@ -112,7 +112,7 @@ class QueryBuilder extends \VuFindSearch\Backend\Solr\QueryBuilder
         }
         $params->set('q', $string);
         if ($switchToParentQuery) {
-            $childrenQuery = preg_replace("/{!child [^}]+}/", "*:*", $string);
+            $childrenQuery = preg_replace('/{!child [^}]+}/', '*:*', $string);
             $params->set('childrenQuery', $childrenQuery);
         }
 

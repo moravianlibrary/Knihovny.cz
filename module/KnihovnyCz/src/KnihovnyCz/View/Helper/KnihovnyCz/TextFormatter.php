@@ -96,7 +96,7 @@ class TextFormatter extends AbstractHelper
                 );
             }
             if ($implode) {
-                return $transEsc($label) . ": " . implode($data) . "\r\n";
+                return $transEsc($label) . ': ' . implode($data) . "\r\n";
             }
             $text = '';
             foreach ($data as $item) {

@@ -16,6 +16,6 @@
 
 <?php $lastupdated = $this->driver->getLastUpdated(); if (!empty($lastupdated)): ?>
     <h2><?=$this->icon('library-general-info')?> <?=$this->translate('LastUpdated')?></h2>
-    <?php $lastUpdatedDate = \DateTime::createFromFormat("Ymd", $lastupdated);?>
+    <?php $lastUpdatedDate = \DateTime::createFromFormat('Ymd', $lastupdated);?>
     <p><span title="<?=$lastupdated?>"><?=$lastUpdatedDate->format('j. n. Y')?></span></p>
 <?php endif;

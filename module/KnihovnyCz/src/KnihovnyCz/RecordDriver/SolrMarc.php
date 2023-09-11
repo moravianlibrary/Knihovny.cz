@@ -127,7 +127,7 @@ class SolrMarc extends SolrDefault
      */
     public function getField773()
     {
-        return $this->getStructuredDataFieldArray("773");
+        return $this->getStructuredDataFieldArray('773');
     }
 
     /**
@@ -137,7 +137,7 @@ class SolrMarc extends SolrDefault
      */
     public function getField770()
     {
-        return $this->getStructuredDataFieldArray("770");
+        return $this->getStructuredDataFieldArray('770');
     }
 
     /**
@@ -147,7 +147,7 @@ class SolrMarc extends SolrDefault
      */
     public function getField772()
     {
-        return $this->getStructuredDataFieldArray("772");
+        return $this->getStructuredDataFieldArray('772');
     }
 
     /**
@@ -157,7 +157,7 @@ class SolrMarc extends SolrDefault
      */
     public function getField777()
     {
-        return $this->getStructuredDataFieldArray("777");
+        return $this->getStructuredDataFieldArray('777');
     }
 
     /**
@@ -167,7 +167,7 @@ class SolrMarc extends SolrDefault
      */
     public function getField780()
     {
-        return $this->getStructuredDataFieldArray("780");
+        return $this->getStructuredDataFieldArray('780');
     }
 
     /**
@@ -177,7 +177,7 @@ class SolrMarc extends SolrDefault
      */
     public function getField785()
     {
-        return $this->getStructuredDataFieldArray("785");
+        return $this->getStructuredDataFieldArray('785');
     }
 
     /**
@@ -393,10 +393,10 @@ class SolrMarc extends SolrDefault
     {
         return trim(
             implode(
-                ", ",
+                ', ',
                 array_map(
                     function ($a): string {
-                        return implode(", ", $a);
+                        return implode(', ', $a);
                     },
                     $this->getField773()
                 )

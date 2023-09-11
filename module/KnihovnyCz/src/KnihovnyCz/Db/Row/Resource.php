@@ -64,7 +64,7 @@ class Resource extends Base
         // the default null:
         $authorSort = $driver->tryMethod('getPrimaryAuthorForSorting');
         if ($authorSort != null) {
-            $authorSort = mb_substr($authorSort, 0, 255, "UTF-8");
+            $authorSort = mb_substr($authorSort, 0, 255, 'UTF-8');
             $this->author_sort = $authorSort;
         }
 

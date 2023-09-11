@@ -63,7 +63,7 @@ class ZboziLinkService extends LinkServiceAbstractBase
             'groupByCategory' => 0,
             'loadTopProducts' => 'true',
             'page' => 1,
-            'query' => str_replace("-", "", $isbn),
+            'query' => str_replace('-', '', $isbn),
         ];
 
         $data = $this->getDataFromService($url, $params);

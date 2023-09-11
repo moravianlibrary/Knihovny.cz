@@ -210,7 +210,7 @@ class Aleph extends AlephBase implements TranslatorAwareInterface
                 }
             }
             $statuses = explode(';', $status, 2);
-            $dueDateRegEx = "/([0-9]*\\/[a-zA-Z0-9]*\\/[0-9]*)/";
+            $dueDateRegEx = '/([0-9]*\\/[a-zA-Z0-9]*\\/[0-9]*)/';
             $matches = [];
             if (preg_match($dueDateRegEx, $statuses[0], $matches)) {
                 $duedate = $this->parseDate($matches[1]);
@@ -227,7 +227,7 @@ class Aleph extends AlephBase implements TranslatorAwareInterface
             } else {
                 $fullStatus = empty($status)
                     ? $fullStatus
-                    : implode(" ; ", [$fullStatus, $status]);
+                    : implode(' ; ', [$fullStatus, $status]);
             }
             $holding[] = [
                 'id' => $id,
@@ -314,7 +314,7 @@ class Aleph extends AlephBase implements TranslatorAwareInterface
             $z13 = $item->z13;
             $z30 = $item->z30;
             $group = $item->xpath('@href');
-            $group = strrchr($group[0], "/");
+            $group = strrchr($group[0], '/');
             $group = $group ? substr($group, 1) : '';
             $renew = $item->xpath('@renew');
 
@@ -345,7 +345,7 @@ class Aleph extends AlephBase implements TranslatorAwareInterface
                 'barcode' => $barcode,
                 'duedate' => $this->parseDate($due),
                 'checkoutDate'  => $this->parseDate($checkoutDate),
-                'renewable' => $renew[0] == "Y",
+                'renewable' => $renew[0] == 'Y',
             ];
             if ($history) {
                 $returned = (string)$z36->{$prefix . 'returned-date'};
@@ -393,7 +393,7 @@ class Aleph extends AlephBase implements TranslatorAwareInterface
             $z30 = $item->z30;
             $delete = $item->xpath('@delete');
             $href = $item->xpath('@href');
-            $type = "hold";
+            $type = 'hold';
             $location = (string)$z37->{'z37-pickup-location'};
             $reqnum = (string)$z37->{'z37-doc-number'}
                 . (string)$z37->{'z37-item-sequence'}
@@ -412,18 +412,18 @@ class Aleph extends AlephBase implements TranslatorAwareInterface
                 . (string)$z37->{'z37-item-sequence'};
             $cancel_item_id = substr($href[0], strrpos($href[0], '/') + 1);
             // remove superfluous spaces in status
-            $status = preg_replace("/\s[\s]+/", " ", $item->status);
+            $status = preg_replace("/\s[\s]+/", ' ', $item->status);
             $position = null;
             // Extract position in the hold queue from item status
             if (preg_match($this->queuePositionRegex, $status, $matches)) {
                 $position = $matches['position'];
             }
-            if ($holddate == "00000000") {
+            if ($holddate == '00000000') {
                 $holddate = null;
             } else {
                 $holddate = $this->parseDate($holddate);
             }
-            $delete = ($delete[0] == "Y");
+            $delete = ($delete[0] == 'Y');
             // Secondary, Aleph-specific identifier that may be useful for
             // local customizations
             $adm_id = (string)$z30->{'z30-doc-number'};
@@ -532,20 +532,20 @@ class Aleph extends AlephBase implements TranslatorAwareInterface
         // parse the fullname into last and first name
         $fullName = $profile['fullname'];
         if ($fullName != null) {
-            if (strpos($fullName, ",") === false) {
+            if (strpos($fullName, ',') === false) {
                 $profile['lastname'] = $fullName;
-                $profile['firstname'] = "";
+                $profile['firstname'] = '';
             } else {
                 [$profile['lastname'], $profile['firstname']]
-                    = explode(",", $fullName);
+                    = explode(',', $fullName);
             }
         }
         // registration status
         $xml = $this->doRestDLFRequest(
             ['patron', $userId, 'patronStatus', 'registration']
         );
-        $status = $xml->xpath("//institution/z305-bor-status");
-        $expiry = $xml->xpath("//institution/z305-expiry-date");
+        $status = $xml->xpath('//institution/z305-bor-status');
+        $expiry = $xml->xpath('//institution/z305-expiry-date');
         $profile['expiration_date'] = $this->parseDate($expiry[0]);
         $profile['group'] = !empty($status[0]) ? $status[0] : null;
         return $profile;
@@ -609,7 +609,7 @@ class Aleph extends AlephBase implements TranslatorAwareInterface
         if ($shortLoanAllowed) {
             return $this->extractShortLoanInfoForItem($xml);
         }
-        throw new \Exception("Hold request or short loan is not alllowed");
+        throw new \Exception('Hold request or short loan is not alllowed');
     }
 
     /**
@@ -638,7 +638,7 @@ class Aleph extends AlephBase implements TranslatorAwareInterface
                 ['patron', $patronId, 'record', $recordId,
                 'items', $itemId, 'shortLoan'],
                 null,
-                "PUT",
+                'PUT',
                 $data
             );
         } catch (\Exception $ex) {
@@ -659,7 +659,7 @@ class Aleph extends AlephBase implements TranslatorAwareInterface
         $xml = $this->doRestDLFRequest(
             ['patron', $patron['id'], 'circulationActions',
             'requests', 'bookings'],
-            ["view" => "full"]
+            ['view' => 'full']
         );
         $results = [];
         foreach ($xml->xpath('//booking-request') as $item) {
@@ -679,7 +679,7 @@ class Aleph extends AlephBase implements TranslatorAwareInterface
                 . ' ' . $this->parseTime($startTime);
             $end = $this->parseDate($endDate)
                 . ' ' . $this->parseTime($endTime);
-            $delete = ($delete[0] == "Y");
+            $delete = ($delete[0] == 'Y');
             $id = (string)$z13->{'z13-doc-number'};
             $adm_id = (string)$z30->{'z30-doc-number'};
             $sortKey = (string)$startDate[0] . $item_id;
@@ -754,7 +754,7 @@ class Aleph extends AlephBase implements TranslatorAwareInterface
                     ['patron', $patronId, 'circulationActions',
                     'requests', 'bookings', $id],
                     null,
-                    "DELETE"
+                    'DELETE'
                 );
             } catch (\Exception $ex) {
                 $statuses[$id] = [
@@ -864,7 +864,7 @@ class Aleph extends AlephBase implements TranslatorAwareInterface
     public function getMyILLRequests($user): array
     {
         $userId = $user['id'];
-        $params = ["view" => "full", "type" => "active"];
+        $params = ['view' => 'full', 'type' => 'active'];
         $count = 0;
         $xml = $this->doRestDLFRequest(
             ['patron', $userId,
@@ -1135,7 +1135,7 @@ class Aleph extends AlephBase implements TranslatorAwareInterface
         }
         $date = $xml->xpath('//last-interest-date/text()');
         $date = $date[0];
-        $date = "" . substr($date, 6, 2) . "." . substr($date, 4, 2) . "."
+        $date = '' . substr($date, 6, 2) . '.' . substr($date, 4, 2) . '.'
             . substr($date, 0, 4);
         return [
             'pickup-locations' => $locations,

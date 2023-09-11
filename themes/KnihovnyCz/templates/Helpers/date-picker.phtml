@@ -3,7 +3,7 @@
   if (!$this->initialized) {
     $lang = $this->layout()->userLang;
     $this->headLink()->appendStylesheet('vendor/jquery-ui.min.css');
-    $this->headScript()->appendFile("lib/jquery-ui/jquery-ui.min.js");
+    $this->headScript()->appendFile('lib/jquery-ui/jquery-ui.min.js');
     $this->headScript()->appendFile("lib/jquery-ui/jquery-ui-i18n-datepicker-$lang.js");
     $dateFormat = $this->dateTime()->getDisplayDateFormatForJQuery();
     $configureDatePicker = <<<JS

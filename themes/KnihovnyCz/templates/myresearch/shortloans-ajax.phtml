@@ -24,17 +24,17 @@
         </label>
         <?php if ($this->cancelForm || true): ?>
           <div class="btn-group">
-            <input id="cancelSelected" name="cancelSelected" type="submit" value="<?=$this->transEscAttr("short_loan_cancel_selected") ?>" class="btn btn-default dropdown-toggle" data-toggle="dropdown" data-lightbox-ignore>
+            <input id="cancelSelected" name="cancelSelected" type="submit" value="<?=$this->transEscAttr('short_loan_cancel_selected') ?>" class="btn btn-default dropdown-toggle" data-toggle="dropdown" data-lightbox-ignore>
             <ul class="dropdown-menu">
-              <li class="disabled"><a><?=$this->transEsc("short_loan_confirm_cancel_selected") ?></a></li>
+              <li class="disabled"><a><?=$this->transEsc('short_loan_confirm_cancel_selected') ?></a></li>
               <li><a href="#" id="confirm_cancel_selected_yes"><?=$this->transEsc('confirm_dialog_yes') ?></a></li>
               <li><a href="#" class="confirm_cancel_no"><?=$this->transEsc('confirm_dialog_no')?></a></li>
             </ul>
           </div>
           <div class="btn-group">
-            <input id="cancelAll" name="cancelAll" type="submit" value="<?=$this->transEscAttr("short_loan_cancel_all") ?>" class="btn btn-default dropdown-toggle" data-toggle="dropdown" data-lightbox-ignore>
+            <input id="cancelAll" name="cancelAll" type="submit" value="<?=$this->transEscAttr('short_loan_cancel_all') ?>" class="btn btn-default dropdown-toggle" data-toggle="dropdown" data-lightbox-ignore>
             <ul class="dropdown-menu">
-              <li class="disabled"><a><?=$this->transEsc("short_loan_confirm_cancel_all") ?></a></li>
+              <li class="disabled"><a><?=$this->transEsc('short_loan_confirm_cancel_all') ?></a></li>
               <li><a href="#" id="confirm_cancel_all_yes"><?=$this->transEsc('confirm_dialog_yes') ?></a></li>
               <li><a href="#" class="confirm_cancel_no"><?=$this->transEsc('confirm_dialog_no')?></a></li>
             </ul>

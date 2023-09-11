@@ -201,9 +201,9 @@ class ShortLoans extends \Laminas\Mvc\Controller\Plugin\AbstractPlugin
     public function fillSlots($slots)
     {
         $min = 24;
-        $minTime = "24:00";
+        $minTime = '24:00';
         $max = 0;
-        $maxTime = "0:00";
+        $maxTime = '0:00';
         foreach ($slots as $date => &$daySlots) {
             foreach ($daySlots as &$slot) {
                 $start = $slot['start'] = $this->convertTime($slot['start_time']);

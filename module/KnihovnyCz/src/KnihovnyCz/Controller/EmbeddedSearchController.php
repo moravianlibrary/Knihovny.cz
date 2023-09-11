@@ -69,7 +69,7 @@ final class EmbeddedSearchController extends EmbeddedController
 
         $view->setVariable('lookfor', $this->params()->fromQuery('lookfor', ''));
 
-        $config = $this->getConfig("config");
+        $config = $this->getConfig('config');
         $databases = [
             'default' => [
                 'url' => '/Search/Results',

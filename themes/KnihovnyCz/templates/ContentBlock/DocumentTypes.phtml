@@ -11,8 +11,8 @@
 </div>
 <div class='list-group'>
   <?php foreach ($this->results as $item): ?>
-  <?php $url = $this->url($searchAction) . "?" . http_build_query([
-          'filter' => '~' . $this->facetField . ':"' . $item["value"] . '"'
+  <?php $url = $this->url($searchAction) . '?' . http_build_query([
+          'filter' => '~' . $this->facetField . ':"' . $item['value'] . '"'
         ]);
   ?>
     <a href='<?=$url?>' class='list-group-item clearfix' title='<?=$this->transEsc($item['title'])?>'>

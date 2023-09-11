@@ -91,7 +91,7 @@ class ContentController extends ContentControllerBase implements
     {
         return preg_replace(
             "/([^a-z0-9_\+\-])+/Di",
-            "",
+            '',
             "content$suffix"
         );
     }

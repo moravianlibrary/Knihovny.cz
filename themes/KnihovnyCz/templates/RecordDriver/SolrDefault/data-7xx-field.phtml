@@ -9,11 +9,11 @@ foreach ($data as $field) {
     if (!empty($field['x'])) {
       $isn = $field['x'];
       if (substr($isn, 0, 1) === 'M') {
-        $isnPrefix = "ISMN";
+        $isnPrefix = 'ISMN';
       } elseif ((strlen($isn) === 8) or (strlen($isn) === 9)) {
-        $isnPrefix = "ISSN";
+        $isnPrefix = 'ISSN';
       } else { // (strlen($isn) === 10) OR (strlen($isn) === 13)
-        $isnPrefix = "ISBN";
+        $isnPrefix = 'ISBN';
       }
 
       $anchor .= '. -- ' . $isnPrefix . ' ' . $field['x'];

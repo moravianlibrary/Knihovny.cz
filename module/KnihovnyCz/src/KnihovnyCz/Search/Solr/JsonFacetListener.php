@@ -164,7 +164,7 @@ class JsonFacetListener implements \Laminas\Log\LoggerAwareInterface
                 )
             );
         }
-        if (!empty($this->orFacets) && $this->orFacets[0] == "*") {
+        if (!empty($this->orFacets) && $this->orFacets[0] == '*') {
             $this->allFacetsAreOr = true;
         }
         if (($specialFacets = $facetConfig->SpecialFacets) !== null) {
@@ -283,7 +283,7 @@ class JsonFacetListener implements \Laminas\Log\LoggerAwareInterface
 
         if (!empty($jsonFacetData)) {
             $this->getLogger()->info(
-                "json.facet: " .
+                'json.facet: ' .
                 json_encode($jsonFacetData, JSON_PRETTY_PRINT)
             );
             $params->set('json.facet', json_encode($jsonFacetData));
@@ -373,7 +373,7 @@ class JsonFacetListener implements \Laminas\Log\LoggerAwareInterface
             $nestedFilter = implode(' AND ', $appliedFilters);
         }
         if ($type == 'nested') {
-            $domain["blockChildren"] = DeduplicationHelper::PARENT_FILTER;
+            $domain['blockChildren'] = DeduplicationHelper::PARENT_FILTER;
             $q = DeduplicationHelper::CHILD_FILTER;
             if ($nestedFilter != null) {
                 $q .= ' AND ' . $nestedFilter;
@@ -382,7 +382,7 @@ class JsonFacetListener implements \Laminas\Log\LoggerAwareInterface
                 $facetConfig['facet'] = [ 'count' => 'unique(_root_)' ];
             }
         } elseif ($type == 'parent') {
-            $domain["blockParent"] = DeduplicationHelper::PARENT_FILTER;
+            $domain['blockParent'] = DeduplicationHelper::PARENT_FILTER;
             $queryDomain = [
                 'blockChildren' => DeduplicationHelper::PARENT_FILTER,
             ];
@@ -428,7 +428,7 @@ class JsonFacetListener implements \Laminas\Log\LoggerAwareInterface
                 $newFilters[] = $fq;
                 continue;
             }
-            [$field, $query] = explode(":", $fq, 2);
+            [$field, $query] = explode(':', $fq, 2);
             [$field, $localParams] = DeduplicationHelper::parseField($field);
             if ($localParams != null) {
                 $fq = $localParams . ' (' . $field . ':' . $query . ')';
@@ -462,13 +462,13 @@ class JsonFacetListener implements \Laminas\Log\LoggerAwareInterface
         }
         if (count($nestedOrFacets) > 1) {
             $newFilters[] = "{!parent which='$parentFilter' " .
-                "tag=nested_facet_filter}( " . implode(
+                'tag=nested_facet_filter}( ' . implode(
                     ' AND ',
                     $nestedOrFacets
-                ) . " )";
+                ) . ' )';
         }
         $this->getLogger()->debug(
-            "New fq parameters: " .
+            'New fq parameters: ' .
             print_r($newFilters, true)
         );
         $params->set('fq', $newFilters);
@@ -492,9 +492,9 @@ class JsonFacetListener implements \Laminas\Log\LoggerAwareInterface
     {
         $localParams = trim($localParams);
         if ($localParams == null) {
-            return "{!" . $newParam . "}";
+            return '{!' . $newParam . '}';
         } else {
-            return rtrim($localParams, "}") . " " . $newParam . "}";
+            return rtrim($localParams, '}') . ' ' . $newParam . '}';
         }
     }
 

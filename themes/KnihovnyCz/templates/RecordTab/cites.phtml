@@ -7,7 +7,7 @@ $data = $this->driver->getCitedDocuments();
 <?php foreach($data as $document): ?>
   <?php
     $searchAction = $this->searchOptions($this->driver->getSourceIdentifier())->getSearchAction();
-    $url = $this->url($searchAction) . "?" . http_build_query(
+    $url = $this->url($searchAction) . '?' . http_build_query(
         [
         'lookfor' => $document['doi'] ?? $document['title'],
         'type' => 'AllFields',

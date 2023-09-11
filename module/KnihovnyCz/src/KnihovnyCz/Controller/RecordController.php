@@ -73,7 +73,7 @@ class RecordController extends \VuFind\Controller\RecordController
     {
         parent::__construct($sm, $config);
         $this->redirectToLibrary = ($config->SearchTabs->Search2 ?? null)
-            == "Libraries directory";
+            == 'Libraries directory';
     }
 
     /**
@@ -208,7 +208,7 @@ class RecordController extends \VuFind\Controller\RecordController
             $gatheredDetails
         ) : [];
         $extraHoldFields = isset($checkHolds['extraHoldFields'])
-            ? explode(":", $checkHolds['extraHoldFields']) : [];
+            ? explode(':', $checkHolds['extraHoldFields']) : [];
 
         $requestGroupNeeded = in_array('requestGroup', $extraHoldFields)
             && !empty($requestGroups)

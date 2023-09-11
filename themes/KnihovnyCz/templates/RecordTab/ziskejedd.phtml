@@ -83,7 +83,7 @@ $dedupedRecordIds = $tab->getDedupedRecordIds();
               $libs = $tab->getConnectedLibs();
             } catch (\Exception $e) {
           ?>
-            <div class="alert alert-warning"><?=$this->transEsc("ZiskejEdd::alert_api_error") ?></div>
+            <div class="alert alert-warning"><?=$this->transEsc('ZiskejEdd::alert_api_error') ?></div>
           <?php
             }
           ?>
@@ -100,7 +100,7 @@ $dedupedRecordIds = $tab->getDedupedRecordIds();
                   <?=$this->translate('Source::' . $libId) ?>
                   <span class="pull-right">
                     <a class="btn btn-primary ziskej-order-btn" data-lightbox href="<?=$this->url('ziskej-edd-order', ['id' => $driver->getUniqueId(), 'eppnDomain' => $userCard->getEppnDomain()]) ?>">
-                      <?=$this->icon('ziskej-order')?> <?=$this->transEsc("ZiskejEdd::btn_order") ?>
+                      <?=$this->icon('ziskej-order')?> <?=$this->transEsc('ZiskejEdd::btn_order') ?>
                     </a>
                 </span>
                 </li>
@@ -108,12 +108,12 @@ $dedupedRecordIds = $tab->getDedupedRecordIds();
             </ul>
           <?php else: ?>
             <div class="alert alert-warning text-center">
-              <?=$this->transEsc("ZiskejEdd::alert_no_connected_libraries") ?>
+              <?=$this->transEsc('ZiskejEdd::alert_no_connected_libraries') ?>
             </div>
           <?php endif; ?>
         <?php else: ?>
           <div class="alert alert-warning text-center">
-            <?=$this->transEsc("ZiskejEdd::warning_api_disconnected") ?>
+            <?=$this->transEsc('ZiskejEdd::warning_api_disconnected') ?>
           </div>
         <?php endif; ?>
       </div>

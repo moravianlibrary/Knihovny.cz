@@ -64,7 +64,7 @@ class SolrDublinCore extends SolrDefault
      */
     public function getAllSubjectHeadings($extended = false)
     {
-        $data = $this->getXmlFieldData("subject");
+        $data = $this->getXmlFieldData('subject');
         $data = array_filter(
             $data,
             function ($part) {
@@ -117,7 +117,7 @@ class SolrDublinCore extends SolrDefault
      */
     public function getHumanReadablePublicationDates()
     {
-        return $this->getXmlFieldData("date");
+        return $this->getXmlFieldData('date');
     }
 
     /**
@@ -127,7 +127,7 @@ class SolrDublinCore extends SolrDefault
      */
     public function getGeneralNotes()
     {
-        return $this->getXmlFieldData("description");
+        return $this->getXmlFieldData('description');
     }
 
     /**

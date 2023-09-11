@@ -54,7 +54,7 @@ class EDS extends \VuFind\RecordDriver\EDS
      */
     public function getAccessUrl()
     {
-        $items = $this->getItems(null, "Access URL", 'URL');
+        $items = $this->getItems(null, 'Access URL', 'URL');
         if (empty($items)) {
             return null;
         }

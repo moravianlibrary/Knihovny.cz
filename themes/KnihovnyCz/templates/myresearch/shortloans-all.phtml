@@ -24,7 +24,7 @@ $this->headScript()->appendFile('holds.js');
 </div>
 
 <div class="<?=$this->layoutClass('sidebar')?>" id="myresearch-sidebar">
-  <?=$this->context($this)->renderInContext("myresearch/menu.phtml", ['active' => 'shortloans'])?>
+  <?=$this->context($this)->renderInContext('myresearch/menu.phtml', ['active' => 'shortloans'])?>
 </div>
 
 <noscript><?=$this->transEsc('Please enable JavaScript.')?></noscript>

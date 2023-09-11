@@ -99,7 +99,7 @@ class Connector extends \VuFindSearch\Backend\Solr\Connector
         $this->debug(
             sprintf('=> %s %s', $client->getMethod(), $client->getUri())
         );
-        $requestId = $this->request->getHeader("X-Request-ID");
+        $requestId = $this->request->getHeader('X-Request-ID');
         if ($requestId) {
             $client->setHeaders(['X-Request-ID' => $requestId->getFieldValue()]);
         }

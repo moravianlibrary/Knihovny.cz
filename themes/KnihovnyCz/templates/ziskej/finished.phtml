@@ -19,10 +19,10 @@ $this->layout()->searchbox = false;
 <?= $this->flashmessages() ?>
 
 <p>
-  <a class="btn btn-sm btn-primary" href="<?= $this->url('myresearch-ziskej-mvs-ticket', ['eppnDomain' => $userCard->getEppnDomain(), 'ticketId' => $ticket->id]); ?>" title="<?= $this->translate("ZiskejMvs::btn_order_detail_title"); ?>">
-    <?=$this->icon('ziskej-order-detail')?> <?= $this->translate("ZiskejMvs::btn_order_detail"); ?>
+  <a class="btn btn-sm btn-primary" href="<?= $this->url('myresearch-ziskej-mvs-ticket', ['eppnDomain' => $userCard->getEppnDomain(), 'ticketId' => $ticket->id]); ?>" title="<?= $this->translate('ZiskejMvs::btn_order_detail_title'); ?>">
+    <?=$this->icon('ziskej-order-detail')?> <?= $this->translate('ZiskejMvs::btn_order_detail'); ?>
   </a>
-  <a class="btn btn-sm btn-default" href="<?= $this->url('home'); ?>" title="<?= $this->translate("btn_homepage_title"); ?>">
-    <?=$this->icon('home')?> <?= $this->translate("btn_homepage"); ?>
+  <a class="btn btn-sm btn-default" href="<?= $this->url('home'); ?>" title="<?= $this->translate('btn_homepage_title'); ?>">
+    <?=$this->icon('home')?> <?= $this->translate('btn_homepage'); ?>
   </a>
 </p>

@@ -93,11 +93,11 @@ class PerformanceLogger
     {
         $solrUrl = $client->getUri();
         $referer = $this->getHeader('Referer');
-        $requestId = $this->getHeader("X-Request-ID");
-        $ip = $this->getHeader("X-Forwarded-For");
+        $requestId = $this->getHeader('X-Request-ID');
+        $ip = $this->getHeader('X-Forwarded-For');
         $response = $client->getResponse();
-        $cache = $this->getHeaderFromResponse($response, "X-Cache");
-        $genTime = $this->getHeaderFromResponse($response, "X-Generated-In");
+        $cache = $this->getHeaderFromResponse($response, 'X-Cache');
+        $genTime = $this->getHeaderFromResponse($response, 'X-Generated-In');
         $solrTime = null;
         if (is_numeric($genTime)) {
             $solrTime = number_format(floatval($genTime), 3);

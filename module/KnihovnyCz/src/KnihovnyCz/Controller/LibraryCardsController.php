@@ -86,7 +86,7 @@ class LibraryCardsController extends LibraryCardsControllerBase
     public function notSupportedAction(): \Laminas\Http\Response
     {
         $this->flashMessenger()->addErrorMessage(
-            "Library cards are not supported in this view"
+            'Library cards are not supported in this view'
         );
         return $this->redirect()->toRoute('myresearch-home');
     }
@@ -145,7 +145,7 @@ class LibraryCardsController extends LibraryCardsControllerBase
     protected function processEditLibraryCard($user)
     {
         $this->flashMessenger()->addErrorMessage(
-            "Editation of library cards is not supported"
+            'Editation of library cards is not supported'
         );
         return $this->redirect()->toRoute('librarycards-home');
     }
