@@ -206,7 +206,7 @@ class NewItems implements \VuFind\Recommend\RecommendInterface
             $range = $this->createRange($date, $previous);
             $this->dateRanges[$formatter->format($date)] = [
                 'filter' => $this->createFilter($range),
-                'selected' => ($this->selectedDateRange == $range)
+                'selected' => ($this->selectedDateRange == $range),
             ];
             if ($this->limitToInterval) {
                 $previous = $date;

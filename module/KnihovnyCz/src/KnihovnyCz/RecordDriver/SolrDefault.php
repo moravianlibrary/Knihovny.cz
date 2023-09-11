@@ -60,7 +60,7 @@ class SolrDefault extends \VuFind\RecordDriver\SolrDefault
      * @var array
      */
     protected $preferredSnippetFields = [
-        'toc_txt_mv', 'fulltext'
+        'toc_txt_mv', 'fulltext',
     ];
 
     /**
@@ -265,7 +265,7 @@ class SolrDefault extends \VuFind\RecordDriver\SolrDefault
                 if (isset($this->highlightDetails[$current][0])) {
                     return [
                         'snippet' => $this->highlightDetails[$current][0],
-                        'caption' => $this->getSnippetCaption($current)
+                        'caption' => $this->getSnippetCaption($current),
                     ];
                 }
             }
@@ -833,7 +833,7 @@ class SolrDefault extends \VuFind\RecordDriver\SolrDefault
                 'status' => $status != '' ? $status : null,
                 'url' => $parts[2] != '' ? $parts[2] : null,
                 'desc' => $parts[3] != '' ? $parts[3] : null,
-                'source' => $source != '' ? $source : null
+                'source' => $source != '' ? $source : null,
             ];
         }
         return $links;

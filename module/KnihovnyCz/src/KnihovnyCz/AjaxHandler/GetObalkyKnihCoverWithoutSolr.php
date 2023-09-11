@@ -143,7 +143,7 @@ class GetObalkyKnihCoverWithoutSolr extends AbstractBase implements
                     'html' => $this->renderer->render(
                         'record/coverReplacement',
                         ['format' => $format]
-                    )
+                    ),
                 ]
             );
     }

@@ -17,10 +17,10 @@ $config = [
                     'util/expire_users' => \KnihovnyCzConsole\Command\Util\ExpireUsersCommand::class,
                     'util/expire_csrf_tokens' => \KnihovnyCzConsole\Command\Util\ExpireCsrfTokensCommand::class,
                     'util/update_resources_from_solr' => \KnihovnyCzConsole\Command\Util\UpdateResourcesFromSolrCommandFactory::class,
-                ]
-            ]
-        ]
-    ]
+                ],
+            ],
+        ],
+    ],
 ];
 
 return $config;

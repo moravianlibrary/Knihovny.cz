@@ -59,7 +59,7 @@ class UserList extends \VuFind\Db\Table\UserList
                     ->where(
                         [
                             'user_list.public' => 1,
-                            new LikePredicate('user.major', '%widgets%')
+                            new LikePredicate('user.major', '%widgets%'),
                         ]
                     );
             }

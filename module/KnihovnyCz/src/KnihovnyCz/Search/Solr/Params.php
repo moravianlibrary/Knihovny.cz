@@ -48,7 +48,7 @@ class Params extends \VuFind\Search\Solr\Params
 
     protected const TREAT_AS_NON_HIERARCHICAL = [
         'region_institution_facet_mv',
-        'local_region_institution_facet_mv'
+        'local_region_institution_facet_mv',
     ];
 
     /**

@@ -37,7 +37,7 @@ $config = [
                      'route' => '/Inspiration',
                      'defaults' => [
                          'controller' => 'Inspiration',
-                         'action' => 'Home'
+                         'action' => 'Home',
                      ],
                  ],
              ],
@@ -47,7 +47,7 @@ $config = [
                      'route' => '/inspirace/[:list]',
                      'defaults' => [
                          'controller' => 'Inspiration',
-                         'action' => 'Show'
+                         'action' => 'Show',
                      ],
                  ],
              ],
@@ -57,7 +57,7 @@ $config = [
                      'route' => '/Inspiration/[:list]',
                      'defaults' => [
                          'controller' => 'Inspiration',
-                         'action' => 'Show'
+                         'action' => 'Show',
                      ],
                  ],
              ],
@@ -68,7 +68,7 @@ $config = [
                      'route' => '/Search/Inspiration',
                      'defaults' => [
                          'controller' => 'Inspiration',
-                         'action' => 'HomeLegacy'
+                         'action' => 'HomeLegacy',
                      ],
                  ],
              ],
@@ -101,7 +101,7 @@ $config = [
                      'route' => '/Search/Results/',
                      'defaults' => [
                          'controller' => 'Search',
-                         'action' => 'Results'
+                         'action' => 'Results',
                      ],
                  ],
              ],
@@ -111,7 +111,7 @@ $config = [
                      'route' => '/ziskej',
                      'defaults' => [
                          'controller' => 'ZiskejAdmin',
-                         'action' => 'Home'
+                         'action' => 'Home',
                      ],
                  ],
              ],
@@ -121,7 +121,7 @@ $config = [
                      'route' => '/MyResearch/Ziskej',
                      'defaults' => [
                          'controller' => 'MyResearchZiskejMvs',
-                         'action' => 'Home'
+                         'action' => 'Home',
                      ],
                  ],
              ],
@@ -131,7 +131,7 @@ $config = [
                      'route' => '/MyResearch/ZiskejEdd',
                      'defaults' => [
                          'controller' => 'MyResearchZiskejEdd',
-                         'action' => 'Home'
+                         'action' => 'Home',
                      ],
                  ],
              ],
@@ -145,7 +145,7 @@ $config = [
                      ],
                      'defaults' => [
                          'controller' => 'MyResearchZiskejMvs',
-                         'action' => 'Ticket'
+                         'action' => 'Ticket',
                      ],
                  ],
              ],
@@ -159,7 +159,7 @@ $config = [
                      ],
                      'defaults' => [
                          'controller' => 'MyResearchZiskejEdd',
-                         'action' => 'Ticket'
+                         'action' => 'Ticket',
                      ],
                  ],
              ],
@@ -173,7 +173,7 @@ $config = [
                      ],
                      'defaults' => [
                          'controller' => 'MyResearchZiskejMvs',
-                         'action' => 'TicketCancel'
+                         'action' => 'TicketCancel',
                      ],
                  ],
              ],
@@ -187,7 +187,7 @@ $config = [
                      ],
                      'defaults' => [
                          'controller' => 'MyResearchZiskejEdd',
-                         'action' => 'TicketCancel'
+                         'action' => 'TicketCancel',
                      ],
                  ],
              ],
@@ -201,7 +201,7 @@ $config = [
                      ],
                      'defaults' => [
                          'controller' => 'MyResearchZiskejMvs',
-                         'action' => 'TicketMessage'
+                         'action' => 'TicketMessage',
                      ],
                  ],
              ],
@@ -215,7 +215,7 @@ $config = [
                      ],
                      'defaults' => [
                          'controller' => 'MyResearchZiskejEdd',
-                         'action' => 'TicketMessage'
+                         'action' => 'TicketMessage',
                      ],
                  ],
              ],
@@ -229,7 +229,7 @@ $config = [
                      ],
                      'defaults' => [
                          'controller' => 'Record',
-                         'action' => 'ZiskejOrder'
+                         'action' => 'ZiskejOrder',
                      ],
                  ],
              ],
@@ -243,7 +243,7 @@ $config = [
                      ],
                      'defaults' => [
                          'controller' => 'Record',
-                         'action' => 'ZiskejEddOrder'
+                         'action' => 'ZiskejEddOrder',
                      ],
                  ],
              ],
@@ -256,7 +256,7 @@ $config = [
                      ],
                      'defaults' => [
                          'controller' => 'Record',
-                         'action' => 'ZiskejOrderPost'
+                         'action' => 'ZiskejOrderPost',
                      ],
                  ],
              ],
@@ -269,7 +269,7 @@ $config = [
                      ],
                      'defaults' => [
                          'controller' => 'Record',
-                         'action' => 'ZiskejEddOrderPost'
+                         'action' => 'ZiskejEddOrderPost',
                      ],
                  ],
              ],
@@ -297,7 +297,7 @@ $config = [
                      ],
                      'defaults' => [
                          'controller' => 'Ziskej',
-                         'action' => 'Finished'
+                         'action' => 'Finished',
                      ],
                  ],
              ],
@@ -311,7 +311,7 @@ $config = [
                      ],
                      'defaults' => [
                          'controller' => 'EmbeddedLibraries',
-                         'action' => 'Index'
+                         'action' => 'Index',
                      ],
                  ],
              ],
@@ -321,7 +321,7 @@ $config = [
                      'route' => '/Search/Embedded',
                      'defaults' => [
                          'controller' => 'EmbeddedSearch',
-                         'action' => 'Index'
+                         'action' => 'Index',
                      ],
                  ],
              ],
@@ -331,7 +331,7 @@ $config = [
                      'route' => '/Search/embedded',
                      'defaults' => [
                          'controller' => 'EmbeddedSearch',
-                         'action' => 'Index'
+                         'action' => 'Index',
                      ],
                  ],
              ],
@@ -342,7 +342,7 @@ $config = [
                      'defaults' => [
                          'controller' => 'AdminIls',
                          'action'     => 'Status',
-                     ]
+                     ],
                  ],
              ],
          ],
@@ -491,7 +491,7 @@ $config = [
                     \VuFind\ContentBlock\TemplateBased::class => \KnihovnyCz\ContentBlock\TemplateBased::class,
                     'templatebasedforloggedin' => \KnihovnyCz\ContentBlock\TemplateBasedForLoggedIn::class,
                     'templatebasedforunloggedin' => \KnihovnyCz\ContentBlock\TemplateBasedForUnloggedIn::class,
-                ]
+                ],
             ],
             'db_row' => [
                 'factories' => [
@@ -511,7 +511,7 @@ $config = [
                     \VuFind\Db\Row\UserCard::class => \KnihovnyCz\Db\Row\UserCard::class,
                     \VuFind\Db\Row\UserList::class => \KnihovnyCz\Db\Row\UserList::class,
                     \VuFind\Db\Row\Resource::class => \KnihovnyCz\Db\Row\Resource::class,
-                ]
+                ],
             ],
             'db_table' => [
                 'factories' => [
@@ -556,11 +556,11 @@ $config = [
             ],
             'content_toc' => [
                 'factories' => [
-                    \KnihovnyCz\Content\TOC\ObalkyKnih::class => \VuFind\Content\ObalkyKnihContentFactory::class
+                    \KnihovnyCz\Content\TOC\ObalkyKnih::class => \VuFind\Content\ObalkyKnihContentFactory::class,
                 ],
                 'aliases' => [
-                    'obalkyknih' => \KnihovnyCz\Content\TOC\ObalkyKnih::class
-                ]
+                    'obalkyknih' => \KnihovnyCz\Content\TOC\ObalkyKnih::class,
+                ],
             ],
             'ajaxhandler' => [
                 'factories' => [
@@ -620,7 +620,7 @@ $config = [
                 ],
                 'aliases' => [
                     \VuFind\Search\Favorites\Options::class => \KnihovnyCz\Search\Favorites\Options::class,
-                ]
+                ],
             ],
             'search_params' => [
                 'factories' => [
@@ -630,7 +630,7 @@ $config = [
                 'aliases' => [
                     \VuFind\Search\Solr\Params::class => \KnihovnyCz\Search\Solr\Params::class,
                     \VuFind\Search\Search2\Params::class => \KnihovnyCz\Search\Search2\Params::class,
-                ]
+                ],
             ],
             'search_results' => [
                 'factories' => [
@@ -638,7 +638,7 @@ $config = [
                 ],
                 'aliases' => [
                     \VuFind\Search\Solr\Results::class => \KnihovnyCz\Search\Solr\Results::class,
-                ]
+                ],
             ],
             'autocomplete' => [
                 'factories' => [
@@ -652,7 +652,7 @@ $config = [
                     'solrprefixsorted' => \KnihovnyCz\Autocomplete\SolrPrefixSorted::class,
                     'solrprefixhandler' => \KnihovnyCz\Autocomplete\SolrPrefixHandler::class,
                     'solrauthorityenricher' => \KnihovnyCz\Autocomplete\SolrAuthorityEnricher::class,
-                ]
+                ],
             ],
             'recommend' => [
                 'factories' => [
@@ -674,7 +674,7 @@ $config = [
                 ],
                 'aliases' => [
                     \VuFind\Sitemap\Plugin\Index::class => \KnihovnyCz\Sitemap\Plugin\Index::class,
-                ]
+                ],
             ],
             'form_handler' => [
                 'factories' => [
@@ -808,7 +808,7 @@ $staticRoutes = [
 ];
 
 $nonTabRecordActions = [
-    'shortLoan'
+    'shortLoan',
 ];
 
 $routeGenerator = new \KnihovnyCz\Route\RouteGenerator();

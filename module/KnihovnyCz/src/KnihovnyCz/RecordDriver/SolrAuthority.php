@@ -534,7 +534,7 @@ SELECT DISTINCT ?relatedId ?propLabel WHERE {
 SPARQL;
         return [
             sprintf($queryPattern, addslashes($id), $lang),
-            ['rdfs', 'wikibase', 'wdt', 'wd']
+            ['rdfs', 'wikibase', 'wdt', 'wd'],
         ];
     }
 
@@ -580,7 +580,7 @@ SPARQL;
                 }
                 $return[] = [
                     'record' => $record,
-                    'label' => $authority['propLabel']['value'] ?? ''
+                    'label' => $authority['propLabel']['value'] ?? '',
                 ];
             }
         }

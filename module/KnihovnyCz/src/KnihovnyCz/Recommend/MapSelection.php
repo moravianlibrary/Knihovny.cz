@@ -223,7 +223,7 @@ class MapSelection extends \VuFind\Recommend\MapSelection
                     );
                 }
                 $results[] = [$recId, $title, $recCoords[0],
-                    $recCoords[1], $recCoords[2], $recCoords[3]
+                    $recCoords[1], $recCoords[2], $recCoords[3],
                 ];
             }
         }

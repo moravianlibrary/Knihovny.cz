@@ -49,7 +49,7 @@
                       'address' => $address,
                       'lng' => $coords['lng'],
                       'lat' => $coords['lat'],
-                  ]
+                  ],
               ];
               foreach ($this->driver->tryMethod('getBranches', []) as $branch) {
                   if (isset($branch['coordinates']) && !empty($branch['coordinates'])) {

@@ -168,7 +168,7 @@ class Aleph extends AlephBase implements TranslatorAwareInterface
                     'opac' => 'Y',
                     'request' => 'C',
                     'desc' => (string)$z30->{'z30-item-status'},
-                    'sub_lib_desc' => (string)$z30->{'z30-sub-library'}
+                    'sub_lib_desc' => (string)$z30->{'z30-sub-library'},
                 ];
             }
             /* @phpstan-ignore-next-line */
@@ -253,7 +253,7 @@ class Aleph extends AlephBase implements TranslatorAwareInterface
                 /* @phpstan-ignore-next-line */
                 'sub_lib_desc' => (string)$item_status['sub_lib_desc'],
                 'no_of_loans' => (string)$z30->{'$no_of_loans'},
-                'requested' => (string)$requested
+                'requested' => (string)$requested,
             ];
         }
         return $holding;
@@ -364,7 +364,7 @@ class Aleph extends AlephBase implements TranslatorAwareInterface
 
         return [
             'count' => $totalCount,
-            $key => $transList
+            $key => $transList,
         ];
     }
 
@@ -691,7 +691,7 @@ class Aleph extends AlephBase implements TranslatorAwareInterface
                 'delete'     => $delete,
                 'item_id'    => $item_id,
                 'barcode'    => $barcode,
-                'callnumber' => $callnumber
+                'callnumber' => $callnumber,
             ];
         }
         ksort($results);
@@ -760,13 +760,13 @@ class Aleph extends AlephBase implements TranslatorAwareInterface
                 $statuses[$id] = [
                     'success' => false,
                     'status' => 'cancel_hold_failed',
-                    'sysMessage' => (string)$ex->getMessage()
+                    'sysMessage' => (string)$ex->getMessage(),
                 ];
             }
             $count++;
             $statuses[$id] = [
                 'success' => true,
-                'status' => 'cancel_hold_ok'
+                'status' => 'cancel_hold_ok',
             ];
         }
         $statuses['count'] = $count;
@@ -907,7 +907,7 @@ class Aleph extends AlephBase implements TranslatorAwareInterface
     {
         return [
             'monography',
-            'serial'
+            'serial',
         ];
     }
 
@@ -942,7 +942,7 @@ class Aleph extends AlephBase implements TranslatorAwareInterface
                 $form[$field] = [
                     'type'     => ($field != 'last-interest-date') ? 'text' : 'future_date',
                     'label'    => self::ILL_BLANK_FORM_LABEL_PREFIX . $field,
-                    'required' => $required
+                    'required' => $required,
                 ];
             } elseif ($field == 'ill-unit') {
                 $options = [];
@@ -1004,7 +1004,7 @@ class Aleph extends AlephBase implements TranslatorAwareInterface
             }
         }
         $groups['hidden'] = [
-            'fields' => $hiddenFields
+            'fields' => $hiddenFields,
         ];
         return $groups;
     }
@@ -1290,14 +1290,14 @@ class Aleph extends AlephBase implements TranslatorAwareInterface
             return [
                 'type'     => 'hidden',
                 'label'    => self::ILL_BLANK_FORM_LABEL_PREFIX . $field,
-                'value'  => array_key_first($options)
+                'value'  => array_key_first($options),
             ];
         }
         return [
             'type'     => 'select',
             'label'    => $field,
             'required' => $required,
-            'options'  => $options
+            'options'  => $options,
         ];
     }
 

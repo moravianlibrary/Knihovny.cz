@@ -55,27 +55,27 @@ class UserTest extends \PHPUnit\Framework\TestCase
             [
                 $this->getMockUser(['id' => 1, 'major' => '']),
                 'widgets',
-                false
+                false,
             ],
             [
                 $this->getMockUser(['id' => 1, 'major' => 'widgets']),
                 'widgets',
-                true
+                true,
             ],
             [
                 $this->getMockUser(['id' => 1, 'major' => 'admin, widgets']),
                 'widgets',
-                true
+                true,
             ],
             [
                 $this->getMockUser(['id' => 1, 'major' => '']),
                 'any',
-                false
+                false,
             ],
             [
                 $this->getMockUser(['id' => 1, 'major' => 'admin, widgets']),
                 'any',
-                true
+                true,
             ],
         ];
     }

@@ -54,7 +54,7 @@
         <?php $label = ''; if ($field->getOption('label') != null):?>
           <?php
             $attributes = [
-                'class' => 'control-label'
+                'class' => 'control-label',
             ];
             $required = $field->getOption('required') ?? false;
             if ($required) {

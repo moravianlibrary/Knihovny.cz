@@ -124,8 +124,8 @@ class Connection extends ConnectionBase
         foreach ($user->getLibraryCards() as $card) {
             $newParams[] = [
                 'patron' => [
-                    'cat_username' => $card['cat_username']
-                ]
+                    'cat_username' => $card['cat_username'],
+                ],
             ];
         }
         return $newParams;

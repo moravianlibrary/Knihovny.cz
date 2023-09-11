@@ -84,7 +84,7 @@ class CheckoutsController extends \VuFind\Controller\CheckoutsController
         if (!($view instanceof \Laminas\View\Model\ViewModel)) {
             $view = $this->createViewModel(
                 [
-                    'error' => 'ils_offline_home_message'
+                    'error' => 'ils_offline_home_message',
                 ]
             );
         }

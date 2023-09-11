@@ -143,19 +143,19 @@ class User extends \VuFind\Db\Table\User
             'comments',
             'user_resource',
             'user_list',
-            'search'
+            'search',
         ];
 
         foreach ($tables as $table) {
             $update = new Update($table);
             $update->set(
                 [
-                'user_id' => $into->id
+                'user_id' => $into->id,
                 ]
             );
             $update->where(
                 [
-                'user_id' => $from->id
+                'user_id' => $from->id,
                 ]
             );
             $this->sql->prepareStatementForSqlObject($update)->execute();

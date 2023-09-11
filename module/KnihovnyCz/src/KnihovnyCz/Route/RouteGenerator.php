@@ -70,8 +70,8 @@ class RouteGenerator extends \VuFind\Route\RouteGenerator
                 'defaults' => [
                     'controller' => $controller,
                     'action'     => 'Home',
-                ]
-            ]
+                ],
+            ],
         ];
         // special non-tab actions that each need their own route:
         foreach (self::$nonTabRecordActions as $action) {
@@ -86,8 +86,8 @@ class RouteGenerator extends \VuFind\Route\RouteGenerator
                     'defaults' => [
                         'controller' => $controller,
                         'action'     => $action,
-                    ]
-                ]
+                    ],
+                ],
             ];
         }
     }
@@ -136,8 +136,8 @@ class RouteGenerator extends \VuFind\Route\RouteGenerator
                 'defaults' => [
                     'controller' => $controller,
                     'action'     => $action,
-                ]
-            ]
+                ],
+            ],
         ];
     }
 

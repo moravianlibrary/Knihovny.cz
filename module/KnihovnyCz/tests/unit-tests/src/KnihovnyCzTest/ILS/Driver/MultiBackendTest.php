@@ -62,7 +62,7 @@ class MultiBackendTest extends \PHPUnit\Framework\TestCase
             'SiglaMapping' => [
                 'aaa' => 'AAA001',
                 'bbb' => 'BBB001',
-                'ccc' => 'CCC001'
+                'ccc' => 'CCC001',
             ],
         ];
         $driver = $this->getDriver();
@@ -101,7 +101,7 @@ class MultiBackendTest extends \PHPUnit\Framework\TestCase
             'SiglaMapping' => [
                 'aaa' => 'AAA001',
                 'bbb' => 'BBB001',
-                'ccc' => 'CCC001'
+                'ccc' => 'CCC001',
             ],
         ];
         $driver = $this->getDriver();
@@ -149,7 +149,7 @@ class MultiBackendTest extends \PHPUnit\Framework\TestCase
             'Drivers' => [],
             'Login' => [
                 'drivers' => ['d1', 'd2'],
-                'default_driver' => 'd1'
+                'default_driver' => 'd1',
             ],
         ];
         $driver->setConfig($config); //@phpstan-ignore-line

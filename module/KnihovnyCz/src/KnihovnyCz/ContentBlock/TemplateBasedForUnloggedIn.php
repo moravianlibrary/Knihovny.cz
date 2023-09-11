@@ -83,7 +83,7 @@ class TemplateBasedForUnloggedIn extends TemplateBased
         if ($this->isLoggedIn) {
             return [
                 'template' => 'ContentBlock/TemplateBased/markdown',
-                'data' => ''
+                'data' => '',
             ];
         }
 

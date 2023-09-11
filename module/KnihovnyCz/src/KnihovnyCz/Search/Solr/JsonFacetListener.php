@@ -308,7 +308,7 @@ class JsonFacetListener implements \Laminas\Log\LoggerAwareInterface
     ) {
         $keys = [
             "f.${field}.facet.${parameter}",
-            "facet.${parameter}"
+            "facet.${parameter}",
         ];
         foreach ($keys as $key) {
             if ($params->hasParam($key)) {
@@ -395,7 +395,7 @@ class JsonFacetListener implements \Laminas\Log\LoggerAwareInterface
                 'count' => [
                     'type' => 'query',
                     'domain' => $queryDomain,
-                ]
+                ],
             ];
         }
         return [
@@ -403,8 +403,8 @@ class JsonFacetListener implements \Laminas\Log\LoggerAwareInterface
             'q'      => $q,
             'domain' => $domain,
             'facet'  => [
-                $facetField => $facetConfig
-            ]
+                $facetField => $facetConfig,
+            ],
         ];
     }
 

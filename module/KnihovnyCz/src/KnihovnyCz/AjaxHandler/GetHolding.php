@@ -154,7 +154,7 @@ class GetHolding extends AbstractBase implements TranslatorAwareInterface
         }
         $response = [
             'status' => 'OK',
-            'holding' => $copy
+            'holding' => $copy,
         ];
         return $this->formatResponse($response, 200);
     }

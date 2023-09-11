@@ -399,7 +399,7 @@ class KohaRest1905 extends AbstractBase implements
                 $holds = $this->makeRequest(
                     [
                         'v1', 'contrib', 'bibliocommons', 'biblios',
-                        $item['biblio_id'], 'holds'
+                        $item['biblio_id'], 'holds',
                     ]
                 );
                 $transaction['renewable'] = $renewability['allows_renewal'] ?? false;
@@ -498,7 +498,7 @@ class KohaRest1905 extends AbstractBase implements
             if ($result['code'] == 403) {
                 $finalResult['details'][$itemId] = [
                     'item_id' => $itemId,
-                    'success' => false
+                    'success' => false,
                 ];
             } else {
                 $finalResult['details'][$itemId] = [
@@ -588,12 +588,12 @@ class KohaRest1905 extends AbstractBase implements
                 $response[$itemId] = [
                     'success' => false,
                     'status' => 'hold_cancel_fail',
-                    'sysMessage' => false
+                    'sysMessage' => false,
                 ];
             } else {
                 $response[$itemId] = [
                     'success' => true,
-                    'status' => 'hold_cancel_success'
+                    'status' => 'hold_cancel_success',
                 ];
                 ++$count;
             }
@@ -635,7 +635,7 @@ class KohaRest1905 extends AbstractBase implements
             }
             $locations[] = [
                 'locationID' => $location['library_id'],
-                'locationDisplay' => $location['name']
+                'locationDisplay' => $location['name'],
             ];
         }
         return $locations;
@@ -707,14 +707,14 @@ class KohaRest1905 extends AbstractBase implements
                 ['v1', 'contrib', 'knihovny_cz', 'biblios', $id, 'alows_hold'],
                 [
                     'patron_id' => $patron['id'],
-                    'library_id' => $this->getDefaultPickUpLocation($patron)
+                    'library_id' => $this->getDefaultPickUpLocation($patron),
                 ]
             );
             $result = $result['data'];
             if (!empty($result['allows_hold']) && $result['allows_hold'] == true) {
                 return [
                     'valid' => true,
-                    'status' => 'title_hold_place'
+                    'status' => 'title_hold_place',
                 ];
             }
             return [
@@ -725,18 +725,18 @@ class KohaRest1905 extends AbstractBase implements
         $result = $this->makeRequest(
             [
                 'v1', 'contrib', 'knihovny_cz', 'items', $data['item_id'],
-                'allows_hold'
+                'allows_hold',
             ],
             [
                 'patron_id' => $patron['id'],
-                'library_id' => $this->getDefaultPickUpLocation($patron)
+                'library_id' => $this->getDefaultPickUpLocation($patron),
             ]
         );
         $result = $result['data'];
         if (!empty($result['allows_hold']) && $result['allows_hold'] == true) {
             return [
                 'valid' => true,
-                'status' => 'hold_place'
+                'status' => 'hold_place',
             ];
         }
         return [
@@ -1056,7 +1056,7 @@ class KohaRest1905 extends AbstractBase implements
                 ['v1', 'contrib', 'knihovny_cz', 'biblios', $id, 'allows_hold'],
                 [
                     'patron_id' => $patron['id'],
-                    'library_id' => $this->getDefaultPickUpLocation($patron)
+                    'library_id' => $this->getDefaultPickUpLocation($patron),
                 ]
             );
             if (
@@ -1256,7 +1256,7 @@ class KohaRest1905 extends AbstractBase implements
     {
         return [
             'success' => false,
-            'sysMessage' => $message
+            'sysMessage' => $message,
         ];
     }
 

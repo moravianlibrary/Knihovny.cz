@@ -148,8 +148,8 @@ class SolrLocal extends \KnihovnyCz\RecordDriver\SolrMarc
                 'holdings' => [
                     [
                         'location' => 'default',
-                        'items' => $items
-                    ]
+                        'items' => $items,
+                    ],
                 ],
                 'filters' => $filters,
             ];

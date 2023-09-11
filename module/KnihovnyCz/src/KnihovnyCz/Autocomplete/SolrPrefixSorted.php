@@ -156,7 +156,7 @@ class SolrPrefixSorted implements \VuFind\Autocomplete\AutocompleteInterface
                 }
                 $jsonFacet['sort'] = 'sort_field' . ' ' . $order;
                 $jsonFacet['facet'] = [
-                    'sort_field' => $sortFunction
+                    'sort_field' => $sortFunction,
                 ];
             }
             $params->addJsonFacet($this->facetField, $jsonFacet);
@@ -168,7 +168,7 @@ class SolrPrefixSorted implements \VuFind\Autocomplete\AutocompleteInterface
             }
             $this->searchObject->getResults();
             $filter = [
-                $this->facetField => $this->facetField
+                $this->facetField => $this->facetField,
             ];
             $facets = $this->searchObject->getFacetList($filter);
             if (isset($facets[$this->facetField]['list'])) {

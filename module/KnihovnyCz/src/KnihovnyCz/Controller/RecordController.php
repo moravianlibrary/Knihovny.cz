@@ -118,7 +118,7 @@ class RecordController extends \VuFind\Controller\RecordController
             'Holds',
             [
                 'id' => $driver->getUniqueID(),
-                'patron' => $patron
+                'patron' => $patron,
             ]
         );
         if (!$checkHolds) {
@@ -170,7 +170,7 @@ class RecordController extends \VuFind\Controller\RecordController
             'Holds',
             [
                 'id' => $driver->getUniqueID(),
-                'patron' => $patron
+                'patron' => $patron,
             ]
         );
         if (!$checkHolds) {
@@ -291,7 +291,7 @@ class RecordController extends \VuFind\Controller\RecordController
                         'html' => true,
                         'msg' => 'hold_place_success_html',
                         'tokens' => [
-                            '%%url%%' => $this->url()->fromRoute('holds-list')
+                            '%%url%%' => $this->url()->fromRoute('holds-list'),
                         ],
                     ];
                     $this->flashMessenger()->addMessage($msg, 'success');

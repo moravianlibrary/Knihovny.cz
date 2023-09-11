@@ -193,7 +193,7 @@ district_exact:"' . $selectedDistrict . '"
                 'selectedRegion' => $selectedRegion,
                 'selectedDistrict' => $selectedDistrict,
                 'tree' => $tree,
-                'color' => $color
+                'color' => $color,
             ]
         );
         return $view;

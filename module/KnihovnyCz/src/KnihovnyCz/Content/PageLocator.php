@@ -57,7 +57,7 @@ class PageLocator extends PageLocatorBase implements HttpServiceAwareInterface
      */
     protected $types = [
         'md',
-        'phtml'
+        'phtml',
     ];
 
     /**
