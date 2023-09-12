@@ -360,7 +360,7 @@ class MultiBackend extends \VuFind\ILS\Driver\MultiBackend
     }
 
     /**
-     * Get short driver name
+     * Get driver class name including namespace
      *
      * @param string $recordId Record identifier
      *
@@ -371,7 +371,7 @@ class MultiBackend extends \VuFind\ILS\Driver\MultiBackend
     {
         $source = $this->getSource($recordId);
         return (!empty($source) && !empty($driver = $this->getDriver($source)))
-            ? (new \ReflectionClass($driver))->getShortName()
+            ? (new \ReflectionClass($driver))->getName()
             : '';
     }
 
