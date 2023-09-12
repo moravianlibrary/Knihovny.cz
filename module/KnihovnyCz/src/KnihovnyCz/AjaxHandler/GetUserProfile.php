@@ -62,7 +62,7 @@ class GetUserProfile extends AbstractIlsAndUserAction
         }
         $result = $this->ils->getMyProfile($patron);
         $status = [
-            'expired' => $result['expired'] ?? false
+            'expired' => $result['expired'] ?? false,
         ];
         return $this->formatResponse($status);
     }

@@ -72,7 +72,7 @@ class ObalkyKnih extends \VuFind\Content\AbstractBase
     public function loadByIsbn($key, \VuFindCode\ISBN $isbnObj)
     {
         $ids = [
-            'isbn' => $isbnObj
+            'isbn' => $isbnObj,
         ];
         $data = $this->service->getData($ids);
         $toc = [];

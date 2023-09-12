@@ -11,7 +11,7 @@ $config = [
         'aliases' => [
             \VuFindApi\Controller\SearchApiController::class => \KnihovnyCzApi\Controller\SearchApiController::class,
             \VuFindApi\Controller\Search2ApiController::class => \KnihovnyCzApi\Controller\Search2ApiController::class,
-        ]
+        ],
     ],
     'service_manager' => [
         'factories' => [
@@ -28,8 +28,8 @@ $config = [
                     'defaults' => [
                         'controller' => 'SearchApi',
                         'action'     => 'item',
-                    ]
-                ]
+                    ],
+                ],
             ],
             'search2Apiv1' => [
                 'type' => 'Laminas\Router\Http\Literal',
@@ -39,8 +39,8 @@ $config = [
                     'defaults' => [
                         'controller' => 'Search2Api',
                         'action'     => 'search',
-                    ]
-                ]
+                    ],
+                ],
             ],
             'record2Apiv1' => [
                 'type' => 'Laminas\Router\Http\Literal',
@@ -50,8 +50,8 @@ $config = [
                     'defaults' => [
                         'controller' => 'Search2Api',
                         'action'     => 'record',
-                    ]
-                ]
+                    ],
+                ],
             ],
         ],
     ],

@@ -28,7 +28,7 @@ $config = [
         ],
         'aliases' => [
             'cronjob' => \KnihovnyCzCronApi\Controller\Cronjob::class,
-        ]
+        ],
     ],
 ];
 

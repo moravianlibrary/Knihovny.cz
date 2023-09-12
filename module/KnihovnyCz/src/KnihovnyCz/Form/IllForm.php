@@ -206,7 +206,7 @@ class IllForm extends Form implements InputFilterProviderInterface
             'name' => 'csrf',
             'type' => Hidden::class,
             'attributes' => [
-                'value' => $this->csrfValidator->getHash()
+                'value' => $this->csrfValidator->getHash(),
             ],
         ]);
         $this->filterSpec['csrf'] = [
@@ -227,8 +227,8 @@ class IllForm extends Form implements InputFilterProviderInterface
                             return $valid;
                         },
                     ],
-                ]
-            ]
+                ],
+            ],
         ];
         $this->add([
             'name' => 'submit',

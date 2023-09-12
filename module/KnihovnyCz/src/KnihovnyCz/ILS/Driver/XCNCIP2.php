@@ -58,7 +58,7 @@ class XCNCIP2 extends \VuFind\ILS\Driver\XCNCIP2
      * @var string[]
      */
     protected $notHoldableStatuses = [
-        'circulation status undefined', 'lost'
+        'circulation status undefined', 'lost',
     ];
 
     /**

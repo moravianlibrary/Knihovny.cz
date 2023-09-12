@@ -199,7 +199,7 @@ class SolrAuthorityEnricher extends SolrPrefix
                     [
                         'label' => $label,
                         'value' => $value,
-                        'link'  => $this->recordLinker->getUrl($recordIds[0])
+                        'link'  => $this->recordLinker->getUrl($recordIds[0]),
                     ]
                 );
             }

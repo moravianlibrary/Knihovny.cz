@@ -166,7 +166,7 @@ class UserSettingsService
         $settings['citationStyle'] = [
             'selected' => $setting->citation_style
                 ?? $citation->Citation->default_citation_style,
-            'values' => $citation->Citation->citation_styles->toArray()
+            'values' => $citation->Citation->citation_styles->toArray(),
         ];
         // records on page
         $searches = $this->config->get('searches');
@@ -178,7 +178,7 @@ class UserSettingsService
             'selected' => $setting->records_per_page
                 ?? $this->memory->retrieveLastSetting('Solr', 'limit')
                 ?? $citation->Citation->default_citation_style,
-            'values' => $limits
+            'values' => $limits,
         ];
         return $settings;
     }

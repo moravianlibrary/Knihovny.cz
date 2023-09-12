@@ -104,7 +104,7 @@ class InvolvedLibrariesExtension implements ConfigurableExtensionInterface
             DocumentParsedEvent::class,
             [
                 new InvolvedLibrariesBuilder($this->involvedLibrariesService),
-                'onDocumentParsed'
+                'onDocumentParsed',
             ],
             -150
         );

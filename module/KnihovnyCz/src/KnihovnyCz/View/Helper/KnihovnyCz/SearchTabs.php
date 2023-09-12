@@ -96,7 +96,7 @@ class SearchTabs extends Base
             'label' => $label,
             'permission' => $permissionName,
             'selected' => false,
-            'url' => $this->appendStoredSettings($class, $url)
+            'url' => $this->appendStoredSettings($class, $url),
         ];
     }
 
@@ -119,7 +119,7 @@ class SearchTabs extends Base
             'label' => $label,
             'permission' => $permissionName,
             'selected' => false,
-            'url' => $this->appendStoredSettings($class, $newUrl)
+            'url' => $this->appendStoredSettings($class, $newUrl),
         ];
     }
 

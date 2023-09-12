@@ -95,7 +95,7 @@ class RecordDataFormatterFactory extends RecordDataFormatterFactoryBase
                         'icon' => $data['icon'],
                         'heading' => $data['heading'],
                         'content-class' => $data['content-class'],
-                    ]
+                    ],
                 ]
             );
         }
@@ -233,7 +233,7 @@ class RecordDataFormatterFactory extends RecordDataFormatterFactoryBase
             null,
             [
                 'itemPrefix' => '<img class="signature" src="',
-                'itemSuffix' => '">'
+                'itemSuffix' => '">',
             ]
         );
 

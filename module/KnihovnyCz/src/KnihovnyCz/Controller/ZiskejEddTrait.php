@@ -211,7 +211,7 @@ trait ZiskejEddTrait
                             'msg' => 'ZiskejEdd::error_max_total_pages_exceeded',
                             'tokens' => [
                                 '%%limit%%' =>
-                                    ZiskejSettings::EDD_SELECTION_MAX_PAGES
+                                    ZiskejSettings::EDD_SELECTION_MAX_PAGES,
                             ],
                         ],
                         'error'

@@ -88,7 +88,7 @@ class Resource extends \VuFind\Db\Table\Resource
                             'DISTINCT(?)',
                             ['resource.id'],
                             [Expression::TYPE_IDENTIFIER]
-                        ), Select::SQL_STAR, new Expression('saved')
+                        ), Select::SQL_STAR, new Expression('saved'),
                     ]
                 );
                 $s->join(
@@ -151,7 +151,7 @@ class Resource extends \VuFind\Db\Table\Resource
         // Apply sorting, if necessary:
         $legalSorts = [
             'title', 'title desc', 'author', 'author desc', 'year',
-            'year desc', 'saved desc', 'saved asc'
+            'year desc', 'saved desc', 'saved asc',
         ];
         if (!empty($sort) && in_array(strtolower($sort), $legalSorts)) {
             // Strip off 'desc' to obtain the raw field name -- we'll need it

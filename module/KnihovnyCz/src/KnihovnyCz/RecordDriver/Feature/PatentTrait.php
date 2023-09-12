@@ -52,7 +52,7 @@ trait PatentTrait
             'b' => 'country',
             'c' => 'type',
             'a' => 'id',
-            'd' => 'publish_date'
+            'd' => 'publish_date',
         ];
         foreach ($subfields as $subfield => $patentInfoKey) {
             $data = $this->getFieldArray('013', [$subfield]);

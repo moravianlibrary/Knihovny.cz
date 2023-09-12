@@ -75,7 +75,7 @@ class TemplateBased extends TemplateBasedBase implements HttpServiceAwareInterfa
         }
         return [
             'template' => 'ContentBlock/TemplateBased/markdown',
-            'data' => $data
+            'data' => $data,
         ];
     }
 

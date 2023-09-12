@@ -90,7 +90,7 @@ class CitaceProService implements \VuFindHttp\HttpServiceAwareInterface
             ? $style : $this->getDefaultCitationStyle();
 
         $query = [
-            'citacniStyl' => $style
+            'citacniStyl' => $style,
         ];
         $citationServerUrl = 'https://www.citacepro.com/api/cpk/citace/'
             . urlencode($recordId) . '?' . http_build_query($query);

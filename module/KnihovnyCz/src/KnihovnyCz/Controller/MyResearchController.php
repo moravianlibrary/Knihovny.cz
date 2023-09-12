@@ -167,7 +167,7 @@ class MyResearchController extends MyResearchControllerBase
         } else {
             $view = $this->createViewModel(
                 [
-                    'error' => 'ils_offline_home_message'
+                    'error' => 'ils_offline_home_message',
                 ]
             );
         }
@@ -230,7 +230,7 @@ class MyResearchController extends MyResearchControllerBase
         } else {
             $view = $this->createViewModel(
                 [
-                    'error' => 'ils_offline_home_message'
+                    'error' => 'ils_offline_home_message',
                 ]
             );
         }
@@ -667,8 +667,8 @@ class MyResearchController extends MyResearchControllerBase
                         $options = [
                             'query' => [
                                 'new' => $name,
-                                'cardId' => $this->getCardId()
-                            ]
+                                'cardId' => $this->getCardId(),
+                            ],
                         ];
                         $label = 'ill_blank_new_request_for_' . $name;
                         $forms[$label] = $this->url()->fromRoute('myresearch-illrequests', [], $options);
@@ -685,7 +685,7 @@ class MyResearchController extends MyResearchControllerBase
         if (!($view instanceof \Laminas\View\Model\ViewModel)) {
             $view = $this->createViewModel(
                 [
-                    'error' => 'ils_offline_home_message'
+                    'error' => 'ils_offline_home_message',
                 ]
             );
         }

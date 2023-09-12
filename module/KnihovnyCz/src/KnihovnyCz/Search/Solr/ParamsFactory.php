@@ -77,7 +77,7 @@ class ParamsFactory extends \VuFind\Search\Params\ParamsFactory
             [
                 $helper,
                 $parser,
-                $dateConverter
+                $dateConverter,
             ]
         );
     }

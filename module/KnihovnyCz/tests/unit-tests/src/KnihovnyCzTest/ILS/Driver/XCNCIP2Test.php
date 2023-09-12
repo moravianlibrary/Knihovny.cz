@@ -295,7 +295,7 @@ class XCNCIP2Test extends \VuFindTest\ILS\Driver\XCNCIP2Test
                         'id' => '2466144',
                     ],
                 ],
-            ]
+            ],
         ],
         [
             'file' => 'lookupItemSet/Tritius.xml',
@@ -350,7 +350,7 @@ class XCNCIP2Test extends \VuFindTest\ILS\Driver\XCNCIP2Test
                         'id' => '2354926',
                     ],
                 ],
-            ]
+            ],
         ],
         [
             'file' => 'lookupItemSet/Verbis.xml',
@@ -1004,7 +1004,7 @@ class XCNCIP2Test extends \VuFindTest\ILS\Driver\XCNCIP2Test
                     'storageRetrievalRequest' => 'auto',
                     'addStorageRetrievalRequestLink' => 'true',
                     'eresource' => '',
-                    'collection_desc' => 'Na Sadech - dospělé - beletrie'
+                    'collection_desc' => 'Na Sadech - dospělé - beletrie',
                 ],
                 [
                     'status' => 'On Loan',
@@ -1152,7 +1152,7 @@ class XCNCIP2Test extends \VuFindTest\ILS\Driver\XCNCIP2Test
                     'storageRetrievalRequest' => 'auto',
                     'addStorageRetrievalRequestLink' => 'true',
                     'eresource' => '',
-                    'collection_desc' => 'Lidická - sklad'
+                    'collection_desc' => 'Lidická - sklad',
                 ],
                 [
                     'status' => 'On Loan',
@@ -1174,7 +1174,7 @@ class XCNCIP2Test extends \VuFindTest\ILS\Driver\XCNCIP2Test
                     'storageRetrievalRequest' => 'auto',
                     'addStorageRetrievalRequestLink' => 'true',
                     'eresource' => '',
-                    'collection_desc' => 'Na Sadech - dospělé - beletrie'
+                    'collection_desc' => 'Na Sadech - dospělé - beletrie',
                 ],
                 [
                     'status' => 'Available On Shelf',
@@ -1196,7 +1196,7 @@ class XCNCIP2Test extends \VuFindTest\ILS\Driver\XCNCIP2Test
                     'storageRetrievalRequest' => 'auto',
                     'addStorageRetrievalRequestLink' => 'true',
                     'eresource' => '',
-                    'collection_desc' => 'Na Sadech - dospělé - beletrie'
+                    'collection_desc' => 'Na Sadech - dospělé - beletrie',
                 ],
             ],
         ],
@@ -1572,7 +1572,7 @@ class XCNCIP2Test extends \VuFindTest\ILS\Driver\XCNCIP2Test
                     'addStorageRetrievalRequestLink' => 'true',
                     'eresource' => '',
                 ],
-            ]
+            ],
         ],
         [
             'file' => 'lookupItemSet/Tritius.xml',
@@ -1703,7 +1703,7 @@ class XCNCIP2Test extends \VuFindTest\ILS\Driver\XCNCIP2Test
                     'addStorageRetrievalRequestLink' => 'true',
                     'eresource' => '',
                 ],
-            ]
+            ],
         ],
         [
             'file' => 'lookupItemSet/Verbis.xml',
@@ -2026,7 +2026,7 @@ class XCNCIP2Test extends \VuFindTest\ILS\Driver\XCNCIP2Test
             [
                 'locationID' => 'ABG001|298',
                 'locationDisplay' => 'Bohnice',
-            ]
+            ],
         ], $locations);
     }
 
@@ -2044,7 +2044,7 @@ class XCNCIP2Test extends \VuFindTest\ILS\Driver\XCNCIP2Test
                 'cat_username' => 'my_login',
                 'cat_password' => 'my_password',
                 'patronAgencyId' => 'Test agency',
-                'id' => '111'
+                'id' => '111',
             ], ['page' => 1]);
             $this->assertEquals(
                 $test['result'],

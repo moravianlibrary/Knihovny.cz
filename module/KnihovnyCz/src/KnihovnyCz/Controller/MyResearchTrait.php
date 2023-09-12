@@ -42,7 +42,7 @@ trait MyResearchTrait
 {
     protected static $EXCEPTIONS_TO_SHOW = [
         'VuFind\ILS\Driver\AlephRestfulException',
-        'VuFind\Exception\ILS'
+        'VuFind\Exception\ILS',
     ];
 
     /**
