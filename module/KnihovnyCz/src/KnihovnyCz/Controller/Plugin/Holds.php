@@ -114,7 +114,7 @@ class Holds extends HoldsBase
 
         if (!empty($details)) {
             // Confirm?
-            if ($params->fromPost('confirm') === "0") {
+            if ($params->fromPost('confirm') === '0') {
                 if ($params->fromPost('cancelAll') !== null) {
                     return $controller->confirm(
                         'hold_cancel_all',

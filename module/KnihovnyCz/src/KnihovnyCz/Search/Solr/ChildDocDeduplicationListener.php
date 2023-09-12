@@ -155,7 +155,7 @@ class ChildDocDeduplicationListener extends DeduplicationListener
         } else {
             $fl = $fl[0];
         }
-        $newFieldList = $fl . ", childs:[subquery]";
+        $newFieldList = $fl . ', childs:[subquery]';
         $params->set('fl', $newFieldList);
         $params->set(
             'childs.q',
@@ -165,7 +165,7 @@ class ChildDocDeduplicationListener extends DeduplicationListener
         $params->set('childs.fl', $this->getChildListOfFields($fl));
         $params->set('childs.rows', static::MAX_CHILD_DOCUMENTS);
         if (!empty($childFilters)) {
-            $params->set('childs.fq', join(" AND ", $childFilters));
+            $params->set('childs.fq', join(' AND ', $childFilters));
         }
     }
 
@@ -252,6 +252,6 @@ class ChildDocDeduplicationListener extends DeduplicationListener
      */
     protected function getChildListOfFields($parentFieldList)
     {
-        return "id";
+        return 'id';
     }
 }

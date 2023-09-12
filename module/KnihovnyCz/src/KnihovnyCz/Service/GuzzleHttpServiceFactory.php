@@ -89,7 +89,7 @@ class GuzzleHttpServiceFactory implements FactoryInterface
             $user = $proxy->user ?? null;
             $pass = $proxy->pass ?? null;
             if ($auth != null && $auth != 'basic') {
-                throw new \Exception("Only basic auth is supported");
+                throw new \Exception('Only basic auth is supported');
             }
             if ($auth == 'basic' && !empty($user) && !empty($pass)) {
                 $user = urlencode($user);

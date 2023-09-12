@@ -107,7 +107,7 @@
                   }
                 }
 JS;
-            $googleMapsScript = "https://maps.googleapis.com/maps/api/js?key=" . $this->escapeUrl($apiKey) . "&callback=initMap";
+            $googleMapsScript = 'https://maps.googleapis.com/maps/api/js?key=' . $this->escapeUrl($apiKey) . '&callback=initMap';
             $this->inlineScript(\Laminas\View\Helper\HeadScript::SCRIPT, $initMap, 'SET');
             echo $this->inlineScript()->appendFile($googleMapsScript);
           ?>

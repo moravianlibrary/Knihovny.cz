@@ -120,7 +120,7 @@ class LibrariesApiLookfor
                 },
                 $fieldMapping
             );
-            $queryString = '(' . implode(" OR ", $subqueries) . ')';
+            $queryString = '(' . implode(' OR ', $subqueries) . ')';
         }
         return $queryString;
     }

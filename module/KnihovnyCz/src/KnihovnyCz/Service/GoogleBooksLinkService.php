@@ -64,7 +64,7 @@ class GoogleBooksLinkService extends LinkServiceAbstractBase
 
         $params = [];
         if (!empty($isbn)) {
-            $params = ['q' => 'isbn:' . str_replace("-", "", $isbn)];
+            $params = ['q' => 'isbn:' . str_replace('-', '', $isbn)];
         }
         if (!empty($lccn)) {
             $params = ['q' => 'lccn:' . $lccn];

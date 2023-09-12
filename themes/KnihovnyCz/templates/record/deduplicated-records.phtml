@@ -103,7 +103,7 @@
     <?php if ($recordMissing): ?>
       <div class="alert alert-warning" role="alert">
         <?php if (($link = $this->recordLinker()->getLinkToMainPortal($this->driver)) != null) : ?>
-          <?=$this->translate("record_missing_in_view_with_link", ['%%url%%' => $link])?>
+          <?=$this->translate('record_missing_in_view_with_link', ['%%url%%' => $link])?>
         <?php else: ?>
           <?=$this->translate('record_missing_in_view')?>
         <?php endif; ?>

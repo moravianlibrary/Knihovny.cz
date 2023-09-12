@@ -1,6 +1,6 @@
 <?php
   $account = $this->auth()->getManager();
-  $accountLabel = $this->translate("Your Account");
+  $accountLabel = $this->translate('Your Account');
   $user = $account->isLoggedIn();
   if ($user && $user->firstname && $user->lastname) {
     $accountLabel = $user->firstname . ' ' . $user->lastname;
@@ -8,7 +8,7 @@
 ?>
 <div class="banner container navbar">
   <div class="navbar-header">
-    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#header-collapse" aria-label="<?=$this->transEscAttr("mobile_toggle_navigation_text")?>">
+    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#header-collapse" aria-label="<?=$this->transEscAttr('mobile_toggle_navigation_text')?>">
       <?=$this->icon('ui-menu', 'fa-fw') ?>
     </button>
     <a class="navbar-brand lang-<?=$this->layout()->userLang ?>" href="<?=$this->url('home') ?>">
@@ -20,13 +20,13 @@
       <nav>
         <ul class="nav navbar-nav navbar-right flip">
           <li>
-            <a href="<?=$this->url('inspiration') ?>"><?=$this->icon('inspiration', 'fa-fw')?> <?=$this->transEsc("Inspiration") ?></a>
+            <a href="<?=$this->url('inspiration') ?>"><?=$this->icon('inspiration', 'fa-fw')?> <?=$this->transEsc('Inspiration') ?></a>
           </li>
           <?php if ($this->feedback()->tabEnabled()): ?>
             <li>
               <a class="icon-link" id="feedbackLink" data-lightbox href="<?=$this->url('feedback-home') ?>">
                 <?=$this->icon('feedback', 'icon-link__icon') ?>
-                <span class="icon-link__label"><?=$this->transEsc("Feedback")?></span>
+                <span class="icon-link__label"><?=$this->transEsc('Feedback')?></span>
               </a>
             </li>
           <?php endif; ?>
@@ -62,12 +62,12 @@
               <?php if ($account->getSessionInitiator($this->serverUrl($this->url('myresearch-home')))): ?>
                 <a href="<?=$this->url('myresearch-userlogin')?>" class="icon-link">
                   <?=$this->icon('sign-in', 'icon-link__icon') ?>
-                  <span class="icon-link__label"><?=$this->transEsc("Institutional Login")?></span>
+                  <span class="icon-link__label"><?=$this->transEsc('Institutional Login')?></span>
                 </a>
               <?php else: ?>
                 <a href="<?=$this->url('myresearch-userlogin')?>" data-lightbox class="icon-link">
                   <?=$this->icon('sign-in', 'icon-link__icon') ?>
-                  <span class="icon-link__label"><?=$this->transEsc("Login")?></span>
+                  <span class="icon-link__label"><?=$this->transEsc('Login')?></span>
                 </a>
               <?php endif; ?>
             </li>

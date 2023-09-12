@@ -92,7 +92,7 @@ class CitaceProService implements \VuFindHttp\HttpServiceAwareInterface
         $query = [
             'citacniStyl' => $style
         ];
-        $citationServerUrl = "https://www.citacepro.com/api/cpk/citace/"
+        $citationServerUrl = 'https://www.citacepro.com/api/cpk/citace/'
             . urlencode($recordId) . '?' . http_build_query($query);
         $http = $this->httpService->createClient($citationServerUrl, 'GET');
         $response = $http->send();
@@ -119,8 +119,8 @@ class CitaceProService implements \VuFindHttp\HttpServiceAwareInterface
      */
     public function getCitationLink(string $recordId): string
     {
-        return "https://www.citacepro.com/nacist-dokument-sysno/"
-            . $recordId . "?katalog=cpk";
+        return 'https://www.citacepro.com/nacist-dokument-sysno/'
+            . $recordId . '?katalog=cpk';
     }
 
     /**

@@ -59,7 +59,7 @@
             <?php $summInCollection = $this->driver->getContainingCollections(); if (!empty($summInCollection)): ?>
                   <?php foreach ($summInCollection as $collId => $collText): ?>
                 <div>
-                  <b><?=$this->transEsc("in_collection_label")?></b>
+                  <b><?=$this->transEsc('in_collection_label')?></b>
                   <a class="collectionLinkText" href="<?=$this->record($this->driver)->getLink('collection', $collId)?>">
                     <?=$this->escapeHtml($collText)?>
                   </a>
@@ -137,7 +137,7 @@
       </div>
       <div class="result-links hidden-print">
         <?php /* Display qrcode if appropriate: */ ?>
-          <?php if ($QRCode = $this->record($this->driver)->getQRCode("results")): ?>
+          <?php if ($QRCode = $this->record($this->driver)->getQRCode('results')): ?>
               <?php
               // Add JS Variables for QrCode
               $this->jsTranslations()->addStrings(['qrcode_hide' => 'qrcode_hide', 'qrcode_show' => 'qrcode_show']);
@@ -168,7 +168,7 @@
               <?php endif; ?>
           <?php /* Saved lists */ ?>
           <div class="savedLists">
-            <strong><?=$this->transEsc("Saved in")?>:</strong>
+            <strong><?=$this->transEsc('Saved in')?>:</strong>
           </div>
           <?php endif; ?>
 

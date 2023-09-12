@@ -275,7 +275,7 @@ abstract class AbstractDbAwaredRecordIds implements ContentBlockInterface
     {
         $options = $this->searchOptions->get($this->searchClassId);
         $searchAction = $options->getSearchAction();
-        return $this->url->__invoke($searchAction) . "?" . http_build_query(
+        return $this->url->__invoke($searchAction) . '?' . http_build_query(
             [
                 'lookfor' => $this->facetField . ':"' . $this->getSlug() . '"',
                 'type' => $this->searchType,
@@ -315,7 +315,7 @@ abstract class AbstractDbAwaredRecordIds implements ContentBlockInterface
     {
         return preg_replace(
             "/([^a-z0-9_\+\-])+/Di",
-            "",
+            '',
             "list$suffix"
         );
     }

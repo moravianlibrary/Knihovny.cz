@@ -3,7 +3,7 @@
 ?>
 <div class="map-scale">
   <form class="map-scale-range-form" name="<?=$this->escapeHtmlAttr($this->mapScaleField)?>Filter" id="<?=$this->escapeHtmlAttr($this->mapScaleField)?>Filter">
-    <?=$results->getUrlQuery()->asHiddenFields(['page' => "/./", 'filter' => "/^{$this->mapScaleField}:.*/"])?>
+    <?=$results->getUrlQuery()->asHiddenFields(['page' => '/./', 'filter' => "/^{$this->mapScaleField}:.*/"])?>
     <input type="hidden" name="mapScalerange[]" value="<?=$this->escapeHtmlAttr($this->mapScaleField)?>">
     <div class="map-scale-from">
       <label for="<?=$this->escapeHtmlAttr($this->mapScaleField)?>from">

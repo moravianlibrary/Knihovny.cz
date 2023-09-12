@@ -111,9 +111,9 @@ class Shibboleth extends Base
             $details = ($this->useHeaders) ? $request->getHeaders()->toArray()
                 : $request->getServer()->toArray();
             $this->debug(
-                "No eduPersonUniqueId attribute "
+                'No eduPersonUniqueId attribute '
                 . "({$shib['edu_person_unique_id']}) "
-                . "present in request: " . print_r($details, true)
+                . 'present in request: ' . print_r($details, true)
             );
             throw new AuthException('authentication_error_admin');
         }

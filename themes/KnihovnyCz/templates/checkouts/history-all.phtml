@@ -44,7 +44,7 @@ JS;
 </div>
 
 <div class="<?=$this->layoutClass('sidebar')?>" id="myresearch-sidebar">
-  <?=$this->context($this)->renderInContext("myresearch/menu.phtml", ['active' => 'historicloans'])?>
+  <?=$this->context($this)->renderInContext('myresearch/menu.phtml', ['active' => 'historicloans'])?>
 </div>
 
 <?=$this->inlineScript(\Laminas\View\Helper\HeadScript::SCRIPT, $loadJs, 'SET')?>

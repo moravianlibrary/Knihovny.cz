@@ -257,7 +257,7 @@ class MultiBackend extends \VuFind\ILS\Driver\MultiBackend
         if ($method == 'placeStorageRetrievalRequest') {
             return false;
         }
-        if ($method == 'getDriverName' || $method == "getIlsType") {
+        if ($method == 'getDriverName' || $method == 'getIlsType') {
             return true;
         }
         return parent::supportsMethod($method, $params);

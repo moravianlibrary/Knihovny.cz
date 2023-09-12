@@ -181,7 +181,7 @@ class IllForm extends Form implements InputFilterProviderInterface
                         'options' => [
                             'message' => 'ill_blank_form_invalid_date_in_the_past',
                             'callback' => function ($value, $context = []) {
-                                $now = new \DateTime(date("d-m-Y"));
+                                $now = new \DateTime(date('d-m-Y'));
                                 try {
                                     $date = new \DateTime($this->dateConverter
                                         ->convertFromDisplayDate('d-m-Y', $value));

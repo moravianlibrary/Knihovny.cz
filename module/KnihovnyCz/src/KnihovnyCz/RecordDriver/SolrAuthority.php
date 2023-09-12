@@ -86,7 +86,7 @@ class SolrAuthority extends \KnihovnyCz\RecordDriver\SolrMarc
      *
      * @return string
      */
-    protected string $recordDataTypeDescription = "Authority Details";
+    protected string $recordDataTypeDescription = 'Authority Details';
 
     /**
      * Get the full title of the record.
@@ -227,9 +227,9 @@ class SolrAuthority extends \KnihovnyCz\RecordDriver\SolrMarc
     {
         $url = null;
         if ($this->hasPublications()) {
-            $url = "/Search/Results?"
-                . "sort=relevance&join=AND&type0[]=adv_search_author_corporation"
-                . "&bool0[]=AND&searchTypeTemplate=advanced&lookfor0[]="
+            $url = '/Search/Results?'
+                . 'sort=relevance&join=AND&type0[]=adv_search_author_corporation'
+                . '&bool0[]=AND&searchTypeTemplate=advanced&lookfor0[]='
                 . $this->getAuthorityId();
         }
         return $url;
@@ -244,9 +244,9 @@ class SolrAuthority extends \KnihovnyCz\RecordDriver\SolrMarc
     {
         $url = null;
         if ($this->hasPublicationsAbout()) {
-            $url = "/Search/Results?"
-                . "sort=relevance&join=AND&type0[]=adv_search_subject_keywords"
-                . "&bool0[]=AND&searchTypeTemplate=advanced&lookfor0[]="
+            $url = '/Search/Results?'
+                . 'sort=relevance&join=AND&type0[]=adv_search_subject_keywords'
+                . '&bool0[]=AND&searchTypeTemplate=advanced&lookfor0[]='
                 . $this->getAuthorityId();
         }
         return $url;

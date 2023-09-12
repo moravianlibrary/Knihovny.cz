@@ -17,7 +17,7 @@
       ?>
       <div class="row list-group-item clearfix">
         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3 similar-item">
-          <a href="<?=$this->escapeHtmlAttr($url)?>" title='<?=$this->escapeHtml($data->title)?> (<?=$this->transEscWithPrefix("Format::", $format)?>)' tabindex='-1'>
+          <a href="<?=$this->escapeHtmlAttr($url)?>" title='<?=$this->escapeHtml($data->title)?> (<?=$this->transEscWithPrefix('Format::', $format)?>)' tabindex='-1'>
               <div class="ajaxcoverobalkyknih">
                 <?php if ($format !== null): ?>
                   <?php $formatClass = 'format-' . preg_replace('/[^a-z]/', '', strtolower($format)); ?>
@@ -33,7 +33,7 @@
         </div>
         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-9 similar-item content">
           <h5 class="list-group-item-heading">
-            <a href='<?=$this->escapeHtmlAttr($url)?>' title='<?=$this->escapeHtml($data->title)?> (<?=$this->transEscWithPrefix("Format::", $format)?>)'>
+            <a href='<?=$this->escapeHtmlAttr($url)?>' title='<?=$this->escapeHtml($data->title)?> (<?=$this->transEscWithPrefix('Format::', $format)?>)'>
               <strong><?=$this->escapeHtml($data->title)?></strong>
             </a>
           </h5>
@@ -47,4 +47,4 @@
     <?php endforeach; ?>
   </div>
 <?php endif;
-$this->headScript()->appendFile("obalkyknih.js");
+$this->headScript()->appendFile('obalkyknih.js');

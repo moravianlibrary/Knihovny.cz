@@ -103,7 +103,7 @@ class InvolvedLibrariesService implements \VuFind\I18n\HasSorterInterface
      */
     protected function searchInvolvedLibraries(): array
     {
-        $filters = ["portal_facet_mv:\"KNIHOVNYCZ_YES\""];
+        $filters = ['portal_facet_mv:"KNIHOVNYCZ_YES"'];
         /**
          * Search results
          *

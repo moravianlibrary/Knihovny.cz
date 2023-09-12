@@ -13,7 +13,7 @@ JS;
 
   <div class="authorbox">
     <form name='newItemsFilter' id='newItemsFilter' class='form-inline' method='get'>
-      <?=$results->getUrlQuery()->asHiddenFields(['page' => "/./", 'filter' => "/^{$dateField}:.*/"])?>
+      <?=$results->getUrlQuery()->asHiddenFields(['page' => '/./', 'filter' => "/^{$dateField}:.*/"])?>
       <label for="<?=$this->escapeHtml($dateField)?>">
         <?=$this->translate('New items since')?>:&nbsp;
       </label>

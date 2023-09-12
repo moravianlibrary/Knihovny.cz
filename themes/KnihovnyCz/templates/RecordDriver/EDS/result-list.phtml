@@ -87,7 +87,7 @@
         </div>
         <div class="result-links hidden-print">
           <?php /* Display qrcode if appropriate: */ ?>
-          <?php if ($QRCode = $this->record($this->driver)->getQRCode("results")): ?>
+          <?php if ($QRCode = $this->record($this->driver)->getQRCode('results')): ?>
             <?php
               // Add JS Variables for QrCode
               $this->jsTranslations()->addStrings(['qrcode_hide' => 'qrcode_hide', 'qrcode_show' => 'qrcode_show']);
@@ -127,7 +127,7 @@
 
         <?php /* Saved lists */ ?>
         <div class="savedLists alert alert-info hidden">
-          <strong><?=$this->transEsc("Saved in")?>:</strong>
+          <strong><?=$this->transEsc('Saved in')?>:</strong>
         </div>
       <?php endif; ?>
       </div>

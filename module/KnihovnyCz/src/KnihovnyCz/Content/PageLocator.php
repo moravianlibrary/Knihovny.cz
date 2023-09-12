@@ -105,7 +105,7 @@ class PageLocator extends PageLocatorBase implements HttpServiceAwareInterface
         string $pattern
     ): \Generator {
         yield 'urlLanguage' => $this->generateTemplateFromPattern(
-            preg_replace("#https:/#", "https://", $this->baseUrl . $pathPrefix),
+            preg_replace('#https:/#', 'https://', $this->baseUrl . $pathPrefix),
             $pageName,
             $pattern,
             $this->language
@@ -239,7 +239,7 @@ class PageLocator extends PageLocatorBase implements HttpServiceAwareInterface
     {
         return preg_replace(
             "/([^a-z0-9_\+\-])+/Di",
-            "",
+            '',
             "content$suffix"
         );
     }

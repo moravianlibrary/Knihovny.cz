@@ -112,7 +112,7 @@ class GetHolding extends AbstractBase implements TranslatorAwareInterface
     {
         $this->disableSessionWrites(); // avoid session write timing bug
         $id = $params->fromPost('id', $params->fromQuery('id', null));
-        $source = explode(".", $id)[0];
+        $source = explode('.', $id)[0];
         $holding = $this->holds->getHoldings($id);
         $copy = [];
         $labels = [

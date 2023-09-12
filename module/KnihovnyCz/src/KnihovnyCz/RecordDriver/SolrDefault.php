@@ -75,7 +75,7 @@ class SolrDefault extends \VuFind\RecordDriver\SolrDefault
      *
      * @return string
      */
-    protected string $recordDataTypeDescription = "Bibliographic Details";
+    protected string $recordDataTypeDescription = 'Bibliographic Details';
 
     /**
      * Parent record
@@ -427,7 +427,7 @@ class SolrDefault extends \VuFind\RecordDriver\SolrDefault
         foreach ($seriesField as $serie) {
             $result[] = [
                 'url' => '/Search/Results?lookfor0[]='
-                    . urlencode(explode("|", $serie)[0])
+                    . urlencode(explode('|', $serie)[0])
                     . '&amp;' . $params,
                 'desc' => str_replace('|', ' | ', $serie),
             ];
@@ -811,7 +811,7 @@ class SolrDefault extends \VuFind\RecordDriver\SolrDefault
         $hasFilter = !empty($this->recordLinksFilter);
         $links = [];
         foreach ($rawLinks as $rawLink) {
-            $parts = explode("|", $rawLink);
+            $parts = explode('|', $rawLink);
             $source = $parts[0];
             $status = $parts[1];
             $isKramerius = (substr($source, 0, 5) === 'kram-');

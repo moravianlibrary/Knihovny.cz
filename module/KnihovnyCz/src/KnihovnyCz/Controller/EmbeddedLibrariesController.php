@@ -71,7 +71,7 @@ final class EmbeddedLibrariesController extends EmbeddedController
             $this->setLanguage($lang);
         }
 
-        $config = $this->getConfig("config");
+        $config = $this->getConfig('config');
 
         $queryString = '
 (function_search_txt_mv:"pověřená regionální funkcí"

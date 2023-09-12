@@ -59,7 +59,7 @@ JS;
             <h3 class="panel-title pull-left">
               <?=$this->transEsc('Source::' . $institution) ?>
             </h3>
-            <img class="pull-right" height="30" src="<?=$this->imageLink($imageLink)?>" alt="<?=$this->transEsc("Source::" . $institution) ?>">
+            <img class="pull-right" height="30" src="<?=$this->imageLink($imageLink)?>" alt="<?=$this->transEsc('Source::' . $institution) ?>">
           </div>
         <?php endif;?>
 
@@ -78,7 +78,7 @@ JS;
   <?php if ($this->user->isSocial()): ?>
     <?php if ($libraryCardEnabled): ?>
       <p class="alert alert-warning" role="alert">
-        <?=$this->translate("notif_you_have_user_dummy", ['%%url%%' => $this->url('librarycards-home')])?>
+        <?=$this->translate('notif_you_have_user_dummy', ['%%url%%' => $this->url('librarycards-home')])?>
       </p>
       <div class="btn-group">
         <a href="<?=$this->url('librarycards-home') ?>" class="btn btn-primary" role="button" aria-pressed="true">
@@ -87,7 +87,7 @@ JS;
       </div>
     <?php else: ?>
       <p class="alert alert-warning" role="alert">
-        <?=$this->translate("notif_you_have_user_dummy_no_library_cards")?>
+        <?=$this->translate('notif_you_have_user_dummy_no_library_cards')?>
       </p>
     <?php endif; ?>
   <?php endif; ?>

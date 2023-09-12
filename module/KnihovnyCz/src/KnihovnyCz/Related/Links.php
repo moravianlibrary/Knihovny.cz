@@ -74,7 +74,7 @@ class Links implements \VuFind\Related\RelatedInterface
             'socialsites' => $driver->tryMethod('getSocialSitesLinks') ?? [],
             default => [],
         };
-        $this->label = "related_" . $settings . "_links";
+        $this->label = 'related_' . $settings . '_links';
     }
 
     /**

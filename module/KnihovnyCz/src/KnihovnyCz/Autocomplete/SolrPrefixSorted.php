@@ -240,6 +240,6 @@ class SolrPrefixSorted implements \VuFind\Autocomplete\AutocompleteInterface
     protected function mungeQuery($query)
     {
         $forbidden = [':', '(', ')', '*', '+', '"'];
-        return str_replace($forbidden, " ", $query);
+        return str_replace($forbidden, ' ', $query);
     }
 }

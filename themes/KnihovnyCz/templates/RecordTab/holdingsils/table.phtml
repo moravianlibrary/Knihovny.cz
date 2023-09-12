@@ -4,7 +4,7 @@
   data-copy-number="<?=$this->escapeHtml($holding['copy_number'])?>"
   data-volume="<?=$this->escapeHtml($holding['volume'])?>"
   data-year="<?=$this->escapeHtml($holding['year'])?>">
-  <td data-type="availability" data-title="<?=$this->transEsc("Availability")?>">
+  <td data-type="availability" data-title="<?=$this->transEsc('Availability')?>">
     <div class="jt" title="<?=$this->transEsc('Availability')?>">
       <?php
       $availabilityStatus = '';
@@ -20,7 +20,7 @@
     ?>
     <div><?=$availabilityStatus?></div>
   </td>
-  <td data-type="status" data-title="<?=$this->transEsc("Status")?>">
+  <td data-type="status" data-title="<?=$this->transEsc('Status')?>">
     <?php
       $status = '';
       if (!empty($holding['catalog_link'])) {
@@ -32,31 +32,31 @@
   <td data-type="request">
     <div class='status-loader'><?=$this->icon('spinner', 'fa-fw') . $this->translate('loading_ellipsis') ?></div>
   </td>
-  <td data-title="<?=$this->transEsc("Department")?>" data-type="location">
+  <td data-title="<?=$this->transEsc('Department')?>" data-type="location">
     <div>
       <?php if(!empty($holding['location'])):?>
         <?=$this->escapeHtml($holding['location'])?>
       <?php endif; ?>
     </div>
 	</td>
-  <td data-title="<?=$this->transEsc("Collection")?>" data-type="collection_desc">
+  <td data-title="<?=$this->transEsc('Collection')?>" data-type="collection_desc">
     <div>
       <?php if(!empty($holding['collection_desc'])):?>
         <?=$this->escapeHtml($holding['collection_desc'])?>
       <?php endif; ?>
     </div>
   </td>
-  <td data-title="<?=$this->transEsc("Location")?>" data-type="callnumber_second">
+  <td data-title="<?=$this->transEsc('Location')?>" data-type="callnumber_second">
     <?php if (!empty($holding['callnumber_second'] && (empty($holding['callnumber']) || ($holding['callnumber_second'] != $holding['callnumber'])))):?>
       <?=$this->escapeHtml($holding['callnumber_second'])?>
     <?php endif;?>
   </td>
-	<td data-title="<?=$this->transEsc("Description")?>" data-type="description">
+	<td data-title="<?=$this->transEsc('Description')?>" data-type="description">
     <?php if (!empty($holding['description'])):?>
       <?=$this->escapeHtml($holding['description']);?>
     <?php endif;?>
   </td>
-  <td data-title="<?=$this->transEsc("callnumber_abbrev")?>" data-type="callnumber">
+  <td data-title="<?=$this->transEsc('callnumber_abbrev')?>" data-type="callnumber">
     <?php if (!empty($holding['callnumber'])):?>
       <?=$this->escapeHtml($holding['callnumber'])?>
     <?php endif;?>

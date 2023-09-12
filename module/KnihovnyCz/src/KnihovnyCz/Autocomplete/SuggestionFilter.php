@@ -109,6 +109,6 @@ class SuggestionFilter
      */
     protected function normalize($query)
     {
-        return (string)iconv("UTF-8", "ASCII//TRANSLIT", $query);
+        return (string)iconv('UTF-8', 'ASCII//TRANSLIT', $query);
     }
 }
