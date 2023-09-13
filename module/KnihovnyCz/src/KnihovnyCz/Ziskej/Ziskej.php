@@ -34,6 +34,8 @@ namespace KnihovnyCz\Ziskej;
 use Laminas\Config\Config;
 use VuFind\Cookie\CookieManager;
 
+use function in_array;
+
 /**
  * KnihovnyCz Ziskej Class
  *
@@ -171,7 +173,7 @@ abstract class Ziskej
     public function setMode(string $mode): void
     {
         $cookieMode = $this->isMode($mode) ? $mode : self::MODE_DISABLED;
-        \setcookie(self::COOKIE_NAME, $cookieMode, 0, '/');
+        setcookie(self::COOKIE_NAME, $cookieMode, 0, '/');
     }
 
     /**

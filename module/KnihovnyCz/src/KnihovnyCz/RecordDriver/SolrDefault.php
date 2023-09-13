@@ -31,6 +31,10 @@ namespace KnihovnyCz\RecordDriver;
 
 use VuFind\Exception\RecordMissing as RecordMissingException;
 
+use function count;
+use function in_array;
+use function is_array;
+
 /**
  * Knihovny.cz solr default record driver
  *

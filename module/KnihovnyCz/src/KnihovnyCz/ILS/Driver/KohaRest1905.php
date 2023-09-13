@@ -39,6 +39,10 @@ use VuFind\Exception\AuthToken as AuthTokenException;
 use VuFind\Exception\ILS as ILSException;
 use VuFind\ILS\Driver\AbstractBase;
 
+use function count;
+use function in_array;
+use function is_string;
+
 /**
  * VuFind Driver for Koha, using REST API
  *

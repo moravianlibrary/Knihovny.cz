@@ -31,6 +31,8 @@ declare(strict_types=1);
 
 namespace KnihovnyCz\Autocomplete;
 
+use function count;
+
 /**
  * Class SuggestionFilter
  *

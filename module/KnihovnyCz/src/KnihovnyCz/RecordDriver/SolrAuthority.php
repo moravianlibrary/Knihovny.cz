@@ -31,6 +31,8 @@ namespace KnihovnyCz\RecordDriver;
 
 use VuFindSearch\Command\SearchCommand;
 
+use function in_array;
+
 /**
  * Knihovny.cz solr authority record driver
  *

@@ -29,6 +29,10 @@
 
 namespace KnihovnyCz\RecordDriver;
 
+use function count;
+use function intval;
+use function is_int;
+
 /**
  * Knihovny.cz solr marc local record driver
  *

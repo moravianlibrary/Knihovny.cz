@@ -39,6 +39,9 @@ use VuFind\Search\Solr\DeduplicationListener as ParentDeduplicationListener;
 use VuFindSearch\Backend\Solr\Backend;
 use VuFindSearch\ParamBag;
 
+use function array_key_exists;
+use function array_slice;
+
 /**
  * Solr merged record handling listener.
  *

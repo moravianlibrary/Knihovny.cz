@@ -39,6 +39,10 @@ use VuFind\Cache\CacheTrait;
 use VuFind\ILS\Connection;
 use VuFind\RecordTab\AbstractBase;
 
+use function count;
+use function in_array;
+use function is_object;
+
 /**
  * Class ZiskejBase
  *

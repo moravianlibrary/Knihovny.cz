@@ -33,6 +33,8 @@ use VuFind\Content\ObalkyKnihService;
 use VuFindCode\ISBN;
 use VuFindCode\ISMN;
 
+use function is_array;
+
 /**
  * Trait ObalkyKnihTrait
  *

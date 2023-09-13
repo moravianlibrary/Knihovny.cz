@@ -29,6 +29,10 @@
 
 namespace KnihovnyCz\Search\EDS\Backend;
 
+use function in_array;
+use function is_string;
+use function strlen;
+
 /**
  * EBSCO EDS API JSON parser
  *

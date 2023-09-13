@@ -34,6 +34,8 @@ namespace KnihovnyCz\Content;
 use Laminas\Stdlib\Parameters;
 use VuFind\Search\Results\PluginManager as ResultsManager;
 
+use function count;
+
 /**
  * Class InvolvedLibrariesService
  *

@@ -36,6 +36,9 @@ use Laminas\Stdlib\RequestInterface as Request;
 use Laminas\Stdlib\ResponseInterface as Response;
 use Laminas\View\Model\ViewModel;
 
+use function in_array;
+use function is_array;
+
 /**
  * Class SearchController
  *

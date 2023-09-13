@@ -34,6 +34,8 @@ use Laminas\Session\Container;
 use VuFind\Config\PluginManager as Config;
 use VuFind\Search\Memory;
 
+use function in_array;
+
 /**
  * Knihovny.cz User settings service
  *

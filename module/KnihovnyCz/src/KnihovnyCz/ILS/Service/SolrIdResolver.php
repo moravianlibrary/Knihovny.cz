@@ -35,6 +35,8 @@ namespace KnihovnyCz\ILS\Service;
 use VuFindSearch\Command\SearchCommand;
 use VuFindSearch\Service as SearchService;
 
+use function count;
+
 /**
  * Class SolrIdResolver
  *

@@ -38,6 +38,8 @@ use Laminas\Mvc\Controller\Plugin\Params;
 use Psr\Http\Message\ResponseInterface;
 use VuFind\AjaxHandler\AbstractBase;
 
+use function count;
+
 /**
  * "Get Autocomplete Suggestions" AJAX handler
  *

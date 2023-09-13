@@ -34,6 +34,8 @@ namespace KnihovnyCz\RecordDriver;
 
 use VuFind\RecordDriver\Missing as Base;
 
+use function is_array;
+
 /**
  * Model for missing records -- used for saved favorites that have been deleted
  * from the index.

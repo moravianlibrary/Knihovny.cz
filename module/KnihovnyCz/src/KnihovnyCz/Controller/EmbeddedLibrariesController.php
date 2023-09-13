@@ -37,6 +37,8 @@ use VuFindSearch\Command\SearchCommand;
 use VuFindSearch\ParamBag;
 use VuFindSearch\Query\Query;
 
+use function in_array;
+
 /**
  * Class EmbeddedController
  *

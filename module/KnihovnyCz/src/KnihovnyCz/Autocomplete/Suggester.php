@@ -34,6 +34,11 @@ use VuFind\Autocomplete\PluginManager;
 use VuFind\Config\PluginManager as ConfigManager;
 use VuFind\Search\Options\PluginManager as OptionsManager;
 
+use function count;
+use function is_callable;
+use function is_object;
+use function is_scalar;
+
 /**
  * Autocomplete handler plugin manager
  *

@@ -34,6 +34,8 @@ namespace KnihovnyCz\ILS;
 
 use VuFind\Exception\ILS as ILSException;
 
+use function count;
+
 /**
  * Catalog Connection Class
  *

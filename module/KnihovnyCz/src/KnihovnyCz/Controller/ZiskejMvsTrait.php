@@ -38,6 +38,8 @@ use Mzk\ZiskejApi\RequestModel\Reader;
 use Mzk\ZiskejApi\RequestModel\TicketMvsRequest;
 use VuFind\Exception\LibraryCard;
 
+use function is_array;
+
 /**
  * Ziskej MVS trait
  *

@@ -33,6 +33,8 @@ namespace KnihovnyCz\Service;
 
 use Laminas\Config\Config;
 
+use function array_key_exists;
+
 /**
  * Class CitaceProService
  *

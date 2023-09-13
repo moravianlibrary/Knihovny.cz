@@ -31,6 +31,8 @@ namespace KnihovnyCz\Autocomplete;
 
 use VuFind\Search\Results\PluginManager as ResultsManager;
 
+use function count;
+
 /**
  * Solr autocomplete module with prefix queries using edge N-gram filter
  *

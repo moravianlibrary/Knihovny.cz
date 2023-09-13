@@ -40,6 +40,8 @@ use VuFind\Exception\Auth as AuthException;
 use VuFind\Exception\Forbidden as ForbiddenException;
 use VuFind\Validator\CsrfInterface;
 
+use function is_array;
+
 /**
  * Class MyResearchController
  *

@@ -36,6 +36,8 @@ use DatePeriod;
 use DateTime;
 use IntlDateFormatter;
 
+use function count;
+
 /**
  * Class NewItems
  *

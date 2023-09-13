@@ -31,6 +31,10 @@ declare(strict_types=1);
 
 namespace KnihovnyCz\RecordDriver\Feature;
 
+use function in_array;
+use function is_array;
+use function strlen;
+
 /**
  * Trait EodLinkTrait
  *

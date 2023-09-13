@@ -31,6 +31,8 @@ namespace KnihovnyCz\Controller\Plugin;
 
 use VuFind\Validator\CsrfInterface;
 
+use function count;
+
 /**
  * Support class for time slots
  *

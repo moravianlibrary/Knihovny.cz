@@ -121,7 +121,7 @@ class InvolvedLibrariesParser extends AbstractBlockContinueParser
                 $placeholder = $this->config->get('involved_libraries/placeholder');
 
                 // The placeholder must be the only thing on the line
-                $regex = '/^' . \preg_quote($placeholder, '/') . '$/';
+                $regex = '/^' . preg_quote($placeholder, '/') . '$/';
                 if ($cursor->match($regex) === null) {
                     return BlockStart::none();
                 }

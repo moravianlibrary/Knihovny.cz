@@ -29,6 +29,9 @@
 
 namespace KnihovnyCz\Autocomplete;
 
+use function count;
+use function is_object;
+
 /**
  * Solr autocomplete module with prefix queries using edge N-gram filter, results
  * are then sorted by supplied function.

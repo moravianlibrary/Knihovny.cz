@@ -29,6 +29,8 @@
 
 namespace KnihovnyCz\Controller;
 
+use function in_array;
+
 /**
  * Class MyResearchTrait
  *

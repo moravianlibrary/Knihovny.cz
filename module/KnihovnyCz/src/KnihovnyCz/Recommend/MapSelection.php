@@ -34,6 +34,8 @@ namespace KnihovnyCz\Recommend;
 use KnihovnyCz\Geo\Parser;
 use VuFindSearch\Service;
 
+use function count;
+
 /**
  * Class MapSelection
  *

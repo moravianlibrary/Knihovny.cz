@@ -29,6 +29,8 @@
 
 namespace KnihovnyCz\Controller;
 
+use function count;
+
 /**
  * Class Inspiration
  *
