@@ -38,7 +38,8 @@
             </a>
           </h5>
           <p class="list-group-item-text">
-            <?php $author = $data->author ?? null; if (isset($author)): ?>
+            <?php $author = $data->author ?? null;
+            if (isset($author)): ?>
               <?=$this->escapeHtml($author);?>
             <?php endif; ?>
           </p>

@@ -3,12 +3,12 @@
     $dateRanges = $this->recommend->getDateRanges();
     $dateField = $this->recommend->getDateField();
     $loadJs = <<<JS
-$(document).ready(function onReady() {
-  $('#newItemsFilter select').on('change', function onChange() {
-    $('#newItemsFilter').submit();
-  });
-});
-JS;
+        $(document).ready(function onReady() {
+          $('#newItemsFilter select').on('change', function onChange() {
+            $('#newItemsFilter').submit();
+          });
+        });
+        JS;
   ?>
 
   <div class="authorbox">

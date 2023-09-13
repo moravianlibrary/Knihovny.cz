@@ -318,7 +318,7 @@ class SolrMarc extends SolrDefault
         ) {
             return strtolower($this->getIdFrom001());
         }
-        if ($this->isAleph() && strpos($id, '-') !== false) {
+        if ($this->isAleph() && str_contains($id, '-')) {
             [$id] = explode(' ', $id);
             [, $id] = explode('-', $id);
             $id = trim($id);

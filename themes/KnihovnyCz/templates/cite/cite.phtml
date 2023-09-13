@@ -50,85 +50,85 @@
 
 <?php
     $script = <<<JS
-  function selectText(element) {
-    var range, selection;
-    if (window.getSelection) {
-      selection = window.getSelection();
-      range = document.createRange();
-      range.selectNodeContents(element);
-      selection.removeAllRanges();
-      selection.addRange(range);
-    } else if (document.body.createTextRange) {
-      range = document.body.createTextRange();
-      range.moveToElementText(element);
-      range.select();
-    }
-  }
+          function selectText(element) {
+            var range, selection;
+            if (window.getSelection) {
+              selection = window.getSelection();
+              range = document.createRange();
+              range.selectNodeContents(element);
+              selection.removeAllRanges();
+              selection.addRange(range);
+            } else if (document.body.createTextRange) {
+              range = document.body.createTextRange();
+              range.moveToElementText(element);
+              range.select();
+            }
+          }
 
-  function updateCitation(citation) {
-    const citationEl = $('#citation-placeholder');
-    citationEl.html('');
-    let missingCitation = false;
-    let hasCitations = false;
-    $.each(citation, function onEachLink(recordId, content) {
-      let citation = $('<div>', {
-        'class': 'citation',
-        'data-record-id': recordId,
-        'html': (content != false)? content : '',
-      });
-      if (content == false) {
-        missingCitation = true;
-      } else {
-        hasCitations = true;
-      }
-      citationEl.append(citation);
-    });
-    $('#citation-loader').addClass('hidden');
-    if (missingCitation && hasCitations) {
-      $('#missing-citations').removeClass('hidden');
-    }
-    if (!hasCitations) {
-      $('#no-citations').removeClass('hidden');
-    }
-    citationEl.removeClass('hidden');
-    citationEl.click(function selectCitation() {
-        selectText(this);
-    });
-  }
+          function updateCitation(citation) {
+            const citationEl = $('#citation-placeholder');
+            citationEl.html('');
+            let missingCitation = false;
+            let hasCitations = false;
+            $.each(citation, function onEachLink(recordId, content) {
+              let citation = $('<div>', {
+                'class': 'citation',
+                'data-record-id': recordId,
+                'html': (content != false)? content : '',
+              });
+              if (content == false) {
+                missingCitation = true;
+              } else {
+                hasCitations = true;
+              }
+              citationEl.append(citation);
+            });
+            $('#citation-loader').addClass('hidden');
+            if (missingCitation && hasCitations) {
+              $('#missing-citations').removeClass('hidden');
+            }
+            if (!hasCitations) {
+              $('#no-citations').removeClass('hidden');
+            }
+            citationEl.removeClass('hidden');
+            citationEl.click(function selectCitation() {
+                selectText(this);
+            });
+          }
 
-  function getCitation( recordIds, citationStyle) {
-    $.ajax({
-      dataType: 'json',
-      async: true,
-      type: 'POST',
-      url: '/AJAX/JSON?method=getCitations',
-      data: { recordIds: recordIds, citationStyle: citationStyle },
-      success: function citationSuccessHandler(result) {
-        updateCitation(result.data);
-      },
-      fail: function citationFailHandler(jqXHR, textStatus) {
-        console.log( "Request failed: " + textStatus );
-      }
-    });
-  }
+          function getCitation( recordIds, citationStyle) {
+            $.ajax({
+              dataType: 'json',
+              async: true,
+              type: 'POST',
+              url: '/AJAX/JSON?method=getCitations',
+              data: { recordIds: recordIds, citationStyle: citationStyle },
+              success: function citationSuccessHandler(result) {
+                updateCitation(result.data);
+              },
+              fail: function citationFailHandler(jqXHR, textStatus) {
+                console.log( "Request failed: " + textStatus );
+              }
+            });
+          }
 
-  $(document).ready(function citationForm() {
-    $('#citace-pro').off('click');
-    $('#citation-placeholder').click(function selectCitation() {
-      selectText(this);
-    });
-    $('#citation-style-selector').change(function citationChangeHandler(event) {
-      var style = event.target.value;
-      $('#citation-placeholder').addClass('hidden');
-      $('#missing-citations').addClass('hidden');
-      $('#no-citations').addClass('hidden');
-      $('#citation-loader').removeClass('hidden');
-      const recordIds = $.map($('#citation-placeholder')
-        .children('.citation'), function getRecordId(it) {return $(it).data('record-id')});
-      getCitation(recordIds,  style);
-    });
-  });
-JS;
+          $(document).ready(function citationForm() {
+            $('#citace-pro').off('click');
+            $('#citation-placeholder').click(function selectCitation() {
+              selectText(this);
+            });
+            $('#citation-style-selector').change(function citationChangeHandler(event) {
+              var style = event.target.value;
+              $('#citation-placeholder').addClass('hidden');
+              $('#missing-citations').addClass('hidden');
+              $('#no-citations').addClass('hidden');
+              $('#citation-loader').removeClass('hidden');
+              const recordIds = $.map($('#citation-placeholder')
+                .children('.citation'), function getRecordId(it) {return $(it).data('record-id')});
+              getCitation(recordIds,  style);
+            });
+          });
+        JS;
     echo $this->inlineScript(\Laminas\View\Helper\HeadScript::SCRIPT, $script, 'SET');
 ?>
 <br>

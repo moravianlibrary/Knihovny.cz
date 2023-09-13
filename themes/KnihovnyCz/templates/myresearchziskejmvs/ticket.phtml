@@ -290,8 +290,8 @@ $this->headTitle($this->translate('ZiskejMvs::header_order_ziskej_num') . ' ' . 
 <?php
 $confirmationText = $this->translate('ZiskejMvs::btn_order_cancel_confirm', ['%orderId' => $ticket->hid]);
 $script = <<<JS
-  $('#cancelButton').click(function confirmCancelTicket() {
-    return confirm('$confirmationText');
-  });
-JS;
+      $('#cancelButton').click(function confirmCancelTicket() {
+        return confirm('$confirmationText');
+      });
+    JS;
 echo $this->inlineScript(\Laminas\View\Helper\HeadScript::SCRIPT, $script, 'SET');

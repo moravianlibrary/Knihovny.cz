@@ -60,7 +60,8 @@
   <?php endif; ?>
 
   <ul class="record-list">
-    <?php $i = 0; foreach ($this->transactions as $resource): ?>
+    <?php $i = 0;
+    foreach ($this->transactions as $resource): ?>
       <?php $ilsDetails = $resource->getExtraDetail('ils_details'); ?>
       <li id="record<?=$this->escapeHtmlAttr($resource->getUniqueId())?>" class="result">
         <?php if ($this->purgeSelectedAllowed): ?>

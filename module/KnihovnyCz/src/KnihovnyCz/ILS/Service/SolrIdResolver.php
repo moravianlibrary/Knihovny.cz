@@ -144,7 +144,7 @@ class SolrIdResolver
             $query = new \VuFindSearch\Query\Query($queryField . ':' . $idForQuery);
             $fullQuery->addQuery($query);
         }
-        $command = new SearchCommand('Solr', $fullQuery, 0, sizeof($ids), $params);
+        $command = new SearchCommand('Solr', $fullQuery, 0, count($ids), $params);
         $searchResults = $this->searchService->invoke($command)->getResult();
         foreach ($searchResults->getRecords() as $record) {
             $fields = $record->getRawData();

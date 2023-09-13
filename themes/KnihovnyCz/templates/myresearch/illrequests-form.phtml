@@ -51,7 +51,8 @@
             ));
           }
         ?>
-        <?php $label = ''; if ($field->getOption('label') != null):?>
+        <?php $label = '';
+        if ($field->getOption('label') != null):?>
           <?php
             $attributes = [
                 'class' => 'control-label',
@@ -65,7 +66,8 @@
           <?=$formLabel->openTag($attributes)?>
           <?=$this->transEsc($field->getOption('label'));?>:
           <?=$formLabel->closeTag();?>
-          <?php $label = ob_get_contents(); ob_end_clean(); ?>
+          <?php $label = ob_get_contents();
+          ob_end_clean(); ?>
         <?php endif; ?>
         <?php if ($field instanceof \Laminas\Form\Element\Select): ?>
           <?=$label?>

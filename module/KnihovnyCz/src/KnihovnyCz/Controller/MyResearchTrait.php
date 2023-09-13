@@ -55,7 +55,7 @@ trait MyResearchTrait
     protected function showException(\Exception $ex)
     {
         $message = 'ils_offline_home_message';
-        if (in_array(get_class($ex), self::$EXCEPTIONS_TO_SHOW)) {
+        if (in_array($ex::class, self::$EXCEPTIONS_TO_SHOW)) {
             $message = $ex->getMessage();
         }
         $this->flashMessenger()->addErrorMessage($message);

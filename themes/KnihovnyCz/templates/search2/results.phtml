@@ -30,7 +30,7 @@
 <?php
   if ($resultsCount != 0) {
     $script = <<<JS
-      initMap('$url');
-JS;
+              initMap('$url');
+        JS;
     echo $this->inlineScript(\Laminas\View\Helper\HeadScript::SCRIPT, $script, 'SET');
   }

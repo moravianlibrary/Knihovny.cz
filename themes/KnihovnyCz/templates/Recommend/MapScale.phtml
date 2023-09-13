@@ -39,45 +39,45 @@
     ];
     $sliderOptionsJson = json_encode($sliderOptions);
     $script = <<<JS
-$(document).ready(function() {
-	const fromField = '#{$this->escapeHtmlAttr($this->mapScaleField)}from';
-	const toField = '#{$this->escapeHtmlAttr($this->mapScaleField)}to';
-	const scaleSliderSelector = '#{$this->escapeHtmlAttr($this->mapScaleField)}scaleSlider';
-	const scaleBase = Math.pow(10, 0.05);
-  var toScale = function(number) {
-    var scale = Math.pow(scaleBase, number);
-    var power = Math.floor(Math.log(scale) / Math.log(10));
-    return Math.round(scale / Math.pow(10, power)) * Math.pow(10, power);
-  };
-  var fromScale = function(number) {
-    return Math.log(number) / Math.log(scaleBase);
-  };
-  var fillTexts = function() {
-    var v = {$this->escapeHtmlAttr($this->mapScaleField)}scaleSlider.getValue();
-    $(fromField).val(toScale(v[0]));
-    $(toField).val(toScale(v[1]));
-  };
-  var sliderOptions = $sliderOptionsJson;
-  var value = sliderOptions['value'];
-  sliderOptions['value'] = [ fromScale(value[0]), fromScale(value[1]) ];
-  var {$this->escapeHtmlAttr($this->mapScaleField)}scaleSlider = $(scaleSliderSelector)
-    .slider(sliderOptions)
-    .on('change', fillTexts)
-    .data('slider');
+        $(document).ready(function() {
+        	const fromField = '#{$this->escapeHtmlAttr($this->mapScaleField)}from';
+        	const toField = '#{$this->escapeHtmlAttr($this->mapScaleField)}to';
+        	const scaleSliderSelector = '#{$this->escapeHtmlAttr($this->mapScaleField)}scaleSlider';
+        	const scaleBase = Math.pow(10, 0.05);
+          var toScale = function(number) {
+            var scale = Math.pow(scaleBase, number);
+            var power = Math.floor(Math.log(scale) / Math.log(10));
+            return Math.round(scale / Math.pow(10, power)) * Math.pow(10, power);
+          };
+          var fromScale = function(number) {
+            return Math.log(number) / Math.log(scaleBase);
+          };
+          var fillTexts = function() {
+            var v = {$this->escapeHtmlAttr($this->mapScaleField)}scaleSlider.getValue();
+            $(fromField).val(toScale(v[0]));
+            $(toField).val(toScale(v[1]));
+          };
+          var sliderOptions = $sliderOptionsJson;
+          var value = sliderOptions['value'];
+          sliderOptions['value'] = [ fromScale(value[0]), fromScale(value[1]) ];
+          var {$this->escapeHtmlAttr($this->mapScaleField)}scaleSlider = $(scaleSliderSelector)
+            .slider(sliderOptions)
+            .on('change', fillTexts)
+            .data('slider');
 
-  $([fromField, toField].join(',')).change(function () {
-    var fromValue = Number($(fromField).val());
-    var toValue = Number($(toField).val());
-    $(scaleSliderSelector).slider(
-      'setValue',
-      [
-        isNaN(fromValue) || fromValue <= 0 ? {$min} : fromValue,
-        isNaN(toValue) || toValue <= 0 ? {$max} : toValue
-      ],
-      true
-    );
-  });
-});
-JS;
+          $([fromField, toField].join(',')).change(function () {
+            var fromValue = Number($(fromField).val());
+            var toValue = Number($(toField).val());
+            $(scaleSliderSelector).slider(
+              'setValue',
+              [
+                isNaN(fromValue) || fromValue <= 0 ? {$min} : fromValue,
+                isNaN(toValue) || toValue <= 0 ? {$max} : toValue
+              ],
+              true
+            );
+          });
+        });
+        JS;
   ?>
   <?=$this->inlineScript(\Laminas\View\Helper\HeadScript::SCRIPT, $script, 'SET'); ?>

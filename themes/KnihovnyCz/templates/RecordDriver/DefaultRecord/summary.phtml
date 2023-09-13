@@ -1,4 +1,5 @@
-<?php $summary = $this->driver->getSummary(); $summary = $summary[0] ?? false; ?>
+<?php $summary = $this->driver->getSummary();
+$summary = $summary[0] ?? false; ?>
 <?php if ($summary): ?>
   <?php
     $splitText = $this->splitText($summary, $this->length ?? 360);

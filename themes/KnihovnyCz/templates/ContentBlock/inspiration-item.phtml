@@ -38,10 +38,12 @@ if ($cover):
           <?=$this->item->getTitle() ?>
         </h4>
         <p class='list-group-item-text'>
-          <?php $authors = $this->item->getPrimaryAuthors(); if (!empty($authors)): ?>
+          <?php $authors = $this->item->getPrimaryAuthors();
+          if (!empty($authors)): ?>
               <?=$authors[0] ?>
             <?php else: ?>
-              <?php $corpAuthors = $this->item->getCorporateAuthors(); if (!empty($author)): ?>
+              <?php $corpAuthors = $this->item->getCorporateAuthors();
+              if (!empty($author)): ?>
                 <?=$corpAuthors[0] ?>
               <?php endif; ?>
             <?php endif; ?>

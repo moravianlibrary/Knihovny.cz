@@ -35,16 +35,19 @@ if ($cover):
             </a>
           </h4>
           <p>
-            <?php $authors = $this->item->getPrimaryAuthors(); if (!empty($authors)): ?>
+            <?php $authors = $this->item->getPrimaryAuthors();
+            if (!empty($authors)): ?>
               <em><?=$authors[0] ?></em>
             <?php else: ?>
-              <?php $corpAuthors = $this->item->getCorporateAuthors(); if (!empty($corpAuthors)): ?>
+              <?php $corpAuthors = $this->item->getCorporateAuthors();
+              if (!empty($corpAuthors)): ?>
                 <em><?=$corpAuthors[0] ?></em>
               <?php endif; ?>
             <?php endif; ?>
           </p>
 
-          <?php $field773Data = $this->item->getField773(); if (!empty($field773Data)): ?>
+          <?php $field773Data = $this->item->getField773();
+          if (!empty($field773Data)): ?>
             <p>
               <span><?=$this->transEsc('field773')?></span>: <?=$this->record($this->item)->renderTemplate('data-7xx-field.phtml', ['data' => $field773Data, 'driver' => $this->item])?>
             </p>
@@ -56,7 +59,8 @@ if ($cover):
 
           <?=$this->record($this->item)->renderTemplate('summary.phtml', ['driver' => $this->item, 'length' => 200, 'expandable' => false])?>
 
-          <?php $links = $this->item->getLinks(); if (!empty($links)): ?>
+          <?php $links = $this->item->getLinks();
+          if (!empty($links)): ?>
             <?php $online = array_filter($links, function ($link) { return $link['status'] == 'online'; }); ?>
             <?php $dnnt = array_filter($links, function ($link) { return $link['status'] == 'dnnt'; }); ?>
             <?php if (!empty($online)): ?>
@@ -67,7 +71,7 @@ if ($cover):
                   break;
                 }
               }
-              $link = $link ?? array_shift($online); ?>
+              $link ??= array_shift($online); ?>
               <div class="text-right">
                 <a class="btn btn-primary" target="_blank" href="<?=$this->escapeHtmlAttr($link['url']) ?>"><?=$this->transEsc('read_online') ?></a>
               </div>

@@ -6,10 +6,10 @@ $this->headTitle($this->translate('ZiskejEdd::checked_out_items'));
 $this->layout()->breadcrumbs = '<li><a href="' . $this->url('myresearch-home') . '">' . $this->transEsc('Your Account') . '</a></li> <li class="active">' . $this->transEsc('ZiskejEdd::checked_out_items') . '</li>';
 
 $loadJs = <<<JS
-  function loadZiskej(element) {
-    loadCovers();
-  };
-JS;
+      function loadZiskej(element) {
+        loadCovers();
+      };
+    JS;
 ?>
 
 <a class="search-filter-toggle visible-xs" href="#myresearch-sidebar" data-toggle="offcanvas" title="Expand Sidebar">

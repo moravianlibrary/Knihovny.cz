@@ -1,43 +1,43 @@
 <?php
     $loadJs = <<<JS
-  function loadMyAccount() {
-    $('.library-card-ajax').each(function onEachLibraryCard() {
-      var element = this;
-      hideLibraryCardContent(element);
-      var callback = $(element).data('callback');
-      var ajaxCall = {
-        dataType: "html",
-        url: $(element).data('action') + "?cardId=" + $(element).data('card-id'),
-        method: "GET",
-        success: function show(content) {
-          showLibraryCardContent(element, content, function onComplete() {
-            if (callback != '') {
-              window[callback](element);
-            }
-          });
-        }
-      };
-      $.ajax(ajaxCall);
-  })}
-  loadMyAccount();
+          function loadMyAccount() {
+            $('.library-card-ajax').each(function onEachLibraryCard() {
+              var element = this;
+              hideLibraryCardContent(element);
+              var callback = $(element).data('callback');
+              var ajaxCall = {
+                dataType: "html",
+                url: $(element).data('action') + "?cardId=" + $(element).data('card-id'),
+                method: "GET",
+                success: function show(content) {
+                  showLibraryCardContent(element, content, function onComplete() {
+                    if (callback != '') {
+                      window[callback](element);
+                    }
+                  });
+                }
+              };
+              $.ajax(ajaxCall);
+          })}
+          loadMyAccount();
 
-  function showLibraryCardContent(element, content, callback) {
-    $(element).hide(500, function onComplete() {
-      $(element).parent('.panel-body').find('.loading-overlay').fadeOut(200);
-      $(element).html(content).slideDown(500);
-      if (callback != null) {
-        callback();
-      }
-    });
-  }
+          function showLibraryCardContent(element, content, callback) {
+            $(element).hide(500, function onComplete() {
+              $(element).parent('.panel-body').find('.loading-overlay').fadeOut(200);
+              $(element).html(content).slideDown(500);
+              if (callback != null) {
+                callback();
+              }
+            });
+          }
 
-  function hideLibraryCardContent(element) {
-    $(element).hide(500, function onComplete() {
-      $(element).html(VuFind.spinner()).show(0);
-    });
-  }
+          function hideLibraryCardContent(element) {
+            $(element).hide(500, function onComplete() {
+              $(element).html(VuFind.spinner()).show(0);
+            });
+          }
 
-JS;
+        JS;
 
 ?>
 <?php if ($this->user): ?>

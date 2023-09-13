@@ -20,7 +20,8 @@ $formattedAuthors = [];
         <?=$this->escapeHtml(rtrim($author, ','))?>
       </a>
 
-      <?php $authorityRecordId = $dataFields['id'][0] ?? null; if (!empty($authorityRecordId)): ?>
+      <?php $authorityRecordId = $dataFields['id'][0] ?? null;
+      if (!empty($authorityRecordId)): ?>
         <a title="<?=$this->translate('Show person')?> <?=$author?>" href="<?=$this->escapeHtmlAttr($this->recordLinker()->getUrl($authorityRecordId))?>">
           <?=$this->icon('authority-person')?>
         </a>
