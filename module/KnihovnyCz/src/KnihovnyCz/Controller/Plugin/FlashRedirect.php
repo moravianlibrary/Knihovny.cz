@@ -35,6 +35,9 @@ use Laminas\Http\Response;
 use Laminas\Mvc\Plugin\FlashMessenger\FlashMessenger;
 use VuFind\Controller\Plugin\AbstractRequestBase;
 
+use function is_array;
+use function is_string;
+
 /**
  * VuFind Flash Redirect
  *

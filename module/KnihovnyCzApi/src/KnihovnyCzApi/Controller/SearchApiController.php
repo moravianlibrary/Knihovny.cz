@@ -38,6 +38,10 @@ use Laminas\ServiceManager\ServiceLocatorInterface;
 use VuFindApi\Formatter\FacetFormatter;
 use VuFindApi\Formatter\RecordFormatter;
 
+use function count;
+use function in_array;
+use function is_array;
+
 /**
  * Class SearchApiController
  *

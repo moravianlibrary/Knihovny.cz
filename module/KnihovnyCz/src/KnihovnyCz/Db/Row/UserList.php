@@ -35,6 +35,8 @@ use VuFind\Exception\ListPermission as ListPermissionException;
 use VuFind\I18n\Translator\TranslatorAwareInterface;
 use VuFind\I18n\Translator\TranslatorAwareTrait;
 
+use function in_array;
+
 /**
  * Class UserList
  *

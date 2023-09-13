@@ -33,6 +33,10 @@ use Laminas\Stdlib\Parameters;
 use VuFind\Search\SearchRunner as Base;
 use VuFind\Search\Solr\AbstractErrorListener as ErrorListener;
 
+use function in_array;
+use function is_array;
+use function is_callable;
+
 /**
  * VuFind Search Runner
  *

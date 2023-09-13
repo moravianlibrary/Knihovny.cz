@@ -31,6 +31,8 @@ declare(strict_types=1);
 
 namespace KnihovnyCz\ILS\Logic;
 
+use function in_array;
+
 /**
  * Class Holds
  *

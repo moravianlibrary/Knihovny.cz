@@ -35,6 +35,8 @@ use KnihovnyCz\Ziskej\ZiskejEdd;
 use KnihovnyCz\Ziskej\ZiskejMvs;
 use Mzk\ZiskejApi\ResponseModel\Ticket;
 
+use function in_array;
+
 /**
  * Class ZiskejAdminController
  *

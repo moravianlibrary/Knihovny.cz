@@ -38,6 +38,10 @@ use Laminas\Stdlib\RequestInterface as Request;
 use Laminas\Stdlib\ResponseInterface as Response;
 use VuFind\Validator\CsrfInterface;
 
+use function count;
+use function in_array;
+use function is_array;
+
 /**
  * Class RecordController
  *

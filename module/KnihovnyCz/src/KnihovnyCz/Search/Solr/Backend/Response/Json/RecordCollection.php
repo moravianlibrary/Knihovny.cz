@@ -33,6 +33,8 @@ namespace KnihovnyCz\Search\Solr\Backend\Response\Json;
 
 use VuFindSearch\Backend\Solr\Response\Json\RecordCollection as Base;
 
+use function is_array;
+
 /**
  * Simple JSON-based record collection.
  *

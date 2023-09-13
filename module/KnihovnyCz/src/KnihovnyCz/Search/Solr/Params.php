@@ -33,6 +33,8 @@ use KnihovnyCz\Geo\Parser;
 use VuFind\Search\Solr\HierarchicalFacetHelper;
 use VuFindSearch\ParamBag;
 
+use function in_array;
+
 /**
  * Solr Search Parameters
  *

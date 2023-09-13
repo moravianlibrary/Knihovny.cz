@@ -35,6 +35,8 @@ namespace KnihovnyCz\ILS;
 use VuFind\Exception\ILS as ILSException;
 use VuFind\ILS\Connection as ConnectionBase;
 
+use function in_array;
+
 /**
  * Catalog Connection Class
  *

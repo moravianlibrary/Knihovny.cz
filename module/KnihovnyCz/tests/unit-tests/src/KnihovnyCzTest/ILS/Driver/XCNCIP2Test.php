@@ -34,6 +34,8 @@ use KnihovnyCz\ILS\Driver\XCNCIP2;
 use Laminas\Http\Response as HttpResponse;
 use PHPUnit\Framework\ExpectationFailedException;
 
+use function is_string;
+
 /**
  * Class XCNCIP2Test
  *

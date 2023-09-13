@@ -38,6 +38,8 @@ use VuFind\Config\PluginManager as ConfigManager;
 use VuFind\Exception\ILS as ILSException;
 use VuFind\ILS\Driver\PluginManager;
 
+use function is_array;
+
 /**
  * Class MultiBackend
  *

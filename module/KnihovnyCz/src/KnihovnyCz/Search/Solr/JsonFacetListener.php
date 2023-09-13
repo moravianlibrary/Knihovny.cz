@@ -36,6 +36,9 @@ use Psr\Container\ContainerInterface;
 use VuFindSearch\Backend\Solr\Backend;
 use VuFindSearch\Service;
 
+use function count;
+use function in_array;
+
 /**
  * Solr hierarchical facet handling listener.
  *

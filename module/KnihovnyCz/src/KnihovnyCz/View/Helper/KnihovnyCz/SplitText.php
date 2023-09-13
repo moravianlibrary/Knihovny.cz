@@ -33,6 +33,8 @@ namespace KnihovnyCz\View\Helper\KnihovnyCz;
 
 use Laminas\View\Helper\AbstractHelper;
 
+use function strlen;
+
 /**
  * Class SplitText
  *

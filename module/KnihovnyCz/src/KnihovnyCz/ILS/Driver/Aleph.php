@@ -35,6 +35,9 @@ use VuFind\I18n\Translator\TranslatorAwareInterface;
 use VuFind\I18n\Translator\TranslatorAwareTrait;
 use VuFind\ILS\Driver\Aleph as AlephBase;
 
+use function count;
+use function in_array;
+
 /**
  * Class Aleph
  *

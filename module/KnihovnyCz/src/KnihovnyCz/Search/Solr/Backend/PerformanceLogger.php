@@ -34,6 +34,8 @@ namespace KnihovnyCz\Search\Solr\Backend;
 use Laminas\Http\Client as HttpClient;
 use Laminas\Http\PhpEnvironment\Request;
 
+use function floatval;
+
 /**
  * Solr performance logger
  *

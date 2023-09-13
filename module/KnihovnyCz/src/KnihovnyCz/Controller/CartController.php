@@ -33,6 +33,9 @@ namespace KnihovnyCz\Controller;
 
 use Laminas\Stdlib\RequestInterface as Request;
 
+use function is_array;
+use function strlen;
+
 /**
  * Class CartController
  *

@@ -38,6 +38,9 @@ use VuFind\I18n\Translator\TranslatorAwareInterface;
 use VuFind\I18n\Translator\TranslatorAwareTrait;
 use VuFind\Search\Results\PluginManager as ResultsManager;
 
+use function array_key_exists;
+use function strlen;
+
 /**
  * "Get Autocomplete Suggestions" AJAX handler
  *

@@ -32,6 +32,11 @@ namespace KnihovnyCz\ILS\Driver;
 use VuFind\Date\DateException;
 use VuFind\Exception\ILS as ILSException;
 
+use function count;
+use function is_callable;
+use function is_int;
+use function is_string;
+
 /**
  * Class XCNCIP2
  *

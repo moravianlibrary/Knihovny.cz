@@ -40,6 +40,8 @@ use VuFind\Session\Settings as SessionSettings;
 use VuFindCode\ISBN;
 use VuFindCode\ISMN;
 
+use function in_array;
+
 /**
  * Class GetObalkyKnihCoverWithoutSolr
  *

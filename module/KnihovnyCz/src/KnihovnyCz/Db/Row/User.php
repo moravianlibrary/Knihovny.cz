@@ -34,6 +34,9 @@ namespace KnihovnyCz\Db\Row;
 use Laminas\Db\ResultSet\ResultSet;
 use VuFind\Db\Row\User as Base;
 
+use function count;
+use function in_array;
+
 /**
  * Class User
  *

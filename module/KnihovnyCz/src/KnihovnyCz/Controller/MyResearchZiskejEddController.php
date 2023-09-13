@@ -40,6 +40,8 @@ use VuFind\Controller\AjaxResponseTrait;
 use VuFind\Exception\LibraryCard;
 use VuFind\Log\LoggerAwareTrait;
 
+use function is_array;
+
 /**
  * Class MyResearchZiskejEddController
  *

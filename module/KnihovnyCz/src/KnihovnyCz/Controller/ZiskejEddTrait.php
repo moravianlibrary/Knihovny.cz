@@ -41,6 +41,8 @@ use Mzk\ZiskejApi\RequestModel\Reader;
 use Mzk\ZiskejApi\RequestModel\TicketEddRequest;
 use VuFind\Exception\LibraryCard;
 
+use function is_array;
+
 /**
  * Ziskej EDD trait
  *

@@ -34,6 +34,8 @@ namespace KnihovnyCz\View\Helper\KnihovnyCz;
 use Laminas\View\Helper\AbstractHelper;
 use VuFind\RecordDriver\AbstractBase;
 
+use function is_array;
+
 /**
  * Class TextFormatter
  *

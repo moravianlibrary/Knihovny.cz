@@ -32,6 +32,8 @@ namespace KnihovnyCz\Db\Table;
 use Laminas\Db\Sql\Expression;
 use Laminas\Db\Sql\Select;
 
+use function in_array;
+
 /**
  * Class Resource
  *

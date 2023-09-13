@@ -29,6 +29,8 @@
 
 namespace KnihovnyCz\Search;
 
+use function in_array;
+
 /**
  * VuFind Search Runner
  *

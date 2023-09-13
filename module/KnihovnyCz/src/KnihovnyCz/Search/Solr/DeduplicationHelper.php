@@ -29,6 +29,8 @@
 
 namespace KnihovnyCz\Search\Solr;
 
+use function in_array;
+
 /**
  * Solr deduplication helper
  *

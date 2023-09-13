@@ -31,6 +31,8 @@ namespace KnihovnyCz\Recommend;
 
 use VuFind\Recommend\SideFacetsDeferred as Base;
 
+use function in_array;
+
 /**
  * SideFacetsDeferred Recommendations Module
  *

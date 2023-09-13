@@ -29,6 +29,8 @@
 
 namespace KnihovnyCz\Geo;
 
+use function floatval;
+
 /**
  * Class Parser
  *

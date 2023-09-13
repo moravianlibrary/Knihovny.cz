@@ -32,6 +32,8 @@ namespace KnihovnyCz\RecordDriver;
 use KnihovnyCz\RecordDriver\Feature\WikidataTrait;
 use KnihovnyCz\Wikidata\WheelchairAccessibility;
 
+use function floatval;
+
 /**
  * Knihovny.cz solr library record driver
  *

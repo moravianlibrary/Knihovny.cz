@@ -35,6 +35,8 @@ use VuFind\Search\Results\PluginManager as Results;
 use VuFindSearch\Command\SearchCommand;
 use VuFindSearch\Service as SearchService;
 
+use function count;
+
 /**
  * SolrAuthorityEnricher
  *
