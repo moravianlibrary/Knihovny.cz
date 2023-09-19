@@ -68,12 +68,12 @@ $this->headTitle($this->translate('ZiskejEdd::header_order_ziskej_num') . ' ' . 
         </li>
         <?php
         if (in_array($ticket->status, [
-          StatusName::CREATED->value,
-          StatusName::ACCEPTED->value,
-          StatusName::UNPAID->value,
-          StatusName::PREPARED->value,
-          StatusName::LENT->value,
-          StatusName::CLOSED->value,
+          StatusName::CREATED,
+          StatusName::ACCEPTED,
+          StatusName::UNPAID,
+          StatusName::PREPARED,
+          StatusName::LENT,
+          StatusName::CLOSED,
         ])) : ?>
           <li class="part col-md-2">
             <?php if (isset($historyArray[StatusName::ACCEPTED->value])): ?>

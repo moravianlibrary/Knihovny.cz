@@ -78,13 +78,13 @@ $this->headTitle($this->translate('ZiskejMvs::header_order_ziskej_num') . ' ' . 
           <?php endif; ?>
         </li>
         <?php
-        if (in_array($ticket->status->value, [
-          StatusName::CREATED->value,
-          StatusName::PAID->value,
-          StatusName::ACCEPTED->value,
-          StatusName::PREPARED->value,
-          StatusName::LENT->value,
-          StatusName::CLOSED->value,
+        if (in_array($ticket->status, [
+          StatusName::CREATED,
+          StatusName::PAID,
+          StatusName::ACCEPTED,
+          StatusName::PREPARED,
+          StatusName::LENT,
+          StatusName::CLOSED,
         ])): ?>
           <li class="part col-md-2">
             <?php if (isset($historyArray[StatusName::ACCEPTED->value])): ?>
