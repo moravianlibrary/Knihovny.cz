@@ -119,23 +119,26 @@ class GetZiskejEddFee extends AbstractBase implements TranslatorAwareInterface
         }
 
         try {
-            $fee = $this->ziskejApi->getEddEstimateFee($totalPages, $eddSubtype);
+            $eddEstimate = $this->ziskejApi->getEddEstimateFee($totalPages, $eddSubtype);
 
             return $this->formatResponse(
                 [
-                    'fee' => $fee->fee,
-                    'is_valid' => $fee->isValid,
+                    'fees' => $eddEstimate,
                     'total_pages' => $totalPages,
                     'message_subtotal' => $this->translate(
                         'ZiskejEdd::message_subtotal_fee_info',
                         [
-                            '%%price%%' => $fee->fee,
+                            '%%price%%' => $eddEstimate->fee,
                             '%%pages%%' => $totalPages,
                         ]
                     ),
                     'message_total' => $this->translate(
                         'ZiskejEdd::message_total_fee_info',
-                        ['%%total%%' => $fee->fee]
+                        [
+                            '%%total%%' => $eddEstimate->fee,
+                            '%%fee_dk%%' => $eddEstimate->feeDk,
+                            '%%fee_dilia%%' => $eddEstimate->feeDilia,
+                        ]
                     ),
                 ]
             );
