@@ -21,6 +21,7 @@
     "watch:lessdev": "grunt watch:lessdev",
 
     "build:scss": "grunt scss",
+    "check:scss": "grunt check:scss",
     "watch:scss": "grunt watch:scss",
 
     "lessToSass": "grunt lessToSass",
@@ -32,7 +33,7 @@
     "grunt-contrib-less": "^2.0.0",
     "jit-grunt": "^0.10.0",
     "jstree": "3.3.15",
-    "vanilla-cookieconsent": "3.0.0-rc.14"
+    "vanilla-cookieconsent": "3.0.0-rc.16"
   },
   "devDependencies": {
     "eslint": "^8.15.0",
