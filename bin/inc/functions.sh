@@ -34,7 +34,7 @@ function merge_directory
     local baseApiUrl="https://raw.githubusercontent.com/$repository"
 
     shopt -s nullglob
-    for current in $localDir/*{.ini,.phtml,/}
+    for current in $localDir/*{.ini,.yaml,.phtml,/}
     do
         local coreEquivalent=$coreDir${current:$localDirLength}
         if [ -d "$current" ]
