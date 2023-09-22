@@ -25,7 +25,7 @@ EXTENSION_MODULE_DIR="${EXTENSION_DIR}/module"
 VUFIND_MODULE_DIR="${PARAM_VUFIND_SRC}/module"
 for modul in KnihovnyCz KnihovnyCzApi KnihovnyCzConsole KnihovnyCzCronApi; do
     if test ! -e "${VUFIND_MODULE_DIR}/${modul}"; then
-        ln -s "${EXTENSION_MODULE_DIR}/${modul}/" "${VUFIND_MODULE_DIR}/${modul}"
+        ln -s -f "${EXTENSION_MODULE_DIR}/${modul}/" "${VUFIND_MODULE_DIR}/${modul}"
     fi
 done
 
@@ -35,14 +35,14 @@ VUFIND_THEME_DIR="${PARAM_VUFIND_SRC}/themes"
 for theme in ${EXTENSION_THEME_DIR}/*/; do
     name=$(basename "$theme")
     if test ! -e "${VUFIND_THEME_DIR}/${name}"; then
-        ln -s "${EXTENSION_THEME_DIR}/${name}/" "${VUFIND_THEME_DIR}/${name}"
+        ln -s -f "${EXTENSION_THEME_DIR}/${name}/" "${VUFIND_THEME_DIR}/${name}"
     fi
 done
 
 # XSL
 EXTENSION_XSL_DIR="${EXTENSION_DIR}/xsl"
 VUFIND_XSL_DIR="${PARAM_VUFIND_SRC}/xsl"
-ln -s "${EXTENSION_XSL_DIR}/" "${VUFIND_XSL_DIR}"
+ln -s -f "${EXTENSION_XSL_DIR}/" "${VUFIND_XSL_DIR}"
 
 # Compile CSS in themes
 grunt less custom
@@ -51,7 +51,7 @@ grunt less custom
 for config in ${EXTENSION_DIR}/local/*/; do
     name=$(basename "$config")
     if test ! -e "${PARAM_VUFIND_SRC}/local/$name"; then
-        ln -s "${EXTENSION_DIR}/local/$name/" "${PARAM_VUFIND_SRC}/local/$name"
+        ln -s -f "${EXTENSION_DIR}/local/$name/" "${PARAM_VUFIND_SRC}/local/$name"
     fi
     # Make cache dirs - if they not exist, the script clear-cache executed below
     # will create them - but with root:root as owner
