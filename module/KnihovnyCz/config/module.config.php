@@ -660,7 +660,6 @@ $config = [
                     \KnihovnyCz\Recommend\MapSelection::class => \KnihovnyCz\Recommend\MapSelectionFactory::class,
                     \KnihovnyCz\Recommend\NewItems::class => \KnihovnyCz\Recommend\NewItemsFactory::class,
                     \KnihovnyCz\Recommend\SideFacetsDeferred::class => \KnihovnyCz\Recommend\SideFacetsDeferredFactory::class,
-                    \KnihovnyCz\Recommend\SideFacets::class => \VuFind\Recommend\SideFacetsFactory::class,
                 ],
                 'aliases' => [
                     'recommendotherportals' => \KnihovnyCz\Recommend\RecommendOtherPortals::class,
