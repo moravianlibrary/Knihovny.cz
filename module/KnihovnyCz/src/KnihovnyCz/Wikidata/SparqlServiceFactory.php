@@ -71,9 +71,10 @@ class SparqlServiceFactory
         if (!empty($options)) {
             throw new \Exception('Unexpected options passed to factory.');
         }
-        $version = $container
+        $generator = $container
             ->get(\VuFind\Config\PluginManager::class)
-            ->get('config')->Site->version;
+            ->get('config')->Site->generator;
+        $version = preg_replace('/(.+) (.+) (\(.*\))/', '$2', $generator);
         return new $requestedName(
             $container->get(\KnihovnyCz\Service\GuzzleHttpService::class),
             $version,

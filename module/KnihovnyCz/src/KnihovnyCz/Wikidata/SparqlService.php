@@ -84,17 +84,6 @@ class SparqlService implements \Laminas\Log\LoggerAwareInterface
 
     protected string $sparqlUrl = 'https://query.wikidata.org/sparql';
 
-    protected string $version;
-
-    protected string $vufindVersion;
-
-    /**
-     * Http service
-     *
-     * @var GuzzleHttpService
-     */
-    protected GuzzleHttpService $httpService;
-
     /**
      * Constructor
      *
@@ -103,13 +92,10 @@ class SparqlService implements \Laminas\Log\LoggerAwareInterface
      * @param string            $vufindVersion VuFind version
      */
     public function __construct(
-        GuzzleHttpService $httpService,
-        string $version,
-        string $vufindVersion
+        protected GuzzleHttpService $httpService,
+        protected string $version,
+        protected string $vufindVersion
     ) {
-        $this->httpService = $httpService;
-        $this->version = $version;
-        $this->vufindVersion = $vufindVersion;
     }
 
     /**

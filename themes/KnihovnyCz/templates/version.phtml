@@ -1,0 +1,5 @@
+<?php
+  $generator = $this->config()->get('config')->Site->generator;
+  $knihovnyCzVersion = preg_replace('/(.*) (\(.*\))/', '$1', $generator);
+?>
+<small class="text-muted"><?=$knihovnyCzVersion?></small>
