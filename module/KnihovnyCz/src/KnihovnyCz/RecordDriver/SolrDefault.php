@@ -740,7 +740,7 @@ class SolrDefault extends \VuFind\RecordDriver\SolrDefault
     }
 
     /**
-     * Deduplicate author information into associative array with main/corporate/
+     * Deduplicate author information into associative array with primary/corporate/
      * secondary keys.
      *
      * @param array $dataFields An array of extra data fields to retrieve (see
@@ -751,6 +751,17 @@ class SolrDefault extends \VuFind\RecordDriver\SolrDefault
     public function getDeduplicatedAuthors($dataFields = ['role'])
     {
         return parent::getDeduplicatedAuthors(array_merge($dataFields, ['id']));
+    }
+
+    /**
+     * Deduplicate author information into associative array with primary/corporate/
+     * secondary keys. Method for API compatibility.
+     *
+     * @return array
+     */
+    public function getDeduplicatedAuthorsForApi()
+    {
+        return parent::getDeduplicatedAuthors();
     }
 
     /**
