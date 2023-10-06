@@ -33,11 +33,13 @@ use KnihovnyCz\Db\Table\UserListCategories;
 use Laminas\ServiceManager\ServiceLocatorInterface;
 use Laminas\Stdlib\ResponseInterface as Response;
 use Laminas\View\Model\ViewModel;
+use Laminas\View\View;
 use VuFind\Controller\MyResearchController as MyResearchControllerBase;
 use VuFind\Db\Table\PluginManager as TableManager;
 use VuFind\Db\Table\UserList;
 use VuFind\Exception\Auth as AuthException;
 use VuFind\Exception\Forbidden as ForbiddenException;
+use VuFind\Exception\ILS as ILSException;
 use VuFind\Validator\CsrfInterface;
 
 use function is_array;
@@ -229,6 +231,9 @@ class MyResearchController extends MyResearchControllerBase
                 $view->prolongRegistrationLink = $catalog
                     ->getMyProlongRegistrationLink($patron);
             }
+            $view->changePassword = $catalog->checkFunction('changePassword', $patron) !== false;
+            $view->changeEmail = $catalog->checkFunction('changeEmail', $patron) !== false;
+            $view->changeNickname = $catalog->checkFunction('changeNickname', $patron) !== false;
         } else {
             $view = $this->createViewModel(
                 [
@@ -237,6 +242,7 @@ class MyResearchController extends MyResearchControllerBase
             );
         }
         $view->setTemplate('myresearch/profile-ajax');
+        $view->cardId = $this->getCardId();
         $result = $this->getViewRenderer()->render($view);
         return $this->getAjaxResponse('text/html', $result, null);
     }
@@ -732,6 +738,189 @@ class MyResearchController extends MyResearchControllerBase
             return $this->redirect()->toUrl($si);
         }
         return $this->forwardTo('MyResearch', 'Login');
+    }
+
+    /**
+     * Change email action.
+     *
+     * @return mixed
+     */
+    public function profileChangeEmailAction(): ViewModel|Response
+    {
+        if (!is_array($patron = $this->checkProfileChange('email'))) {
+            return $patron;
+        }
+        $email = null;
+        if ($this->getRequest()->isPost()) {
+            $csrf = $this->getRequest()->getPost('csrf');
+            $email = $this->getRequest()->getPost('email', null);
+            $validator = new \Laminas\Validator\EmailAddress();
+            if (!$this->getAuthManager()->isValidCsrfHash($csrf)) {
+                $this->flashMessenger()->addErrorMessage('csrf_validation_error');
+            } elseif (empty($email)) {
+                $this->flashMessenger()->addErrorMessage('email_empty_error');
+            } elseif (!$validator->isValid($email)) {
+                $this->flashMessenger()->addErrorMessage('email_invalid_error');
+            } else {
+                $input = [
+                    'patron' => $patron,
+                    'email' => $email,
+                ];
+                try {
+                    $result = $this->getILS()->changeEmail($input);
+                    if ($result['success']) {
+                        $this->flashMessenger()->addInfoMessage('email_change_successful');
+                        return $this->redirect()->toRoute('myresearch-profile');
+                    } else {
+                        $this->flashMessenger()->addErrorMessage('email_change_error');
+                    }
+                } catch (ILSException $ex) {
+                    $this->flashMessenger()->addErrorMessage('ils_offline_home_message');
+                }
+            }
+        }
+        $view = $this->createProfileChangeView('email');
+        $view->email = $email ?? $patron['email'];
+        return $view;
+    }
+
+    /**
+     * Change nickname action.
+     *
+     * @return mixed
+     */
+    public function profileChangeNicknameAction(): ViewModel|Response
+    {
+        if (!is_array($patron = $this->checkProfileChange('nickname'))) {
+            return $patron;
+        }
+        $nickname = null;
+        if ($this->getRequest()->isPost()) {
+            $csrf = $this->getRequest()->getPost('csrf');
+            $nickname = $this->getRequest()->getPost('nickname', null);
+            if (!$this->getAuthManager()->isValidCsrfHash($csrf)) {
+                $this->flashMessenger()->addErrorMessage('csrf_validation_error');
+            } elseif (empty($nickname)) {
+                $this->flashMessenger()->addErrorMessage('nickname_empty_error');
+            } else {
+                $input = [
+                    'patron' => $patron,
+                    'nickname' => $nickname,
+                ];
+                try {
+                    $result = $this->getILS()->changeNickname($input);
+                    if ($result['success']) {
+                        $this->flashMessenger()->addInfoMessage('nickname_change_successful');
+                        return $this->redirect()->toRoute('myresearch-profile');
+                    } else {
+                        $this->flashMessenger()->addErrorMessage('nickname_change_error');
+                    }
+                } catch (ILSException $ex) {
+                    $this->flashMessenger()->addErrorMessage('ils_offline_home_message');
+                }
+            }
+        }
+        $view = $this->createProfileChangeView('nickname');
+        try {
+            $nickname ??= $this->getILS()->getNickname($patron);
+        } catch (ILSException $ex) {
+            $this->flashMessenger()->addErrorMessage('ils_offline_home_message');
+        }
+        $view->nickname = $nickname;
+        return $view;
+    }
+
+    /**
+     * Change password action.
+     *
+     * @return mixed
+     */
+    public function profileChangePasswordAction(): ViewModel|Response
+    {
+        if (!is_array($patron = $this->checkProfileChange('password'))) {
+            return $patron;
+        }
+        if ($this->getRequest()->isPost()) {
+            $csrf = $this->getRequest()->getPost('csrf');
+            $oldPassword = $this->getRequest()->getPost('oldpassword', null);
+            $newPassword = $this->getRequest()->getPost('password', null);
+            $newPasswordCheck = $this->getRequest()->getPost('password2', null);
+            if (!$this->getAuthManager()->isValidCsrfHash($csrf)) {
+                $this->flashMessenger()->addErrorMessage('csrf_validation_error');
+            } elseif (empty($oldPassword)) {
+                $this->flashMessenger()->addErrorMessage('password_old_empty_error');
+            } elseif (empty($newPassword)) {
+                $this->flashMessenger()->addErrorMessage('password_new_empty_error');
+            } elseif ($newPassword != $newPasswordCheck) {
+                $this->flashMessenger()->addErrorMessage('password_check_error');
+            } else {
+                $input = [
+                    'patron' => $patron,
+                    'oldPassword' => $oldPassword,
+                    'newPassword' => $newPassword,
+                ];
+                try {
+                    $result = $this->getILS()->changePassword($input);
+                    if ($result['success']) {
+                        $this->flashMessenger()->addInfoMessage('password_change_successful');
+                        return $this->redirect()->toRoute('myresearch-profile');
+                    } else {
+                        $this->flashMessenger()->addErrorMessage('password_change_error');
+                    }
+                } catch (ILSException $ex) {
+                    $this->flashMessenger()->addErrorMessage('ils_offline_home_message');
+                }
+            }
+        }
+        return $this->createProfileChangeView('password');
+    }
+
+    /**
+     * Check profile change
+     *
+     * @param string $attribute attribute to change
+     *
+     * @return mixed array with patron on success or redirect on error (user not logged, attribute change not supported)
+     */
+    protected function checkProfileChange(string $attribute): array|Response|ViewModel
+    {
+        // Force login:
+        if (!$this->getUser()) {
+            return $this->forceLogin();
+        }
+        // Stop now if the user does not have valid catalog credentials available:
+        if (!is_array($patron = $this->catalogLogin())) {
+            return $patron;
+        }
+        $isSupported = $this->getILS()->checkFunction('change' . ucfirst($attribute), compact('patron'));
+        if (!$isSupported) {
+            $this->flashMessenger()->addErrorMessage(
+                $this->translate('ils_action_unavailable')
+            );
+            return $this->redirect()->toRoute('myresearch-profile');
+        }
+        return $patron;
+    }
+
+    /**
+     * Return view model for profile change.
+     *
+     * @param string $attribute attribute
+     *
+     * @return ViewModel
+     * @throws \VuFind\Exception\LibraryCard
+     */
+    protected function createProfileChangeView(string $attribute): ViewModel
+    {
+        $csrf = $this->serviceLocator->get(CsrfInterface::class);
+        $view = $this->createViewModel();
+        $view->setTemplate('myresearch/profile-change');
+        $user = $this->getUser();
+        $view->user = $user;
+        $view->title = $attribute . '_change_title';
+        $view->card = $user->getLibraryCard((int)$this->getCardId());
+        $view->formLayout = 'myresearch/profile-change/' . $attribute;
+        return $view;
     }
 
     /**

@@ -800,6 +800,10 @@ $staticRoutes = [
     'MyResearchZiskejEdd/ListAjax' => 'MyResearchZiskejEdd/ListAjax',
     'MyResearch/LogoutWarning' => 'MyResearch/LogoutWarning',
     'MyResearch/FrontPageLogin' => 'MyResearch/FrontPageLogin',
+    'MyResearch/ProfileChange' => 'MyResearch/ProfileChange',
+    'MyResearch/ProfileChangeEmail' => 'MyResearch/ProfileChangeEmail',
+    'MyResearch/ProfileChangeNickname' => 'MyResearch/ProfileChangeNickname',
+    'MyResearch/ProfileChangePassword' => 'MyResearch/ProfileChangePassword',
     'LibraryCards/NotSupported' => 'LibraryCards/NotSupported',
     'Cart/Cite' => 'Cart/Cite',
 ];

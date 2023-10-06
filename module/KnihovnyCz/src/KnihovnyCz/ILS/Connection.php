@@ -239,4 +239,44 @@ class Connection extends ConnectionBase
         }
         return false;
     }
+
+    /**
+     * Check changeEmail
+     *
+     * A support method for checkFunction(). This is responsible for checking
+     * the driver configuration to determine if the system supports
+     * changeEmail.
+     *
+     * @param array $functionConfig The ILL request configuration values
+     * @param array $params         An array of function-specific params (or null)
+     *
+     * @return bool if driver capability is supported
+     */
+    protected function checkMethodchangeEmail($functionConfig, $params)
+    {
+        if (parent::checkCapability('changeEmail', [$params ?: []])) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Check nickname
+     *
+     * A support method for checkFunction(). This is responsible for checking
+     * the driver configuration to determine if the system supports
+     * changeNickname.
+     *
+     * @param array $functionConfig The ILL request configuration values
+     * @param array $params         An array of function-specific params (or null)
+     *
+     * @return bool if driver capability is supported
+     */
+    protected function checkMethodchangeNickname($functionConfig, $params)
+    {
+        if (parent::checkCapability('changeNickname', [$params ?: []])) {
+            return true;
+        }
+        return false;
+    }
 }
