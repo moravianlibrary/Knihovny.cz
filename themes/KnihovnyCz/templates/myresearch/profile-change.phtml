@@ -1,0 +1,52 @@
+<?php
+  $singleCard = $this->user->isSingleCard();
+  $card = $this->card;
+  $operation = $this->operation;
+
+  // Set up page title:
+  $this->headTitle($this->translate($this->title));
+
+  // Set up breadcrumbs:
+  $this->layout()->breadcrumbs = '<li><a href="' . $this->url('myresearch-home') . '">' . $this->transEsc('Your Account') . '</a></li> <li class="active">' . $this->transEsc('Change password') . '</li>';
+
+?>
+
+<a class="search-filter-toggle visible-xs" href="#myresearch-sidebar" data-toggle="offcanvas" title="Expand Sidebar">
+  <?=$this->transEsc('Your Account') ?>
+</a>
+
+<div class="<?=$this->layoutClass('mainbody')?>">
+  <h2><?=$this->transEsc($this->title)?></h2>
+
+  <div class="panel panel-default">
+    <?php if (!$singleCard): ?>
+      <?php
+      $institution = $card->home_library;
+      $imageLink = sprintf('institutions/logos/%s/%s_small.png', $institution, $institution);
+      ?>
+      <div class="panel-heading panel-heading-with-img bg-white clearfix pointer" role="tab">
+        <h3 class="panel-title pull-left">
+          <?=$this->transEsc('Source::' . $institution) ?>
+        </h3>
+        <img class="pull-right" height="30" src="<?=$this->imageLink($imageLink)?>" alt="<?=$this->transEsc('Source::' . $institution) ?>">
+      </div>
+    <?php endif;?>
+
+    <div class="panel-body">
+      <?=$this->flashmessages();?>
+      <form id="profileChange" class="profile-change" method="post" data-toggle="validator">
+        <input type="hidden" name="csrf" value="<?=$this->escapeHtmlAttr($this->auth()->getManager()->getCsrfHash())?>">
+        <?=$this->context($this)->renderInContext($this->formLayout, []); ?>
+        <div class="form-group">
+          <input class="btn btn-primary" name="submit" type="submit" value="<?=$this->transEscAttr('Submit')?>">
+        </div>
+      </form>
+    </div>
+
+  </div>
+
+</div>
+
+<div class="<?=$this->layoutClass('sidebar')?>" id="myresearch-sidebar">
+  <?=$this->context($this)->renderInContext('myresearch/menu.phtml', ['active' => 'profile'])?>
+</div>

@@ -32,6 +32,21 @@
       <?=$this->transEsc('online_prolongation_link_text')?>
     </a>
   <?php endif; ?>
+  <?php if ($this->changePassword):?>
+    <a href="<?=$this->url('myresearch-profilechangepassword')?>?cardId=<?=urlencode($this->cardId)?>" class="btn btn-primary">
+      <?=$this->transEsc('password_change_label')?>
+    </a>
+  <?php endif; ?>
+  <?php if ($this->changeEmail):?>
+    <a href="<?=$this->url('myresearch-profilechangeemail')?>?cardId=<?=urlencode($this->cardId)?>" class="btn btn-primary">
+      <?=$this->transEsc('email_change_label')?>
+    </a>
+  <?php endif; ?>
+  <?php if ($this->changeNickname):?>
+    <a href="<?=$this->url('myresearch-profilechangenickname')?>?cardId=<?=urlencode($this->cardId)?>" class="btn btn-primary">
+      <?=$this->transEsc('nickname_change_label')?>
+    </a>
+  <?php endif; ?>
 <?php elseif ('ils-none' !== $this->ils()->getOfflineMode() && $this->patronLoginView && !empty($this->patronLoginView->getTemplate())): ?>
     <?=$this->partial($this->patronLoginView);?>
 <?php endif; ?>
