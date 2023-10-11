@@ -148,6 +148,8 @@ Author:
     - [bq, "inspiration:top_results^1"]
     - [bf, "if(exists(merged_records_boolean),10000,0)" ]
     - [bq, "region_institution_facet_mv:2/Others/bibliography/GEOBIBLINE/^30000"]
+    - [pf, "author^200"]
+    - [ps, "2"]
   QueryFields:
     author_search:
       - [onephrase, 350]
@@ -287,6 +289,8 @@ Title:
     - [bq, "inspiration:top_results^1"]
     - [bf, "if(exists(merged_records_boolean),10000,0)" ]
     - [bq, "region_institution_facet_mv:2/Others/bibliography/GEOBIBLINE/^30000"]
+    - [pf, "title^600"]
+    - [ps, "2"]
   QueryFields:
     title_short:
       - [onephrase, 500]
@@ -360,11 +364,11 @@ AllFields:
   DismaxParams:
     - [bq, "inspiration:top_results^1"]
     - [bf, "if(exists(merged_records_boolean),10000,0)" ]
-    - [bq, "author_exact:\"@query\"^20000"]
-    - [bq, "title_exact:\"@query\"^10000"]
-    - [bq, "term_exact:\"@query\"^30000"]
     - [bq, "region_institution_facet_mv:2/Others/bibliography/GEOBIBLINE/^30000"]
     - [bf, ord(publishDateSort)^1]
+    - [pf, "title^1000"]
+    - [pf, "author^1000"]
+    - [ps, "2"]
   DismaxHandler: edismax
   QueryFields:
     0:
