@@ -1,34 +1,5 @@
 <?php
 
-/**
- * Solr deduplication (merged records) listener.
- *
- * PHP version 7
- *
- * Copyright (C) Moravian Library 2020.
- *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License version 2,
- * as published by the Free Software Foundation.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
- *
- * @category VuFind
- * @package  Search
- * @author   David Maus <maus@hab.de>
- * @author   Ere Maijala <ere.maijala@helsinki.fi>
- * @author   Vaclav Rosecky <vaclav.rosecky@mzk.cz>
- * @license  http://opensource.org/licenses/gpl-2.0.php GNU General Public License
- * @link     http://vufind.org   Main Site
- */
-
 declare(strict_types=1);
 
 namespace KnihovnyCz\Search\Solr;
@@ -38,8 +9,6 @@ use Laminas\EventManager\SharedEventManagerInterface;
 use Psr\Container\ContainerInterface;
 use VuFindSearch\Backend\Solr\Backend;
 use VuFindSearch\Service;
-
-use function in_array;
 
 /**
  * Solr merged record handling listener.

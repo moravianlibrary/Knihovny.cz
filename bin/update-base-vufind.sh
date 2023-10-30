@@ -86,6 +86,7 @@ merge_directory themes/KnihovnyCz/templates/searchapi themes/root/templates/sear
 merge_file package.json package.json $OUR_VERSION $REMOTE_VERSION ${repository}
 merge_file tests/vufind.php-cs-fixer.php tests/vufind.php-cs-fixer.php $OUR_VERSION $REMOTE_VERSION ${repository}
 merge_file tests/vufind_templates.php-cs-fixer.php tests/vufind_templates.php-cs-fixer.php $OUR_VERSION $REMOTE_VERSION ${repository}
+merge_file tests/phpcs.xml tests/phpcs.xml $OUR_VERSION $REMOTE_VERSION ${repository}
 
 echo "Version was updated."
 echo "Please commit with command: "
