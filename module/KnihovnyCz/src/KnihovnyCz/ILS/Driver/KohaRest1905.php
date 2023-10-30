@@ -1,35 +1,5 @@
 <?php
 
-/**
- * VuFind Driver for Koha, using REST API
- *
- * PHP version 7
- *
- * Copyright (C) Moravian Library 2019.
- *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License version 2,
- * as published by the Free Software Foundation.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
- *
- * @category VuFind
- * @package  KnihovnyCz\ILS\Driver
- * @author   Bohdan Inhliziian <bohdan.inhliziian@gmail.com.cz>
- * @author   Ere Maijala <ere.maijala@helsinki.fi>
- * @author   Josef Moravec <josef.moravec@mzk.cz>
- * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
- * @link     https://vufind.org/wiki/vufind2:building_an_ils_driver Wiki
- * @link     https://knihovny.cz Main Page
- */
-
 declare(strict_types=1);
 
 namespace KnihovnyCz\ILS\Driver;
@@ -38,10 +8,6 @@ use VuFind\Date\DateException;
 use VuFind\Exception\AuthToken as AuthTokenException;
 use VuFind\Exception\ILS as ILSException;
 use VuFind\ILS\Driver\AbstractBase;
-
-use function count;
-use function in_array;
-use function is_string;
 
 /**
  * VuFind Driver for Koha, using REST API

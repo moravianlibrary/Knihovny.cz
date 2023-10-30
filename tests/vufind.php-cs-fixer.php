@@ -19,7 +19,7 @@ $rules = [
     'ereg_to_preg' => true,
     'get_class_to_class_keyword' => true,
     'global_namespace_import' => [
-        'import_functions' => true,
+        'import_functions' => null,
         'import_classes' => null,
     ],
     'is_null' => true,
@@ -28,10 +28,6 @@ $rules = [
     'magic_constant_casing' => true,
     'modernize_strpos' => true,
     'native_function_casing' => true,
-    'native_function_invocation' => [
-        'strict' => true,
-        'scope' => 'namespaced',
-    ],
     'no_alias_functions' => true,
     'no_blank_lines_after_class_opening' => true,
     'no_empty_comment' => true,
