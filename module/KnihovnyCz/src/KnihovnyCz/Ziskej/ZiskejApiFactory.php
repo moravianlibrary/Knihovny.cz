@@ -100,7 +100,7 @@ class ZiskejApiFactory implements FactoryInterface
         );
 
         $jwtConfig = Configuration::forSymmetricSigner(
-            Sha512::create(),
+            new Sha512(),
             InMemoryKey::file($cpkZiskej->getPrivateKeyFileLocation())
         );
 
