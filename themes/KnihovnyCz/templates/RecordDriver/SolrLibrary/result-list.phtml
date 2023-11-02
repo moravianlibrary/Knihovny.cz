@@ -28,11 +28,11 @@
           <?php $addresses = $this->driver->getLibraryAddress();
           if (!empty($addresses)): ?>
             <?php foreach ($addresses as $address): ?>
-              <p><?=$this->icon('map-marker', 'fa-fw')?> <?=$address?></p>
+              <p><?=$this->icon('map-marker')?> <?=$address?></p>
             <?php endforeach; ?>
           <?php endif; ?>
           <div>
-            <?php if($this->driver->isCollection()): ?>
+            <?php if ($this->driver->isCollection()): ?>
               <?=implode('<br>', array_map([$this, 'escapeHtml'], $this->driver->getSummary())); ?>
             <?php else: ?>
               <?php $summAuthors = $this->driver->getPrimaryAuthorsWithHighlighting();
@@ -103,7 +103,7 @@
 
           <?php $searchFilter = $this->driver->getBookSearchFilter();
           if (!empty($searchFilter)): ?>
-            <?=$this->icon('search', 'fa-fw')?> <?=$this->render('RecordDriver/SolrLibrary/search_in_library_link.phtml', ['data' => $searchFilter]); ?>
+            <?=$this->icon('search')?> <?=$this->render('RecordDriver/SolrLibrary/search_in_library_link.phtml', ['data' => $searchFilter]); ?>
           <?php endif; ?>
 
           <div class="callnumAndLocation ajax-availability hidden">
@@ -144,28 +144,14 @@
           <?php endif; ?>
 
           <?php if ($this->cart()->isActiveInSearch() && $this->params->getOptions()->supportsCart() && $this->cart()->isActive()): ?>
-            <?php $cart = $this->cart(); ?>
-            <?php if ($cart->isActive()): ?>
-              <?php $cartId = $this->source . '|' . $this->id; ?>
-              <span class="btn-bookbag-toggle" data-cart-id="<?=$this->escapeHtmlAttr($this->id)?>" data-cart-source="<?=$this->escapeHtmlAttr($this->source)?>">
-                <a href="#" class="cart-add result-link icon-link hidden<?php if (!$cart->contains($cartId)): ?> correct<?php endif ?>">
-                  <?=$this->icon('cart-add', 'icon-link__icon fa-fw') ?>
-                  <span class="icon-link__label"><?=$this->transEsc('Add to Book Bag') ?></span>
-                </a>
-                <a href="#" class="cart-remove result-link icon-link hidden<?php if ($cart->contains($cartId)): ?> correct<?php endif ?>">
-                  <?=$this->icon('cart-remove', 'icon-link__icon fa-fw') ?>
-                  <span class="icon-link__label"><?=$this->transEsc('Remove from Book Bag') ?></span>
-                </a>
-              </span>
-            <?php endif; ?>
+            <?=$this->render('record/cart-buttons.phtml', ['id' => $this->driver->getUniqueId(), 'source' => $this->driver->getSourceIdentifier()]); ?><br>
           <?php endif; ?>
-          <br>
 
           <?php if ($this->userlist()->getMode() !== 'disabled'): ?>
             <?php if ($this->permission()->allowDisplay('feature.Favorites')): ?>
               <?php /* Add to favorites */ ?>
               <a href="<?=$this->escapeHtmlAttr($recordLinker->getActionUrl($this->driver, 'Save'))?>" data-lightbox class="save-record" data-id="<?=$this->escapeHtmlAttr($this->driver->getUniqueId()) ?>">
-                <?=$this->icon('user-list-add', 'icon-link__icon') ?>
+                <?=$this->icon('user-favorites', 'icon-link__icon') ?>
                 <span class="result-link-label icon-link__label"><?=$this->transEsc('Add to favorites')?></span>
               </a><br>
             <?php elseif ($block = $this->permission()->getAlternateContent('feature.Favorites')): ?>
