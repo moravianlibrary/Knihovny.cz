@@ -430,3 +430,19 @@ function initDatePicker(form) {
     $(this).datepicker(options);
   });
 }
+
+$(function cartPopoverReinit() {
+  $('#updateCart, #bottom_updateCart')
+    .popover('destroy')
+    .popover({
+      title: VuFind.translate('bookbag'),
+      content: '',
+      html: true,
+      trigger: 'manual',
+      placement: 'top',
+      viewport: {
+        'selector': '.action-toolbar',
+        'padding': 0,
+      },
+    });
+});
