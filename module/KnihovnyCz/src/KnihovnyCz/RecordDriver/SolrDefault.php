@@ -631,7 +631,7 @@ class SolrDefault extends \VuFind\RecordDriver\SolrDefault
      *
      * @return array
      */
-    public function getDeduplicatedRecordIds()
+    public function getDeduplicatedRecordIds(): array
     {
         $parent = $this->getParentRecord() ?? $this;
         return $parent->tryMethod('getChildrenIds') ?? [];

@@ -16,6 +16,10 @@ $config = [
     'service_manager' => [
         'factories' => [
             \KnihovnyCzApi\Formatter\ItemFormatter::class => \KnihovnyCzApi\Formatter\ItemFormatterFactory::class,
+            \KnihovnyCzApi\Formatter\RecordFormatter::class => \VuFindApi\Formatter\RecordFormatterFactory::class,
+        ],
+        'aliases' => [
+            \VuFindApi\Formatter\RecordFormatter::class => \KnihovnyCzApi\Formatter\RecordFormatter::class,
         ],
     ],
     'router' => [
