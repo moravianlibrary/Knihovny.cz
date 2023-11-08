@@ -567,12 +567,7 @@ class SolrAuthority extends \KnihovnyCz\RecordDriver\SolrMarc
      */
     public function getWikidataId(): string
     {
-        $data = array_filter(
-            $this->getExternalLinksByType('identifiers'),
-            function ($link) {
-                return $link['label'] === 'wikidata';
-            }
-        );
-        return $data[0]['value'] ?? '';
+        $links = $this->getExternalLinksByType('identifiers');
+        return $links['wikidata']['url'] ?? '';
     }
 }
