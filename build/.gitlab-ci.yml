@@ -1,9 +1,9 @@
+include:
+  - project: 'Knihovny.cz/ci-templates'
+    ref: main
+    file: '/vufind/.gitlab-ci.yml'
+
 variables:
-  DEPLOY_JOB_IMAGE: "docker.app.knihovny.cz/ci-builds/kustomize:latest"
-  TARGET_REGISTRY_URL: registry.app.knihovny.cz
-  TARGET_IMAGE_NAME: knihovny-cz/vufind
-  TARGET_IMAGE_TAG: build
-  CACHE_REGISTRY_URL: docker.app.knihovny.cz
   BUILD_DEBUG: 'true'
 
 Test the code:
@@ -22,6 +22,7 @@ Test the code:
     - echo "Add your tests here, please"
 
 Build image:
+  extends: .build_image
   stage: build
   rules:
     - if:  # build on issue or feat-
@@ -37,86 +38,6 @@ Build image:
     - if:  # run build on version tag
         ( $CI_PIPELINE_SOURCE == "push" )  &&
         ( $CI_COMMIT_TAG =~ /^v[0-9]+.[0-9]+.[0-9]+/  )
-  image: ${CACHE_REGISTRY_URL}/mirrors/docker:20.10-git
-  services:
-    - ${CACHE_REGISTRY_URL}/mirrors/docker:20.10-dind
-  before_script:
-    - apk update
-    - apk add make bash
-    - mkdir -p $HOME/.docker
-    - cp ${REGISTRY_AUTH_FILE} $HOME/.docker/config.json
-  script:
-    - cd ${CI_PROJECT_DIR}
-    # pull cache layers
-    - docker pull ${CACHE_REGISTRY_URL}/${TARGET_IMAGE_NAME}:build
-    # build it
-    - make -C build IMAGE_NAME=${TARGET_REGISTRY_URL}/${TARGET_IMAGE_NAME}:build PARAM_VUFIND_COMMIT_ID=${VUFIND_COMMIT_ID}
-    # push build image
-    - docker push --quiet ${TARGET_REGISTRY_URL}/${TARGET_IMAGE_NAME}:build
-    # push MR
-    - |
-        if [ "$CI_PIPELINE_SOURCE" == "merge_request_event" ]; then
-            echo ${TARGET_REGISTRY_URL}/${TARGET_IMAGE_NAME}:mr-${CI_MERGE_REQUEST_IID}
-            docker tag ${TARGET_REGISTRY_URL}/${TARGET_IMAGE_NAME}:build ${TARGET_REGISTRY_URL}/${TARGET_IMAGE_NAME}:mr-${CI_MERGE_REQUEST_IID}
-            docker push --quiet ${TARGET_REGISTRY_URL}/${TARGET_IMAGE_NAME}:mr-${CI_MERGE_REQUEST_IID}
-        fi
-    # push dev
-    - |
-        if [ "$CI_PIPELINE_SOURCE" == "push" ]; then
-           if [ "$CI_COMMIT_BRANCH" == "dev" ]; then
-            echo ${TARGET_REGISTRY_URL}/${TARGET_IMAGE_NAME}:branch-${CI_COMMIT_BRANCH}
-            docker tag ${TARGET_REGISTRY_URL}/${TARGET_IMAGE_NAME}:build ${TARGET_REGISTRY_URL}/${TARGET_IMAGE_NAME}:branch-${CI_COMMIT_BRANCH}
-            docker push --quiet ${TARGET_REGISTRY_URL}/${TARGET_IMAGE_NAME}:branch-${CI_COMMIT_BRANCH}
-           fi
-        fi
-    - |
-        if [ "$CI_PIPELINE_SOURCE" == "push" ]; then
-           if [ "$CI_COMMIT_TAG" ]; then
-            echo ${TARGET_REGISTRY_URL}/${TARGET_IMAGE_NAME}:tag-${CI_COMMIT_TAG}
-            docker tag ${TARGET_REGISTRY_URL}/${TARGET_IMAGE_NAME}:build ${TARGET_REGISTRY_URL}/${TARGET_IMAGE_NAME}:tag-${CI_COMMIT_TAG}
-            docker push --quiet ${TARGET_REGISTRY_URL}/${TARGET_IMAGE_NAME}:tag-${CI_COMMIT_TAG}
-           fi
-        fi
-
-.deploy_image:
-  stage: deploy
-  image: "${DEPLOY_JOB_IMAGE}"
-  needs:
-    - Build image
-
-  retry: # retry deploy job one time (on failure)
-    max: 1
-
-  variables:
-    APP_IMAGE_NAME: docker.app.knihovny.cz/knihovny-cz/vufind
-    APP_IMAGE_TAG: build
-    GIT_STRATEGY: none # no need to checkout the image
-
-  script:
-    - echo "Deploying ${APP_IMAGE_NAME}:${APP_IMAGE_TAG}"
-    - mkdir ${HOME}/.ssh; install -m 0600 ${K8S_DEPLOY_KEY} ${HOME}/.ssh/id_rsa
-    - ssh-keyscan gitlab.mzk.cz >> ${HOME}/.ssh/known_hosts
-    - git clone git@gitlab.mzk.cz:knihovny.cz/deploy/vufind.git deployment
-    - cd deployment/${DEPLOY_REPO_DIR};
-    - git checkout ${DEPLOY_REPO_BRANCH}
-    - kustomize edit set image vufind=${APP_IMAGE_NAME}:${APP_IMAGE_TAG}
-    # provide commit-id
-    - echo -n ${CI_COMMIT_SHORT_SHA} > config/commit-id.txt
-    # overwrite annotation to force deploy
-    - envsubst < patch-version.yml.template > patch-version.yml
-    - git config user.name "${GITLAB_USER_NAME} by Gitlab Robot"
-    - git config user.email "${GITLAB_USER_EMAIL}"
-    - |
-        cat >> ${TMP_DIR}/commit-message <<EOF
-        ${APP_IMAGE_TAG}(${CI_COMMIT_SHORT_SHA}): ${CI_COMMIT_TITLE}
-        * Upgrade image version to ${APP_IMAGE_TAG}
-        * commit: ${CI_PROJECT_URL}/-/commit/${CI_COMMIT_SHORT_SHA}
-        * CI job: ${CI_JOB_URL}
-        EOF
-    - git add .
-    - |
-        git commit --file ${TMP_DIR}/commit-message
-    - git push
 
 Deploy MR image:
   extends: .deploy_image
@@ -158,7 +79,6 @@ Deploy release image:
   environment:
     name: production
     url: $PRODUCTION_ENVIRONMENT_URL
-
 
 Deploy tech image:
   extends: .deploy_image
@@ -275,9 +195,3 @@ Deploy geo image:
     name: geo
     url: $GEO_ENVIRONMENT_URL
 
-Debug CI:
-  stage: test
-  rules:
-    - if: $CI_COMMIT_MESSAGE =~ /\#cidebug/
-  script:
-    - export
