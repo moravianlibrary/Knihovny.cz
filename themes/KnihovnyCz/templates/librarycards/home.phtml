@@ -5,6 +5,20 @@
     // Set up breadcrumbs:
     $this->layout()->breadcrumbs = '<li><a href="' . $this->url('myresearch-home') . '">' . $this->transEsc('Your Account') . '</a></li> <li class="active">' . $this->transEsc('Library Cards') . '</li>';
     $delete = count($this->libraryCards) > 1;
+
+    $loadJs = <<<JS
+          function initLibraryCards() {
+            $('.confirm_delete_library_card_yes').each(function onEach() {
+              $(this).on('click', function onClick(e) {
+                e.preventDefault();
+                let form = $(this).parents('form');
+                form.find('input[name="confirm"]').val(1);
+                form.submit();
+              });
+            });
+          }
+          initLibraryCards();
+        JS;
 ?>
 <div class="<?=$this->layoutClass('mainbody')?>">
 
@@ -42,14 +56,23 @@
         <td>
           <div class="btn-group">
             <?php if ($delete): ?>
-              <a class="btn btn-link dropdown-toggle" data-toggle="dropdown" href="<?=$this->url('librarycards-deletecard') ?>?cardID=<?=urlencode($record['id'])?>">
-                <?=$this->icon('profile-card-delete', 'icon-link__icon') ?> <span class="icon-link__label"><?=$this->transEsc('Disconnect identity')?></span>
-              </a>
+              <div class="btn-group">
+                <form method="post" action="<?=$this->url('librarycards-deletecard') ?>">
+                  <input type="hidden" name="cardID" value="<?=$this->escapeHtmlAttr($record['id'])?>"/>
+                  <input type='hidden' name='csrf' value="<?=$this->escapeHtml($this->csrfHash)?>">
+                  <input type="hidden" name="confirm" value="0"/>
+                  <button class="btn btn-primary" data-toggle="dropdown" data-lightbox-ignore>
+                    <?=$this->icon('profile-card-delete', 'icon-link__icon') ?>
+                    <?=$this->transEsc('Disconnect identity')?>
+                  </button>
+                  <ul class="dropdown-menu">
+                    <li class="disabled"><a><?=$this->transEsc('confirm_delete_library_card_brief')?></a></li>
+                    <li><a href="#" class="confirm_delete_library_card_yes"><?=$this->transEsc('confirm_dialog_yes')?></a></li>
+                    <li><a href="#" class="confirm_delete_library_card_no"><?=$this->transEsc('confirm_dialog_no')?></a></li>
+                  </ul>
+                </form>
+              </div>
             <?php endif; ?>
-            <ul class="dropdown-menu">
-              <li><a href="<?=$this->url('librarycards-deletecard') ?>?cardID=<?=urlencode($record['id'])?>&amp;confirm=1" data-clear-account-cache><?=$this->transEsc('confirm_dialog_yes') ?></a></li>
-              <li><a href="#"><?=$this->transEsc('confirm_dialog_no')?></a></li>
-            </ul>
           </div>
         </td>
       </tr>
@@ -96,3 +119,5 @@
   <?=$this->context($this)->renderInContext('myresearch/menu.phtml', ['active' => 'librarycards'])?>
 </div>
 
+<?=$this->inlineScript(\Laminas\View\Helper\HeadScript::SCRIPT, $loadJs, 'SET')?>
+<noscript><?=$this->transEsc('Please enable JavaScript.')?></noscript>
