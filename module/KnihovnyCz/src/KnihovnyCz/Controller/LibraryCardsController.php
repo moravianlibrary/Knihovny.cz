@@ -42,6 +42,17 @@ class LibraryCardsController extends LibraryCardsControllerBase
     public function deleteCardAction()
     {
         try {
+            /**
+             * Auth manager
+             *
+             * @var \KnihovnyCz\Auth\Manager $authManager
+             */
+            $authManager = $this->getAuthManager();
+            $csrf = $this->params()->fromPost('csrf', null);
+            if ($csrf == null || !$authManager->isValidCsrfHash($csrf)) {
+                $this->flashMessenger()->addMessage('csrf_validation_error', 'error');
+                return $this->redirect()->toRoute('librarycards-home');
+            }
             return parent::deleteCardAction();
         } catch (\Exception $ex) {
             // Display error message instead of error page
