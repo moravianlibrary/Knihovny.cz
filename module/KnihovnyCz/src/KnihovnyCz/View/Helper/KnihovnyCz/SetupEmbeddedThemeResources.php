@@ -50,17 +50,27 @@ class SetupEmbeddedThemeResources extends AbstractHelper
      */
     protected function addLinks(): void
     {
-        $headLink = $this->getView()->plugin('headLink');
-
         $favicon = $this->container->getFavicon();
         if (!empty($favicon)) {
             $imageLink = $this->getView()->plugin('imageLink');
-            $headLink(
-                [
-                    'href' => $imageLink($favicon),
-                    'type' => 'image/x-icon', 'rel' => 'shortcut icon',
-                ]
-            );
+            $headLink = $this->getView()->plugin('headLink');
+            if (is_array($favicon)) {
+                foreach ($favicon as $attrs) {
+                    if (isset($attrs['href'])) {
+                        $attrs['href'] = $imageLink($attrs['href']);
+                    }
+                    $attrs['rel'] ??= 'icon';
+                    $headLink($attrs);
+                }
+            } else {
+                $headLink(
+                    [
+                        'href' => $imageLink($favicon),
+                        'type' => 'image/x-icon',
+                        'rel' => 'icon',
+                    ]
+                );
+            }
         }
     }
 }
