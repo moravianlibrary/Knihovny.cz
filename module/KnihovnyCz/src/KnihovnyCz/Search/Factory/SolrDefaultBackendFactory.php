@@ -6,6 +6,8 @@ namespace KnihovnyCz\Search\Factory;
 
 use KnihovnyCz\Search\Solr\Backend\Backend as KnihovnyCzBackend;
 use KnihovnyCz\Search\Solr\Backend\Connector as KnihovnyCzConnector;
+use KnihovnyCz\Search\Solr\Backend\LuceneSyntaxHelper;
+use KnihovnyCz\Search\Solr\Backend\OrQueryRewriter;
 use KnihovnyCz\Search\Solr\Backend\PerformanceLogger;
 use KnihovnyCz\Search\Solr\Backend\QueryBuilder;
 use KnihovnyCz\Search\Solr\Backend\Response\Json\RecordCollection;
@@ -170,5 +172,20 @@ class SolrDefaultBackendFactory extends ParentSolrDefaultBackendFactory
         $search = $this->config->get($this->searchConfig);
         $type = $search->Records->deduplication_type ?? null;
         return $type;
+    }
+
+    /**
+     * Create Lucene syntax helper.
+     *
+     * @return LuceneSyntaxHelper
+     */
+    protected function createLuceneSyntaxHelper(): LuceneSyntaxHelper
+    {
+        $search = $this->config->get($this->searchConfig);
+        $caseSensitiveBooleans = $search->General->case_sensitive_bools ?? true;
+        $caseSensitiveRanges = $search->General->case_sensitive_ranges ?? true;
+        $orQueryFixer = new OrQueryRewriter();
+        $orQueryFixer->setLogger($this->logger);
+        return new LuceneSyntaxHelper($caseSensitiveBooleans, $caseSensitiveRanges, $orQueryFixer);
     }
 }
