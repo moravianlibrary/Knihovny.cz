@@ -151,4 +151,17 @@ class QueryBuilder extends \VuFindSearch\Backend\Solr\QueryBuilder
         }
         return $this->externalQueryParameters;
     }
+
+    /**
+     * Get Lucene syntax helper
+     *
+     * @return LuceneSyntaxHelper
+     */
+    public function getLuceneHelper(): LuceneSyntaxHelper
+    {
+        if (null === $this->luceneHelper) {
+            $this->luceneHelper = new LuceneSyntaxHelper();
+        }
+        return $this->luceneHelper;
+    }
 }
