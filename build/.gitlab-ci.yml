@@ -10,170 +10,154 @@ Test the code:
   stage: test
   image: ${CACHE_REGISTRY_URL}/mirrors/alpine:latest
   rules:
-    - if:  # run tests on main
+    - if: # run tests on the default branch
         ( $CI_PIPELINE_SOURCE == "push" )  &&
-        ( ( $CI_COMMIT_BRANCH == "master" ) || ( $CI_COMMIT_BRANCH == "main" ) || ( $CI_COMMIT_BRANCH =~ /^dev/ )  )
-    - if:  # run tests on MR
+        ( $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH )
+    - if: # run tests on MR
         ( $CI_PIPELINE_SOURCE == "merge_request_event" )
-    - if:  # run tests on version tag
+    - if: # run tests on version tag
         ( $CI_PIPELINE_SOURCE == "push" )  &&
         ( $CI_COMMIT_TAG =~ /^v[0-9]+.[0-9]+.[0-9]+/ )
   script:
     - echo "Add your tests here, please"
 
-Build image:
-  extends: .build_image
-  stage: build
-  rules:
-    - if:  # build on issue or feat-
-        ( $CI_PIPELINE_SOURCE == "merge_request_event" ) &&
-        ( ( $CI_MERGE_REQUEST_SOURCE_BRANCH_NAME =~ /^issue/ ) ||
-          ( $CI_MERGE_REQUEST_SOURCE_BRANCH_NAME =~ /^feat-/ ) ||
-          ( $CI_MERGE_REQUEST_SOURCE_BRANCH_NAME =~ /^feat\// ) ||
-          ( $CI_MERGE_REQUEST_SOURCE_BRANCH_NAME =~ /^fix\// )
-        )
-    - if: # run build on dev
-        ( $CI_PIPELINE_SOURCE == "push" ) &&
-        ( $CI_COMMIT_BRANCH == "dev" )
-    - if:  # run build on version tag
-        ( $CI_PIPELINE_SOURCE == "push" )  &&
-        ( $CI_COMMIT_TAG =~ /^v[0-9]+.[0-9]+.[0-9]+/  )
-
-Deploy MR image:
-  extends: .deploy_image
+.on_merge_request:
   variables:
-    APP_IMAGE_TAG: 'mr-${CI_MERGE_REQUEST_IID}'
-    DEPLOY_REPO_BRANCH: devel
-    DEPLOY_REPO_DIR: devel
+    CONTAINER_IMAGE_TAG: 'mr-${CI_MERGE_REQUEST_IID}'
   rules:
-    - if: # do not run on merge_request merge
-        ( $CI_PIPELINE_SOURCE == "merge_request_event" ) &&
-        ( $CI_MERGE_REQUEST_EVENT_TYPE == "merged_result" )
-      when: never
-    - if:  # deploy on issue or feat-  while detached (when required)
+    - if: # build and run on issue or feat branches
         ( $CI_PIPELINE_SOURCE == "merge_request_event" ) &&
         ( $CI_MERGE_REQUEST_EVENT_TYPE == "detached" ) &&
         ( ( $CI_MERGE_REQUEST_SOURCE_BRANCH_NAME =~ /^issue/ ) ||
-          ( $CI_MERGE_REQUEST_SOURCE_BRANCH_NAME =~ /^feat-/ ) ||
-          ( $CI_MERGE_REQUEST_SOURCE_BRANCH_NAME =~ /^feat\// ) ||
-          ( $CI_MERGE_REQUEST_SOURCE_BRANCH_NAME =~ /^fix\// )
+        ( $CI_MERGE_REQUEST_SOURCE_BRANCH_NAME =~ /^feat-/ ) ||
+        ( $CI_MERGE_REQUEST_SOURCE_BRANCH_NAME =~ /^feat\// ) ||
+        ( $CI_MERGE_REQUEST_SOURCE_BRANCH_NAME =~ /^fix\// )
         )
+
+.on_release:
+  variables:
+    CONTAINER_IMAGE_TAG: 'tag-${CI_COMMIT_TAG}'
+  rules:
+    - if: # build on version tag
+        ( $CI_PIPELINE_SOURCE == "push" )  &&
+        ( $CI_COMMIT_TAG =~ /^v[0-9]+.[0-9]+.[0-9]+/  ) &&
+        ( $CI_JOB_STAGE != "deploy" )
+      when: always
+    - if: # deploy on version tag with confirmation
+        ( $CI_PIPELINE_SOURCE == "push" )  &&
+        ( $CI_COMMIT_TAG =~ /^v[0-9]+.[0-9]+.[0-9]+/  ) &&
+        ( $CI_JOB_STAGE == "deploy" )
       when: manual
+
+.on_devel_branch:
+  variables:
+    CONTAINER_IMAGE_TAG: 'branch-${CI_COMMIT_BRANCH}'
+  rules:
+    - if: # build on the default branch
+        ( $CI_PIPELINE_SOURCE == "push" ) &&
+        ( $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH ) &&
+        ( $CI_JOB_STAGE != "build" )
+      when: always
+    - if: # deploy on the default branch with confirmation
+        ( $CI_PIPELINE_SOURCE == "push" ) &&
+        ( $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH ) &&
+        ( $CI_JOB_STAGE == "deploy" )
+      when: manual
+
+Build MR image:
+  extends:
+    - .build_image
+    - .on_merge_request
+
+Deploy MR image:
+  extends:
+   - .deploy_image
+   - .on_merge_request
+  needs:
+    - Build MR image
+  dependencies:
+    - Build MR image
+  variables:
+    DEPLOY_REPO_BRANCH: devel
+    DEPLOY_REPO_DIR: devel
+  environment:
+    name: devel
+    url: $DEVEL_ENVIRONMENT_URL
+
+Build release image:
+  extends:
+    - .build_image
+    - .on_release
+
+Build devel image:
+  extends:
+  - .build_image
+  - .on_devel_branch
+
+Deploy devel image:
+  extends:
+    - .deploy_image
+    - .on_devel_branch
   allow_failure: true # this is optional
   environment:
     name: devel
     url: $DEVEL_ENVIRONMENT_URL
 
-
-Deploy release image:
+.deploy_release_image:
   extends: .deploy_image
   variables:
-    APP_IMAGE_TAG: 'tag-${CI_COMMIT_TAG}'
     DEPLOY_REPO_BRANCH: main
     DEPLOY_REPO_DIR: production
-  rules:
-    - if:  # deploy on version tag
-        ( $CI_PIPELINE_SOURCE == "push" )  &&
-        ( $CI_COMMIT_TAG =~ /^v[0-9]+.[0-9]+.[0-9]+/  )
+  dependencies:
+    - Build release image
+  needs:
+    - Build release image
 
+Deploy release image:
+  extends: .deploy_release_image
+  variables:
+    DEPLOY_REPO_DIR: production
   environment:
     name: production
     url: $PRODUCTION_ENVIRONMENT_URL
 
 Deploy tech image:
-  extends: .deploy_image
+  extends: .deploy_release_image
   variables:
-    APP_IMAGE_TAG: 'tag-${CI_COMMIT_TAG}'
-    DEPLOY_REPO_BRANCH: main
     DEPLOY_REPO_DIR: tech
-  rules:
-    - if:  # deploy on version tag
-        ( $CI_PIPELINE_SOURCE == "push" )  &&
-        ( $CI_COMMIT_TAG =~ /^v[0-9]+.[0-9]+.[0-9]+/  )
-      when: manual
-
   environment:
-    name: production
+    name: tech
     url: $TECH_ENVIRONMENT_URL
 
-Deploy dev image:
-  extends: .deploy_image
-  variables:
-    APP_IMAGE_TAG: 'branch-${CI_COMMIT_BRANCH}'
-    DEPLOY_REPO_BRANCH: devel
-    DEPLOY_REPO_DIR: devel
-
-  rules:
-    - if: # deploy on dev branch
-        ( $CI_PIPELINE_SOURCE == "push" )  &&
-        ( $CI_COMMIT_BRANCH == "dev" )
-
-  environment:
-    name: devel
-    url: $DEVEL_ENVIRONMENT_URL
-
 Deploy irel image:
-  extends: .deploy_image
+  extends: .deploy_release_image
   variables:
-    APP_IMAGE_TAG: 'tag-${CI_COMMIT_TAG}'
-    DEPLOY_REPO_BRANCH: main
     DEPLOY_REPO_DIR: irel
-  rules:
-    - if: # deploy on version tag
-        ( $CI_PIPELINE_SOURCE == "push" )  &&
-        ( $CI_COMMIT_TAG =~ /^v[0-9]+.[0-9]+.[0-9]+/  )
-      when: manual
-
   environment:
     name: irel
     url: $IREL_ENVIRONMENT_URL
 
 Deploy kiv image:
-  extends: .deploy_image
+  extends: .deploy_release_image
   variables:
-    APP_IMAGE_TAG: 'tag-${CI_COMMIT_TAG}'
-    DEPLOY_REPO_BRANCH: main
     DEPLOY_REPO_DIR: kiv
-
-  rules:
-    - if: # deploy on dev branch
-        ( $CI_PIPELINE_SOURCE == "push" )  &&
-        ( $CI_COMMIT_TAG =~ /^v[0-9]+.[0-9]+.[0-9]+/  )
-      when: manual
-
   environment:
     name: kiv
     url: $KIV_ENVIRONMENT_URL
 
 Deploy mus image:
-  extends: .deploy_image
+  extends: .deploy_release_image
   variables:
-    APP_IMAGE_TAG: 'tag-${CI_COMMIT_TAG}'
-    DEPLOY_REPO_BRANCH: main
     DEPLOY_REPO_DIR: mus
-
-  rules:
-    - if: # deploy on dev branch
-        ( $CI_PIPELINE_SOURCE == "push" )  &&
-        ( $CI_COMMIT_TAG =~ /^v[0-9]+.[0-9]+.[0-9]+/  )
-      when: manual
-
   environment:
     name: mus
     url: $MUS_ENVIRONMENT_URL
 
 Deploy mzk image:
-  extends: .deploy_image
+  extends: .deploy_release_image
   variables:
-    APP_IMAGE_TAG: 'branch-${CI_COMMIT_BRANCH}'
     DEPLOY_REPO_BRANCH: devel
     DEPLOY_REPO_DIR: mzk
-
-  rules:
-    - if: # deploy on dev branch
-        ( $CI_PIPELINE_SOURCE == "push" )  &&
-        ( $CI_COMMIT_BRANCH == "dev" )
-
   environment:
     name: mzk
     url: $MZK_ENVIRONMENT_URL
@@ -181,16 +165,7 @@ Deploy mzk image:
 Deploy geo image:
   extends: .deploy_image
   variables:
-    APP_IMAGE_TAG: 'tag-${CI_COMMIT_TAG}'
-    DEPLOY_REPO_BRANCH: main
     DEPLOY_REPO_DIR: geo
-
-  rules:
-    - if: # deploy on dev branch
-        ( $CI_PIPELINE_SOURCE == "push" )  &&
-        ( $CI_COMMIT_TAG =~ /^v[0-9]+.[0-9]+.[0-9]+/  )
-      when: manual
-
   environment:
     name: geo
     url: $GEO_ENVIRONMENT_URL

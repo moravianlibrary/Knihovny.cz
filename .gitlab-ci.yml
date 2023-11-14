@@ -6,6 +6,7 @@ include:
   - local: build/.gitlab-ci.yml
 
 stages:
+  - prepare
   - test
   - build
   - deploy
