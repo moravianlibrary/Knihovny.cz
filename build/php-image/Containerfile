@@ -14,27 +14,32 @@ RUN a2enmod headers remoteip rewrite shib proxy proxy_fcgi
 RUN a2dismod mpm_event && a2enmod mpm_prefork
 
 ## Install libraries and extension
-RUN apt-get install -y libpng-tools libpng16-16 libxslt1.1 libzip4 && \
-    apt-get install -y zlib1g-dev libzip-dev libicu-dev libonig-dev libpng-dev libxml2-dev libxslt1-dev && \
-    docker-php-ext-install gd && \
-    docker-php-ext-configure intl && \
-    docker-php-ext-install intl && \
-    docker-php-ext-install mbstring && \
-    docker-php-ext-install mysqli && \
-    docker-php-ext-install opcache && \
-    docker-php-ext-install pdo_mysql && \
-    docker-php-ext-install soap && \
-    docker-php-ext-install xml && \
-    docker-php-ext-install xsl && \
-    docker-php-ext-install zip && \
-    pecl install xdebug && \
-    docker-php-ext-enable xdebug && \
-    pecl install redis && \
-    docker-php-ext-enable redis && \
-    apt-get remove -y zlib1g-dev libzip-dev libicu-dev libonig-dev libpng-dev libxml2-dev libxslt1-dev && \
-    apt-get autoremove -y && \
-    apt-get clean && \
-    rm -rf /tmp/*
+# https://github.com/mlocati/docker-php-extension-installer
+COPY --from=mlocati/php-extension-installer /usr/bin/install-php-extensions /usr/local/bin/
+RUN install-php-extensions \
+	gd
+RUN install-php-extensions \
+	intl
+RUN install-php-extensions \
+	mbstring
+RUN install-php-extensions \
+	mysqli
+RUN install-php-extensions \
+	opcache
+RUN install-php-extensions \
+	pdo_mysql
+RUN install-php-extensions \
+	soap
+RUN install-php-extensions \
+	xml
+RUN install-php-extensions \
+	xsl
+RUN install-php-extensions \
+	zip
+RUN install-php-extensions \
+	xdebug
+RUN install-php-extensions \
+	redis
 
 # add basic productivity tools
 RUN apt-get update && \
