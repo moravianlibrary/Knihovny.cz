@@ -104,10 +104,8 @@ district_exact:"' . $selectedDistrict . '"
                     'link' => $record->getChildrenIds()[0],
                     'parent' => $record->getRegionalLibraryTxt(),
                     'functions' => $record->getFunctionSearchTxtMv(),
-                    'is_regional' => in_array(
-                        'pověřená regionální funkcí',
-                        $record->getFunctionSearchTxtMv()
-                    ),
+                    'is_regional' => in_array('pověřená regionální funkcí', $record->getFunctionSearchTxtMv()),
+                    'is_professional' => in_array('profesionální', $record->getFunctionSearchTxtMv()),
                     'region' => $record->getRegionSearchTxt(),
                     'district' => $record->getDistrictSearchTxt(),
                     'town' => $record->getTownStr(),
@@ -169,6 +167,7 @@ district_exact:"' . $selectedDistrict . '"
                 'color' => $color,
             ]
         );
+
         return $view;
     }
 }
