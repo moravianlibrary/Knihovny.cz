@@ -49,4 +49,112 @@ class KohaRest extends \VuFind\ILS\Driver\KohaRest
             'home_library' => $data['library_id'],
         ];
     }
+
+    /**
+     * Get Pick Up Locations
+     *
+     * This is responsible for gettting a list of valid library locations for
+     * holds / recall retrieval
+     *
+     * @param array $patron      Patron information returned by the patronLogin
+     * method.
+     * @param array $holdDetails Optional array, only passed in when getting a list
+     * in the context of placing or editing a hold. When placing a hold, it contains
+     * most of the same values passed to placeHold, minus the patron data. When
+     * editing a hold it contains all the hold information returned by getMyHolds.
+     * May be used to limit the pickup options or may be ignored. The driver must
+     * not add new options to the return array based on this data or other areas of
+     * VuFind may behave incorrectly.
+     *
+     * @throws ILSException
+     * @return array        An array of associative arrays with locationID and
+     * locationDisplay keys
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    public function getPickUpLocations($patron = false, $holdDetails = null)
+    {
+        $bibId = $holdDetails['id'] ?? null;
+        $itemId = $holdDetails['item_id'] ?? false;
+
+        $requestType
+            = array_key_exists('StorageRetrievalRequest', $holdDetails ?? [])
+            ? 'StorageRetrievalRequests' : 'Holds';
+        $availableLocations = [];
+        if ($bibId && 'Holds' === $requestType) {
+            // Collect library codes that are to be included
+            $level = !empty($holdDetails['level']) ? $holdDetails['level'] : 'title';
+            if ('copy' === $level && false === $itemId) {
+                return [];
+            }
+            if ('copy' === $level) {
+                $result = $this->makeRequest(
+                    [
+                        'path' => [
+                            'v1', 'items', $itemId, 'pickup_locations',
+                        ],
+                        'query' => [
+                            'patron_id' => (int)$patron['id'],
+                        ],
+                    ]
+                );
+                if (empty($result['data'])) {
+                    return [];
+                }
+                $availableLocations = $result['data'];
+            } else {
+                $result = $this->makeRequest(
+                    [
+                        'path' => [
+                            'v1', 'biblios', $bibId, 'pickup_locations',
+                        ],
+                        'query' => [
+                            'patron_id' => (int)$patron['id'],
+                        ],
+                    ]
+                );
+                if (empty($result['data'])) {
+                    return [];
+                }
+                $availableLocations = $result['data'];
+            }
+        }
+
+        $locations = [];
+        foreach ($availableLocations as $library) {
+            $locations[] = [
+                'locationID' => $library['library_id'],
+                'locationDisplay' => $library['name'],
+            ];
+        }
+
+        // Do we need to sort pickup locations? If the setting is false, don't
+        // bother doing any more work. If it's not set at all, default to
+        // alphabetical order.
+        $orderSetting = $this->config['Holds']['pickUpLocationOrder'] ?? 'default';
+        if (count($locations) > 1 && !empty($orderSetting)) {
+            $locationOrder = $orderSetting === 'default'
+                ? [] : array_flip(explode(':', $orderSetting));
+            $sortFunction = function ($a, $b) use ($locationOrder) {
+                $aLoc = $a['locationID'];
+                $bLoc = $b['locationID'];
+                if (isset($locationOrder[$aLoc])) {
+                    if (isset($locationOrder[$bLoc])) {
+                        return $locationOrder[$aLoc] - $locationOrder[$bLoc];
+                    }
+                    return -1;
+                }
+                if (isset($locationOrder[$bLoc])) {
+                    return 1;
+                }
+                return $this->getSorter()->compare(
+                    $a['locationDisplay'],
+                    $b['locationDisplay']
+                );
+            };
+            usort($locations, $sortFunction);
+        }
+
+        return $locations;
+    }
 }
