@@ -1,4 +1,4 @@
-FROM docker.io/php:8.1-fpm-bullseye
+FROM docker.io/php:8.1.26-fpm-bullseye
 ARG ADD_EXTRA_PACKAGES=""
 
 LABEL maintainer="mzk.cz"
