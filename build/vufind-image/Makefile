@@ -2,8 +2,8 @@
 
 BUILD_COMMAND = docker build
 
-IMAGE_TAG = latest
-IMAGE_NAME = localhost/knihovny-vufind:${IMAGE_TAG}
+IMAGE_TAG ?= latest
+IMAGE_NAME ?= localhost/knihovny-vufind:${IMAGE_TAG}
 
 SRC_ROOT_PATH = $(shell dirname $(shell dirname $(CURDIR)))
 
