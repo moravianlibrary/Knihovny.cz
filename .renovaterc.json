@@ -1,7 +1,14 @@
 {
     "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+    "extends": [ ":disableMajorUpdates" ],
     "includePaths": [
         "build/php-image/**"
     ],
+    "packageRules": [
+       {
+          "matchCategories":  [ "docker" ],
+	  "major": false
+       }
+     ],
     "assigneesFromCodeOwners": true
 }
