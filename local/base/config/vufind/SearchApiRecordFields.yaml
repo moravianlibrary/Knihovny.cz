@@ -14,9 +14,6 @@ accessRestrictions:
 authors:
   vufind.method: getDeduplicatedAuthorsForApi
   vufind.default: true
-  description: >-
-    Deduplicated author information including primary, corporate and secondary
-    authors
   $ref: '#/components/schemas/Authors'
 awards:
   vufind.method: getAwards
@@ -124,9 +121,7 @@ formats:
 fullRecord:
   vufind.method: "Formatter::getFullRecord"
   description: Full metadata record (typically XML)
-  type: array
-  items:
-    type: string
+  type: string
 generalNotes:
   vufind.method: getGeneralNotes
   description: General notes
@@ -311,7 +306,7 @@ series:
   description: Series
   type: array
   items:
-    type: string
+    $ref: '#/components/schemas/Series'
 shortTitle:
   vufind.method: getShortTitle
   description: Short title (title excluding any subtitle)
