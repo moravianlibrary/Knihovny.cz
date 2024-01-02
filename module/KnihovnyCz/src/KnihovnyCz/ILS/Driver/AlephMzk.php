@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace KnihovnyCz\ILS\Driver;
 
 use KnihovnyCz\ILS\Driver\Aleph as AlephBase;
+use VuFind\Date\DateException;
 use VuFind\Exception\ILS as ILSException;
 
 /**
@@ -187,5 +188,31 @@ class AlephMzk extends AlephBase
         } else {
             return [ 'success' => true ];
         }
+    }
+
+    /**
+     * Get Patron Holds
+     *
+     * This is responsible for retrieving all holds by a specific patron.
+     *
+     * @param array $user The patron array from patronLogin
+     *
+     * @return array      Array of the patron's holds on success.
+     * @throws ILSException
+     * @throws DateException
+     */
+    public function getMyHolds($user)
+    {
+        $holds = parent::getMyHolds($user);
+        $ready = [];
+        $waiting = [];
+        foreach ($holds as $hold) {
+            if ($hold['z37_status'] == 'S') {
+                $ready[] = $hold;
+            } else {
+                $waiting[] = $hold;
+            }
+        }
+        return array_merge($ready, $waiting);
     }
 }

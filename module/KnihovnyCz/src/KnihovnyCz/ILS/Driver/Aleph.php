@@ -380,6 +380,7 @@ class Aleph extends AlephBase implements TranslatorAwareInterface
             $barcode = (string)$z30->{'z30-barcode'};
             $item_id = (string)$z37->{'z37-doc-number'}
                 . (string)$z37->{'z37-sequence'};
+            $z37_status = (string)$z37->{'z37-status'};
             $hold_item_id = (string)$z37->{'translate-change-active-library'}
                 . (string)$z37->{'z37-doc-number'}
                 . (string)$z37->{'z37-item-sequence'};
@@ -420,6 +421,7 @@ class Aleph extends AlephBase implements TranslatorAwareInterface
                 'create' => $this->parseDate($create),
                 'status' => $status,
                 'position' => $position,
+                'z37_status' => $z37_status,
             ];
         }
         return $holdList;
