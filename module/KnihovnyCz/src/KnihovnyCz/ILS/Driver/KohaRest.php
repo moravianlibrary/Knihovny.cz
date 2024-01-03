@@ -17,6 +17,19 @@ use VuFind\Exception\ILS as ILSException;
  */
 class KohaRest extends \VuFind\ILS\Driver\KohaRest
 {
+
+    /**
+     * Checkout statuses
+     *
+     * @var array
+     */
+    protected $statuses = [
+        'Charged' => 'On Loan',
+        'On Shelf' => 'Available On Shelf',
+        'In Transit' => 'In Transit Between Library Locations',
+        'On Hold' => 'Available For Pickup',
+    ];
+
     /**
      * Patron Login
      *
@@ -156,5 +169,43 @@ class KohaRest extends \VuFind\ILS\Driver\KohaRest
         }
 
         return $locations;
+    }
+
+    /**
+     * Get Status By Item ID
+     *
+     * This is responsible for retrieving the status information of a certain
+     * item.
+     *
+     * @param string $id The item id to retrieve the holdings for
+     *
+     * @throws ILSException
+     * @return mixed     On success, an associative array with the following keys:
+     * id, availability (boolean), status, location, reserve, callnumber.
+     */
+    public function getStatusByItemId($id)
+    {
+        $item = $this->getItem((int)$id);
+            $statuses = $this->getItemStatusesForBiblio($item['biblio_id']);
+        $statuses = array_filter(
+            $statuses,
+            function ($item) use ($id) {
+                return $item['item_id'] === (int)$id;
+            }
+        );
+        $status = $statuses[0] ?? [];
+        if (empty($status)) {
+            return [];
+        }
+
+        return [
+            'id' => $item['biblio_id'],
+            'item_id' => $item['item_id'],
+            'availability' => $status['availability'],
+            'status' => $item['not_for_loan_status'] ? 'Not For Loan' : ($this->statuses[$status['status']] ?? ''),
+            'location' => $this->getItemLocationName($item),
+            'callnumber' => $item['callnumber'],
+            'duedate' => $status['duedate'] ?? null,
+        ];
     }
 }
