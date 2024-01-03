@@ -1238,9 +1238,30 @@ img.signature {
   }
 }
 
-.navbar-nav button.dropdown-toggle {
-  padding-top: 18px;
-  padding-bottom: 12px;
+.navbar-nav {
+  button.dropdown-toggle {
+    padding-top: 18px;
+    padding-bottom: 12px;
+    color: @brand-primary;
+  }
+
+  button.dropdown-toggle:hover,
+  button.dropdown-toggle:focus {
+    color: @link-hover-color;
+    background-color: transparent;
+    text-decoration: underline;
+  }
+
+  .dropdown-menu a:hover {
+    text-decoration: underline;
+    color: @link-hover-color;
+  }
+
+  .dropdown-menu > li.active > a:hover,
+  .dropdown-menu > li.active > a .icon-link__label:hover {
+    text-decoration: none;
+    color: #ffffff;
+  }
 }
 
 .primary-color {
@@ -1283,8 +1304,11 @@ a,
 }
 
 .searchForm-query #searchForm-reset {
-  right: 4px;
-  top: 7px;
+  right: 2px;
+  top: 2px;
+  padding: 5px;
+  position: relative;
+
 }
 
 #searchForm .tab-content.well {

@@ -1,6 +1,12 @@
 <?php if ($this->pageCount): ?>
-<nav class="text-center" aria-label="<?=$this->transEscAttr('pagination_label')?>">
-  <ul class="pagination">
+  <nav class="text-center" aria-label="<?=$this->transEscAttr('pagination_label')?>">
+    <?php
+      $ulAttrs = $this->htmlAttributes(['class' => 'pagination']);
+      if ($className = $this->options['className'] ?? '') {
+        $ulAttrs->add('class', $className);
+      }
+    ?>
+    <ul<?=$ulAttrs?>>
       <?php if (isset($this->previous)): ?>
         <?php if (!isset($this->options['disableFirst']) || !$this->options['disableFirst']): ?>
           <li role="none">

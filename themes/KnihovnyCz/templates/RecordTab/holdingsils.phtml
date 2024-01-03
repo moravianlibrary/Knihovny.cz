@@ -251,7 +251,7 @@
 <?php endif; ?>
 <?php $history = $this->driver->getRealTimeHistory(); ?>
 <?php if (is_array($history) && !empty($history)): ?>
-  <h3><?=$this->transEsc('Most Recent Received Issues')?></h3>
+  <h2><?=$this->transEsc('Most Recent Received Issues')?></h2>
   <table class="table table-striped">
     <?php foreach ($history as $row): ?>
       <tr><td><?=$this->escapeHtml($row['issue'])?></td></tr>
