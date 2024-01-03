@@ -32,7 +32,7 @@
           <?php endif; ?>
           <?php $cart = $this->cart(); ?>
           <?php if ($cart->isActive()): ?>
-            <li id="cartSummary">
+            <li id="cartSummary" aria-live="polite" aria-atomic="true">
               <a id="cartItems" class="icon-link"  title="<?=$this->transEscAttr('View Book Bag')?>" href="<?=$this->url('cart-home')?>">
                 <span role="status"><span class="sr-only"><?=$this->transEsc('Book Bag')?>:</span>
                   <sup class="badge badge-info">
