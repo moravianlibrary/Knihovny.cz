@@ -17,7 +17,6 @@ return [
             },
             KnihovnyCz\View\Helper\KnihovnyCz\SearchTabs::class => \KnihovnyCz\View\Helper\KnihovnyCz\SearchTabsFactory::class,
             KnihovnyCz\View\Helper\KnihovnyCz\RecordLinker::class => \KnihovnyCz\View\Helper\KnihovnyCz\RecordLinkerFactory::class,
-            \KnihovnyCz\View\Helper\KnihovnyCz\GoogleTagManager::class => \KnihovnyCz\View\Helper\KnihovnyCz\GoogleTagManagerFactory::class,
             \KnihovnyCz\View\Helper\KnihovnyCz\GeoCoords::class => \VuFind\View\Helper\Root\GeoCoordsFactory::class,
             \KnihovnyCz\View\Helper\KnihovnyCz\SetupEmbeddedThemeResources::class =>
                 KnihovnyCz\View\Helper\KnihovnyCz\SetupEmbeddedThemeResourcesFactory::class,
@@ -39,7 +38,6 @@ return [
             'recordDataFormatter' => 'VuFind\View\Helper\Root\RecordDataFormatter',
             'ziskejMvs' => KnihovnyCz\View\Helper\KnihovnyCz\ZiskejMvs::class,
             'ziskejEdd' => KnihovnyCz\View\Helper\KnihovnyCz\ZiskejEdd::class,
-            'googleTagManager' => \KnihovnyCz\View\Helper\KnihovnyCz\GoogleTagManager::class,
             'librariesApiLookfor' => \KnihovnyCz\View\Helper\KnihovnyCz\LibrariesApiLookfor::class,
             'splitText' => \KnihovnyCz\View\Helper\KnihovnyCz\SplitText::class,
             'escapeElementId' => \KnihovnyCz\View\Helper\KnihovnyCz\EscapeElementId::class,

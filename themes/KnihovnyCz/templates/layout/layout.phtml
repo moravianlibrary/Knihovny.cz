@@ -19,7 +19,6 @@ $this->headMeta()->setProperty('apple-mobile-web-app-title', $this->translate('w
 $this->headMeta()->setProperty('application-name', $this->translate('web_app_name'));
 // Disable automatic telephone number detection and link creation on Safari
 $this->headMeta()->appendName('format-detection', 'telephone=no');
-$gtmEnabled = $this->googleTagManager()->isEnabled();
 ?>
 
 <?php
@@ -146,7 +145,7 @@ $gtmEnabled = $this->googleTagManager()->isEnabled();
       }
     ?>
     <?php $this->headScript()->appendFile('cpk.js') ?>
-    <?php if ($gtmEnabled): ?>
+    <?php if ($this->googleTagManager()->getHeadCode()): ?>
       <?php $this->headScript()->appendFile('gtm.js', 'text/javascript', ['defer' => true]) ?>
     <?php endif; ?>
     <?=$this->cookieConsent()->render()?>
@@ -200,7 +199,7 @@ $gtmEnabled = $this->googleTagManager()->isEnabled();
 
     <?=$this->footScript() ?>
     <?=$this->render('ziskej-bar.phtml') ?>
-    <?php if ($gtmEnabled): ?>
+    <?php if ($this->googleTagManager()->getHeadCode()): ?>
       <?=$this->render('gtm.phtml');?>
     <?php endif; ?>
   </body>
