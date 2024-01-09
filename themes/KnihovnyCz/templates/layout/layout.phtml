@@ -79,10 +79,6 @@ $gtmEnabled = $this->googleTagManager()->isEnabled();
     ?>
     <?=$this->headMeta()?>
 
-    <?php if ($gtmEnabled): ?>
-      <?=$this->googleTagManager()->getCode()?>
-    <?php endif; ?>
-
     <?php if ($this->layout()->rtl) {
       // RTL styling
       $this->headLink()->appendStylesheet('vendor/bootstrap-rtl.min.css');
@@ -157,9 +153,6 @@ $gtmEnabled = $this->googleTagManager()->isEnabled();
     <?=$this->headScript() ?>
   </head>
   <body class="template-dir-<?=$this->templateDir?> template-name-<?=$this->templateName?> <?=$this->layoutClass('offcanvas-row')?><?php if ($this->layout()->rtl): ?> rtl<?php endif; ?> ziskej-mode-<?=$this->ziskejMvs()->getCurrentMode()?>">
-    <?php if ($gtmEnabled): ?>
-      <?=$this->googleTagManager()->getNoScriptCode()?>
-    <?php endif; ?>
     <header class="hidden-print">
       <?php if (isset($this->layout()->srmessage)): // message for benefit of screen-reader users ?>
         <span class="sr-only" role="heading" aria-level="1"><?=$this->layout()->srmessage ?></span>
