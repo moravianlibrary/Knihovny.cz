@@ -186,17 +186,17 @@ class KohaRest extends \VuFind\ILS\Driver\KohaRest
     public function getStatusByItemId($id)
     {
         $item = $this->getItem((int)$id);
-            $statuses = $this->getItemStatusesForBiblio($item['biblio_id']);
+        $statuses = $this->getItemStatusesForBiblio($item['biblio_id']);
         $statuses = array_filter(
             $statuses,
             function ($item) use ($id) {
                 return $item['item_id'] === (int)$id;
             }
         );
-        $status = $statuses[0] ?? [];
-        if (empty($status)) {
+        if (empty($statuses)) {
             return [];
         }
+        $status = array_shift($statuses);
 
         return [
             'id' => $item['biblio_id'],
@@ -207,5 +207,27 @@ class KohaRest extends \VuFind\ILS\Driver\KohaRest
             'callnumber' => $item['callnumber'],
             'duedate' => $status['duedate'] ?? null,
         ];
+    }
+
+    /**
+     * Status item sort function
+     *
+     * @param array $a First status record to compare
+     * @param array $b Second status record to compare
+     *
+     * @return int
+     */
+    protected function statusSortFunction($a, $b)
+    {
+        $result = $this->getSorter()->compare($a['location'], $b['location']);
+
+        if (0 === $result && $this->sortItemsBySerialIssue) {
+            $result = strnatcmp($a['number'] ?? '', $b['number'] ?? '');
+        }
+
+        if (0 === $result) {
+            $result = $a['sort'] - $b['sort'];
+        }
+        return $result;
     }
 }
