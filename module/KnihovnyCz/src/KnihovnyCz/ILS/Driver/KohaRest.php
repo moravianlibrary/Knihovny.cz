@@ -17,7 +17,6 @@ use VuFind\Exception\ILS as ILSException;
  */
 class KohaRest extends \VuFind\ILS\Driver\KohaRest
 {
-
     /**
      * Checkout statuses
      *
