@@ -30,3 +30,18 @@ if (!empty($libresponsibilities)): ?>
     <h2><?=$this->icon('library-general-info')?> <?=$this->translate('LibResponsibility')?></h2>
     <?php foreach ($libresponsibilities as $libresponsibility): ?><?=$this->escapeHtml($libresponsibility)?><br><?php endforeach; ?>
 <?php endif; ?>
+
+<!-- IČO -->
+<?php $ico = $this->driver->getIco(); ?>
+<?php if ($ico !== ''): ?>
+  <h2><?=$this->icon('library-general-info')?> <?=$this->translate('IČO')?></h2>
+  <?=$ico?>
+<?php endif; ?>
+
+<!-- DIČ -->
+<?php $dic = $this->driver->getDic(); ?>
+<?php if ($dic !== ''): ?>
+  <h2><?=$this->icon('library-general-info')?> <?=$this->translate('DIČ')?></h2>
+  <?=$dic?>
+<?php endif; ?>
+

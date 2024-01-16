@@ -32,6 +32,10 @@ ico:
   vufind.method: getIco
   description: Identification number of person
   type: string
+dic:
+  vufind.method: getDic
+  description: Taxes identification number
+  type: string
 note:
   vufind.method: getLibNote
   description: Note

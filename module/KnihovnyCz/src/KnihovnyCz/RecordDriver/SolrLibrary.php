@@ -140,13 +140,23 @@ class SolrLibrary extends \KnihovnyCz\RecordDriver\SolrMarc
     }
 
     /**
-     * Get an array of library ico and dicn
+     * Get library IČO
      *
      * @return string
      */
     public function getIco()
     {
         return $this->fields['ico_display'] ?? '';
+    }
+
+    /**
+     * Get library DIČ
+     *
+     * @return string
+     */
+    public function getDic()
+    {
+        return $this->fields['dic_display'] ?? '';
     }
 
     /**
@@ -386,7 +396,10 @@ class SolrLibrary extends \KnihovnyCz\RecordDriver\SolrMarc
     {
         return !empty($this->getPhone())
             || !empty($this->getEmail())
-            || !empty($this->getLibResponsibility());
+            || !empty($this->getLibResponsibility())
+            || !empty($this->getIsds())
+            || !empty($this->getIco())
+            || !empty($this->getDic());
     }
 
     /**
