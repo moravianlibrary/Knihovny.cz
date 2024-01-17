@@ -2,6 +2,8 @@
 
 namespace KnihovnyCz\RecordDriver;
 
+use VuFind\RecordDriver\Response\PublicationDetails;
+
 /**
  * Knihovny.cz solr marc local record driver
  *
@@ -208,5 +210,48 @@ class SolrLocal extends \KnihovnyCz\RecordDriver\SolrMarc
             return intval($matches[1]);
         }
         return $volume;
+    }
+
+    /**
+     * Get an array of publication detail lines from normalized MARC field 978.
+     * Output has the same structure as getPublicationDetails
+     *
+     * @return array
+     */
+    protected function getNormalizedPublicationDetails(): array
+    {
+        $fields978 = $this->getMarcReader()->getFields('978', ['a', 'b', 'c']);
+        $details = [];
+        foreach ($fields978 as $field) {
+            $data = [];
+            foreach ($field['subfields'] ?? [] as $subfield) {
+                $data[$subfield['code']][] = $subfield['data'];
+            }
+            if (!empty($data)) {
+                $details[] = new PublicationDetails(
+                    !empty($data['a']) ? implode('; ', $data['a']) . ' :' : '',
+                    !empty($data['b']) ? implode('; ', $data['b']) . ',' : '',
+                    implode('; ', $data['c'])
+                );
+            }
+        }
+        return $details;
+    }
+
+    /**
+     * Get an array of publication detail lines combining information from
+     * getPublicationDates(), getPublishers() and getPlacesOfPublication().
+     *
+     * @return array
+     */
+    public function getPublicationDetails(): array
+    {
+        if (
+            str_starts_with($this->getUniqueID(), 'mzk.MZK03')
+            && !empty($normalizedPublicationDetails = $this->getNormalizedPublicationDetails())
+        ) {
+            return $normalizedPublicationDetails;
+        }
+        return parent::getPublicationDetails();
     }
 }
