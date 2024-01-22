@@ -17,6 +17,8 @@ use VuFindSearch\ParamBag;
  */
 class Params extends \VuFind\Search\Solr\Params
 {
+    protected const DEFAULT_FACET_LIMIT = -1;
+
     public const SOLR_DATE_FORMAT = 'Y-m-d\TH:i:s.z\Z';
 
     protected const TREAT_AS_NON_HIERARCHICAL = [
@@ -36,21 +38,84 @@ class Params extends \VuFind\Search\Solr\Params
      *
      * @var \KnihovnyCz\Date\Converter
      */
-    protected $dateConverter;
+    protected ?\KnihovnyCz\Date\Converter $dateConverter;
 
     /**
      * Array of functions for boosting the query
      *
      * @var array
      */
-    protected $boostFunctions = [];
+    protected array $boostFunctions = [];
 
     /**
      * Array of array parameters
      *
      * @var array
      */
-    protected $jsonFacets = [];
+    protected array $jsonFacets = [];
+
+    /**
+     * Array of facets
+     *
+     * @var array
+     */
+    protected array $nestedFacets = [];
+
+    /**
+     * Parent count
+     *
+     * @var bool
+     */
+    protected bool $parentCount = false;
+
+    /**
+     * Child filter
+     *
+     * @var bool
+     */
+    protected ?string $childFilter = null;
+
+    /**
+     * Deduplication type
+     *
+     * @var string
+     */
+    protected ?string $deduplicationType = null;
+
+    /**
+     * Nested filters
+     *
+     * @var array
+     */
+    protected array $nestedFilters = [];
+
+    /**
+     * Enable for all facets
+     *
+     * @var bool
+     */
+    private bool $enabledForAllFacets = false;
+
+    /**
+     * Facet method to use
+     *
+     * @var string
+     */
+    private string $facetMethod;
+
+    /**
+     * List of facets with zero count
+     *
+     * @var array
+     */
+    private array $zeroCountFacets = [];
+
+    /**
+     * All facets are OR
+     *
+     * @var bool
+     */
+    private bool $allFacetsAreOr = false;
 
     /**
      * Constructor
@@ -71,6 +136,22 @@ class Params extends \VuFind\Search\Solr\Params
         parent::__construct($options, $configLoader, $facetHelper);
         $this->parser = $parser;
         $this->dateConverter = $converter;
+        $facetConfig = $configLoader->get($options->getFacetsIni());
+        if (($specialFacets = $facetConfig->SpecialFacets) !== null) {
+            $this->nestedFacets = isset($specialFacets->nested) ? $specialFacets
+                ->nested->toArray() : [];
+            $this->parentCount = $specialFacets->nestedParentCount ?? false;
+        }
+        $this->enabledForAllFacets = $facetConfig->JSON_API->enabled ?? false;
+        $this->facetMethod = $facetConfig->JSON_API->method ?? 'smart';
+        $searchConfig = $configLoader->get($options->getSearchIni());
+        $this->deduplicationType = $searchConfig->Records->deduplication_type ?? null;
+        if (isset($searchConfig->ChildRecordFilters)) {
+            $this->childFilter = implode(
+                ' AND ',
+                array_values($searchConfig->ChildRecordFilters->toArray())
+            );
+        }
     }
 
     /**
@@ -84,12 +165,40 @@ class Params extends \VuFind\Search\Solr\Params
         foreach ($this->boostFunctions as $func) {
             $backendParams->add('boost', $func);
         }
-        $jsonFacet = [];
-        foreach ($this->jsonFacets as $field => $parameters) {
-            $jsonFacet[$field] = $parameters;
+        $remaining = [];
+        $hasChildDocFilter = $this->deduplicationType == 'multiplying';
+        $facetFields = $backendParams->get('facet.field') ?? [];
+        $jsonFacetData = [];
+        foreach ($facetFields as $facetField) {
+            [$field, ] = DeduplicationHelper::parseField($facetField);
+            $type = 'default';
+            $nested = in_array($field, $this->nestedFacets);
+            if (!$hasChildDocFilter && $nested) {
+                $type = 'nested';
+            }
+            if ($hasChildDocFilter && !$nested) {
+                $type = 'parent';
+            }
+            if ($type != 'default' || $this->enabledForAllFacets) {
+                $jsonFacetData[$field] = $this->getJsonFacetConfig(
+                    $field,
+                    $backendParams,
+                    $type
+                );
+            } else {
+                $remaining[] = $facetField;
+            }
         }
-        if (!empty($jsonFacet)) {
-            $backendParams->add('json.facet', json_encode($jsonFacet));
+        if (empty($remaining)) {
+            $backendParams->remove('facet.field');
+        } else {
+            $backendParams->set('facet.field', $remaining);
+        }
+        foreach ($this->jsonFacets as $field => $data) {
+            $jsonFacetData[$field] = $data;
+        }
+        if (!empty($jsonFacetData)) {
+            $backendParams->add('json.facet', json_encode($jsonFacetData));
         }
         return $backendParams;
     }
@@ -117,6 +226,240 @@ class Params extends \VuFind\Search\Solr\Params
     public function addJsonFacet($field, $parameters)
     {
         $this->jsonFacets[$field] = $parameters;
+    }
+
+    /**
+     * Return the current filters as an array of strings ['field:filter']
+     *
+     * @return array $filterQuery
+     */
+    public function getFilterSettings()
+    {
+        // Define Filter Query
+        $filterQuery = [];
+        $orFilters = [];
+        $filterList = array_merge_recursive(
+            $this->getHiddenFilters(),
+            $this->filterList
+        );
+        foreach ($filterList as $field => $filter) {
+            if ($orFacet = str_starts_with($field, '~')) {
+                $field = substr($field, 1);
+            }
+            if ($neg = str_starts_with($field, '-')) {
+                $field = substr($field, 1);
+            }
+            foreach ($filter as $value) {
+                $fq = new FilterQuery();
+                // Special case -- complex filter, that should be taken as-is:
+                if ($field == '#') {
+                    $fq->setRawQuery($value);
+                } else {
+                    $fq->setField($field);
+                    $fq->setQuery($value);
+                }
+                $fq->setNegation($neg);
+                if ($orFacet) {
+                    $orFilters[$field] ??= [];
+                    $fq->setField(null);
+                    $orFilters[$field][] = $fq->getFilter();
+                } else {
+                    $this->configureFilter($fq);
+                    $filterQuery[] = $fq->getFilter();
+                }
+            }
+        }
+        $nestedOrFilters = [];
+        foreach ($orFilters as $field => $parts) {
+            $orFilter = new FilterQuery();
+            $orFilter->setTag($field . '_filter');
+            $orFilter->setField($field);
+            $orFilter->setRawQuery('(' . implode(' OR ', $parts) . ')');
+            $this->configureFilter($orFilter);
+            if ($orFilter->isParentQueryParser()) {
+                $copy = clone $orFilter;
+                $copy->setParentQueryParser(false);
+                $copy->setTag(null);
+                $nestedOrFilters[] = $copy->getFilter();
+            }
+            $filterQuery[] = $orFilter->getFilter();
+        }
+        if (count($nestedOrFilters) > 1) {
+            $nestedFilter = new FilterQuery();
+            $nestedFilter->setParentQueryParser(true);
+            $nestedFilter->setTag('nested_or_facet_filter');
+            $nestedFilter->setRawQuery('(' . implode(' AND ', $nestedOrFilters) . ')');
+            $filterQuery[] = $nestedFilter->getFilter();
+        }
+        return $filterQuery;
+    }
+
+    /**
+     * Get configuration for nested facet
+     *
+     * @param string                 $facetField field
+     * @param \VuFindSearch\ParamBag $params     parameters
+     * @param string                 $type       default, parent or nested
+     *
+     * @return array
+     */
+    protected function getJsonFacetConfig($facetField, $params, $type)
+    {
+        $limit = $this->getFacetParameter(
+            $facetField,
+            $params,
+            'limit',
+            self::DEFAULT_FACET_LIMIT
+        );
+        $sort = $this->getFacetParameter($facetField, $params, 'sort', 'count');
+        $facetConfig = [
+            'type' => 'terms',
+            'field' => $facetField,
+            'limit' => (int)$limit,
+            'sort'  => $sort,
+        ];
+        $offset = $this->getFacetParameter($facetField, $params, 'offset');
+        if ($offset != null) {
+            $facetConfig['offset'] = $offset;
+        }
+        if (in_array($facetField, $this->zeroCountFacets)) {
+            $facetConfig['mincount'] = 0;
+        }
+        $facetConfig['method'] = $this->facetMethod;
+        $domain = [];
+        $domain['excludeTags'] = [ 'nested_or_facet_filter' ];
+        if ($this->isOrFacet($facetField)) {
+            $domain['excludeTags'][] =  $facetField . '_filter';
+        }
+        if ($type == 'default') {
+            $facetConfig['domain'] = $domain;
+            return $facetConfig;
+        }
+        $q = null;
+        $nestedFilter = null;
+        $appliedFilters = [];
+        foreach ($this->nestedFilters as $filter) {
+            if ($facetField != $filter->getField()) {
+                $appliedFilters[] = $this->putBrackets($filter->getFilter());
+            }
+        }
+        if (!empty($appliedFilters)) {
+            $nestedFilter = implode(' AND ', $appliedFilters);
+        }
+        if ($type == 'nested') {
+            $domain['blockChildren'] = DeduplicationHelper::PARENT_FILTER;
+            $q = DeduplicationHelper::CHILD_FILTER;
+            if ($nestedFilter != null) {
+                $q .= ' AND ' . $nestedFilter;
+            }
+            if ($this->parentCount) {
+                $facetConfig['facet'] = [ 'count' => 'unique(_root_)' ];
+            }
+        } elseif ($type == 'parent') {
+            $domain['blockParent'] = DeduplicationHelper::PARENT_FILTER;
+            $queryDomain = [
+                'blockChildren' => DeduplicationHelper::PARENT_FILTER,
+            ];
+            $queryDomainFilter = '({!lucene v=$childrenQuery})';
+            if ($nestedFilter != null) {
+                $queryDomainFilter .= ' AND ' . $nestedFilter;
+            }
+            if ($this->childFilter != null) {
+                $queryDomainFilter .= ' AND (' . $this->childFilter . ')';
+            }
+            $queryDomain['filter'] = $queryDomainFilter;
+            $facetConfig['facet'] = [
+                'count' => [
+                    'type' => 'query',
+                    'domain' => $queryDomain,
+                ],
+            ];
+        }
+        return [
+            'type'   => 'query',
+            'q'      => $q,
+            'domain' => $domain,
+            'facet'  => [
+                $facetField => $facetConfig,
+            ],
+        ];
+    }
+
+    /**
+     * Return facet parameter
+     *
+     * @param string                 $field     field
+     * @param \VuFindSearch\ParamBag $params    parameters
+     * @param string                 $parameter parameter
+     * @param string                 $default   default value if parameter is not set
+     *
+     * @return string
+     */
+    protected function getFacetParameter(
+        $field,
+        $params,
+        $parameter,
+        $default = null
+    ) {
+        $keys = [
+            "f.${field}.facet.${parameter}",
+            "facet.${parameter}",
+        ];
+        foreach ($keys as $key) {
+            if ($params->hasParam($key)) {
+                return $params->get($key)[0];
+            }
+        }
+        return $default;
+    }
+
+    /**
+     * Configure filter
+     *
+     * @param FilterQuery $filter filter
+     *
+     * @return FilterQuery
+     */
+    protected function configureFilter(FilterQuery $filter): FilterQuery
+    {
+        $nested = in_array($filter->getField(), $this->nestedFacets);
+        if ($nested && $this->deduplicationType == 'multiplying') {
+            $this->nestedFilters[] = clone $filter;
+            return $filter;
+        } elseif ($nested) {
+            $this->nestedFilters[] = clone $filter;
+            $filter->setParentQueryParser(true);
+        } elseif ($this->deduplicationType == 'multiplying') {
+            $filter->setChildrenQueryParser(true);
+        }
+        return $filter;
+    }
+
+    /**
+     * Return if the field is ORed
+     *
+     * @param $field field name
+     *
+     * @return bool  is OR facet
+     */
+    protected function isOrFacet($field): bool
+    {
+        return $this->allFacetsAreOr || in_array($field, $this->orFacets);
+    }
+
+    /**
+     * Put brackets around query if not already bracketed
+     *
+     * @param string $query query
+     *
+     * @return string bracketed query
+     */
+    protected function putBrackets($query)
+    {
+        if (str_starts_with($query, '(') || str_starts_with($query, '-(')) {
+            return $query;
+        }
+        return '(' . $query . ')';
     }
 
     /**

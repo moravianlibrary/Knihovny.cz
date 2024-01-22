@@ -172,8 +172,9 @@ class MultiplyingDeduplicationListener
             $facetFields
         );
         $facets = array_intersect($this->facets, $facetFields);
+        $hasFacets = !empty($facets) || $params->hasParam('json.facet');
         $switchToParentQuery = !DeduplicationHelper::hasChildFilter($params)
-            && ($fetchRecords || !empty($facets));
+            && ($fetchRecords || $hasFacets);
         if ($switchToParentQuery) {
             $params->set('switchToParentQuery', true);
             $fq[] = DeduplicationHelper::CHILD_FILTER;
