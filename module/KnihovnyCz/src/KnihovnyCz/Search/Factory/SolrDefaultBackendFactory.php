@@ -13,7 +13,6 @@ use KnihovnyCz\Search\Solr\Backend\QueryBuilder;
 use KnihovnyCz\Search\Solr\Backend\Response\Json\RecordCollection;
 use KnihovnyCz\Search\Solr\ChildDocDeduplicationListener;
 use KnihovnyCz\Search\Solr\DeduplicationListener;
-use KnihovnyCz\Search\Solr\JsonFacetListener;
 use KnihovnyCz\Search\Solr\MultiplyingDeduplicationListener;
 use KnihovnyCz\Search\Solr\OneChildDocDeduplicationListener;
 use VuFind\Search\Factory\SolrDefaultBackendFactory
@@ -70,26 +69,6 @@ class SolrDefaultBackendFactory extends ParentSolrDefaultBackendFactory
     {
         parent::createListeners($backend);
         $events = $this->serviceLocator->get('SharedEventManager');
-        $this->getJsonFacetListener($backend)->attach($events);
-    }
-
-    /**
-     * Get a JSON facet listener for the backend
-     *
-     * @param Backend $backend Search backend
-     *
-     * @return JsonFacetListener
-     */
-    protected function getJsonFacetListener(Backend $backend)
-    {
-        $listener = new JsonFacetListener(
-            $backend,
-            $this->serviceLocator,
-            $this->searchConfig,
-            $this->facetConfig
-        );
-        $listener->setLogger($this->logger);
-        return $listener;
     }
 
     /**
