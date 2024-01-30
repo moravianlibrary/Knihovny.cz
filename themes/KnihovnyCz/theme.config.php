@@ -78,6 +78,8 @@ return [
             'export' => 'FontAwesome:external-link:fa-fw',
             'external-link' => 'FontAwesome:link:fa-fw',
             'facebook' => 'FontAwesome:facebook-square',
+            'facet-collapse' => 'Unicode:25BD',
+            'facet-expand' => 'Unicode:25B6',
             'feedback' => 'FontAwesome:comments-o:fa-fw',
             'github' => 'FontAwesome:github-square',
             'home' => 'FontAwesome:home',

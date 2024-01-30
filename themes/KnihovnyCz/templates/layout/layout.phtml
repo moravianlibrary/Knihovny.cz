@@ -138,6 +138,17 @@ $this->headMeta()->appendName('format-detection', 'telephone=no');
           VuFind.setCspNonce('{$cspNonce}');
           VuFind.setCurrentSearchId($searchId);
           JS;
+
+      if (!empty($lightboxParent)) {
+        $lightboxParent = json_encode((string)$lightboxParent);
+        $appendScripts[] = 'VuFind.lightbox.parent = ' . $lightboxParent;
+      }
+
+      if (!empty($lightboxChild)) {
+        $lightboxChild = json_encode((string)$lightboxChild);
+        $appendScripts[] = 'VuFind.lightbox.child = ' . $lightboxChild;
+      }
+
       $this->headScript()->appendScript(implode("\n", $appendScripts));
 
       if ($this->config()->ajaxCoversEnabled()) {
@@ -191,8 +202,7 @@ $this->headMeta()->appendName('format-detection', 'telephone=no');
       </div>
     </div>
     <div class="offcanvas-overlay" data-toggle="offcanvas"></div>
-    <?=$this->googleTagManager()->getBodyCode()?>
-    <?=$this->googleanalytics()?>
+    <?=$this->render('Helpers/analytics.phtml')?>
     <?php foreach ($this->captcha()->js() as $jsInclude):?>
       <?=$this->inlineScript(\Laminas\View\Helper\HeadScript::FILE, $jsInclude, 'SET')?>
     <?php endforeach; ?>
