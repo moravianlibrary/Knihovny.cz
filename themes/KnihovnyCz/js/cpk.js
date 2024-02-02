@@ -18,11 +18,11 @@ const observeCartHandler = function observeCartHandler(mutationsList) {
   }
 };
 
-const observer = new MutationObserver(observeCartHandler);
+const cartObserver = new MutationObserver(observeCartHandler);
 
 document.addEventListener('DOMContentLoaded', function runObserver() {
   const targetNode = document.querySelector('#cartItems strong');
-  observer.observe(targetNode, config);
+  cartObserver.observe(targetNode, config);
 }, false);
 
 $(function jQueryReady($) {
@@ -244,32 +244,11 @@ $(function openUrl() {
   setupOpenUrl();
 });
 
-// We only need to observe change of type childList
-const institutionFacetConfig = { attributes: false, childList: true, subtree: false };
-
-// Callback function to execute when mutations are observed
-const observeInstitutionFacetHandler = function observeInstitutionFacetHandler(mutationsList, observer) {
-  // Use traditional 'for loops' for IE 11
-  for (const mutation of mutationsList) {
-    if (mutation.target) {
-      observer.disconnect();
-      setLibraryAutoComplete(mutation.target)
-    }
-  }
-};
-
-const institutionFacetObserver = new MutationObserver(observeInstitutionFacetHandler);
-
-document.addEventListener('DOMContentLoaded', function runObserver() {
-  const targetNode = document.querySelector('#side-collapse-region_institution_facet_mv, #side-collapse-local_region_institution_facet_mv');
-  institutionFacetObserver.observe(targetNode, institutionFacetConfig);
-}, false);
-
 function setLibraryAutoComplete(element) {
   var libraries = new Map();
   const list = element.querySelectorAll('ul li:not(.facet-tree__parent) a');
   for (const item of list) {
-    const value = item.attributes.href.value.split('=').pop();
+    const value = item.dataset.value;
     libraries.set(value, {
       label: item.dataset.title,
       value: value,
@@ -328,6 +307,27 @@ function setLibraryAutoComplete(element) {
   });
   $(element).prepend(input);
 }
+
+// We only need to observe change of type childList
+const institutionFacetConfig = { attributes: false, childList: true, subtree: false };
+
+// Callback function to execute when mutations are observed
+const observeInstitutionFacetHandler = function observeInstitutionFacetHandler(mutationsList, observer) {
+  // Use traditional 'for loops' for IE 11
+  for (const mutation of mutationsList) {
+    if (mutation.target) {
+      observer.disconnect();
+      setLibraryAutoComplete(mutation.target);
+    }
+  }
+};
+
+const institutionFacetObserver = new MutationObserver(observeInstitutionFacetHandler);
+
+document.addEventListener('DOMContentLoaded', function runObserver() {
+  const targetNode = document.querySelector('#side-collapse-region_institution_facet_mv, #side-collapse-local_region_institution_facet_mv');
+  institutionFacetObserver.observe(targetNode, institutionFacetConfig);
+}, false);
 
 $(function saveInstitutionFilter() {
   var element = $('#my-institution-filter-save');
