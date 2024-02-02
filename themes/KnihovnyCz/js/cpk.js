@@ -244,26 +244,38 @@ $(function openUrl() {
   setupOpenUrl();
 });
 
-function setLibraryAutoComplete(element, data) {
-  const facetFilter = element.data('facet');
-  const paramSep = window.location.href.includes('?') ? '&' : '?';
-  var libraries = new Map();
-  function traverse(item) {
-    if (Array.isArray(item)) {
-      item.forEach(it => traverse(it));
-    } else if ('children' in item && item.children.length > 0) {
-      traverse(item.children);
-    } else {
-      const value = item.value;
-      const filter = paramSep + "filter[]=~" + facetFilter + ':"' + value + '"';
-      libraries.set(value, {
-        label: item.displayText,
-        value: value,
-        href: window.location.href + filter,
-      });
+// We only need to observe change of type childList
+const institutionFacetConfig = { attributes: false, childList: true, subtree: false };
+
+// Callback function to execute when mutations are observed
+const observeInstitutionFacetHandler = function observeInstitutionFacetHandler(mutationsList, observer) {
+  // Use traditional 'for loops' for IE 11
+  for (const mutation of mutationsList) {
+    if (mutation.target) {
+      observer.disconnect();
+      setLibraryAutoComplete(mutation.target)
     }
   }
-  traverse(data);
+};
+
+const institutionFacetObserver = new MutationObserver(observeInstitutionFacetHandler);
+
+document.addEventListener('DOMContentLoaded', function runObserver() {
+  const targetNode = document.querySelector('#side-collapse-region_institution_facet_mv, #side-collapse-local_region_institution_facet_mv');
+  institutionFacetObserver.observe(targetNode, institutionFacetConfig);
+}, false);
+
+function setLibraryAutoComplete(element) {
+  var libraries = new Map();
+  const list = element.querySelectorAll('ul li:not(.facet-tree__parent) a');
+  for (const item of list) {
+    const value = item.attributes.href.value.split('=').pop();
+    libraries.set(value, {
+      label: item.dataset.title,
+      value: value,
+      href: item.attributes.href.value,
+    });
+  }
 
   var input = $('<input></input>').addClass('autocomplete-institutions form-control')
     .attr('placeholder', VuFind.translate('Autocomplete institutions placeholder'));
@@ -274,8 +286,8 @@ function setLibraryAutoComplete(element, data) {
   input.autocomplete({
     rtl: $(document.body).hasClass("rtl"),
     maxResults: 10,
-    loadingString: VuFind.translate('loading') + '...',
-    // AJAX call for autocomplete results
+    loadingString: VuFind.translate('loading_ellipsis'),
+    // AJAX call for autocomplete institutions
     handler: function vufindACHandler(inputField, cb) {
       const query = inputField.val();
       const terms = normalizeString(query).split(' ');
@@ -314,22 +326,8 @@ function setLibraryAutoComplete(element, data) {
       });
     }
   });
-  element.parent().prepend(input);
+  $(element).prepend(input);
 }
-
-VuFind.listen('VuFind.sidefacets.buildtree', function onLoaded(event){
-  var facet = event.detail.node[0].id;
-  const facets = [
-    'facet_region_institution_facet_mv',
-    'facet_local_region_institution_facet_mv'
-  ];
-  if (!facets.includes(facet)) {
-    return;
-  }
-  var data = event.detail.data;
-  var element = $(document.getElementById(facet));
-  setLibraryAutoComplete(element, data);
-});
 
 $(function saveInstitutionFilter() {
   var element = $('#my-institution-filter-save');
@@ -376,18 +374,6 @@ $(function saveInstitutionFilter() {
   });
   element.show();
 });
-
-/* eslint-disable no-undef */
-if (typeof buildFacetTree === 'function') {
-  buildFacetTree = (function wrapper(_super) {
-    return function callback() {
-      var treeNode = arguments[0];
-      var facetData = arguments[1];
-      VuFind.emit('VuFind.sidefacets.buildtree', {node: treeNode, data: facetData});
-      return _super.apply(this, arguments);
-    };
-  })(buildFacetTree);
-}
 
 $(function coverImageLoadError($) {
   $('.ajaxcover img').on('error', function showCoverIconOnError() {
