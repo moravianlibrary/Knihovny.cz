@@ -66,7 +66,7 @@ class GetLibrariesACSuggestions extends AbstractBase implements
         $libraries = [];
         foreach ($results->getResults() as $library) {
             $filter = $library->getBookSearchFilter();
-            if ($filter != null ) {
+            if ($filter != null) {
                 $libraries[] = $filter;
             }
         }
