@@ -23,9 +23,9 @@ use VuFindSearch\ParamBag;
  */
 class DeduplicationListener extends ParentDeduplicationListener
 {
-    public const OR_FACETS_REGEX = '/(\\{[^\\}]*\\})*([\S]+):\\((.+)\\)/';
+    public const OR_FACETS_REGEX = '/(\\{[^\\}]*\\})*([^\\(\s]+):\\(([^\\)]+)\\)/';
 
-    public const FILTER_REGEX = '/(\S+):"([^"]+)"/';
+    public const FILTER_REGEX = '/"([^"]+)"/';
 
     public const UNDEF_PRIORITY = 99999;
 
@@ -277,15 +277,9 @@ class DeduplicationListener extends ParentDeduplicationListener
                 $filters = explode('OR', $matches[3]);
                 foreach ($filters as $filter) {
                     if (preg_match(self::FILTER_REGEX, $filter, $matches)) {
-                        $values[] = $matches[2];
+                        $values[] = $matches[1];
                     }
                 }
-            } elseif (preg_match(self::FILTER_REGEX, $fq, $matches)) {
-                $field = $matches[1];
-                if ($field != $this->institutionField) {
-                    continue;
-                }
-                $values[] = $matches[2];
             }
         }
         $priorities = [];
