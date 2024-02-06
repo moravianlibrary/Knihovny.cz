@@ -326,7 +326,9 @@ const institutionFacetObserver = new MutationObserver(observeInstitutionFacetHan
 
 document.addEventListener('DOMContentLoaded', function runObserver() {
   const targetNode = document.querySelector('#side-collapse-region_institution_facet_mv, #side-collapse-local_region_institution_facet_mv');
-  institutionFacetObserver.observe(targetNode, institutionFacetConfig);
+  if (targetNode !== null) {
+    institutionFacetObserver.observe(targetNode, institutionFacetConfig);
+  }
 }, false);
 
 $(function saveInstitutionFilter() {
