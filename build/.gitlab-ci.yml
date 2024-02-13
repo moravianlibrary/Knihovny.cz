@@ -1,6 +1,6 @@
 include:
   - project: 'Knihovny.cz/ci-templates'
-    ref: v2023.01
+    ref: v2024.2
     file: '/vufind/.gitlab-ci.yml'
 
 variables:
