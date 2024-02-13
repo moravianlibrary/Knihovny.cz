@@ -146,16 +146,13 @@
             <md:ArtifactResolutionService Location="/Artifact/SOAP" index="1"
                 Binding="urn:oasis:names:tc:SAML:2.0:bindings:SOAP"/>
 
-            <!-- Extension service that generates "approximate" metadata based on SP configuration. -->
-            <Handler type="MetadataGenerator" Location="/Metadata" signing="false"/>
-
             <!-- Status reporting service. -->
             <Handler type="Status" Location="/Status" acl="127.0.0.1"/>
 
             <!-- Session diagnostic service. -->
             <Handler type="Session" Location="/Session" showAttributeValues="true"/>
 
-            <!-- Metadata -->
+            <!-- Extension service that generates "approximate" metadata based on SP configuration. -->
             <Handler type="MetadataGenerator" Location="/Metadata" signing="false" template="/etc/shibboleth/template.xml"/>
 
         </Sessions>
