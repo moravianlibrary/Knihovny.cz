@@ -47,9 +47,8 @@ COPY ./Gruntfile.local.js /var/www/knihovny-cz/
 RUN rm /var/www/knihovny-cz/composer.lock
 
 # Install composer dependencies
-RUN composer config --no-plugins allow-plugins.php-http/discovery true
-RUN composer install --no-interaction -q --ignore-platform-req=php
-RUN composer update --no-interaction -q --ignore-platform-req=php
+RUN COMPOSER_ALLOW_SUPERUSER=1 composer install --no-interaction -q --ignore-platform-req=php
+RUN COMPOSER_ALLOW_SUPERUSER=1 composer update --no-interaction -q --ignore-platform-req=php
 
 #TODO: sentry/sentry still missing
 
