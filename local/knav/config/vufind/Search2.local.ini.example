@@ -1,0 +1,6 @@
+[Index]
+url = http://solr-dev.app.knihovny.cz/solr
+default_core = front
+
+[Parent_Config]
+relative_path = ../../../base/config/vufind/Search2.ini

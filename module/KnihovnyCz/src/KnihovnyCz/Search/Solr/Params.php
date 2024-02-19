@@ -19,8 +19,6 @@ class Params extends \VuFind\Search\Solr\Params
 {
     protected const DEFAULT_FACET_LIMIT = -1;
 
-    public const SOLR_DATE_FORMAT = 'Y-m-d\TH:i:s.z\Z';
-
     protected const TREAT_AS_NON_HIERARCHICAL = [
         'region_institution_facet_mv',
         'local_region_institution_facet_mv',

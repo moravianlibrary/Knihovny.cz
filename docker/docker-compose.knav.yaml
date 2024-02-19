@@ -1,0 +1,138 @@
+version: '2.2'
+services:
+  devel6:
+    image: "localhost/${IMAGE_NAME:-knihovny-cz-devel}"
+    extends:
+      file: docker-compose.yaml
+      service: knihovny-cz
+    env_file:
+      - knav.env
+    build:
+      context: "builds/knihovny-cz-source6"
+      args:
+        PARAM_VUFIND_BRANCH: ""
+        GITLAB_DEPLOY_USER: ""
+        GITLAB_DEPLOY_PASSWORD: ""
+    volumes:
+      - "./data/devel/:/data/"
+    network_mode: bridge
+  devel6-10000:
+    extends:
+      service: devel6
+    container_name: "${CONTAINER_NAME:-vufind-devel6-10000}"
+    environment:
+      PARAM_VUFIND_SSL_PORT: "10000"
+  devel6-10001:
+    extends:
+      service: devel6
+    container_name: "${CONTAINER_NAME:-vufind-devel6-10001}"
+    environment:
+      PARAM_VUFIND_SSL_PORT: "10001"
+  devel6-10002:
+    extends:
+      service: devel6
+    container_name: "${CONTAINER_NAME:-vufind-devel6-10002}"
+    environment:
+      PARAM_VUFIND_SSL_PORT: "10002"
+  devel6-10003:
+    extends:
+      service: devel6
+    container_name: "${CONTAINER_NAME:-vufind-devel6-10003}"
+    environment:
+      PARAM_VUFIND_SSL_PORT: "10003"
+  devel6-10004:
+    extends:
+      service: devel6
+    container_name: "${CONTAINER_NAME:-vufind-devel6-10004}"
+    environment:
+      PARAM_VUFIND_SSL_PORT: "10004"
+  devel6-10005:
+    extends:
+      service: devel6
+    container_name: "${CONTAINER_NAME:-vufind-devel6-10005}"
+    environment:
+      PARAM_VUFIND_SSL_PORT: "10005"
+  devel6-10006:
+    extends:
+      service: devel6
+    container_name: "${CONTAINER_NAME:-vufind-devel6-10006}"
+    environment:
+      PARAM_VUFIND_SSL_PORT: "10006"
+  devel6-10007:
+    extends:
+      service: devel6
+    container_name: "${CONTAINER_NAME:-vufind-devel6-10007}"
+    environment:
+      PARAM_VUFIND_SSL_PORT: "10007"
+  devel6-10008:
+    extends:
+      service: devel6
+    container_name: "${CONTAINER_NAME:-vufind-devel6-10008}"
+    environment:
+      PARAM_VUFIND_SSL_PORT: "10008"
+  devel6-10009:
+    extends:
+      service: devel6
+    container_name: "${CONTAINER_NAME:-vufind-devel6-10009}"
+    environment:
+      PARAM_VUFIND_SSL_PORT: "10009"
+  devel6-10010:
+    extends:
+      service: devel6
+    container_name: "${CONTAINER_NAME:-vufind-devel6-10010}"
+    environment:
+      PARAM_VUFIND_SSL_PORT: "10010"
+  devel6-10011:
+    extends:
+      service: devel6
+    container_name: "${CONTAINER_NAME:-vufind-devel6-10011}"
+    environment:
+      PARAM_VUFIND_SSL_PORT: "10011"
+  devel6-10012:
+    extends:
+      service: devel6
+    container_name: "${CONTAINER_NAME:-vufind-devel6-10012}"
+    environment:
+      PARAM_VUFIND_SSL_PORT: "10012"
+  devel6-10013:
+    extends:
+      service: devel6
+    container_name: "${CONTAINER_NAME:-vufind-devel6-10013}"
+    environment:
+      PARAM_VUFIND_SSL_PORT: "10013"
+  devel6-10014:
+    extends:
+      service: devel6
+    container_name: "${CONTAINER_NAME:-vufind-devel6-10014}"
+    environment:
+      PARAM_VUFIND_SSL_PORT: "10014"
+  devel6-10015:
+    extends:
+      service: devel6
+    container_name: "${CONTAINER_NAME:-vufind-devel6-10015}"
+    environment:
+      PARAM_VUFIND_SSL_PORT: "10015"
+  devel6-10016:
+    extends:
+      service: devel6
+    container_name: "${CONTAINER_NAME:-vufind-devel6-10016}"
+    environment:
+      PARAM_VUFIND_SSL_PORT: "10016"
+  devel6-10017:
+    extends:
+      service: devel6
+    container_name: "${CONTAINER_NAME:-vufind-devel6-10017}"
+    environment:
+      PARAM_VUFIND_SSL_PORT: "10017"
+  devel6-10018:
+    extends:
+      service: devel6
+    container_name: "${CONTAINER_NAME:-vufind-devel6-10018}"
+    environment:
+      PARAM_VUFIND_SSL_PORT: "10018"
+  devel6-10019:
+    extends:
+      service: devel6
+    container_name: "${CONTAINER_NAME:-vufind-devel6-10019}"
+    environment:
+      PARAM_VUFIND_SSL_PORT: "10019"
