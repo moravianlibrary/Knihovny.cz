@@ -1,0 +1,97 @@
+[System]
+debug           = false
+
+[Captcha]
+recaptcha_siteKey   = "123456abc"
+recaptcha_secretKey = "cba654321"
+; Valid theme values: dark, light
+recaptcha_theme     = light
+; Valid forms values: changePassword, email, newAccount, passwordRecovery, sms
+; Use * for all supported forms
+forms = *
+
+[Site]
+url             = https://beta.knihovny.cz/
+email           = cpk-support@mzk.cz
+theme		= KnihovnyCz
+
+[Index]
+engine       = Solr
+url          = http://solr-dev.app.knihovny.cz/solr
+default_core = front
+
+[Authentication]
+method		= Shibboleth
+
+[Shibboleth]
+login           = /Shibboleth.sso/DS
+logout          = /Shibboleth.sso/Logout
+username        = eduPersonPrincipalName
+cat_username    = userLibraryId
+email           = mail
+firstname       = givenName
+lastname        = sn
+edu_person_unique_id = eduPersonUniqueId
+allow_configuration_override = true
+; Check for duplicate institutions when connecting library card
+;check_duplicate_institutions = false
+
+[Database]
+database        = mysql://user:pw@localhost/dbName
+
+[Logging]
+file            = /home/vufind/git/VuFind/fatal-errors.log:alert,error
+;file            = /home/vufind/git/VuFind/fatal-errors.log:alert,error,notice,debug
+ziskej          = /var/www/knihovny-cz/log/ziskej-api.log
+
+[GoogleMaps]
+apikey = "A1b2C3"
+
+;This configuration sets recipients for feedback page. Split values with comma
+;E.g. "mail@server.cz,mail2@server.cz"
+[Feedback]
+RequestHelpRecipients = "cpk-support@mzk.cz"
+ReportBugRecipients   = "cpk-support@mzk.cz"
+
+[Proxy]
+host = cpk-front.mzk.cz
+port = 3128
+auth = basic
+user = vufind
+pass = ***
+non_proxy_host[] = cluster.local
+non_proxy_host[] = knihovny.cz
+non_proxy_host[] = mzk.cz
+
+[Http]
+adapter = 'Laminas\Http\Client\Adapter\Default'
+
+[Session]
+type = File
+
+[Mail]
+sms = disabled
+
+[GoogleTagManager]
+gtmContainerId = "ABC-123456"
+salt = "some salt"
+
+[Parent_Config]
+relative_path = ../../../base/config/vufind/config.ini
+
+[Ziskej]
+techlib_url = "https://ziskej.techlib.cz"
+default_mode_mvs = "test"
+default_mode_edd = "disabled"
+mode_urls["disabled"] = ""
+mode_urls["prod"] = "https://ziskej.techlib.cz:9080/api/v1"
+mode_urls["test"] = "https://ziskej-test.techlib.cz:9080/api/v1"
+mode_urls["demo"] = "https://ziskej-demo.techlib.cz:9080/api/v1"
+mode_urls["dev"] = "https://ziskej-dev.techlib.cz:9080/api/v1"
+
+[Certs]
+ziskej = "/var/www/cert-cpk-ziskej-api.key"
+
+[Filebeat]
+host = xx.xx.xx.xx
+port = xxxx
