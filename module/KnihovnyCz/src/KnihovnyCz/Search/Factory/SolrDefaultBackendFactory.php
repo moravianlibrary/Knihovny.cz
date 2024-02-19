@@ -59,19 +59,6 @@ class SolrDefaultBackendFactory extends ParentSolrDefaultBackendFactory
     protected $backendClass = KnihovnyCzBackend::class;
 
     /**
-     * Create listeners.
-     *
-     * @param Backend $backend Backend
-     *
-     * @return void
-     */
-    protected function createListeners(Backend $backend)
-    {
-        parent::createListeners($backend);
-        $events = $this->serviceLocator->get('SharedEventManager');
-    }
-
-    /**
      * Get a deduplication listener for the backend
      *
      * @param Backend $backend Search backend

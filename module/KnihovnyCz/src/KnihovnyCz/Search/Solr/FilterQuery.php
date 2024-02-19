@@ -200,6 +200,7 @@ class FilterQuery
                 $filter = null;
             } elseif ($this->child) {
                 $filter = addcslashes($filter, '"\'');
+                var_dump($filter); die();
                 $localParams .= "child of='$parentFilter' v='$filter'";
                 $filter = null;
             }
