@@ -218,6 +218,7 @@ class Aleph extends AlephBase implements TranslatorAwareInterface
                 'notes' => ($note == null) ? null : [$note],
                 'is_holdable' => true,
                 'addLink' => $addLink,
+                'linkText' => ($availability) ? 'Order' : 'Reserve',
                 /* below are optional attributes*/
                 'collection' => (string)$collection,
                 /* @phpstan-ignore-next-line */

@@ -88,8 +88,9 @@
                     elm.find('td[data-type="callnumber"]').text(item.callnumber);
                   }
                   if (item.link && showRequestLink) {
+                    linkText = item.linkText ?? 'Place a Hold';
                     elm.find('td[data-type="request"]')
-                      .html('<a href="' + item.link + '">' + VuFind.translate('Place a Hold') + '</a>');
+                      .html('<a href="' + item.link + '">' + VuFind.translate(linkText) + '</a>');
                   }
                   const possiblyDuplicateData = [
                     { primary: 'callnumber', secondary: 'callnumber_second' },
