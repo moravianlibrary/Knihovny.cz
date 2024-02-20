@@ -20,12 +20,12 @@
       <UIInfo xmlns="urn:oasis:names:tc:SAML:metadata:ui">
         <DisplayName xml:lang="en">Czech libraries in one place</DisplayName>
         <Description xml:lang="en">Czech libraries in one place</Description>
-        <InformationURL xml:lang="en">https://www.knihovny.cz/Portal/Page/o-portalu</InformationURL>
-        <PrivacyStatementURL xml:lang="en">https://www.knihovny.cz/Portal/Page/ochrana-osobnich-udaju</PrivacyStatementURL>
+        <InformationURL xml:lang="en">https://www.knihovny.cz/Content/o-portalu</InformationURL>
+        <PrivacyStatementURL xml:lang="en">https://www.knihovny.cz/Content/ochrana-osobnich-udaju</PrivacyStatementURL>
         <DisplayName xml:lang="cs">České knihovny na jednom místě</DisplayName>
         <Description xml:lang="cs">České knihovny na jednom místě</Description>
-        <InformationURL xml:lang="cs">https://www.knihovny.cz/Portal/Page/o-portalu</InformationURL>
-        <PrivacyStatementURL xml:lang="cs">https://www.knihovny.cz/Portal/Page/ochrana-osobnich-udaju</PrivacyStatementURL>
+        <InformationURL xml:lang="cs">https://www.knihovny.cz/Content/o-portalu</InformationURL>
+        <PrivacyStatementURL xml:lang="cs">https://www.knihovny.cz/Content/ochrana-osobnich-udaju</PrivacyStatementURL>
       </UIInfo>
 
     </md:Extensions>
@@ -55,21 +55,18 @@
       <md:RequestedAttribute FriendlyName="eduPersonScopedAffiliation" Name="urn:mace:dir:attribute-def:eduPersonScopedAffiliation" NameFormat="urn:mace:shibboleth:1.0:attributeNamespace:uri" isRequired="false"/>
       <md:RequestedAttribute FriendlyName="eduPersonScopedAffiliation" Name="urn:oid:1.3.6.1.4.1.5923.1.1.1.9" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri" isRequired="false"/>
       <md:RequestedAttribute FriendlyName="userLibraryId" Name="https://shib.knihovny.cz/attribute-def/alephID" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri" isRequired="false"/>
-      <md:RequestedAttribute FriendlyName="userLibraryId" Name="https://shib.knihovny.cz/attribute-def/alephID" NameFormat="urn:mace:shibboleth:1.0:attributeNamespace:uri" isRequired="false"/>
       <md:RequestedAttribute FriendlyName="userLibraryId" Name="https://shib.knihovny.cz/attribute-def/userLibraryId" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri" isRequired="false"/>
-      <md:RequestedAttribute FriendlyName="userLibraryId" Name="https://shib.knihovny.cz/attribute-def/userLibraryId" NameFormat="urn:mace:shibboleth:1.0:attributeNamespace:uri" isRequired="false"/>
       <md:RequestedAttribute FriendlyName="userLibraryId" Name="userLibraryId" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri" isRequired="false"/>
-      <md:RequestedAttribute FriendlyName="userLibraryId" Name="userLibraryId" NameFormat="urn:mace:shibboleth:1.0:attributeNamespace:uri" isRequired="false"/>
     </md:AttributeConsumingService>
   </md:SPSSODescriptor>
 
   <md:Organization>
     <md:OrganizationName xml:lang="en">Moravian Library</md:OrganizationName>
     <md:OrganizationDisplayName xml:lang="en">Moravian Library</md:OrganizationDisplayName>
-    <md:OrganizationURL xml:lang="en">http://www.mzk.cz/</md:OrganizationURL>
+    <md:OrganizationURL xml:lang="en">https://www.mzk.cz/</md:OrganizationURL>
     <md:OrganizationName xml:lang="cs">Moravská zemská knihovna</md:OrganizationName>
     <md:OrganizationDisplayName xml:lang="cs">Moravská zemská knihovna</md:OrganizationDisplayName>
-    <md:OrganizationURL xml:lang="cs">http://www.mzk.cz/</md:OrganizationURL>
+    <md:OrganizationURL xml:lang="cs">https://www.mzk.cz/</md:OrganizationURL>
   </md:Organization>
 
   <md:ContactPerson contactType="technical">
