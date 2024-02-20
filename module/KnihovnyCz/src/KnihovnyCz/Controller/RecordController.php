@@ -321,6 +321,8 @@ class RecordController extends \VuFind\Controller\RecordController
         // helpText is only for backward compatibility:
         $helpText = $helpTextHtml = $checkHolds['helpText'];
 
+        $linkText = $this->params()->fromQuery('linkText');
+
         $view = $this->createViewModel(
             compact(
                 'gatheredDetails',
@@ -335,7 +337,8 @@ class RecordController extends \VuFind\Controller\RecordController
                 'requestGroupNeeded',
                 'helpText',
                 'helpTextHtml',
-                'orderInQueue'
+                'orderInQueue',
+                'linkText'
             )
         );
         $view->setTemplate('record/hold');

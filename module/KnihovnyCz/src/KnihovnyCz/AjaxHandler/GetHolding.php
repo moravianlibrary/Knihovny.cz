@@ -112,15 +112,20 @@ class GetHolding extends AbstractBase implements TranslatorAwareInterface
                         $item['status'],
                         'HoldingStatus'
                     );
-                    if ($status == $item['status']) {
-                        $status = $this->translateString(
-                            $status,
-                            [],
-                            $status,
-                            'HoldingStatus'
-                        );
-                    }
                     $item['status'] = $status;
+                }
+                if (isset($item['linkText'])) {
+                    $linkText = $item['linkText'];
+                    if (isset($item['link'])) {
+                        [$link, $anchor] = explode('#', $item['link']);
+                        $item['link'] = $link . '&linkText=' . $linkText . '#' . $anchor;
+                    }
+                    $linkText = $this->translateWithSource(
+                        $source,
+                        $item['linkText'],
+                        'HoldingLinkText'
+                    );
+                    $item['linkText'] = $linkText;
                 }
                 array_push($copy, $item);
             }
@@ -146,11 +151,20 @@ class GetHolding extends AbstractBase implements TranslatorAwareInterface
         string $text,
         string $domain
     ): string {
-        return $this->translateString(
+        $translated = $this->translateString(
             $source . '_' . $text,
             [],
             $text,
             $domain
         );
+        if ($translated == $text) {
+            $translated = $this->translateString(
+                $text,
+                [],
+                $text,
+                $domain
+            );
+        }
+        return $translated;
     }
 }
