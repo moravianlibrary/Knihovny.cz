@@ -73,7 +73,7 @@ class SolrLocal extends \KnihovnyCz\RecordDriver\SolrMarc
                 $collection_desc, $agency_id, $sequenceNo, $copy_number,
                 $catalog_link
             ] = str_getcsv($line);
-            if (!preg_match('/^https?:\/\//', $catalog_link)) {
+            if (!preg_match('/^https?:\/\//', $catalog_link) && !empty($catalog_link)) {
                 $catalog_link = 'https://' . $catalog_link;
             }
             $item_id = ($isAleph ? $agency_id : '') . $itemId . $sequenceNo;
