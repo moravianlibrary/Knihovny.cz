@@ -279,13 +279,11 @@ class SolrMarc extends SolrDefault
     {
         $sigla = strtolower($this->ils->sourceToSigla($this->getSourceId()));
         [, $id] = explode('.', $this->getUniqueID(), 2);
-        if ($sigla === 'boa001') {
-            return strtolower(str_replace('-', '', $id));
-        }
-        // NKP, NLK, ARL and Verbis libraries use 001 as identifiers in obalky knih
+        // NKP, NLK, MZK, ARL and Verbis libraries use 001 as identifiers in obalky knih
         if (
             $sigla === 'aba001'
             || $sigla === 'aba008'
+            || $sigla === 'boa001'
             || $this->isArl()
             || $this->isVerbis()
         ) {
