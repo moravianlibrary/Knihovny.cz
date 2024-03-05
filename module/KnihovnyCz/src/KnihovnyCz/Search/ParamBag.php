@@ -21,7 +21,7 @@ class ParamBag extends \VuFindSearch\ParamBag
     protected $applyChildFilter = true;
 
     /**
-     * Set appply child filter
+     * Set apply child filter
      *
      * @param bool $applyChildFilter apply child filter
      *

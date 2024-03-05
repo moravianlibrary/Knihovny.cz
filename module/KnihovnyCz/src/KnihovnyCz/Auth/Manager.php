@@ -25,7 +25,7 @@ use VuFind\Validator\CsrfInterface;
 class Manager extends Base
 {
     /**
-     * Restorer to load saved user settings to sesssion
+     * Restorer to load saved user settings to session
      *
      * @var Restorer
      */

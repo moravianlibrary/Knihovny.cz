@@ -44,7 +44,7 @@ class TextFormatter extends AbstractHelper
      *
      * @param string $label    Label for data
      * @param string $method   Driver method to get data
-     * @param string $arrayKey Key of array returned by metho
+     * @param string $arrayKey Key of array returned by method
      * @param bool   $flatten  Whether to flatten an array by one level
      * @param bool   $implode  Implode data instead of repeating lines
      *

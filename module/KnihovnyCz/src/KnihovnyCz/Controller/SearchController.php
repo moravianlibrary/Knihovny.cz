@@ -122,7 +122,7 @@ class SearchController extends \VuFind\Controller\SearchController
 
     /**
      * Disable link to page with the last results in pagination if the limit on
-     * numer of results is exceeded.
+     * number of results is exceeded.
      *
      * @param ViewModel|Response $view view
      *

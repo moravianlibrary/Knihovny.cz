@@ -199,7 +199,7 @@ class SolrLocal extends \KnihovnyCz\RecordDriver\SolrMarc
     }
 
     /**
-     * Try to extract volume from 996|v in hodings
+     * Try to extract volume from 996|v in holdings
      *
      * @param string $volume volume
      *

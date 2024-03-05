@@ -16,7 +16,7 @@ namespace KnihovnyCz\Controller;
 class WayfController extends \VuFind\Controller\AbstractBase
 {
     /**
-     * Returns text response with encoded fiter for CESNET DS/WAYF service
+     * Returns text response with encoded filter for CESNET DS/WAYF service
      *
      * @return \Laminas\Http\Response|\Laminas\View\Model\ViewModel
      */

@@ -33,7 +33,7 @@ class SuggestionFilter
     }
 
     /**
-     * Filter suggestions and apply highlightin
+     * Filter suggestions and apply highlighting
      *
      * @param string $query   The user query
      * @param array  $results Suggestions to filter

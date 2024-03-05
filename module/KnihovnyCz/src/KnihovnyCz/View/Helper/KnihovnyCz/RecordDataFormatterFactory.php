@@ -77,7 +77,7 @@ class RecordDataFormatterFactory extends RecordDataFormatterFactoryBase
     }
 
     /**
-     * Utitity function for getting fields for library core metadata
+     * Utility function for getting fields for library core metadata
      *
      * @return array
      */

@@ -12,7 +12,7 @@ use PHPUnit\Framework\MockObject\Rule\InvocationOrder;
 use VuFind\ILS\Driver\PluginManager as ILSPluginManager;
 
 /**
- * Class MutiBackendTest
+ * Class MultiBackendTest
  *
  * @category CPK-vufind-6
  * @package  KnihovnyCzTest\ILS\Driver

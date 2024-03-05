@@ -663,7 +663,7 @@ class SolrDefault extends \VuFind\RecordDriver\SolrDefault
     }
 
     /**
-     * Attach libary id mappings
+     * Attach library id mappings
      *
      * @param \Laminas\Config\Config $mappings Mappings from config
      *
