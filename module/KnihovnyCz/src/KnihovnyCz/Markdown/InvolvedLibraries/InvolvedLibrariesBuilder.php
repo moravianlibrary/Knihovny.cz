@@ -35,7 +35,7 @@ class InvolvedLibrariesBuilder implements ConfigurationAwareInterface
     protected InvolvedLibrariesService $service;
 
     /**
-     * Contructor
+     * Constructor
      *
      * @param InvolvedLibrariesService $service Involved libraries service
      */

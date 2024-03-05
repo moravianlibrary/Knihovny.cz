@@ -150,7 +150,7 @@ class OrQueryRewriter
         // range query
         $lex->push("\\{[\w|d]+ TO [\w|d]+\\}", self::RANGE_QUERY);
         $lex->push("\\[[\w|d]+ TO [\w|d]+\\]", self::RANGE_QUERY);
-        // field:ranqe qeuery
+        // field:range query
         $lex->push("[\p{L}|\\_]+:\\{[\w|d]+ TO [\w|d]+\\}", self::RANGE_QUERY);
         $lex->push("[\p{L}|\\_]+:\\[[\w|d]+ TO [\w|d]+\\]", self::RANGE_QUERY);
         // space

@@ -19,7 +19,7 @@ DIRNAME=$(dirname "$0");
 FILENAME="${DIRNAME}/../docker/builds/knihovny-cz-base6/Dockerfile"
 CI_FILENAME="${DIRNAME}/../.gitlab-ci.yml"
 
-# Set deafults
+# Set defaults
 repository="vufind-org/vufind"
 branch="dev"
 dryrun=false

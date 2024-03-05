@@ -57,7 +57,7 @@ class Parser
      * @param string $from from
      * @param string $to   to
      *
-     * @return null|string normalized range, array with two elemetns - minimal
+     * @return null|string normalized range, array with two elements - minimal
      * and maximal value or null if invalid
      */
     public function normalizeRange($from, $to)

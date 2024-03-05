@@ -56,9 +56,9 @@ class PerformanceLogger
     /**
      * Log response
      *
-     * @param HttpClient             $client   client
-     * @param \Laminas\Http\Response $response ressponse
-     * @param float                  $time     time
+     * @param HttpClient             $client   Client
+     * @param \Laminas\Http\Response $response Response
+     * @param float                  $time     Time
      *
      * @return void
      */

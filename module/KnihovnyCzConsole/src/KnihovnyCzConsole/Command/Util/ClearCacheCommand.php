@@ -108,7 +108,7 @@ class ClearCacheCommand extends \Symfony\Component\Console\Command\Command
                 $output->writeln('Error clearing cacheName "' . $cacheName . '"');
                 $return = 1;
             } else {
-                $output->writeln('Cache "' . $cacheName . '" cleared sucessfully');
+                $output->writeln('Cache "' . $cacheName . '" cleared successfully');
             }
         }
         return $return;

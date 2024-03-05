@@ -113,7 +113,7 @@ CURRENT_BRANCH=${CURRENT_BRANCH:-HEAD}
 git fetch
 git checkout "origin/$branch"
 if [[ $? != 0 ]]; then
-  echo 'Cannot run git checkout, ensure you have ale changes commited'
+  echo 'Cannot run git checkout, ensure you have ale changes committed'
   exit 1
 fi
 
