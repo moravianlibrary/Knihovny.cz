@@ -1,9 +1,10 @@
 include:
   - project: 'Knihovny.cz/ci-templates'
-    ref: v2024.02.20
+    ref: v2024.03.06
+    #ref: devel
     file: '/vufind/.gitlab-ci.yml'
 
 variables:
     BUILD_DEBUG: 'true'
     #CI_TEMPLATE_BRANCH: devel
-    #COUNTER: "1708335118"
+    #COUNTER: "1708335138"
