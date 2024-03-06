@@ -1,4 +1,4 @@
-<?php /** @noinspection SpellCheckingInspection */
+<?php
 
 namespace KnihovnyCz\ILS\Driver;
 
