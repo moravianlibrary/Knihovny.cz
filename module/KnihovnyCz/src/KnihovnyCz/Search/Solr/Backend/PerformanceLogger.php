@@ -56,13 +56,12 @@ class PerformanceLogger
     /**
      * Log response
      *
-     * @param HttpClient             $client   Client
-     * @param \Laminas\Http\Response $response Response
-     * @param float                  $time     Time
+     * @param HttpClient $client Client
+     * @param float      $time   Time
      *
      * @return void
      */
-    public function log($client, $response, $time)
+    public function log(HttpClient $client, float $time): void
     {
         $solrUrl = $client->getUri();
         $referer = $this->getHeader('Referer');
