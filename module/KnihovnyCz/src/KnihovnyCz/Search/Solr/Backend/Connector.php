@@ -88,7 +88,7 @@ class Connector extends \VuFindSearch\Backend\Solr\Connector
             ['time' => $time]
         );
         if ($this->performanceLogger != null) {
-            $this->performanceLogger->log($client, $response, $time);
+            $this->performanceLogger->log($client, $time);
         }
         if (!$response->isSuccess()) {
             throw HttpErrorException::createFromResponse($response);
