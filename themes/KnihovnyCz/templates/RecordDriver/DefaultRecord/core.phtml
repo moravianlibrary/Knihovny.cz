@@ -69,7 +69,7 @@
       <?=$this->record($this->driver)->renderTemplate('versions-link.phtml')?>
     <?php endif; ?>
 
-    <?=$this->record($this->driver)->renderTemplate('summary.phtml')?>
+    <?=$this->record($this->driver)->renderTemplate('summary.phtml', ['driver' => $this->driver, 'length' => 360, 'expandable' => true])?>
 
     <?php if ($this->userlist()->getMode() !== 'disabled'): ?>
       <?php /* Display the lists that this record is saved to */ ?>
