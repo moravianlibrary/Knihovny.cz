@@ -283,7 +283,7 @@ $this->headTitle($this->translate('ZiskejMvs::header_order_ziskej_num') . ' ' . 
 
 
   <div class="<?=$this->layoutClass('sidebar') ?>">
-    <?=$this->context($this)->renderInContext('myresearch/menu.phtml', ['active' => 'ziskej']) ?>
+    <?=$this->accountMenu()->render('ziskej');?>
   </div>
 
 </div>

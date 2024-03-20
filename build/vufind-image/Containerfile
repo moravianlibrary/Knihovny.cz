@@ -77,8 +77,6 @@ COPY --from=themes /vufind-build-themes/themes ${VUFIND_ROOT}/themes
 COPY --from=vufind-src /src/vufind/build.xml ${VUFIND_ROOT}/build.xml
 COPY ./xsl ${VUFIND_ROOT}/xsl
 COPY --from=themes /vufind-build-themes/node_modules/autocomplete.js/autocomplete.js ${VUFIND_ROOT}/themes/bootstrap3/js/vendor/
-COPY --from=themes /vufind-build-themes/node_modules/jstree/dist/jstree.min.js ./themes/bootstrap3/js/vendor/jsTree/
-COPY --from=themes /vufind-build-themes/node_modules/jstree/dist/themes ./themes/bootstrap3/js/vendor/jsTree/themes
 COPY --from=themes /vufind-build-themes/node_modules/vanilla-cookieconsent/dist/cookieconsent.umd.js ${VUFIND_ROOT}/themes/bootstrap3/js/vendor/
 
 RUN chown vufind:vufind -R ${VUFIND_ROOT}

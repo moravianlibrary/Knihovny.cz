@@ -4,9 +4,9 @@ namespace KnihovnyCz\Controller;
 
 use KnihovnyCz\Db\Table\UserListCategories;
 use Laminas\ServiceManager\ServiceLocatorInterface;
+use Laminas\Session\Container;
 use Laminas\Stdlib\ResponseInterface as Response;
 use Laminas\View\Model\ViewModel;
-use Laminas\View\View;
 use VuFind\Controller\MyResearchController as MyResearchControllerBase;
 use VuFind\Db\Table\PluginManager as TableManager;
 use VuFind\Db\Table\UserList;
@@ -51,11 +51,18 @@ class MyResearchController extends MyResearchControllerBase
     /**
      * Constructor
      *
-     * @param ServiceLocatorInterface $sm Service locator
+     * @param ServiceLocatorInterface      $sm           Service locator
+     * @param Container                    $container    Session container
+     * @param \VuFind\Config\PluginManager $configLoader Configuration loader
+     * @param \VuFind\Export               $export       Export support class
      */
-    public function __construct(ServiceLocatorInterface $sm)
-    {
-        parent::__construct($sm);
+    public function __construct(
+        ServiceLocatorInterface $sm,
+        Container $container,
+        \VuFind\Config\PluginManager $configLoader,
+        \VuFind\Export $export
+    ) {
+        parent::__construct($sm, $container, $configLoader, $export);
         $this->dateConverter = $sm->get(\KnihovnyCz\Date\Converter::class);
     }
 

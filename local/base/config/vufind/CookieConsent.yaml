@@ -107,6 +107,12 @@ CookieConsent:
           Domain: '{{vufind_cookie_domain}}'
           Description: CookieConsent::cookie_description_ziskejmode_html
           Expiration: session
+#        - Name: '{{vufind_login_token_cookie_name}}'
+#          Domain: '{{vufind_cookie_domain}}'
+#          Description: CookieConsent::cookie_description_login_token_html
+#          Expiration: '{{vufind_login_token_cookie_expiration}}'
+#          ExpirationUnit: days
+
     analytics:
       Title: CookieConsent::analytics_cookies_title_html
       Description: CookieConsent::analytics_cookies_description_html

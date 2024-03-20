@@ -162,10 +162,10 @@
 <?php if (($this->ils()->getHoldsMode() == 'driver' && !empty($holdings['holdings'])) || $this->ils()->getTitleHoldsMode() == 'driver'): ?>
     <?php if ($account->loginEnabled() && $offlineMode != 'ils-offline'): ?>
         <?php if (!$user): ?>
-      <div class="alert alert-info">
-        <?php $loginUrl = $this->escapeHtmlAttr($this->recordLinker()->getTabUrl($this->driver, 'Holdings', ['login' => 'true'])); ?>
-        <?=$this->translate('hold_login', ['%%url%%' => $loginUrl])?>
-      </div>
+          <div class="alert alert-info">
+            <?php $loginUrl = $this->escapeHtmlAttr($this->serverUrl($this->url('myresearch-completelogin'))); ?>
+            <?=$this->translate('hold_login', ['%%url%%' => $loginUrl, '%%attributes%%' => 'id="hold-login"'])?>
+          </div>
         <?php elseif (!$user->cat_username): ?>
       <div class="alert alert-info">
         <?=$this->translate('hold_profile_html', ['%%url%%' => $this->escapeHtmlAttr($this->recordLinker()->getTabUrl($this->driver, 'Holdings', ['catalogLogin' => 'true']))])?>

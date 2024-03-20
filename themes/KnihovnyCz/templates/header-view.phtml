@@ -54,7 +54,7 @@ if ($user && $user->firstname && $user->lastname) {
               <li id="login-dropdown" class="dropdown<?php if(!$account->isLoggedIn()): ?> hidden<?php endif ?>">
                 <a href="#" data-toggle="dropdown"><?=$this->icon('dropdown-caret') ?></a>
                 <div class="dropdown-menu">
-                  <?=$this->render('myresearch/menu'); ?>
+                  <?=$this->accountMenu()->render(''); ?>
                 </div>
               </li>
             <?php endif; ?>

@@ -5,12 +5,14 @@ namespace KnihovnyCz\Auth;
 use KnihovnyCz\Service\UserSettingsService as Restorer;
 use Laminas\Config\Config;
 use Laminas\Session\SessionManager;
+use VuFind\Auth\LoginTokenManager;
 use VuFind\Auth\Manager as Base;
 use VuFind\Auth\PluginManager;
 use VuFind\Cookie\CookieManager;
 use VuFind\Db\Row\User;
 use VuFind\Db\Row\User as UserRow;
 use VuFind\Db\Table\User as UserTable;
+use VuFind\ILS\Connection;
 use VuFind\Validator\CsrfInterface;
 
 /**
@@ -34,13 +36,15 @@ class Manager extends Base
     /**
      * Constructor
      *
-     * @param Config         $config         VuFind configuration
-     * @param UserTable      $userTable      User table gateway
-     * @param SessionManager $sessionManager Session manager
-     * @param PluginManager  $pm             Authentication plugin manager
-     * @param CookieManager  $cookieManager  Cookie manager
-     * @param CsrfInterface  $csrf           CSRF validator
-     * @param Restorer       $restorer       Restorer
+     * @param Config            $config            VuFind configuration
+     * @param UserTable         $userTable         User table gateway
+     * @param SessionManager    $sessionManager    Session manager
+     * @param PluginManager     $pm                Authentication plugin manager
+     * @param CookieManager     $cookieManager     Cookie manager
+     * @param CsrfInterface     $csrf              CSRF validator
+     * @param LoginTokenManager $loginTokenManager Login Token manager
+     * @param Connection        $ils               ILS Connection
+     * @param Restorer          $restorer          Restorer
      */
     public function __construct(
         Config $config,
@@ -49,6 +53,8 @@ class Manager extends Base
         PluginManager $pm,
         CookieManager $cookieManager,
         CsrfInterface $csrf,
+        LoginTokenManager $loginTokenManager,
+        Connection $ils,
         Restorer $restorer
     ) {
         parent::__construct(
@@ -57,7 +63,9 @@ class Manager extends Base
             $sessionManager,
             $pm,
             $cookieManager,
-            $csrf
+            $csrf,
+            $loginTokenManager,
+            $ils
         );
         $this->restorer = $restorer;
     }

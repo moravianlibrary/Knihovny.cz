@@ -6,8 +6,7 @@
         }
     ],
     "require": {
-        "php-http/guzzle7-adapter": "^1",
-        "monolog/monolog": "^1.24",
+        "monolog/monolog": "^2.5.0",
         "moravianlibrary/ziskej-api-php-client": "^9.0.1",
         "lcobucci/jwt": "^4.1.5|^5.0",
         "salsify/json-streaming-parser": "^8.2",

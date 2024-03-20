@@ -23,13 +23,6 @@ use VuFind\View\Helper\Root\SearchTabs as Base;
 class SearchTabs extends Base
 {
     /**
-     * Search Memory
-     *
-     * @var Memory
-     */
-    protected $memory;
-
-    /**
      * Constructor
      *
      * @param PluginManager    $results Search results plugin manager
@@ -41,59 +34,27 @@ class SearchTabs extends Base
         PluginManager $results,
         Url $url,
         SearchTabsHelper $helper,
-        Memory $memory
+        protected Memory $memory
     ) {
         parent::__construct($results, $url, $helper);
-        $this->memory = $memory;
     }
 
     /**
-     * Create information representing a tab linking to "search home."
+     * Get an url to "search home".
      *
-     * @param string $id             Tab ID
-     * @param string $class          Search class ID
-     * @param string $label          Display text for tab
-     * @param array  $filters        Tab filters
-     * @param string $permissionName Name of a permissionrule
+     * @param string $class   Search class ID
+     * @param array  $filters Tab filters
      *
-     * @return array
+     * @return string
      */
-    protected function createHomeTab($id, $class, $label, $filters, $permissionName)
+    protected function getHomeTabUrl($class, $filters)
     {
+        // If an advanced search is available, link there; otherwise, just go
+        // to the search home:
         $results = $this->results->get($class);
         $url = ($this->url)($results->getOptions()->getSearchAction())
             . $this->buildUrlHiddenFilters($results, $filters);
-        return [
-            'id' => $id,
-            'class' => $class,
-            'label' => $label,
-            'permission' => $permissionName,
-            'selected' => false,
-            'url' => $this->appendStoredSettings($class, $url),
-        ];
-    }
-
-    /**
-     * Create information representing a basic search tab.
-     *
-     * @param string $id             Tab ID
-     * @param string $class          Search class ID
-     * @param string $label          Display text for tab
-     * @param string $newUrl         Target search URL
-     * @param string $permissionName Name of a permissionrule
-     *
-     * @return array
-     */
-    protected function createBasicTab($id, $class, $label, $newUrl, $permissionName)
-    {
-        return [
-            'id' => $id,
-            'class' => $class,
-            'label' => $label,
-            'permission' => $permissionName,
-            'selected' => false,
-            'url' => $this->appendStoredSettings($class, $newUrl),
-        ];
+        return $this->appendStoredSettings($class, $url);
     }
 
     /**

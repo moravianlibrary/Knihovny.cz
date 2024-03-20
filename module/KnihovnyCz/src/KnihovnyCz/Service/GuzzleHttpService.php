@@ -4,7 +4,6 @@ namespace KnihovnyCz\Service;
 
 use GuzzleHttp\Handler\CurlHandler;
 use GuzzleHttp\HandlerStack;
-use Http\Adapter\Guzzle7\Client;
 
 /**
  * Class GuzzleHttpService
@@ -49,7 +48,7 @@ class GuzzleHttpService
             $stack->push(self::addProxy($this->proxy));
         }
         $config['handler'] = $stack;
-        return Client::createWithConfig($config);
+        return new \GuzzleHttp\Client($config);
     }
 
     /**
