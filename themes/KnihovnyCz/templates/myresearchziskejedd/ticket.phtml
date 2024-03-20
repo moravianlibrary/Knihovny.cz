@@ -368,7 +368,7 @@ $this->headTitle($this->translate('ZiskejEdd::header_order_ziskej_num') . ' ' . 
 
 
   <div class="<?=$this->layoutClass('sidebar')?>">
-    <?=$this->context($this)->renderInContext('myresearch/menu.phtml', ['active' => 'ziskej-edd'])?>
+    <?=$this->accountMenu()->render('ziskej-edd')?>
   </div>
 
 </div>

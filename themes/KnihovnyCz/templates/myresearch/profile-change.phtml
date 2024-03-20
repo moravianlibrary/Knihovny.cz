@@ -48,5 +48,5 @@
 </div>
 
 <div class="<?=$this->layoutClass('sidebar')?>" id="myresearch-sidebar">
-  <?=$this->context($this)->renderInContext('myresearch/menu.phtml', ['active' => 'profile'])?>
+  <?=$this->accountMenu()->render('profile')?>
 </div>

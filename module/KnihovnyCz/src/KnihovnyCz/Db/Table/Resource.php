@@ -55,15 +55,16 @@ class Resource extends \VuFind\Db\Table\Resource
         $obj = & $this;
         return $this->select(
             function ($s) use ($user, $list, $tags, $sort, $offset, $limit, $obj) {
-                $s->columns(
-                    [
-                        new Expression(
-                            'DISTINCT(?)',
-                            ['resource.id'],
-                            [Expression::TYPE_IDENTIFIER]
-                        ), Select::SQL_STAR, new Expression('saved'),
-                    ]
-                );
+                $columns = [
+                    new Expression(
+                        'DISTINCT(?)',
+                        ['resource.id'],
+                        [Expression::TYPE_IDENTIFIER]
+                    ),
+                    Select::SQL_STAR,
+                    new Expression('saved'),
+                ];
+                $s->columns($columns);
                 $s->join(
                     ['ur' => 'user_resource'],
                     'resource.id = ur.resource_id',
@@ -102,7 +103,7 @@ class Resource extends \VuFind\Db\Table\Resource
                     if ($sort == 'saved' || $sort == 'saved DESC') {
                         $alias = 'ur';
                     }
-                    Resource::applySort($s, $sort, $alias);
+                    Resource::applySort($s, $sort, $alias, $columns);
                 }
             }
         );
@@ -111,15 +112,14 @@ class Resource extends \VuFind\Db\Table\Resource
     /**
      * Apply a sort parameter to a query on the resource table.
      *
-     * @param \Laminas\Db\Sql\Select $query Query to modify
-     * @param string                 $sort  Field to use for sorting (may include
-     * 'desc' qualifier)
-     * @param string                 $alias Alias to the resource table (defaults to
-     * 'resource')
+     * @param \Laminas\Db\Sql\Select $query   Query to modify
+     * @param string                 $sort    Field to use for sorting (may include 'desc' qualifier)
+     * @param string                 $alias   Alias to the resource table (defaults to 'resource')
+     * @param array                  $columns Existing list of columns to select
      *
      * @return void
      */
-    public static function applySort($query, $sort, $alias = 'resource')
+    public static function applySort($query, $sort, $alias = 'resource', $columns = [])
     {
         // Apply sorting, if necessary:
         $legalSorts = [
@@ -144,11 +144,13 @@ class Resource extends \VuFind\Db\Table\Resource
             // The title field can't be null, so don't bother with the extra
             // isnull() sort in that case.
             if (strtolower($rawField) != 'title') {
-                $order[] = new Expression(
+                $expression = new Expression(
                     'isnull(?)',
                     [$alias . '.' . $rawField],
                     [Expression::TYPE_IDENTIFIER]
                 );
+                $query->columns(array_merge($columns, [$expression]));
+                $order[] = $expression;
             }
 
             // Apply the user-specified sort:

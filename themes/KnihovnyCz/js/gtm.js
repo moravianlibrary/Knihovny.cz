@@ -72,7 +72,7 @@ $(document).on('click', '#btnSearchSave', function reportSaveSearch() {
  * Spouští se s každou zaškrtnutou položkou. */
 // Function for adding handler on facets
 const addFacetHandler = function addFacetHandler(target) {
-  $(target).find('.jstree-anchor, .js-facet-item').on('click', function reportFacets() {
+  $(target).find('.js-facet-item').on('click', function reportFacets() {
     let action = $(this).find('.facet-value').text();
     let type = $(this).parents('.collapse').data('facet');
     let useFacet = 1;

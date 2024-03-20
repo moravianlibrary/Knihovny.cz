@@ -22,7 +22,7 @@ class AccountCapabilities extends Base
     /**
      * Are user settings enabled?
      *
-     * @return string
+     * @return bool
      */
     public function isUserSettingsEnabled()
     {

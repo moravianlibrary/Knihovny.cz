@@ -30,7 +30,7 @@ $loadJs = <<<JS
 </div>
 
 <div class="<?=$this->layoutClass('sidebar')?>" id="myresearch-sidebar">
-  <?=$this->context($this)->renderInContext('myresearch/menu.phtml', ['active' => 'ziskej'])?>
+  <?=$this->accountMenu()->render('ziskej')?>
 </div>
 
 <?=$this->inlineScript(\Laminas\View\Helper\HeadScript::SCRIPT, $loadJs, 'SET')?>

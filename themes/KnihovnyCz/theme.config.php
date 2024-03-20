@@ -6,6 +6,7 @@ return [
     'extends' => 'bootstrap3',
     'helpers' => [
         'factories' => [
+            \KnihovnyCz\View\Helper\KnihovnyCz\AccountMenu::class => \VuFind\View\Helper\Root\AccountMenuFactory::class,
             'VuFind\View\Helper\Root\RecordDataFormatter' => 'KnihovnyCz\View\Helper\KnihovnyCz\RecordDataFormatterFactory',
             KnihovnyCz\View\Helper\KnihovnyCz\ZiskejMvs::class => function (ContainerInterface $container, $requestedName) {
                 $dependency = $container->get(KnihovnyCz\Ziskej\ZiskejMvs::class);
@@ -34,6 +35,7 @@ return [
             KnihovnyCz\View\Helper\KnihovnyCz\DatePicker::class,
         ],
         'aliases' => [
+            'accountMenu' => \KnihovnyCz\View\Helper\KnihovnyCz\AccountMenu::class,
             'footerLink' => \KnihovnyCz\View\Helper\KnihovnyCz\FooterLink::class,
             'recordDataFormatter' => 'VuFind\View\Helper\Root\RecordDataFormatter',
             'ziskejMvs' => KnihovnyCz\View\Helper\KnihovnyCz\ZiskejMvs::class,
@@ -154,4 +156,5 @@ return [
             'href' => 'favicons/site.webmanifest',
             'rel' => 'manifest',
         ],
-    ],];
+    ],
+];
