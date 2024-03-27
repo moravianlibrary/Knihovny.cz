@@ -395,3 +395,7 @@ citationRecordType:
   vufind.method: getCitationRecordType
   description: Citation type needed to generate citation on Citace.com
   type: string
+cnb:
+  vufind.method: getCnb
+  description: Number of Czech national bibliography
+  type: string
