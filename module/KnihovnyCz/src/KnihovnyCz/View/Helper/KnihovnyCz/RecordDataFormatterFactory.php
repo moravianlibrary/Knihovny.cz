@@ -312,6 +312,11 @@ class RecordDataFormatterFactory extends RecordDataFormatterFactoryBase
             'data-allRecordLinks.phtml'
         );
         $spec->setLine('Reviewed', 'getReviews');
+        $spec->setLine('Formatted Contents Note', 'getNote505');
+        $spec->setLine('Citation/References Note', 'getNote510');
+        $spec->setLine('Ownership and Custodial History', 'getNote561');
+        $spec->setLine('Binding Information', 'getNote563');
+        $spec->setLine('Defect Note', 'getNote590');
 
         return $spec->getArray();
     }
