@@ -9,6 +9,7 @@
         $navAttrs->add('class', 'js-pagination__top');
       }
     }
+    $disableLast = $this->options['disableLast'] ?? false;
   ?>
   <nav<?=$navAttrs?>>
     <?php
@@ -84,7 +85,7 @@
             ]
           )
         ?>
-        <?php if ($showFirstLast): ?>
+        <?php if ($showFirstLast && !$disableLast): ?>
           <?=
             $this->render(
                 'Helpers/pagination-item.phtml',
