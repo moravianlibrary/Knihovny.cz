@@ -495,4 +495,15 @@ class SolrMarc extends SolrDefault
 
         return null;
     }
+
+    /**
+     * Get CNB number
+     *
+     * @return string|null
+     */
+    public function getCnb(): ?string
+    {
+        $nbn = $this->getCleanNBNMarc();
+        return $nbn['nbn'] ?? null;
+    }
 }
