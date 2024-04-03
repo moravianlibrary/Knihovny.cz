@@ -8,9 +8,15 @@ if (!empty($authorities)):?>
         $otherChars = mb_substr($authority['label'], 1);
         $label = mb_strtoupper($firstChar) . $otherChars;
       ?>
-      <li><?=$label?>:
-        <a href="<?=$this->recordLinker()->getUrl($authority['record'])?>"><?=$authority['record']->getTitle()?></a>
-      </li>
+      <?php if (!empty($authority['record']) || !empty($authority['title'])): ?>
+        <li><?=$label?>:
+          <?php if (!empty($authority['record'])): ?>
+            <a href="<?=$this->recordLinker()->getUrl($authority['record'])?>"><?=$authority['record']->getTitle()?></a>
+          <?php else: ?>
+            <strong><?=$authority['title']?></strong>
+          <?php endif; ?>
+        </li>
+      <?php endif;  ?>
     <?php endforeach; ?>
   </ul>
   <ul class="external-links">
