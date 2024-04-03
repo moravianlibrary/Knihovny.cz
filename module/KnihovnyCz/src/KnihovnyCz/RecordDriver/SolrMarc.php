@@ -506,4 +506,54 @@ class SolrMarc extends SolrDefault
         $nbn = $this->getCleanNBNMarc();
         return $nbn['nbn'] ?? null;
     }
+
+    /**
+     * Formatted Contents Note
+     *
+     * @return array
+     */
+    public function getNote505(): array
+    {
+        return $this->getFieldArray('505', ['a'], false);
+    }
+
+    /**
+     * Citation/References Note
+     *
+     * @return array
+     */
+    public function getNote510(): array
+    {
+        return $this->getFieldArray('510', ['a'], false);
+    }
+
+    /**
+     * Ownership and Custodial History
+     *
+     * @return array
+     */
+    public function getNote561(): array
+    {
+        return $this->getFieldArray('561', ['a'], false);
+    }
+
+    /**
+     * Binding Information
+     *
+     * @return array
+     */
+    public function getNote563(): array
+    {
+        return $this->getFieldArray('563', ['a'], false);
+    }
+
+    /**
+     * Defect note
+     *
+     * @return array
+     */
+    public function getNote590(): array
+    {
+        return $this->getFieldArray('590', ['a'], false);
+    }
 }
