@@ -859,7 +859,7 @@ class SolrDefault extends \VuFind\RecordDriver\SolrDefault
      */
     protected function getCacheKey($suffix = null)
     {
-        $id = str_replace('.', '_', $this->getUniqueID());
+        $id = str_replace(['.', '*'], ['_', '_'], $this->getUniqueID());
         return 'record_' . $id . '_' . $suffix;
     }
 
