@@ -202,14 +202,6 @@ trait ZiskejEddTrait
             return $this->redirectToTabEdd();
         }
 
-        if (!$this->params()->fromPost('is_price')) {
-            $this->flashMessenger()->addMessage(
-                'ZiskejEdd::error_is_price',
-                'error'
-            );
-            return $this->redirectToTabEdd();
-        }
-
         /**
          * Multibackend ILS driver
          *
