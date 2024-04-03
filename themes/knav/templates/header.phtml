@@ -1,4 +1,5 @@
 <?php
-  $loginTarget = ($this->frontPage ?? false) ? $this->url('myresearch-frontpagelogin') : $this->url('myresearch-userlogin');
+  $this->loginTarget = ($this->frontPage ?? false) ? $this->url('myresearch-frontpagelogin') : $this->url('myresearch-userlogin');
+  $this->slot('inspiration-link')->set('');
 ?>
-<?=$this->render('header-view.phtml', [ 'loginTarget' => $loginTarget ]);?>
+<?php include $this->parentTemplate('header.phtml');?>

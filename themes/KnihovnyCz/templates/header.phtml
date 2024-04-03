@@ -1,4 +1,5 @@
 <?php
+  $loginTarget = $this->loginTarget ?? $this->url('myresearch-userlogin');
   $account = $this->auth()->getManager();
   $accountLabel = $this->translate('Your Account');
   $user = $account->isLoggedIn();
@@ -19,9 +20,11 @@
     <div class="collapse navbar-collapse" id="header-collapse">
       <nav>
         <ul class="nav navbar-nav navbar-right flip">
-          <li>
-            <a href="<?=$this->url('inspiration') ?>"><?=$this->icon('inspiration', 'fa-fw')?> <?=$this->transEsc('Inspiration') ?></a>
-          </li>
+          <?php $this->slot('inspiration-link')->start(); ?>
+            <li>
+              <a href="<?=$this->url('inspiration') ?>"><?=$this->icon('inspiration', 'fa-fw')?> <?=$this->transEsc('Inspiration') ?></a>
+            </li>
+          <?=$this->slot('inspiration-link')->end(); ?>
           <?php if ($this->feedback()->tabEnabled()): ?>
             <li>
               <a class="icon-link" id="feedbackLink" data-lightbox href="<?=$this->url('feedback-home') ?>">
@@ -60,7 +63,7 @@
             <?php if (!$account->isLoggedIn()): ?>
             <li id="loginOptions">
               <?php if ($account->getSessionInitiator($this->serverUrl($this->url('myresearch-home')))): ?>
-                <a href="<?=$this->url('myresearch-userlogin')?>" class="icon-link">
+                <a href="<?=$loginTarget?>" class="icon-link">
                   <?=$this->icon('sign-in', 'icon-link__icon') ?>
                   <span class="icon-link__label"><?=$this->transEsc('Institutional Login')?></span>
                 </a>
@@ -71,7 +74,7 @@
                 </a>
               <?php endif; ?>
             </li>
-	    <?php endif ?>
+            <?php endif ?>
 
           <?php endif; ?>
           <?php if (isset($this->layout()->themeOptions) && count($this->layout()->themeOptions) > 1): ?>
