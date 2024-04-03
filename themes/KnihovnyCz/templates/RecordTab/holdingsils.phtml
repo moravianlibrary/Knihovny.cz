@@ -163,7 +163,7 @@
     <?php if ($account->loginEnabled() && $offlineMode != 'ils-offline'): ?>
         <?php if (!$user): ?>
           <div class="alert alert-info">
-            <?php $loginUrl = $this->escapeHtmlAttr($this->serverUrl($this->url('myresearch-completelogin'))); ?>
+            <?php $loginUrl = $this->escapeHtmlAttr($this->recordLinker()->getTabUrl($this->driver, 'Holdings', ['login' => 'true'])); ?>
             <?=$this->translate('hold_login', ['%%url%%' => $loginUrl, '%%attributes%%' => 'id="hold-login"'])?>
           </div>
         <?php elseif (!$user->cat_username): ?>

@@ -2,7 +2,7 @@
   <?php
     $showFirstLast = $this->pageCount > 3;
   ?>
-  <nav class="text-cennter" aria-label="<?=$this->transEscAttr('pagination_label')?>">
+  <nav class="text-center" aria-label="<?=$this->transEscAttr('pagination_label')?>">
     <ul class="pagination">
       <?php if ($this->previous): ?>
         <?php if ($showFirstLast && $this->first): ?>
