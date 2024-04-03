@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace KnihovnyCz\ContentBlock;
 
 use Laminas\Db\ResultSet\ResultSetInterface;
+use Laminas\Db\Sql\Expression;
 use Laminas\Db\Sql\Select;
 use Laminas\View\Helper\Url;
 use VuFind\Cache\CacheTrait;
@@ -142,9 +143,7 @@ abstract class AbstractDbAwaredRecordIds implements ContentBlockInterface
             }
             $this->putCachedData($this->formatId($record->getUniqueID()), $record->getRawData());
         }
-        $records = array_merge($records, $recordsFromSolr);
-        shuffle($records);
-        return $records;
+        return array_merge($records, $recordsFromSolr);
     }
 
     /**
@@ -189,6 +188,7 @@ abstract class AbstractDbAwaredRecordIds implements ContentBlockInterface
             $itemsTable = $this->tableManager->get($this->itemsTableName);
             $select = $itemsTable->getSql()->select();
             $this->setSelect($select);
+            $select->order(new Expression('RAND()'));
             $select->limit($this->limit);
             $items = $itemsTable->selectWith($select);
             $this->items = $this->loadRecords($this->getIds($items));
