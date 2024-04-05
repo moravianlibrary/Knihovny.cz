@@ -1,2 +1,15 @@
 @import "../../KnihovnyCz/less/knihovny-cz";
 @import "variables";
+
+body.template-name-checkedout-all,
+body.template-name-illrequests-all,
+body.template-dir-holds.template-name-list-all,
+body.template-name-fines-all,
+body.template-name-profile-all,
+body.template-dir-myresearch.template-name-mylist
+{
+  div.mainbody a.context-help-link
+  {
+    display:none !important;
+  }
+}
