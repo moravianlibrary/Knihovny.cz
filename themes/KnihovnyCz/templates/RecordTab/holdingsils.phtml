@@ -159,6 +159,12 @@
 
 <?=($offlineMode == 'ils-offline') ? $this->render('Helpers/ils-offline.phtml', ['offlineModeMsg' => 'ils_offline_holdings_message']) : ''?>
 
+<?php $holdingsNotice = $this->driver->tryMethod('getHoldingsNotice'); ?>
+<?php if (!empty($holdingsNotice)): ?>
+  <div class="holdings-notice alert alert-info">
+    <?=$this->transEsc($holdingsNotice);?>
+  </div>
+<?php endif; ?>
 <?php if (($this->ils()->getHoldsMode() == 'driver' && !empty($holdings['holdings'])) || $this->ils()->getTitleHoldsMode() == 'driver'): ?>
     <?php if ($account->loginEnabled() && $offlineMode != 'ils-offline'): ?>
         <?php if (!$user): ?>
