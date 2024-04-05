@@ -556,4 +556,28 @@ class SolrMarc extends SolrDefault
     {
         return $this->getFieldArray('590', ['a'], false);
     }
+
+    /** Get notice for holdings availability in special cases - for now it is only applicable to historical fonds in MZK
+     *
+     * @return string
+     * @throws \Exception
+     */
+    public function getHoldingsNotice(): string
+    {
+        [$source, $id] = explode('.', $this->getUniqueID());
+        [$base] = explode('-', $id);
+        if ($source !== 'mzk' || $base !== 'MZK03') {
+            return '';
+        }
+
+        $field991k = $this->getFirstFieldValue('991', ['k']);
+        $field991Mapping = [
+            'broumov' => 'holdings_notice_benediktini_broumov',
+            'minorite' => 'holdings_notice_minorite_brno',
+            'rajhrad' => 'holdings_notice_benediktini_rajhrad',
+            'trebova' => 'holdings_notice_frantiskani_trebova',
+        ];
+
+        return $field991Mapping[$field991k] ?? '';
+    }
 }
