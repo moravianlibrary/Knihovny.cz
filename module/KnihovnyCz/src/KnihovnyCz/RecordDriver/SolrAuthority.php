@@ -491,14 +491,15 @@ class SolrAuthority extends \KnihovnyCz\RecordDriver\SolrMarc
         $id = $this->getCombinedAuthorityId();
         $lang = $this->getTranslatorLocale();
         $queryPattern = <<<SPARQL
-            SELECT DISTINCT ?relatedId ?propLabel WHERE {
+            SELECT DISTINCT ?relatedId ?propLabel ?relatedLabel WHERE {
               {
-                SELECT ?prop ?relatedId {
+                SELECT ?prop ?relatedId ?relatedLabel {
                   ?item wdt:P691|wdt:P9299 "%s" .
                   ?related wdt:P691|wdt:P9299 ?relatedId .
                   ?item ?prop ?related .
                   ?item wdt:P31 wd:Q5 .
                   ?related wdt:P31 wd:Q5 .
+                  SERVICE wikibase:label { bd:serviceParam wikibase:language "%s". }
                 } LIMIT 100
               }
               ?property wikibase:directClaim ?prop .
@@ -506,7 +507,7 @@ class SolrAuthority extends \KnihovnyCz\RecordDriver\SolrMarc
             }
             SPARQL;
         return [
-            sprintf($queryPattern, addslashes($id), $lang),
+            sprintf($queryPattern, addslashes($id), $lang, $lang),
             ['rdfs', 'wikibase', 'wdt', 'wd'],
         ];
     }
@@ -554,6 +555,7 @@ class SolrAuthority extends \KnihovnyCz\RecordDriver\SolrMarc
                 $return[] = [
                     'record' => $record,
                     'label' => $authority['propLabel']['value'] ?? '',
+                    'title' => $authority['relatedLabel']['value'] ?? '',
                 ];
             }
         }
