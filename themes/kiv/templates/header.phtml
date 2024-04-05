@@ -1,1 +1,4 @@
-<?=$this->render('header-view.phtml');
+<?php
+  $this->slot('inspiration-link')->set('');
+?>
+<?php include $this->parentTemplate('header.phtml');?>
