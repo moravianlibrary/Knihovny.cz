@@ -51,7 +51,7 @@ class UpdateRecordStatus extends \Symfony\Component\Console\Command\Command
         LOAD DATA LOCAL INFILE ':file' INTO TABLE import_record_status_totals
           FIELDS TERMINATED BY ','
           LINES TERMINATED BY '\n'
-          (@local_record_id, absent_total, present_total)
+          (@local_record_id, present_total, absent_total)
           SET source = ':source',
             record_id = CONCAT(':source', '.', @local_record_id)
         ;
@@ -81,7 +81,7 @@ class UpdateRecordStatus extends \Symfony\Component\Console\Command\Command
         LOAD DATA LOCAL INFILE ':file' INTO TABLE import_record_status_loans
           FIELDS TERMINATED BY ','
           LINES TERMINATED BY '\n'
-          (@local_record_id, absent_on_loan, present_on_loan)
+          (@local_record_id, present_on_loan, absent_on_loan)
           SET source = ':source',
             record_id = CONCAT(':source', '.', @local_record_id)
         ;
