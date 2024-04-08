@@ -303,6 +303,8 @@ CREATE ALGORITHM=UNDEFINED SQL SECURITY DEFINER VIEW `user_resource` AS select `
 DROP TABLE IF EXISTS `user_settings`;
 CREATE ALGORITHM=UNDEFINED SQL SECURITY DEFINER VIEW `user_settings` AS select `vufind6`.`user_settings`.`id` AS `id`,`vufind6`.`user_settings`.`user_id` AS `user_id`,`vufind6`.`user_settings`.`citation_style` AS `citation_style`,`vufind6`.`user_settings`.`records_per_page` AS `records_per_page`,`vufind6`.`user_settings`.`sorting` AS `sorting`,`vufind6`.`user_settings`.`saved_institutions` AS `saved_institutions` from `vufind6`.`user_settings`;
 
+CREATE ALGORITHM=UNDEFINED SQL SECURITY DEFINER VIEW `record_status` AS select `vufind6`.`record_status`.`record_id` AS `record_id`,`vufind6`.`record_status`.`absent_total` AS `user_id`,`vufind6`.`record_status`.`absent_total` AS `absent_total`,`vufind6`.`record_status`.`absent_on_loan` AS `absent_on_loan`,`vufind6`.`record_status`.`present_total` AS `present_total`,`vufind6`.`record_status`.`present_on_loan` AS `present_on_loan` from `vufind6`.`record_status`
+
 SET foreign_key_checks = 1;
 -- 2022-07-19 09:48:52
 
