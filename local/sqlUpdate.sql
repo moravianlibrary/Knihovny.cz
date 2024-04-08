@@ -483,3 +483,31 @@ DROP TABLE `widget_categories`;
 DROP TABLE `widget_content`;
 
 UPDATE `system` SET `value` = '120' WHERE `key`='DB_VERSION';
+
+CREATE TABLE `record_status` (
+    `record_id`        varchar(255) NOT NULL,
+    `absent_total`     int(11) NOT NULL DEFAULT 0,
+    `absent_on_loan`   int(11) NOT NULL DEFAULT 0,
+    `present_total`    int(11) NOT NULL DEFAULT 0,
+    `present_on_loan`  int(11) NOT NULL DEFAULT 0,
+    `last_update`      bigint NOT NULL DEFAULT 0,
+    PRIMARY KEY (`record_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+CREATE TABLE `import_record_status_totals` (
+  `record_id`        varchar(255) NOT NULL,
+  `source`           varchar(32),
+  `absent_total`     int(11) NOT NULL DEFAULT 0,
+  `present_total`    int(11) NOT NULL DEFAULT 0,
+  PRIMARY KEY (`record_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+CREATE TABLE `import_record_status_loans` (
+  `record_id`          varchar(255) NOT NULL,
+  `source`             varchar(32),
+  `absent_on_loan`     int(11) NOT NULL DEFAULT 0,
+  `present_on_loan`    int(11) NOT NULL DEFAULT 0,
+  PRIMARY KEY (`record_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+UPDATE `system` SET `value` = '121' WHERE `key`='DB_VERSION';

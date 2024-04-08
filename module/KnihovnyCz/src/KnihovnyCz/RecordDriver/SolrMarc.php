@@ -208,9 +208,10 @@ class SolrMarc extends SolrDefault
      *
      * @return bool
      */
-    public function supportsAjaxStatus()
+    public function supportsAjaxStatus(): bool
     {
-        return false;
+        // call parent method instead of implementation from IlsAwareTrait
+        return parent::supportsAjaxStatus();
     }
 
     /**

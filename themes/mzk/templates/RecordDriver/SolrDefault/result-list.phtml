@@ -105,25 +105,6 @@
             <?php endif; ?>
           <?php endif; ?>
 
-          <div class="callnumAndLocation ajax-availability hidden">
-            <?php if ($this->driver->supportsAjaxStatus()): ?>
-              <strong class="hideIfDetailed"><?=$this->transEsc('Call Number')?>:</strong>
-              <span class="callnumber ajax-availability hidden">
-            <?=$this->transEsc('loading_ellipsis')?><br>
-          </span>
-              <strong><?=$this->transEsc('Located')?>:</strong>
-              <span class="location ajax-availability hidden">
-            <?=$this->transEsc('loading_ellipsis')?>
-          </span>
-              <div class="locationDetails"></div>
-            <?php else: ?>
-              <?php $summCallNo = $this->driver->getCallNumber();
-              if (!empty($summCallNo)): ?>
-                <strong><?=$this->transEsc('Call Number')?>:</strong> <?=$this->escapeHtml($summCallNo)?>
-              <?php endif; ?>
-            <?php endif; ?>
-          </div>
-
           <?php /* We need to find out if we're supposed to display an OpenURL link ($openUrlActive),
             but even if we don't plan to display the link, we still want to get the $openUrl
             value for use in generating a COinS (Z3988) tag -- see bottom of file.
@@ -164,7 +145,7 @@
           <div class="result-formats">
             <?=$this->record($this->driver)->getFormatList() ?>
 
-            <?php if (!$openUrlActive && empty($urls) && $this->driver->supportsAjaxStatus()): ?>
+            <?php if ($this->driver->supportsAjaxStatus()): ?>
               <span class="status ajax-availability hidden">
             <span class="label label-default"><?=$this->transEsc('loading_ellipsis')?></span>
           </span>

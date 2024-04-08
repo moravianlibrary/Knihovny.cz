@@ -79,6 +79,13 @@ class SolrDefault extends \VuFind\RecordDriver\SolrDefault
     protected $libraryIdMappings;
 
     /**
+     * Libraries with support for Ajax status
+     *
+     * @var \Laminas\Config\Config
+     */
+    protected $libraryAjaxStatus;
+
+    /**
      * Auth Manager
      *
      * @var \VuFind\Auth\Manager
@@ -675,6 +682,18 @@ class SolrDefault extends \VuFind\RecordDriver\SolrDefault
     }
 
     /**
+     * Attach libary id mappings
+     *
+     * @param \Laminas\Config\Config $mappings Mappings from config
+     *
+     * @return void
+     */
+    public function attachLibraryAjaxStatus(\Laminas\Config\Config $mappings)
+    {
+        $this->libraryAjaxStatus = $mappings;
+    }
+
+    /**
      * Attach auth manager
      *
      * @param \VuFind\Auth\Manager $authManager Auth manager
@@ -968,5 +987,15 @@ class SolrDefault extends \VuFind\RecordDriver\SolrDefault
     public function getIsbn(): ?string
     {
         return !empty($this->getCleanISBN()) ? (string)$this->getCleanISBN() : null;
+    }
+
+    /**
+     * Returns true if the record supports real-time AJAX status lookups.
+     *
+     * @return bool
+     */
+    public function supportsAjaxStatus(): bool
+    {
+        return $this->libraryAjaxStatus[$this->getSourceId()] ?? false;
     }
 }
