@@ -3,26 +3,27 @@
   $absent_avail = $this->status['absent_avail'];
   $present_total = $this->status['present_total'];
   $present_avail = $this->status['present_avail'];
+  $items = $absent_total > 0 || $present_total > 0;
 ?>
-<?php if ($this->status['available']):?>
-  <?php if ($absent_total > 0):?>
+<?php if ($items): ?>
+  <?php if ($absent_total > 0): ?>
     <span class="label <?=($absent_avail > 0) ? 'label-success' : 'label-danger'?>">
       <?=$this->transEsc('online_availability_absent')?>:
       <?=$this->escapeHtml($absent_avail)?>
       <?=$this->transEsc('online_availability_of')?>
       <?=$this->escapeHtml($absent_total)?>
     </span>
-  <?php endif;?>
-  <?php if ($present_total > 0):?>
+  <?php endif; ?>
+  <?php if ($present_total > 0): ?>
     <span class="label <?=($present_avail > 0) ? 'label-success' : 'label-danger'?>">
       <?=$this->transEsc('online_availability_present')?>:
       <?=$this->escapeHtml($present_avail)?>
       <?=$this->transEsc('online_availability_of')?>
       <?=$this->escapeHtml($present_total)?>
     </span>
-  <?php endif;?>
-<?php else:?>
+  <?php endif; ?>
+<?php else: ?>
   <span class="label label-default">
     <?=$this->transEsc('online_availability_no_items')?>
   </span>
-<?php endif;?>
+<?php endif; ?>
