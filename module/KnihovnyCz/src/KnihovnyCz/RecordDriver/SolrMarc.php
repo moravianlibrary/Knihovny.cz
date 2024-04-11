@@ -558,7 +558,8 @@ class SolrMarc extends SolrDefault
         return $this->getFieldArray('590', ['a'], false);
     }
 
-    /** Get notice for holdings availability in special cases - for now it is only applicable to historical fonds in MZK
+    /**
+     * Get notice for holdings availability in special cases - for now it is only applicable to historical fonds in MZK
      *
      * @return string
      * @throws \Exception
