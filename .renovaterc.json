@@ -1,14 +1,35 @@
 {
-    "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-    "extends": [ ":disableMajorUpdates" ],
-    "includePaths": [
-        "build/php-image/**"
-    ],
-    "packageRules": [
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "includePaths": [
+       "build/php-image/**"
+  ],
+  "assigneesFromCodeOwners": true,
+  "separateMajorMinor": true,
+  "separateMultipleMinor": true,
+  "packageRules": [
        {
-          "matchCategories":  [ "docker" ],
-	  "major": false
+          "matchUpdateTypes": [ "major" ],
+          "labels": [ "renovate", "renovate-major" ]
+       },
+       {
+          "matchDatasources":  [ "docker" ],
+          "matchPackageNames": [ "php", "docker.io/php" ],
+          "separateMultipleMinor": true,
+          "description": "Enable minor upgrades, but with separate PRs for each minor version"
+       },
+       {
+          "matchDatasources":  [ "docker" ],
+          "matchPackageNames": [ "php", "docker.io/php" ],
+          "matchUpdateTypes": [ "major" ],
+          "enabled": false,
+          "description": "PHP major updates are not reported by Renovate"
+       },
+       {
+          "matchDatasources":  [ "docker" ],
+          "matchPackageNames": [ "php", "docker.io/php" ],
+          "matchUpdateTypes": [ "minor" ],
+          "enabled": true,
+          "description": "Enable minor PHP upgrades"
        }
-     ],
-    "assigneesFromCodeOwners": true
+  ]
 }
