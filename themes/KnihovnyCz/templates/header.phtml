@@ -49,7 +49,7 @@
             </li>
           <?php endif; ?>
           <?php if (is_object($account) && $account->loginEnabled()): // hide login/logout if unavailable ?>
-            <?php if($account->isLoggedIn()): ?>
+            <?php if ($account->isLoggedIn()): ?>
             <li class="dropdown">
               <a href="#" data-toggle="dropdown" class="icon-link">
                 <span id="account-icon"><?=$this->icon('my-account', 'icon-link__icon') ?></span>
@@ -61,7 +61,8 @@
             </li>
             <?php endif ?>
             <?php if (!$account->isLoggedIn()): ?>
-            <li id="loginOptions">
+              <?=$this->slot('registration-link')->set('');?>
+              <li id="loginOptions">
               <?php if ($account->getSessionInitiator($this->serverUrl($this->url('myresearch-home')))): ?>
                 <a href="<?=$loginTarget?>" class="icon-link">
                   <?=$this->icon('sign-in', 'icon-link__icon') ?>

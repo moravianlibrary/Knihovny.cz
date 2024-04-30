@@ -103,6 +103,7 @@ return [
             'short-loans' => 'FontAwesome:calendar:fa-fw',
             'sign-in' => 'FontAwesome:sign-in:fa-fw',
             'sign-out' => 'FontAwesome:sign-out:fa-fw',
+            'sign-up' => 'FontAwesome:user-plus:fa-fw',
             'ui-menu' => 'FontAwesome:bars:fa-fw',
             'user-favorites' => 'FontAwesome:star',
             'user-list-add' => 'FontAwesome:star:fa-fw',
