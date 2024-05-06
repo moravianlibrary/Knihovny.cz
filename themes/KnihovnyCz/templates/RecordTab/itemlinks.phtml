@@ -1,0 +1,24 @@
+<ul>
+  <?php foreach ($this->itemLinks as $id => $record):?>
+    <?php
+      $title = $record['label'];
+      $rec = $record['record'] ?? null;
+      if ($rec != null) {
+        $title = $this->translate('document_bound_in_a_composite_volume_order_text');
+        if ($record['type'] == 'DN') {
+          $title = $rec->getTitle();
+          if (!empty($publisherDetails = $rec->tryMethod('getPublisherDetails'))) {
+            $title .= '. - ' . $publisherDetails;
+          }
+          $label = $record['label'];
+          $title = $title . '  (' . $label . ')';
+        }
+      }
+    ?>
+    <li>
+      <a href="<?=$this->escapeHtmlAttr($this->recordLinker()->getUrl($id))?>">
+        <?=$this->escapeHtml($title)?>
+      </a>
+    </li>
+  <?php endforeach;?>
+</ul>

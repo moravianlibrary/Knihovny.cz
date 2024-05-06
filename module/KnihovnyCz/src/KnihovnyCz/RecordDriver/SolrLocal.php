@@ -61,7 +61,18 @@ class SolrLocal extends \KnihovnyCz\RecordDriver\SolrMarc
             'year' => [],
             'volume' => [],
         ];
+        $recordId = $this->getUniqueID();
         $f996 = $this->fields['mappings996_display_mv'] ?? [];
+        if (empty($f996)) {
+            $itemLinks = $this->getItemLinks('UP');
+            if (count($itemLinks) == 1) {
+                $record = reset($itemLinks);
+                if (($record = $record['record'] ?? null) != null) {
+                    $recordId = $record->getUniqueID();
+                    $f996 = $record->fields['mappings996_display_mv'] ?? [];
+                }
+            }
+        }
         $isCaslin = str_starts_with($this->getUniqueID(), 'caslin');
         /* @phpstan-ignore-next-line */
 
@@ -129,7 +140,8 @@ class SolrLocal extends \KnihovnyCz\RecordDriver\SolrMarc
                         'items' => $items,
                     ],
                 ],
-                'filters' => $filters,
+                'filters'  => $filters,
+                'recordId' => $recordId,
             ];
     }
 
@@ -256,5 +268,65 @@ class SolrLocal extends \KnihovnyCz\RecordDriver\SolrMarc
             return $normalizedPublicationDetails;
         }
         return parent::getPublicationDetails();
+    }
+
+    /**
+     * Has item links - field 994?
+     *
+     * @return bool
+     */
+    public function hasItemLinks(): bool
+    {
+        return !empty($this->getMarcReader()->getFields('994'));
+    }
+
+    /**
+     * Get item links - field 994 enriched by title from record.
+     *
+     * @param string $type type of link (UP, DN or null to ignore) to return
+     *
+     * @return array
+     */
+    public function getItemLinks($type = null): array
+    {
+        $fields994 = $this->getStructuredDataFieldArray('994');
+        $itemLinks = [];
+        foreach ($fields994 as $field) {
+            $id = $this->getSourceId() . '.' . $field['l'] . '-' . $field['b'];
+            $linkType = $field['a'];
+            if ($type != null && $type != $linkType) {
+                continue;
+            }
+            $label = $field['n'];
+            $itemLinks[$id] = [
+                'label' => $label,
+                'type'  => $linkType,
+            ];
+        }
+        uasort($itemLinks, function ($a, $b) {
+            return strnatcmp($a['label'], $b['label']);
+        });
+        $ids = array_keys($itemLinks);
+        if ($this->recordLoader != null) {
+            $records = $this->recordLoader->loadBatchForSource($ids);
+            foreach ($records as $record) {
+                $itemLinks[$record->getUniqueId()]['record'] = $record;
+            }
+        }
+        return $itemLinks;
+    }
+
+    /**
+     * Get publisher details
+     *
+     * @return string
+     */
+    public function getPublisherDetails(): string
+    {
+        $details = $this->getFirstFieldValue('260', ['a', 'b', 'c']);
+        if (empty($details)) {
+            $details = $this->getFirstFieldValue('264', ['a', 'b', 'c']);
+        }
+        return $details;
     }
 }
