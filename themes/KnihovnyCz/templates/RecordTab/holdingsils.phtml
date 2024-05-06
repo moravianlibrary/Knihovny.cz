@@ -11,7 +11,16 @@
 
     $showRequestLink = $user ? (int)$user->activateCardByPrefix($source) : 0;
 
-    $recordIdJson = json_encode($this->driver->getUniqueID(), JSON_HEX_QUOT);
+    $data = [];
+    $recordId = $holdings['recordId'] ?? $this->driver->getUniqueID();
+    if ($recordId != null) {
+      $data['id'] = $recordId;
+    }
+
+    if ($recordId != $this->driver->getUniqueID()) {
+      $data['childrenId'] = $this->driver->getUniqueID();
+    }
+    $recordIdJson = json_encode($data, JSON_HEX_QUOT);
     $isCaslin = (int)str_starts_with($this->driver->getUniqueID(), 'caslin');
     $loadJs = <<<JS
           const statusUnknownHtml = '<span class="label label-default">' + VuFind.translate('status_unknown_message') + '</span>';
@@ -30,11 +39,11 @@
               }
             });
           }
-          var _ajaxStatus = function _ajaxStatus(id) {
+          var _ajaxStatus = function _ajaxStatus(record) {
             $.ajax({
               url: VuFind.path + '/AJAX/JSON?method=getHolding',
               method: 'POST',
-              data: {'id': id },
+              data: record,
               dataType: 'json',
             })
               .done(function ajaxLookupDone(response) {
@@ -248,6 +257,11 @@
       <?php endforeach; ?>
     </tbody>
   </table>
+<?php endif; ?>
+
+<?php if ($itemLinks = $this->driver->tryMethod('getItemLinks')) : ?>
+  <h3 class="context-text mt-0"><?=$this->transEsc('Documents bound in a composite volume')?></h3>
+  <?=$this->render('RecordTab/itemlinks.phtml', ['itemLinks' => $itemLinks]);?>
 <?php endif; ?>
 
 <?=$this->inlineScript(\Laminas\View\Helper\HeadScript::SCRIPT, $loadJs, 'SET')?>

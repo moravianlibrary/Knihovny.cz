@@ -85,6 +85,7 @@ class GetHolding extends AbstractBase implements TranslatorAwareInterface
     {
         $this->disableSessionWrites(); // avoid session write timing bug
         $id = $params->fromPost('id', $params->fromQuery('id', null));
+        $childrenId = $params->fromPost('childrenId', $params->fromQuery('childrenId', null));
         $source = explode('.', $id)[0];
         $holding = $this->holds->getHoldings($id);
         $copy = [];
@@ -99,8 +100,12 @@ class GetHolding extends AbstractBase implements TranslatorAwareInterface
         foreach ($holding['holdings'] as $location => $hold) {
             foreach ($hold['items'] as $item) {
                 if (isset($item['link'])) {
+                    $link = $item['link'];
+                    if ($childrenId != null && is_array($link)) {
+                        $link['record'] = $childrenId;
+                    }
                     $item['link']
-                        = $this->recordLinker->getRequestUrl($item['link']);
+                        = $this->recordLinker->getRequestUrl($link);
                 }
                 if (isset($item['status'])) {
                     $holdingStatus = $this->holdingsLogic->getAvailabilityByStatus(
