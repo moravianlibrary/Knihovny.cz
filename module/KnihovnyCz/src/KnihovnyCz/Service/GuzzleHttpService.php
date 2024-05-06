@@ -2,8 +2,9 @@
 
 namespace KnihovnyCz\Service;
 
-use GuzzleHttp\Handler\CurlHandler;
+use GuzzleHttp\Handler\CurlMultiHandler;
 use GuzzleHttp\HandlerStack;
+use GuzzleHttp\Psr7\Request;
 
 /**
  * Class GuzzleHttpService
@@ -19,18 +20,27 @@ class GuzzleHttpService
     /**
      * Configuration
      *
-     * @param ?string $proxy proxy server to use
+     * @var ?string $proxy proxy server to use
      */
     protected ?string $proxy;
 
     /**
+     * List of host names with disabled proxy
+     *
+     * @var array
+     */
+    protected array $nonProxyHosts;
+
+    /**
      * GuzzleHttpService constructor.
      *
-     * @param string $proxy proxy server to use
+     * @param string? $proxy         proxy server to use
+     * @param array   $nonProxyHosts list of host names to use without proxy
      */
-    public function __construct($proxy)
+    public function __construct(string|null $proxy = null, array $nonProxyHosts = [])
     {
         $this->proxy = $proxy;
+        $this->nonProxyHosts = $nonProxyHosts;
     }
 
     /**
@@ -42,11 +52,8 @@ class GuzzleHttpService
      */
     public function createClient($config = [])
     {
-        $stack = new HandlerStack();
-        $stack->setHandler(new CurlHandler());
-        if ($this->proxy != null) {
-            $stack->push(self::addProxy($this->proxy));
-        }
+        $stack = new HandlerStack(new CurlMultiHandler());
+        $this->configureProxy($stack);
         $config['handler'] = $stack;
         return new \GuzzleHttp\Client($config);
     }
@@ -54,17 +61,24 @@ class GuzzleHttpService
     /**
      * Configure proxy
      *
-     * @param string $proxy proxy server to use
+     * @param HandlerStack $stack $stack to configure
      *
-     * @return \Closure
+     * @return void
      */
-    public static function addProxy($proxy)
+    protected function configureProxy(HandlerStack $stack)
     {
-        return function (callable $handler) use ($proxy) {
-            return function ($request, array $options) use ($handler, $proxy) {
-                $options['proxy'] = $proxy;
+        if ($this->proxy == null) {
+            return $stack;
+        }
+        $proxy = function (callable $handler) {
+            return function (Request $request, array $options) use ($handler) {
+                $host = $request->getUri()->getHost();
+                if (!in_array($host, $this->nonProxyHosts)) {
+                    $options['proxy'] = $this->proxy;
+                }
                 return $handler($request, $options);
             };
         };
+        $stack->push($proxy);
     }
 }

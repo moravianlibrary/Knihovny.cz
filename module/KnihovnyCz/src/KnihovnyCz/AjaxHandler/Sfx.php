@@ -6,7 +6,6 @@ namespace KnihovnyCz\AjaxHandler;
 
 use GuzzleHttp\Promise\Utils;
 use GuzzleHttp\Psr7\Query;
-use GuzzleHttp\Psr7\Request;
 use Laminas\Mvc\Controller\Plugin\Params;
 use Psr\Http\Message\ResponseInterface;
 use VuFind\AjaxHandler\AbstractBase;
@@ -105,11 +104,12 @@ class Sfx extends AbstractBase implements
                 }
                 $promises[$code] = $this->callSfx($sfxUrl, $apiQueryParams);
             }
-            Utils::all($promises);
+            Utils::all($promises)->wait();
             foreach ($promises as $code => $promise) {
                 $links = [];
                 try {
-                    $links = $this->parseResponse($promise->wait());
+                    $response = $promise->wait();
+                    $links = $this->parseResponse($response);
                 } catch (\Exception $ex) {
                     $url = $this->getSfxUrl($servers[$code], $apiQueryParams);
                     $this->logWarning(
@@ -188,9 +188,8 @@ class Sfx extends AbstractBase implements
     {
         $client = $this->httpService->createClient();
         $url = $this->getSfxUrl($sfxUrl, $query);
-        $this->logWarning('Calling SFX: ' . $url);
-        $request = new Request('GET', $url);
-        return $client->sendAsyncRequest($request);
+        $this->debug('Calling SFX: ' . $url);
+        return $client->requestAsync('GET', $url);
     }
 
     /**
@@ -216,9 +215,8 @@ class Sfx extends AbstractBase implements
      *
      * @return array fulltext links
      */
-    protected function parseResponse($response)
+    protected function parseResponse(ResponseInterface $response)
     {
-        $body = $response->getBody();
         $xml = simplexml_load_string($response->getBody()->getContents());
         if (!$xml) {
             return [];

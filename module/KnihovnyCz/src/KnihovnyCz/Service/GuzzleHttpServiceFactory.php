@@ -42,6 +42,7 @@ class GuzzleHttpServiceFactory implements FactoryInterface
             throw new \Exception('Unexpected options passed to factory.');
         }
         $proxyUrl = null;
+        $nonProxyHosts = [];
         /**
          * Main configuration
          *
@@ -72,6 +73,9 @@ class GuzzleHttpServiceFactory implements FactoryInterface
                 $proxyUrl = "http://$host:$port/";
             }
         }
-        return new $requestedName($proxyUrl);
+        if (isset($proxy->non_proxy_host)) {
+            $nonProxyHosts = $proxy->non_proxy_host->toArray();
+        }
+        return new $requestedName($proxyUrl, $nonProxyHosts);
     }
 }
