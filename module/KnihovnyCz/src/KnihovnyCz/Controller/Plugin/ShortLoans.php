@@ -177,6 +177,7 @@ class ShortLoans extends \Laminas\Mvc\Controller\Plugin\AbstractPlugin
         $minTime = '24:00';
         $max = 0;
         $maxTime = '0:00';
+        $slotsInHour = 2;
         foreach ($slots as $date => &$daySlots) {
             foreach ($daySlots as &$slot) {
                 $start = $slot['start'] = $this->convertTime($slot['start_time']);
@@ -226,14 +227,15 @@ class ShortLoans extends \Laminas\Mvc\Controller\Plugin\AbstractPlugin
             }
             $this->sortSlots($daySlots);
         }
+        $numOfSlots = max(($max - $min) * $slotsInHour, 0);
         // final sort
-        $newSlots = [
+        return [
             'slots' => $slots,
-            'slotsInHour' => 2,
+            'numOfSlots' => $numOfSlots,
+            'slotsInHour' => $slotsInHour,
             'min' => $min,
             'max' => $max,
         ];
-        return $newSlots;
     }
 
     /**
