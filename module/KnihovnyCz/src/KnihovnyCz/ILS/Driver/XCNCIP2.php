@@ -119,6 +119,13 @@ class XCNCIP2 extends \VuFind\ILS\Driver\XCNCIP2
                 if ($holding['status'] !== 'On Loan') {
                     $holding['duedate'] =  null;
                 }
+                $status = $holding['status'];
+                if (in_array($status, $this->itemUseRestrictionTypesForStatus)) {
+                    $holding['availability_status'] = $this->translate('HoldingStatus::' . $status);
+                    if ($status === 'In Library Use Only') {
+                        $holding['status'] = 'Available On Shelf';
+                    }
+                }
                 return $holding;
             },
             $holdings
