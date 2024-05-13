@@ -89,9 +89,9 @@ class Connection extends ConnectionBase
         ) {
             return [ $params ];
         }
-        $user = $params['user'];
+        $user = $params['user'] ?: null;
         $newParams = [];
-        foreach ($user->getLibraryCards() as $card) {
+        foreach ($user?->getLibraryCards() ?? [] as $card) {
             $newParams[] = [
                 'patron' => [
                     'cat_username' => $card['cat_username'],
