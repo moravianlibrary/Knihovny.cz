@@ -511,3 +511,22 @@ CREATE TABLE `import_record_status_loans` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 UPDATE `system` SET `value` = '121' WHERE `key`='DB_VERSION';
+
+-- #940
+INSERT INTO `inst_keys` (`key_name`, `section_id`)
+VALUES ('itemUseRestrictionTypesForStatus', (SELECT id FROM `inst_sections` WHERE `section_name` = 'Catalog'));
+
+INSERT INTO inst_configs (`source_id`, `key_id`,  `value`) VALUES (
+  (SELECT `id` FROM `inst_sources` WHERE `source` = '!ncip'),
+  (SELECT `id` FROM `inst_keys` WHERE `key_name` = 'itemUseRestrictionTypesForStatus'),
+  'In Library Use Only'
+);
+
+INSERT INTO inst_configs (`source_id`, `key_id`,  `value`) VALUES (
+  (SELECT `id` FROM `inst_sources` WHERE `source` = '!ncip'),
+  (SELECT `id` FROM `inst_keys` WHERE `key_name` = 'itemUseRestrictionTypesForStatus'),
+  'Not For Loan'
+);
+
+UPDATE `system` SET `value` = '122' WHERE `key`='DB_VERSION';
+
