@@ -1338,3 +1338,14 @@ strong.pull-left.order {
 .helptext.order .reserve {
   display: none;
 }
+
+/* Sticky footer */
+html, body {
+  /* Could causes wrong document.documentElement.clientHeight */
+  min-height: 100vh;
+  footer {
+    position: sticky;
+    top: 100vh;
+  }
+}
+/** Sticky footer: end */
