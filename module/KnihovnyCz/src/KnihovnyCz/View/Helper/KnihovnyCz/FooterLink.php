@@ -20,11 +20,12 @@ class FooterLink extends AbstractHelper
     /**
      * Invoke
      *
-     * @param string $page Page name
+     * @param string $page     Page name
+     * @param bool   $lightbox Should be content loaded into lightbox?
      *
      * @return string
      */
-    public function __invoke(string $page): string
+    public function __invoke(string $page, bool $lightbox = false): string
     {
         $view = $this->getView();
         return isset($view) ? $view->render(
@@ -32,6 +33,7 @@ class FooterLink extends AbstractHelper
             [
                 'page' => $page,
                 'title' => 'link_' . $page,
+                'lightbox' => $lightbox,
             ]
         ) : '';
     }

@@ -1,0 +1,22 @@
+<?php $this->slot('footer-linkbar')->start(); ?>
+<div class="linkbar">
+  <div class="container">
+    <div class="row">
+      <div class="col-xs-12 col-sm-6 col-md-4">
+        <ul class="list-unstyled">
+          <li><?=$this->footerLink('ochrana-osobnich-udaju') ?></li>
+        </ul>
+      </div>
+      <div class="col-xs-12 col-sm-6 col-md-4">
+        <ul class="list-unstyled">
+          <li><?=$this->footerLink('napoveda') ?></li>
+        </ul>
+      </div>
+      <div class="col-xs-12 col-sm-6 col-md-4">
+        <ul class="list-unstyled">
+          <li><a data-lightbox href="<?=$this->url('feedback-home') ?>"><?=$this->transEsc('Feedback')?></a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+<?php $this->slot('footer-linkbar')->end(); ?>
