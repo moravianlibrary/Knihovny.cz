@@ -23,22 +23,34 @@
             <?=$this->transEsc('select_all_on_page')?>
         </label>
         <?php if ($this->cancelForm || true): ?>
-          <div class="btn-group">
-            <input id="cancelSelected" name="cancelSelected" type="submit" value="<?=$this->transEscAttr('short_loan_cancel_selected') ?>" class="btn btn-default dropdown-toggle" data-toggle="dropdown" data-lightbox-ignore>
-            <ul class="dropdown-menu">
-              <li class="disabled"><a><?=$this->transEsc('short_loan_confirm_cancel_selected') ?></a></li>
-              <li><a href="#" id="confirm_cancel_selected_yes"><?=$this->transEsc('confirm_dialog_yes') ?></a></li>
-              <li><a href="#" class="confirm_cancel_no"><?=$this->transEsc('confirm_dialog_no')?></a></li>
-            </ul>
-          </div>
-          <div class="btn-group">
-            <input id="cancelAll" name="cancelAll" type="submit" value="<?=$this->transEscAttr('short_loan_cancel_all') ?>" class="btn btn-default dropdown-toggle" data-toggle="dropdown" data-lightbox-ignore>
-            <ul class="dropdown-menu">
-              <li class="disabled"><a><?=$this->transEsc('short_loan_confirm_cancel_all') ?></a></li>
-              <li><a href="#" id="confirm_cancel_all_yes"><?=$this->transEsc('confirm_dialog_yes') ?></a></li>
-              <li><a href="#" class="confirm_cancel_no"><?=$this->transEsc('confirm_dialog_no')?></a></li>
-            </ul>
-          </div>
+          <?=
+            $this->component(
+                'confirm-button',
+                [
+                    'buttonId' => 'cancelSelected',
+                    'buttonName' => 'cancelSelected',
+                    'buttonLabel' => 'short_loan_cancel_selected',
+                    'header' => 'short_loan_confirm_cancel_selected',
+                    'confirmId' => 'confirm_cancel_selected_yes',
+                    'cancelClass' => 'confirm_cancel_no',
+                    'ignoreLightbox' => true,
+                ]
+            )
+          ?>
+          <?=
+            $this->component(
+                'confirm-button',
+                [
+                    'buttonId' => 'cancelAll',
+                    'buttonName' => 'cancelAll',
+                    'buttonLabel' => 'short_loan_cancel_all',
+                    'header' => 'short_loan_confirm_cancel_all',
+                    'confirmId' => 'confirm_cancel_all_yes',
+                    'cancelClass' => 'confirm_cancel_no',
+                    'ignoreLightbox' => true,
+                ]
+            )
+          ?>
         <?php endif; ?>
       </div>
     </div>

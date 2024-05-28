@@ -99,11 +99,13 @@
 </div>
 <div class="col-sm-3">
   <?=$this->record($this->driver)->getToolbar()?>
-  <div role="region" aria-label="<?=$this->translate('Related Items')?>">
-    <?php foreach ($sidebarList as $current): ?>
-      <?=$this->related()->render($current)?>
-    <?php endforeach; ?>
-  </div>
+  <?php if ($sidebarList): ?>
+    <div class="<?=$this->layoutClass('sidebar')?>" role="region" aria-label="<?=$this->translate('Related Items')?>">
+      <?php foreach ($sidebarList as $current): ?>
+        <?=$this->related()->render($current)?>
+      <?php endforeach; ?>
+    </div>
+  <?php endif; ?>
 </div>
 </div>
 <?=$this->inlineScript(\Laminas\View\Helper\HeadScript::SCRIPT, '$(document).ready(recordDocReady);', 'SET'); ?>

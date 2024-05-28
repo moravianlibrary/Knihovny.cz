@@ -1,0 +1,10 @@
+<?php
+$recordTotal = $this->results->getResultTotal();
+$lookfor = $this->results->getUrlQuery()->isQuerySuppressed() ? '' : $this->params->getDisplayQuery();
+?>
+
+<div class="search-stats">
+  <?php if ($recordTotal > 0): ?>
+    <?= $this->context()->renderInContext('search/controls/showing.phtml', ['lookfor' => $lookfor, 'recordTotal' => $recordTotal]) ?>
+  <?php endif; ?>
+</div>

@@ -2,6 +2,7 @@
 
 namespace KnihovnyCz\Auth;
 
+use VuFind\Auth\ILSAuthenticator;
 use VuFind\Auth\Shibboleth as Base;
 use VuFind\Auth\Shibboleth\ConfigurationLoaderInterface;
 use VuFind\Exception\Auth as AuthException;
@@ -30,19 +31,18 @@ class Shibboleth extends Base
     /**
      * Constructor
      *
-     * @param \Laminas\Session\ManagerInterface    $sessionManager      Session
-     * manager
-     * @param ConfigurationLoaderInterface         $configurationLoader Configuration
-     * loader
-     * @param \Laminas\Http\PhpEnvironment\Request $request             Http
-     * request object
+     * @param \Laminas\Session\ManagerInterface    $sessionManager      Session manager
+     * @param ConfigurationLoaderInterface         $configurationLoader Configuration loader
+     * @param \Laminas\Http\PhpEnvironment\Request $request             Http request object
+     * @param \VuFind\Auth\ILSAuthenticator        $ilsAuthenticator    ILS Authenticator
      */
     public function __construct(
         \Laminas\Session\ManagerInterface $sessionManager,
         ConfigurationLoaderInterface $configurationLoader,
-        \Laminas\Http\PhpEnvironment\Request $request
+        \Laminas\Http\PhpEnvironment\Request $request,
+        ILSAuthenticator $ilsAuthenticator
     ) {
-        parent::__construct($sessionManager, $configurationLoader, $request);
+        parent::__construct($sessionManager, $configurationLoader, $request, $ilsAuthenticator);
     }
 
     /**

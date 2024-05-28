@@ -1,7 +1,7 @@
 <?php
     // Set up convenience variables:
     $account = $this->auth()->getManager();
-    $user = $account->isLoggedIn();
+    $user = $account->getUserObject();
     $source = $this->driver->getSourceId();
     $offlineMode = $this->ils()->getOfflineMode();
     $holdings = $this->driver->getOfflineHoldings();
@@ -183,7 +183,14 @@
           </div>
         <?php elseif (!$user->cat_username): ?>
       <div class="alert alert-info">
-        <?=$this->translate('hold_profile_html', ['%%url%%' => $this->escapeHtmlAttr($this->recordLinker()->getTabUrl($this->driver, 'Holdings', ['catalogLogin' => 'true']))])?>
+        <?php
+          // Add a data-lightbox attribute to the link in the translation; we do this here to keep
+          // the HTML in the language files as simple/generic/future-proof as possible.
+          $catalogLoginUrl = $this->recordLinker()
+            ->getTabUrl($this->driver, 'Holdings', ['catalogLogin' => 'true']);
+          $tokens = ['%%url%%' => $this->escapeHtmlAttr($catalogLoginUrl)];
+          echo str_replace('<a ', '<a data-lightbox ', $this->translate('hold_profile_html', $tokens));
+        ?>
       </div>
         <?php elseif (!$showRequestLink): ?>
           <?=

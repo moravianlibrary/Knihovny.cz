@@ -2,7 +2,7 @@
   $loginTarget = $this->loginTarget ?? $this->url('myresearch-userlogin');
   $account = $this->auth()->getManager();
   $accountLabel = $this->translate('Your Account');
-  $user = $account->isLoggedIn();
+  $user = $account->getIdentity();
   if ($user && $user->firstname && $user->lastname) {
     $accountLabel = $user->firstname . ' ' . $user->lastname;
   }
@@ -49,7 +49,7 @@
             </li>
           <?php endif; ?>
           <?php if (is_object($account) && $account->loginEnabled()): // hide login/logout if unavailable ?>
-            <?php if ($account->isLoggedIn()): ?>
+            <?php if($account->getIdentity()): ?>
             <li class="dropdown">
               <a href="#" data-toggle="dropdown" class="icon-link">
                 <span id="account-icon"><?=$this->icon('my-account', 'icon-link__icon') ?></span>
@@ -60,9 +60,9 @@
               </ul>
             </li>
             <?php endif ?>
-            <?php if (!$account->isLoggedIn()): ?>
-              <?=$this->slot('registration-link')->set('');?>
-              <li id="loginOptions">
+            <?php if (!$account->getIdentity()): ?>
+            <?=$this->slot('registration-link')->set('');?>
+            <li id="loginOptions">
               <?php if ($account->getSessionInitiator($this->serverUrl($this->url('myresearch-home')))): ?>
                 <a href="<?=$loginTarget?>" class="icon-link">
                   <?=$this->icon('sign-in', 'icon-link__icon') ?>

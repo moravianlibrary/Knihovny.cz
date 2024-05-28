@@ -28,7 +28,7 @@
     <h2 class="context-text"><?=$this->transEsc('Library Cards')?></h2>
     <?=$this->contextHelp('library-cards', 'heading')?>
   </div>
-  <?php if ($this->libraryCards->count() == 0): ?>
+  <?php if (count($this->libraryCards) == 0): ?>
     <div><?=$this->transEsc('You do not have any library cards')?></div>
   <?php else: ?>
     <table class="table table-striped">
@@ -51,7 +51,7 @@
           <img height="30" src="<?=$this->imageLink($imageLink)?>" alt="<?=$this->transEsc('Source::' . $institution) ?>">
         </td>
         <td>
-          <?=$this->transEsc('Source::' . $record['card_name'])?>
+          <?=$this->transEsc('Source::' . $record->getCardName())?>
         </td>
         <td>
           <div class="btn-group">

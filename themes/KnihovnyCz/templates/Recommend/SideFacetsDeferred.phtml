@@ -39,6 +39,7 @@
     }
   }
 ?>
+<?=$this->component('hide-offcanvas-button')?>
 <?php if ($results->getResultTotal() > 0 || $hasVisibleCheckboxes): ?>
   <div class="context-help">
     <h2 class="context-text"><?=$this->transEsc($this->slot('side-facet-caption')->get('Refine Results')) ?></h2>

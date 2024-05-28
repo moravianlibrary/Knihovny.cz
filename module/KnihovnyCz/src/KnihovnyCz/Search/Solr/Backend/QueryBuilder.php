@@ -94,7 +94,7 @@ class QueryBuilder extends \VuFindSearch\Backend\Solr\QueryBuilder
             if (empty($extraParam['param']) || empty($extraParam['value'])) {
                 continue;
             }
-            if (!$this->checkParamConditions($query, $extraParam['conditions'] ?? [])) {
+            if (!$this->checkParamConditions($query, null, $extraParam['conditions'] ?? [])) {
                 continue;
             }
             foreach ((array)$extraParam['value'] as $value) {

@@ -28,12 +28,13 @@ class ContentController extends ContentControllerBase implements
     /**
      * Get ViewModel for markdown based page
      *
-     * @param string $page Page name/route (if applicable)
-     * @param string $path Full path to file with content (if applicable)
+     * @param string $page    Page name/route (if applicable)
+     * @param string $relPath Relative path to file with content (if applicable)
+     * @param string $path    Full path to file with content (if applicable)
      *
      * @return ViewModel
      */
-    protected function getViewForMd(string $page, string $path): ViewModel
+    protected function getViewForMd(string $page, string $relPath, string $path): ViewModel
     {
         $data = $this->getCachedData($path);
         if (null === $data) {
