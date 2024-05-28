@@ -186,11 +186,8 @@ class MultiplyingDeduplicationListener
             }
             $newFieldList = $fl . ', parent:[subquery]';
             $params->set('fl', $newFieldList);
-            $params->set(
-                'parent.q',
-                '{!term f=id v=$row.parent_id_str} '
-                . DeduplicationHelper::PARENT_FILTER
-            );
+            $params->set('parent.fl', $fl);
+            $params->set('parent.q', '{!term f=id v=$row.parent_id_str}');
         }
         if (
             $this->childFilter != null

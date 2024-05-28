@@ -133,11 +133,10 @@ class SolrDefaultBackendFactory extends ParentSolrDefaultBackendFactory
      *
      * @return string|null
      */
-    protected function getDeduplicationType()
+    protected function getDeduplicationType(): ?string
     {
         $search = $this->config->get($this->searchConfig);
-        $type = $search->Records->deduplication_type ?? null;
-        return $type;
+        return $search->Records->deduplication_type ?? null;
     }
 
     /**
