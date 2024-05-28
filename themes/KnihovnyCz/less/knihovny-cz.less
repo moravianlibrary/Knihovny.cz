@@ -1348,3 +1348,44 @@ html, body {
   }
 }
 /** Sticky footer: end */
+
+// fix display facet links
+.facet.icon-link {
+  display: flex;
+}
+
+// fix related items sidebar width
+.col-sm-3 .sidebar {
+  width: initial !important;
+}
+
+// fix bulk actions checkbox and buttons order
+.bulkActionButtons {
+  display: flex;
+  flex-direction: column-reverse;
+  align-items: baseline;
+  justify-content: start;
+
+  @media (min-width: @screen-lg-min) {
+    display: flex;
+    flex-direction: row-reverse;
+    align-items: baseline;
+    justify-content: start;
+  }
+}
+
+#form-favorites {
+  .bulkActionButtons {
+    ul.selection-controls-bar {
+      li:nth-child(1),
+      li:nth-child(3) {
+        display: none;
+      }
+    }
+  }
+}
+
+// Fix library detail page
+.record.sourceSearch2 .media {
+  display: block;
+}
