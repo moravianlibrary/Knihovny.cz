@@ -57,9 +57,8 @@ class SearchHandler extends \VuFindSearch\Backend\Solr\SearchHandler
     {
         $query = parent::createQueryString($search, $advanced);
         if ($this->isApplyParentFilter()) {
-            $query = '(merged_boolean:true AND ' . $query . ')';
             $key = $this->externalQueryParameters->add($query);
-            $query = "{!child of='merged_boolean:true' v=\$$key}";
+            $query = "{!child of='merged_boolean:true' filters='merged_boolean:true' v=\$$key}";
         }
         return $query;
     }

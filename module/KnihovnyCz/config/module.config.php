@@ -588,6 +588,7 @@ $config = [
             'search_backend' => [
                 'factories' => [
                     'Solr' => \KnihovnyCz\Search\Factory\SolrDefaultBackendFactory::class,
+                    'SolrAutocomplete' => \KnihovnyCz\Search\Factory\SolrAutocompleteBackendFactory::class,
                     'Search2' => \KnihovnyCz\Search\Factory\Search2BackendFactory::class,
                     'EDS' => \KnihovnyCz\Search\Factory\EdsBackendFactory::class,
                 ],
@@ -595,6 +596,7 @@ $config = [
             'search_options' => [
                 'factories' => [
                     \KnihovnyCz\Search\Favorites\Options::class => \VuFind\Search\Options\OptionsFactory::class,
+                    \KnihovnyCz\Search\SolrAutocomplete\Options::class => \VuFind\Search\Options\OptionsFactory::class,
                 ],
                 'aliases' => [
                     \VuFind\Search\Favorites\Options::class => \KnihovnyCz\Search\Favorites\Options::class,
@@ -604,6 +606,7 @@ $config = [
                 'factories' => [
                     \KnihovnyCz\Search\Solr\Params::class => \KnihovnyCz\Search\Solr\ParamsFactory::class,
                     \KnihovnyCz\Search\Search2\Params::class => \KnihovnyCz\Search\Solr\ParamsFactory::class,
+                    \KnihovnyCz\Search\SolrAutocomplete\Params::class => \KnihovnyCz\Search\Solr\ParamsFactory::class,
                 ],
                 'aliases' => [
                     \VuFind\Search\Solr\Params::class => \KnihovnyCz\Search\Solr\Params::class,
@@ -613,9 +616,10 @@ $config = [
             'search_results' => [
                 'factories' => [
                     \KnihovnyCz\Search\Solr\Results::class => \VuFind\Search\Solr\ResultsFactory::class,
+                    \KnihovnyCz\Search\SolrAutocomplete\Results::class => \VuFind\Search\Solr\ResultsFactory::class,
                 ],
                 'aliases' => [
-                    \VuFind\Search\Solr\Results::class => \KnihovnyCz\Search\Solr\Results::class,
+                   'SolrAutocomplete' => \KnihovnyCz\Search\SolrAutocomplete\Results::class,
                 ],
             ],
             'autocomplete' => [

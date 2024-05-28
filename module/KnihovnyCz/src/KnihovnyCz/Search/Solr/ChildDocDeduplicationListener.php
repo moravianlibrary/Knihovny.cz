@@ -79,8 +79,13 @@ class ChildDocDeduplicationListener extends DeduplicationListener
         if ($command->getTargetIdentifier() === $this->backend->getIdentifier()) {
             $params = $command->getSearchParameters();
             $context = $command->getContext();
+            $fetchRecords = true;
+            if ($command instanceof \VufindSearch\Command\SearchCommand) {
+                $arguments = $command->getArguments();
+                $fetchRecords = $arguments[2] > 0;
+            }
             if ($context == 'search' || $context == 'similar') {
-                $this->configureFilter($params);
+                $this->configureFilter($params, $fetchRecords);
             }
         }
         return $event;
@@ -89,11 +94,12 @@ class ChildDocDeduplicationListener extends DeduplicationListener
     /**
      * Get filter for limiting results
      *
-     * @param \VuFindSearch\ParamBag $params Search parameters
+     * @param \VuFindSearch\ParamBag $params       Search parameters
+     * @param boolean                $fetchRecords Fetch records
      *
      * @return void
      */
-    protected function configureFilter($params)
+    protected function configureFilter($params, $fetchRecords)
     {
         $applyChildFilter = true;
         if ($params instanceof \KnihovnyCz\Search\ParamBag) {
@@ -115,12 +121,8 @@ class ChildDocDeduplicationListener extends DeduplicationListener
         }
         $params->set('uniqueId', 'local_ids_str_mv');
         $params->add('fq', '-' . DeduplicationHelper::CHILD_FILTER);
-        $config = $this->serviceLocator->get('VuFind\Config');
-        if (isset($searchConfig->RawHiddenFilters)) {
-            $childFilters = array_merge(
-                $childFilters,
-                $searchConfig->RawHiddenFilters->toArray()
-            );
+        if (!$fetchRecords) {
+            return;
         }
         $fl = $params->get('fl');
         if (empty($fl)) {
@@ -130,6 +132,15 @@ class ChildDocDeduplicationListener extends DeduplicationListener
         }
         $newFieldList = $fl . ', childs:[subquery]';
         $params->set('fl', $newFieldList);
+        if (isset($searchConfig->RawHiddenFilters)) {
+            $childFilters = array_merge(
+                $childFilters,
+                $searchConfig->RawHiddenFilters->toArray()
+            );
+        }
+        if (!empty($childFilters)) {
+            $params->set('childs.fq', implode(' AND ', $childFilters));
+        }
         $params->set(
             'childs.q',
             '{!term f=parent_id_str v=$row.id} '
@@ -137,9 +148,6 @@ class ChildDocDeduplicationListener extends DeduplicationListener
         );
         $params->set('childs.fl', $this->getChildListOfFields($fl));
         $params->set('childs.rows', static::MAX_CHILD_DOCUMENTS);
-        if (!empty($childFilters)) {
-            $params->set('childs.fq', implode(' AND ', $childFilters));
-        }
     }
 
     /**
