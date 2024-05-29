@@ -283,21 +283,21 @@ class SolrLocal extends \KnihovnyCz\RecordDriver\SolrMarc
     /**
      * Get item links - field 994 enriched by title from record.
      *
-     * @param string $type type of link (UP, DN or null to ignore) to return
+     * @param ?string $type type of link (UP, DN or null to ignore) to return
      *
      * @return array
      */
-    public function getItemLinks($type = null): array
+    public function getItemLinks(?string $type = null): array
     {
         $fields994 = $this->getStructuredDataFieldArray('994');
         $itemLinks = [];
         foreach ($fields994 as $field) {
-            $id = $this->getSourceId() . '.' . $field['l'] . '-' . $field['b'];
-            $linkType = $field['a'];
+            $id = $this->getSourceId() . '.' . ($field['l'] ?? '') . '-' . ($field['b'] ?? '');
+            $linkType = $field['a'] ?? '';
             if ($type != null && $type != $linkType) {
                 continue;
             }
-            $label = $field['n'];
+            $label = $field['n'] ?? '';
             $itemLinks[$id] = [
                 'label' => $label,
                 'type'  => $linkType,
