@@ -620,6 +620,7 @@ $config = [
                 ],
                 'aliases' => [
                    'SolrAutocomplete' => \KnihovnyCz\Search\SolrAutocomplete\Results::class,
+                    \VuFind\Search\Solr\Results::class => \KnihovnyCz\Search\Solr\Results::class,
                 ],
             ],
             'autocomplete' => [
