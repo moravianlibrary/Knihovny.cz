@@ -100,9 +100,8 @@ class SideFacetsDeferred extends Base
         if (empty($institutions)) {
             return false;
         }
-        $field = $this->getInstitutionField();
         $url = $this->getResults()->getUrlQuery()
-            ->removeFilterByField($this->institutionField);
+            ->removeFilterByField($this->getInstitutionField());
         foreach ($this->getMyInstitutions() as $filterValue) {
             $url = $url->addFacet($this->institutionField, $filterValue, 'OR');
         }
