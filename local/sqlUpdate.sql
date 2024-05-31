@@ -530,3 +530,11 @@ INSERT INTO inst_configs (`source_id`, `key_id`,  `value`) VALUES (
 
 UPDATE `system` SET `value` = '122' WHERE `key`='DB_VERSION';
 
+-- #1094
+
+ALTER TABLE `import_record_status_totals` ADD INDEX `source` (`source`);
+
+ALTER TABLE `import_record_status_loans` ADD INDEX `source` (`source`);
+
+UPDATE `system` SET `value` = '123' WHERE `key`='DB_VERSION';
+
