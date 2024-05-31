@@ -6,6 +6,7 @@ namespace KnihovnyCzCronApi\Controller;
 
 use KnihovnyCzConsole\Command\Util\ExpireCsrfTokensCommand;
 use KnihovnyCzConsole\Command\Util\ExpireUsersCommand;
+use KnihovnyCzConsole\Command\Util\UpdateRecordStatus;
 use Laminas\Http\Response as HttpResponse;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputInterface;
@@ -79,6 +80,28 @@ class Cronjob extends \VuFind\Controller\AbstractBase
     {
         $input = new ArrayInput([]);
         return $this->runCommand(SitemapCommand::class, $input);
+    }
+
+    /**
+     * Update availability totals endpoint
+     *
+     * @return HttpResponse
+     */
+    public function updateAvailabilityTotalsAction(): HttpResponse
+    {
+        $input = new ArrayInput(['--config' => true, '--type' => 'totals']);
+        return $this->runCommand(UpdateRecordStatus::class, $input);
+    }
+
+    /**
+     * Update availability loans endpoint
+     *
+     * @return HttpResponse
+     */
+    public function updateAvailabilityLoansAction(): HttpResponse
+    {
+        $input = new ArrayInput(['--config' => true, '--type' => 'loans']);
+        return $this->runCommand(UpdateRecordStatus::class, $input);
     }
 
     /**
