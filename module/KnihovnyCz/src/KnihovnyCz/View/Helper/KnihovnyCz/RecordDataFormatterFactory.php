@@ -6,8 +6,7 @@ namespace KnihovnyCz\View\Helper\KnihovnyCz;
 
 use Psr\Container\ContainerInterface;
 use VuFind\View\Helper\Root\RecordDataFormatter\SpecBuilder;
-use VuFind\View\Helper\Root\RecordDataFormatterFactory
-as RecordDataFormatterFactoryBase;
+use VuFind\View\Helper\Root\RecordDataFormatterFactory as RecordDataFormatterFactoryBase;
 
 /**
  * Class RecordDataFormatterFactory
@@ -250,7 +249,7 @@ class RecordDataFormatterFactory extends RecordDataFormatterFactoryBase
             ['helperMethod' => 'getFormatList']
         );
         $spec->setLine('Language', 'getLanguages');
-        $spec->setLine('Document range', 'getRange');
+        $spec->setLine('Physical Description', 'getPhysicalDescriptions');
         $spec->setTemplateLine(
             'From monographic series',
             'getMonographicSeries',
@@ -286,7 +285,6 @@ class RecordDataFormatterFactory extends RecordDataFormatterFactoryBase
             ['allowZero' => false]
         );
         $spec->setLine('Item Description', 'getGeneralNotes');
-        $spec->setLine('Physical Description', 'getPhysicalDescriptions');
         $spec->setLine('Publication Frequency', 'getPublicationFrequency');
         $spec->setLine('Playing Time', 'getPlayingTimes');
         $spec->setLine('System Details Note', 'getSystemDetails');
@@ -358,7 +356,7 @@ class RecordDataFormatterFactory extends RecordDataFormatterFactoryBase
             ['helperMethod' => 'getFormatList']
         );
         $spec->setLine('Language', 'getLanguages');
-        $spec->setLine('Document range', 'getRange');
+        $spec->setLine('Physical Description', 'getPhysicalDescriptions');
         $spec->setTemplateLine(
             'From monographic series',
             'getMonographicSeries',
@@ -378,7 +376,6 @@ class RecordDataFormatterFactory extends RecordDataFormatterFactoryBase
         $spec->setTemplateLine('Series', 'getSeries', 'data-series.phtml');
         $spec->setLine('Published', 'getDateSpan');
         $spec->setLine('Item Description', 'getGeneralNotes');
-        $spec->setLine('Physical Description', 'getPhysicalDescriptions');
         $spec->setLine('Publication Frequency', 'getPublicationFrequency');
         $spec->setLine('Playing Time', 'getPlayingTimes');
         $spec->setLine('System Details Note', 'getSystemDetails');
