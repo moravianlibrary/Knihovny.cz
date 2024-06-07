@@ -54,16 +54,6 @@ class SolrMarc extends SolrDefault
     }
 
     /**
-     * Returns document range info from field 300
-     *
-     * @return array
-     */
-    public function getRange()
-    {
-        return $this->getFieldArray('300');
-    }
-
-    /**
      * Non-standard ISBNs from marc record
      *
      * @return array

@@ -1389,3 +1389,21 @@ html, body {
 .record.sourceSearch2 .media {
   display: block;
 }
+
+.more-less-btn-wrapper.subject-line {
+  color: @gray-dark;
+  .more-btn, .less-btn {
+    background-color: white;
+    padding-left: 0;
+    &:hover {
+      color: @primary-darken;
+    }
+    &:focus {
+      outline: none;
+    }
+    &:active {
+      -webkit-box-shadow: none;
+      box-shadow: none;
+    }
+  }
+}
