@@ -38,24 +38,26 @@ class RecordCollection extends Base
     protected function parseFacets()
     {
         $facets = parent::getFacets();
-        if (isset($this->response['facets'])) {
-            foreach ($this->response['facets'] as $field => $facet) {
-                if (is_array($facet)) {
-                    $buckets = [];
-                    if (isset($facet['buckets'])) {
-                        $buckets = $facet['buckets'];
-                    } elseif (isset($facet[$field]['buckets'])) {
-                        $buckets = $facet[$field]['buckets'];
-                    }
-                    $results = [];
-                    foreach ($buckets as $bucket) {
-                        $count = $bucket['count'];
-                        $count = is_array($count) ? $count['count'] : $count;
-                        $results[$bucket['val']] = $count;
-                    }
-                    arsort($results);
-                    $facets[$field] = $results;
+        if (!isset($this->response['facets'])) {
+            return $facets;
+        }
+        $foundResults = (int)$this->response['response']['numFound'];
+        foreach ($this->response['facets'] as $field => $facet) {
+            if (is_array($facet)) {
+                $buckets = [];
+                if (isset($facet['buckets'])) {
+                    $buckets = $facet['buckets'];
+                } elseif (isset($facet[$field]['buckets'])) {
+                    $buckets = $facet[$field]['buckets'];
                 }
+                $results = [];
+                foreach ($buckets as $bucket) {
+                    $count = $bucket['count'];
+                    $count = (int)(is_array($count) ? $count['count'] : $count);
+                    $results[$bucket['val']] = min($count, $foundResults);
+                }
+                arsort($results);
+                $facets[$field] = $results;
             }
         }
         return $facets;
