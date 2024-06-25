@@ -174,14 +174,6 @@ trait ZiskejMvsTrait
             return $this->redirectToTabMvs();
         }
 
-        if (!$this->params()->fromPost('is_price')) {
-            $this->flashMessenger()->addMessage(
-                'ZiskejMvs::error_is_price',
-                'error'
-            );
-            return $this->redirectToTabMvs();
-        }
-
         /**
          * Multibackend ILS driver
          *
