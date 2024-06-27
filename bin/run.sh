@@ -24,7 +24,7 @@ Available params
   --version|-v             Image version to use when building container with vufind, default "latest"
   --push                   Push image after successful build to docker hub
   --push-only              Push image after successful build to docker hub without running container
-  --no-run                 Don't run 'docker-compose up'
+  --no-run                 Don't run 'docker compose up'
   --private-registry       Push image after successful build to private registry
   --help|-h                Print usage
 
@@ -195,20 +195,20 @@ cp "../composer.local.json" "./builds/knihovny-cz-base6/"
 cp "../package.json" "./builds/knihovny-cz-base6/"
 
 for srv in php-extensions6 apache-shibboleth6 knihovny-cz; do
-    docker-compose build "$srv"
+    docker compose build "$srv"
     if [ $? -ne 0 ]; then
         echo "Can't build $srv, exiting"
         exit 1
     fi
 done
 
-docker-compose -f "$docker_compose_file" build $build_args $service
+docker compose -f "$docker_compose_file" build $build_args $service
 if [ $? -ne 0 ]; then
     echo "Can't build Knihovny.cz containers, exiting"
     exit 3
 fi
 if [[ $push == "true" ]]; then
-    docker-compose -f "$docker_compose_file" push $service
+    docker compose -f "$docker_compose_file" push $service
 fi
 if [[ $push_to_private_registry == "true" ]]; then
     # CI uses $HOME/.docker/config.json
@@ -226,6 +226,6 @@ if [[ $push_to_private_registry == "true" ]]; then
     docker push "$tag"
 fi
 if [[ $run == "true" ]]; then
-    docker-compose -f "$docker_compose_file" up $compose_args $service
+    docker compose -f "$docker_compose_file" up $compose_args $service
 fi
 
