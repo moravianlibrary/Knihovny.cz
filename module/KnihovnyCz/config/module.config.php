@@ -667,6 +667,14 @@ $config = [
                     'asklibrary' => \KnihovnyCz\Form\Handler\AskLibrary::class,
                 ],
             ],
+            'record_fallbackloader' => [
+                'factories' => [
+                    \KnihovnyCz\Record\FallbackLoader\Summon::class => \VuFind\Record\FallbackLoader\AbstractFallbackLoaderFactory::class,
+                ],
+                'aliases' => [
+                    'summon' => \KnihovnyCz\Record\FallbackLoader\Summon::class,
+                ],
+            ],
         ],
     ],
     'service_manager' => [
