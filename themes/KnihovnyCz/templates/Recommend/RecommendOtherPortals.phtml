@@ -1,8 +1,15 @@
 <?php $links = $this->recommend->getLinks();
+$js = '';
 if (!empty($links)): ?>
   <div class="alert alert-info">
-    <?php foreach($links as $portal => $url): ?>
-      <a target="_blank" href="<?=$url?>"><?=$this->transEsc('recommend_link_to_portal_' . $portal)?></a>
-    <?php endforeach; ?>
+    <ul>
+      <?php foreach($links as $portal => $url): ?>
+        <li>
+          <a id="recommend<?=$portal?>" target="_blank" href="<?=$url?>"><?=$this->transEsc('recommend_link_to_portal_' . $portal)?> <span></span></a>
+        </li>
+        <?php $js .= $this->resultsCount()->getAjaxCode($url, "#recommend$portal span"); ?>
+      <?php endforeach; ?>
+    </ul>
   </div>
-<?php endif;
+<?php endif;?>
+<?=$this->inlineScript(\Laminas\View\Helper\HeadScript::SCRIPT, $js, 'SET')?>

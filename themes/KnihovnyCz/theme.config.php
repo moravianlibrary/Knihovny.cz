@@ -33,6 +33,7 @@ return [
             KnihovnyCz\View\Helper\KnihovnyCz\UserCards::class,
             KnihovnyCz\View\Helper\KnihovnyCz\ContextHelp::class,
             KnihovnyCz\View\Helper\KnihovnyCz\DatePicker::class,
+            \KnihovnyCz\View\Helper\KnihovnyCz\ResultsCount::class,
         ],
         'aliases' => [
             'accountMenu' => \KnihovnyCz\View\Helper\KnihovnyCz\AccountMenu::class,
@@ -52,6 +53,7 @@ return [
             'setupEmbeddedThemeResources' => KnihovnyCz\View\Helper\KnihovnyCz\SetupEmbeddedThemeResources::class,
             'dateTime' => \KnihovnyCz\View\Helper\KnihovnyCz\DateTime::class,
             'datePicker' => KnihovnyCz\View\Helper\KnihovnyCz\DatePicker::class,
+            'resultsCount' => \KnihovnyCz\View\Helper\KnihovnyCz\ResultsCount::class,
         ],
     ],
     'icons' => [
