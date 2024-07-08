@@ -232,8 +232,8 @@ class DeduplicationListener extends ParentDeduplicationListener
          *
          * @var \KnihovnyCz\Db\Row\User|false $user
          */
-        $user = $this->authManager->isLoggedIn();
-        if (!$user) {
+        $user = $this->authManager->getUserObject();
+        if ($user == null) {
             return [];
         }
         return $user->getLibraryPrefixes();

@@ -56,16 +56,8 @@
 
 <?php // Render the element: ?>
 <?php if ($hasSubLinks): ?>
-<<<<<<< Our original
-  <div class="<?=implode(' ', $classList) ?>">
-    <a class="text<?=$hasCheckbox ? ' icon-link' : ''?>" href="<?=$toggleUrl ?>" data-lightbox-ignore data-title="<?=$this->escapeHtmlAttr($this->facet['displayText']) ?>" data-count="<?=$this->facet['count'] ?>" data-value="<?=$this->escapeHtmlAttr($this->facet['value'])?>"<?php if ($this->facet['isApplied']): ?> title="<?=$this->transEscAttr('applied_filter') ?>"<?php endif;?>>
-||||||| Upstream original
-  <div class="<?=implode(' ', $classList) ?>">
-    <a class="text<?=$hasCheckbox ? ' icon-link' : ''?>" href="<?=$toggleUrl ?>" data-lightbox-ignore data-title="<?=$this->escapeHtmlAttr($this->facet['displayText']) ?>" data-count="<?=$this->facet['count'] ?>"<?php if ($this->facet['isApplied']): ?> title="<?=$this->transEscAttr('applied_filter') ?>"<?php endif;?>>
-=======
   <span class="<?=implode(' ', $classList) ?>">
-    <a class="text<?=$hasCheckbox ? ' icon-link' : ''?>" href="<?=$toggleUrl ?>" data-lightbox-ignore data-title="<?=$this->escapeHtmlAttr($this->facet['displayText']) ?>" data-count="<?=$this->facet['count'] ?>"<?php if ($this->facet['isApplied']): ?> title="<?=$this->transEscAttr('applied_filter') ?>"<?php endif;?>>
->>>>>>> Upstream updated
+    <a class="text<?=$hasCheckbox ? ' icon-link' : ''?>" href="<?=$toggleUrl ?>" data-lightbox-ignore data-title="<?=$this->escapeHtmlAttr($this->facet['displayText']) ?>" data-count="<?=$this->facet['count'] ?>" data-value="<?=$this->escapeHtmlAttr($this->facet['value'])?>"<?php if ($this->facet['isApplied']): ?> title="<?=$this->transEscAttr('applied_filter') ?>"<?php endif;?>>
       <?=$displayText ?>
     </a>
     <?=$badgeExclude?>

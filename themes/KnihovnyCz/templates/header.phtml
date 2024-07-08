@@ -73,26 +73,6 @@
                   <?=$this->icon('sign-in', 'icon-link__icon') ?>
                   <span class="icon-link__label"><?=$this->transEsc('Login')?></span>
                 </a>
-<<<<<<< Our original
-||||||| Upstream original
-              </li>
-              <?php if ($account->dropdownEnabled()): ?>
-                <li id="login-dropdown" class="dropdown hidden-xs">
-                  <a href="#" data-toggle="dropdown"><?=$this->icon('dropdown-caret') ?></a>
-                  <div class="dropdown-menu">
-                    <?=$this->accountMenu()->render('')?>
-                  </div>
-                </li>
-=======
-              </li>
-              <?php if ($account->dropdownEnabled()): ?>
-                <li id="login-dropdown" class="dropdown hidden-xs">
-                  <a href="#" data-toggle="dropdown"><?=$this->icon('dropdown-caret') ?></a>
-                  <div class="dropdown-menu">
-                    <?=$this->accountMenu()->render('', 'header_')?>
-                  </div>
-                </li>
->>>>>>> Upstream updated
               <?php endif; ?>
             </li>
             <?php endif ?>

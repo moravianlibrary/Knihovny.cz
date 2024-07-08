@@ -25,32 +25,6 @@
       );
       $publicInd .= '<span class="sr-only">(' . $this->transEsc('public_list_indicator') . ')</span>';
     ?>
-
-<<<<<<< Our original
-    <?php $lists = $user->getLists() ?>
-    <?php foreach ($lists as $list): ?>
-      <li>
-        <a class="user-list-link icon-link <?=$this->active == 'list' . $list['id'] ? ' active' : ''?>" href="<?=$this->url('userList', ['id' => $list['id']])?>">
-          <?=$this->icon('user-list', 'icon-link__icon fa-fw') ?>
-          <span class="icon-link__label"><?=$this->escapeHtml($list['title'])?></span>
-          <?=$list['public'] ? $publicInd : ''?>
-          <span class="badge"><?=$list->cnt ?></span>
-        </a>
-      </li>
-    <?php endforeach; ?>
-||||||| Upstream original
-      <?php $lists = $user->getLists() ?>
-      <?php foreach ($lists as $list): ?>
-      <li>
-        <a class="user-list-link icon-link <?=$this->active == 'list' . $list['id'] ? ' active' : ''?>" href="<?=$this->url('userList', ['id' => $list['id']])?>">
-          <?=$this->icon('user-list', 'icon-link__icon') ?>
-          <span class="icon-link__label"><?=$this->escapeHtml($list['title'])?></span>
-          <?=$list['public'] ? $publicInd : ''?>
-          <span class="badge"><?=$list->cnt ?></span>
-        </a>
-      </li>
-      <?php endforeach; ?>
-=======
       <?php foreach ($this->userlist()->getUserListsAndCountsByUser($user) as $current): ?>
         <?php $list = $current['list_entity']; ?>
         <li>
@@ -62,7 +36,6 @@
           </a>
         </li>
       <?php endforeach; ?>
->>>>>>> Upstream updated
       <li>
         <a href="<?=$this->url('editList', ['id' => 'NEW'])?>" class="icon-link <?=$this->active == 'editlist/NEW' ? ' active' : ''?>">
           <?=$this->icon('ui-add', 'icon-link__icon fa-fw') ?>

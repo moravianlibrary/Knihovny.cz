@@ -52,7 +52,7 @@ class SaveInstitutionFilter extends AbstractBase implements TranslatorAwareInter
     public function handleRequest(Params $params)
     {
         $this->disableSessionWrites(); // avoid session write timing bug
-        $user = $this->authManager->isLoggedIn();
+        $user = $this->authManager->getUserObject();
         if (!$user) {
             return $this->formatResponse(
                 $this->translate('You must be logged in first'),

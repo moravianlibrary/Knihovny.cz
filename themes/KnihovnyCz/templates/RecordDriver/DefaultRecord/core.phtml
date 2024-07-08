@@ -42,21 +42,13 @@
     </div>
   <?php endif; ?>
   <div class="media-body">
-    <h1 property="name" class="record-title" data-sigla="<?=$sigla ?: 'undefined' ?>"><?=$this->escapeHtml($this->driver->getShortTitle())?></h1>
+    <h1<?=$this->schemaOrg()->getAttributes(['property' => 'name'])?> class="record-title" data-sigla="<?=$sigla ?: 'undefined' ?>"><?=$this->escapeHtml($this->driver->getShortTitle())?></h1>
 
-<<<<<<< Our original
     <?php if ($this->driver->getExtraDetail('cached_record') && !$this->translationEmpty('cached_record_warning')): ?>
-||||||| Upstream original
-    <h1 property="name"><?=$this->escapeHtml($this->driver->getShortTitle() . ' ' . $this->driver->getSubtitle() . ' ' . $this->driver->getTitleSection())?></h1>
-=======
-    <h1<?=$this->schemaOrg()->getAttributes(['property' => 'name'])?>><?=$this->escapeHtml($this->driver->getShortTitle() . ' ' . $this->driver->getSubtitle() . ' ' . $this->driver->getTitleSection())?></h1>
->>>>>>> Upstream updated
-
       <div class="alert alert-warning">
         <?=$this->transEsc('cached_record_warning')?>
       </div>
     <?php endif; ?>
-
 
     <?=$this->record($this->driver)->renderTemplate('wantit.phtml');?>
 

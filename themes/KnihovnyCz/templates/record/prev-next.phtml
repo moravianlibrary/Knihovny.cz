@@ -3,21 +3,6 @@
 ?>
 <nav aria-label="<?=$this->transEscAttr('Search Results')?>">
   <ul class="pager hidden-print">
-<<<<<<< Our original
-    <?php if ($this->scrollData['linkToResults']): ?>
-      <li role="none" class="backToResults">
-        <a href="<?=$this->scrollData['linkToResults']?>" aria-label="<?=$this->transEscAttr('Back to search results')?>" rel="nofollow">
-          <?=$this->icon('back-to-results', 'icon-link__icon')?>
-          <span class="icon-link__label"><?=$this->transEsc('Back to search results')?></span>
-        </a>
-      </li>
-    <?php endif; ?>
-    <?php if ($this->scrollData['previousRecord']): ?>
-      <?php if ($this->scrollData['firstRecord']): ?>
-||||||| Upstream original
-    <?php if ($this->scrollData['previousRecord']): ?>
-      <?php if ($this->scrollData['firstRecord']): ?>
-=======
     <span class="pager-direction">
       <?php if ($this->scrollData['previousRecord']): ?>
         <?php if ($this->scrollData['firstRecord']): ?>
@@ -28,50 +13,12 @@
             </a>
           </li>
         <?php endif; ?>
->>>>>>> Upstream updated
         <li role="none">
-<<<<<<< Our original
-          <?php
-            $link = $recordLinker->getLinkToLocalRecord($this->scrollData['firstRecord']);
-          ?>
-          <a href="<?=$this->escapeHtmlAttr($link)?>" aria-label="<?=$this->transEscAttr('First Search Result')?>" rel="nofollow">
-            <?=$this->icon('page-first', 'icon-link__icon') ?>
-            <span class="icon-link__label"><?=$this->transEsc('First')?></span>
-||||||| Upstream original
-          <a class="icon-link" href="<?=$this->escapeHtmlAttr($this->recordLinker()->getUrl($this->scrollData['firstRecord']))?>" aria-label="<?=$this->transEscAttr('First Search Result')?>" rel="nofollow">
-            <?=$this->icon('page-first', 'icon-link__icon') ?>
-            <span class="icon-link__label"><?=$this->transEsc('First')?></span>
-=======
           <a class="icon-link" href="<?=$this->escapeHtmlAttr($this->recordLinker()->getUrl($this->scrollData['previousRecord']))?>" aria-label="<?=$this->transEscAttr('Previous Search Result')?>" rel="nofollow">
             <?=$this->icon('page-prev', 'icon-link__icon') ?>
             <span class="icon-link__label"><?=$this->transEsc('Prev')?></span>
->>>>>>> Upstream updated
           </a>
         </li>
-<<<<<<< Our original
-      <?php endif; ?>
-      <li role="none">
-        <?php
-          $link = $recordLinker->getLinkToLocalRecord($this->scrollData['previousRecord']);
-        ?>
-        <a href="<?=$this->escapeHtmlAttr($link)?>" aria-label="<?=$this->transEscAttr('Previous Search Result')?>" rel="nofollow">
-          <?=$this->icon('page-prev', 'icon-link__icon') ?>
-          <span class="icon-link__label"><?=$this->transEsc('Prev')?></span>
-        </a>
-      </li>
-    <?php else: ?>
-      <?php if ($this->scrollData['firstRecord']): ?>
-||||||| Upstream original
-      <?php endif; ?>
-      <li role="none">
-        <a class="icon-link" href="<?=$this->escapeHtmlAttr($this->recordLinker()->getUrl($this->scrollData['previousRecord']))?>" aria-label="<?=$this->transEscAttr('Previous Search Result')?>" rel="nofollow">
-          <?=$this->icon('page-prev', 'icon-link__icon') ?>
-          <span class="icon-link__label"><?=$this->transEsc('Prev')?></span>
-        </a>
-      </li>
-    <?php else: ?>
-      <?php if ($this->scrollData['firstRecord']): ?>
-=======
       <?php else: ?>
         <?php if ($this->scrollData['firstRecord']): ?>
           <li class="disabled" aria-hidden="true" role="none">
@@ -81,7 +28,6 @@
             </a>
           </li>
         <?php endif; ?>
->>>>>>> Upstream updated
         <li class="disabled" aria-hidden="true" role="none">
           <a class="icon-link" disabled>
             <?=$this->icon('page-prev', 'icon-link__icon') ?>
@@ -96,48 +42,12 @@
       '%%total%%' => $this->localizedNumber($this->scrollData['resultTotal']),
     ]) ?>
 
-<<<<<<< Our original
-    <?php if ($this->scrollData['nextRecord']): ?>
-      <li role="none">
-        <?php
-          $link = $recordLinker->getLinkToLocalRecord($this->scrollData['nextRecord']);
-        ?>
-        <a href="<?=$this->escapeHtmlAttr($link)?>" aria-label="<?=$this->transEscAttr('Next Search Result')?>" rel="nofollow">
-          <span class="icon-link__label"><?=$this->transEsc('Next')?></span>
-          <?=$this->icon('page-next', 'icon-link__icon') ?>
-        </a>
-      </li>
-      <?php if ($this->scrollData['lastRecord']): ?>
-||||||| Upstream original
-    <?php if ($this->scrollData['nextRecord']): ?>
-      <li role="none">
-        <a class="icon-link" href="<?=$this->escapeHtmlAttr($this->recordLinker()->getUrl($this->scrollData['nextRecord']))?>" aria-label="<?=$this->transEscAttr('Next Search Result')?>" rel="nofollow">
-          <span class="icon-link__label"><?=$this->transEsc('Next')?></span>
-          <?=$this->icon('page-next', 'icon-link__icon') ?>
-        </a>
-      </li>
-      <?php if ($this->scrollData['lastRecord']): ?>
-=======
     <span class="pager-direction">
       <?php if ($this->scrollData['nextRecord']): ?>
->>>>>>> Upstream updated
         <li role="none">
-<<<<<<< Our original
-          <?php
-            $link = $recordLinker->getLinkToLocalRecord($this->scrollData['lastRecord']);
-          ?>
-          <a href="<?=$this->escapeHtmlAttr($link)?>" aria-label="<?=$this->transEscAttr('Last Search Result')?>" rel="nofollow">
-            <span class="icon-link__label"><?=$this->transEsc('Last')?></span>
-            <?=$this->icon('page-last', 'icon-link__icon') ?>
-||||||| Upstream original
-          <a class="icon-link" href="<?=$this->escapeHtmlAttr($this->recordLinker()->getUrl($this->scrollData['lastRecord']))?>" aria-label="<?=$this->transEscAttr('Last Search Result')?>" rel="nofollow">
-            <span class="icon-link__label"><?=$this->transEsc('Last')?></span>
-            <?=$this->icon('page-last', 'icon-link__icon') ?>
-=======
           <a class="icon-link" href="<?=$this->escapeHtmlAttr($this->recordLinker()->getUrl($this->scrollData['nextRecord']))?>" aria-label="<?=$this->transEscAttr('Next Search Result')?>" rel="nofollow">
             <span class="icon-link__label"><?=$this->transEsc('Next')?></span>
             <?=$this->icon('page-next', 'icon-link__icon') ?>
->>>>>>> Upstream updated
           </a>
         </li>
         <?php if ($this->scrollData['lastRecord']): ?>

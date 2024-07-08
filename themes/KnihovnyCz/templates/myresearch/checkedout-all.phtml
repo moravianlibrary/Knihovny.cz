@@ -96,7 +96,7 @@
   <?=$this->flashmessages();?>
   <p>
     <?=$this->context($this)->renderInContext('librarycards/listcards.phtml', [
-        'user' => $this->auth()->isLoggedIn(),
+        'user' => $this->auth()->getUserObject(),
         'action' => $this->url('myresearch-checkedoutajax'),
         'callback' => 'loadCheckedOut',
     ]);

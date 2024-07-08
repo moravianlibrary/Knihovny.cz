@@ -47,7 +47,7 @@ class TemplateBasedForLoggedInFactory implements FactoryInterface
         $user = $container->get(\KnihovnyCz\Auth\Manager::class);
 
         $pageContent = $container->get(\VuFind\Content\PageLocator::class);
-        $contentBlock = new $requestedName($pageContent, (bool)$user->isLoggedIn());
+        $contentBlock = new $requestedName($pageContent, $user->getUserObject() != null);
 
         // Populate cache storage if a setCacheStorage method is present:
         if (method_exists($contentBlock, 'setCacheStorage')) {

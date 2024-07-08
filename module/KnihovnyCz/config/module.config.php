@@ -526,9 +526,13 @@ $config = [
             'db_service' => [
                 'factories' => [
                     \KnihovnyCz\Db\Service\NotificationsService::class => \VuFind\Db\Service\AbstractDbServiceFactory::class,
+                    \KnihovnyCz\Db\Service\UserService::class => \VuFind\Db\Service\UserServiceFactory::class,
+
                 ],
                 'aliases' => [
                     \KnihovnyCz\Db\Service\NotificationsServiceInterface::class => \KnihovnyCz\Db\Service\NotificationsService::class,
+                    \VuFind\Db\Service\UserService::class => \KnihovnyCz\Db\Service\UserService::class,
+
                 ],
             ],
             'db_table' => [
@@ -723,6 +727,14 @@ $config = [
                     'summon' => \KnihovnyCz\Record\FallbackLoader\Summon::class,
                 ],
             ],
+            'session' => [
+                'factories' => [
+                    \KnihovnyCz\Session\Redis::class => \KnihovnyCz\Session\RedisFactory::class,
+                ],
+                'aliases' => [
+                    'redis' => \KnihovnyCz\Session\Redis::class,
+                ],
+            ],
         ],
     ],
     'service_manager' => [
@@ -750,7 +762,7 @@ $config = [
             \KnihovnyCz\Markdown\InvolvedLibraries\InvolvedLibrariesExtension::class => \KnihovnyCz\Markdown\InvolvedLibraries\InvolvedLibrariesExtensionFactory::class,
             \KnihovnyCz\Markdown\InvolvedLibrariesCount\InvolvedLibrariesCountExtension::class => \KnihovnyCz\Markdown\InvolvedLibrariesCount\InvolvedLibrariesCountExtensionFactory::class,
             \KnihovnyCz\Content\InvolvedLibrariesService::class => \KnihovnyCz\Content\InvolvedLibrariesServiceFactory::class,
-            \KnihovnyCz\Service\UserSettingsService::class => \KnihovnyCz\Service\UserSettingsServiceFactory::class,
+            \KnihovnyCz\Db\Service\UserSettingsService::class => \KnihovnyCz\Db\Service\UserSettingsServiceFactory::class,
             \KnihovnyCz\ILS\Logic\Holds::class => \VuFind\ILS\Logic\LogicFactory::class,
             \KnihovnyCz\Wikidata\SparqlService::class => \KnihovnyCz\Wikidata\SparqlServiceFactory::class,
             \KnihovnyCz\Autocomplete\SuggestionFilter::class => \KnihovnyCz\Autocomplete\SuggestionFilterFactory::class,

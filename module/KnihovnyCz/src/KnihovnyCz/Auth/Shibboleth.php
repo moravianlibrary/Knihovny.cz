@@ -5,6 +5,9 @@ namespace KnihovnyCz\Auth;
 use VuFind\Auth\ILSAuthenticator;
 use VuFind\Auth\Shibboleth as Base;
 use VuFind\Auth\Shibboleth\ConfigurationLoaderInterface;
+use VuFind\Db\Entity\UserEntityInterface;
+use VuFind\Db\Service\UserCardServiceInterface;
+use VuFind\Db\Service\UserServiceInterface;
 use VuFind\Exception\Auth as AuthException;
 
 /**
@@ -66,7 +69,7 @@ class Shibboleth extends Base
      * account credentials.
      *
      * @throws AuthException
-     * @return \VuFind\Db\Row\User Object representing logged-in user.
+     * @return UserEntityInterface Object representing logged-in user.
      */
     public function authenticate($request)
     {
@@ -105,12 +108,12 @@ class Shibboleth extends Base
         /**
          * User db table
          *
-         * @var \KnihovnyCz\Db\Table\User $userTable
+         * @var UserServiceInterface $userService
          */
-        $userTable = $this->getUserTable();
-        $user = $userTable->getByEduPersonUniqueId($eduPersonUniqueId);
+        $userService = $this->getUserService();
+        $user = $userService->getUserByField('edu_person_unique_id', $eduPersonUniqueId);
         if ($user == null) {
-            $user = $userTable->getByUsername($eduPersonUniqueId, false);
+            $user = $userService->getUserByField('username', $eduPersonUniqueId);
         }
         // lookup by eduPersonPrincipalName for backward compatibility
         $lookupByEppn = $shib['lookupByEduPersonPrincipalName'] ?? false;
@@ -118,19 +121,17 @@ class Shibboleth extends Base
             $eppn = $this->getAttribute($request, $shib['eppn']);
             $card = $this->getUserCardByEppnWithoutEpui($eppn);
             if ($card != null) {
-                $card->edu_person_unique_id = $eduPersonUniqueId;
+                $card->setEduPersonUniqueId($eduPersonUniqueId);
                 $card->save();
-                $user = $userTable->getById($card->user_id);
-                $user->username = $eduPersonUniqueId;
+                $user = $card->getUser();
+                $user->setUsername($eduPersonUniqueId);
             }
         }
         if ($user == null) {
-            $user = $userTable->createRow();
-            $user->created = date('Y-m-d H:i:s');
-            $user->username = $eduPersonUniqueId;
+            $user = $userService->createEntityForUsername($eduPersonUniqueId);
             // Failing to initialize this here can cause Laminas\Db errors in
             // the VuFind\Auth\Shibboleth and VuFind\Auth\ILS integration tests.
-            $user->user_provided_email = 0;
+            $user->setHasUserProvidedEmail(false);
         }
 
         // Has the user configured attributes to use for populating the user table?
@@ -138,37 +139,22 @@ class Shibboleth extends Base
             if (isset($shib[$attribute])) {
                 $value = $this->getAttribute($request, $shib[$attribute]);
                 if ($attribute == 'email' && $value != null) {
-                    $user->updateEmail($value);
+                    $userService->updateUserEmail($user, $value);
                 } elseif ($attribute == 'cat_username' && isset($shib['prefix'])) {
-                    $user->cat_username = $shib['prefix'] . '.' . ($value ?? '');
+                    $user->setCatUsername($shib['prefix'] . '.' . ($value ?? ''));
                 } else {
-                    $user->$attribute = $value ?? '';
+                    $this->setUserValueByField($user, $attribute, $value ?? '');
                 }
             }
         }
         if (isset($shib['prefix'])) {
-            $user->home_library = $shib['prefix'];
+            $user->setHomeLibrary($shib['prefix']);
         }
 
         $this->storeShibbolethSession($request);
 
-        // modification for GDPR - do not store last name, first name and email
-        // in database
-        $userInfo = [];
-        $userInfo['firstname'] = $user->firstname;
-        $userInfo['lastname'] = $user->lastname;
-        $userInfo['email'] = $user->email;
-        $userInfo['safeLogout'] = $shib['safeLogout'] ?? 'global';
-
-        $session = new \Laminas\Session\Container(
-            'Account',
-            $this->sessionManager
-        );
-        /* @phpstan-ignore-next-line */
-        $session->userInfo = $userInfo;
-
         // Save and return the user object:
-        $user->save();
+        $userService->persistEntity($user);
         // create library card
         $this->connectLibraryCard($request, $user);
         return $user;
@@ -205,26 +191,14 @@ class Shibboleth extends Base
             $eppn = $this->getAttribute($request, $shib['eppn']);
             $card = $this->getUserCardByEppnWithoutEpui($eppn);
             if ($card != null) {
-                $card->edu_person_unique_id = $eduPersonUniqueId;
+                $card->setEduPersonUniqueId($eduPersonUniqueId);
             }
         }
         // Is library card already connected to another user? If so, merge the
         // two users.
-        if ($card != null && $card->user_id != $connectingUser->id) {
-            /**
-             * User model
-             *
-             * @var \KnihovnyCz\Db\Row\User $user
-             */
-            $user = $this->getUserTable()->getById($card->user_id);
-            /**
-             * User db table
-             *
-             * @var \KnihovnyCz\Db\Table\User $userTable
-             */
-            $userTable = $this->getUserTable();
-            $userTable->merge($user, $connectingUser);
-            $card->user_id = $connectingUser->id;
+        if ($card != null && $card->getUser()->getId() != $connectingUser->getId()) {
+            $this->getUserTable()->merge($card->getUser(), $connectingUser);
+            $card->setUser($connectingUser);
         }
         $username = $this->getAttribute($request, $shib['cat_username']);
         $prefix = $shib['prefix'] ?? '';
@@ -238,14 +212,14 @@ class Shibboleth extends Base
              *
              * @var \KnihovnyCz\Db\Row\UserCard $libCard
              */
-            foreach ($connectingUser->getLibraryCards() as $libCard) {
+            foreach ($this->getUserCardService()->getLibraryCards($connectingUser) as $libCard) {
                 $institution = explode(
                     '.',
-                    $libCard->cat_username
+                    $libCard->getCatUsername()
                 )[0];
                 if (
                     $institution == $prefix
-                    && $eduPersonUniqueId != $libCard->edu_person_unique_id
+                    && $eduPersonUniqueId != $libCard->getEduPersonUniqueId()
                 ) {
                     throw new \VuFind\Exception\LibraryCard(
                         'Another library card with the same institution is '
@@ -260,19 +234,18 @@ class Shibboleth extends Base
              *
              * @var \KnihovnyCz\Db\Row\UserCard $card
              */
-            $card = $this->getUserCardTable()->createRow();
-            $card->created = date('Y-m-d H:i:s');
-            $card->user_id = $connectingUser->id;
-            $card->edu_person_unique_id = $eduPersonUniqueId;
-            $card->card_name = $prefix;
-            $card->home_library = $prefix;
+            $card = $this->getUserCardService()->getOrCreateLibraryCard($connectingUser);
+            $card->setCreated(new \DateTime());
+            $card->setEduPersonUniqueId($eduPersonUniqueId);
+            $card->setCardName($prefix);
+            $card->setHomeLibrary($prefix);
         }
         // update library card
-        $card->cat_username = $username;
+        $card->setCatUsername($username);
         if (isset($shib['eppn'])) {
-            $card->eppn = $this->getAttribute($request, $shib['eppn']);
+            $card->setEppn($this->getAttribute($request, $shib['eppn']));
         }
-        $card->save();
+        $this->getUserCardService()->persistEntity($card);
     }
 
     /**
@@ -280,7 +253,7 @@ class Shibboleth extends Base
      *
      * @return \KnihovnyCz\Db\Table\UserCard
      */
-    public function getUserCardTable()
+    public function getUserCardTable(): \KnihovnyCz\Db\Table\UserCard
     {
         return $this->getDbTableManager()->get('UserCard');
     }
@@ -310,19 +283,36 @@ class Shibboleth extends Base
      *
      * @return \KnihovnyCz\Db\Row\UserCard|null
      */
-    protected function getUserCardByEppnWithoutEpui($eppn)
+    protected function getUserCardByEppnWithoutEpui($eppn): \KnihovnyCz\Db\Row\UserCard|null
     {
         if ($eppn == null) {
             return null;
         }
         $card = $this->getUserCardTable()
             ->getByEduPersonPrincipalName($eppn);
-        if (
-            !isset($card->edu_person_unique_id)
-            || $card->edu_person_unique_id == null
-        ) {
+        if ($card->getEduPersonUniqueId() == null) {
             return $card;
         }
         return null;
+    }
+
+    /**
+     * Get access to the user card service.
+     *
+     * @return UserCardServiceInterface
+     */
+    protected function getUserCardService(): UserCardServiceInterface
+    {
+        return $this->getDbService(UserCardServiceInterface::class);
+    }
+
+    /**
+     * Get access to the user table.
+     *
+     * @return \KnihovnyCz\Db\Table\User
+     */
+    protected function getUserTable(): \KnihovnyCz\Db\Table\User
+    {
+        return $this->getDbTable('User');
     }
 }

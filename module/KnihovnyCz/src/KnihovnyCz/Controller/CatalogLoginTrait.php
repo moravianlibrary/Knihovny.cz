@@ -23,8 +23,8 @@ trait CatalogLoginTrait
      */
     protected function catalogLogin()
     {
-        $user = $this->getAuthManager()->isLoggedIn();
-        if ($user == false) {
+        $user = $this->getAuthManager()->getUserObject();
+        if ($user == null) {
             return $this->forceLogin();
         }
         $cardId = $this->getCardId();

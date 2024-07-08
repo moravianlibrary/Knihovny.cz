@@ -2,16 +2,15 @@
 
 namespace KnihovnyCz\Auth;
 
-use KnihovnyCz\Service\UserSettingsService as Restorer;
+use KnihovnyCz\Db\Service\UserSettingsService as UserSettingsService;
 use Laminas\Config\Config;
 use Laminas\Session\SessionManager;
 use VuFind\Auth\LoginTokenManager;
 use VuFind\Auth\Manager as Base;
 use VuFind\Auth\PluginManager;
 use VuFind\Cookie\CookieManager;
-use VuFind\Db\Row\User;
 use VuFind\Db\Row\User as UserRow;
-use VuFind\Db\Table\User as UserTable;
+use VuFind\Db\Service\UserServiceInterface;
 use VuFind\ILS\Connection;
 use VuFind\Validator\CsrfInterface;
 
@@ -29,37 +28,38 @@ class Manager extends Base
     /**
      * Restorer to load saved user settings to session
      *
-     * @var Restorer
+     * @var UserSettingsService
      */
-    protected $restorer;
+    protected $userSettingsService;
 
     /**
      * Constructor
      *
-     * @param Config            $config            VuFind configuration
-     * @param UserTable         $userTable         User table gateway
-     * @param SessionManager    $sessionManager    Session manager
-     * @param PluginManager     $pm                Authentication plugin manager
-     * @param CookieManager     $cookieManager     Cookie manager
-     * @param CsrfInterface     $csrf              CSRF validator
-     * @param LoginTokenManager $loginTokenManager Login Token manager
-     * @param Connection        $ils               ILS Connection
-     * @param Restorer          $restorer          Restorer
+     * @param Config               $config            VuFind configuration
+     * @param UserServiceInterface $userService       User database service
+     * @param SessionManager       $sessionManager    Session manager
+     * @param PluginManager        $pm                Authentication plugin manager
+     * @param CookieManager        $cookieManager     Cookie manager
+     * @param CsrfInterface        $csrf              CSRF validator
+     * @param LoginTokenManager    $loginTokenManager Login Token manager
+     * @param Connection           $ils               ILS Connection
+     * @param UserSettingsService  $userSettings      Restorer
      */
     public function __construct(
         Config $config,
-        UserTable $userTable,
+        UserServiceInterface $userService,
         SessionManager $sessionManager,
         PluginManager $pm,
         CookieManager $cookieManager,
         CsrfInterface $csrf,
         LoginTokenManager $loginTokenManager,
         Connection $ils,
-        Restorer $restorer
+        UserSettingsService $userSettings
     ) {
         parent::__construct(
             $config,
-            $userTable,
+            $userService,
+            $userService,
             $sessionManager,
             $pm,
             $cookieManager,
@@ -67,32 +67,7 @@ class Manager extends Base
             $loginTokenManager,
             $ils
         );
-        $this->restorer = $restorer;
-    }
-
-    /**
-     * Checks whether the user is logged in.
-     *
-     * @return \KnihovnyCz\Db\Row\User|false Object if user is logged in, false
-     * otherwise.
-     */
-    public function isLoggedIn()
-    {
-        // modification for GDPR - do not store last name, first name and email
-        // in database
-        /**
-         * Logged in user
-         *
-         * @var \KnihovnyCz\Db\Row\User|false
-         */
-        $user = parent::isLoggedIn();
-        if ($user && isset($this->session->userInfo)) {
-            $userInfo = $this->session->userInfo;
-            $user->lastname = $userInfo['lastname'];
-            $user->firstname = $userInfo['firstname'];
-            $user->email = $userInfo['email'];
-        }
-        return $user;
+        $this->userSettingsService = $userSettings;
     }
 
     /**
@@ -120,32 +95,8 @@ class Manager extends Base
      */
     public function logout($url, $destroy = true, $extLogout = true)
     {
-        // Perform authentication-specific cleanup and modify redirect URL if
-        // necessary.
-        if ($extLogout) {
-            $url = $this->getAuth()->logout($url);
-        }
-
-        // Reset authentication state
-        $this->getAuth()->resetState();
-
-        // Clear out the cached user object and session entry.
-        $this->currentUser = false;
-        unset($this->session->userId);
-        unset($this->session->userDetails);
-        $this->cookieManager->set('loggedOut', 1);
-
-        // Destroy the session for good measure, if requested.
-        if ($destroy) {
-            $this->sessionManager->destroy();
-        } else {
-            // If we don't want to destroy the session, we still need to empty it.
-            // There should be a way to do this through Laminas\Session, but there
-            // apparently isn't (TODO -- do this better):
-            $_SESSION = [];
-        }
-
-        return $url;
+        $extLogoutUrl = parent::logout($url, $destroy);
+        return ($extLogout) ? $extLogoutUrl : $url;
     }
 
     /**
@@ -158,6 +109,8 @@ class Manager extends Base
     public function updateSession($user)
     {
         parent::updateSession($user);
-        $this->restorer->restore();
+        // add user data to session even if privacy mode is disabled
+        $this->userSession->addUserDataToSession($user);
+        $this->userSettingsService->restore();
     }
 }

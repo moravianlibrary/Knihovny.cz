@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace KnihovnyCz\View\Helper\KnihovnyCz;
 
-use Laminas\Db\ResultSet\AbstractResultSet;
 use Laminas\View\Helper\AbstractHelper;
 
 /**
@@ -21,18 +20,18 @@ class UserCards extends AbstractHelper
     /**
      * User cards
      *
-     * @var \Laminas\Db\ResultSet\AbstractResultSet
+     * @var array
      */
-    private AbstractResultSet $cards;
+    private array $cards;
 
     /**
      * Invoke function
      *
-     * @param AbstractResultSet $cards User cards
+     * @param array $cards User cards
      *
      * @return $this
      */
-    public function __invoke(AbstractResultSet $cards): self
+    public function __invoke(array $cards): self
     {
         $this->cards = $cards;
         return $this;
