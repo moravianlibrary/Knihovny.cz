@@ -14,7 +14,7 @@
   $this->layout()->breadcrumbs = false;
   $this->viewModel()->getRoot()->setVariable('frontPage', true);
 ?>
-
+<?=$this->slot('search-home-title')->set('');?>
 <div class="searchHomeContent">
   <?php $this->slot('search-home-hero')->start() ?>
     <?=$this->context($this)->renderInContext('search/searchbox.phtml', ['ignoreHiddenFilterMemory' => true])?>
@@ -22,4 +22,6 @@
   <?=$this->slot('search-home-hero')->end() ?>
 </div>
 
-<?=implode('', array_map([$this, 'contentBlock'], $blocks ?? []))?>
+<div class="row">
+  <?=implode('', array_map([$this, 'contentBlock'], $blocks ?? []))?>
+</div>
