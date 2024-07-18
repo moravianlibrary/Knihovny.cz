@@ -1,7 +1,7 @@
 <?php
 $id = urlencode($this->driver->getUniqueID());
-$anchor = '';
-foreach ($data as $field) {
+foreach ($this->data as $field) {
+  $anchor = '';
   if (!empty($field['t']) || !empty($field['g']) || !empty($field['x'])) {
     if (!empty($field['t'])) {
       $anchor .= $field['t'];
