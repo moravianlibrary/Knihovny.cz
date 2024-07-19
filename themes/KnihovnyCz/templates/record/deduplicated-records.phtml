@@ -79,7 +79,7 @@
     ?>
     <?php if ($count > 1): ?>
       <span>
-      <?=$this->translate('The library has another record(s) for this publication');?>
+        <?=$this->translate('The library has another records for this publication');?>
         <?php foreach ($internalMultiplicity as $index => $recordId): ?>
           <?php
              $sep = ($count == $index + 1) ? '' : ', ';
