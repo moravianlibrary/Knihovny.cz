@@ -746,7 +746,7 @@ adv_search_call_number:
       - [preg_replace, '/\*/m', ""]
       - [append, "* "]
   QueryFields:
-    local_callnumber_str_mv:
+    callnumber-search:
       - [onephrase, 1000]
       - [location_fuzzy, ~]
   FilterQuery: "*:* NOT record_format:library"
