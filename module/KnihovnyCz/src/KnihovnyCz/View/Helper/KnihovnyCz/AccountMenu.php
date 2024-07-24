@@ -71,7 +71,7 @@ class AccountMenu extends \VuFind\View\Helper\Root\AccountMenu
      */
     public function checkNotifications(): bool
     {
-        return $this->getUser()->couldManageNotifications();
+        return $this->getUser()?->couldManageNotifications() ?? false;
     }
 
     /**
