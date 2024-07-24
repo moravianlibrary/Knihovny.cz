@@ -65,6 +65,16 @@ class AccountMenu extends \VuFind\View\Helper\Root\AccountMenu
     }
 
     /**
+     * Check whether to show notifications management item
+     *
+     * @return bool
+     */
+    public function checkNotifications(): bool
+    {
+        return $this->getUser()->couldManageNotifications();
+    }
+
+    /**
      * Get params for checking ILS capability/function
      *
      * @return array

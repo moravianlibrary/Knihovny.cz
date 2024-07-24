@@ -319,6 +319,36 @@ $config = [
                      ],
                  ],
              ],
+             'notifications' => [
+                 'type' => 'Laminas\Router\Http\Segment',
+                 'options' => [
+                     'route' => '/Notifications',
+                     'defaults' => [
+                         'controller' => 'Notification',
+                         'action' => 'Home',
+                     ],
+                 ],
+             ],
+             'notifications-edit' => [
+                 'type' => 'Laminas\Router\Http\Segment',
+                 'options' => [
+                     'route' => '/Notifications/Edit/[:id]',
+                     'defaults' => [
+                         'controller' => 'Notification',
+                         'action' => 'Edit',
+                     ],
+                 ],
+             ],
+             'notifications-delete' => [
+                 'type' => 'Laminas\Router\Http\Segment',
+                 'options' => [
+                     'route' => '/Notifications/Delete/[:id]',
+                     'defaults' => [
+                         'controller' => 'Notification',
+                         'action' => 'Delete',
+                     ],
+                 ],
+             ],
          ],
      ],
     'controllers' => [
@@ -332,6 +362,7 @@ $config = [
             \KnihovnyCz\Controller\SearchController::class => \VuFind\Controller\AbstractBaseFactory::class,
             \KnihovnyCz\Controller\MyResearchZiskejMvsController::class => \VuFind\Controller\AbstractBaseFactory::class,
             \KnihovnyCz\Controller\MyResearchZiskejEddController::class => \VuFind\Controller\AbstractBaseFactory::class,
+            \KnihovnyCz\Controller\NotificationController::class => \VuFind\Controller\AbstractBaseFactory::class,
             \KnihovnyCz\Controller\ZiskejController::class => \VuFind\Controller\AbstractBaseFactory::class,
             \KnihovnyCz\Controller\ZiskejAdminController::class => \VuFind\Controller\AbstractBaseFactory::class,
             \KnihovnyCz\Controller\HoldsController::class => \VuFind\Controller\HoldsControllerFactory::class,
@@ -353,6 +384,7 @@ $config = [
             'MyResearchZiskejMvs' => \KnihovnyCz\Controller\MyResearchZiskejMvsController::class,
             'MyResearchZiskejEdd' => \KnihovnyCz\Controller\MyResearchZiskejEddController::class,
             'MyResearch' => \KnihovnyCz\Controller\MyResearchController::class,
+            'Notification' => \KnihovnyCz\Controller\NotificationController::class,
             \VuFind\Controller\RecordController::class => \KnihovnyCz\Controller\RecordController::class,
             \VuFind\Controller\SearchController::class => \KnihovnyCz\Controller\SearchController::class,
             \VuFind\Controller\HoldsController::class => \KnihovnyCz\Controller\HoldsController::class,
@@ -480,12 +512,21 @@ $config = [
                     \KnihovnyCz\Db\Row\UserSettings::class => \VuFind\Db\Row\RowGatewayFactory::class,
                     \KnihovnyCz\Db\Row\Resource::class => \VuFind\Db\Row\RowGatewayFactory::class,
                     \KnihovnyCz\Db\Row\RecordStatus::class => \VuFind\Db\Row\RowGatewayFactory::class,
+                    \KnihovnyCz\Db\Row\Notifications::class => \VuFind\Db\Row\RowGatewayFactory::class,
                 ],
                 'aliases' => [
                     \VuFind\Db\Row\User::class => \KnihovnyCz\Db\Row\User::class,
                     \VuFind\Db\Row\UserCard::class => \KnihovnyCz\Db\Row\UserCard::class,
                     \VuFind\Db\Row\UserList::class => \KnihovnyCz\Db\Row\UserList::class,
                     \VuFind\Db\Row\Resource::class => \KnihovnyCz\Db\Row\Resource::class,
+                ],
+            ],
+            'db_service' => [
+                'factories' => [
+                    \KnihovnyCz\Db\Service\NotificationsService::class => \VuFind\Db\Service\AbstractDbServiceFactory::class,
+                ],
+                'aliases' => [
+                    \KnihovnyCz\Db\Service\NotificationsServiceInterface::class => \KnihovnyCz\Db\Service\NotificationsService::class,
                 ],
             ],
             'db_table' => [
@@ -501,6 +542,7 @@ $config = [
                     \KnihovnyCz\Db\Table\UserList::class => \VuFind\Db\Table\UserListFactory::class,
                     \KnihovnyCz\Db\Table\UserListCategories::class => \VuFind\Db\Table\GatewayFactory::class,
                     \KnihovnyCz\Db\Table\RecordStatus::class => \VuFind\Db\Table\GatewayFactory::class,
+                    \KnihovnyCz\Db\Table\Notifications::class => \VuFind\Db\Table\GatewayFactory::class,
                 ],
                 'aliases' => [
                     \VuFind\Db\Table\User::class => \KnihovnyCz\Db\Table\User::class,
@@ -508,6 +550,7 @@ $config = [
                     \VuFind\Db\Table\UserList::class => \KnihovnyCz\Db\Table\UserList::class,
                     'UserSettings' => \KnihovnyCz\Db\Table\UserSettings::class,
                     \VuFind\Db\Table\Resource::class => \KnihovnyCz\Db\Table\Resource::class,
+                    'notifications' => \KnihovnyCz\Db\Table\Notifications::class,
                 ],
             ],
             'ils_driver' => [

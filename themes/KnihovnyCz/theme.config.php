@@ -23,6 +23,7 @@ return [
                 KnihovnyCz\View\Helper\KnihovnyCz\SetupEmbeddedThemeResourcesFactory::class,
             \KnihovnyCz\View\Helper\KnihovnyCz\DateTime::class =>
                 \VuFind\View\Helper\Root\DateTimeFactory::class,
+            \KnihovnyCz\View\Helper\KnihovnyCz\Notifications::class => \KnihovnyCz\View\Helper\KnihovnyCz\NotificationsFactory::class,
         ],
         'invokables' => [
             \KnihovnyCz\View\Helper\KnihovnyCz\FooterLink::class,
@@ -54,6 +55,7 @@ return [
             'dateTime' => \KnihovnyCz\View\Helper\KnihovnyCz\DateTime::class,
             'datePicker' => KnihovnyCz\View\Helper\KnihovnyCz\DatePicker::class,
             'resultsCount' => \KnihovnyCz\View\Helper\KnihovnyCz\ResultsCount::class,
+            'notifications' => \KnihovnyCz\View\Helper\KnihovnyCz\Notifications::class,
         ],
     ],
     'icons' => [
@@ -96,6 +98,7 @@ return [
             'load-institution-filter' => 'FontAwesome:home:fa-fw',
             'map-marker' => 'FontAwesome:map-marker',
             'my-account' => 'FontAwesome:user-circle-o:fa-fw',
+            'notifications-management' => 'FontAwesome:envelope-o:fa-fw',
             'opening-hours' => 'FontAwesome:clock-o',
             'phone-number' => 'FontAwesome:phone',
             'regional-library-marker' => 'FontAwesome:dot-circle-o',

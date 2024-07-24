@@ -369,6 +369,16 @@ class User extends Base
     }
 
     /**
+     * Whether user could manage notifications
+     *
+     * @return bool
+     */
+    public function couldManageNotifications(): bool
+    {
+        return $this->hasPermission('notifications');
+    }
+
+    /**
      * Return true if user has permission
      *
      * @param string $permission Permission, could be 'admin', 'widgets' or 'any'

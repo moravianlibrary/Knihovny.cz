@@ -1,0 +1,68 @@
+<h1><?=$this->translate('Notifications::Edit notification')?></h1>
+
+<form action="<?=$this->url('notifications-edit', ['id' => $this?->data?->getId() ?? 'NEW'])?>" method="post">
+  <input type="hidden" value="<?=$this->escapeHtmlAttr($this->auth()->getManager()->getCsrfHash())?>" name="csrf">
+  <div class="form-group">
+    <label for="notifications-content"><?=$this->translate('Notifications::Content');?></label>:
+    <textarea class="form-control" id="notifications-content" name="content" placeholder="<?=$this->translate('Notifications::Content');?>"><?=$this?->data?->getContent() ?? ''?></textarea>
+  </div>
+  <div class="form-group">
+    <label for="notifications-"><?=$this->translate('Notifications::Language');?></label>:
+    <select class="form-control" id="notifications-language" name="language">
+      <option value="cs"<?=($this?->data?->getLanguage() ?? 'cs') === 'cs' ? ' selected' : '' ?>><?=$this->translate('Notifications::language_cs')?></option>
+      <option value="en"<?=($this?->data?->getLanguage() ?? 'cs') === 'en' ? ' selected' : '' ?>><?=$this->translate('Notifications::language_en')?></option>
+    </select>
+  </div>
+  <div class="form-group">
+    <?php
+      $priorities = $this->notifications()->getPriorityData();
+    ?>
+    <label for="notifications-priority"><?=$this->translate('Notification::Priority')?></label>
+    <select class="form-control" id="notifications-priority" name="priority">
+      <?php foreach($priorities as $priority => $class): ?>
+        <option value="<?=$priority?>"<?=($this?->data?->getPriority() ?? '2') == $priority ? ' selected' : ''?> data-class="alert alert-<?=$class?>"><?=$this->transEsc('Notifications::priority_' . $class)?></option>
+      <?php endforeach; ?>
+    </select>
+  </div>
+  <div class="form-group">
+    <div class="radio">
+      <label>
+        <input type="radio" name="visibility" value="0" id="notifications-visibility-hide"<?=!($this?->data?->getVisibility()) ?? false ? ' checked' : ''?>> <?=$this->translate('Notifications::visibility_hide');?>
+      </label>
+    </div>
+    <div class="radio">
+      <label>
+        <input type="radio" name="visibility" value="1" id="notifications-visibility-show"<?=($this?->data?->getVisibility() ?? false) ? ' checked' : ''?>> <?=$this->translate('Notifications::visibility_show');?>
+      </label>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <input type="submit" class="btn btn-primary" id="notifications-submit" name="submit" value="<?=$this->translate('Notifications::Submit');?>">
+    <a class="btn btn-default" href="<?=$this->url('notifications')?>"><?=$this->translate('Notifications::Cancel')?></a>
+  </div>
+</form>
+<div class="preview">
+  <h2><?=$this->translate('Notifications::Preview')?></h2>
+  <div id="preview-content" class="alert alert-<?=$this->notifications()->getPriorityClass($this?->data?->getPriority() ?? '0')?>">
+    <?=$this?->data?->getContent() ?? ''?>
+  </div>
+</div>
+
+<?php
+  $js = <<<JS
+          document.addEventListener('DOMContentLoaded', function previewNotifications() {
+            console.log('running');
+            const content = document.getElementById('notifications-content');
+            const priority = document.getElementById('notifications-priority');
+            const previewContent = document.getElementById('preview-content');
+            priority.addEventListener('change', function changePriority(e) {
+               previewContent.className = e.target[e.target.selectedIndex].dataset.class;
+            });
+            content.addEventListener('input', function changeContent(e) {
+              previewContent.innerHTML = e.target.value
+            });
+          });
+      JS;
+
+echo $this->inlineScript(\Laminas\View\Helper\HeadScript::SCRIPT, $js, 'SET');
