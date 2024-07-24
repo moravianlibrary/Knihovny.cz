@@ -190,13 +190,14 @@ class MyResearchController extends MyResearchControllerBase
             $this->showException($ex);
         }
         if ($view instanceof \Laminas\View\Model\ViewModel) {
-            if (
-                isset($view->profile)
-                && isset($view->profile['expired'])
-                && $view->profile['expired']
-            ) {
+            if (isset($view->profile) && ($view->profile['expired'] ?? false)) {
                 $this->flashMessenger()->addErrorMessage(
                     'library_card_expirated_warning'
+                );
+            }
+            if (isset($view->profile) && ($view->profile['will_expire'] ?? false)) {
+                $this->flashMessenger()->addWarningMessage(
+                    'library_card_will_expire_warning'
                 );
             }
             $catalog = $this->getILS();
