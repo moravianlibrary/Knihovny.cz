@@ -105,7 +105,8 @@
             <?php endif; ?>
 
             <?php if (isset($ilsDetails['media']) && !empty($ilsDetails['media'])): ?>
-              <strong><?=$this->transEsc('ill_request_type')?>:</strong> <?=$this->transEsc(['ILL', 'media_' . $ilsDetails['media']], [], $ilsDetails['media'])?><br>
+              <?php $mediaForTranslation = str_replace(['(', ')'], '', $ilsDetails['media']); ?>
+              <strong><?=$this->transEsc('ill_request_type')?>:</strong> <?=$this->transEsc(['ILL', 'media_' . $mediaForTranslation], [], $ilsDetails['media'])?><br>
             <?php endif; ?>
 
             <?php if (isset($ilsDetails['price']) && !empty($ilsDetails['price'])): ?>
