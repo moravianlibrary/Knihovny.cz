@@ -177,6 +177,9 @@ $this->headMeta()->appendName('format-detection', 'telephone=no');
         </div>
       </nav>
     <?php endif; ?>
+    <div class="container">
+      <?=$this->notifications()->renderCurrentNotifications()?>
+    </div>
     <?php if ($this->layout()->searchbox !== false): ?>
       <div class="search container navbar">
         <nav class="nav searchbox hidden-print" role="search">

@@ -538,3 +538,21 @@ ALTER TABLE `import_record_status_loans` ADD INDEX `source` (`source`);
 
 UPDATE `system` SET `value` = '123' WHERE `key`='DB_VERSION';
 
+-- #1060 - Notifications
+DROP TABLE IF EXISTS `notifications`;
+CREATE TABLE `notifications` (
+   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+   `visibility` tinyint(1) NOT NULL DEFAULT 0,
+   `priority` int(11) NOT NULL DEFAULT 1,
+   `author_id` int(11) DEFAULT NULL,
+   `content` text NOT NULL DEFAULT '',
+   `change_date` datetime DEFAULT NULL ON UPDATE current_timestamp(),
+   `create_date` datetime NOT NULL DEFAULT current_timestamp(),
+   `language` varchar(255) DEFAULT NULL,
+   PRIMARY KEY (`id`),
+   KEY `language` (`language`),
+   KEY `visibility` (`visibility`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+UPDATE `system` SET `value` = '124' WHERE `key`='DB_VERSION';
+

@@ -1,0 +1,77 @@
+<h1><?=$this->translate('Notifications::Notifications management')?></h1>
+<a href="<?=$this->url('notifications-edit', ['id' => 'NEW'])?>" class="btn btn-primary"><?=$this->icon('ui-add')?> <?=$this->translate('Notifications::Create new notification')?></a>
+<?php if (count($this->data) > 0): ?>
+  <table class="table responsive-table">
+    <thead>
+      <tr>
+        <th><?=$this->translate('Notifications::Visibility');?></th>
+        <th><?=$this->translate('Notifications::Content');?></th>
+        <th><?=$this->translate('Notifications::Language');?></th>
+        <th><?=$this->translate('Notifications::Action');?></th>
+      </tr>
+    </thead>
+<?php endif; ?>
+<tbody>
+  <?php foreach($this->data as $notif): ?>
+    <tr>
+      <td data-title="<?=$this->translate('Notifications::Visibility');?>"><?=$notif->getVisibility()
+          ? '<span class="label label-success">' . $this->transEsc('Notifications::visibility_show') . '</span>'
+          : '<span class="label label-danger">' . $this->transEsc('Notifications::visibility_hide') . '</span>'?>
+      </td>
+      <td data-title="<?=$this->translate('Notifications::Content');?>">
+        <div class="alert alert-<?=$this->notifications()->getPriorityClass($notif->getPriority()) ?? 'info'?>">
+          <?=$this->escapeHtml($notif->getContent())?>
+        </div>
+      </td>
+      <td data-title="<?=$this->translate('Notifications::Language');?>"><?=$this->transEsc('Notifications::language_' . $notif->getLanguage())?></td>
+      <td data-title="<?=$this->translate('Notifications::Action');?>">
+        <div class="btn-group">
+          <a class="btn btn-sm btn-primary" href="<?=$this->url('notifications-edit', ['id' => $notif->getId()])?>">
+            <?=$this->translate('Notifications::Edit')?>
+          </a>
+        </div>
+        <div class="btn-group">
+          <a class="btn btn-sm btn-primary" href="<?=$this->url('notifications-edit', ['id' => $notif->getId()], [ 'query' => ['submit' => 'true', 'visibility' => abs($notif->getVisibility() - 1), 'csrf' => $this->auth()->getManager()->getCsrfHash()]])?>">
+            <?=$this->translate('Notifications::' . ($notif->getVisibility() ? 'Hide' : 'Show'))?>
+          </a>
+        </div>
+        <?php
+          $deleteUrl = $this->url('notifications-delete', ['id' => $notif->getId()], ['query' => ['csrf' => $this->auth()->getManager()->getCsrfHash()]]);
+          $selectorId = $this->escapeElementId((string)$notif->getId());
+        ?>
+        <?=
+        $this->component(
+            'confirm-button',
+            [
+            'buttonClass' => 'btn btn-sm btn-default',
+            'buttonLink' => $deleteUrl,
+            'buttonIcon' => '',
+            'buttonLabel' => 'Notifications::Delete',
+            'confirmId' => 'confirm_delete_item_' . $this->escapeHtmlAttr($selectorId),
+          ]
+        )
+        ?>
+      </td>
+      <?php
+        $escId = $this->escapeJs($notif->getId());
+        $escSelectorId = $this->escapeJs($selectorId);
+        $script = <<<JS
+            $('#confirm_delete_item_${escSelectorId}').click(function(e) {
+                e.preventDefault();
+                $.post('${deleteUrl}', {
+                            'confirm':true
+                        },
+                        function() {
+                            location.reload()
+                        }
+                    );
+            });
+            JS;
+      ?>
+      <?=$this->inlineScript(\Laminas\View\Helper\HeadScript::SCRIPT, $script, 'SET');?>
+    </tr>
+  <?php endforeach; ?>
+</tbody>
+<?php if (count($this->data) > 0): ?>
+  </table>
+<?php endif; ?>
