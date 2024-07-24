@@ -5,6 +5,7 @@
     $source = $this->driver->getSourceId();
     $offlineMode = $this->ils()->getOfflineMode();
     $holdings = $this->driver->getOfflineHoldings();
+    $itemsCount = count($holdings['holdings'][0]['items'] ?? []);
     $filters = $holdings['filters'] ?? [];
     // Set page title.
     $this->headTitle($this->driver->getBreadcrumb());
@@ -147,6 +148,10 @@
             });
           });
 
+          $(document).ready(function setFilters() {
+            $('select.holding_filter[name="year"]').change();
+          });
+
         JS;
 
 ?>
@@ -224,8 +229,10 @@
     <label for="<?=$this->escapeHtml($filter)?>"><?=$this->transEsc($filter . '_filter')?>: </label>
     <select name="<?=$this->escapeHtml($filter)?>" class='holding_filter'>
       <option value="ALL"><?=$this->transEsc('All')?></option>
+      <?php $count = 0; ?>
       <?php foreach ($values as $key => $value): ?>
-        <option value="<?=$this->escapeHtml($key)?>">
+        <?php $count++;?>
+        <option value="<?=$this->escapeHtml($key)?>" <?=$filter === 'year' && $count === 1 && $itemsCount > 30 ? ' selected' : ''?>>
           <?php if(!empty($key)):?>
             <?=$this->escapeHtml($key)?>
           <?php else:?>
