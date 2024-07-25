@@ -13,14 +13,14 @@
       <div class="col-xs-12 col-sm-6 col-md-4">
         <h3><?=$this->translate('footer_heading_2') ?></h3>
         <ul class="list-unstyled">
-          <li><a href="https://listky.mzk.cz/"><?=$this->transEsc('card_catalogues')?></a></li>
+          <li><a href="https://listky.mzk.cz/" target="_blank"><?=$this->transEsc('card_catalogues')?></a></li>
           <?php if($this->layout()->userLang === 'cs'): ?>
-            <li><a href="https://www.mzk.cz/meziknihovni-vypujcni-sluzba"><?=$this->transEsc('interlibrary_loan')?></a></li>
+            <li><a href="https://www.mzk.cz/meziknihovni-vypujcni-sluzba" target="_blank"><?=$this->transEsc('interlibrary_loan')?></a></li>
           <?php else: ?>
-            <li><a href="https://www.mzk.cz/en/services/borrowing/international-interlibrary-loan-service"><?=$this->transEsc('international_interlibrary_loan')?></a></li>
+            <li><a href="https://www.mzk.cz/en/services/borrowing/international-interlibrary-loan-service" target="_blank"><?=$this->transEsc('international_interlibrary_loan')?></a></li>
           <?php endif; ?>
-          <li><a href="http://www.mzk.cz/katalogy-databaze/databaze"><?=$this->transEsc('other_online_resources')?></a></li>
-          <li><a href="http://www.knihovny.cz">Knihovny.cz</a></li>
+          <li><a href="http://www.mzk.cz/katalogy-databaze/databaze" target="_blank"><?=$this->transEsc('other_online_resources')?></a></li>
+          <li><a href="http://www.knihovny.cz" target="_blank">Knihovny.cz</a></li>
         </ul>
       </div>
 
@@ -29,11 +29,11 @@
         <ul class="list-unstyled">
           <li><?=$this->footerLink('autocomplete', true) ?></li>
           <?php if($this->layout()->userLang === 'cs'): ?>
-            <li><a href="https://www.youtube.com/watch?v=5-zzsQKQ6gU"><?=$this->transEsc('search_video_help')?></a></li>
+            <li><a href="https://www.youtube.com/watch?v=5-zzsQKQ6gU" target="_blank"><?=$this->transEsc('search_video_help')?></a></li>
           <?php endif; ?>
-          <li><a href="http://www.ptejteseknihovny.cz/zadani-dotazu?q=BOA001"><?=$this->transEsc('Ask a Librarian')?></a></li>
-          <li><a href="http://www.mzk.cz/faq"><?=$this->transEsc('link_faq')?></a></li>
-          <li><a href="https://docs.google.com/spreadsheet/viewform?formkey=dHN5S2pMa0pEYnJyQUtzbWU3Wm9YcWc6MQ&entry_3=https%3A%2F%2Fvufind.mzk.cz%2F%3Flng%3Dcs&entry_4=&TB_iframe=true&height=600&width=600"><?=$this->transEsc('link_feedback')?></a></li>
+          <li><a href="http://www.ptejteseknihovny.cz/zadani-dotazu?q=BOA001" target="_blank"><?=$this->transEsc('Ask a Librarian')?></a></li>
+          <li><a href="http://www.mzk.cz/faq" target="_blank"><?=$this->transEsc('link_faq')?></a></li>
+          <li><a href="https://docs.google.com/spreadsheet/viewform?formkey=dHN5S2pMa0pEYnJyQUtzbWU3Wm9YcWc6MQ&entry_3=https%3A%2F%2Fvufind.mzk.cz%2F%3Flng%3Dcs&entry_4=&TB_iframe=true&height=600&width=600" target="_blank"><?=$this->transEsc('link_feedback')?></a></li>
         </ul>
       </div>
     </div>
