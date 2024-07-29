@@ -13,3 +13,20 @@ body.template-dir-myresearch.template-name-mylist
     display:none !important;
   }
 }
+
+#searchForm .tab-content.well {
+  row-gap: 10px;
+  padding-bottom: 10px;
+
+  .searchForm-query {
+    width: 50%;
+  }
+}
+
+@media (max-width: @screen-sm-max) {
+  #searchForm .tab-content.well {
+    .searchForm-query, .form-control {
+      width: 100%;
+    }
+  }
+}

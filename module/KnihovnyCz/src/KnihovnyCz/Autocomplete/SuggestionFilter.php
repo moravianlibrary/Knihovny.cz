@@ -76,12 +76,12 @@ class SuggestionFilter
     /**
      * Normalize query
      *
-     * @param string $query query to normalize
+     * @param string $query Query to normalize
      *
      * @return string normalized query with removed diacritic
      */
-    protected function normalize($query)
+    protected function normalize(string $query): string
     {
-        return (string)iconv('UTF-8', 'ASCII//TRANSLIT', $query);
+        return (string)\Transliterator::create('Any-Latin; Latin-ASCII')->transliterate($query);
     }
 }

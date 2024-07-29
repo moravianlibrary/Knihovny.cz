@@ -214,10 +214,14 @@ VuFind.register('searchbox_controls', function SearchboxControls() {
         const type = searcher.type ? searcher.type : $('#searchForm_type').val();
         const searchTypes = {
           'AllFields': ['Title', 'Author', 'Subject'],
+          'adv_search_without_fulltext': ['Title', 'Author', 'Subject'],
           'AllLibraries': ['Name', 'Town'],
         };
         var types = searchTypes[type] ? searchTypes[type] : [type];
-        if (type === 'AllFields' && query.trim().split(/\s+/).length > 1) {
+        if (
+          (type === 'AllFields' || type === 'adv_search_without_fulltext')
+          && query.trim().split(/\s+/).length > 1
+        ) {
           types.push('AuthorTitle');
         }
         const limit = (types.length > 1) ? 6 : 10;
@@ -256,8 +260,11 @@ VuFind.register('searchbox_controls', function SearchboxControls() {
                 suggestions.set(contexts[index].type, result[0].data.groups[0]);
               }
             });
-            if (type === 'AllFields' && suggestions.has('Author')
-              && suggestions.has('Title')) {
+            if (
+              (type === 'AllFields' || type === 'adv_search_without_fulltext')
+              && suggestions.has('Author')
+              && suggestions.has('Title')
+            ) {
               suggestions.delete('AuthorTitle');
             }
             for (const [, value] of suggestions.entries()) {
