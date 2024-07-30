@@ -315,6 +315,12 @@ class RecordDataFormatterFactory extends RecordDataFormatterFactoryBase
         $spec->setLine('Ownership and Custodial History', 'getNote561');
         $spec->setLine('Binding Information', 'getNote563');
         $spec->setLine('Defect Note', 'getNote590');
+        $spec->setTemplateLine(
+            'digitalization_suggestion_button_text',
+            true,
+            'data-digitization-request.phtml',
+            ['context' => ['hiddenLabel' => true]]
+        );
 
         return $spec->getArray();
     }

@@ -6,7 +6,9 @@
   <h4 class="sr-only"><?=$this->transEsc($this->caption ?? 'Bibliographic Details')?></h4>
   <dl <?php if (!empty($this->tableId)): ?>id="<?=$this->tableId ?>" <?php endif; ?>class="dl-horizontal">
     <?php foreach ($coreFields as $current): ?>
-      <dt><?=$this->transEsc($current['label'])?>:</dt>
+      <dt>
+        <span <?=($current['context']['hiddenLabel'] ?? false) ? 'class="sr-only"' : ''?>><?=$this->transEsc($current['label'])?></span>
+      </dt>
       <dd><?=$current['value']?></dd>
     <?php endforeach; ?>
   </table>

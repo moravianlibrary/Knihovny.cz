@@ -10,7 +10,8 @@
         "moravianlibrary/ziskej-api-php-client": "^9.0.1",
         "lcobucci/jwt": "^4.1.5|^5.0",
         "salsify/json-streaming-parser": "^8.2",
-        "serialssolutions/summon": "dev-develop#1e64cb8f6e307b219caf677f552561f31a09757e"
+        "serialssolutions/summon": "dev-develop#1e64cb8f6e307b219caf677f552561f31a09757e",
+        "google/apiclient": "^2.13"
     },
     "scripts": {
          "phing-install-dependencies": "phing installswaggerui"

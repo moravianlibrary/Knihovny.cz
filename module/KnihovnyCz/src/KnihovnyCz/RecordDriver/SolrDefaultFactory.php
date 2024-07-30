@@ -67,6 +67,12 @@ class SolrDefaultFactory extends \VuFind\RecordDriver\SolrDefaultFactory
         $driver->attachSparqlService(
             $container->get(\KnihovnyCz\Wikidata\SparqlService::class)
         );
+        try {
+            $digiRequestConfig = $container->get(\VuFind\Config\PluginManager::class)->get('digitalizationrequest');
+            $driver->attachDigitalizationRequestConfig($digiRequestConfig);
+        } catch (ServiceNotFoundException $exception) {
+            // It is OK if digitalizationrequest.ini file does not exist
+        }
         // Populate cache storage if a setCacheStorage method is present:
         if (method_exists($driver, 'setCacheStorage')) {
             $driver->setCacheStorage(
