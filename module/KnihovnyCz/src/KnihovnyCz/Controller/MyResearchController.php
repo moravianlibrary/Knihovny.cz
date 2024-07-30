@@ -212,6 +212,15 @@ class MyResearchController extends MyResearchControllerBase
             $view->changePassword = $catalog->checkFunction('changePassword', $patron) !== false;
             $view->changeEmail = $catalog->checkFunction('changeEmail', $patron) !== false;
             $view->changeNickname = $catalog->checkFunction('changeNickname', $patron) !== false;
+            $supportBlocks = $catalog->checkFunction('getMyBlocks', $patron);
+            if ($supportBlocks !== false) {
+                $blocks = $catalog->getMyBlocks($patron);
+                foreach ($blocks as $block) {
+                    $this->flashMessenger()->addErrorMessage(
+                        'ILSMessages::' . $block['id']
+                    );
+                }
+            }
         } else {
             $view = $this->createViewModel(
                 [
