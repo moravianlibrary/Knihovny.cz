@@ -1,13 +1,13 @@
 <?php $recordLinker = $this->recordLinker($this->results); ?>
-<?php $source = $this->driver->getSourceId() ?>
 <?php if ($this->driver->tryMethod('isAvailableForDigitalization')): ?>
+  <?php $source = $this->driver->tryMethod('getSourceId', [], '') ?>
   <a class="btn btn-light" href="<?=$this->url('feedback-form', ['id' => 'DigitalizationSuggestion'], ['query' => ['recordId' => $this->driver->getUniqueID()]]);?>">
     <?=$this->transEsc('digitalization_suggestion_button_text');?>
   </a>
 <?php else: ?>
   <?php
     $availableRecords = [];
-    foreach ($this->driver->tryMethod('getIdsForDigitalization') as $digiId) {
+    foreach ($this->driver->tryMethod('getIdsForDigitalization', [], []) as $digiId) {
       [$source, ] = explode('.', $digiId, 2);
       $availableRecords[] = [
         'label' => $this->translate('Source::' . $source),
