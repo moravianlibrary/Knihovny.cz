@@ -34,12 +34,14 @@ class DigitalizationRequest implements HandlerInterface, LoggerAwareInterface
      * @param RecordLinker $recordLinker Record linker
      * @param Loader       $recordLoader Record loader
      * @param ServerUrl    $serverUrl    Server URL helper
+     * @param string       $host         Host URL from configuration
      */
     public function __construct(
         protected Config $config,
         protected RecordLinker $recordLinker,
         protected Loader $recordLoader,
-        protected ServerUrl $serverUrl
+        protected ServerUrl $serverUrl,
+        protected string $host
     ) {
     }
 
@@ -62,7 +64,9 @@ class DigitalizationRequest implements HandlerInterface, LoggerAwareInterface
         $record = $this->recordLoader->load($fields['recordId']);
         $source = $record->getSourceId();
         $orderNumber = $this->getLastId($source) + 1;
-        $link = $this->serverUrl->__invoke($this->recordLinker->getUrl($record));
+        $link = empty($this->host)
+            ? $this->serverUrl->__invoke($this->recordLinker->getUrl($record))
+            : rtrim($this->host, '/') . $this->recordLinker->getUrl($record);
         $title = $record->getTitle();
         $date = date('d.m.Y');
         $reason = $fields['reason'];

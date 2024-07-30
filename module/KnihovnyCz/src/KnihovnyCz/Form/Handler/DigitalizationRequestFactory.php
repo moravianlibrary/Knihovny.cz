@@ -44,12 +44,15 @@ class DigitalizationRequestFactory implements FactoryInterface
         $config = $container
             ->get(\VuFind\Config\PluginManager::class)
             ->get('digitalizationrequest');
-
+        $host = $container
+            ->get(\VuFind\Config\PluginManager::class)
+            ->get('config')?->Site?->url ?? '';
         return new $requestedName(
             $config,
             $container->get('ViewHelperManager')->get('recordLinker'),
             $container->get(Loader::class),
-            $container->get('ViewHelperManager')->get('serverUrl')
+            $container->get('ViewHelperManager')->get('serverUrl'),
+            $host
         );
     }
 }
