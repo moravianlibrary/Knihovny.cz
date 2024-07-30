@@ -247,4 +247,24 @@ class Connection extends ConnectionBase
         }
         return false;
     }
+
+    /**
+     * Check getMyBlocks
+     *
+     * A support method for checkFunction(). This is responsible for checking
+     * the driver configuration to determine if the system supports
+     * changeNickname.
+     *
+     * @param array $functionConfig The ILL request configuration values
+     * @param array $params         An array of function-specific params (or null)
+     *
+     * @return bool if driver capability is supported
+     */
+    protected function checkMethodgetMyBlocks($functionConfig, $params)
+    {
+        if (parent::checkCapability('getMyBlocks', [$params ?: []])) {
+            return true;
+        }
+        return false;
+    }
 }

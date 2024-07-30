@@ -556,3 +556,10 @@ CREATE TABLE `notifications` (
 
 UPDATE `system` SET `value` = '124' WHERE `key`='DB_VERSION';
 
+-- #1145
+SET @mzk_source_id = (SELECT id FROM inst_sources WHERE source = 'mzk');
+INSERT INTO `inst_sections` (`section_name`) VALUES('ProfileBlocks');
+INSERT INTO `inst_keys` (`key_name`, `section_id`) VALUES ('enabled', (SELECT `id` FROM `inst_sections` WHERE `section_name` = 'ProfileBlocks'));
+SELECT @profile_blocks_id := LAST_INSERT_ID();
+INSERT INTO inst_configs (source_id, key_id, value, timestamp) VALUES (@mzk_source_id, @profile_blocks_id, 'true', NOW());
+UPDATE `system` SET `value` = '124' WHERE `key`='DB_VERSION';

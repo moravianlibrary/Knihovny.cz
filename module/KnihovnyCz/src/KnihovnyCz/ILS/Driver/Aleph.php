@@ -89,6 +89,9 @@ class Aleph extends AlephBase implements TranslatorAwareInterface
         if ($method == 'getBlankIllRequestTypes') {
             return !empty($this->config['ILLRequests']['placingEnabled']);
         }
+        if ($method == 'getMyBlocks') {
+            return !empty($this->config['ProfileBlocks']['enabled']);
+        }
         return parent::supportsMethod($method, $params);
     }
 
@@ -525,6 +528,49 @@ class Aleph extends AlephBase implements TranslatorAwareInterface
         $profile['expiration_date'] = $this->parseDate($expiry[0]);
         $profile['group'] = !empty($status[0]) ? $status[0] : null;
         return $profile;
+    }
+
+    /**
+     * Get blocks
+     *
+     * @param array $user The patron array
+     *
+     * @throws ILSException
+     * @return array      Array of the patron's profile data on success.
+     */
+    public function getMyBlocks($user)
+    {
+        if (!isset($user['college'])) {
+            $user['college'] = $this->useradm;
+        }
+        $xml = $this->doXRequest(
+            'bor-info',
+            [
+                'loans' => 'N', 'cash' => 'N', 'hold' => 'N',
+                'library' => $user['college'], 'bor_id' => $user['id'],
+            ],
+            true
+        );
+        $blocks = [];
+        $blockElements = [
+            'z303' => ['z303-delinq-1', 'z303-delinq-2', 'z303-delinq-3'],
+            'z305' => ['z305-delinq-1', 'z305-delinq-2', 'z305-delinq-3'],
+        ];
+        foreach ($blockElements as $parentElement => $childElements) {
+            foreach ($childElements as $childElement) {
+                $child = $xml->{$parentElement};
+                $block = (string)$child->{$childElement};
+                if (empty($block) || $block == '00') {
+                    continue;
+                }
+                $updated = (string)$child->{$childElement . '-update-date'};
+                $blocks[] = [
+                    'id' => 'block_' . $block,
+                    'updated' => $this->parseDate($updated),
+                ];
+            }
+        }
+        return $blocks;
     }
 
     /**
