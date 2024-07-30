@@ -72,6 +72,13 @@
 #      pre (string)      Like above.
 #      post (string)     Like above but the help text is displayed after the element.
 #
+#   prefillFields (array) Fields that could be prefilled by passing parameter to form URL. Could be
+#                         used only with hidden, text and textarea types.
+#                         Example:
+#                           prefillFields:
+#                             - siteCode
+#                          With configured field 'siteCode' enables prefilling the field with
+#                          /Feedback/Form/FeedbackSite?siteCode=website
 #
 #     Additional settings for date element:
 #
@@ -242,3 +249,42 @@ forms:
             label: "Computing"
           - value: "zemedelstvi"
             label: "Agriculture"
+
+
+  DigitalizationSuggestion:
+    title: digitalization_suggestion_title
+    enabled: true
+    useCaptcha: true
+    reportReferrer: true
+    reportUserAgent: true
+    recipient:
+      name: CPK
+      email: cpk-support@mzk.cz
+
+    onlyForLoggedUsers: false
+    emailSubject: '%%subject%%'
+    response: digitalization_suggestion_response
+    senderNameRequired: false
+    senderEmailRequired: true
+
+    primaryHandler: digitalizationrequest
+    secondaryHandlers:
+      - database
+
+    prefillFields:
+      - recordId
+
+    help:
+      pre: digitalization_suggestion_help_pre
+
+    fields:
+      - name: subject
+        type: hidden
+        settings:
+          - [value, 'Návrh na digitalizaci']
+      - name: reason
+        type: textarea
+        label: digitalization_reason
+        required: true
+      - name: recordId
+        type: hidden

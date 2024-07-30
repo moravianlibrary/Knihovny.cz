@@ -79,6 +79,13 @@ class SolrDefault extends \VuFind\RecordDriver\SolrDefault
     protected $libraryIdMappings;
 
     /**
+     * Digitalization request configuration
+     *
+     * @var \Laminas\Config\Config
+     */
+    protected \Laminas\Config\Config $digitalizationrequestConfig;
+
+    /**
      * Libraries with support for Ajax status
      *
      * @var \Laminas\Config\Config
@@ -997,5 +1004,59 @@ class SolrDefault extends \VuFind\RecordDriver\SolrDefault
     public function supportsAjaxStatus(): bool
     {
         return $this->libraryAjaxStatus[$this->getSourceId()] ?? false;
+    }
+
+    /**
+     * Get ids for deduplicated record available for digitization
+     *
+     * @return array
+     */
+    public function getIdsForDigitalization(): array
+    {
+        $parent = $this->getParentRecord();
+        $ids = [];
+        if ($parent !== null) {
+            foreach ($parent->getChildrenIdsAvailableForDigitalization() as $id) {
+                [$source] = explode('.', $id);
+                if ($this->digitalizationrequestConfig?->$source?->enabled ?? false) {
+                    $ids[] = $id;
+                }
+            }
+        }
+        return $ids;
+    }
+
+    /**
+     * Get children record available for digitization
+     *
+     * @return array
+     */
+    public function getChildrenIdsAvailableForDigitalization(): array
+    {
+        return $this->fields['ids_for_digitalization_display_mv'] ?? [];
+    }
+
+    /**
+     * Determine if record is available for digitalization
+     *
+     * @return bool
+     */
+    public function isAvailableForDigitalization(): bool
+    {
+        $source = $this->getSourceId();
+        return ($this->digitalizationrequestConfig?->$source?->enabled ?? false)
+            && ($this->fields['available_for_digitalization_boolean'] ?? false);
+    }
+
+    /**
+     * Attach digitalization request configuration
+     *
+     * @param \Laminas\Config\Config $digitaliztationRequestConfig Digitalization request configuration
+     *
+     * @return void
+     */
+    public function attachDigitalizationRequestConfig(\Laminas\Config\Config $digitaliztationRequestConfig): void
+    {
+        $this->digitalizationrequestConfig = $digitaliztationRequestConfig;
     }
 }

@@ -705,9 +705,11 @@ $config = [
             'form_handler' => [
                 'factories' => [
                     \KnihovnyCz\Form\Handler\AskLibrary::class => \Laminas\ServiceManager\Factory\InvokableFactory::class,
+                    \KnihovnyCz\Form\Handler\DigitalizationRequest::class => \KnihovnyCz\Form\Handler\DigitalizationRequestFactory::class,
                 ],
                 'aliases' => [
                     'asklibrary' => \KnihovnyCz\Form\Handler\AskLibrary::class,
+                    'digitalizationrequest' => \KnihovnyCz\Form\Handler\DigitalizationRequest::class,
                 ],
             ],
             'record_fallbackloader' => [

@@ -1,0 +1,26 @@
+<?php $recordLinker = $this->recordLinker($this->results); ?>
+<?php $source = $this->driver->getSourceId() ?>
+<?php if ($this->driver->tryMethod('isAvailableForDigitalization')): ?>
+  <a class="btn btn-light" href="<?=$this->url('feedback-form', ['id' => 'DigitalizationSuggestion'], ['query' => ['recordId' => $this->driver->getUniqueID()]]);?>">
+    <?=$this->transEsc('digitalization_suggestion_button_text');?>
+  </a>
+<?php else: ?>
+  <?php
+    $availableRecords = [];
+    foreach ($this->driver->tryMethod('getIdsForDigitalization') as $digiId) {
+      [$source, ] = explode('.', $digiId, 2);
+      $availableRecords[] = [
+        'label' => $this->translate('Source::' . $source),
+        'url' => $recordLinker->getUrl($digiId),
+      ];
+    }
+  ?>
+  <?php if (!empty($availableRecords)): ?>
+    <?=$this->transEsc('digitalization_available_in_other_libraries');?>
+    <ul>
+      <?php foreach($availableRecords as $ar): ?>
+        <li><a href="<?=$ar['url']?>"><?=$ar['label']?></a></li>
+      <?php endforeach; ?>
+    </ul>
+  <?php endif; ?>
+<?php endif; ?>

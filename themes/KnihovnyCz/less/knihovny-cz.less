@@ -741,7 +741,7 @@ body.ziskej-mode-dev {
   &:hover,
   &:focus,
   &:active {
-    color: #000;
+    color: @link-color;
     background-color: #d4d4d4;
     border-color: #ced4da;
   }
@@ -1062,7 +1062,7 @@ div .library-card-ajax {
   display: none;
 }
 
-form[action*="PtejteSeKnihovny"] {
+form[action*="PtejteSeKnihovny"], form[action*="DigitalizationSuggestion"] {
   .group-name {
     display: none;
   }
@@ -1072,6 +1072,12 @@ form[action*="PtejteSeKnihovny"] {
     img {
       margin-bottom: 0.8em;
     }
+  }
+}
+
+form[action*="DigitalizationSuggestion"] {
+  .form-info.pre {
+    font-weight: normal;
   }
 }
 
