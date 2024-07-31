@@ -51,6 +51,8 @@ envsubst.a8m -no-unset -i /etc/vufind/config.local.ini -o ${VUFIND_LOCAL_DIR}/co
 envsubst.a8m -no-unset -i /etc/vufind/Search2.local.ini -o ${VUFIND_LOCAL_DIR}/config/vufind/Search2.local.ini
 envsubst.a8m -no-unset -i /etc/vufind/content.local.ini -o ${VUFIND_LOCAL_DIR}/config/vufind/content.local.ini
 envsubst.a8m -no-unset -i /etc/vufind/obalkyknih.local.ini -o ${VUFIND_LOCAL_DIR}/config/vufind/obalkyknih.local.ini
+envsubst.a8m -no-unset -i /etc/vufind/digitalizationrequest.ini -o ${VUFIND_LOCAL_DIR}/config/vufind/digitalizationrequest.ini
+
 
 if [[ -n "$PARAM_VUFIND_ROBOTS_TXT" && "$PARAM_VUFIND_ROBOTS_TXT" != "robots.txt" && -e "$VUFIND_ROOT/public/$PARAM_VUFIND_ROBOTS_TXT" ]]; then
     cp "$VUFIND_ROOT/public/$PARAM_VUFIND_ROBOTS_TXT" "$VUFIND_ROOT/public/robots.txt"
