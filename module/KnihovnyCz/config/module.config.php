@@ -513,12 +513,14 @@ $config = [
                     \KnihovnyCz\Db\Row\Resource::class => \VuFind\Db\Row\RowGatewayFactory::class,
                     \KnihovnyCz\Db\Row\RecordStatus::class => \VuFind\Db\Row\RowGatewayFactory::class,
                     \KnihovnyCz\Db\Row\Notifications::class => \VuFind\Db\Row\RowGatewayFactory::class,
+                    \KnihovnyCz\Db\Row\Search::class => \VuFind\Db\Row\RowGatewayFactory::class,
                 ],
                 'aliases' => [
                     \VuFind\Db\Row\User::class => \KnihovnyCz\Db\Row\User::class,
                     \VuFind\Db\Row\UserCard::class => \KnihovnyCz\Db\Row\UserCard::class,
                     \VuFind\Db\Row\UserList::class => \KnihovnyCz\Db\Row\UserList::class,
                     \VuFind\Db\Row\Resource::class => \KnihovnyCz\Db\Row\Resource::class,
+                    \VuFind\Db\Row\Search::class => \KnihovnyCz\Db\Row\Search::class,
                 ],
             ],
             'db_service' => [
@@ -543,6 +545,7 @@ $config = [
                     \KnihovnyCz\Db\Table\UserListCategories::class => \VuFind\Db\Table\GatewayFactory::class,
                     \KnihovnyCz\Db\Table\RecordStatus::class => \VuFind\Db\Table\GatewayFactory::class,
                     \KnihovnyCz\Db\Table\Notifications::class => \VuFind\Db\Table\GatewayFactory::class,
+                    \KnihovnyCz\Db\Table\Search::class => \VuFind\Db\Table\GatewayFactory::class,
                 ],
                 'aliases' => [
                     \VuFind\Db\Table\User::class => \KnihovnyCz\Db\Table\User::class,
