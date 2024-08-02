@@ -36,6 +36,13 @@ class RecordController extends \VuFind\Controller\RecordController
     protected $redirectToLibrary = false;
 
     /**
+     * Source to redirect to when no source is present
+     *
+     * @var string
+     */
+    protected string $defaultSource;
+
+    /**
      * Constructor
      *
      * @param ServiceLocatorInterface $sm     Service manager
@@ -46,6 +53,7 @@ class RecordController extends \VuFind\Controller\RecordController
         parent::__construct($sm, $config);
         $this->redirectToLibrary = ($config->SearchTabs->Search2 ?? null)
             == 'Libraries directory';
+        $this->defaultSource = ($config->Record->defaultSource ?? '');
     }
 
     /**
@@ -65,6 +73,19 @@ class RecordController extends \VuFind\Controller\RecordController
             return $this->redirect()->toRoute(
                 'search2record',
                 $this->params()->fromRoute()
+            );
+        }
+        $id = $this->params()->fromRoute('id');
+        if (
+            !empty($this->defaultSource)
+            && count(explode('.', $id)) === 1
+        ) {
+            $routeParams = $this->params()->fromRoute();
+            $routeParams['id'] = $this->defaultSource . '.' . $id;
+            return $this->redirect()->toRoute(
+                null,
+                $routeParams,
+                ['query' => $this->params()->fromQuery()]
             );
         }
         return parent::dispatch($request, $response);
