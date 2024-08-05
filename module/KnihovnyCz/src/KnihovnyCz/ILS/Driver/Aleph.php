@@ -852,7 +852,7 @@ class Aleph extends AlephBase implements TranslatorAwareInterface
         $params = [
             'id'           => $patron['id'],
             'status_cten'  => $status,
-            'from'         => 'cpk',
+            'from'         => $from,
             'hmac'         => $hash,
         ];
         $query = http_build_query($params);
