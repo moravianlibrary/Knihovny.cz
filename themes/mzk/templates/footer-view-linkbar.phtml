@@ -33,7 +33,8 @@
           <?php endif; ?>
           <li><a href="http://www.ptejteseknihovny.cz/zadani-dotazu?q=BOA001" target="_blank"><?=$this->transEsc('Ask a Librarian')?></a></li>
           <li><a href="http://www.mzk.cz/faq" target="_blank"><?=$this->transEsc('link_faq')?></a></li>
-          <li><a href="https://docs.google.com/spreadsheet/viewform?formkey=dHN5S2pMa0pEYnJyQUtzbWU3Wm9YcWc6MQ&entry_3=https%3A%2F%2Fvufind.mzk.cz%2F%3Flng%3Dcs&entry_4=&TB_iframe=true&height=600&width=600" target="_blank"><?=$this->transEsc('link_feedback')?></a></li>
+          <?php $url = $this->escapeHtmlAttr($this->serverUrl(true)); ?>
+          <li><a href="https://docs.google.com/spreadsheet/viewform?formkey=dHN5S2pMa0pEYnJyQUtzbWU3Wm9YcWc6MQ&TB_iframe=true&height=600&width=600&entry.2299455=<?=$url?>" target="_blank"><?=$this->transEsc('link_feedback')?></a></li>
         </ul>
       </div>
     </div>
