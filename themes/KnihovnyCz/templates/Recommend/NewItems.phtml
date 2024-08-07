@@ -13,14 +13,17 @@
 
   <div class="authorbox">
     <form name='newItemsFilter' id='newItemsFilter' class='form-inline' method='get'>
-      <?=$results->getUrlQuery()->asHiddenFields(['page' => '/./', 'filter' => "/^{$dateField}:.*/"])?>
+      <?=
+        $results->getUrlQuery()->asHiddenFields(['page' => '/./', 'filter' => "/^{$dateField}:.*/"]);
+        $selectedDateRangeFilter = $this->recommend->getSelectedDateRangeFilter();
+      ?>
       <label for="<?=$this->escapeHtml($dateField)?>">
         <?=$this->translate('New items since')?>:&nbsp;
       </label>
       <select id="<?=$this->escapeHtml($dateField)?>" name="filter[]" class="jumpMenu form-control">
         <option value="" selected disabled hidden></option>
-        <?php foreach($dateRanges as $key => $val):?>
-          <option value="<?=$this->escapeHtml($val['filter'])?>" <?php if ($val['selected']):?> selected <?php endif; ?>><?=$this->escapeHtml($key);?> </option>
+        <?php foreach($dateRanges as $key => $filter):?>
+          <option value="<?=$this->escapeHtml($filter)?>" <?php if ($filter == $selectedDateRangeFilter):?> selected <?php endif; ?>><?=$this->escapeHtml($key);?> </option>
         <?php endforeach;?>
       </select>
       <noscript>
