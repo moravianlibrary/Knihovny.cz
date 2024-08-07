@@ -7,7 +7,7 @@
         <ul class="list-unstyled">
           <li><a href="<?=$this->url('search-history') ?>"><?=$this->transEsc('Search History')?></a></li>
           <?php /* <li><a href="<?=$this->url('search-conspectus') ?>"><?=$this->transEsc('Thematic Search')?></a></li> */?>
-          <li><a href="<?=$this->url('search-results', [], ['query' => ['newItems' => 1]]) ?>"><?=$this->transEsc('New Items')?></a></li>
+          <li><a href="<?=$this->url('search-results', [], ['query' => ['newItems' => 'true']]) ?>"><?=$this->transEsc('New Items')?></a></li>
         </ul>
       </div>
       <div class="col-xs-12 col-sm-6 col-md-4">
