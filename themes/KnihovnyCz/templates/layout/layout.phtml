@@ -88,6 +88,10 @@ $this->headMeta()->appendName('format-detection', 'telephone=no');
       // Collect small scripts together and append as one block:
       $appendScripts = [];
 
+      if (!empty($this->themeConfig()['stickyElements'])) {
+        $this->headScript()->appendFile('sticky_elements.js');
+      }
+
       if (!isset($this->renderingError)) {
         // Deal with cart stuff:
         $cart = $this->cart();
