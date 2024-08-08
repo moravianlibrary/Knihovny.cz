@@ -883,3 +883,16 @@ adv_search_location:
       - [onephrase, 1000]
       - [withPrefix, ~]
   FilterQuery: "*:* NOT record_format:library"
+
+Location:
+  ChildrenQuery: true
+  CustomMunge:
+    location_fuzzy:
+      - [uppercase]
+      - [preg_replace, '/\*/m', ""]
+      - [append, "* "]
+  QueryFields:
+    callnumber_second_str_mv:
+      - [onephrase, 1000]
+      - [location_fuzzy, ~]
+  FilterQuery: "*:* NOT record_format:library"

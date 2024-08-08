@@ -26,8 +26,6 @@ class NewItems implements \VuFind\Recommend\RecommendInterface
 
     protected const INTERVAL = '-1 month';
 
-    protected const FACET_ALIAS = 'New items since';
-
     protected const SOLR_DATE_FORMAT = 'Y-m-d\T00:00:00.000\Z';
 
     /**
@@ -71,11 +69,11 @@ class NewItems implements \VuFind\Recommend\RecommendInterface
     protected $limitToInterval = false;
 
     /**
-     * Selected date range
+     * Selected date range filter
      *
      * @var string|null
      */
-    protected $selectedDateRange = null;
+    protected $selectedDateRangeFilter = null;
 
     /**
      * List of date ranges
@@ -143,14 +141,21 @@ class NewItems implements \VuFind\Recommend\RecommendInterface
      */
     public function init($params, $request)
     {
-        $this->active = $request->get($this->activatingParameter) ?? false;
+        $months = $request->get($this->activatingParameter);
+        $this->active = $months ?? false;
         $filters = $params->getRawFilters();
+        $hasFilter = false;
         foreach ($filters as $key => $value) {
             if ($key == $this->dateField) {
-                $this->selectedDateRange = $value[0];
-                $params->addFacet($this->dateField, self::FACET_ALIAS);
+                $this->selectedDateRangeFilter = $this->createFilter($value[0]);
                 $this->active = true;
+                $hasFilter = true;
             }
+        }
+        $this->initDateRanges();
+        if ($this->active && !$hasFilter) {
+            $this->selectedDateRangeFilter = $this->createDataRangeFilter($months);
+            $params->addFilter($this->selectedDateRangeFilter);
         }
     }
 
@@ -165,26 +170,6 @@ class NewItems implements \VuFind\Recommend\RecommendInterface
      */
     public function process($results)
     {
-        $formatter = new IntlDateFormatter(
-            $this->translator->getLocale(),
-            IntlDateFormatter::FULL,
-            IntlDateFormatter::FULL
-        );
-        $formatter->setPattern(self::DATE_FORMAT_FOR_DISPLAY);
-        $begin = new DateTime(self::START_DATE);
-        $interval = DateInterval::createFromDateString(self::INTERVAL);
-        $period = new DatePeriod($begin, $interval, $this->intervals);
-        $previous = null;
-        foreach ($period as $date) {
-            $range = $this->createRange($date, $previous);
-            $this->dateRanges[$formatter->format($date)] = [
-                'filter' => $this->createFilter($range),
-                'selected' => ($this->selectedDateRange == $range),
-            ];
-            if ($this->limitToInterval) {
-                $previous = $date;
-            }
-        }
     }
 
     /**
@@ -205,6 +190,69 @@ class NewItems implements \VuFind\Recommend\RecommendInterface
     public function getDateField()
     {
         return $this->dateField;
+    }
+
+    /**
+     * Get selected date range filter
+     *
+     * @return string|null
+     */
+    public function getSelectedDateRangeFilter(): ?string
+    {
+        return $this->selectedDateRangeFilter;
+    }
+
+    /**
+     * Return data range filter for given number of months back
+     *
+     * @param string $months number of months back
+     *
+     * @return array|mixed
+     */
+    protected function createDataRangeFilter(string $months): string
+    {
+        // placeholder value to avoid no results at the beginning of the month
+        if ($months == 'true') {
+            $dayInMonth = intval(date('d'));
+            $months = ($dayInMonth >= 5) ? 1 : 2;
+        }
+        $index = intval($months);
+        if ($index <= 1) {
+            $index = 1;
+        }
+        $max = count($this->dateRanges);
+        if ($index >= $max) {
+            $index = $max;
+        }
+        $ranges = array_values($this->dateRanges);
+        return $ranges[$index - 1];
+    }
+
+    /**
+     * Initialize the data ranges
+     *
+     * @return void
+     */
+    protected function initDateRanges(): void
+    {
+        $formatter = new IntlDateFormatter(
+            $this->translator->getLocale(),
+            IntlDateFormatter::FULL,
+            IntlDateFormatter::FULL
+        );
+        $formatter->setPattern(self::DATE_FORMAT_FOR_DISPLAY);
+        $begin = new DateTime(self::START_DATE);
+        $interval = DateInterval::createFromDateString(self::INTERVAL);
+        $period = new DatePeriod($begin, $interval, $this->intervals);
+        $previous = null;
+        foreach ($period as $date) {
+            $range = $this->createRange($date, $previous);
+            $label = $formatter->format($date);
+            $this->dateRanges[$label] = $this->createFilter($range);
+            if ($this->limitToInterval) {
+                $previous = $date;
+            }
+        }
     }
 
     /**

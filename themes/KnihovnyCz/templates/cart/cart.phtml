@@ -14,7 +14,7 @@
   <?=$this->contextHelp('book-bag', 'heading')?>
 </div>
 <?=$this->flashmessages()?>
-<form class="form-inline" action="<?=$this->url('cart-processor')?>" method="post"  name="cartForm" data-lightbox-onsubmit="cartFormHandler">
+<form class="form-inline" action="<?=$this->url('cart-processor')?>" method="post" id="cart_form" name="cartForm" data-lightbox-onsubmit="cartFormHandler">
   <input type="hidden" id="dropdown_value">
   <input type="hidden" name="redirectInLightbox" value="true">
   <?php if (!$this->cart()->isEmpty()): ?>

@@ -218,7 +218,7 @@ class Aleph extends AlephBase implements TranslatorAwareInterface
                 'number' => (string)$z30->{'z30-inventory-number'},
                 'barcode' => (string)$z30->{'z30-barcode'},
                 'description' => (string)$z30->{'z30-description'},
-                'notes' => ($note == null) ? null : [$note],
+                'item_notes' => ($note == null) ? null : [$note],
                 'is_holdable' => true,
                 'addLink' => $addLink,
                 'linkText' => ($availability) ? 'Order' : 'Reserve',
@@ -852,7 +852,7 @@ class Aleph extends AlephBase implements TranslatorAwareInterface
         $params = [
             'id'           => $patron['id'],
             'status_cten'  => $status,
-            'from'         => 'cpk',
+            'from'         => $from,
             'hmac'         => $hash,
         ];
         $query = http_build_query($params);

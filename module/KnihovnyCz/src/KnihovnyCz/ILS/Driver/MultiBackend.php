@@ -8,6 +8,7 @@ use KnihovnyCz\Db\Table\InstSources;
 use KnihovnyCz\ILS\Service\SolrIdResolver;
 use VuFind\Auth\ILSAuthenticator;
 use VuFind\Config\PluginManager as ConfigManager;
+use VuFind\Date\DateException;
 use VuFind\Exception\ILS as ILSException;
 use VuFind\ILS\Driver\PluginManager;
 
@@ -206,11 +207,10 @@ class MultiBackend extends \VuFind\ILS\Driver\MultiBackend
     public function getMyProfile($patron)
     {
         $profile = parent::getMyProfile($patron);
-        if (
-            isset($profile['expiration_date'])
-            && $this->isExpired($profile['expiration_date'])
-        ) {
-            $profile['expired'] = true;
+        if (isset($profile['expiration_date'])) {
+            $expired = $this->dateDiff($profile['expiration_date']);
+            $profile['expired'] = ($expired > 0);
+            $profile['will_expire'] = ($expired <= 0 && $expired >= -30);
         }
         return $profile;
     }
@@ -386,16 +386,37 @@ class MultiBackend extends \VuFind\ILS\Driver\MultiBackend
      * Return if the date is in the past, used for checking expired checked
      * out items or registrations.
      *
-     * @param string $date Expiration date
+     * @param string $expire Expiration date in display format
      *
      * @return bool is expired
      */
-    protected function isExpired(string $date): bool
+    protected function isExpired(string $expire): bool
     {
-        if ($expire = $this->dateConverter->parseDisplayDate($date)) {
-            $dateDiff = $expire->diff(new \DateTime());
-            return $dateDiff->invert == 0 && $dateDiff->days > 0;
+        return $this->dateDiff($expire) > 0;
+    }
+
+    /**
+     * Return difference between base and target date in days
+     *
+     * @param string      $base   base date
+     * @param string|null $target target date (if null use current date)
+     *
+     * @return int                 number of days
+     *
+     * @throws DateException
+     */
+    protected function dateDiff(string $base, string $target = null): int
+    {
+        $baseDate = $this->dateConverter->parseDisplayDate($base);
+        if ($baseDate == false) {
+            throw new DateException('Invalid date: ' . $base);
         }
-        return false;
+        $targetDate = ($target == null) ? new \DateTime()
+            : $this->dateConverter->parseDisplayDate($target);
+        if ($targetDate == false) {
+            throw new DateException('Invalid date: ' . $target);
+        }
+        $dateDiff = $baseDate->diff($targetDate);
+        return ($dateDiff->invert == 0 ? 1 : -1) * $dateDiff->days;
     }
 }

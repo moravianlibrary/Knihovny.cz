@@ -29,7 +29,7 @@
           const showRequestLink = $showRequestLink;
           function updateHoldingsTable() {
             $('.status-loader').remove();
-            ['availability', 'request','collection_desc', 'callnumber_second', 'description', 'callnumber'].forEach(function hideTableColumn(column) {
+            ['availability', 'request','collection_desc', 'callnumber_second', 'description', 'callnumber', 'item_notes'].forEach(function hideTableColumn(column) {
               if ($('td[data-type="' + column + '"]').text().trim() === '') {
                 $('th[data-type="' + column + '"], td[data-type="' + column + '"]').hide();
               }
@@ -96,6 +96,9 @@
                   }
                   if (item.hasOwnProperty('callnumber') && item.callnumber) {
                     elm.find('td[data-type="callnumber"]').text(item.callnumber);
+                  }
+                  if (item.hasOwnProperty('item_notes') && item.item_notes && Array.isArray(item.item_notes)) {
+                    elm.find('td[data-type="item_notes"]').text(item.item_notes.join(', '));
                   }
                   if (item.link && showRequestLink) {
                     linkText = item.linkText ?? 'Place a Hold';
@@ -255,6 +258,7 @@
         <th data-type="collection_desc"><?=$this->transEsc('Collection')?></th>
         <th data-type="callnumber_second"><?=$this->transEsc('Location')?></th>
         <th data-type="description"><?=$this->transEsc('Description')?></th>
+        <th data-type="item_notes"><?=$this->transEsc('Item notes')?></th>
         <th data-type="callnumber"><?=$this->transEsc('callnumber_abbrev')?></th>
       </tr>
     </thead>
