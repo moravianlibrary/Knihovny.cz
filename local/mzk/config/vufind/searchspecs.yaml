@@ -889,7 +889,11 @@ Location:
   CustomMunge:
     location_fuzzy:
       - [uppercase]
+      - [preg_replace, '/[\s]+/m', '|']
       - [preg_replace, '/\*/m', ""]
+      - [preg_replace, '/\(/m', "\\("]
+      - [preg_replace, '/\)/m', "\\)"]
+      - [preg_replace, '/:/m', "\\:"]
       - [append, "* "]
   QueryFields:
     callnumber_second_str_mv:
