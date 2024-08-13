@@ -15,7 +15,7 @@
         <?=$this->record($current)->getCheckbox('', 'search-cart-form', $recordNumber)?>
       <?php endif; ?>
       <div class="record-number">
-        <?=$recordNumber ?>
+        <?=$this->localizedNumber($recordNumber) ?>
       </div>
       <?=$this->record($current)->getSearchResult('list', $this->results)?>
     </li>
