@@ -323,6 +323,7 @@ class Aleph extends AlephBase implements TranslatorAwareInterface
                 'duedate' => $this->parseDate($due),
                 'checkoutDate'  => $this->parseDate($checkoutDate),
                 'renewable' => $renew[0] == 'Y',
+                'message' => $renew[0] != 'Y' ? 'renew_item_no' : '',
             ];
             if ($history) {
                 $returned = (string)$z36->{$prefix . 'returned-date'};
