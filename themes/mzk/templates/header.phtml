@@ -2,7 +2,7 @@
   $this->loginTarget = ($this->frontPage ?? false) ? $this->url('myresearch-frontpagelogin') : $this->url('myresearch-userlogin');
   $this->slot('inspiration-link')->set('');
 ?>
-<?php $this->slot('demo')->start(); ?>
+<?php $this->slot('registration-link')->start(); ?>
   <li>
     <a href="https://registrace.mzk.cz/" class="icon-link">
       <?=$this->icon('sign-up', 'icon-link__icon') ?>
