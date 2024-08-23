@@ -400,8 +400,8 @@ class Params extends \VuFind\Search\Solr\Params
         $default = null
     ) {
         $keys = [
-            "f.${field}.facet.${parameter}",
-            "facet.${parameter}",
+            "f.{$field}.facet.{$parameter}",
+            "facet.{$parameter}",
         ];
         foreach ($keys as $key) {
             if ($params->hasParam($key)) {
