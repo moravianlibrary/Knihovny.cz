@@ -1,4 +1,3 @@
-version: '2.2'
 services:
     vufind6:
         image: "localhost/${IMAGE_NAME:-knihovny-cz-local}"
