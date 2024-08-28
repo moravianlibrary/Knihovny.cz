@@ -727,14 +727,6 @@ $config = [
                     'summon' => \KnihovnyCz\Record\FallbackLoader\Summon::class,
                 ],
             ],
-            'session' => [
-                'factories' => [
-                    \KnihovnyCz\Session\Redis::class => \KnihovnyCz\Session\RedisFactory::class,
-                ],
-                'aliases' => [
-                    'redis' => \KnihovnyCz\Session\Redis::class,
-                ],
-            ],
         ],
     ],
     'service_manager' => [
