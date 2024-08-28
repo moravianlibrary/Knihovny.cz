@@ -1,7 +1,7 @@
 <?php
   $this->metadata()->generateMetatags($this->driver);
 ?>
-<div class="media" vocab="http://schema.org/" resource="#record" typeof="<?=$this->driver->getSchemaOrgFormats()?> Product">
+<div class="media"<?=$this->schemaOrg()->getAttributes(['vocab' => 'http://schema.org/', 'resource' => '#record', 'typeof' => $this->schemaOrg()->getRecordTypes($this->driver)])?>>
   <?php
     $sigla = $this->driver->tryMethod('getSiglaDisplay');
     $QRCode = $this->record($this->driver)->getQRCode('core');
@@ -42,15 +42,13 @@
     </div>
   <?php endif; ?>
   <div class="media-body">
-    <h1 property="name" class="record-title" data-sigla="<?=$sigla ?: 'undefined' ?>"><?=$this->escapeHtml($this->driver->getShortTitle())?></h1>
+    <h1<?=$this->schemaOrg()->getAttributes(['property' => 'name'])?> class="record-title" data-sigla="<?=$sigla ?: 'undefined' ?>"><?=$this->escapeHtml($this->driver->getShortTitle())?></h1>
 
     <?php if ($this->driver->getExtraDetail('cached_record') && !$this->translationEmpty('cached_record_warning')): ?>
-
       <div class="alert alert-warning">
         <?=$this->transEsc('cached_record_warning')?>
       </div>
     <?php endif; ?>
-
 
     <?=$this->record($this->driver)->renderTemplate('wantit.phtml');?>
 

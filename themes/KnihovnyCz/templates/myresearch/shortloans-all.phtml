@@ -16,7 +16,7 @@ $this->headScript()->appendFile('holds.js');
   <h2><?=$this->transEsc('short_loan_list_text')?></h2>
   <?=$this->flashmessages();?>
   <?=$this->context($this)->renderInContext('librarycards/listcards.phtml', [
-      'user' => $this->auth()->isLoggedIn(),
+      'user' => $this->auth()->getUserObject(),
       'action' => $this->url('myresearch-shortloansajax'),
       'callback' => 'loadHolds',
     ]);

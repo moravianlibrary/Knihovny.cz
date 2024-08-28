@@ -1,6 +1,6 @@
 <?php
 
-namespace KnihovnyCz\Service;
+namespace KnihovnyCz\Db\Service;
 
 use Laminas\ServiceManager\Exception\ServiceNotCreatedException;
 use Laminas\ServiceManager\Exception\ServiceNotFoundException;

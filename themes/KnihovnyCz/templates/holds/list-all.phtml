@@ -20,7 +20,7 @@ $this->headScript()->appendFile('holds.js');
   <?=$this->flashmessages()?>
 
   <?=$this->context($this)->renderInContext('librarycards/listcards.phtml', [
-    'user' => $this->auth()->isLoggedIn(),
+    'user' => $this->auth()->getUserObject(),
     'action' => $this->url('holds-listajax'),
     'callback' => 'loadHolds',
   ]);

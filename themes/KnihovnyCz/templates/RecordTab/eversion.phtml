@@ -1,10 +1,10 @@
 <?php
     // Set page title.
     $this->headTitle($this->driver->getBreadcrumb());
-    $user = $this->auth()->isLoggedIn();
+    $user = $this->auth()->getUserObject();
 ?>
 
-<?php if ($user): ?>
+<?php if ($user != null): ?>
 <?=
   $this->context($this)->renderInContext(
       'RecordTab/availabilityalert.phtml',

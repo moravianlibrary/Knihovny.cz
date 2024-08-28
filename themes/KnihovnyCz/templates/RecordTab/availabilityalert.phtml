@@ -1,6 +1,6 @@
 <?php
-  $user = $this->auth()->isLoggedIn();
-  $cardsSources = $user ? $user->getLibraryPrefixes() : [];
+  $user = $this->auth()->getUserObject();
+  $cardsSources = $user != null ? $user->getLibraryPrefixes() : [];
 ?>
 <div class="alert alert-info <?=$this->class ?? ''?>">
   <?=$this->transEsc($this->mainMessage)?>

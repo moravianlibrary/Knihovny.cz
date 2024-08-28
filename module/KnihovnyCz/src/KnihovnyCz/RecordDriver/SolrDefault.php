@@ -622,8 +622,8 @@ class SolrDefault extends \VuFind\RecordDriver\SolrDefault
          *
          * @var \KnihovnyCz\Db\Row\User|false $user
          */
-        $user = $this->authManager->isLoggedIn();
-        if ($user) {
+        $user = $this->authManager->getUserObject();
+        if ($user != null) {
             $prefixes = $user->getLibraryPrefixes();
             array_unshift($prefixes, $this->getSourceId());
             uksort(

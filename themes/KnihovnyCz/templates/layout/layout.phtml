@@ -88,6 +88,10 @@ $this->headMeta()->appendName('format-detection', 'telephone=no');
       // Collect small scripts together and append as one block:
       $appendScripts = [];
 
+      if (!empty($this->themeConfig()['stickyElements'])) {
+        $this->headScript()->appendFile('sticky_elements.js');
+      }
+
       if (!isset($this->renderingError)) {
         // Deal with cart stuff:
         $cart = $this->cart();
@@ -126,6 +130,7 @@ $this->headMeta()->appendName('format-detection', 'telephone=no');
       }
 
       $root = rtrim($this->url('home'), '/');
+      $jsConfig = !isset($this->renderingError) ? $this->render('js-configs.phtml') : '{}';
       $translations = !isset($this->renderingError) ? $this->render('js-translations.phtml') : '{}';
       $dsb = DEFAULT_SEARCH_BACKEND;
       $cspNonce = $this->csp()->getNonce();
@@ -133,6 +138,7 @@ $this->headMeta()->appendName('format-detection', 'telephone=no');
       $appendScripts[] = <<<JS
           VuFind.path = '{$root}';
           VuFind.defaultSearchBackend = '{$dsb}';
+          VuFind.config.add({$jsConfig});
           VuFind.addTranslations({$translations});
           VuFind.addIcons({$icons});
           VuFind.setCspNonce('{$cspNonce}');

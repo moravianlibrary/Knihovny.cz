@@ -1,11 +1,10 @@
 <?php
   // Set up some convenience variables:
   $id = $this->driver->getUniqueId();
-  $selectorId = $this->escapeElementId($id);
   $source = $this->driver->getSourceIdentifier();
   if (isset($this->list) && is_object($this->list)) {
-    $list_id = $this->list->id;
-    $user_id = $this->list->user_id;
+    $list_id = $this->list->getId();
+    $user_id = $this->list->getUser()->getId();
   } else {
     $list_id = null;
     $user_id = $this->user ? $this->user->id : null;
@@ -104,8 +103,8 @@
             } ?>
 
           <?php
-            $listTags = ($this->usertags()->getMode() !== 'disabled') ? $this->driver->getTags(
-                null === $list_id ? true : $list_id, // get tags for all lists if no single list is selected
+            $listTags = ($this->usertags()->getMode() !== 'disabled') ? $this->record($this->driver)->getTagsFromFavorites(
+                $list_id,
                 $user_id,
                 'tag'
             ) : [];
@@ -113,11 +112,11 @@
           <?php if (count($listTags) > 0): ?>
             <strong><?=$this->transEsc('Your Tags')?>:</strong>
             <?php foreach ($listTags as $tag): ?>
-              <a href="<?=$this->currentPath() . $results->getUrlQuery()->addFacet('tags', $tag->tag)?>"><?=$this->escapeHtml($tag->tag)?></a>
+              <a href="<?=$this->currentPath() . $results->getUrlQuery()->addFacet('tags', $tag['tag'])?>"><?=$this->escapeHtml($tag['tag'])?></a>
             <?php endforeach; ?>
             <br>
           <?php endif; ?>
-          <?php $listNotes = $this->driver->getListNotes($list_id, $user_id); ?>
+          <?php $listNotes = $this->record($this->driver)->getListNotes($list_id, $user_id); ?>
           <?php if (count($listNotes) > 0): ?>
             <strong><?=$this->transEsc('Notes')?>:</strong>
             <?php if (count($listNotes) > 1): ?><br><?php endif; ?>
@@ -130,7 +129,7 @@
               <strong><?=$this->transEsc('Saved in')?>:</strong>
               <?php $i = 0; ?>
               <?php foreach ($this->lists as $current): ?>
-                <a href="<?=$this->url('userList', ['id' => $current->id])?>"><?=$this->escapeHtml($current->title)?></a><?php if ($i++ < count($this->lists) - 1): ?>,<?php endif; ?>
+                <a href="<?=$this->url('userList', ['id' => $current->getId()])?>"><?=$this->escapeHtml($current->getTitle())?></a><?php if ($i++ < count($this->lists) - 1): ?>,<?php endif; ?>
               <?php endforeach; ?>
               <br>
           <?php endif; ?>
@@ -204,6 +203,7 @@
             <span class="status ajax-availability hidden"><?=$this->transEsc('loading_ellipsis')?></span>
             <br><br>
           <?php endif; ?>
+          <?=$this->record($this->driver)->getPreviews()?>
         </div>
       </div>
 
@@ -219,16 +219,16 @@
           $deleteUrlGet = $deleteUrl . '?delete=' . urlencode($id) . '&amp;source=' . urlencode($source);
         ?>
         <?=
-        $this->component(
-            'confirm-button',
-            [
-            'buttonClass' => 'btn-link',
-            'buttonLink' => $deleteUrlGet,
-            'buttonIcon' => 'user-list-remove',
-            'buttonLabel' => 'Delete',
-            'confirmId' => 'confirm_delete_item_' . $this->escapeHtmlAttr($selectorId),
-          ]
-        )
+          $this->component(
+              'confirm-button',
+              [
+                  'buttonClass' => 'btn-link',
+                  'buttonLink' => $deleteUrlGet,
+                  'buttonIcon' => 'user-list-remove',
+                  'buttonLabel' => 'Delete',
+                  'confirmId' => 'confirm_delete_item_' . urlencode($id),
+              ]
+          )
         ?>
         <?=$this->driver->supportsCoinsOpenUrl() ? '<span class="Z3988" aria-hidden="true" title="' . $this->escapeHtmlAttr($this->driver->getCoinsOpenUrl()) . '"></span>' : ''?>
       </div>
@@ -239,10 +239,9 @@
   </div>
   <?php
     $escId = $this->escapeJs($id);
-    $escSelectorId = $this->escapeJs($selectorId);
     $escSource = $this->escapeJs($source);
     $script = <<<JS
-        $('#confirm_delete_item_${escSelectorId}').click(function(e) {
+        $('#confirm_delete_item_${escId}').click(function(e) {
             e.preventDefault();
             $.post('${deleteUrl}', {
                         'delete':'${escId}',

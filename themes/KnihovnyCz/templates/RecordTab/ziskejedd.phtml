@@ -17,7 +17,7 @@ $ziskejViewHelper = $this->ziskejEdd();
 /**
  * @var ?\KnihovnyCz\Db\Row\User $user
  */
-$user = $this->auth()->isLoggedIn();
+$user = $this->auth()->getUserObject();
 
 /**
  * @var \KnihovnyCz\Ziskej\ZiskejEdd $ziskejEdd
@@ -31,7 +31,7 @@ $dedupedRecordIds = $tab->getDedupedRecordIds();
 ?>
 <?php if ($ziskejViewHelper->isEnabled()): ?>
 
-  <?php if (!$user): ?>
+  <?php if ($user == null): ?>
     <div class="alert alert-info">
       <?php $loginUrl = $this->escapeHtmlAttr($this->recordLinker()->getTabUrl($this->driver, 'ZiskejEdd', ['login' => 'true'])); ?>
       <?=$this->translate('Ziskej::alert_not_logged_in', ['%%url%%' => $loginUrl])?>
@@ -70,7 +70,7 @@ $dedupedRecordIds = $tab->getDedupedRecordIds();
     </div>
   </div>
 
-  <?php if ($user): ?>
+  <?php if ($user != null): ?>
     <div class="panel panel-default">
       <div class="panel-heading">
         <h4 class="panel-title"><?=$this->translate('ZiskejEdd::connected_libraries') ?></h4>

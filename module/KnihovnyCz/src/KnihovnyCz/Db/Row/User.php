@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace KnihovnyCz\Db\Row;
 
-use Laminas\Db\ResultSet\ResultSet;
 use VuFind\Db\Row\User as Base;
 
 /**
@@ -57,7 +56,7 @@ class User extends Base
              *
              * @var \KnihovnyCz\Db\Row\UserCard $userCard
              */
-            foreach ($this->getLibraryCards() as $userCard) {
+            foreach ($this->getUserCardService()->getLibraryCards($this) as $userCard) {
                 if ($userCard->cat_username === $catUsername) {
                     return $userCard;
                 }
@@ -82,7 +81,7 @@ class User extends Base
          *
          * @var \KnihovnyCz\Db\Row\UserCard $userCard
          */
-        foreach ($this->getLibraryCards() as $userCard) {
+        foreach ($this->getUserCardService()->getLibraryCards($this) as $userCard) {
             if ($userCard->eppn === $eppn) {
                 return $userCard;
             }
@@ -105,7 +104,7 @@ class User extends Base
          *
          * @var \KnihovnyCz\Db\Row\UserCard $userCard
          */
-        foreach ($this->getLibraryCards() as $userCard) {
+        foreach ($this->getUserCardService()->getLibraryCards($this) as $userCard) {
             if ($userCard->getEppnDomain() === $eppnDomain) {
                 return $userCard;
             }
@@ -124,11 +123,11 @@ class User extends Base
      */
     public function deleteLibraryCard($id): void
     {
-        if (!$this->libraryCardsEnabled()) {
+        if (!$this->capabilities->libraryCardsEnabled()) {
             throw new \VuFind\Exception\LibraryCard('Library Cards Disabled');
         }
 
-        $cards = $this->getLibraryCards();
+        $cards = $this->getUserCardService()->getLibraryCards($this);
         if ($cards->count() <= 1) {
             throw new \Exception('Library card cannot be deleted');
         }
@@ -163,7 +162,7 @@ class User extends Base
      */
     public function activateLibraryCard($id): void
     {
-        if (!$this->libraryCardsEnabled()) {
+        if (!$this->capabilities->libraryCardsEnabled()) {
             throw new \VuFind\Exception\LibraryCard('Library Cards Disabled');
         }
         $userCard = $this->getDbTable('UserCard');
@@ -187,11 +186,18 @@ class User extends Base
     public function save(): int
     {
         // modification for GDPR - do not store last name, first name and email
-        // in database
+        // in database, empty and restore them after saving
+        $firstname = $this->firstname;
+        $lastname = $this->lastname;
+        $email = $this->email;
         $this->firstname = '';
         $this->lastname = '';
         $this->email = '';
-        return parent::save();
+        $id = parent::save();
+        $this->firstname = $firstname;
+        $this->lastname = $lastname;
+        $this->email = $email;
+        return $id;
     }
 
     /**
@@ -201,11 +207,11 @@ class User extends Base
      */
     public function getLibraryPrefixes()
     {
-        if (!$this->libraryCardsEnabled()) {
+        if (!$this->capabilities->libraryCardsEnabled()) {
             return [];
         }
         $myLibs = [];
-        foreach ($this->getLibraryCards() as $libCard) {
+        foreach ($this->getUserCardService()->getLibraryCards($this) as $libCard) {
             $ids = explode('.', $libCard['cat_username'] ?? '', 2);
             if (count($ids) == 2) {
                 $myLibs[] = $ids[0];
@@ -223,7 +229,7 @@ class User extends Base
      */
     protected function updateLibraryCardEntry(): void
     {
-        if (!$this->libraryCardsEnabled() || empty($this->cat_username)) {
+        if (!$this->capabilities->libraryCardsEnabled() || empty($this->cat_username)) {
             return;
         }
 
@@ -251,7 +257,7 @@ class User extends Base
      */
     public function activateCardByPrefix(string $source): bool
     {
-        foreach ($this->getLibraryCards()->toArray() as $card) {
+        foreach ($this->getUserCardService()->getLibraryCards($this) as $card) {
             if (($card['home_library'] ?? '') == $source) {
                 $this->activateLibraryCard($card['id']);
                 return true;
@@ -263,17 +269,17 @@ class User extends Base
     /**
      * Get all library cards associated with the user with enabled ILS.
      *
-     * @return \Laminas\Db\ResultSet\ResultSet
+     * @return array
      * @throws \VuFind\Exception\LibraryCard
      */
-    public function getLibraryCardsWithILS(): ResultSet
+    public function getLibraryCardsWithILS(): array
     {
         $cards = [];
         $filter = [];
         if (isset($this->config->LibraryCards->filter)) {
             $filter = $this->config->LibraryCards->filter->toArray();
         }
-        foreach ($this->getLibraryCards() as $card) {
+        foreach ($this->getUserCardService()->getLibraryCards($this) as $card) {
             [$prefix, $username] = explode(
                 '.',
                 $card['cat_username'] ?? '',
@@ -286,8 +292,7 @@ class User extends Base
                 $cards[] = $card;
             }
         }
-        $resultSet = new ResultSet();
-        return $resultSet->initialize($cards);
+        return $cards;
     }
 
     /**
@@ -319,7 +324,7 @@ class User extends Base
      */
     public function isSocial(): bool
     {
-        return !($this->getLibraryCardsWithILS()->count());
+        return empty($this->getLibraryCardsWithILS());
     }
 
     /**

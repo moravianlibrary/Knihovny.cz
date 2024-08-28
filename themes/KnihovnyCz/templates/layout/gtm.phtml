@@ -1,9 +1,9 @@
 <?php
 
 /* Chapter 2.1 - user information */
-$user = $this->auth()->isLoggedIn();
-$hashedUserId = $user ? "'" . $user->getHashedId() . "'" : 'undefined';
-$institutions = $user ? "'" . $user->getConnectedInstitutionsForGTM() . "'" : '';
+$user = $this->auth()->getUserObject();
+$hashedUserId = $user != null ? "'" . $user->getHashedId() . "'" : 'undefined';
+$institutions = $user != null ? "'" . $user->getConnectedInstitutionsForGTM() . "'" : '';
 $institutions = empty($institutions) ? 'undefined' : $institutions;
 
 $gtmUser = <<<JS

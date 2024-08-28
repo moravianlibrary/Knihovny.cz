@@ -33,13 +33,14 @@ class Resource extends \VuFind\Db\Table\Resource
     /**
      * Get a set of records from the requested favorite list.
      *
-     * @param string $user   ID of user owning favorite list
-     * @param string $list   ID of list to retrieve (null for all favorites)
-     * @param array  $tags   Tags to use for limiting results
-     * @param string $sort   Resource table field to use for sorting (null for
-     * no particular sort).
-     * @param int    $offset Offset for results
-     * @param int    $limit  Limit for results (null for none)
+     * @param string $user              ID of user owning favorite list
+     * @param string $list              ID of list to retrieve (null for all favorites)
+     * @param array  $tags              Tags to use for limiting results
+     * @param string $sort              Resource table field to use for sorting (null for
+     *                                  no particular sort).
+     * @param int    $offset            Offset for results
+     * @param int    $limit             Limit for results (null for none)
+     * @param ?bool  $caseSensitiveTags Should tags be searched case sensitively (null for configured default)
      *
      * @return \Laminas\Db\ResultSet\AbstractResultSet
      */
@@ -49,7 +50,8 @@ class Resource extends \VuFind\Db\Table\Resource
         $tags = [],
         $sort = null,
         $offset = 0,
-        $limit = null
+        $limit = null,
+        $caseSensitiveTags = null
     ) {
         // Set up base query:
         $obj = & $this;
