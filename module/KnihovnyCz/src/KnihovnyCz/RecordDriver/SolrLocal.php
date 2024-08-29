@@ -112,6 +112,9 @@ class SolrLocal extends \KnihovnyCz\RecordDriver\SolrMarc
             $filters['year'][$year] = $this->extractYear($year);
             $filters['volume'][$volume] = $this->extractVolume($volume);
         }
+        usort($items, function ($a, $b) {
+            return strnatcmp($b['year'], $a['year']) ?: strnatcmp($b['issue'], $a['issue']);
+        });
         foreach ($filters as $key => &$values) {
             if (count($values) > 1) {
                 $reverse = ($key == 'year') ? 1 : -1;
@@ -132,6 +135,8 @@ class SolrLocal extends \KnihovnyCz\RecordDriver\SolrMarc
                 $values = [];
             }
         }
+        $ajaxFilters = count($filters['year']) > 1
+            && $this->supportAjaxHoldingsFilters();
         return empty($items) ? [] :
             [
                 'holdings' => [
@@ -141,6 +146,7 @@ class SolrLocal extends \KnihovnyCz\RecordDriver\SolrMarc
                     ],
                 ],
                 'filters'  => $filters,
+                'ajaxFilters' => $ajaxFilters,
                 'recordId' => $recordId,
             ];
     }
@@ -225,6 +231,22 @@ class SolrLocal extends \KnihovnyCz\RecordDriver\SolrMarc
             return intval($matches[1]);
         }
         return $volume;
+    }
+
+    /**
+     * Support ajax holdings filter.
+     *
+     * @return bool
+     */
+    public function supportAjaxHoldingsFilters()
+    {
+        if ($this->ils == null) {
+            return false;
+        }
+        $config = $this->ils->getConfig('Holdings', ['id' => $this->getUniqueID()]) ?? [];
+        $filters = $config['filters'] ?? [];
+        return in_array('year', $filters)
+            && in_array('volume', $filters);
     }
 
     /**

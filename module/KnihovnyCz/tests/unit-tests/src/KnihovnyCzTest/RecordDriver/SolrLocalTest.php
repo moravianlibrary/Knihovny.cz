@@ -75,6 +75,7 @@ class SolrLocalTest extends \PHPUnit\Framework\TestCase
                    'XXIII' => 'XXIII',
                ],
             ],
+            'ajaxFilters' => false,
             'recordId' => 'mendelu.55567',
         ];
         $filename = 'records/offlineHoldings.json';
