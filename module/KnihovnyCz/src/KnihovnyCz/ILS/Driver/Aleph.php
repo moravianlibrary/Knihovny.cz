@@ -51,9 +51,10 @@ class Aleph extends AlephBase implements TranslatorAwareInterface
     {
         if ($func == 'getMyShortLoans') {
             return [];
-        }
-        if ($func == 'getMyPaymentLink') {
+        } elseif ($func == 'getMyPaymentLink') {
             return [];
+        } elseif ($func == 'Holdings') {
+            return [ 'filters' => [ 'year', 'volume' ] ];
         }
         return parent::getConfig($func, $params);
     }
@@ -120,7 +121,14 @@ class Aleph extends AlephBase implements TranslatorAwareInterface
         } elseif (isset($this->defaultPatronId)) {
             $params['patron'] = $this->defaultPatronId;
         }
-        $xml = $this->doRestDLFRequest(['record', $resource, 'items'], $params);
+        $filters = [];
+        if (isset($options['volume'])) {
+            $filters['volume'] = $options['volume'];
+        }
+        if (isset($options['year'])) {
+            $filters['year'] = $options['year'];
+        }
+        $xml = $this->doRestDLFRequest(['record', $resource, 'items'], $params + $filters);
         if (!empty($xml->{'items'})) {
             $items = $xml->{'items'}->{'item'};
         } else {
@@ -233,7 +241,7 @@ class Aleph extends AlephBase implements TranslatorAwareInterface
                 'requested' => (string)$requested,
             ];
         }
-        return $holding;
+        return ['holdings' => $holding, 'filters' => $filters];
     }
 
     /**

@@ -88,7 +88,16 @@ class GetHolding extends AbstractBase implements TranslatorAwareInterface
         $id = $params->fromPost('id', $params->fromQuery('id', null));
         $childrenId = $params->fromPost('childrenId', $params->fromQuery('childrenId', null));
         $source = explode('.', $id)[0];
-        $holding = $this->holds->getHoldings($id);
+        $options = [];
+        $year = $params->fromPost('year', $params->fromQuery('year', null));
+        if ($year != null) {
+            $options['year'] = $year;
+        }
+        $volume = $params->fromPost('volume', $params->fromQuery('volume', null));
+        if ($volume != null) {
+            $options['volume'] = $volume;
+        }
+        $holding = $this->holds->getHoldings($id, null, $options);
         $copy = [];
         $labels = [
             HoldingsLogic::STATUS_NOT_AVAILABLE => 'danger',
@@ -137,6 +146,7 @@ class GetHolding extends AbstractBase implements TranslatorAwareInterface
         }
         $response = [
             'status' => 'OK',
+            'filters' => $holding['filters'] ?? [],
             'holding' => $copy,
         ];
         return $this->formatResponse($response, 200);
