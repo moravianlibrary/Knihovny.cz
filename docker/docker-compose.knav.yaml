@@ -1,4 +1,3 @@
-version: '2.2'
 services:
   devel6:
     image: "localhost/${IMAGE_NAME:-knihovny-cz-devel}"
