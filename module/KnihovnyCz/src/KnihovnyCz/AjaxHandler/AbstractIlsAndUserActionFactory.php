@@ -44,7 +44,7 @@ class AbstractIlsAndUserActionFactory implements FactoryInterface
             $container->get(\VuFind\Session\Settings::class),
             $container->get(\KnihovnyCz\ILS\MultiConnection::class),
             $container->get(\VuFind\Auth\ILSAuthenticator::class),
-            $container->get(\VuFind\Auth\Manager::class)->isLoggedIn(),
+            $container->get(\VuFind\Auth\Manager::class)->getUserObject(),
             ...($options ?: [])
         );
     }

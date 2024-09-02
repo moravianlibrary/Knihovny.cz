@@ -40,7 +40,7 @@
         JS;
 
 ?>
-<?php if ($this->user): ?>
+<?php if ($this->user != null): ?>
   <?php
     $cards = $this->userCards($this->user->getLibraryCardsWithILS())->getSortedByLibraryName();
     $singleCard = $this->user->isSingleCard() && count($cards) == 1;

@@ -14,15 +14,13 @@
         $itemStatus = !empty($item['status']) ? $this->transEsc('HoldingStatus::' . $item['status']) : $this->transEsc('HoldingStatus::' . 'Available');
       ?>
       <td class="fullAvailability">
-        <?php if ($item['use_unknown_message'] ?? false): ?>
-          <span><?=$this->transEsc('status_unknown_message')?></span>
-        <?php elseif ((int)$item['availability'] === \VuFind\ILS\Logic\ItemStatus::STATUS_UNAVAILABLE): ?>
-          <span class="text-danger"><?=$this->transEsc($itemStatus)?></span>
-        <?php elseif ((int)$item['availability'] === \VuFind\ILS\Logic\ItemStatus::STATUS_UNCERTAIN): ?>
-          <span class="text-warning"><?=$this->transEsc($itemStatus)?></span>
-	<?php else: ?>
-          <span class="text-success"><?=$this->transEsc($itemStatus)?></span>
-        <?php endif; ?>
+        <?php
+          $availabilityStatus = $item['availability'];
+          $statusClass = $this->availabilityStatus()->getClass($availabilityStatus);
+          $statusDescription = $availabilityStatus->getStatusDescription();
+          $statusDescriptionTokens = $availabilityStatus->getStatusDescriptionTokens();
+        ?>
+        <span class="<?=$this->escapeHtmlAttr($statusClass)?>"><?=$this->transEsc($statusDescription, $statusDescriptionTokens)?></span>
         <?php if (isset($item['item_notes'])): ?>
           <div class="item-notes">
             <b><?=$this->transEsc('Item Notes')?>:</b>

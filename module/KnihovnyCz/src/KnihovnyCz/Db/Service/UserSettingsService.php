@@ -1,6 +1,6 @@
 <?php
 
-namespace KnihovnyCz\Service;
+namespace KnihovnyCz\Db\Service;
 
 use KnihovnyCz\Db\Table\UserSettings;
 use Laminas\Session\Container;
@@ -95,7 +95,7 @@ class UserSettingsService
             $setting->citation_style != null
             && in_array($setting->citation_style, $availableCitations)
         ) {
-            $this->session->citationStyle = $setting->citation_style;
+            $this->session->citationStyle = (string)$setting->citation_style;
         }
     }
 

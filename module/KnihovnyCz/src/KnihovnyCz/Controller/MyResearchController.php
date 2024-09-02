@@ -49,6 +49,13 @@ class MyResearchController extends MyResearchControllerBase
     protected $illFormClass = \KnihovnyCz\Form\IllForm::class;
 
     /**
+     * User account service
+     *
+     * @var \VuFind\Account\UserAccountService
+     */
+    protected $userAccountService = null;
+
+    /**
      * Constructor
      *
      * @param ServiceLocatorInterface      $sm           Service locator
@@ -64,6 +71,7 @@ class MyResearchController extends MyResearchControllerBase
     ) {
         parent::__construct($sm, $container, $configLoader, $export);
         $this->dateConverter = $sm->get(\KnihovnyCz\Date\Converter::class);
+        $this->userAccountService = $sm->get(\VuFind\Account\UserAccountService::class);
     }
 
     /**
@@ -74,7 +82,7 @@ class MyResearchController extends MyResearchControllerBase
     public function deleteUserAction()
     {
         // Stop now if the user does not have valid catalog credentials available:
-        if (!$user = $this->getAuthManager()->isLoggedIn()) {
+        if (($user = $this->getAuthManager()->getUserObject()) == null) {
             return $this->forceLogin();
         }
 
@@ -88,7 +96,7 @@ class MyResearchController extends MyResearchControllerBase
          */
         $authManager = $this->getAuthManager();
         if ($confirm && $authManager->isValidCsrfHash($csrf)) {
-            $user->delete();
+            $this->userAccountService->purgeUserData($user);
             return $this->logoutAction();
         }
 
@@ -381,10 +389,10 @@ class MyResearchController extends MyResearchControllerBase
         /**
          * User setting service
          *
-         * @var \KnihovnyCz\Service\UserSettingsService
+         * @var \KnihovnyCz\Db\Service\UserSettingsService $userSettings
          */
         $userSettings = $this->serviceLocator
-            ->get(\KnihovnyCz\Service\UserSettingsService::class);
+            ->get(\KnihovnyCz\Db\Service\UserSettingsService::class);
         if ($this->params()->fromPost('submit')) {
             if ($userSettings->save($this->params()->fromPost())) {
                 $this->flashMessenger()->addSuccessMessage(
@@ -397,9 +405,7 @@ class MyResearchController extends MyResearchControllerBase
             }
         }
         $view = $this->createViewModel();
-        $settings = $this->serviceLocator
-            ->get(\KnihovnyCz\Service\UserSettingsService::class)
-            ->getAvailableSettings();
+        $settings = $userSettings->getAvailableSettings();
         $view->recordsPerPage = $settings['recordsPerPage'];
         $view->citationStyle = $settings['citationStyle'];
         $view->setTemplate('myresearch/usersettings');
@@ -719,7 +725,7 @@ class MyResearchController extends MyResearchControllerBase
     public function directloginAction(): ViewModel|Response
     {
         // Don't log in if already logged in!
-        if ($this->getAuthManager()->isLoggedIn()) {
+        if ($this->getAuthManager()->getUserObject() != null) {
             return $this->redirect()->toRoute('home');
         }
         if ($si = $this->getSessionInitiator()) {

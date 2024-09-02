@@ -8,6 +8,7 @@ use VuFind\AjaxHandler\AbstractBase;
 use VuFind\I18n\Translator\TranslatorAwareInterface;
 use VuFind\I18n\Translator\TranslatorAwareTrait;
 use VuFind\ILS\Connection;
+use VuFind\ILS\Logic\AvailabilityStatus;
 use VuFind\ILS\Logic\Holds as Holds;
 use VuFind\Session\Settings as SessionSettings;
 use VuFind\View\Helper\Root\RecordLinker as RecordLinker;
@@ -87,7 +88,16 @@ class GetHolding extends AbstractBase implements TranslatorAwareInterface
         $id = $params->fromPost('id', $params->fromQuery('id', null));
         $childrenId = $params->fromPost('childrenId', $params->fromQuery('childrenId', null));
         $source = explode('.', $id)[0];
-        $holding = $this->holds->getHoldings($id);
+        $options = [];
+        $year = $params->fromPost('year', $params->fromQuery('year', null));
+        if ($year != null) {
+            $options['year'] = $year;
+        }
+        $volume = $params->fromPost('volume', $params->fromQuery('volume', null));
+        if ($volume != null) {
+            $options['volume'] = $volume;
+        }
+        $holding = $this->holds->getHoldings($id, null, $options);
         $copy = [];
         $labels = [
             HoldingsLogic::STATUS_NOT_AVAILABLE => 'danger',
@@ -104,21 +114,20 @@ class GetHolding extends AbstractBase implements TranslatorAwareInterface
                     if ($childrenId != null && is_array($link)) {
                         $link['record'] = $childrenId;
                     }
-                    $item['link']
-                        = $this->recordLinker->getRequestUrl($link);
+                    $item['link'] = $this->recordLinker->getRequestUrl($link);
                 }
-                if (isset($item['status'])) {
-                    $holdingStatus = $this->holdingsLogic->getAvailabilityByStatus(
-                        $item['status']
-                    );
-                    $item['label'] = $labels[$holdingStatus] ?? 'default';
-                    $status = $this->translateWithSource(
-                        $source,
-                        $item['status'],
-                        'HoldingStatus'
-                    );
-                    $item['status'] = $status;
-                }
+                /**
+                 * Availability status object
+                 *
+                 * @var AvailabilityStatus $availability
+                 */
+                $availability = $item['availability'];
+                $status = $availability->getStatusDescription();
+                $item['availability'] = $availability->isAvailable();
+                $holdingStatus = $this->holdingsLogic->getAvailabilityByStatus($status);
+                $item['label'] = $labels[$holdingStatus] ?? 'default';
+                $item['status'] = $this->translateWithSource($source, $status, 'HoldingStatus');
+
                 if (isset($item['linkText'])) {
                     $linkText = $item['linkText'];
                     if (isset($item['link'])) {
@@ -137,6 +146,7 @@ class GetHolding extends AbstractBase implements TranslatorAwareInterface
         }
         $response = [
             'status' => 'OK',
+            'filters' => $holding['filters'] ?? [],
             'holding' => $copy,
         ];
         return $this->formatResponse($response, 200);

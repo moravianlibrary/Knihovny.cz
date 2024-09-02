@@ -22,6 +22,7 @@ use VuFind\Db\Row\UserCard as Base;
  * @property string  $home_library
  * @property string  $created
  * @property string  $saved
+ * @property string  $edu_person_unique_id
  * @property ?string $eppn
  * @property ?string $major
  */
@@ -36,5 +37,51 @@ class UserCard extends Base
     {
         $array = explode('@', $this->eppn ?? '');
         return end($array) ?? null;
+    }
+
+    /**
+     * Get edu person unique id
+     *
+     * @return ?string
+     */
+    public function getEduPersonUniqueId(): ?string
+    {
+        return $this->edu_person_unique_id;
+    }
+
+    /**
+     * Set edu person unique id
+     *
+     * @param string $eduPersonUniqueId new edu person unique id
+     *
+     * @return UserCard
+     */
+    public function setEduPersonUniqueId(string $eduPersonUniqueId): UserCard
+    {
+        $this->edu_person_unique_id = $eduPersonUniqueId;
+        return $this;
+    }
+
+    /**
+     * Get eppn
+     *
+     * @return ?string
+     */
+    public function getEppn(): ?string
+    {
+        return $this->eppn;
+    }
+
+    /**
+     * Set eppn
+     *
+     * @param string $eppn new eduPersonPrincipalName
+     *
+     * @return UserCard
+     */
+    public function setEppn(string $eppn): UserCard
+    {
+        $this->eppn = $eppn;
+        return $this;
     }
 }

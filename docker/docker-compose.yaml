@@ -1,4 +1,3 @@
-version: '2.2'
 services:
     php-extensions6:
         image: "localhost/php-extensions6"

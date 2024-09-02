@@ -8,14 +8,14 @@
     $coverDetails = $this->record($this->driver)->getCoverDetails('core', 'medium');
     $cover = $coverDetails['html'];
 ?>
-<div class="media" vocab="http://schema.org/" resource="#record" typeof="<?=$this->driver->getSchemaOrgFormats()?> Product">
+<div class="media"<?=$this->schemaOrg()->getAttributes(['vocab' => 'http://schema.org/', 'resource' => '#record', 'typeof' => $this->schemaOrg()->getRecordTypes($this->driver)])?>>
   <div class="media-left medium img-col">
     <?php if ($cover): ?>
       <?=$cover?>
     <?php endif; ?>
   </div>
   <div class="media-body info-col">
-    <h1 property="name"><?=$this->driver->getTitle()?></h1>
+    <h1<?=$this->schemaOrg()->getAttributes(['property' => 'name'])?>><?=$this->driver->getTitle()?></h1>
 
     <?=$this->record($this->driver)->renderTemplate('wantit.phtml');?>
 
@@ -59,13 +59,13 @@
         </tr>
       <?php elseif ($this->driver->hasHTMLFullTextAvailable() && $restrictedView): ?>
         <tr id="html">
-          <td>
-            <?=$this->transEsc('Full text is not displayed to guests')?>
-          </td>
-          <td>
-            <a class="login" href="<?=$this->url('myresearch-userlogin')?>" rel="nofollow">
-              <strong><?=$this->transEsc('Login for full access')?></strong>
-            </a>
+          <td colspan="2">
+            <div class="alert alert-info">
+              <?=$this->transEsc('Full text is not displayed to guests')?>
+              <a class="login" href="<?=$this->url('myresearch-userlogin')?>" rel="nofollow">
+                <strong><?=$this->transEsc('Login for full access')?></strong>
+              </a>
+            </div>
           </td>
         </tr>
       <?php endif; ?>
@@ -84,7 +84,7 @@
         ?>
         <div>
           <a href="<?=$this->escapeHtmlAttr($url)?>" target="_blank" title="<?=$this->escapeHtmlAttr($mot)?>" class="custom-link">
-            <?php if ($icon): ?><img src="<?=$this->escapeHtmlAttr($icon)?>"> <?php endif; ?><?=$this->escapeHtml($name)?>
+            <?php if ($icon): ?><img alt="" src="<?=$this->escapeHtmlAttr($icon)?>"> <?php endif; ?><?=$this->escapeHtml($name)?>
           </a>
         </div>
       <?php endforeach; ?>

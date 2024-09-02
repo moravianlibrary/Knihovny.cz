@@ -144,8 +144,8 @@ abstract class ZiskejBase extends AbstractBase
     {
         $connectedLibs = [];
 
-        $user = $this->authManager->isLoggedIn();
-        if ($user) {
+        $user = $this->authManager->getUserObject();
+        if ($user != null) {
             /**
              * User library card
              *

@@ -2,4 +2,12 @@
   $this->loginTarget = ($this->frontPage ?? false) ? $this->url('myresearch-frontpagelogin') : $this->url('myresearch-userlogin');
   $this->slot('inspiration-link')->set('');
 ?>
+<?php $this->slot('registration-link')->start(); ?>
+<li>
+  <a href="https://www.lib.cas.cz/sluzby/vypujcni-sluzby/registrace/" class="icon-link">
+    <?=$this->icon('sign-up', 'icon-link__icon') ?>
+    <span class="icon-link__label"><?=$this->translate('registration_link_label')?></span>
+  </a>
+</li>
+<?php $this->slot('registration-link')->end(); ?>
 <?php include $this->parentTemplate('header.phtml');?>

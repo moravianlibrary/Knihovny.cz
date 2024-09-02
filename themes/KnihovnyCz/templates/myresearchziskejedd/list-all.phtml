@@ -21,7 +21,7 @@ $loadJs = <<<JS
   <?=$this->flashmessages();?>
   <p>
     <?=$this->context($this)->renderInContext('librarycards/listcards.phtml', [
-      'user' => $this->auth()->isLoggedIn(),
+      'user' => $this->auth()->getUserObject(),
       'action' => $this->url('myresearchziskejedd-listajax'),
       'callback' => 'loadZiskej',
     ]);

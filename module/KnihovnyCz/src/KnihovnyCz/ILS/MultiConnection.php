@@ -129,7 +129,7 @@ class MultiConnection extends Connection
     protected function callAll($method, $params = [], $merge = true)
     {
         $allResults = [];
-        $user = $this->getAuthManager()->isLoggedIn();
+        $user = $this->getAuthManager()->getUserObject();
         if (!$user) {
             throw new \Exception('User is not logged in!');
         }

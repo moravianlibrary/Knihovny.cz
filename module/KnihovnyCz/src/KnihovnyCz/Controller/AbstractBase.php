@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace KnihovnyCz\Controller;
 
-use KnihovnyCz\Db\Row\User;
-
 /**
  * Class AbstractBase
  *
@@ -17,19 +15,4 @@ use KnihovnyCz\Db\Row\User;
  */
 class AbstractBase extends \VuFind\Controller\AbstractBase
 {
-    /**
-     * Get the user object if logged in, false otherwise.
-     *
-     * @return User|false
-     */
-    protected function getUser(): false|User
-    {
-        /**
-         * User model
-         *
-         * @var User|false $user
-         */
-        $user = $this->getAuthManager()->isLoggedIn();
-        return $user;
-    }
 }
