@@ -129,6 +129,7 @@ fieldset, .fieldset {
   text-decoration: none;
   cursor: default;
 }
+
 .nav-tabs > li.active > a,
 .nav-tabs > li.active > a:hover,
 .nav-tabs > li.active > a:focus {
@@ -164,10 +165,22 @@ fieldset, .fieldset {
 
 .well.tab-content {
   padding: 19px 19px;
-  border-top: 0;
+  border-top-width: 0;
   -webkit-box-shadow: none;
   box-shadow: none;
   border-color: #dddddd;
+}
+
+.navbar-form {
+  .nav-tabs {
+    position: relative;
+    top: 1px;
+    z-index: 10;
+  }
+
+  .searchForm-inputs.well.tab-content {
+    border-top-width: 1px;
+  }
 }
 
 dl.dl-horizontal {
@@ -685,6 +698,7 @@ h6:hover .heading-permalink {
   a {
     color: #ffffff;
     text-decoration: underline;
+
     &:hover {
       color: #150007;
     }
@@ -827,14 +841,17 @@ body.ziskej-mode-dev {
       color: @gray-dark;
       background-color: @gray-lighter;
     }
+
     &.account-info {
       color: @gray-dark;
       background-color: @gray-lighter;
     }
+
     &.account-warning {
       color: @gray-dark;
       background-color: @gray-lighter;
     }
+
     &.account-alert {
       color: @gray-dark;
       background-color: @gray-lighter;
@@ -1031,9 +1048,10 @@ div .library-card-ajax {
   padding: @btn-padding-y @btn-padding-x;
   font-weight: bold;
   color: #555;
-  background-color: rgba(0,0,0,.05);
+  background-color: rgba(0, 0, 0, .05);
+
   &:hover {
-    background-color: rgba(0,0,0,.1);
+    background-color: rgba(0, 0, 0, .1);
   }
 }
 
@@ -1054,18 +1072,23 @@ div .library-card-ajax {
   display: inline-block;
   margin-bottom: 10px;
   margin-top: 10px;
+
   label {
     display: inline-block;
   }
+
   input {
     display: inline-block;
   }
+
   div {
     display: inline-block;
   }
+
   span {
     display: inline-block;
   }
+
   .slider-container {
     width: 200px;
   }
@@ -1079,6 +1102,7 @@ form[action*="PtejteSeKnihovny"], form[action*="DigitalizationSuggestion"] {
   .group-name {
     display: none;
   }
+
   .form-info.pre {
     margin: 0;
 
@@ -1103,9 +1127,11 @@ form[action*="DigitalizationSuggestion"] {
     display: grid;
     grid-template-columns: 1fr;
     grid-template-rows: min-content min-content min-content;
+
     li {
       margin-left: 0;
     }
+
     li.active {
       grid-row: -1;
     }
@@ -1123,7 +1149,6 @@ form[action*="DigitalizationSuggestion"] {
 .short-loan-reserved {
   background-color: @state-danger-bg;
 }
-
 
 
 .helptext {
@@ -1172,6 +1197,7 @@ a.context-help-link {
 ul.external-links {
   list-style: none;
   padding-left: 0;
+
   img {
     margin-right: 0.5em;
     margin-bottom: 0.3em;
@@ -1255,9 +1281,9 @@ img.signature {
 
 a,
 .icon-link__label,
-.searchForm .advanced-search-link
-{
+.searchForm .advanced-search-link {
   text-decoration: none;
+
   &:hover {
     color: @link-hover-color;
     text-decoration: @link-hover-decoration;
@@ -1297,6 +1323,7 @@ a,
 
 #searchForm .tab-content.well {
   width: 100%;
+
   > * {
     margin-bottom: 3px;
   }
@@ -1361,11 +1388,13 @@ strong.pull-left.order {
 html, body {
   /* Could causes wrong document.documentElement.clientHeight */
   min-height: 100vh;
+
   footer {
     position: sticky;
     top: 100vh;
   }
 }
+
 /** Sticky footer: end */
 
 // fix display facet links
@@ -1411,15 +1440,19 @@ html, body {
 
 .more-less-btn-wrapper.subject-line {
   color: @gray-dark;
+
   .more-btn, .less-btn {
     background-color: white;
     padding-left: 0;
+
     &:hover {
       color: @primary-darken;
     }
+
     &:focus {
       outline: none;
     }
+
     &:active {
       -webkit-box-shadow: none;
       box-shadow: none;
