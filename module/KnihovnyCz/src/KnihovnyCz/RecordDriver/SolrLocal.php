@@ -136,7 +136,7 @@ class SolrLocal extends \KnihovnyCz\RecordDriver\SolrMarc
             }
         }
         $ajaxFilters = count($filters['year']) > 1
-            && $this->supportAjaxHoldingsFilters();
+            && $this->supportsAjaxHoldingsFilters();
         return empty($items) ? [] :
             [
                 'holdings' => [
@@ -234,11 +234,24 @@ class SolrLocal extends \KnihovnyCz\RecordDriver\SolrMarc
     }
 
     /**
-     * Support ajax holdings filter.
+     * Supports ajax holdings.
      *
      * @return bool
      */
-    public function supportAjaxHoldingsFilters()
+    public function supportsAjaxHoldings(): bool
+    {
+        // We need to check also if driver name is not empty
+        return $this->ils != null
+            && !empty($this->ils->getDriverName($this->getUniqueID()))
+            && $this->ils->supportsMethod('getHolding', ['id' => $this->getUniqueID()]);
+    }
+
+    /**
+     * Supports ajax holdings filter.
+     *
+     * @return bool
+     */
+    public function supportsAjaxHoldingsFilters(): bool
     {
         if ($this->ils == null) {
             return false;

@@ -22,15 +22,15 @@
       $data['childrenId'] = $this->driver->getUniqueID();
     }
     $recordIdJson = json_encode($data, JSON_HEX_QUOT);
-    $isCaslin = (int)str_starts_with($this->driver->getUniqueID(), 'caslin');
     $preselectFilter = (int)($itemsCount > 30);
-    $ajaxFilters = (int)($holdings['ajaxFilters'] ?? 0);
+    $supportsAjaxHoldings = (int)$this->driver->tryMethod('supportsAjaxHoldings', [], false);
+    $supportsAjaxFilters = (int)($holdings['ajaxFilters'] ?? 0);
     $loadJs = <<<JS
           const statusUnknownHtml = '<span class="label label-default">' + VuFind.translate('status_unknown_message') + '</span>';
-          const isCaslin = $isCaslin;
           const showRequestLink = $showRequestLink;
           const preselectFilter = $preselectFilter;
-          const ajaxFilters = $ajaxFilters;
+          const supportsAjaxHoldings = $supportsAjaxHoldings;
+          const supportsAjaxFilters = $supportsAjaxFilters;
 
           function updateHoldingsTable() {
             ['availability', 'request', 'collection_desc', 'callnumber_second', 'description', 'callnumber', 'item_notes'].forEach(function hideTableColumn(column) {
@@ -161,7 +161,7 @@
                 values.add(rowVal);
               }
             });
-            if (ajaxFilters) {
+            if (supportsAjaxFilters) {
               values.forEach((value) => _ajaxStatus({$recordIdJson}, key, value));
             }
           };
@@ -179,13 +179,13 @@
             });
           });
 
-          if (isCaslin) {
+          if (!supportsAjaxHoldings) {
             updateHoldingsTable();
           } else if (preselectFilter) {
             $(document).ready(function setFilters() {
               $('select.holding_filter[name="year"]').change();
             });
-            if (!ajaxFilters) {
+            if (!supportsAjaxFilters) {
               _ajaxStatus({$recordIdJson});
             }
           } else {
@@ -304,7 +304,7 @@
           <?php
             echo $this->context($this)->renderInContext(
       'RecordTab/holdingsils/' . $this->tab->getTemplate() . '.phtml',
-      ['holding' => $row, 'source' => $source]
+      ['holding' => $row, 'source' => $source, 'ajax' => $supportsAjaxHoldings]
   );
           ?>
         <?php endforeach; ?>
