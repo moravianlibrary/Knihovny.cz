@@ -1231,22 +1231,31 @@ class Aleph extends AlephBase implements TranslatorAwareInterface
     /**
      * Parse a date.
      *
-     * @param string $date Date to parse
+     * @param string $date          Date to parse
+     * @param bool   $ignoreInvalid Ignore invalid date and return null instead
      *
-     * @return string
+     * @return string|null
      */
-    public function parseDate($date)
+    public function parseDate($date, bool $ignoreInvalid = true): string|null
     {
         if (empty($date)) {
             return null;
         }
         foreach (self::DATE_FORMATS as $regex => $format) {
             if (preg_match($regex, $date) === 1) {
-                return $this->dateConverter
-                    ->convertToDisplayDate($format, $date);
+                try {
+                    return $this->dateConverter
+                        ->convertToDisplayDate($format, $date);
+                } catch (\VuFind\Date\DateException $de) {
+                    if ($ignoreInvalid) {
+                        return null;
+                    }
+                    throw $de;
+                }
             }
         }
-        throw new \Exception("Invalid date: $date");
+        // always throw exception for unknown date format
+        throw new \VuFind\Date\DateException("Invalid date format: $date");
     }
 
     /**
