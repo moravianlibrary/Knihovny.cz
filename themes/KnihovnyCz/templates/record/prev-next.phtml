@@ -4,6 +4,14 @@
 <nav aria-label="<?=$this->transEscAttr('Search Results')?>">
   <ul class="pager hidden-print">
     <span class="pager-direction">
+      <?php if ($this->scrollData['linkToResults']): ?>
+        <li role="none" class="backToResults">
+        <a href="<?=$this->scrollData['linkToResults']?>" aria-label="<?=$this->transEscAttr('Back to search results')?>" rel="nofollow">
+          <?=$this->icon('back-to-results', 'icon-link__icon')?>
+          <span class="icon-link__label"><?=$this->transEsc('Back to search results')?></span>
+        </a>
+      </li>
+      <?php endif; ?>
       <?php if ($this->scrollData['previousRecord']): ?>
         <?php if ($this->scrollData['firstRecord']): ?>
           <li role="none">
