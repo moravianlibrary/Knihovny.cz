@@ -187,7 +187,7 @@ class KohaRest extends \VuFind\ILS\Driver\KohaRest
         $item = $this->getItem((int)$id);
         $statuses = $this->getItemStatusesForBiblio($item['biblio_id']);
         $statuses = array_filter(
-            $statuses,
+            $statuses['holdings'] ?? $statuses,
             function ($item) use ($id) {
                 return $item['item_id'] === (int)$id;
             }
@@ -196,12 +196,13 @@ class KohaRest extends \VuFind\ILS\Driver\KohaRest
             return [];
         }
         $status = array_shift($statuses);
+        $statusCode = array_shift($status['status_array']);
 
         return [
             'id' => $item['biblio_id'],
             'item_id' => $item['item_id'],
             'availability' => $status['availability'],
-            'status' => $item['not_for_loan_status'] ? 'Not For Loan' : ($this->statuses[$status['status']] ?? ''),
+            'status' => $item['not_for_loan_status'] ? 'Not For Loan' : ($this->statuses[$statusCode] ?? ''),
             'location' => $this->getItemLocationName($item),
             'callnumber' => $item['callnumber'],
             'duedate' => $status['duedate'] ?? null,
