@@ -2,10 +2,10 @@
   <table class='table table-striped responsive-table' id='e-version-table'>
     <thead>
     <tr>
-      <th class="col-md-2"><?=$this->translate('Destination');?></th>
-      <th class="col-md-2"><?=$this->translate('Accessibility');?></th>
-      <th class="col-md-3"><?=$this->translate('Link');?></th>
-      <th class="col-md-5"><?=$this->translate('Distributor');?></th>
+      <th class="col-md-2" data-type="destination"><?=$this->translate('Destination');?></th>
+      <th class="col-md-2" data-type="accessibility"><?=$this->translate('Accessibility');?></th>
+      <th class="col-md-3" data-type="link"><?=$this->translate('Link');?></th>
+      <th class="col-md-5" data-type="distributor"><?=$this->translate('Distributor');?></th>
     </tr>
     </thead>
     <tbody>
@@ -20,16 +20,30 @@
         $description = $link['desc'] ?? 'Link';
         ?>
         <tr>
-          <td data-title="<?=$this->translate('Destination');?>"><?=$this->transEsc($link['destination'])?></td>
-            <td data-title="<?=$this->translate('Accessibility');?>">
-              <?php if ($link['status'] !== 'unknown'): ?>
+          <td data-title="<?=$this->translate('Destination');?>" data-type="destination"><?=$this->transEsc($link['destination'])?></td>
+            <td data-title="<?=$this->translate('Accessibility');?>" data-type="accessibility">
+              <?php if (!in_array($link['status'], ['unknown', 'na'])): ?>
                 <span class="label label-<?=$statusClass?>"><?=$this->transEsc('link_access_status_' . $link['status'])?></span>
               <?php endif; ?>
             </td>
-          <td data-title="<?=$this->translate('Link');?>"><a title='<?=$this->transEsc($description)?>' href='<?=$link['url']?>' target='_blank'><?=$this->transEsc($description)?></a></td>
-          <td data-title="<?=$this->translate('Distributor');?>"><?=$this->transEsc('Source::' . $link['source'])?></td>
+          <td data-title="<?=$this->translate('Link');?>" data-type="link"><a title='<?=$this->transEsc($description)?>' href='<?=$link['url']?>' target='_blank'><?=$this->transEsc($description)?></a></td>
+          <td data-title="<?=$this->translate('Distributor');?>" data-type="distributor"><?=$this->transEsc('Source::' . $link['source'])?></td>
         </tr>
       <?php endforeach; ?>
     </tbody>
   </table>
 </div>
+<?php
+$js = <<<JS
+              $(document).ready(function updateLinksTable() {
+                ['destination', 'accessibility', 'distributor'].forEach(function hideTableColumn(column) {
+                  const hide = $('td[data-type="' + column + '"]').text().trim() === '';
+                  const columns = $('th[data-type="' + column + '"], td[data-type="' + column + '"]');
+                  (hide) ? columns.hide() : columns.show();
+                });
+              });
+            JS;
+?>
+<?=$this->inlineScript(\Laminas\View\Helper\HeadScript::SCRIPT, $js, 'SET')?>
+
+
