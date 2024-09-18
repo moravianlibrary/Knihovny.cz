@@ -227,7 +227,7 @@ class ShortLoans extends \Laminas\Mvc\Controller\Plugin\AbstractPlugin
             }
             $this->sortSlots($daySlots);
         }
-        $numOfSlots = max(($max - $min) * $slotsInHour, 0);
+        $numOfSlots = ceil(max(($max - $min) * $slotsInHour, 0));
         // final sort
         return [
             'slots' => $slots,
