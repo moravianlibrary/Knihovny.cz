@@ -432,4 +432,27 @@ class RecordController extends \VuFind\Controller\RecordController
         }
         return $this->redirect()->toRoute('myresearch-directlogin');
     }
+
+    /**
+     * Redirect the user to the main record view.
+     *
+     * @param string $params Parameters to append to record URL.
+     * @param string $tab    Record tab to display (null for default).
+     *
+     * @return mixed
+     */
+    protected function redirectToRecord($params = '', $tab = null)
+    {
+        $details = $this->getRecordRouter()
+            ->getTabRouteDetails($this->loadRecord(), $tab);
+        $target = $this->url()->fromRoute($details['route'], $details['params']);
+        $sid = $this->params()->fromQuery('sid');
+        if ($sid !== null) {
+            [$query, $fragment] = explode('#', $params, 2);
+            $query .= str_starts_with($query, '?') ? '&' : '?';
+            $query .= 'sid=' . urlencode($sid);
+            $params = $query . '#' . $fragment;
+        }
+        return $this->redirect()->toUrl($target . $params);
+    }
 }
