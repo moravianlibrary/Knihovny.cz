@@ -245,6 +245,28 @@ class Aleph extends AlephBase implements TranslatorAwareInterface
     }
 
     /**
+     * Get Status
+     *
+     * This is responsible for retrieving the status information of a certain
+     * record.
+     *
+     * @param string $id The record id to retrieve the holdings for
+     *
+     * @throws ILSException
+     * @return mixed     On success, an associative array with the following keys:
+     * id, availability (boolean), status, location, reserve, callnumber.
+     */
+    public function getStatus($id)
+    {
+        $statuses = $this->getHolding($id);
+        foreach ($statuses['holdings'] as &$status) {
+            $status['status']
+                = ($status['availability'] == 1) ? 'available' : 'unavailable';
+        }
+        return $statuses;
+    }
+
+    /**
      * Get Patron Transactions
      *
      * This is responsible for retrieving all transactions (i.e. checked out items)
