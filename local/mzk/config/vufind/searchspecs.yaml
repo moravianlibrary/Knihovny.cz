@@ -900,3 +900,10 @@ Location:
       - [onephrase, 1000]
       - [location_fuzzy, ~]
   FilterQuery: "*:* NOT record_format:library"
+
+adv_search_previous_owner:
+  ChildrenQuery: true
+  QueryFields:
+    previous_owner_txt_mv:
+      - [onephrase, 1]
+  FilterQuery: "*:* NOT record_format:library"
