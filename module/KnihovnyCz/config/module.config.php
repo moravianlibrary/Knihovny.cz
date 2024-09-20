@@ -527,7 +527,7 @@ $config = [
                 'factories' => [
                     \KnihovnyCz\Db\Service\NotificationsService::class => \VuFind\Db\Service\AbstractDbServiceFactory::class,
                     \KnihovnyCz\Db\Service\UserService::class => \VuFind\Db\Service\UserServiceFactory::class,
-
+                    \KnihovnyCz\Db\Service\CsrfTokenService::class => \VuFind\Db\Service\AbstractDbServiceFactory::class,
                 ],
                 'aliases' => [
                     \KnihovnyCz\Db\Service\NotificationsServiceInterface::class => \KnihovnyCz\Db\Service\NotificationsService::class,

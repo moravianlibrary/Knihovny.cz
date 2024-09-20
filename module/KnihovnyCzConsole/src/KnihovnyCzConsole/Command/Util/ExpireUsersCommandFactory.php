@@ -38,9 +38,9 @@ class ExpireUsersCommandFactory implements FactoryInterface
         $requestedName,
         array $options = null
     ) {
-        $tableManager = $container->get(\VuFind\Db\Table\PluginManager::class);
+        $tableManager = $container->get(\VuFind\Db\Service\PluginManager::class);
         return new $requestedName(
-            $tableManager->get(\VuFind\Db\Table\User::class),
+            $tableManager->get(\VuFind\Db\Service\UserServiceInterface::class),
             ...($options ?? [])
         );
     }
