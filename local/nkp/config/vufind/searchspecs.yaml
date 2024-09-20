@@ -886,3 +886,10 @@ adv_search_location:
       - [onephrase, 1000]
       - [withPrefix, ~]
   FilterQuery: "*:* NOT record_format:library"
+
+adv_search_previous_owner:
+  ChildrenQuery: true
+  QueryFields:
+    previous_owner_txt_mv:
+      - [onephrase, 1]
+  FilterQuery: "*:* NOT record_format:library"
