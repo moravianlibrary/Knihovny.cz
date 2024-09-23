@@ -2,7 +2,9 @@
 
 namespace KnihovnyCz\Db\Service;
 
+use DateTime;
 use VuFind\Db\Entity\UserEntityInterface;
+use VuFind\Db\Service\Feature\DeleteExpiredInterface;
 use VuFind\Db\Service\UserService as Base;
 
 /**
@@ -14,7 +16,7 @@ use VuFind\Db\Service\UserService as Base;
  * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://knihovny.cz Main Page
  */
-class UserService extends Base
+class UserService extends Base implements DeleteExpiredInterface
 {
     /**
      * Retrieve a user object from the database based on the given field.
@@ -49,5 +51,18 @@ class UserService extends Base
             $user->setEmail($details['email']);
         }
         return $user;
+    }
+
+    /**
+     * Delete expired records. Allows setting a limit so that rows can be deleted in small batches.
+     *
+     * @param DateTime $dateLimit Date threshold of an "expired" record.
+     * @param ?int     $limit     Maximum number of rows to delete or null for no limit.
+     *
+     * @return int Number of rows deleted
+     */
+    public function deleteExpired(DateTime $dateLimit, ?int $limit = null): int
+    {
+        return $this->getDbTable('User')->deleteExpired($dateLimit->format('Y-m-d H:i:s'), $limit);
     }
 }
