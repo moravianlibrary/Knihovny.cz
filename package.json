@@ -1,6 +1,6 @@
 {
   "name": "knihovny-cz",
-  "version": "2.15.5",
+  "version": "2.15.6",
   "description": "Dev tools to handle css preprocessing, js magic, and compression",
   "repository": {
     "type": "git",
