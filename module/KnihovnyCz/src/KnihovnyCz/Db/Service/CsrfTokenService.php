@@ -7,6 +7,7 @@ namespace KnihovnyCz\Db\Service;
 use DateTime;
 use VuFind\Db\Service\AbstractDbService;
 use VuFind\Db\Service\Feature\DeleteExpiredInterface;
+use VuFind\Db\Table\DbTableAwareInterface;
 use VuFind\Db\Table\DbTableAwareTrait;
 
 /**
@@ -18,7 +19,7 @@ use VuFind\Db\Table\DbTableAwareTrait;
  * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://knihovny.cz Main Page
  */
-class CsrfTokenService extends AbstractDbService implements DeleteExpiredInterface
+class CsrfTokenService extends AbstractDbService implements DeleteExpiredInterface, DbTableAwareInterface
 {
     use DbTableAwareTrait;
 
