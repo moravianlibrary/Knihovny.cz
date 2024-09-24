@@ -558,6 +558,7 @@ $config = [
                     'UserSettings' => \KnihovnyCz\Db\Table\UserSettings::class,
                     \VuFind\Db\Table\Resource::class => \KnihovnyCz\Db\Table\Resource::class,
                     'notifications' => \KnihovnyCz\Db\Table\Notifications::class,
+                    'CsrfToken' => \KnihovnyCz\Db\Table\CsrfToken::class,
                 ],
             ],
             'ils_driver' => [
