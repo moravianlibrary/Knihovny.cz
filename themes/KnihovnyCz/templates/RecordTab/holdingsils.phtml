@@ -121,9 +121,16 @@
                     elm.find('td[data-type="item_notes"]').text(item.item_notes.join(', '));
                   }
                   if (item.link && showRequestLink) {
-                    linkText = item.linkText ?? 'Place a Hold';
+                    const linkText = item.linkText ?? 'Place a Hold';
+                    const baseUrl = new URL(window.location);
+                    const url = new URL(item.link, baseUrl);
+                    const sid = baseUrl.searchParams.get('sid');
+                    if (sid != null) {
+                      url.searchParams.set('sid', sid);
+                    }
+                    const newLink = url.href;
                     elm.find('td[data-type="request"]')
-                      .html('<a href="' + item.link + '">' + VuFind.translate(linkText) + '</a>');
+                      .html('<a href="' + newLink + '">' + VuFind.translate(linkText) + '</a>');
                   }
                   const possiblyDuplicateData = [
                     { primary: 'callnumber', secondary: 'callnumber_second' },
