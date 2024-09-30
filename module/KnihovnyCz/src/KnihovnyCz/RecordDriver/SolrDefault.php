@@ -1059,4 +1059,14 @@ class SolrDefault extends \VuFind\RecordDriver\SolrDefault
     {
         $this->digitalizationrequestConfig = $digitaliztationRequestConfig;
     }
+
+    /**
+     * Get all call numbers associated with the record.
+     *
+     * @return array
+     */
+    public function getCallNumbers(): array
+    {
+        return (array)($this->fields['local_callnumber_str_mv'] ?? []);
+    }
 }
