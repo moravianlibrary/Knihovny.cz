@@ -759,6 +759,7 @@ $config = [
             \KnihovnyCz\ILS\Logic\Holds::class => \VuFind\ILS\Logic\LogicFactory::class,
             \KnihovnyCz\Wikidata\SparqlService::class => \KnihovnyCz\Wikidata\SparqlServiceFactory::class,
             \KnihovnyCz\Autocomplete\SuggestionFilter::class => \KnihovnyCz\Autocomplete\SuggestionFilterFactory::class,
+            \KnihovnyCz\Cache\Manager::class => \VuFind\Cache\ManagerFactory::class,
         ],
         'aliases' => [
             'VuFind\Http' => 'VuFindHttp\HttpService',
@@ -777,6 +778,7 @@ $config = [
             \VuFind\Record\Loader::class => \KnihovnyCz\Record\Loader::class,
             \VuFind\Search\Solr\Results::class => \KnihovnyCz\Search\Solr\Results::class,
             \VuFind\ILS\Logic\Holds::class => \KnihovnyCz\ILS\Logic\Holds::class,
+            \VuFind\Cache\Manager::class => \KnihovnyCz\Cache\Manager::class,
         ],
         'invokables' => [
             \KnihovnyCz\Service\GoogleBooksLinkService::class,
