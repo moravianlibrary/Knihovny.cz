@@ -177,11 +177,6 @@
                               backingFilePath="/etc/shibboleth/cesnet-proxy-idp.xml"
                               reloadInterval="7200"/>
 
-            <!-- hosted IdPs by knihovny.cz not in eduID.cz federation -->
-            <MetadataProvider type="XML" uri="https://vfu.knihovny.cz/metadata.xml"
-                              backingFilePath="/etc/shibboleth/vfu-knihovny-idp.xml"
-                              reloadInterval="7200"/>
-
         </MetadataProvider>
 
         <!-- Chain the two built-in trust engines together. -->
