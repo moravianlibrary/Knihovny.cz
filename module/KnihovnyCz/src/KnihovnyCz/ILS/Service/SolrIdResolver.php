@@ -65,6 +65,9 @@ class SolrIdResolver
         foreach ($recordsToResolve as $record) {
             $identifier = $record[$itemIdentifier] ?? null;
             if (!empty($identifier)) {
+                $queryFieldPrefix = $record['base'] ?? $config['solrQueryFieldPrefix'] ?? '';
+                $identifier = !empty($queryFieldPrefix)
+                    ? $queryFieldPrefix . '.' . $identifier : $identifier;
                 $idsToResolve[] = $identifier;
             }
         }
@@ -99,7 +102,6 @@ class SolrIdResolver
             return $results;
         }
         $queryField = $config['solrQueryField'] ?? $this->defaultSolrQueryField;
-        $queryFieldPrefix = $config['solrQueryFieldPrefix'] ?? '';
         $params = new \KnihovnyCz\Search\ParamBag(
             [
             'fq' => ['merged_child_boolean:true'],
@@ -109,9 +111,12 @@ class SolrIdResolver
         $params->setApplyChildFilter(false);
         $fullQuery = new \VuFindSearch\Query\QueryGroup('OR');
         $idMappings = [];
-        foreach ($ids as $id) {
-            $idForQuery = !empty($queryFieldPrefix)
-                ? $queryFieldPrefix . '.' . $id : $id;
+        foreach ($ids as $idForQuery) {
+            $id = $idForQuery;
+            $idsParts = explode('.', $idForQuery);
+            if (count($idsParts) === 2) {
+                $id = $idsParts[1];
+            }
             $idMappings[$idForQuery] = $id;
             $query = new \VuFindSearch\Query\Query($queryField . ':' . $idForQuery);
             $fullQuery->addQuery($query);

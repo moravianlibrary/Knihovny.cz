@@ -339,6 +339,7 @@ class Aleph extends AlephBase implements TranslatorAwareInterface
             // Secondary, Aleph-specific identifier that may be useful for
             // local customizations
             $adm_id = (string)$z30->{'z30-doc-number'};
+            $base = (string)$z30->{'translate-change-active-library'};
 
             $transaction = [
                 'id' => $this->barcodeToID($barcode),
@@ -352,6 +353,7 @@ class Aleph extends AlephBase implements TranslatorAwareInterface
                 'barcode' => $barcode,
                 'duedate' => $this->parseDate($due),
                 'checkoutDate'  => $this->parseDate($checkoutDate),
+                'base' => $base,
             ];
             if ($history) {
                 $returned = (string)$z36->{$prefix . 'returned-date'};
@@ -438,6 +440,7 @@ class Aleph extends AlephBase implements TranslatorAwareInterface
             // Secondary, Aleph-specific identifier that may be useful for
             // local customizations
             $adm_id = (string)$z30->{'z30-doc-number'};
+            $base = (string)$z30->{'translate-change-active-library'};
 
             $holdList[] = [
                 'type' => $type,
@@ -459,6 +462,7 @@ class Aleph extends AlephBase implements TranslatorAwareInterface
                 'status' => $status,
                 'position' => $position,
                 'z37_status' => $z37_status,
+                'base' => $base,
             ];
         }
         return $holdList;
