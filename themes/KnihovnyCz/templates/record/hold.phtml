@@ -19,7 +19,7 @@
   <?= $this->transEsc('Back to record'); ?>
 </a>
 
-<h2><?=$this->transEsc('HoldingLinkText::' . $this->linkText)?></h2>
+<h2 id="tabnav"><?=$this->transEsc('HoldingLinkText::' . $this->linkText)?></h2>
 <?php if ($this->helpTextHtml): ?>
   <div class="helptext <?=strtolower($this->linkText)?>"><?=$this->helpTextHtml?></div>
 <?php endif; ?>
