@@ -54,6 +54,7 @@ class CitaceProServiceFactory implements FactoryInterface
         $defaultCitationStyle = isset($session->citationStyle)
             && !empty($session->citationStyle) ? $session->citationStyle
             : $defaultCitationStyle;
-        return new $requestedName($config, (string)$defaultCitationStyle);
+        $recordLoader = $container->get(\VuFind\Record\Loader::class);
+        return new $requestedName($config, (string)$defaultCitationStyle, $recordLoader);
     }
 }

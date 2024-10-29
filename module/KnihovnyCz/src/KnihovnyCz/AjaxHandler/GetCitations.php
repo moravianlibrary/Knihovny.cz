@@ -48,13 +48,22 @@ class GetCitations extends \VuFind\AjaxHandler\AbstractBase
         $this->disableSessionWrites();  // avoid session write timing bug
         $ids = $params->fromPost('recordIds');
         $citeStyle = $params->fromPost('citationStyle');
+        $source = $params->fromPost('recordSource');
 
         $citations = [];
         foreach ($ids as $id) {
             try {
-                $citations[$id] = $this->citacePro->getCitation($id, $citeStyle);
+                $citations[] = [
+                    'id' => $id,
+                    'source' => $source,
+                    'content' => $this->citacePro->getCitation($id, $citeStyle, $source),
+                ];
             } catch (\Exception $ex) {
-                $citations[$id] = false;
+                $citations[] = [
+                    'id' => $id,
+                    'source' => null,
+                    'content' => false,
+                ];
             }
         }
         return $this->formatResponse($citations);

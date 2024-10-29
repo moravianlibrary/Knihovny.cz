@@ -12,17 +12,17 @@
   $citationStyles = $this->driver->getCitationFormats();
   $citationLink = $this->driver->getCitationLink();
   $currentStyle = array_key_exists($this->style, $citationStyles) ? $this->style : $this->driver->getDefaultCitationStyle();
-  $recordId = $driver->getUniqueID();
   ?>
   <h2><?=$this->transEsc('Record Citations') ?>: <span class="title-in-heading"><?=$this->escapeHtml($this->driver->getBreadcrumb())?></span></h2>
   <?=
     $this->context($this)->renderInContext(
         'cite/cite.phtml',
         [
-            'citationStyles' => $citationStyles,
-            'citations' => [ $driver->getUniqueID() => $citation ],
-            'citationLink' => $driver->getCitationLink(),
-            'currentStyle' => $currentStyle,
+          'citationStyles' => $citationStyles,
+          'citations' => [ $this->driver->getUniqueID() => $citation ],
+          'source' => $this->driver->getSourceIdentifier(),
+          'citationLink' => $this->driver->getCitationLink(),
+          'currentStyle' => $currentStyle,
         ]
     );
   ?>

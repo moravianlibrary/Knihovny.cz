@@ -53,6 +53,10 @@ class SummonFactory extends \VuFind\RecordDriver\SummonFactory
                 $container->get(\VuFind\Cache\Manager::class)->getCache('object')
             );
         }
+        $driver->attachCitaceProService(
+            $container->get(\KnihovnyCz\Service\CitaceProService::class)
+        );
+        $driver->attachRecordLinker($container->get('ViewHelperManager')->get('recordLinker'));
         return $driver;
     }
 }

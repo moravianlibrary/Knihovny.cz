@@ -64,7 +64,7 @@ trait CitaceProTrait
      */
     public function getCitation(?string $style = null): string
     {
-        return $this->citacePro->getCitation($this->getUniqueID(), $style);
+        return $this->citacePro->getCitation($this->getUniqueID(), $style, $this->getSourceIdentifier());
     }
 
     /**
