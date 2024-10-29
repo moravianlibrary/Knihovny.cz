@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace KnihovnyCz\Service;
 
 use Laminas\Config\Config;
+use VuFind\Record\Loader;
 
 /**
  * Class CitaceProService
@@ -20,25 +21,17 @@ class CitaceProService implements \VuFindHttp\HttpServiceAwareInterface
     use \VuFindHttp\HttpServiceAwareTrait;
 
     /**
-     * Configuration
-     */
-    protected Config $config;
-
-    /*
-     * Default citation style
-     */
-    protected string $defaultCitationStyle;
-
-    /**
      * CitaceProService constructor.
      *
-     * @param Config $config               Citation       configuration
-     * @param string $defaultCitationStyle default citation style
+     * @param Config $config               Citation configuration
+     * @param string $defaultCitationStyle Default citation style
+     * @param Loader $recordLoader         Record loader
      */
-    public function __construct(Config $config, $defaultCitationStyle)
-    {
-        $this->config = $config;
-        $this->defaultCitationStyle = $defaultCitationStyle;
+    public function __construct(
+        protected Config $config,
+        protected string $defaultCitationStyle,
+        protected Loader $recordLoader
+    ) {
     }
 
     /**
@@ -46,28 +39,27 @@ class CitaceProService implements \VuFindHttp\HttpServiceAwareInterface
      *
      * @param string      $recordId Record identifier
      * @param string|null $style    Citation style
+     * @param string|null $source   Record source
      *
      * @return string Generated citation as HTML snippet
      * @throws \Exception
      */
-    public function getCitation(string $recordId, ?string $style = null): string
+    public function getCitation(string $recordId, ?string $style = null, ?string $source = 'Solr'): string
     {
-        $source = 'Solr';
+        $record = null;
         if (str_contains($recordId, '|')) {
             [$source, $recordId] = explode('|', $recordId);
         }
         if ($source != 'Solr') {
-            throw new \Exception('Citation not found');
+            $record = $this->recordLoader->load($recordId, $source);
         }
-        $style = $style && $this->isCitationStyleValid($style)
-            ? $style : $this->getDefaultCitationStyle();
-
-        $query = [
-            'citacniStyl' => $style,
-        ];
-        $citationServerUrl = 'https://www.citacepro.com/api/cpk/citace/'
-            . urlencode($recordId) . '?' . http_build_query($query);
-        $http = $this->httpService->createClient($citationServerUrl, 'GET');
+        $openUrl = $record != null
+            ? $record->tryMethod('getOpenUrlLinkForCitations', [$style])
+            : $this->getCitationApiUrl($recordId, $style);
+        if (empty($openUrl)) {
+            throw new \Exception('Citation not found: No function for URL generation');
+        }
+        $http = $this->httpService->createClient($openUrl, 'GET');
         $response = $http->send();
         if ($response->getStatusCode() != 200) {
             throw new \Exception('Citation not found');
@@ -79,8 +71,27 @@ class CitaceProService implements \VuFindHttp\HttpServiceAwareInterface
         if ($results === false || !$item = $results->item(0)) {
             throw new \Exception('Citation not found');
         }
-        $citation = $item->c14n();
-        return $citation;
+        return $item->c14n();
+    }
+
+    /**
+     * Get citation from citacepro.com API
+     *
+     * @param string  $recordId Record identifier
+     * @param ?string $style    Citation style
+     *
+     * @return string
+     * @throws \Exception
+     */
+    protected function getCitationApiUrl(string $recordId, ?string $style = null): string
+    {
+
+        $style = $style && $this->isCitationStyleValid($style) ? $style : $this->getDefaultCitationStyle();
+
+        $query = [
+            'citacniStyl' => $style,
+        ];
+        return 'https://www.citacepro.com/api/cpk/citace/' . urlencode($recordId) . '?' . http_build_query($query);
     }
 
     /**

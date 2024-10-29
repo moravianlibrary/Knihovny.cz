@@ -8,16 +8,16 @@
   <div id='citation-loader' class="hidden"><?=$this->icon('spinner', 'fa-fw') . $this->translate('loading_ellipsis')?></div>
 
   <div id='citation-placeholder'>
-    <?php foreach($citations as $recordId => $citation): ?>
+    <?php foreach($this->citations as $recordId => $citation): ?>
       <?php
-        if ($citation == false || empty($citation)) {
+        if (empty($citation)) {
           $missingCitation = true;
           $citation = '';
         } else {
           $hasCitations = true;
         }
       ?>
-      <div class='citation' data-record-id='<?=$this->escapeHtml($recordId);?>'>
+      <div class='citation' data-record-id='<?=$this->escapeHtml($recordId);?>' data-record-source="<?=$this->source?>">
         <?=$citation?>
       </div>
     <?php endforeach; ?>
@@ -65,44 +65,45 @@
             }
           }
 
-          function updateCitation(citation) {
-            const citationEl = $('#citation-placeholder');
-            citationEl.html('');
+          function updateCitation(citations) {
+            const citationPlaceholder = $('#citation-placeholder');
+            citationPlaceholder.html('');
             let missingCitation = false;
             let hasCitations = false;
-            $.each(citation, function onEachLink(recordId, content) {
-              let citation = $('<div>', {
+            $.each(citations, function onEachLink(index, citation) {
+              const citationEl = $('<div>', {
                 'class': 'citation',
-                'data-record-id': recordId,
-                'html': (content != false)? content : '',
+                'data-record-id': citation.id,
+                'data-record-source': citation.source,
+                'html': citation.content
               });
-              if (content == false) {
+              if (citation.content == false) {
                 missingCitation = true;
               } else {
                 hasCitations = true;
               }
-              citationEl.append(citation);
+              citationPlaceholder.append(citationEl);
             });
-            $('#citation-loader').addClass('hidden');
             if (missingCitation && hasCitations) {
               $('#missing-citations').removeClass('hidden');
             }
             if (!hasCitations) {
               $('#no-citations').removeClass('hidden');
             }
-            citationEl.removeClass('hidden');
-            citationEl.click(function selectCitation() {
+            citationPlaceholder.removeClass('hidden');
+            $('.citation').click(function selectCitation() {
                 selectText(this);
             });
+            $('#citation-loader').addClass('hidden');
           }
 
-          function getCitation( recordIds, citationStyle) {
+          function getCitation( recordIds, citationStyle, recordSource) {
             $.ajax({
               dataType: 'json',
               async: true,
               type: 'POST',
               url: '/AJAX/JSON?method=getCitations',
-              data: { recordIds: recordIds, citationStyle: citationStyle },
+              data: { recordIds: recordIds, citationStyle: citationStyle, recordSource: recordSource },
               success: function citationSuccessHandler(result) {
                 updateCitation(result.data);
               },
@@ -114,7 +115,7 @@
 
           $(document).ready(function citationForm() {
             $('#citace-pro').off('click');
-            $('#citation-placeholder').click(function selectCitation() {
+            $('.citation').click(function selectCitation() {
               selectText(this);
             });
             $('#citation-style-selector').change(function citationChangeHandler(event) {
@@ -125,7 +126,8 @@
               $('#citation-loader').removeClass('hidden');
               const recordIds = $.map($('#citation-placeholder')
                 .children('.citation'), function getRecordId(it) {return $(it).data('record-id')});
-              getCitation(recordIds,  style);
+              const recordSource = $('#citation-placeholder').children('.citation').first().data('record-source');
+              getCitation(recordIds,  style, recordSource);
             });
           });
         JS;
