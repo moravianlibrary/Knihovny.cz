@@ -279,18 +279,17 @@ class Shibboleth extends Base
     /**
      * Return library card by eduPersonPrincipalName without eduPersonUniqueId.
      *
-     * @param string $eppn eduPersonPrincipalName
+     * @param string|null $eppn eduPersonPrincipalName
      *
      * @return \KnihovnyCz\Db\Row\UserCard|null
      */
-    protected function getUserCardByEppnWithoutEpui($eppn): \KnihovnyCz\Db\Row\UserCard|null
+    protected function getUserCardByEppnWithoutEpui(string|null $eppn): \KnihovnyCz\Db\Row\UserCard|null
     {
-        if ($eppn == null) {
+        if (empty($eppn)) {
             return null;
         }
-        $card = $this->getUserCardTable()
-            ->getByEduPersonPrincipalName($eppn);
-        if ($card->getEduPersonUniqueId() == null) {
+        $card = $this->getUserCardTable()->getByEduPersonPrincipalName($eppn);
+        if ($card?->getEduPersonUniqueId() == null) {
             return $card;
         }
         return null;

@@ -31,19 +31,17 @@ class UserCard extends \VuFind\Db\Table\UserCard
     }
 
     /**
-     * Retrieve a user card object from the database based on eduPersonUniqueId
-     * or create new one.
+     * Retrieve a user card object from the database based on eduPersonUniqueId or create new one.
      *
      * @param string $eduPersonPrincipalName eduPersonPrincipalName
      *
-     * @return \VuFind\Db\Row\UserCard
+     * @return \KnihovnyCz\Db\Row\UserCard|null
      */
-    public function getByEduPersonPrincipalName($eduPersonPrincipalName)
+    public function getByEduPersonPrincipalName(string $eduPersonPrincipalName): \KnihovnyCz\Db\Row\UserCard|null
     {
         $callback = function ($select) use ($eduPersonPrincipalName) {
             $select->where->equalTo('eppn', $eduPersonPrincipalName);
         };
-        $row = $this->select($callback)->current();
-        return $row;
+        return $this->select($callback)->current();
     }
 }
