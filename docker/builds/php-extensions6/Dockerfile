@@ -1,4 +1,4 @@
-FROM php:8.2-apache-buster
+FROM php:8.2-apache-bullseye
 LABEL maintainer="Moravian Library <cpk-dev@mzk.cz>"
 LABEL version="2.0"
 LABEL description="Based on the 'php:8.1-apache-buster' build with appended modules to php & apache2 + productivity tools included (vim, mc, htop, ping, traceroute, dig, ssh, mysql-client, locate, git, curl, bash-completion)"
