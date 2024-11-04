@@ -53,17 +53,21 @@ class HeadersListener implements ListenerAggregateInterface
     {
         $app = $e->getApplication();
         $mvcEvent = $app->getMvcEvent();
-        $matchedRouteName = $mvcEvent->getRouteMatch()->getMatchedRouteName();
-        $config = $app->getServiceManager()->get('Config');
+        $routeMatch = $mvcEvent->getRouteMatch();
+        if (!$routeMatch) {
+            return;
+        }
 
+        $matchedRouteName = $routeMatch->getMatchedRouteName();
+        $config = $app->getServiceManager()->get('Config');
         $responseHeaders = $app->getResponse()->getHeaders();
+        if (!$responseHeaders) {
+            return;
+        }
+
         foreach ($config['http']['headers'] ?? [] as $key => $headerValues) {
-            if ($key === '*') {
+            if ($key === '*' || $key === $matchedRouteName) {
                 $responseHeaders->addHeaders($headerValues);
-            } else {
-                if ($key === $matchedRouteName) {
-                    $responseHeaders->addHeaders($headerValues);
-                }
             }
         }
     }
