@@ -10,10 +10,12 @@
   foreach ($deduplicatedRecords as $source => $ids) {
     if (in_array($source, $cardsSources)) {
       foreach ($ids as $id) {
-        $availableRecords[] = [
-          'label' => $this->translate('Source::' . $source),
-          'url' => $this->recordLinker()->getUrl($id),
-        ];
+        if ($id != $this->driver->getUniqueID()) {
+          $availableRecords[] = [
+            'label' => $this->translate('Source::' . $source),
+            'url' => $this->recordLinker()->getUrl($id),
+          ];
+        }
       }
     }
   }
