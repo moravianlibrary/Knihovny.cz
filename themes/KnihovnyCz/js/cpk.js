@@ -9,19 +9,21 @@ const observeCartHandler = function observeCartHandler(mutationsList) {
   // Use traditional 'for loops' for IE 11
   for (const mutation of mutationsList) {
     if (mutation.type === 'childList') {
-      if (mutation.target.innerText === '0') {
-        mutation.target.parentNode.style.display = 'none';
-      } else {
-        mutation.target.parentNode.style.display = '';
-      }
+      toggleCartBadge(mutation.target);
     }
   }
+};
+
+// Function to hide or show cart badge
+const toggleCartBadge = function toggleCartBadge(targetNode) {
+  targetNode.parentNode.style.display = targetNode.innerText === '0' ? 'none' : 'block';
 };
 
 const cartObserver = new MutationObserver(observeCartHandler);
 
 document.addEventListener('DOMContentLoaded', function runObserver() {
   const targetNode = document.querySelector('#cartItems strong');
+  toggleCartBadge(targetNode);
   cartObserver.observe(targetNode, config);
 }, false);
 
