@@ -149,9 +149,15 @@ class MyResearchController extends MyResearchControllerBase
                 foreach ($view->fines as $fine) {
                     $totalDue += $fine['balance'] ?? 0;
                 }
-                if ($totalDue < 0) {
-                    $view->paymentLink = $catalog
-                        ->getMyPaymentLink($patron, -1 * $totalDue);
+                // First check if payments are enabled, then check for email
+                if ($totalDue < 0 && ($paymentLink = $catalog->getMyPaymentLink($patron, -1 * $totalDue)) != null) {
+                    $profile = $catalog->getMyProfile($patron);
+                    if (isset($profile['email'])) {
+                        $view->paymentLink = $paymentLink;
+                    } else {
+                        $view->missingEmailLink = $this->url()->fromRoute('myresearch-profile')
+                            . '#' . $this->getCardId();
+                    }
                 }
             }
         } else {
@@ -210,17 +216,39 @@ class MyResearchController extends MyResearchControllerBase
             }
             $catalog = $this->getILS();
             $patron = $this->catalogLogin();
+
+            $cardIdQuery = ['query' => ['cardId' => $this->getCardId()]];
+
+            $changePasswordUrl = null;
+            if ($catalog->checkFunction('changePassword', $patron) !== false) {
+                $changePasswordUrl = $this->url()->fromRoute('myresearch-profilechangepassword', [], $cardIdQuery);
+            }
+            $view->changePasswordUrl = $changePasswordUrl;
+
+            $changeNicknameUrl = null;
+            if ($catalog->checkFunction('changeNickname', $patron) !== false) {
+                $changeNicknameUrl = $this->url()->fromRoute('myresearch-profilechangenickname', [], $cardIdQuery);
+            }
+            $view->changeNicknameUrl = $changeNicknameUrl;
+
+            $changeEmailUrl = null;
+            if ($catalog->checkFunction('changeEmail', $patron) !== false) {
+                $changeEmailUrl = $this->url()->fromRoute('myresearch-profilechangeemail', [], $cardIdQuery);
+            }
+            $view->changeEmailUrl = $changeEmailUrl;
+
             $functionConfig = $catalog->checkFunction(
                 'getMyProlongRegistrationLink',
                 $patron
             );
             if ($functionConfig !== false) {
-                $view->prolongRegistrationLink = $catalog
-                    ->getMyProlongRegistrationLink($patron);
+                $link = $catalog->getMyProlongRegistrationLink($patron);
+                if ($link !== null && $view->profile['email'] == null) {
+                    $this->flashMessenger()->addErrorMessage('payment_warning_missing_email_in_profile');
+                    $link = null;
+                }
+                $view->prolongRegistrationLink = $link;
             }
-            $view->changePassword = $catalog->checkFunction('changePassword', $patron) !== false;
-            $view->changeEmail = $catalog->checkFunction('changeEmail', $patron) !== false;
-            $view->changeNickname = $catalog->checkFunction('changeNickname', $patron) !== false;
             $supportBlocks = $catalog->checkFunction('getMyBlocks', $patron);
             if ($supportBlocks !== false) {
                 $blocks = $catalog->getMyBlocks($patron);
