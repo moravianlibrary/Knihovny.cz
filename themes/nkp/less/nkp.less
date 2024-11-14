@@ -1,2 +1,19 @@
 @import "../../KnihovnyCz/less/knihovny-cz";
 @import "variables";
+
+#searchForm .tab-content.well {
+  row-gap: 10px;
+  padding-bottom: 10px;
+
+  .searchForm-query {
+    width: 60%;
+  }
+}
+
+@media (max-width: @screen-sm-max) {
+  #searchForm .tab-content.well {
+    .searchForm-query, .form-control {
+      width: 100%;
+    }
+  }
+}
