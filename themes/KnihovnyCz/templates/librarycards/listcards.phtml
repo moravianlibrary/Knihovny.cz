@@ -24,7 +24,14 @@
           function showLibraryCardContent(element, content, callback) {
             $(element).hide(500, function onComplete() {
               $(element).parent('.panel-body').find('.loading-overlay').fadeOut(200);
-              $(element).html(content).slideDown(500);
+              $(element).html(content).slideDown(500, function onComplete(){
+                if (window.location.hash != null) {
+                  const fragment = window.location.hash.substring(1);
+                  if ($(element).data('card-id') == fragment || $(element).data('card-name') == fragment) {
+                    $(element).closest('.panel').get(0).scrollIntoView();
+                  }
+                }
+              });
               if (callback != null) {
                 callback();
               }
@@ -55,7 +62,7 @@
             $institution = $card->home_library;
             $imageLink = sprintf('institutions/logos/%s/%s_small.png', $institution, $institution);
           ?>
-          <div class="panel-heading panel-heading-with-img bg-white clearfix pointer" role="tab" data-toggle="collapse" data-target="#card_<?=$i ?>">
+          <div class="panel-heading panel-heading-with-img bg-white clearfix pointer" role="tab" data-toggle="collapse" data-target="#card_<?=$i?>">
             <h3 class="panel-title pull-left">
               <?=$this->transEsc('Source::' . $institution) ?>
             </h3>
@@ -66,7 +73,7 @@
         <div id="card_<?=$i ?>" class="panel-collapse collapse in" role="tabpanel">
           <div class="panel-body">
             <div class="loading-overlay"></div>
-            <div class='library-card-ajax' data-card-id='<?=$card->id?>' data-action='<?=$action?>' data-callback='<?=$this->callback?>'>
+            <div class='library-card-ajax' data-card-id='<?=$card->id?>' data-card-name="<?=$card->card_name?>" data-action='<?=$action?>' data-callback='<?=$this->callback?>'>
             </div>
           </div>
         </div>

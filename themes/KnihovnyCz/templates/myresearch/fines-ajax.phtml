@@ -60,6 +60,11 @@
     $rowCount = count($this->fines);
     ?>
   <?=$this->flashmessages()?>
+  <?php if (isset($this->missingEmailLink)):?>
+    <div class="alert alert-danger">
+      <?=$this->translate('payment_warning_missing_email_in_profile_with_link', ['%%url%%' => $this->missingEmailLink])?>
+    </div>
+  <?php endif; ?>
   <table class="table table-striped">
     <caption class="sr-only"><?=$this->transEsc('Your Fines')?></caption>
     <tr>
