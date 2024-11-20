@@ -282,6 +282,7 @@ Title:
     - title_alt^200
     - title_new^100
     - title_old
+    - title_original_language_search_txt_mv^300
   DismaxParams:
     - [bq, "inspiration:top_results^1"]
     - [bf, "if(exists(merged_records_boolean),10000,0)"]
@@ -363,6 +364,7 @@ AllFields:
     - author_search_txt_mv
     - occupation_txt_mv
     - authorCorporation_search_txt_mv
+    - title_original_language_search_txt_mv^500
   DismaxParams:
     - [bq, "inspiration:top_results^1"]
     - [bf, "if(exists(merged_records_boolean),10000,0)" ]
@@ -468,6 +470,7 @@ adv_search_title_series:
     - uniftitle_viz
     - title_old_spelling_txt_mv
     - title_search_txt_mv
+    - title_original_language_search_txt_mv^300
   DismaxParams:
     - [bq, "inspiration:top_results^1"]
     - [bf, "if(exists(merged_records_boolean),10000,0)" ]
@@ -749,6 +752,7 @@ adv_search_without_fulltext:
     - auto_conspectus_txt_mv^5
     - title_search_txt_mv
     - author_search_txt_mv
+    - title_original_language_search_txt_mv^500
   DismaxParams:
     - [bq, "inspiration:top_results^1"]
     - [bf, "if(exists(merged_records_boolean),10000,0)" ]
