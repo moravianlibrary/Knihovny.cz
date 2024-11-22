@@ -119,4 +119,23 @@ class InspirationController extends \VuFind\Controller\AbstractBase
         }
         return $contentBlock->getContext();
     }
+
+    /**
+     * Conspectus action
+     *
+     * @return \Laminas\View\Model\ViewModel|\Laminas\Http\Response
+     *
+     * @throws \Psr\Container\ContainerExceptionInterface
+     * @throws \Psr\Container\NotFoundExceptionInterface
+     */
+    public function conspectusAction()
+    {
+        $blocks = $this->serviceLocator->get(\VuFind\ContentBlock\BlockLoader::class)
+            ->getFromConfigObject(
+                new \Laminas\Config\Config(['Conspectus' => ['block' => ['FacetList:Solr']]]),
+                'Conspectus',
+                'block'
+            );
+        return $this->createViewModel(['blocks' => $blocks]);
+    }
 }

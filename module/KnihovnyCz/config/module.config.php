@@ -825,6 +825,7 @@ $recordRoutes = [
 
 // Key is URL, value is Controller/Action
 $staticRoutes = [
+    'Inspiration/Conspectus' => 'Inspiration/Conspectus',
     'Libraries/Advanced' => 'Search2/Advanced',
     'Libraries/FacetList' => 'Search2/FacetList',
     'Libraries/Home' => 'Search2/Home',
