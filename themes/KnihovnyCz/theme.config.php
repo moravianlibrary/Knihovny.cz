@@ -24,6 +24,7 @@ return [
             \KnihovnyCz\View\Helper\KnihovnyCz\DateTime::class =>
                 \VuFind\View\Helper\Root\DateTimeFactory::class,
             \KnihovnyCz\View\Helper\KnihovnyCz\Notifications::class => \KnihovnyCz\View\Helper\KnihovnyCz\NotificationsFactory::class,
+            \KnihovnyCz\View\Helper\KnihovnyCz\SearchMemory::class => \VuFind\View\Helper\Root\SearchMemoryFactory::class,
         ],
         'invokables' => [
             \KnihovnyCz\View\Helper\KnihovnyCz\FooterLink::class,
@@ -56,6 +57,7 @@ return [
             'datePicker' => KnihovnyCz\View\Helper\KnihovnyCz\DatePicker::class,
             'resultsCount' => \KnihovnyCz\View\Helper\KnihovnyCz\ResultsCount::class,
             'notifications' => \KnihovnyCz\View\Helper\KnihovnyCz\Notifications::class,
+            'searchMemory' => \KnihovnyCz\View\Helper\KnihovnyCz\SearchMemory::class,
         ],
     ],
     'icons' => [

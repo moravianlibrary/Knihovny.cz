@@ -29,4 +29,14 @@ class Search2Library extends SolrLibrary
     {
         return parent::getHierarchyType() ? 'search2' : false;
     }
+
+    /**
+     * Get the deduplicated records
+     *
+     * @return array
+     */
+    public function getDeduplicatedRecords(): array
+    {
+        return ['library' => $this->fields['local_ids_str_mv'] ?? []];
+    }
 }

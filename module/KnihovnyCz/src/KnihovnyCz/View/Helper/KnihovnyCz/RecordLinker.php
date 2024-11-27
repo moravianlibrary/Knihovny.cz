@@ -17,13 +17,6 @@ use VuFind\View\Helper\Root\RecordLinker as Base;
 class RecordLinker extends Base
 {
     /**
-     * Search config
-     *
-     * @var \Laminas\Config\Config
-     */
-    protected $searchConfig;
-
-    /**
      * Record loader
      *
      * @var \VuFind\Record\Loader
@@ -33,17 +26,14 @@ class RecordLinker extends Base
     /**
      * Constructor
      *
-     * @param \VuFind\Record\Router  $router       Record router
-     * @param \Laminas\Config\Config $searchConfig Search configuration
-     * @param \VuFind\Record\Loader  $recordLoader Record loader
+     * @param \VuFind\Record\Router $router       Record router
+     * @param \VuFind\Record\Loader $recordLoader Record loader
      */
     public function __construct(
         \VuFind\Record\Router $router,
-        \Laminas\Config\Config $searchConfig,
         \VuFind\Record\Loader $recordLoader
     ) {
         parent::__construct($router);
-        $this->searchConfig = $searchConfig;
         $this->recordLoader = $recordLoader;
     }
 
@@ -65,48 +55,38 @@ class RecordLinker extends Base
     }
 
     /**
-     * Given a record driver, get a URL for that record that links to local
+     * Given a source and record ID, get a URL for that record that links to local
      * record.
      *
-     * @param BaseRecord|string $record      Record driver representing record to
-     * link to, or source|id pipe-delimited string
-     * @param string|null       $institution Institution
+     * @param string      $recordId    source|id pipe-delimited string
+     * @param string|null $institution Institution to prefer
      *
      * @return string
      */
     public function getLinkToLocalRecord(
-        BaseRecord|string $record,
+        string $recordId,
         ?string $institution = null
     ): string {
-        if (!$record instanceof BaseRecord) {
-            $record = $this->loadRecord($record);
+        $record = $this->loadRecord($recordId);
+        $records = $record->tryMethod('getDeduplicatedRecords', [], []);
+        if (!empty($records)) {
+            $first = $records[$institution] ?? reset($records);
+            $source = $record->getSourceIdentifier();
+            $recordId = $source . '|' . reset($first);
         }
-        $recordId = $record->getUniqueID();
-        $dedupType = $this->searchConfig->Records->deduplication_type ?? '';
-        if ($dedupType != 'multiplying') {
-            $records = $record->tryMethod('getDeduplicatedRecords');
-            if (!empty($records)) {
-                $first = reset($records);
-                if ($institution !== null && isset($records[$institution])) {
-                    $first = $records[$institution];
-                }
-                $recordId = reset($first);
-            }
-        }
-
         return $this->getUrl($recordId);
     }
 
     /**
-     * Load record by given id.
+     * Load record.
      *
-     * @param string $recordId Record id
+     * @param string $recordId source|id pipe-delimited string
      *
      * @return BaseRecord
      */
-    protected function loadRecord(string $recordId)
+    protected function loadRecord(string $recordId): BaseRecord
     {
-        [$sourceId, $recordId] = explode('|', $recordId);
+        [$sourceId, $recordId] = explode('|', $recordId, 2);
         return $this->recordLoader->load($recordId, $sourceId);
     }
 }

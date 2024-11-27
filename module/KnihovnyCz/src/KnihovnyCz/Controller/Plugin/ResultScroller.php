@@ -2,12 +2,11 @@
 
 namespace KnihovnyCz\Controller\Plugin;
 
-use Laminas\Config\Config;
 use Laminas\Session\Container as SessionContainer;
-use Laminas\View\Renderer\RendererInterface;
 use VuFind\Controller\Plugin\ResultScroller as Base;
 use VuFind\Search\Memory as SearchMemory;
 use VuFind\Search\Results\PluginManager as ResultsManager;
+use VuFind\View\Helper\Root\Url as UrlHelper;
 
 /**
  * Class for managing "next" and "previous" navigation within result sets.
@@ -21,36 +20,30 @@ use VuFind\Search\Results\PluginManager as ResultsManager;
 class ResultScroller extends Base
 {
     /**
-     * Renderer
+     * Url helper
      *
-     * @var RendererInterface
+     * @var UrlHelper
      */
-    protected $renderer;
-
-    protected $useParentRecord = true;
+    protected $urlHelper;
 
     /**
      * Constructor. Create a new search result scroller.
      *
-     * @param SessionContainer  $session   Session container
-     * @param ResultsManager    $rm        Results manager
-     * @param SearchMemory      $sm        Search memory
-     * @param RendererInterface $renderer  Renderer
-     * @param Config            $searchCfg Search configuration
-     * @param bool              $enabled   Is the scroller enabled?
+     * @param SessionContainer $session   Session container
+     * @param ResultsManager   $rm        Results manager
+     * @param SearchMemory     $sm        Search memory
+     * @param UrlHelper        $urlHelper Url helper
+     * @param bool             $enabled   Is the scroller enabled?
      */
     public function __construct(
         SessionContainer $session,
         ResultsManager $rm,
         SearchMemory $sm,
-        RendererInterface $renderer,
-        \Laminas\Config\Config $searchCfg,
-        $enabled = true
+        UrlHelper $urlHelper,
+        bool $enabled = true
     ) {
         parent::__construct($session, $rm, $sm, $enabled);
-        $dedupType = $searchCfg->Records->deduplication_type ?? '';
-        $this->useParentRecord = ($dedupType != 'multiplying');
-        $this->renderer = $renderer;
+        $this->urlHelper = $urlHelper;
     }
 
     /**
@@ -67,35 +60,77 @@ class ResultScroller extends Base
      */
     public function getScrollData($driver)
     {
-        if ($this->useParentRecord) {
-            $driver = $driver->tryMethod('getParentRecord', [], null)
-                ?? $driver;
+        $retVal = [
+            'firstRecord' => null, 'lastRecord' => null,
+            'previousRecord' => null, 'nextRecord' => null,
+            'currentPosition' => null, 'resultTotal' => null,
+            'linkToResults' => null,
+        ];
+
+        // Process scroll data only if enabled and data exists:
+        if (!$this->enabled || ($search = $this->restoreCurrentSearch()) == null) {
+            return $retVal;
         }
-        $result = parent::getScrollData($driver);
-        $result['linkToResults'] = null;
-        if (
-            isset($result['currentPosition'])
-            && $result['currentPosition'] != null
-        ) {
-            $result['linkToResults'] = $this->getLinkToResults();
+        $this->data = $this->session->s[$search->getSearchId()] ?? null;
+        if ($this->data == null) {
+            // no data for scroller - return only link to results
+            $retVal['linkToResults'] = $this->getLinkToResults($search);
+            return $retVal;
         }
+        $multiplied = $driver->tryMethod('isMultiplied', [], false);
+        if (!$multiplied) {
+            $driver = $driver->tryMethod(
+                'getParentRecord',
+                [],
+                null
+            ) ?? $driver;
+        }
+        // Get results:
+        $result = $this->buildScrollDataArray($retVal, $driver, $search);
+        // current page is updated after moving to previous or next page - must
+        // be here after buildScrollDataArray to reflect it
+        $result['linkToResults'] = $this->getLinkToResults($search, $result);
+        $result['multiplied'] = $multiplied;
+        // Touch and update session with any changes:
+        $this->data->lastAccessTime = time();
+        $this->session->s[$search->getSearchId()] = $this->data;
         return $result;
     }
 
     /**
      * Get link to page with results
      *
+     * @param \VuFind\Search\Base\Results $search search
+     * @param array|null                  $result result
+     *
      * @return string|null link
      */
-    protected function getLinkToResults()
+    protected function getLinkToResults(\VuFind\Search\Base\Results $search, ?array $result = null)
     {
-        if (($search = $this->restoreLastSearch()) == null) {
-            return null;
-        }
         $action = $search->getOptions()->getSearchAction();
-        $params = $search->getUrlQuery()->getParams();
-        $urlHelper = $this->renderer->plugin('url');
-        return $urlHelper($action) . $params;
+        $urlQuery = $search->getUrlQuery();
+        $limit = null;
+        $page = null;
+        if (isset($result['currentPosition']) && $this->data != null) {
+            if (isset($this->data->limit)) {
+                $limit = $this->data->limit;
+                $urlQuery = $urlQuery->setLimit($limit);
+            }
+            if (isset($this->data->sort)) {
+                $urlQuery = $urlQuery->setSort($this->data->sort);
+            }
+            if (isset($this->data->page)) {
+                $page = $this->data->page;
+                $urlQuery = $urlQuery->setPage($page);
+            }
+        }
+        $params = $urlQuery->getParams();
+        $url = call_user_func($this->urlHelper, $action) . $params;
+        if ($limit != null && $page != null && $result != null) {
+            $offset = ($result['currentPosition'] - 1) - (($page - 1) * $limit);
+            $url .= '#result' . $offset;
+        }
+        return $url;
     }
 
     /**
@@ -103,9 +138,12 @@ class ResultScroller extends Base
      *
      * @return \VuFind\Search\Base\Results
      */
-    protected function restoreLastSearch()
+    protected function restoreCurrentSearch()
     {
-        $searchId = $this->searchMemory->getLastSearchId();
+        $searchId = $this->searchMemory->getCurrentSearchId();
+        if ($searchId == null) {
+            return null;
+        }
         return parent::restoreSearch($searchId);
     }
 
@@ -131,12 +169,8 @@ class ResultScroller extends Base
                 return false;
             }
             $recordId = $record->getUniqueId();
-            if ($this->useParentRecord) {
-                $recordId = $record->tryMethod(
-                    'getParentRecordID',
-                    [],
-                    $record->getUniqueId()
-                );
+            if (!$record->tryMethod('isMultiplied', [], false)) {
+                $recordId = $record->tryMethod('getParentRecordID', [], $recordId);
             }
             $retVal[] = $record->getSourceIdentifier() . '|' . $recordId;
         }

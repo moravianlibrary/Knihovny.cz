@@ -1,4 +1,5 @@
 <?php
+    $onResultsPage = isset($this->results);
     // Initialize from current search (if available and not explicitly overridden) or defaults:
     if ($results = ($this->results ?? $this->searchMemory()->getCurrentSearch())) {
       $params = $results->getParams();
@@ -231,7 +232,7 @@
           'search/filters.phtml',
           [
           'params' => $params ?? null,
-          'urlQuery' => isset($results) ? $results->getUrlQuery() : null,
+          'urlQuery' => $onResultsPage ? $this->results->getUrlQuery() : null,
           'filterList' => $showFilters ? $filterList : [],
           'checkboxFilters' => $showFilters ? $checkboxFilters : [],
           'searchClassId' => $this->searchClassId,
