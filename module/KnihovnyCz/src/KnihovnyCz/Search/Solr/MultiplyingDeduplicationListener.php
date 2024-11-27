@@ -23,7 +23,9 @@ use VuFindSearch\Service;
  */
 class MultiplyingDeduplicationListener
 {
-    protected const CONTEXTS = ['search', 'similar'];
+    protected const PRE_CONTEXTS = ['search', 'similar'];
+
+    protected const POST_CONTEXTS = [...self::PRE_CONTEXTS, 'retrieve'];
 
     /**
      * Backend.
@@ -144,8 +146,7 @@ class MultiplyingDeduplicationListener
                 $fetchRecords = $arguments[2] > 0;
             }
             $context = $command->getContext();
-            $enabled = in_array($context, self::CONTEXTS);
-            if ($enabled) {
+            if ($this->enabled && in_array($context, self::PRE_CONTEXTS)) {
                 $this->configureFilter($params, $fetchRecords);
             }
         }
@@ -210,12 +211,11 @@ class MultiplyingDeduplicationListener
     {
         // Inject deduplication details into record objects:
         $command = $event->getParam('command');
-
         if ($command->getTargetIdentifier() !== $this->backend->getIdentifier()) {
             return $event;
         }
         $context = $command->getContext();
-        if ($this->enabled && in_array($context, self::CONTEXTS)) {
+        if ($this->enabled && in_array($context, self::POST_CONTEXTS)) {
             $this->fetchLocalRecords($event);
         }
         return $event;
@@ -234,12 +234,13 @@ class MultiplyingDeduplicationListener
         $result = $command->getResult();
         foreach ($result->getRecords() as $record) {
             $data = $record->getRawData();
+            $data['multiplied'] = true;
             if (!empty($data['parent']['docs'])) {
                 $parent = $data['parent']['docs'][0];
                 $data['parent_data'] = $parent;
                 $data['local_ids_str_mv'] = $data['id'];
-                $record->setRawData($data);
             }
+            $record->setRawData($data);
         }
     }
 }

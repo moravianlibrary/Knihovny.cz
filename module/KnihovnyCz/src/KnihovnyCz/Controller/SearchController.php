@@ -5,9 +5,11 @@ declare(strict_types=1);
 namespace KnihovnyCz\Controller;
 
 use Laminas\ServiceManager\ServiceLocatorInterface;
+use Laminas\Session\SessionManager;
 use Laminas\Stdlib\RequestInterface as Request;
 use Laminas\Stdlib\ResponseInterface as Response;
 use Laminas\View\Model\ViewModel;
+use VuFind\Search\Factory\UrlQueryHelperFactory;
 
 /**
  * Class SearchController
@@ -74,6 +76,67 @@ class SearchController extends \VuFind\Controller\SearchController
         $view = parent::homeAction();
         $view->setVariable('hideFilters', true);
         return $view;
+    }
+
+    /**
+     * Edit search memory action.
+     *
+     * @return mixed
+     */
+    /**
+     * Edit search memory action.
+     *
+     * @return mixed
+     */
+    public function editmemoryAction()
+    {
+        // Get the user's referer, with the home page as a fallback; we'll
+        // redirect here after the work is done.
+        $from = $this->getRequest()->getServer()->get('HTTP_REFERER') ?? null;
+        if (empty($from) || !$this->isLocalUrl($from)) {
+            $from = $this->url()->fromRoute('home');
+        }
+        $search = $this->getSearchMemory()->getCurrentSearch();
+        if (!isset($search)) {
+            return $this->redirect()->toUrl($from);
+        }
+        $params = $search->getParams();
+
+        $removeAllFilters = $this->params()->fromQuery('removeAllFilters');
+        $removeFacet = $this->params()->fromQuery('removeFacet');
+        $removeFilter = $this->params()->fromQuery('removeFilter');
+
+        $factory = $this->serviceLocator->get(UrlQueryHelperFactory::class);
+        $initialParams = $factory->fromParams($params);
+        if ($removeAllFilters) {
+            $defaultFilters = $params->getOptions()->getDefaultFilters();
+            $query = $initialParams->removeAllFilters();
+            foreach ($defaultFilters as $filter) {
+                $query = $query->addFilter($filter);
+            }
+        } elseif ($removeFacet) {
+            $query = $initialParams->removeFacet(
+                $removeFacet['field'] ?? '',
+                $removeFacet['value'] ?? '',
+                $removeFacet['operator'] ?? 'AND'
+            );
+        } elseif ($removeFilter) {
+            $query = $initialParams->removeFilter($removeFilter);
+        } else {
+            $query = null;
+        }
+        $searchClassId = $params->getSearchClassId();
+        $runner = $this->serviceLocator->get(\VuFind\Search\SearchRunner::class);
+        $results = $runner->run($query->getParamArray(), $searchClassId);
+        $sessManager = $this->serviceLocator->get(SessionManager::class);
+        $sessId = $sessManager->getId();
+        $result = $this->serviceLocator->get(\VuFind\Search\SearchNormalizer::class)->saveNormalizedSearch(
+            $results,
+            $sessId,
+            $this->getUser()?->getId()
+        );
+        $newUrl = preg_replace('/sid=[\d]+/', 'sid=' . $result->id, $from);
+        return $this->redirect()->toUrl($newUrl);
     }
 
     /**

@@ -1,0 +1,15 @@
+<?php if ($active): ?>
+  <li role="none">
+    <a class="icon-link" href="<?=$this->escapeHtmlAttr($link)?>" aria-label="<?=$this->transEscAttr($label)?>" rel="nofollow">
+      <?=$this->icon($icon, 'icon-link__icon') ?>
+      <span class="icon-link__label"><?=$this->transEsc($text)?></span>
+    </a>
+  </li>
+<?php else: ?>
+  <li class="disabled" aria-hidden="true" role="none">
+    <a class="icon-link" disabled>
+      <?=$this->icon($icon, 'icon-link__icon') ?>
+      <span class="icon-link__label"><?=$this->transEsc($text)?>
+    </a>
+  </li>
+<?php endif; ?>

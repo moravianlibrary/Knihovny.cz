@@ -54,7 +54,9 @@
     <?=$this->record($this->driver)->getCoreMetadata()?>
     </div>
 
-    <?=$this->render('record/deduplicated-records.phtml'); ?>
+    <?php if($this->driver->getSourceIdentifier() != 'Search2'): ?>
+      <?=$this->render('record/deduplicated-records.phtml'); ?>
+    <?php endif; ?>
 
     <?php if (count($this->tabs) > 0): ?>
       <a id="tabnav"></a>

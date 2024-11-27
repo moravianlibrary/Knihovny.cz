@@ -565,7 +565,7 @@ class SolrDefault extends \VuFind\RecordDriver\SolrDefault
             && ($parentRecordId = $this->getParentRecordID()) !== null
         ) {
             try {
-                $this->parentRecord = $this->recordLoader->load($parentRecordId);
+                $this->parentRecord = $this->recordLoader->load($parentRecordId, $this->getSearchBackendIdentifier());
             } catch (RecordMissingException $exception) {
                 // If there is no parent record (e.g. this is parent), we could
                 // safely keep parent record variable at null
@@ -1068,5 +1068,15 @@ class SolrDefault extends \VuFind\RecordDriver\SolrDefault
     public function getCallNumbers(): array
     {
         return (array)($this->fields['local_callnumber_str_mv'] ?? []);
+    }
+
+    /**
+     * Is multiplied record?
+     *
+     * @return bool
+     */
+    public function isMultiplied(): bool
+    {
+        return $this->fields['multiplied'] ?? false;
     }
 }
