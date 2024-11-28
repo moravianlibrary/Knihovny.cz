@@ -1,0 +1,10 @@
+<?php
+// Set page title.
+$this->headTitle($this->translate('funds_thematic_map'));
+$this->layout()->breadcrumbs = false;
+$this->layout()->searchbox = false;
+?>
+<h1><?=$this->translate('funds_thematic_map')?></h1>
+<div class="row">
+  <?=implode('', array_map([$this, 'contentBlock'], $blocks ?? []))?>
+</div>
