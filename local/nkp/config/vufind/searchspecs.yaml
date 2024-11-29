@@ -857,7 +857,7 @@ adv_search_sysno:
   ChildrenQuery: true
   CustomMunge:
     addBases:
-      - [preg_replace, "/(.+)/", '("nkp.KKL01-$1" OR "nkp.STT0103-$1" OR "nkp.NKC01-$1" OR "nkp.SLK01-$1")']
+      - [preg_replace, "/(.+)/", '("nkp.KKL01-$1" OR "nkp.STT01-$1" OR "nkp.NKC01-$1" OR "nkp.SLK01-$1" OR "anl.ANL01-$1")']
   QueryFields:
     id:
       - [addBases, ~]
@@ -872,7 +872,7 @@ adv_search_call_number:
       - [preg_replace, '/\*/m', ""]
       - [append, "* "]
   QueryFields:
-    local_callnumber_str_mv:
+    callnumber-search:
       - [onephrase, 1000]
       - [location_fuzzy, ~]
   FilterQuery: "*:* NOT record_format:library"
