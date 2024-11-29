@@ -23,7 +23,7 @@
           <td data-title="<?=$this->translate('Destination');?>" data-type="destination"><?=$this->transEsc($link['destination'])?></td>
             <td data-title="<?=$this->translate('Accessibility');?>" data-type="accessibility">
               <?php if (!in_array($link['status'], ['unknown', 'na'])): ?>
-                <span class="label label-<?=$statusClass?>"><?=$this->transEsc('link_access_status_' . $link['status'])?></span>
+                <span class="label label-<?=$statusClass?>"><?=$this->transEsc('link_access_status_' . (($link['source'] === 'kram-nkp' && $link['status'] === 'protected') ? 'nkp_' : '') . $link['status'])?></span>
               <?php endif; ?>
             </td>
           <td data-title="<?=$this->translate('Link');?>" data-type="link"><a title='<?=$this->transEsc($description)?>' href='<?=$link['url']?>' target='_blank'><?=$this->transEsc($description)?></a></td>
