@@ -563,3 +563,21 @@ INSERT INTO `inst_keys` (`key_name`, `section_id`) VALUES ('enabled', (SELECT `i
 SELECT @profile_blocks_id := LAST_INSERT_ID();
 INSERT INTO inst_configs (source_id, key_id, value, timestamp) VALUES (@mzk_source_id, @profile_blocks_id, 'true', NOW());
 UPDATE `system` SET `value` = '124' WHERE `key`='DB_VERSION';
+
+-- #1270 - NKP: Rezervace týmových studoven
+SET @nkp_source_id = (SELECT id FROM inst_sources WHERE source = 'nkp');
+SET @short_loan_enabled_id = (SELECT id FROM inst_keys WHERE section_id = (SELECT id FROM inst_sections WHERE section_name = 'ShortLoan'));
+INSERT INTO inst_configs (source_id, key_id, value, timestamp) VALUES (@nkp_source_id, @short_loan_enabled_id, 'true', NOW());
+-- Týmová studovna s projektorem (16 osob) / Team Study Room (16-person capacity, data projector)
+INSERT INTO `inst_keys` (`key_name`, `section_id`) VALUES ('NKC01-000000053', (SELECT `id` FROM `inst_sections` WHERE `section_name` = 'ShortLoanLinks'));
+SELECT @study_room_id1 := LAST_INSERT_ID();
+INSERT INTO inst_configs (source_id, key_id, value, timestamp) VALUES (@nkp_source_id, @study_room_id1, 'Team Study Room with 16 person capacity in NKP', NOW());
+-- Týmová studovna (10 osob) / Team Study Room (10-person capacity)
+INSERT INTO `inst_keys` (`key_name`, `section_id`) VALUES ('NKC01-000000055', (SELECT `id` FROM `inst_sections` WHERE `section_name` = 'ShortLoanLinks'));
+SELECT @study_room_id2 := LAST_INSERT_ID();
+INSERT INTO inst_configs (source_id, key_id, value, timestamp) VALUES (@nkp_source_id, @study_room_id2, 'Team Study Room with 10 person capacity in NKP', NOW());
+-- Studovna Referenčního centra a MVS (rezervace studijních míst)
+INSERT INTO `inst_keys` (`key_name`, `section_id`) VALUES ('NKC01-000000054', (SELECT `id` FROM `inst_sections` WHERE `section_name` = 'ShortLoanLinks'));
+SELECT @study_room_id3 := LAST_INSERT_ID();
+INSERT INTO inst_configs (source_id, key_id, value, timestamp) VALUES (@nkp_source_id, @study_room_id3, 'Study room of the Reference Center and ILL in NKP', NOW());
+UPDATE `system` SET `value` = '125' WHERE `key`='DB_VERSION';
