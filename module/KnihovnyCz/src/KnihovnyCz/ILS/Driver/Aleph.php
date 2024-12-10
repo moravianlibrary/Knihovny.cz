@@ -550,7 +550,7 @@ class Aleph extends AlephBase implements TranslatorAwareInterface
         if ($fullName != null) {
             if (!str_contains($fullName, ',')) {
                 $profile['lastname'] = $fullName;
-                $profile['firstname'] = '';
+                $profile['firstname'] = null;
             } else {
                 [$profile['lastname'], $profile['firstname']]
                     = explode(',', $fullName);

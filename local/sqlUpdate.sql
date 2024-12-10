@@ -581,3 +581,8 @@ INSERT INTO `inst_keys` (`key_name`, `section_id`) VALUES ('NKC01-000000054', (S
 SELECT @study_room_id3 := LAST_INSERT_ID();
 INSERT INTO inst_configs (source_id, key_id, value, timestamp) VALUES (@nkp_source_id, @study_room_id3, 'Study room of the Reference Center and ILL in NKP', NOW());
 UPDATE `system` SET `value` = '125' WHERE `key`='DB_VERSION';
+
+-- #1276
+insert into inst_keys (key_name, section_id) VALUES
+('address1', (SELECT id FROM inst_sections WHERE section_name="AddressMappings")),
+('address2', (SELECT id FROM inst_sections WHERE section_name="AddressMappings"));
