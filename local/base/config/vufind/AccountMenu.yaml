@@ -113,3 +113,9 @@ MenuItems:
     route: myresearch-logout
     icon: sign-out
     checkMethod: checkLogout
+
+  - name: notifications
+    label: Notifications::Manage notifications
+    route: notifications
+    icon: notifications-management
+    checkMethod: checkNotifications
