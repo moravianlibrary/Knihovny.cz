@@ -1,0 +1,58 @@
+<?php
+    // Template for use by the renderArray helper:
+    $arrTemplate = '<tr><th>%%LABEL%%:</th><td> %%VALUE%%</td></tr>';
+?>
+<?=$this->flashmessages();?>
+<?php if (is_array($this->profile)): ?>
+  <table class="table table-striped">
+    <?=
+        $this->renderArray(
+            $arrTemplate,
+            $this->profile,
+            [
+                $this->transEsc('First Name') => 'firstname',
+                $this->transEsc('Last Name') => 'lastname',
+                $this->transEsc('Email') => 'email',
+            ]
+        );
+    ?>
+    <tr><th><?=$this->transEsc('Address')?></th><td><?=$this->profile['address1'] ?? ''?><br><?=$this->profile['address2'] ?? ''?></td></tr>
+    <?=
+        $this->renderArray(
+            $arrTemplate,
+            $this->profile,
+            [
+                $this->transEsc('Zip') => 'zip',
+                $this->transEsc('City') => 'city',
+                $this->transEsc('Country') => 'country',
+                $this->transEsc('Phone Number') => 'phone',
+                $this->transEsc('Mobile Number') => 'mobile_phone',
+                $this->transEsc('patron_account_expires') => 'expiration_date',
+                $this->transEsc('patron_bookshelf_number') => 'bookshelf',
+            ]
+        );
+    ?>
+  </table>
+  <?php if (isset($this->prolongRegistrationLink)):?>
+    <a href="<?=$this->prolongRegistrationLink?>" class="btn btn-primary">
+      <?=$this->transEsc('online_prolongation_link_text')?>
+    </a>
+  <?php endif; ?>
+  <?php if ($this->changePasswordUrl != null):?>
+    <a href="<?=$this->changePasswordUrl?>" class="btn btn-primary">
+      <?=$this->transEsc('password_change_label')?>
+    </a>
+  <?php endif; ?>
+  <?php if ($this->changeEmailUrl != null):?>
+   <a href="<?=$this->changeEmailUrl?>" class="btn btn-primary">
+      <?=$this->transEsc('email_change_label')?>
+    </a>
+  <?php endif; ?>
+  <?php if ($this->changeNicknameUrl != null):?>
+   <a href="<?=$this->changeNicknameUrl?>" class="btn btn-primary">
+      <?=$this->transEsc('nickname_change_label')?>
+    </a>
+  <?php endif; ?>
+<?php elseif ('ils-none' !== $this->ils()->getOfflineMode() && $this->patronLoginView && !empty($this->patronLoginView->getTemplate())): ?>
+    <?=$this->partial($this->patronLoginView);?>
+<?php endif; ?>
