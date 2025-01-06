@@ -75,7 +75,7 @@
       <?php for ($row = 0; $row < $rowCount; $row++): ?>
           <tr>
         <?php foreach ($columns as $column): ?>
-            <td><?=$tableData[$column][$row]?></td>
+            <td class="<?=str_replace(' ', '-', $column)?>"><?=$tableData[$column][$row]?></td>
         <?php endforeach; ?>
       </tr>
       <?php endfor; ?>
