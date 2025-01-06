@@ -20,7 +20,7 @@
 
 <div id="popupMessages"><?=$this->flashmessages()?></div>
 
-<?php if (($info = $this->transEsc('short_loan_request_info_text', [], '')) != ''): ?>
+<?php if (($info = $this->translate('short_loan_request_info_text', [], '')) != ''): ?>
   <div class="alert alert-info">
     <?=$info?>
   </div>
