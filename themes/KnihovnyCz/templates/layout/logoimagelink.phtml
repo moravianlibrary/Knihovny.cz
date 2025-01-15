@@ -1,8 +1,14 @@
 <?php
   $language = $this->langugage ?? $this->layout()->userLang;
   $themeConfig = $this->config()->get('config')->Theme;
-  $logo = ($themeConfig && $themeConfig->logo_path)
-    ? $themeConfig->logo_path
-    : 'logo-knihovny.cz-' . $language . '.svg';
+  $logo = "logo-knihovny.cz-$language.svg";
+  if($themeConfig) {
+    $logoPathLang = 'logo_path_' . $language;
+    if($themeConfig->$logoPathLang) {
+      $logo = $themeConfig->$logoPathLang;
+    } elseif ($themeConfig->logo_path) {
+      $logo = $themeConfig->logo_path;
+    }
+  }
   ?>
 <?=$this->imageLink($logo);?>
