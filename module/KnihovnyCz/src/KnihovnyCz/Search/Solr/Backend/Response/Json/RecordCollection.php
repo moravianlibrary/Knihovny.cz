@@ -52,7 +52,7 @@ class RecordCollection extends Base
                 }
                 $results = [];
                 foreach ($buckets as $bucket) {
-                    $count = $bucket['count'];
+                    $count = $bucket['real_count'] ?? $bucket['count'];
                     $count = (int)(is_array($count) ? $count['count'] : $count);
                     $results[$bucket['val']] = min($count, $foundResults);
                 }
