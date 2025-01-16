@@ -25,6 +25,8 @@ class FilterQuery
 
     protected ?string $query;
 
+    protected ?string $childQuery;
+
     /**
      * Get field
      *
@@ -177,6 +179,29 @@ class FilterQuery
     }
 
     /**
+     * Get child query
+     *
+     * @return string|null
+     */
+    public function getChildQuery(): ?string
+    {
+        return $this->childQuery;
+    }
+
+    /**
+     * Set child query
+     *
+     * @param string|null $childQuery child query
+     *
+     * @return $this
+     */
+    public function setChildQuery(?string $childQuery): FilterQuery
+    {
+        $this->childQuery = $childQuery;
+        return $this;
+    }
+
+    /**
      * Get filter
      *
      * @return string
@@ -196,6 +221,9 @@ class FilterQuery
             }
             if ($this->parent) {
                 $filter = addcslashes($filter, '"\'');
+                if ($this->childQuery != null) {
+                    $filter = '(' . $this->childQuery . ') AND ' . $filter;
+                }
                 $localParams .= "parent which='$parentFilter' v='$filter'";
                 $filter = null;
             } elseif ($this->child) {

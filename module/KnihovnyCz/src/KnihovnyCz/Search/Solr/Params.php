@@ -109,11 +109,18 @@ class Params extends \VuFind\Search\Solr\Params
     private array $zeroCountFacets = [];
 
     /**
-     * All facets are OR
+     * All fields are ORed
      *
      * @var bool
      */
     private bool $allFacetsAreOr = false;
+
+    /**
+     * List of fields that are ORed
+     *
+     * @var array
+     */
+    private array $orFields = [];
 
     /**
      * Constructor
@@ -150,6 +157,8 @@ class Params extends \VuFind\Search\Solr\Params
                 array_values($searchConfig->ChildRecordFilters->toArray())
             );
         }
+        $this->orFields  = array_map('trim', explode(',', $facetConfig->Results_Settings->orFacets ?? ''));
+        $this->allFacetsAreOr = (isset($this->orFields[0]) && $this->orFields[0] == '*');
     }
 
     /**
@@ -240,6 +249,7 @@ class Params extends \VuFind\Search\Solr\Params
             $this->getHiddenFilters(),
             $this->filterList
         );
+        $nestedFilters = [];
         foreach ($filterList as $field => $filter) {
             if ($orFacet = str_starts_with($field, '~')) {
                 $field = substr($field, 1);
@@ -264,29 +274,35 @@ class Params extends \VuFind\Search\Solr\Params
                 } else {
                     $this->configureFilter($fq);
                     $filterQuery[] = $fq->getFilter();
+                    if ($fq->isParentQueryParser()) {
+                        $copy = clone $fq;
+                        $copy->setParentQueryParser(false);
+                        $copy->setTag(null);
+                        $nestedFilters[] = $copy->getFilter();
+                    }
                 }
             }
         }
-        $nestedOrFilters = [];
         foreach ($orFilters as $field => $parts) {
             $orFilter = new FilterQuery();
             $orFilter->setTag($field . '_filter');
             $orFilter->setField($field);
             $orFilter->setRawQuery('(' . implode(' OR ', $parts) . ')');
             $this->configureFilter($orFilter);
+            $filterQuery[] = $orFilter->getFilter();
             if ($orFilter->isParentQueryParser()) {
                 $copy = clone $orFilter;
                 $copy->setParentQueryParser(false);
                 $copy->setTag(null);
-                $nestedOrFilters[] = $copy->getFilter();
+                $nestedFilters[] = $copy->getFilter();
             }
-            $filterQuery[] = $orFilter->getFilter();
         }
-        if (count($nestedOrFilters) > 1) {
+        if (count($nestedFilters) > 1) {
             $nestedFilter = new FilterQuery();
             $nestedFilter->setParentQueryParser(true);
-            $nestedFilter->setTag('nested_or_facet_filter');
-            $nestedFilter->setRawQuery('(' . implode(' AND ', $nestedOrFilters) . ')');
+            $nestedFilter->setChildQuery($this->childFilter);
+            $nestedFilter->setTag('nested_facet_filter');
+            $nestedFilter->setRawQuery('(' . implode(' AND ', $nestedFilters) . ')');
             $filterQuery[] = $nestedFilter->getFilter();
         }
         return $filterQuery;
@@ -324,20 +340,27 @@ class Params extends \VuFind\Search\Solr\Params
             $facetConfig['mincount'] = 0;
         }
         $facetConfig['method'] = $this->facetMethod;
-        $domain = [];
-        $domain['excludeTags'] = [ 'nested_or_facet_filter' ];
+        $excludeTags = [];
         if ($this->isOrFacet($facetField)) {
-            $domain['excludeTags'][] =  $facetField . '_filter';
+            $excludeTags[] =  $facetField . '_filter';
+        }
+        if ($type != 'default') {
+            $excludeTags[] = 'nested_facet_filter';
+        }
+        $domain = [];
+        if (!empty($excludeTags)) {
+            $domain['excludeTags'] = $excludeTags;
         }
         if ($type == 'default') {
-            $facetConfig['domain'] = $domain;
             return $facetConfig;
         }
+
         $q = null;
         $nestedFilter = null;
+
         $appliedFilters = [];
         foreach ($this->nestedFilters as $filter) {
-            if ($facetField != $filter->getField()) {
+            if (!$this->isOrFacet($filter->getField()) || $facetField != $filter->getField()) {
                 $appliedFilters[] = $this->putBrackets($filter->getFilter());
             }
         }
@@ -350,8 +373,11 @@ class Params extends \VuFind\Search\Solr\Params
             if ($nestedFilter != null) {
                 $q .= ' AND ' . $nestedFilter;
             }
+            if ($this->childFilter != null) {
+                $q .= ' AND (' . $this->childFilter . ')';
+            }
             if ($this->parentCount) {
-                $facetConfig['facet'] = [ 'count' => 'unique(_root_)' ];
+                $facetConfig['facet'] = [ 'real_count' => 'uniqueBlock(_root_)' ];
             }
         } elseif ($type == 'parent') {
             $domain['blockParent'] = DeduplicationHelper::PARENT_FILTER;
@@ -427,6 +453,7 @@ class Params extends \VuFind\Search\Solr\Params
         } elseif ($nested) {
             $this->nestedFilters[] = clone $filter;
             $filter->setParentQueryParser(true);
+            $filter->setChildQuery($this->childFilter);
         } elseif ($this->deduplicationType == 'multiplying') {
             $filter->setChildrenQueryParser(true);
         }
@@ -436,13 +463,13 @@ class Params extends \VuFind\Search\Solr\Params
     /**
      * Return if the field is ORed
      *
-     * @param $field field name
+     * @param string $field field name
      *
      * @return bool  is OR facet
      */
-    protected function isOrFacet($field): bool
+    protected function isOrFacet(string $field): bool
     {
-        return $this->allFacetsAreOr || in_array($field, $this->orFacets);
+        return $this->allFacetsAreOr || in_array($field, $this->orFields);
     }
 
     /**

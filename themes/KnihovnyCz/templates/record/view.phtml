@@ -54,7 +54,7 @@
     <?=$this->record($this->driver)->getCoreMetadata()?>
     </div>
 
-    <?php if($this->driver->getSourceIdentifier() != 'Search2'): ?>
+    <?php if ($this->driver->getSourceIdentifier() != 'Search2'): ?>
       <?=$this->render('record/deduplicated-records.phtml'); ?>
     <?php endif; ?>
 
