@@ -1,0 +1,59 @@
+HTTP/1.1 200 OK
+Content-Type: application/xml
+Date: Wed, 18 Mar 2024 11:49:40 GMT
+
+<?xml version = "1.0" encoding = "UTF-8"?>
+<bor-info>
+  <z303>
+    <z303-id>LIB1234567</z303-id>
+    <z303-proxy-for-id></z303-proxy-for-id>
+    <z303-primary-id></z303-primary-id>
+    <z303-name-key>dobrota frantis|ek NK1234567</z303-name-key>
+    <z303-user-type></z303-user-type>
+    <z303-user-library></z303-user-library>
+    <z303-open-date>20220224</z303-open-date>
+    <z303-update-date>20241212</z303-update-date>
+    <z303-con-lng>CZE</z303-con-lng>
+    <z303-alpha>L</z303-alpha>
+    <z303-name>DOBROTA František</z303-name>
+    <z303-title>Mgr.</z303-title>
+    <z303-delinq-1>34</z303-delinq-1>
+    <z303-delinq-n-1>34 - Nezaplacená pokuta, registrace nebo MVS TEST</z303-delinq-n-1>
+    <z303-delinq-1-update-date>20241212</z303-delinq-1-update-date>
+    <z303-delinq-1-cat-name>0204</z303-delinq-1-cat-name>
+    <z303-delinq-2>12</z303-delinq-2>
+    <z303-delinq-n-2>12 - Vzkaz pro čtenáře TEST</z303-delinq-n-2>
+    <z303-delinq-2-update-date>20241212</z303-delinq-2-update-date>
+    <z303-delinq-2-cat-name>0204</z303-delinq-2-cat-name>
+    <z303-delinq-3>00</z303-delinq-3>
+    <z303-delinq-n-3></z303-delinq-n-3>
+    <z303-delinq-3-update-date>00000000</z303-delinq-3-update-date>
+    <z303-delinq-3-cat-name></z303-delinq-3-cat-name>
+    <z303-budget></z303-budget>
+    <z303-profile-id></z303-profile-id>
+    <z303-ill-library>LIB</z303-ill-library>
+    <z303-home-library>200</z303-home-library>
+    <z303-field-1></z303-field-1>
+    <z303-field-2></z303-field-2>
+    <z303-field-3></z303-field-3>
+    <z303-note-1></z303-note-1>
+    <z303-note-2></z303-note-2>
+    <z303-salutation></z303-salutation>
+    <z303-ill-total-limit>9999</z303-ill-total-limit>
+    <z303-ill-active-limit>9999</z303-ill-active-limit>
+    <z303-dispatch-library></z303-dispatch-library>
+    <z303-birth-date>19900101</z303-birth-date>
+    <z303-export-consent>Y</z303-export-consent>
+    <z303-proxy-id-type>00</z303-proxy-id-type>
+    <z303-send-all-letters>Y</z303-send-all-letters>
+    <z303-plain-html>P</z303-plain-html>
+    <z303-want-sms>N</z303-want-sms>
+    <z303-plif-modification>A E B D</z303-plif-modification>
+    <z303-title-req-limit>0010</z303-title-req-limit>
+    <z303-gender>F</z303-gender>
+    <z303-birthplace></z303-birthplace>
+    <z303-upd-time-stamp>202412121330253</z303-upd-time-stamp>
+    <z303-last-name></z303-last-name>
+    <z303-first-name></z303-first-name>
+  </z303>
+</bor-info>
