@@ -419,4 +419,21 @@ class MultiBackend extends \VuFind\ILS\Driver\MultiBackend
         $dateDiff = $baseDate->diff($targetDate);
         return ($dateDiff->invert == 0 ? 1 : -1) * $dateDiff->days;
     }
+
+    /**
+     * Find the correct driver for the correct configuration file for the
+     * given source and cache an initialized copy of it.
+     *
+     * @param string $source The source name of the driver to get.
+     *
+     * @return mixed On success a driver object, otherwise null.
+     */
+    protected function getDriver($source)
+    {
+        $driver = parent::getDriver($source);
+        if ($driver !== null && method_exists($driver, 'setSource')) {
+            $driver->setSource($source);
+        }
+        return $driver;
+    }
 }

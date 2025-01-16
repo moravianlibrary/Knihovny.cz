@@ -253,9 +253,7 @@ class MyResearchController extends MyResearchControllerBase
             if ($supportBlocks !== false) {
                 $blocks = $catalog->getMyBlocks($patron);
                 foreach ($blocks as $block) {
-                    $this->flashMessenger()->addErrorMessage(
-                        'ILSMessages::' . $block['id']
-                    );
+                    $this->flashMessenger()->addErrorMessage($block['label']);
                 }
             }
         } else {

@@ -36,6 +36,10 @@ class Aleph extends AlephBase implements TranslatorAwareInterface
 
     protected const ILL_BLANK_FORM_LABEL_PREFIX = 'ill_blank_form_';
 
+    protected bool $showAlephLabelBlocks = false;
+
+    protected string $source = '';
+
     /**
      * Public Function which retrieves historic loan, renew, hold and cancel
      * settings from the driver ini file.
@@ -57,6 +61,12 @@ class Aleph extends AlephBase implements TranslatorAwareInterface
             return [ 'filters' => [ 'year', 'volume' ] ];
         }
         return parent::getConfig($func, $params);
+    }
+
+    public function init()
+    {
+        parent::init();
+        $this->showAlephLabelBlocks = $this->config['ProfileBlocks']['showAlephLabel'] ?? false;
     }
 
     /**
@@ -575,11 +585,23 @@ class Aleph extends AlephBase implements TranslatorAwareInterface
      * @throws ILSException
      * @return array      Array of the patron's profile data on success.
      */
-    public function getMyBlocks($user)
+    public function getMyBlocks(array $user)
     {
-        if (!isset($user['college'])) {
-            $user['college'] = $this->useradm;
+        $blocks = [];
+        if ($this->showAlephLabelBlocks)
+        {
+            $xml = $this->doRestDLFRequest(
+                ['patron', $user['id'], 'patronStatus', 'blocks']
+            );
+            $blocksArray = (array)$xml->{'blocks_messages'}->{'global-blocks'};
+            foreach ($blocksArray as $block) {
+                $blocks[] = [
+                    'label' => (string)$block,
+                ];
+            }
+            return $blocks;
         }
+        $user['college'] ??= $this->useradm;
         $xml = $this->doXRequest(
             'bor-info',
             [
@@ -588,24 +610,25 @@ class Aleph extends AlephBase implements TranslatorAwareInterface
             ],
             true
         );
-        $blocks = [];
-        $blockElements = [
-            'z303' => ['z303-delinq-1', 'z303-delinq-2', 'z303-delinq-3'],
-            'z305' => ['z305-delinq-1', 'z305-delinq-2', 'z305-delinq-3'],
-        ];
-        foreach ($blockElements as $parentElement => $childElements) {
-            foreach ($childElements as $childElement) {
-                $child = $xml->{$parentElement};
-                $block = (string)$child->{$childElement};
+        $parents = ['z303', 'z305'];
+        foreach ($parents as $parent) {
+            for ($i = 1; $i <= 3; $i++) {
+                $block = (string)$xml->{$parent}->{$parent . '-delinq-' . $i};
                 if (empty($block) || $block == '00') {
                     continue;
                 }
-                $updated = (string)$child->{$childElement . '-update-date'};
+                $updated = (string)$xml->{$parent}->{$parent . '-delinq-' . $i . '-update-date'};
+                $blockId = 'block_' . $block;
+                $label = $this->translate(
+                    'ILSMessages::' . (!empty($this->source) ? $this->source . '.' : '') .  $blockId
+                );
                 $blocks[] = [
-                    'id' => 'block_' . $block,
+                    'id' => $blockId,
+                    'label' => $label,
                     'updated' => $this->parseDate($updated),
                 ];
             }
+
         }
         return $blocks;
     }
@@ -1409,5 +1432,17 @@ class Aleph extends AlephBase implements TranslatorAwareInterface
             $result['value'] = $value;
         }
         return $result;
+    }
+
+    /**
+     * Set source from multibackend
+     *
+     * @param string $source Source identifier
+     *
+     * @return void
+     */
+    public function setSource(string $source): void
+    {
+        $this->source = $source;
     }
 }
