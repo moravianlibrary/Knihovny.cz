@@ -480,11 +480,10 @@ class Aleph extends AlephBase implements TranslatorAwareInterface
      */
     public function getCancelHoldDetails($holdDetails, $patron = [])
     {
-        if ($holdDetails['delete']) {
+        if ($holdDetails['delete'] && $holdDetails['z37_status'] !== 'S') {
             return $holdDetails['cancel_item_id'];
-        } else {
-            return null;
         }
+        return null;
     }
 
     /**
