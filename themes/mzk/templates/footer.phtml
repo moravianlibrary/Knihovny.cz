@@ -1,28 +1,3 @@
 <?php $this->render('footer-view-linkbar.phtml'); ?>
 <?php $this->slot('footer-description')->set(''); ?>
-<?php $this->slot('footer-follow-links')->start() ?>
-<h3><?=$this->translate('Follow us') ?></h3>
-<ul class="list-unstyled list-inline">
-  <li>
-    <a href="https://www.instagram.com/moravskazemska/" title="<?=$this->translate('Instagram: Moravská zemská knihovna') ?>" target="_blank">
-      <?=$this->icon('instagram', 'fa-2x') ?>
-    </a>
-  </li>
-  <li>
-    <a href="https://www.facebook.com/mzk.cz" title="<?=$this->translate('Facebook: Moravská zemská knihovna') ?>" target="_blank">
-      <?=$this->icon('facebook', 'fa-2x') ?>
-    </a>
-  </li>
-  <li>
-    <a href="https://x.com/MoravskaZemska" title="<?=$this->translate('Twitter: Moravská zemská knihovna') ?>" target="_blank">
-      <?=$this->icon('twitter', 'fa-2x') ?>
-    </a>
-  </li>
-  <li>
-    <a href="https://cz.linkedin.com/company/moravska-zemska-knihovna" title="<?=$this->translate('Linkedin: Moravská zemská knihovna') ?>" target="_blank">
-      <?=$this->icon('linkedin', 'fa-2x') ?>
-    </a>
-  </li>
-</ul>
-<?php $this->slot('footer-follow-links')->end(); ?>
 <?php include $this->parentTemplate('footer.phtml');?>
