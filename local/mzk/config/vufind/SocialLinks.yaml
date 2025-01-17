@@ -1,0 +1,33 @@
+Items:
+  cs:
+    - icon: instagram
+      label: "Instagram: Moravian library"
+      link: "https://www.instagram.com/moravskazemska"
+    - icon: facebook
+      label: "Facebook: Moravian library"
+      link: "https://www.facebook.com/mzk.cz"
+    - icon: twitter
+      label: "X: Moravian library"
+      link: "https://x.com/MoravskaZemska"
+    - icon: linkedin
+      label: "LinkedIn: Moravian library"
+      link: "https://www.linkedin.com/company/moravska-zemska-knihovna"
+    - icon: youtube
+      label: "YouTube: Moravian library"
+      link: "https://www.youtube.com/@MZK-Brno"
+  en:
+    - icon: instagram
+      label: "Instagram: Moravian library"
+      link: "https://www.instagram.com/moravskazemska"
+    - icon: facebook
+      label: "Facebook: Moravian library"
+      link: "https://www.facebook.com/mzk.cz"
+    - icon: twitter
+      label: "X: Moravian library"
+      link: "https://x.com/MoravskaZemska"
+    - icon: linkedin
+      label: "LinkedIn: Moravian library"
+      link: "https://www.linkedin.com/company/moravska-zemska-knihovna"
+    - icon: youtube
+      label: "YouTube: Moravian library"
+      link: "https://www.youtube.com/@MZK-Brno"

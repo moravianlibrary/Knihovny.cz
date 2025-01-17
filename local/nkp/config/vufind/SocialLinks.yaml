@@ -1,0 +1,41 @@
+Items:
+  cs:
+    - icon: facebook
+      label: "Facebook: Národní knihovna ČR"
+      link: "https://www.facebook.com/narodni.knihovna"
+
+    - icon: twitter
+      label: "X: Národní knihovna ČR"
+      link: "https://x.com/narodniknihovna"
+
+    - icon: instagram
+      label: "Instagram: Národní knihovna ČR"
+      link: "https://www.instagram.com/narodni_knihovna_cr"
+
+    - icon: youtube
+      label: "YouTube: Národní knihovna ČR"
+      link: "https://www.youtube.com/NarodniknihovnaCR"
+
+    - icon: linkedin
+      label: "LinkedIn: Národní knihovna ČR"
+      link: "https://www.linkedin.com/company/n%C3%A1rodn%C3%AD-knihovna-%C4%8Desk%C3%A9-republiky"
+  en:
+    - icon: facebook
+      label: "Facebook: National Library of the Czech Republic"
+      link: "https://www.facebook.com/narodni.knihovna"
+
+    - icon: twitter
+      label: "X: National Library of the Czech Republic"
+      link: "https://x.com/narodniknihovna"
+
+    - icon: instagram
+      label: "Instagram: National Library of the Czech Republic"
+      link: "https://www.instagram.com/narodni_knihovna_cr"
+
+    - icon: youtube
+      label: "YouTube: National Library of the Czech Republic"
+      link: "https://www.youtube.com/NarodniknihovnaCR"
+
+    - icon: linkedin
+      label: "LinkedIn: National Library of the Czech Republic"
+      link: "https://www.linkedin.com/company/n%C3%A1rodn%C3%AD-knihovna-%C4%8Desk%C3%A9-republiky"

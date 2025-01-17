@@ -1,0 +1,12 @@
+<?php if(count($this->items)): ?>
+  <h3><?=$this->translate('Follow us') ?></h3>
+  <ul class="list-unstyled list-inline">
+    <?php foreach ($this->items as $item): ?>
+      <li>
+        <a href="<?=$item['link'] ?>" title="<?=$item['label'] ?>" target="_blank">
+          <?=$this->icon($item['icon'], 'fa-2x') ?>
+        </a>
+      </li>
+    <?php endforeach; ?>
+  </ul>
+<?php endif; ?>

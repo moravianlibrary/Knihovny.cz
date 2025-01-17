@@ -25,6 +25,7 @@ return [
                 \VuFind\View\Helper\Root\DateTimeFactory::class,
             \KnihovnyCz\View\Helper\KnihovnyCz\Notifications::class => \KnihovnyCz\View\Helper\KnihovnyCz\NotificationsFactory::class,
             \KnihovnyCz\View\Helper\KnihovnyCz\SearchMemory::class => \VuFind\View\Helper\Root\SearchMemoryFactory::class,
+            \KnihovnyCz\View\Helper\KnihovnyCz\SocialLinks::class => \KnihovnyCz\View\Helper\KnihovnyCz\SocialLinksFactory::class,
         ],
         'invokables' => [
             \KnihovnyCz\View\Helper\KnihovnyCz\FooterLink::class,
@@ -58,6 +59,7 @@ return [
             'resultsCount' => \KnihovnyCz\View\Helper\KnihovnyCz\ResultsCount::class,
             'notifications' => \KnihovnyCz\View\Helper\KnihovnyCz\Notifications::class,
             'searchMemory' => \KnihovnyCz\View\Helper\KnihovnyCz\SearchMemory::class,
+            'socialLinks' => \KnihovnyCz\View\Helper\KnihovnyCz\SocialLinks::class,
         ],
     ],
     'icons' => [

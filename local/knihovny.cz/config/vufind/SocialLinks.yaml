@@ -1,0 +1,21 @@
+Items:
+  cs:
+    - icon: instagram
+      label: "Instagram: Knihovny.cz"
+      link: "https://www.instagram.com/knihovny.cz"
+    - icon: facebook
+      label: "Facebook: Knihovny.cz"
+      link: "https://www.facebook.com/Knihovny.cz"
+    - icon: github
+      label: "Github: Knihovny.cz"
+      link: "https://github.com/moravianlibrary/Knihovny.cz"
+  en:
+    - icon: instagram
+      label: "Instagram: Knihovny.cz"
+      link: "https://www.instagram.com/knihovny.cz"
+    - icon: facebook
+      label: "Facebook: Knihovny.cz"
+      link: "https://www.facebook.com/Knihovny.cz"
+    - icon: github
+      label: "Github: Knihovny.cz"
+      link: "https://github.com/moravianlibrary/Knihovny.cz"
