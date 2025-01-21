@@ -4,6 +4,11 @@
 // We only need to observe change of type childList
 const config = { attributes: false, childList: true, subtree: false };
 
+// Function to hide or show cart badge
+const toggleCartBadge = function toggleCartBadge(targetNode) {
+  targetNode.parentNode.style.display = targetNode.innerText === '0' ? 'none' : 'block';
+};
+
 // Callback function to execute when mutations are observed
 const observeCartHandler = function observeCartHandler(mutationsList) {
   // Use traditional 'for loops' for IE 11
@@ -12,11 +17,6 @@ const observeCartHandler = function observeCartHandler(mutationsList) {
       toggleCartBadge(mutation.target);
     }
   }
-};
-
-// Function to hide or show cart badge
-const toggleCartBadge = function toggleCartBadge(targetNode) {
-  targetNode.parentNode.style.display = targetNode.innerText === '0' ? 'none' : 'block';
 };
 
 const cartObserver = new MutationObserver(observeCartHandler);
