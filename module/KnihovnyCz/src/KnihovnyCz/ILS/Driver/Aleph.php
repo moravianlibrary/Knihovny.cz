@@ -63,6 +63,15 @@ class Aleph extends AlephBase implements TranslatorAwareInterface
         return parent::getConfig($func, $params);
     }
 
+    /**
+     * Initialize the driver.
+     *
+     * Validate configuration and perform all resource-intensive tasks needed to
+     * make the driver active.
+     *
+     * @throws ILSException
+     * @return void
+     */
     public function init()
     {
         parent::init();
@@ -587,8 +596,7 @@ class Aleph extends AlephBase implements TranslatorAwareInterface
     public function getMyBlocks(array $user)
     {
         $blocks = [];
-        if ($this->showAlephLabelBlocks)
-        {
+        if ($this->showAlephLabelBlocks) {
             $xml = $this->doRestDLFRequest(
                 ['patron', $user['id'], 'patronStatus', 'blocks']
             );
@@ -619,7 +627,7 @@ class Aleph extends AlephBase implements TranslatorAwareInterface
                 $updated = (string)$xml->{$parent}->{$parent . '-delinq-' . $i . '-update-date'};
                 $blockId = 'block_' . $block;
                 $label = $this->translate(
-                    'ILSMessages::' . (!empty($this->source) ? $this->source . '.' : '') .  $blockId
+                    'ILSMessages::' . (!empty($this->source) ? $this->source . '.' : '') . $blockId
                 );
                 $blocks[] = [
                     'id' => $blockId,
@@ -627,7 +635,6 @@ class Aleph extends AlephBase implements TranslatorAwareInterface
                     'updated' => $this->parseDate($updated),
                 ];
             }
-
         }
         return $blocks;
     }

@@ -69,17 +69,10 @@ class AlephTest extends \PHPUnit\Framework\TestCase
             'enabled' => 'true',
         ];
         $this->configureDriver($blocksFromAlephConfig);
-        $this->mockResponse('bor-info.xml');
+        $this->mockResponse('patron-blocks.xml');
         $expected = [
             [
-                'id' => 'block_34',
                 'label' => '34 - Nezaplacená pokuta, registrace nebo MVS TEST',
-                'updated' => '12-12-2024',
-            ],
-            [
-                'id' => 'block_12',
-                'label' => '12 - Vzkaz pro čtenáře TEST',
-                'updated' => '12-12-2024',
             ],
         ];
         $blocks = $this->driver->getMyBlocks(['id' => 'NK1234567']);
@@ -155,6 +148,11 @@ class AlephTest extends \PHPUnit\Framework\TestCase
         $this->driver->init();
     }
 
+    /**
+     * Get default configuration
+     *
+     * @return array
+     */
     protected function getDefaultConfig(): array
     {
         return [

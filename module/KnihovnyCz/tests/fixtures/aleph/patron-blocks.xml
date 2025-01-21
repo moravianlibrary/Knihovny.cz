@@ -1,0 +1,38 @@
+HTTP/1.1 200 OK
+Content-Type: application/xml
+Date: Wed, 18 Mar 2024 11:49:40 GMT
+
+<?xml version="1.0" encoding="UTF-8"?>
+<pat-blocks>
+  <reply-text>ok</reply-text>
+  <reply-code>0000</reply-code>
+  <blocks_messages>
+    <global-blocks>
+      <patron-block>34 - Nezaplacená pokuta, registrace nebo MVS TEST</patron-block>
+    </global-blocks>
+    <translate-change-active-library>USM50</translate-change-active-library>
+    <institution code="USM50">
+      <inst-name>Exlibris Demo Libraries</inst-name>
+      <sublibrary code="HIL  ">
+        <sublib-name>Humanities Library and Reading</sublib-name>
+      </sublibrary>
+      <sublibrary code="LAW  ">
+        <sublib-name>Law Library</sublib-name>
+      </sublibrary>
+      <sublibrary code="USM50">
+        <sublib-name>Exlibris Demo Libraries</sublib-name>
+      </sublibrary>
+      <sublibrary code="WID  ">
+        <sublib-name>Main Library</sublib-name>
+      </sublibrary>
+    </institution>
+    <translate-change-active-library>USM51</translate-change-active-library>
+    <institution code="USM51">
+      <inst-name>USM51 Demo Libraries</inst-name>
+    </institution>
+    <translate-change-active-library>MAB50</translate-change-active-library>
+    <institution code="MAB50">
+      <inst-name>MAB Demo Library</inst-name>
+    </institution>
+  </blocks_messages>
+</pat-blocks>
