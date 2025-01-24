@@ -144,6 +144,7 @@ Author:
     - corporation_viz
     - author_additional
     - author_find
+    - author_original_language_search_txt_mv^100
   DismaxParams:
     - [bq, "inspiration:top_results^1"]
     - [bf, "if(exists(merged_records_boolean),10000,0)" ]
@@ -362,6 +363,7 @@ AllFields:
     - title_search_txt_mv
     - author_search_txt_mv
     - title_original_language_search_txt_mv^500
+    - author_original_language_search_txt_mv^500
   DismaxParams:
     - [bq, "inspiration:top_results^1"]
     - [bf, "if(exists(merged_records_boolean),10000,0)" ]
@@ -492,6 +494,7 @@ adv_search_author_corporation:
     - author_find
     - authorCorporation_search_txt_mv
     - author_search_txt_mv
+    - author_original_language_search_txt_mv^100
   DismaxParams:
     - [bq, "inspiration:top_results^1"]
     - [bf, "if(exists(merged_records_boolean),10000,0)" ]
@@ -732,6 +735,7 @@ adv_search_without_fulltext:
     - title_search_txt_mv
     - author_search_txt_mv
     - title_original_language_search_txt_mv^500
+    - author_original_language_search_txt_mv^500
   DismaxParams:
     - [bq, "inspiration:top_results^1"]
     - [bf, "if(exists(merged_records_boolean),10000,0)" ]
