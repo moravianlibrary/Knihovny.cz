@@ -1498,3 +1498,18 @@ html, body {
     white-space: nowrap;
   }
 }
+
+// fix menu items gray background
+.open > a {
+  &:focus {
+    background-color: transparent !important;
+  }
+}
+
+.navbar-nav {
+  button.dropdown-toggle {
+    &:active {
+      background-color: transparent !important;
+    }
+  }
+}
