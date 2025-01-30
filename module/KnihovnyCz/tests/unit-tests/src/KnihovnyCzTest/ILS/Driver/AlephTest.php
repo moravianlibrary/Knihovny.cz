@@ -78,6 +78,18 @@ class AlephTest extends \PHPUnit\Framework\TestCase
         $blocks = $this->driver->getMyBlocks(['id' => 'NK1234567']);
         $this->assertIsArray($blocks);
         $this->assertEquals($expected, $blocks);
+        $this->configureDriver($blocksFromAlephConfig);
+        $this->mockResponse('patron-blocks-multi.xml');
+        $expected = [
+            [
+                'label' => '12 - Vzkaz pro čtenáře',
+            ],
+            [
+                'label' => '15 - Ohlášená ztráta čtenářského průkazu',
+            ],
+        ];
+        $blocks = $this->driver->getMyBlocks(['id' => 'NK1234567']);
+        $this->assertEquals($expected, $blocks);
     }
 
     /**
