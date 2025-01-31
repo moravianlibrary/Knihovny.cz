@@ -1,21 +1,65 @@
-<?php $this->slot('footer-linkbar')->start(); ?>
+<?php
+  $this->slot('footer-linkbar')->start();
+  $urlBase = 'https://beta.nkp.cz';
+  //$urlBase = 'https://www.nkp.cz';
+  $lang = $this->layout()->userLang;
+  $lang = ($lang === 'cs') ? 'cs' : 'en';
+  $webLinks = [
+    'cs' => [
+      'librarian_consultation' => '/sluzby/skoleni-pro-uzivatele-a-verejnost#skoleni',
+      'licensed_resources' => '/katalogy-databaze-digitalni-knihovny?sort=&text=&sorttype%5B%5D=4',
+      'digital_libraries' => '/katalogy-databaze-digitalni-knihovny?sort=&text=&sorttype%5B%5D=5',
+      'other_resources' => '/katalogy-databaze-digitalni-knihovny?page=2&sorttype%5B0%5D=1&sorttype%5B1%5D=2',
+      'open_data' => '/o-knihovne/odborne-cinnosti/otevrena-data',
+      'Ask a Librarian' => 'https://www.ptejteseknihovny.cz/',
+      'library_services' => '/sluzby',
+      'frequently_asked_questions' => '/faq-katalog-nk-cr',
+      'contact_us' => '/faq-katalog-nk-cr#form',
+      'scanned_catalogues' => 'https://retris.nkp.cz/Catalog?sigla=ABA001',
+    ],
+    'en' => [
+      'librarian_consultation' => '/en/services/training-for-users-and-the-public#Training%20in%20resources',
+      'licensed_resources' => '/en/catalogues-databases-digital-libraries?sort=&text=&sorttype%5B%5D=4',
+      'digital_libraries' => '/en/catalogues-databases-digital-libraries?sort=&text=&sorttype%5B%5D=5',
+      'other_resources' => '/en/catalogues-databases-digital-libraries?sort=&text=&sorttype%5B%5D=1&sorttype%5B%5D=2',
+      'open_data' => '/en/about-us/professional-activities/open-data',
+      'Ask a Librarian' => 'https://www.ptejteseknihovny.cz/english',
+      'library_services' => '/en/services',
+      'frequently_asked_questions' => '/en/faq-nlcr-catalogue',
+      'contact_us' => '/en/faq-nlcr-catalogue#form',
+      'scanned_catalogues' => 'https://retris.nkp.cz/Home/SetLocale?locale=en-US&returnUrl=%2FCatalog%3Fsigla%3DABA001',
+    ],
+  ];
+?>
 <div class="linkbar">
   <div class="container">
     <div class="row">
       <div class="col-xs-12 col-sm-6 col-md-4">
+        <h3><?=$this->translate('footer_heading_1') ?></h3>
         <ul class="list-unstyled">
+          <li><?=$this->footerLink('autocomplete') ?></li>
           <li><a href="<?=$this->url('inspiration-conspectus') ?>"><?=$this->transEsc('funds_thematic_map')?></a></li>
-          <li><?=$this->footerLink('ochrana-osobnich-udaju') ?></li>
+          <li><a href="<?=$this->url('search-history') ?>"><?=$this->transEsc('Search History')?></a></li>
+          <li><a href="<?=$urlBase?><?=$webLinks[$lang]['librarian_consultation']?>"><?=$this->transEsc('librarian_consultation')?></a></li>
         </ul>
       </div>
       <div class="col-xs-12 col-sm-6 col-md-4">
+        <h3><?=$this->translate('footer_heading_2') ?></h3>
         <ul class="list-unstyled">
-          <li><?=$this->footerLink('napoveda') ?></li>
+          <li><a href="<?=$webLinks[$lang]['scanned_catalogues']?>"><?=$this->transEsc('scanned_catalogues')?></a></li>
+          <li><a href="<?=$urlBase?><?=$webLinks[$lang]['licensed_resources']?>"><?=$this->transEsc('licensed_resources')?></a></li>
+          <li><a href="<?=$urlBase?><?=$webLinks[$lang]['digital_libraries']?>"><?=$this->transEsc('digital_libraries')?></a></li>
+          <li><a href="<?=$urlBase?><?=$webLinks[$lang]['other_resources']?>"><?=$this->transEsc('other_resources')?></a></li>
+          <li><a href="<?=$urlBase?><?=$webLinks[$lang]['open_data']?>"><?=$this->transEsc('open_data')?></a></li>
         </ul>
       </div>
       <div class="col-xs-12 col-sm-6 col-md-4">
+        <h3><?=$this->translate('footer_heading_3') ?></h3>
         <ul class="list-unstyled">
-          <li><a data-lightbox href="<?=$this->url('feedback-home') ?>"><?=$this->transEsc('Feedback')?></a></li>
+          <li><a href="<?=$webLinks[$lang]['Ask a Librarian']?>"><?=$this->transEsc('Ask a Librarian')?></a></li>
+          <li><a href="<?=$urlBase?><?=$webLinks[$lang]['library_services']?>"><?=$this->transEsc('library_services')?></a></li>
+          <li><a href="<?=$urlBase?><?=$webLinks[$lang]['frequently_asked_questions']?>"><?=$this->transEsc('frequently_asked_questions')?></a></li>
+          <li><a href="<?=$urlBase?><?=$webLinks[$lang]['contact_us']?>"><?=$this->transEsc('contact_us')?></a></li>
         </ul>
       </div>
     </div>
