@@ -600,7 +600,7 @@ class Aleph extends AlephBase implements TranslatorAwareInterface
             $xml = $this->doRestDLFRequest(
                 ['patron', $user['id'], 'patronStatus', 'blocks']
             );
-            $blocksArray = (array)$xml->{'blocks_messages'}->{'global-blocks'};
+            $blocksArray = (array)$xml->{'blocks_messages'}->{'global-blocks'}->{'patron-block'};
             foreach ($blocksArray as $block) {
                 $blocks[] = [
                     'label' => (string)$block,

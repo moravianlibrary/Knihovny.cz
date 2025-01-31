@@ -1,0 +1,29 @@
+HTTP/1.1 200 OK
+Content-Type: application/xml
+Date: Wed, 18 Mar 2024 11:49:40 GMT
+
+<?xml version="1.0" encoding="UTF-8"?>
+<pat-blocks>
+  <reply-text>ok</reply-text>
+  <reply-code>0000</reply-code>
+  <blocks_messages>
+    <global-blocks>
+      <patron-block>12 - Vzkaz pro čtenáře</patron-block>
+      <patron-block>15 - Ohlášená ztráta čtenářského průkazu</patron-block>
+    </global-blocks>
+    <translate-change-active-library>NKC50</translate-change-active-library>
+    <institution code="NKC50">
+      <inst-name>NKC50</inst-name>
+      <sublibrary code="NKC50">
+        <sublib-name>NKC50</sublib-name>
+      </sublibrary>
+    </institution>
+    <translate-change-active-library>SLK50</translate-change-active-library>
+    <institution code="SLK50">
+      <inst-name>SLK50</inst-name>
+      <sublibrary code="SLK50">
+        <sublib-name>SLK50</sublib-name>
+      </sublibrary>
+    </institution>
+  </blocks_messages>
+</pat-blocks>
