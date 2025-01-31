@@ -67,7 +67,7 @@ class UrlQueryHelper extends \VuFind\Search\UrlQueryHelper
         foreach ($a as $key => $value) {
             if (is_array($value)) {
                 foreach ($value as $index => $current) {
-                    $ord = ($number) ? $index : '';
+                    $ord = ($number && !str_starts_with($key, 'lookfor')) ? $index : '';
                     $parts[] = urlencode($key . '[' . $ord . ']') . '=' . urlencode($current ?? '');
                 }
             } else {
