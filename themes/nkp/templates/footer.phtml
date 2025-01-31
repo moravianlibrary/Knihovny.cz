@@ -1,5 +1,7 @@
 <?php $this->render('footer-view-linkbar.phtml'); ?>
-<?php $this->slot('footer-description')->set(''); ?>
+<?php $this->slot('footer-description')->start(); ?>
+<p class="text"><?=$this->translate('Footer text') ?></p>
+<?php $this->slot('footer-description')->end() ?>
 <?php $this->slot('footer-follow-links')->start() ?>
 <h3><?=$this->translate('Follow us') ?></h3>
 <ul class="list-unstyled list-inline">
