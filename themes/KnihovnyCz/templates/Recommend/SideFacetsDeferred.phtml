@@ -52,7 +52,7 @@
     // the real Solr query in order to process facets correctly, so we need to
     // unsuppress it here.
     $querySuppressed = $results->getUrlQuery()->isQuerySuppressed();
-    $urlQuery = substr($results->getUrlQuery()->setSuppressQuery(false)->getParams(false, true), 1);
+    $urlQuery = substr($results->getUrlQuery()->setSuppressQuery(false)->getParams(false), 1);
     $results->getUrlQuery()->setSuppressQuery($querySuppressed); // restore original config
     // We also need to inform the helper about any special parameters used in place
     // of the suppressed query:
