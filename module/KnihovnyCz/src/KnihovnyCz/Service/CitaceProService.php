@@ -53,6 +53,7 @@ class CitaceProService implements \VuFindHttp\HttpServiceAwareInterface
         if ($source != 'Solr') {
             $record = $this->recordLoader->load($recordId, $source);
         }
+        $style = $style && $this->isCitationStyleValid($style) ? $style : $this->getDefaultCitationStyle();
         $openUrl = $record != null
             ? $record->tryMethod('getOpenUrlLinkForCitations', [$style])
             : $this->getCitationApiUrl($recordId, $style);
@@ -78,16 +79,13 @@ class CitaceProService implements \VuFindHttp\HttpServiceAwareInterface
      * Get citation from citacepro.com API
      *
      * @param string  $recordId Record identifier
-     * @param ?string $style    Citation style
+     * @param string  $style    Citation style
      *
      * @return string
      * @throws \Exception
      */
-    protected function getCitationApiUrl(string $recordId, ?string $style = null): string
+    protected function getCitationApiUrl(string $recordId, string $style): string
     {
-
-        $style = $style && $this->isCitationStyleValid($style) ? $style : $this->getDefaultCitationStyle();
-
         $query = [
             'citacniStyl' => $style,
         ];
