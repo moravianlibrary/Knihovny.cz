@@ -94,13 +94,15 @@ class Summon extends \VuFind\RecordDriver\Summon
     /**
      * Get OpenURL for CitacePro
      *
-     * @param int $style Citations style id
+     * @param string $style Citations style id
      *
      * @return string
      */
-    public function getOpenUrlLinkForCitations(?string $style = null): string
+    public function getOpenUrlLinkForCitations(string $style): string
     {
         $params = $this->getOpenUrlParamsForCitation();
+        $params['citacepro_style'] = $style;
+        $params['citacepro_display'] = 'bibliography';
         return  'https://www.citacepro.com/sfx?' . http_build_query($params);
     }
 
