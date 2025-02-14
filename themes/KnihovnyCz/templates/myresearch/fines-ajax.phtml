@@ -81,7 +81,7 @@
       <?php endfor; ?>
       <tr style="font-weight:bold">
       <td colspan="<?=count($columns) - 1?>"><?=$this->transEsc('Total Balance Due')?></td>
-      <td><?=$this->safeMoneyFormat($totalDue / 100.00) ?></td>
+      <td class="Fee"><?=$this->safeMoneyFormat($totalDue / 100.00) ?></td>
     </tr>
   </table>
   <?php if (isset($this->paymentLink)):?>

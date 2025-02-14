@@ -1,0 +1,64 @@
+HTTP/1.1 200 OK
+Content-Type: application/xml
+Date: Wed, 18 Mar 2024 11:49:40 GMT
+
+<?xml version="1.0" encoding="UTF-8"?>
+<pat-cash-list>
+  <reply-text>ok</reply-text>
+  <reply-code>0000</reply-code>
+  <charges>
+    <translate-change-active-library>MZK50</translate-change-active-library>
+    <institution code="MZK50">
+      <inst-name>MZK50</inst-name>
+      <balance>
+        <sublibrary code="MZK50">
+          <sublib-name>MZK50</sublib-name>
+          <open-sum>- 400.00</open-sum>
+          <transferred-sum>0.00</transferred-sum>
+        </sublibrary>
+      </balance>
+      <cash type="debit" transferred="N"
+            href="https://aleph.mzk.cz:8443/rest-dlf/patron/702/circulationActions/cash/MZK50702%20%20%20%20%20%20%20%20%20202408087519594">
+        <z31>
+          <translate-change-active-library>MZK50</translate-change-active-library>
+          <z31-id>702</z31-id>
+          <z31-sequence>202408087519594</z31-sequence>
+          <z31-date>20240808</z31-date>
+          <z31-status>Neplaceno/připsáno k dobru čtenáři</z31-status>
+          <z31-sub-library>MZK50</z31-sub-library>
+          <z31-alpha>L</z31-alpha>
+          <z31-type>B Online registrace roční - AU</z31-type>
+          <z31-credit-debit>K tíži</z31-credit-debit>
+          <z31-sum>(400.00)</z31-sum>
+          <z31-vat-sum>(0.00)</z31-vat-sum>
+          <z31-net-sum>(400.00)</z31-net-sum>
+          <z31-payment-date>00000000</z31-payment-date>
+          <z31-payment-hour>0000</z31-payment-hour>
+          <z31-payment-cataloger>GPE1</z31-payment-cataloger>
+          <z31-payment-target>MZK50</z31-payment-target>
+          <z31-payment-ip>10.8.29.107</z31-payment-ip>
+          <z31-payment-receipt-number/>
+          <z31-payment-mode/>
+          <z31-payment-identifier>GPE-31596-40000</z31-payment-identifier>
+          <z31-description>B Online registrace rocni - AU</z31-description>
+          <z31-key/>
+          <z31-key-type/>
+          <z31-transfer-department/>
+          <z31-transfer-date>00000000</z31-transfer-date>
+          <z31-transfer-number/>
+          <z31-recall-transfer-status>0</z31-recall-transfer-status>
+          <z31-recall-transfer-date>00000000</z31-recall-transfer-date>
+          <z31-recall-transfer-number>0</z31-recall-transfer-number>
+          <z31-related-z31-key/>
+          <z31-related-z31-key-type/>
+          <z31-requester-name/>
+          <z31-upd-time-stamp>20240808</z31-upd-time-stamp>
+          <z31-payment-ip-v6/>
+          <z31-note/>
+        </z31>
+      </cash>
+    </institution>
+  </charges>
+</pat-cash-list>
+
+
