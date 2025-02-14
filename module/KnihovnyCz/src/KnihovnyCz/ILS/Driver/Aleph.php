@@ -38,6 +38,8 @@ class Aleph extends AlephBase implements TranslatorAwareInterface
 
     protected bool $showAlephLabelBlocks = false;
 
+    protected bool $showAccruingFines = false;
+
     protected string $source = '';
 
     /**
@@ -76,6 +78,7 @@ class Aleph extends AlephBase implements TranslatorAwareInterface
     {
         parent::init();
         $this->showAlephLabelBlocks = $this->config['ProfileBlocks']['showAlephLabel'] ?? false;
+        $this->showAccruingFines = $this->config['Catalog']['showAccruingFines'] ?? false;
     }
 
     /**
@@ -332,13 +335,13 @@ class Aleph extends AlephBase implements TranslatorAwareInterface
             ['patron', $userId, 'circulationActions', 'loans'],
             $alephParams
         );
-
         $transList = [];
         foreach ($xml->xpath('//loan') as $item) {
             $z36 = ($history) ? $item->z36h : $item->z36;
             $prefix = ($history) ? 'z36h-' : 'z36-';
             $z13 = $item->z13;
             $z30 = $item->z30;
+            $fine = (string)$item->fine;
             $group = $item->xpath('@href');
             $group = strrchr($group[0], '/');
             $group = $group ? substr($group, 1) : '';
@@ -373,7 +376,11 @@ class Aleph extends AlephBase implements TranslatorAwareInterface
                 'duedate' => $this->parseDate($due),
                 'checkoutDate'  => $this->parseDate($checkoutDate),
                 'base' => $base,
+                'fine' => $fine,
             ];
+            if ($this->showAccruingFines) {
+                $transaction['fine'] = $fine;
+            }
             if ($history) {
                 $returned = (string)$z36->{$prefix . 'returned-date'};
                 $transaction['returnDate'] = $this->parseDate($returned);
@@ -924,6 +931,57 @@ class Aleph extends AlephBase implements TranslatorAwareInterface
         $query = http_build_query($params);
         $url = $url . '?' . $query;
         return $url;
+    }
+
+    /**
+     * Get Patron Fines
+     *
+     * This is responsible for retrieving all fines by a specific patron.
+     *
+     * @param array $user The patron array from patronLogin
+     *
+     * @throws DateException
+     * @throws ILSException
+     * @return mixed      Array of the patron's fines on success.
+     */
+    public function getMyFines($user)
+    {
+        $fines = parent::getMyFines($user);
+        $fines = array_filter($fines, function ($fine) {
+            return $fine['amount'] != 0;
+        });
+        if ($this->showAccruingFines) {
+            $xml = $this->doRestDLFRequest(
+                ['patron', $user['id'], 'circulationActions', 'loans'],
+                ['view' => 'full']
+            );
+            foreach ($xml->xpath('//loan') as $item) {
+                $z36 = $item->z36;
+                $z13 = $item->z13;
+                $z30 = $item->z30;
+                $fineAmount = (float)$item->fine * -100;
+                if ($fineAmount == 0) {
+                    continue;
+                }
+                $due = (string)$z36->{'z36-due-date'};
+                $checkoutDate = (string)$z36->{'z36-loan-date'};
+                $title = (string)$z13->{'z13-title'};
+                $barcode = (string)$z30->{'z30-barcode'};
+                $adm_id = (string)$z30->{'z30-doc-number'};
+                $fines[] = [
+                    'title'   => $title,
+                    'barcode' => $barcode,
+                    'amount' => $fineAmount,
+                    'transactiondate' => $this->parseDate($due),
+                    'checkout' => $this->parseDate($checkoutDate),
+                    'balance'  => $fineAmount,
+                    'id'  => $adm_id,
+                    'printLink' => 'test',
+                    'fine' => $this->translate('loan_fine'),
+                ];
+            }
+        }
+        return $fines;
     }
 
     /**

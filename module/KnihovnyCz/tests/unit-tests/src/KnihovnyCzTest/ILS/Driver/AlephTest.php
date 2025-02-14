@@ -93,6 +93,59 @@ class AlephTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Test getMyFines
+     *
+     * @return void
+     * @throws \ReflectionException
+     */
+    public function testGetMyFines(): void
+    {
+        $config = $this->getDefaultConfig();
+        $config['Catalog']['showAccruingFines'] = 'true';
+        $this->configureDriver($config);
+        $expected = [
+            [
+                'title' => '',
+                'barcode' => '',
+                'amount' => -40000.0,
+                'transactiondate' => '08-08-2024',
+                'checkout' => '08-08-2024',
+                'balance' => -40000.0,
+                'id' => null,
+                'printLink' => 'test',
+                'fine' => 'B Online registrace rocni - AU',
+                'transactiontype' => 'K tíži',
+            ],
+            [
+                'title' => 'PHP : kapesní přehled / Lukáš Krejčí',
+                'barcode' => '2610276641',
+                'amount' => -2800.0,
+                'transactiondate' => '11-20-2017',
+                'checkout' => '11-09-2017',
+                'balance' => -2800.0,
+                'id' => '000812790',
+                'printLink' => 'test',
+                'fine' => 'loan_fine',
+            ],
+            [
+                'title'
+                    => 'Algoritmy : základní konstrukce v příkladech a jejich vizualizace / Eva Milková ... [et al.]',
+                'barcode' => '2610453364',
+                'amount' => -3000.0,
+                'transactiondate' => '11-20-2017',
+                'checkout' => '11-09-2017',
+                'balance' => -3000.0,
+                'id' => '001156544',
+                'printLink' => 'test',
+                'fine' => 'loan_fine',
+            ],
+        ];
+        $this->mockResponse(['cash.xml', 'loans.xml']);
+        $loans = $this->driver->getMyFines([]);
+        $this->assertEquals($expected, $loans);
+    }
+
+    /**
      * Mock fixture as HTTP client response
      *
      * @param string|array|null $fixture Fixture file

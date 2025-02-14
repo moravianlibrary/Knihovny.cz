@@ -593,3 +593,10 @@ INSERT INTO inst_configs (source_id, key_id, `value`) VALUES (
     (SELECT id FROM inst_sources WHERE source = 'nkp'), (SELECT id FROM inst_keys WHERE key_name = 'showAlephLabel'), 'true'
 );
 UPDATE `system` SET `value` = '126' WHERE `key`='DB_VERSION';
+
+-- #1308
+INSERT INTO inst_keys (key_name, section_id) VALUES ('showAccruingFines', (SELECT id FROM inst_sections WHERE section_name = 'Catalog'));
+INSERT INTO inst_configs (source_id, key_id, `value`) VALUES (
+    (SELECT id FROM inst_sources WHERE source = 'nkp'), (SELECT id FROM inst_keys WHERE key_name = 'showAccruingFines'), 'true'
+                                                             );
+UPDATE `system` SET `value` = '127' WHERE `key`='DB_VERSION';
