@@ -42,6 +42,8 @@ class Aleph extends AlephBase implements TranslatorAwareInterface
 
     protected string $source = '';
 
+    protected array $hiddenLocations = [];
+
     /**
      * Public Function which retrieves historic loan, renew, hold and cancel
      * settings from the driver ini file.
@@ -79,6 +81,7 @@ class Aleph extends AlephBase implements TranslatorAwareInterface
         parent::init();
         $this->showAlephLabelBlocks = $this->config['ProfileBlocks']['showAlephLabel'] ?? false;
         $this->showAccruingFines = $this->config['Catalog']['showAccruingFines'] ?? false;
+        $this->hiddenLocations = $this->config['Catalog']['hiddenLocations'] ?? [];
     }
 
     /**
@@ -1326,6 +1329,36 @@ class Aleph extends AlephBase implements TranslatorAwareInterface
             'slots'      => $slots,
         ];
         return $result;
+    }
+
+    /**
+     * Get Pick Up Locations
+     *
+     * This is responsible for getting a list of valid library locations for
+     * holds / recall retrieval
+     *
+     * @param array $patron   Patron information returned by the patronLogin method.
+     * @param array $holdInfo Optional array, only passed in when getting a list
+     * in the context of placing or editing a hold. When placing a hold, it contains
+     * most of the same values passed to placeHold, minus the patron data. When
+     * editing a hold it contains all the hold information returned by getMyHolds.
+     * May be used to limit the pickup options or may be ignored. The driver must
+     * not add new options to the return array based on this data or other areas of
+     * VuFind may behave incorrectly.
+     *
+     * @throws ILSException
+     * @return array        An array of associative arrays with locationID and
+     * locationDisplay keys
+     */
+    public function getPickUpLocations($patron, $holdInfo = null)
+    {
+        $pickupLocations = parent::getPickUpLocations($patron, $holdInfo);
+        return array_filter(
+            $pickupLocations,
+            function ($location) {
+                return !in_array($location['locationID'], $this->hiddenLocations);
+            }
+        );
     }
 
     /**
