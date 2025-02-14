@@ -136,6 +136,6 @@ class InspirationController extends \VuFind\Controller\AbstractBase
                 'Conspectus',
                 'block'
             );
-        return $this->createViewModel(['blocks' => $blocks]);
+        return $this->createViewModel(['blocks' => $blocks, 'columnClass' => 'col-xs-12']);
     }
 }

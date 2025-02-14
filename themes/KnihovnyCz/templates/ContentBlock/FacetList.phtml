@@ -5,9 +5,10 @@
   $advSearch = $options->getAdvancedSearchAction();
   $noJsSupport = $this->config()->nonJavascriptSupportEnabled();
   $format = '%%displayText%%'; // change to '%%displayText%% (%%count%%)' if you want to show counts
+  $columnClass = $this->columnClass ?? 'col-md-4';
 ?>
 <?php if (!empty($facetList)): ?>
-  <div class="search-home-facets col-md-4">
+  <div class="search-home-facets <?=$columnClass?>">
     <?php foreach ($facetList as $field => $details): ?>
       <?php $isHierarchy = in_array($field, $hierarchicalFacets ?? []); ?>
       <?php $labelHeading = $this->transEsc('home_browse_by_facet', ['%%facet%%' => $this->translate($details['label'])]); ?>
