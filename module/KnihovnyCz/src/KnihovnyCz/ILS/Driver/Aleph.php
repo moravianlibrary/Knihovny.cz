@@ -1039,6 +1039,7 @@ class Aleph extends AlephBase implements TranslatorAwareInterface
                 'media' => $media,
                 'create' => $this->parseDate($create),
                 'expire' => $this->parseDate($expire),
+                'status' => (string)$z410->{'z410-status'},
             ];
         }
         return $loans;

@@ -149,6 +149,11 @@
             <?php endif; ?>
             <br>
 
+            <?php if (!empty($ilsDetails['status'])): ?>
+              <strong><?=$this->transEsc('ill_request_status') ?>:</strong> <?=$this->transEsc($ilsDetails['status']) ?></strong>
+            <?php endif; ?>
+            <br>
+
             <?php if (isset($this->cancelResults['items'])): ?>
               <?php foreach ($this->cancelResults['items'] as $itemId => $cancelResult): ?>
                 <?php if ($itemId == $ilsDetails['item_id'] && $cancelResult['success'] == false): ?>
