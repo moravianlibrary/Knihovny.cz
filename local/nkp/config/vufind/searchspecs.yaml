@@ -858,12 +858,11 @@ adv_search_barcodes:
   FilterQuery: "*:* NOT record_format:library"
 
 adv_search_sysno:
-  ChildrenQuery: true
   CustomMunge:
     addBases:
       - [preg_replace, "/(.+)/", '("nkp.KKL01-$1" OR "nkp.STT01-$1" OR "nkp.NKC01-$1" OR "nkp.SLK01-$1" OR "anl.ANL01-$1")']
   QueryFields:
-    id:
+    local_ids_str_mv:
       - [addBases, ~]
   FilterQuery: "*:* NOT record_format:library"
 
