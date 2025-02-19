@@ -78,8 +78,8 @@ class CitaceProService implements \VuFindHttp\HttpServiceAwareInterface
     /**
      * Get citation from citacepro.com API
      *
-     * @param string  $recordId Record identifier
-     * @param string  $style    Citation style
+     * @param string $recordId Record identifier
+     * @param string $style    Citation style
      *
      * @return string
      * @throws \Exception
