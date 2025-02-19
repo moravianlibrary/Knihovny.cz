@@ -1513,3 +1513,31 @@ html, body {
     }
   }
 }
+
+// language flags
+.flags {
+  font-size: 80%;
+  background-size: contain;
+  background-position: 50%;
+  background-repeat: no-repeat;
+  position: relative;
+  display: inline-block;
+  width: 1.333333em;
+  line-height: 1em;
+
+  &:before {
+    content: " ";
+  }
+
+  &.flag {
+    &-cs {
+      background-image: url(flags/cs.svg);
+    }
+
+    &-en {
+      background-image: url(flags/en.svg);
+    }
+  }
+}
+
+
