@@ -40,6 +40,8 @@ class Aleph extends AlephBase implements TranslatorAwareInterface
 
     protected bool $showAccruingFines = false;
 
+    protected bool $showBorrowingLocation = false;
+
     protected string $source = '';
 
     protected array $hiddenLocations = [];
@@ -82,6 +84,7 @@ class Aleph extends AlephBase implements TranslatorAwareInterface
         $this->showAlephLabelBlocks = $this->config['ProfileBlocks']['showAlephLabel'] ?? false;
         $this->showAccruingFines = $this->config['Catalog']['showAccruingFines'] ?? false;
         $this->hiddenLocations = $this->config['Catalog']['hiddenLocations'] ?? [];
+        $this->showBorrowingLocation = $this->config['Catalog']['showBorrowingLocation'] ?? false;
     }
 
     /**
@@ -383,6 +386,9 @@ class Aleph extends AlephBase implements TranslatorAwareInterface
             ];
             if ($this->showAccruingFines) {
                 $transaction['fine'] = $fine;
+            }
+            if ($this->showBorrowingLocation) {
+                $transaction['borrowingLocation'] = (string)$z30->{'z30-sub-library'};
             }
             if ($history) {
                 $returned = (string)$z36->{$prefix . 'returned-date'};

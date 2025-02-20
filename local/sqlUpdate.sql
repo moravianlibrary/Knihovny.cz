@@ -608,3 +608,13 @@ INSERT INTO inst_configs (source_id, key_id, array_key, `value`) VALUES (
  );
 
 UPDATE `system` SET `value` = '128' WHERE `key`='DB_VERSION';
+
+-- #1365
+INSERT INTO inst_keys (key_name, section_id) VALUES ('showBorrowingLocation', (SELECT id FROM inst_sections WHERE section_name = 'Catalog'));
+INSERT INTO inst_configs (source_id, key_id, `value`) VALUES (
+    (SELECT id FROM inst_sources WHERE source = 'nkp'),
+    (SELECT id FROM inst_keys WHERE key_name = 'showBorrowingLocation'),
+    'true'
+);
+
+UPDATE `system` SET `value` = '128' WHERE `key`='DB_VERSION';
