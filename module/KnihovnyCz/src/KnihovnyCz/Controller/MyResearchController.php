@@ -721,6 +721,11 @@ class MyResearchController extends MyResearchControllerBase
         if ($this->flashMessenger()->hasCurrentMessages('error')) {
             $view->error = true;
         }
+        $recordCount = count($view->getVariable('recordList', []));
+        $cardName = $this->getUser()->getLibraryCard((int)$this->getCardId())->getCardName();
+        if ($recordCount && $cardName === 'nkp') {
+            $this->flashMessenger()->addInfoMessage(['html' => true, 'msg' => 'ill_request_nkp_info']);
+        }
         $view->setTemplate('myresearch/illrequests-ajax');
         $view->setVariable('cardId', $this->getCardId());
         $params = $view->getVariable('params', []);
