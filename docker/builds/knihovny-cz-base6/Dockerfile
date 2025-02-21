@@ -27,17 +27,10 @@ ENV PARAM_VUFIND_SUMMON_API_KEY=${PARAM_VUFIND_SUMMON_API_KEY}
 
 ## Install base VuFind
 
-# Take a vufind source at given state
-RUN curl "https://github.com/vufind-org/vufind/archive/${PARAM_VUFIND_COMMIT}.zip" -L -o /tmp/vufind.zip
-
-# Unzip the files
-RUN unzip -q /tmp/vufind.zip -d /tmp
-
-# Move them to target place
-RUN cp -rl /tmp/vufind-${PARAM_VUFIND_COMMIT}/* /var/www/knihovny-cz/ && \
-    mv /tmp/vufind-${PARAM_VUFIND_COMMIT}/.[!.]* /var/www/knihovny-cz/ && \
-    rm -r /tmp/vufind-${PARAM_VUFIND_COMMIT} && \
-    rm /tmp/vufind.zip
+# Take a vufind source at given state and move them to target place
+RUN curl "https://github.com/vufind-org/vufind/archive/${PARAM_VUFIND_COMMIT}.tar.gz" -L -o /tmp/vufind.tar.gz  && \
+    tar zxvf /tmp/vufind.tar.gz --strip-components=1 -C /var/www/knihovny-cz/ && \
+    rm /tmp/vufind.tar.gz
 
 # Add local dependecies
 COPY ./composer.local.json /var/www/knihovny-cz/

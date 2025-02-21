@@ -42,7 +42,9 @@ done
 # XSL
 EXTENSION_XSL_DIR="${EXTENSION_DIR}/xsl"
 VUFIND_XSL_DIR="${PARAM_VUFIND_SRC}/xsl"
-ln -s -f "${EXTENSION_XSL_DIR}/" "${VUFIND_XSL_DIR}"
+if [ ! -e "${VUFIND_XSL_DIR}/" ]; then
+    ln -s -f "${EXTENSION_XSL_DIR}/" "${VUFIND_XSL_DIR}"
+fi
 
 # Compile CSS in themes
 grunt less custom
@@ -85,7 +87,7 @@ env
 clear-cache
 
 # This has to be done so that the server can create caches & logs
-chgrp -R www-data "/var/www"
+chgrp -R www-data "${EXTENSION_DIR}/themes" "${PARAM_VUFIND_SRC:-/var/www/src}/log"
 chmod -R g+w "${EXTENSION_DIR}/themes"
 chmod -R g+w "${PARAM_VUFIND_SRC:-/var/www/src}/log"
 
