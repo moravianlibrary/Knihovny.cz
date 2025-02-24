@@ -96,18 +96,18 @@
           <?php endif; ?>
           <?php if (isset($this->layout()->allLangs) && count($this->layout()->allLangs) > 1): ?>
           <li class="language dropdown">
-            <button type="button" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false" aria-haspopup="true">
+            <a href="#" data-toggle="dropdown" class="icon-link">
               <span class="fi flags flag-<?=$this->layout()->userLang ?>" role="img" aria-hidden="true"></span>
               <?=$this->displayLanguageOption($this->layout()->allLangs[$this->layout()->userLang]) ?>
               <span class="icon icon--font fa fa-caret-down fa-fw" role="img" aria-hidden="true"></span>
-            </button>
+            </a>
             <ul class="dropdown-menu">
               <?php foreach ($this->layout()->allLangs as $langCode => $langName): ?>
               <?php if($langCode !== $this->layout()->userLang): ?>
-              <li class="dropdown__item ">
-                <a class="dropdown__link" href="<?=$this->url()->addQueryParameters(['lng' => $langCode]) ?>" rel="nofollow">
-                  <span class="fi flags flag-<?=$langCode ?>" role="img" aria-hidden="true"></span>
-                  <?=$this->displayLanguageOption($langName) ?>
+              <li>
+                <a class="icon-link" href="<?=$this->url()->addQueryParameters(['lng' => $langCode]) ?>" rel="nofollow">
+                  <span class="fi flags flag-<?=$langCode ?> icon-link__icon" role="img" aria-hidden="true"></span>
+                  <span class="icon-link__label"><?=$this->displayLanguageOption($langName) ?></span>
                 </a>
               </li>
               <?php endif; ?>
