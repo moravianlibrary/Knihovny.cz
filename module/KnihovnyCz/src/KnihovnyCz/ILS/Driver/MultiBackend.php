@@ -89,11 +89,9 @@ class MultiBackend extends \VuFind\ILS\Driver\MultiBackend
      */
     protected function getDriverConfig($source)
     {
-        $instSource = $this->instSources->getSource($source);
-        if ($instSource == null) {
-            return [];
-        }
-        return $this->instConfigs->getConfig($instSource);
+        $fileConfig = parent::getDriverConfig($source);
+        $instSource = $this->instSources->getSource($source) ?? [];
+        return array_merge($fileConfig, $this->instConfigs->getConfig($instSource));
     }
 
     /**
