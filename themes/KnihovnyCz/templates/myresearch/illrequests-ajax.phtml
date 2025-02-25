@@ -6,8 +6,14 @@
 <?php if (isset($this->forms)): ?>
   <ul>
     <?php foreach($this->forms as $label => $link):?>
+      <?php
+        $translation = $this->transEsc($label . '_' . $this->card->getHomeLibrary(), [], '');
+        if (empty($translation)) {
+          $translation = $this->transEsc($label);
+        }
+      ?>
       <li>
-        <a data-lightbox href='<?=$link?>'><?=$this->transEsc($label)?></a>
+        <a data-lightbox href='<?=$link?>'><?=$translation?></a>
       </li>
     <?php endforeach; ?>
   </ul>

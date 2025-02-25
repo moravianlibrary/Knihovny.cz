@@ -676,6 +676,9 @@ class MyResearchController extends MyResearchControllerBase
     {
         $view = null;
         try {
+            if (($user = $this->getAuthManager()->getUserObject()) == null) {
+                throw new \Exception('User not logged in');
+            }
             if (!is_array($patron = $this->catalogLogin())) {
                 return $patron;
             }
@@ -703,6 +706,7 @@ class MyResearchController extends MyResearchControllerBase
                     }
                 }
                 $view->setVariable('forms', $forms);
+                $view->setVariable('card', $user->getLibraryCard((int)$this->getCardId()));
             } else {
                 $this->flashMessenger()->addErrorMessage('ils_action_unavailable');
             }

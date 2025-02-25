@@ -46,6 +46,10 @@ class Aleph extends AlephBase implements TranslatorAwareInterface
 
     protected array $hiddenLocations = [];
 
+    // Returning successful message in error element is brilliant idea
+    protected string $updateDocSuccessfulErrorTexts = '/Document: [0-9]+ was updated successfully\\.?'
+        . '|Zaznam byl uspesne aktualizovan, system\\. cislo: [0-9]+\\.?/';
+
     /**
      * Public Function which retrieves historic loan, renew, hold and cancel
      * settings from the driver ini file.
@@ -85,6 +89,9 @@ class Aleph extends AlephBase implements TranslatorAwareInterface
         $this->showAccruingFines = $this->config['Catalog']['showAccruingFines'] ?? false;
         $this->hiddenLocations = $this->config['Catalog']['hiddenLocations'] ?? [];
         $this->showBorrowingLocation = $this->config['Catalog']['showBorrowingLocation'] ?? false;
+        if (isset($this->config['Catalog']['updateDocSuccessfulErrorTexts'])) {
+            $this->updateDocSuccessfulErrorTexts = $this->config['Catalog']['updateDocSuccessfulErrorTexts'];
+        }
     }
 
     /**
@@ -1061,10 +1068,14 @@ class Aleph extends AlephBase implements TranslatorAwareInterface
      */
     public function getBlankIllRequestTypes(): array
     {
-        return [
-            'monography',
-            'serial',
-        ];
+        $types = [];
+        if (isset($this->config['BlankILLRequestForMonographyGroups'])) {
+            $types[] = 'monography';
+        }
+        if (isset($this->config['BlankILLRequestForSerialGroups'])) {
+            $types[] = 'serial';
+        }
+        return $types;
     }
 
     /**
@@ -1118,7 +1129,8 @@ class Aleph extends AlephBase implements TranslatorAwareInterface
                     $text = null;
                     foreach ($child->children() as $subChild) {
                         if (str_ends_with($subChild->getName(), '-code')) {
-                            $code = (string)$subChild->xpath('text()')[0];
+                            $codes = $subChild->xpath('text()');
+                            $code = (!empty($codes)) ? (string)$codes[0] : null;
                         }
                         if (str_ends_with($subChild->getName(), '-text')) {
                             $text = (string)$subChild->xpath('text()')[0];
@@ -1184,12 +1196,23 @@ class Aleph extends AlephBase implements TranslatorAwareInterface
         $illRoot = $illDom->createElement('ill-parameters');
         $illRootNode = $illDom->appendChild($illRoot);
         $variableFields = [];
+        $media = $data['media'] ?? null;
+        if ($media != null && str_contains($media, ':')) {
+            [$deliveryMethod, $media] = explode(':', $media);
+            $data['media'] = $media;
+            $data['delivery-method'] = $deliveryMethod;
+        }
         foreach ($form as $id => $group) {
             $fields = $group['fields'] ?? [];
             foreach ($fields as $key => $config) {
                 $value = $data[$key] ?? null;
                 if ($config['type'] == 'hidden') {
                     $value = $config['value'];
+                    if ($key == 'last-interest-date') {
+                        $lastInterestDate = new \DateTime();
+                        $lastInterestDate = $lastInterestDate->add(new \DateInterval($config['value']));
+                        $value = $lastInterestDate->format('Ymd');
+                    }
                 }
                 if ($value == null) {
                     continue;
@@ -1227,6 +1250,7 @@ class Aleph extends AlephBase implements TranslatorAwareInterface
         } catch (\Exception $ex) {
             return ['success' => false, 'sysMessage' => $ex->getMessage()];
         }
+
         $baseAndDocNumber = $result->{'create-ill'}->{'request-number'};
         $base = substr($baseAndDocNumber, 0, 5);
         $docNum = substr($baseAndDocNumber, 5);
@@ -1242,10 +1266,15 @@ class Aleph extends AlephBase implements TranslatorAwareInterface
             $i1 = substr($target, 3, 1) ?: ' ';
             $i2 = substr($target, 4, 1) ?: ' ';
             $label = substr($target, 5, 1) ?: 'a';
-            $variableField = $document->{'record'}->{'metadata'}->{'oai_marc'}->addChild('varfield');
-            $variableField->addAttribute('id', $id);
-            $variableField->addAttribute('i1', $i1);
-            $variableField->addAttribute('i2', $i2);
+            $variableField = $document->xpath("//varfield[@id='$id' and @i1='$i1' and @i2='$i2']");
+            if (empty($variableField)) {
+                $variableField = $document->{'record'}->{'metadata'}->{'oai_marc'}->addChild('varfield');
+                $variableField->addAttribute('id', $id);
+                $variableField->addAttribute('i1', $i1);
+                $variableField->addAttribute('i2', $i2);
+            } else {
+                $variableField = $variableField[0];
+            }
             $subfield = $variableField->addChild('subfield', $value);
             $subfield->addAttribute('label', $label);
         }
@@ -1453,17 +1482,16 @@ class Aleph extends AlephBase implements TranslatorAwareInterface
         }
         $result = $this->doHTTPRequest($url, 'POST', $body);
         if ($result->error) {
-            if (
-                $op == 'update-doc' && preg_match(
-                    '/Document: [0-9]+ was updated successfully\\./',
-                    trim($result->error)
-                ) === 1
-            ) {
-                return $result;
+            // remove diacritics
+            $transliterator = \Transliterator::create('Any-Latin; Latin-ASCII');
+            $error = $transliterator->transliterate(trim($result->error));
+            $this->debug("Error: $error, regex: $this->updateDocSuccessfulErrorTexts");
+            if ($op == 'update-doc') {
+                if (preg_match($this->updateDocSuccessfulErrorTexts, $error) === 1) {
+                    return $result;
+                }
             }
-            if ($this->debug_enabled) {
-                $this->debug("XServer error, URL is $url, error message: $result->error.");
-            }
+            $this->debug("XServer error, URL is $url, error message: $result->error.");
             throw new ILSException("XServer error: $result->error.");
         }
         return $result;
