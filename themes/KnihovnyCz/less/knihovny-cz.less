@@ -4,6 +4,7 @@
 @import "mixins/buttons";
 @import "autocomplete";
 @import "format-icons";
+@import "icons-knihovnycz";
 @import "content-pages";
 @import "responsive-tables";
 
@@ -87,7 +88,6 @@ fieldset, .fieldset {
 .nav > li > a:hover,
 .nav > li > a:focus {
   outline: none;
-  text-decoration: @link-hover-decoration;
   background: transparent;
   color: @link-hover-color;
 }
@@ -171,6 +171,12 @@ fieldset, .fieldset {
   border-color: #dddddd;
 }
 
+#searchForm {
+  .well.tab-content {
+    padding-bottom: 0;
+  }
+}
+
 .navbar-form {
   .nav-tabs {
     position: relative;
@@ -178,7 +184,7 @@ fieldset, .fieldset {
     z-index: 10;
   }
 
-  .searchForm-inputs.well.tab-content {
+  .well.tab-content {
     border-top-width: 1px;
   }
 }
@@ -1260,11 +1266,9 @@ img.signature {
   button.dropdown-toggle:focus {
     color: @link-hover-color;
     background-color: transparent;
-    text-decoration: underline;
   }
 
   .dropdown-menu a:hover {
-    text-decoration: underline;
     color: @link-hover-color;
   }
 
@@ -1338,7 +1342,7 @@ form .form-control {
 }
 
 @media (min-width: @screen-md) {
-  #searchForm .tab-content.well {
+  .searchForm-inputs {
     position: relative;
     display: flex;
     flex-wrap: wrap;
@@ -1540,4 +1544,19 @@ html, body {
   }
 }
 
+.slogan {
+  margin-top: 1.5em;
+  margin-bottom: 1em;
 
+  h2 {
+    margin-top: 0;
+  }
+
+  p {
+    margin-bottom: .1em;
+  }
+
+  .sup-title {
+    text-transform: uppercase;
+  }
+}

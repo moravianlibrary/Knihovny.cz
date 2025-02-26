@@ -54,7 +54,7 @@
 
 // Button sizes
 .button-size(@padding-vertical; @padding-horizontal; @font-size; @line-height; @border-radius) {
-  padding: @padding-vertical @padding-horizontal;
+  padding: @padding-vertical + 1 @padding-horizontal @padding-vertical - 1 @padding-horizontal;
   font-size: @font-size;
   line-height: @line-height;
   border-radius: @border-radius;
