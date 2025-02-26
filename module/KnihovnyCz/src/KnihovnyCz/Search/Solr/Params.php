@@ -352,6 +352,9 @@ class Params extends \VuFind\Search\Solr\Params
             $domain['excludeTags'] = $excludeTags;
         }
         if ($type == 'default') {
+            if (!empty($domain)) {
+                $facetConfig['domain'] = $domain;
+            }
             return $facetConfig;
         }
 
