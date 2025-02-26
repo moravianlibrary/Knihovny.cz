@@ -78,6 +78,8 @@ class SolrMarc extends SolrDefault
             foreach ($fieldData['subfields'] as $subfield) {
                 $subfields[$subfield['code']] = trim($subfield['data']);
             }
+            $subfields['ind1'] = $fieldData['i1'];
+            $subfields['ind2'] = $fieldData['i2'];
             $result[] = $subfields;
         }
         return $result;
@@ -583,5 +585,27 @@ class SolrMarc extends SolrDefault
         }
 
         return '';
+    }
+
+    /**
+     * Parse tag specification with indicators. Non-numeric indicators are
+     * replaced with null.
+     *
+     * @param string $fieldSpec tag spec (eg. 245, 245## or 24577)
+     *
+     * @return array with tag, first and second indicator
+     */
+    public function parseTagSpecWithIndicators(string $fieldSpec): array
+    {
+        $field = substr($fieldSpec, 0, 3);
+        $ind1 = null;
+        $ind2 = null;
+        if (strlen($fieldSpec) > 4) {
+            $ind1 = substr($fieldSpec, 3, 1);
+            $ind1 = \IntlChar::isdigit($ind1) ? $ind1 : null;
+            $ind2 = substr($fieldSpec, 4, 1);
+            $ind2 = \IntlChar::isdigit($ind2) ? $ind2 : null;
+        }
+        return [$field, $ind1, $ind2];
     }
 }

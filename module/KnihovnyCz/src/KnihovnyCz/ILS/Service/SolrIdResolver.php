@@ -95,27 +95,34 @@ class SolrIdResolver
      *
      * @return array
      */
-    protected function convertToIdUsingSolr(array $ids, array $config): array
+    public function convertToIdUsingSolr(array $ids, array $config): array
     {
         $results = [];
         if (empty($ids)) {
             return $results;
         }
         $queryField = $config['solrQueryField'] ?? $this->defaultSolrQueryField;
+        $fq = [ 'merged_child_boolean:true' ];
+        if (isset($config['sourceFilter'])) {
+            $fq[] = 'id:' . $config['sourceFilter'] . '.*';
+        }
         $params = new \KnihovnyCz\Search\ParamBag(
             [
-            'fq' => ['merged_child_boolean:true'],
+            'fq' => $fq,
             'fl' => "id,$queryField",
             ]
         );
         $params->setApplyChildFilter(false);
         $fullQuery = new \VuFindSearch\Query\QueryGroup('OR');
         $idMappings = [];
+        $separateIdParts = $config['separateIdParts'] ?? true;
         foreach ($ids as $idForQuery) {
             $id = $idForQuery;
-            $idsParts = explode('.', $idForQuery);
-            if (count($idsParts) === 2) {
-                $id = $idsParts[1];
+            if ($separateIdParts) {
+                $idsParts = explode('.', $idForQuery);
+                if (count($idsParts) === 2) {
+                    $id = $idsParts[1];
+                }
             }
             $idMappings[$idForQuery] = $id;
             $query = new \VuFindSearch\Query\Query($queryField . ':' . $idForQuery);
@@ -126,6 +133,9 @@ class SolrIdResolver
         foreach ($searchResults->getRecords() as $record) {
             $fields = $record->getRawData();
             $fieldVals = $fields[$queryField] ?? [];
+            if (is_scalar($fieldVals)) {
+                $fieldVals = [ $fieldVals ];
+            }
             foreach ($fieldVals as $value) {
                 $originalId = $idMappings[$value] ?? '';
                 if (!empty($originalId)) {
