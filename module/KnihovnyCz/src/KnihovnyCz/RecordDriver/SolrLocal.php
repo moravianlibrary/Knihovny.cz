@@ -18,6 +18,13 @@ class SolrLocal extends \KnihovnyCz\RecordDriver\SolrMarc
     use Feature\CitaceProTrait;
 
     /**
+     * Solr Id resolver
+     *
+     * @var \KnihovnyCz\ILS\Service\SolrIdResolver $resolver
+     */
+    protected $solrIdResolver;
+
+    /**
      * Get an array of information about record holdings, obtained in real-time
      * from the ILS.
      *
@@ -67,9 +74,12 @@ class SolrLocal extends \KnihovnyCz\RecordDriver\SolrMarc
             $itemLinks = $this->getItemLinks('UP');
             if (count($itemLinks) == 1) {
                 $record = reset($itemLinks);
-                if (($record = $record['record'] ?? null) != null) {
-                    $recordId = $record->getUniqueID();
-                    $f996 = $record->fields['mappings996_display_mv'] ?? [];
+                if (($linkedRecordId = $record['recordId'] ?? null) != null) {
+                    $record = $this->recordLoader->load($linkedRecordId);
+                    if ($record != null) {
+                        $recordId = $record->getUniqueID();
+                        $f996 = $record->fields['mappings996_display_mv'] ?? [];
+                    }
                 }
             }
         }
@@ -324,8 +334,38 @@ class SolrLocal extends \KnihovnyCz\RecordDriver\SolrMarc
      */
     public function getItemLinks(?string $type = null): array
     {
-        $fields994 = $this->getStructuredDataFieldArray('994');
+        $itemLinks = $this->getItemLinksFrom994($type);
+        $itemLinks += $this->parseItemLinks($type);
+        if ($this->recordLoader != null) {
+            $ids = array_column(array_filter($itemLinks, function ($record) {
+                return !isset($record['title']) && isset($record['recordId']);
+            }), 'recordId');
+            $records = $this->recordLoader->loadBatchForSource($ids);
+            $recordsById = [];
+            foreach ($records as $record) {
+                $recordsById[$record->getUniqueId()] = $record;
+            }
+            foreach ($itemLinks as &$itemLink) {
+                $record = $recordsById[$itemLink['recordId']] ?? null;
+                if ($record != null) {
+                    $itemLink['title'] = $record->getTitle() . '  (' . $itemLink['label'] . ')';
+                }
+            }
+        }
+        return $itemLinks;
+    }
+
+    /**
+     * Get item links from 994 field
+     *
+     * @param string $type type of link (UP, DN or null to ignore) to return
+     *
+     * @return array
+     */
+    protected function getItemLinksFrom994(?string $type = null): array
+    {
         $itemLinks = [];
+        $fields994 = $this->getStructuredDataFieldArray('994');
         foreach ($fields994 as $field) {
             $id = $this->getSourceId() . '.' . ($field['l'] ?? '') . '-' . ($field['b'] ?? '');
             $linkType = $field['a'] ?? '';
@@ -333,20 +373,80 @@ class SolrLocal extends \KnihovnyCz\RecordDriver\SolrMarc
                 continue;
             }
             $label = $field['n'] ?? '';
-            $itemLinks[$id] = [
+            $itemLink = [
+                'recordId' => $id,
                 'label' => $label,
                 'type'  => $linkType,
             ];
+            if ($linkType == 'UP') {
+                $itemLink['title'] = $this->translate('document_bound_in_a_composite_volume_order_text');
+            }
+            $itemLinks[] = $itemLink;
         }
         uasort($itemLinks, function ($a, $b) {
             return strnatcmp($a['label'], $b['label']);
         });
-        $ids = array_keys($itemLinks);
-        if ($this->recordLoader != null) {
-            $records = $this->recordLoader->loadBatchForSource($ids);
-            foreach ($records as $record) {
-                $itemLinks[$record->getUniqueId()]['record'] = $record;
+        return $itemLinks;
+    }
+
+    /**
+     * Parse item links according to configuration for institution
+     *
+     * @param string $requiredType type
+     *
+     * @return array
+     */
+    protected function parseItemLinks(string $requiredType = null): array
+    {
+        $config = $this->recordConfig->Record->itemLinks;
+        $itemLinksConfig = $config[$this->getSourceId()] ?? null;
+        if ($itemLinksConfig == null) {
+            return [];
+        }
+        $configItems = explode(':', $itemLinksConfig);
+
+        [$field, $ind1, $ind2] = $this->parseTagSpecWithIndicators($configItems[0]);
+        $idSubfield = $configItems[1];
+        $solrQueryField = $configItems[2];
+        $labelSubfields = str_split($configItems[3]);
+        $useLabelAsTitle = ($configItems[4] ?? '') == 'title';
+
+        $records = [];
+        $fields = $this->getStructuredDataFieldArray($field);
+        foreach ($fields as $fieldArray) {
+            if ($ind1 != null && $ind1 != $fieldArray['ind1']) {
+                continue;
             }
+            if ($ind2 != null && $ind2 != $fieldArray['ind2']) {
+                continue;
+            }
+            $label = implode(' ', array_map(fn ($sf) => $fieldArray[$sf] ?? '', $labelSubfields));
+            $id = $fieldArray[$idSubfield];
+            $records[$id] =  $label;
+        }
+        $type = (count($fields) > 1) ? 'DN' : 'UP';
+        if ($requiredType != null && $requiredType != $type) {
+            return [];
+        }
+        $resolverConfig = [
+            'itemIdentifier'  => 'id',
+            'solrQueryField'  => $solrQueryField,
+            'sourceFilter'    => $this->getSourceId(),
+            'separateIdParts' => false,
+        ];
+        $resolved = $this->solrIdResolver->convertToIdUsingSolr(array_keys($records), $resolverConfig);
+        $itemLinks = [];
+        foreach ($records as $itemIdentifier => $label) {
+            $recordId = $resolved[$itemIdentifier] ?? null;
+            $result = [
+                'recordId' => $recordId,
+                'label'    => $label,
+                'type'     => $type,
+            ];
+            if ($useLabelAsTitle) {
+                $result['title'] = $label;
+            }
+            $itemLinks[] = $result;
         }
         return $itemLinks;
     }
@@ -363,5 +463,17 @@ class SolrLocal extends \KnihovnyCz\RecordDriver\SolrMarc
             $details = $this->getFirstFieldValue('264', ['a', 'b', 'c']);
         }
         return $details;
+    }
+
+    /**
+     * Attach Solr id resolver
+     *
+     * @param \KnihovnyCz\ILS\Service\SolrIdResolver $resolver resolver
+     *
+     * @return void
+     */
+    public function atttachSolrIdResolver(\KnihovnyCz\ILS\Service\SolrIdResolver $resolver)
+    {
+        $this->solrIdResolver = $resolver;
     }
 }

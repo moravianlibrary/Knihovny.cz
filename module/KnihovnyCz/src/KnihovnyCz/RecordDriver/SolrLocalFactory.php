@@ -47,6 +47,9 @@ class SolrLocalFactory extends SolrDefaultFactory
         $driver->attachCitaceProService(
             $container->get(\KnihovnyCz\Service\CitaceProService::class)
         );
+        $driver->atttachSolrIdResolver(
+            $container->get(\KnihovnyCz\ILS\Service\SolrIdResolver::class)
+        );
         return $driver;
     }
 }

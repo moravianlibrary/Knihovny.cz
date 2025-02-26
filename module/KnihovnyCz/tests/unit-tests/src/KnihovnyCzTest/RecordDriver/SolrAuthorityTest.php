@@ -45,6 +45,8 @@ class SolrAuthorityTest extends \PHPUnit\Framework\TestCase
                 'u' => '000020',
                 'j' => 'NKC50',
                 't' => 'ABA001.NKC01002931098.NKC50002953486000020',
+                'ind1' => ' ',
+                'ind2' => ' ',
             ],
             [
                 'b' => '1003934167',
@@ -58,6 +60,8 @@ class SolrAuthorityTest extends \PHPUnit\Framework\TestCase
                 'j' => 'NKC50',
                 't' => 'ABA001.NKC01002931098.NKC50002953486000010',
                 'a' => '24',
+                'ind1' => ' ',
+                'ind2' => ' ',
             ],
         ];
         $fields = $method->invokeArgs($record, ['996']);
@@ -81,6 +85,8 @@ class SolrAuthorityTest extends \PHPUnit\Framework\TestCase
                 'j' => 'SVK50',
                 't' => 'OLA001.SVK01001217387.SVK50001236141000010',
                 'm' => 'BOOK',
+                'ind1' => ' ',
+                'ind2' => ' ',
             ],
         ];
         $fields = $method->invokeArgs($record, ['996']);
