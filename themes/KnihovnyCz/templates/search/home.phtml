@@ -14,7 +14,14 @@
   $this->layout()->breadcrumbs = false;
   $this->viewModel()->getRoot()->setVariable('frontPage', true);
 ?>
-<?=$this->slot('search-home-title')->set('');?>
+<?php $this->slot('search-home-title')->start(); ?>
+<div class="slogan">
+  <p class="sup-title"><?=$this->transEsc('homepage_slogan_p') ?></p>
+  <h2><?=$this->transEsc('homepage_slogan_h') ?></h2>
+</div>
+<?php $this->slot('search-home-title')->end(); ?>
+<?=$this->slot('search-home-title');?>
+
 <div class="searchHomeContent">
   <?php $this->slot('search-home-hero')->start() ?>
     <?=$this->context($this)->renderInContext('search/searchbox.phtml', ['ignoreHiddenFilterMemory' => true])?>
@@ -22,6 +29,4 @@
   <?=$this->slot('search-home-hero')->end() ?>
 </div>
 
-<div class="row">
-  <?=implode('', array_map([$this, 'contentBlock'], $blocks ?? []))?>
-</div>
+<?=$this->content()->renderTranslated('homepage'); ?>

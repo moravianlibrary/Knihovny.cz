@@ -3,11 +3,9 @@
   $this->slot('inspiration-link')->set('');
 ?>
 <?php $this->slot('registration-link')->start(); ?>
-  <li>
-    <a href="https://registrace.mzk.cz/" class="icon-link">
-      <?=$this->icon('sign-up', 'icon-link__icon') ?>
-      <span class="icon-link__label"><?=$this->translate('registration_link_label')?></span>
-    </a>
-  </li>
+  <a href="https://registrace.mzk.cz/" class="btn btn-primary">
+    <?=$this->icon('sign-up') ?>
+    <?=$this->translate('registration_link_label')?>
+  </a>
 <?php $this->slot('registration-link')->end(); ?>
 <?php include $this->parentTemplate('header.phtml');?>

@@ -85,107 +85,114 @@
   </div>
   <form id="searchForm" class="searchForm navbar-form navbar-left flip" method="get" action="<?=$this->url($basicSearch)?>" name="searchForm" autocomplete="off">
     <?= $this->context($this)->renderInContext('search/searchTabs', ['searchTabs' => $tabConfig['tabs'], 'showCounts' => $tabConfig['showCounts']]); ?>
-    <div class="searchForm-inputs tab-content well">
-      <?php
-        // Note: we need type="text" for autocomplete role="combobox"
-        $searchboxAttributes = [
-          'id' => 'searchForm_lookfor',
-          'class' => 'searchForm_lookfor form-control search-query input-lg',
-          'type' => 'text',
-          'name' => 'lookfor',
-          'value' => $this->lookfor,
-          'aria-label' => $this->translate('search_terms'),
-        ];
-        if ($placeholder = $this->searchbox()->getPlaceholderText($tabConfig['selected']['id'] ?? $this->searchClassId)) {
-          $searchboxAttributes['placeholder'] = $this->translate($placeholder);
-        }
-        if ($this->searchbox()->autocompleteEnabled($this->searchClassId)) {
-          $searchboxAttributes['class'] .= " autocomplete searcher:{$this->searchClassId}"
-            . ($this->searchbox()->autocompleteAutoSubmit($this->searchClassId) ? ' ac-auto-submit' : '');
-          $searchboxAttributes['data-autocomplete-formatting-rules'] = $this->searchbox()->autocompleteFormattingRulesJson($this->searchClassId);
-        }
-        if (!empty($keyboardLayouts)) {
-          $searchboxAttributes['class'] .= ' with-keyboard-selection';
-        }
-      ?>
-      <div class="searchForm-query">
-        <input<?=$this->htmlAttributes($searchboxAttributes)?>>
-        <div id="searchForm_controls">
-          <button id="searchForm-reset" class="searchForm-reset hidden" type="reset" tabindex="-1" aria-label="<?=$this->transEscAttr('searchform_reset_button')?>"><?=$this->icon('ui-reset-search');?></button>
-          <?php if (!empty($keyboardLayouts)): ?>
-            <?php
-            $this->headScript()->appendFile('vendor/js.cookie.js');
-            $this->headScript()->appendFile('vendor/simple-keyboard/index.js');
-            $this->headScript()->appendFile('vendor/simple-keyboard-layouts/index.js');
-            $this->headLink()->appendStylesheet('vendor/simple-keyboard/index.css');
-            ?>
-            <div class="keyboard-selection dropdown">
-              <button class="btn btn-primary dropdown-toggle" type="button" id="keyboard-selection-button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <?=$this->icon('keyboard-o') ?>
-                <?=$this->icon('caret-down') ?>
-              </button>
-              <ul class="dropdown-menu" aria-labelledby="keyboard-selection-button">
-                <li>
-                  <a class="dropdown-item keyboard-selection-item" href="#" data-value="none"><?= $this->transEsc('None') ?></a>
-                </li>
-                <?php foreach ($keyboardLayouts as $keyboardLayout): ?>
-                  <li>
-                    <a class="keyboard-selection-item" href="#" data-value="<?= $this->escapeHtmlAttr($keyboardLayout) ?>"><?= $this->transEsc("KeyboardLayout::$keyboardLayout") ?></a>
-                  </li>
-                <?php endforeach; ?>
-              </ul>
-            </div>
-          <?php endif; ?>
-        </div>
-      </div>
-      <?php if ($handlerCount > 1): ?>
-      <select id="searchForm_type" class="searchForm_type form-control input-lg" name="type" data-native-menu="false" aria-label="<?=$this->transEscAttr('Search type')?>">
-          <?php $currentGroup = $insideGroup = false; ?>
-          <?php foreach ($handlers as $handler): ?>
-            <?php
-              if ($currentGroup !== ($handler['group'] ?? false)) {
-                $currentGroup = $handler['group'];
-                if ($insideGroup) {
-                  echo '</optgroup>';
-                }
-                if ($currentGroup) {
-                  echo '<optgroup label="' . $this->escapeHtmlAttr($currentGroup) . '">';
-                  $insideGroup = true;
-                } else {
-                  $insideGroup = false;
-                }
-              }
-            ?>
-            <option value="<?=$this->escapeHtmlAttr($handler['value'])?>"<?=$handler['selected'] ? ' selected="selected"' : ''?>><?=$handler['indent'] ? '-- ' : ''?><?=$this->transEsc($handler['label'])?></option>
-          <?php endforeach; ?>
-          <?php if ($insideGroup): ?>
-            </optgroup>
-          <?php endif; ?>
-        </select>
-      <?php elseif ($handlerCount == 1): ?>
-        <input type="hidden" name="type" value="<?=$this->escapeHtmlAttr($handlers[0]['value'])?>">
-      <?php endif; ?>
-    <button type="submit" class="btn btn-lg btn-primary"><?=$this->icon('search') ?> <?=$this->transEsc('Find')?></button>
-    <?php
-      $contextHelpLinks = [
-        'search' => 'autocomplete',
-        'search2' => 'autocomplete',
-        'eds' => 'ci-autocomplete',
-        'summon' => 'ci-autocomplete',
-      ];
-    ?>
-    <?php if(isset($contextHelpLinks[$this->layout()->templateDir])): ?>
-      <?=$this->contextHelp($contextHelpLinks[$this->layout()->templateDir], 'search')?>
-    <?php endif; ?>
-      <?php if ($advSearch): ?>
+    <div class="tab-content well">
+      <div class="searchForm-inputs">
         <?php
-          $advSearchQuery = $results ? ['edit' => $results->getSearchId()] : $hiddenFilters;
-          $advSearchLink = $this->url($advSearch, [], ['query' => $advSearchQuery]);
+          // Note: we need type="text" for autocomplete role="combobox"
+          $searchboxAttributes = [
+            'id' => 'searchForm_lookfor',
+            'class' => 'searchForm_lookfor form-control search-query input-lg',
+            'type' => 'text',
+            'name' => 'lookfor',
+            'value' => $this->lookfor,
+            'aria-label' => $this->translate('search_terms'),
+          ];
+          if ($placeholder = $this->searchbox()->getPlaceholderText($tabConfig['selected']['id'] ?? $this->searchClassId)) {
+            $searchboxAttributes['placeholder'] = $this->translate($placeholder);
+          }
+          if ($this->searchbox()->autocompleteEnabled($this->searchClassId)) {
+            $searchboxAttributes['class'] .= " autocomplete searcher:{$this->searchClassId}"
+              . ($this->searchbox()->autocompleteAutoSubmit($this->searchClassId) ? ' ac-auto-submit' : '');
+            $searchboxAttributes['data-autocomplete-formatting-rules'] = $this->searchbox()->autocompleteFormattingRulesJson($this->searchClassId);
+          }
+          if (!empty($keyboardLayouts)) {
+            $searchboxAttributes['class'] .= ' with-keyboard-selection';
+          }
         ?>
-      <a href="<?=$advSearchLink?>" class="advanced-search-link btn btn-link btn-lg" rel="nofollow"><?=$this->transEsc('Advanced')?></a>
-      <?php endif; ?>
-      <?php if ($geoUrl = $this->geocoords()->getSearchUrl($options)) : ?>
+        <div class="searchForm-query">
+          <input<?=$this->htmlAttributes($searchboxAttributes)?>>
+          <div id="searchForm_controls">
+            <button id="searchForm-reset" class="searchForm-reset hidden" type="reset" tabindex="-1" aria-label="<?=$this->transEscAttr('searchform_reset_button')?>"><?=$this->icon('ui-reset-search');?></button>
+            <?php if (!empty($keyboardLayouts)): ?>
+              <?php
+              $this->headScript()->appendFile('vendor/js.cookie.js');
+              $this->headScript()->appendFile('vendor/simple-keyboard/index.js');
+              $this->headScript()->appendFile('vendor/simple-keyboard-layouts/index.js');
+              $this->headLink()->appendStylesheet('vendor/simple-keyboard/index.css');
+              ?>
+              <div class="keyboard-selection dropdown">
+                <button class="btn btn-primary dropdown-toggle" type="button" id="keyboard-selection-button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <?=$this->icon('keyboard-o') ?>
+                  <?=$this->icon('caret-down') ?>
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="keyboard-selection-button">
+                  <li>
+                    <a class="dropdown-item keyboard-selection-item" href="#" data-value="none"><?= $this->transEsc('None') ?></a>
+                  </li>
+                  <?php foreach ($keyboardLayouts as $keyboardLayout): ?>
+                    <li>
+                      <a class="keyboard-selection-item" href="#" data-value="<?= $this->escapeHtmlAttr($keyboardLayout) ?>"><?= $this->transEsc("KeyboardLayout::$keyboardLayout") ?></a>
+                    </li>
+                  <?php endforeach; ?>
+                </ul>
+              </div>
+            <?php endif; ?>
+          </div>
+        </div>
+        <?php if ($handlerCount > 1): ?>
+        <select id="searchForm_type" class="searchForm_type form-control input-lg" name="type" data-native-menu="false" aria-label="<?=$this->transEscAttr('Search type')?>">
+            <?php $currentGroup = $insideGroup = false; ?>
+            <?php foreach ($handlers as $handler): ?>
+              <?php
+                if ($currentGroup !== ($handler['group'] ?? false)) {
+                  $currentGroup = $handler['group'];
+                  if ($insideGroup) {
+                    echo '</optgroup>';
+                  }
+                  if ($currentGroup) {
+                    echo '<optgroup label="' . $this->escapeHtmlAttr($currentGroup) . '">';
+                    $insideGroup = true;
+                  } else {
+                    $insideGroup = false;
+                  }
+                }
+              ?>
+              <option value="<?=$this->escapeHtmlAttr($handler['value'])?>"<?=$handler['selected'] ? ' selected="selected"' : ''?>><?=$handler['indent'] ? '-- ' : ''?><?=$this->transEsc($handler['label'])?></option>
+            <?php endforeach; ?>
+            <?php if ($insideGroup): ?>
+              </optgroup>
+            <?php endif; ?>
+          </select>
+        <?php elseif ($handlerCount == 1): ?>
+          <input type="hidden" name="type" value="<?=$this->escapeHtmlAttr($handlers[0]['value'])?>">
+        <?php endif; ?>
+        <button type="submit" class="btn btn-lg btn-primary"><?=$this->icon('search') ?> <?=$this->transEsc('Find')?></button>
+        <?php
+          $contextHelpLinks = [
+            'search' => 'autocomplete',
+            'search2' => 'autocomplete',
+            'eds' => 'ci-autocomplete',
+            'summon' => 'ci-autocomplete',
+          ];
+        ?>
+        <?php if(isset($contextHelpLinks[$this->layout()->templateDir])): ?>
+          <?=$this->contextHelp($contextHelpLinks[$this->layout()->templateDir], 'search')?>
+        <?php endif; ?>
+      </div>
+      <?php $geoUrl = $this->geocoords()->getSearchUrl($options); ?>
+      <?php if($advSearch || $geoUrl): ?>
+      <div>
+        <?php if ($advSearch): ?>
+          <?php
+            $advSearchQuery = $results ? ['edit' => $results->getSearchId()] : $hiddenFilters;
+            $advSearchLink = $this->url($advSearch, [], ['query' => $advSearchQuery]);
+          ?>
+          <a href="<?=$advSearchLink?>" class="advanced-search-link btn btn-link btn-lg" rel="nofollow"><?=$this->transEsc('Advanced')?></a>
+        <?php endif; ?>
+        <?php if ($geoUrl): ?>
           <a href="<?=$geoUrl ?>" class="btn btn-link btn-lg"><?=$this->transEsc('Geographic Search')?></a>
+        <?php endif; ?>
+      </div>
       <?php endif; ?>
 
       <?php $shards = $options->getShards(); ?>
