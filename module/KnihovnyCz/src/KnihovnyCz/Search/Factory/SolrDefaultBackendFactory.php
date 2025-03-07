@@ -120,7 +120,8 @@ class SolrDefaultBackendFactory extends ParentSolrDefaultBackendFactory
         $specs   = $this->loadSpecs();
         $config = $this->config->get($this->mainConfig);
         $defaultDismax = $config->Index->default_dismax_handler ?? 'dismax';
-        $builder = new QueryBuilder($specs, $defaultDismax);
+        $searchConfig = $this->config->get($this->searchConfig);
+        $builder = new QueryBuilder($specs, $defaultDismax, $searchConfig);
 
         // Configure builder:
         $builder->setLuceneHelper($this->createLuceneSyntaxHelper());

@@ -2,6 +2,7 @@
 
 namespace KnihovnyCz\Search\Solr\Backend;
 
+use Laminas\Config\Config;
 use VuFindSearch\ParamBag;
 use VuFindSearch\Query\AbstractQuery;
 use VuFindSearch\Query\Query;
@@ -20,20 +21,49 @@ class QueryBuilder extends \VuFindSearch\Backend\Solr\QueryBuilder
 {
     protected $externalQueryParameters = null;
 
+    protected $searchConfig;
+
+    /**
+     * Constructor.
+     *
+     * @param array  $specs                Search handler specifications
+     * @param string $defaultDismaxHandler Default dismax handler (if no
+     * DismaxHandler set in specs).
+     * @param Config $searchConfig         Search configuration
+     *
+     * @return void
+     */
+    public function __construct(
+        array $specs = [],
+        $defaultDismaxHandler = 'dismax',
+        Config $searchConfig = null
+    ) {
+        parent::__construct($specs, $defaultDismaxHandler);
+        $this->searchConfig = $searchConfig;
+    }
+
     /**
      * Return SOLR search parameters based on a user query and params.
      * Non-reentrant method.
      *
-     * @param AbstractQuery $query               User query
-     * @param boolean       $switchToParentQuery Switch to parent query
+     * @param AbstractQuery $query  User query
+     * @param array         $config Additional configuration
      *
      * @return ParamBag
      */
-    public function build(AbstractQuery $query, $switchToParentQuery = false)
+    public function build(AbstractQuery $query, $config = [])
     {
+        $switchToParentQuery = $config['switchToParentQuery'] ?? false;
         $this->externalQueryParameters->reset();
         $this->externalQueryParameters
             ->setSwitchToParentQuery($switchToParentQuery);
+        $deduplication = $this->searchConfig->Records->deduplication_type ?? 'default';
+        $this->externalQueryParameters->setDeduplication($deduplication);
+        $childFilters = $this->searchConfig->ChildRecordFilters ?? null;
+        if ($childFilters != null) {
+            $childFilter = implode(' AND ', array_values($childFilters->toArray()));
+            $this->externalQueryParameters->setChildFilter($childFilter);
+        }
         $params = new ParamBag();
 
         // Add spelling query if applicable -- note that we must set this up before
