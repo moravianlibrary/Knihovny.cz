@@ -56,22 +56,49 @@ class SearchHandler extends \VuFindSearch\Backend\Solr\SearchHandler
     protected function createQueryString($search, $advanced = false)
     {
         $query = parent::createQueryString($search, $advanced);
-        if ($this->isApplyParentFilter()) {
+        if ($this->applyChildQueryParser()) {
             $key = $this->externalQueryParameters->add($query);
             $query = "{!child of='merged_boolean:true' filters='merged_boolean:true' v=\$$key}";
+        } elseif ($this->applyParentQueryParser()) {
+            $childFilter = $this->externalQueryParameters->getChildFilter();
+            if ($childFilter != null) {
+                $query = '(' . $childFilter . ') AND (' . $query . ')';
+            }
+            $key = $this->externalQueryParameters->add($query);
+            $query = "{!parent which='merged_boolean:true' v=\$$key}";
         }
         return $query;
     }
 
     /**
-     * Switch query to parent?
+     * Apply child query parser?
      *
      * @return boolean
      */
-    protected function isApplyParentFilter()
+    protected function applyChildQueryParser(): bool
     {
-        $childSearch = $this->specs['ChildrenQuery'] ?? false;
-        return !$childSearch &&
+        return !$this->isChildrenQuery() &&
             $this->externalQueryParameters->isSwitchToParentQuery();
+    }
+
+    /**
+     * Apply parent query parser?
+     *
+     * @return boolean
+     */
+    protected function applyParentQueryParser(): bool
+    {
+        return $this->isChildrenQuery()
+            && $this->externalQueryParameters->getDeduplication() != 'multiplying';
+    }
+
+    /**
+     * Is children query?
+     *
+     * @return boolean
+     */
+    protected function isChildrenQuery(): bool
+    {
+        return $this->specs['ChildrenQuery'] ?? false;
     }
 }

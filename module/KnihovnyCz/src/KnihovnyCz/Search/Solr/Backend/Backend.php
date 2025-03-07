@@ -44,7 +44,7 @@ class Backend extends Base
         }
         $params->mergeWith(
             $this->getQueryBuilder()
-                ->build($query, $switchToParentQuery)
+                ->build($query, compact('switchToParentQuery'))
         );
         return $this->connector->search($params);
     }

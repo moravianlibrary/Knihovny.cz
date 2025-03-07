@@ -21,6 +21,10 @@ class ExternalQueryParameters
 
     protected $switchToParentQuery = false;
 
+    protected $deduplication = null;
+
+    protected ?string $childFilter = null;
+
     /**
      * Add search query to parameters and return parameter name for it
      *
@@ -55,6 +59,50 @@ class ExternalQueryParameters
     public function isSwitchToParentQuery(): bool
     {
         return $this->switchToParentQuery;
+    }
+
+    /**
+     * Get deduplication type
+     *
+     * @return string
+     */
+    public function getDeduplication(): ?string
+    {
+        return $this->deduplication;
+    }
+
+    /**
+     * Set deduplication type
+     *
+     * @param string|null $deduplication deduplication type
+     *
+     * @return void
+     */
+    public function setDeduplication(string|null $deduplication): void
+    {
+        $this->deduplication = $deduplication;
+    }
+
+    /**
+     * Get child filter
+     *
+     * @return string|null
+     */
+    public function getChildFilter(): ?string
+    {
+        return $this->childFilter;
+    }
+
+    /**
+     * Set child filter
+     *
+     * @param string|null $childFilter child filter
+     *
+     * @return void
+     */
+    public function setChildFilter(?string $childFilter): void
+    {
+        $this->childFilter = $childFilter;
     }
 
     /**
