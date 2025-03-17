@@ -420,9 +420,14 @@ class SolrLocal extends \KnihovnyCz\RecordDriver\SolrMarc
             if ($ind2 != null && $ind2 != $fieldArray['ind2']) {
                 continue;
             }
-            $label = implode(' ', array_map(fn ($sf) => $fieldArray[$sf] ?? '', $labelSubfields));
-            $id = $fieldArray[$idSubfield];
-            $records[$id] =  $label;
+            $label = trim(implode(' ', array_map(fn ($sf) => $fieldArray[$sf] ?? '', $labelSubfields)));
+            if ($label == '') {
+                $label = $this->translate('document_bound_in_a_composite_volume_order_text');
+            }
+            $id = trim($fieldArray[$idSubfield] ?? '');
+            if ($id != '') {
+                $records[$id] = $label;
+            }
         }
         $type = (count($fields) > 1) ? 'DN' : 'UP';
         if ($requiredType != null && $requiredType != $type) {
