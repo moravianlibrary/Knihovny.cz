@@ -14,6 +14,16 @@ namespace KnihovnyCz\Content;
 class ObalkyKnihService extends \VuFind\Content\ObalkyKnihService
 {
     /**
+     * Default timeout for ObalkyKnih.cz check alive
+     */
+    protected const DEFAULT_TIMEOUT = 2;
+
+    /**
+     * Expected response from obalkyknih.cz alive check
+     */
+    protected const OBALKYKNIH_ALIVE_RESPONSE = 'ALIVE';
+
+    /**
      * Obalky knih checker
      *
      * @var string
@@ -89,21 +99,70 @@ class ObalkyKnihService extends \VuFind\Content\ObalkyKnihService
      */
     protected function getAliveUrl(): string
     {
+        return $this->getAliveUrlFromChecker() ?? $this->getAliveUrlFromObalkyKnih() ?? '';
+    }
+
+    /**
+     * Get live URL from checker
+     *
+     * @return string|null
+     */
+    protected function getAliveUrlFromChecker(): ?string
+    {
         if (empty($this->checkerUrl)) {
-            return parent::getAliveUrl();
+            return null;
         }
         $aliveUrl = $this->getCachedData('aliveUrl');
         if ($aliveUrl !== null) {
             return $aliveUrl;
         }
-        $client = $this->getHttpClient($this->checkerUrl);
-        $response = $client->send();
-        $client->setOptions(['timeout' => 1]);
-        if ($response->isSuccess()) {
-            $aliveUrl = trim($response->getBody(), '/"');
-            $this->putCachedData('aliveUrl', $aliveUrl, 30);
+        try {
+            $client = $this->getHttpClient($this->checkerUrl);
+            $client->setOptions(['timeout' => self::DEFAULT_TIMEOUT]);
+            $response = $client->send();
+        } catch (\Exception $e) {
+            $this->logError('Unexpected ' . $e::class . ': ' . $e->getMessage());
+            return null;
+        }
+        if (!$response->isSuccess()) {
+            return null;
+        }
+        $body = $response->getBody();
+        if (str_starts_with($body, '"') && str_ends_with($body, '"')) {
+            $aliveUrl = substr($body, 1, -1);
+            if (filter_var($aliveUrl, FILTER_VALIDATE_URL) !== false) {
+                return $aliveUrl;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Check base URLs and return the first available
+     *
+     * @return string|null
+     */
+    protected function getAliveUrlFromObalkyKnih(): ?string
+    {
+        $aliveUrl = $this->getCachedData('baseUrl');
+        if ($aliveUrl !== null) {
             return $aliveUrl;
         }
-        return $this->baseUrls[0];
+        foreach ($this->baseUrls as $baseUrl) {
+            $url = $baseUrl . $this->endpoints['alive'];
+            try {
+                $client = $this->getHttpClient($url);
+                $client->setOptions(['timeout' => self::DEFAULT_TIMEOUT]);
+                $response = $client->send();
+            } catch (\Exception $e) {
+                $this->logError('Unexpected ' . $e::class . ': ' . $e->getMessage());
+                continue;
+            }
+            if ($response->isSuccess() && trim($response->getBody()) == self::OBALKYKNIH_ALIVE_RESPONSE) {
+                $this->putCachedData('baseUrl', $baseUrl, 60);
+                return $baseUrl;
+            }
+        }
+        return null;
     }
 }
