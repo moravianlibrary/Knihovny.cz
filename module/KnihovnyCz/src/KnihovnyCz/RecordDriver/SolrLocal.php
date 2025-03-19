@@ -365,9 +365,11 @@ class SolrLocal extends \KnihovnyCz\RecordDriver\SolrMarc
     protected function getItemLinksFrom994(?string $type = null): array
     {
         $itemLinks = [];
+        $source = $this->getSourceId();
         $fields994 = $this->getStructuredDataFieldArray('994');
         foreach ($fields994 as $field) {
-            $id = $this->getSourceId() . '.' . ($field['l'] ?? '') . '-' . ($field['b'] ?? '');
+            $base = $field['l'] ?? '';
+            $id = $source . '.' . (empty($base) ? '' : $base . '-') . ($field['b'] ?? '');
             $linkType = $field['a'] ?? '';
             if ($type != null && $type != $linkType) {
                 continue;
