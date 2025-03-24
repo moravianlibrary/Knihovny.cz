@@ -1,0 +1,37 @@
+<?php
+  $lang = $this->layout()->userLang;
+  $lang = ($lang === 'cs') ? 'cs' : 'en';
+  $urlPrefix = 'https://www.nkp.cz';
+  if ($this->libraryId = '000000002' && !empty($this->base)) {
+    $baseUrls = [
+      'NKC01' => [
+        'cs' => '/katalogy-databaze-digitalni-knihovny/online-katalog-nk-cr-nkc',
+        'en' => '/en/catalogues-databases-digital-libraries/online-catalogue-of-the-national-library-of-the-czech-republic-nkc',
+      ],
+      'SLK01' => [
+        'cs' => '/katalogy-databaze-digitalni-knihovny/online-katalog-slovanske-knihovny-slk',
+        'en' => '/en/catalogues-databases-digital-libraries/electronic-catalogue-of-the-slavonic-library-slk',
+      ],
+      'KKL01' => [
+        'cs' => '/katalogy-databaze-digitalni-knihovny/databaze-knihovnicke-literatury-kkl',
+        'en' => '/en/catalogues-databases-digital-libraries/database-of-library-information-science-literature-kkl',
+      ],
+      'STT01' => [
+        'cs' => '/katalogy-databaze-digitalni-knihovny/databaze-prvotisku-starych-tisku-a-map-stt',
+        'en' => '/en/catalogues-databases-digital-libraries/database-of-incunables-old-prints-and-maps-stt',
+      ],
+      'ANL01' => [
+        'cs' => '/katalogy-databaze-digitalni-knihovny/databaze-ceskych-clanku-anl',
+        'en' => '/en/catalogues-databases-digital-libraries/database-of-czech-articles-anl',
+      ],
+    ];
+    $url = $urlPrefix . $baseUrls[$this->base][$lang];
+  } else {
+    $url = $this->recordLinker()->getUrl("library.$this->libraryId");
+  }
+?>
+<span class="input-group-btn">
+  <a href='<?=$this->escapeHtmlAttr($url)?>' class="btn btn-light" target="_blank" title="<?=$this->translate('Information about library')?>">
+    <?=$this->icon('information')?> <?=$this->translate('Information about library')?>
+  </a>
+</span>
