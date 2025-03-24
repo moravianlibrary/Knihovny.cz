@@ -55,7 +55,7 @@
     </div>
 
     <?php if ($this->driver->getSourceIdentifier() != 'Search2'): ?>
-      <?=$this->render('record/deduplicated-records.phtml', ['showInstitutionPanel' => false, 'driver' => $this->driver]); ?>
+      <?=$this->render('record/deduplicated-records.phtml', ['showInstitutionPanel' => true, 'driver' => $this->driver]); ?>
     <?php endif; ?>
 
     <?php if (count($this->tabs) > 0): ?>
