@@ -36,7 +36,7 @@
       $data[] = [
         'id' => $id,
         'href' => $this->recordLinker()->getUrl($id),
-        'selected' => str_starts_with($currentRecordId, $source . "." . $base),
+        'selected' => str_starts_with($currentRecordId, $source . '.' . $base),
         'text' => $text,
         'logoAltText' => $this->translate('logo_of', ['%%source%%' => $this->translate('Source::' . $source)]),
       ];
