@@ -13,7 +13,13 @@
 <?=$this->flashmessages()?>
 
 <h2>
-  <?=$this->transEsc('ill_blank_form_' . $this->type . '_main_heading') ?>
+  <?php
+    $heading = $this->transEsc('ill_' . $institution . '_blank_form_' . $this->type . '_main_heading', [], '');
+    if (empty($heading)) {
+      $heading = $this->transEsc('ill_blank_form_' . $this->type . '_main_heading');
+    }
+  ?>
+  <?=$heading?>
   -
   <?=$this->transEsc('Source::' . $institution) ?>
   <img class="pull-right" height="30" src="<?=$this->imageLink($imageLink)?>" alt="<?=$this->transEsc('Source::' . $institution) ?>">
@@ -29,7 +35,7 @@
       <h2><?=$this->transEsc($group['heading']);?></h2>
     <?php endif; ?>
     <?php if (isset($group['text'])):?>
-      <div><?=$this->transEsc($group['text']);?></div>
+      <div><?=$this->translate($group['text']);?></div>
     <?php endif; ?>
     <?php foreach($group['fields'] ?? [] as $name => $field): ?>
       <div class='form-group'>
@@ -64,7 +70,7 @@
             ob_start();
           ?>
           <?=$formLabel->openTag($attributes)?>
-          <?=$this->transEsc($field->getOption('label'));?>:
+          <?=$this->translate($field->getOption('label'));?><?=($type != 'checkbox') ? ':' : ''?>
           <?=$formLabel->closeTag();?>
           <?php $label = ob_get_contents();
           ob_end_clean(); ?>
