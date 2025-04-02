@@ -118,6 +118,20 @@ class MultiConnection extends Connection
     }
 
     /**
+     * Get Patron ILL requests
+     *
+     * This is responsible for retrieving all ILL requests
+     *
+     * @param array $patron The patron array from patronLogin
+     *
+     * @return mixed        Array of the patron's ILL requests
+     */
+    public function getMyILLRequests($patron)
+    {
+        return $this->callAll('getMyILLRequests');
+    }
+
+    /**
      * Call ILS method for every connected user card
      *
      * @param string  $method ILS method to call
@@ -140,10 +154,18 @@ class MultiConnection extends Connection
                 $user->cat_username,
                 $user->getCatPassword()
             );
-            $results = $transactions = $this->__call(
-                $method,
-                [$patron, $params]
-            );
+            try {
+                $results = $this->__call(
+                    $method,
+                    [$patron, $params]
+                );
+            } catch (ILSException $e) {
+                $this->logWarning(
+                    'Error calling method ' . $method . ' for card ' . $card->cat_username . ': ' . $e->getMessage()
+                );
+                // just log the exception and continue
+                continue;
+            }
             if ($merge) {
                 if (isset($results['records'])) {
                     $results = $results['records'];

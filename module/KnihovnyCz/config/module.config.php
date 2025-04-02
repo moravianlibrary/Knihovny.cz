@@ -604,6 +604,7 @@ $config = [
                     \VuFind\AjaxHandler\GetUserTransactions::class => \KnihovnyCz\AjaxHandler\AbstractIlsAndUserActionFactory::class,
                     \VuFind\AjaxHandler\GetUserHolds::class => \KnihovnyCz\AjaxHandler\AbstractIlsAndUserActionFactory::class,
                     \VuFind\AjaxHandler\GetUserFines::class => \KnihovnyCz\AjaxHandler\GetUserFinesFactory::class,
+                    \VuFind\AjaxHandler\GetUserILLRequests::class => \KnihovnyCz\AjaxHandler\AbstractIlsAndUserActionFactory::class,
                     \KnihovnyCz\AjaxHandler\GetUserProfile::class => \KnihovnyCz\AjaxHandler\AbstractIlsAndUserActionFactory::class,
                     \KnihovnyCz\AjaxHandler\GetZiskejEddFee::class => \KnihovnyCz\AjaxHandler\GetZiskejEddFeeFactory::class,
                     \KnihovnyCz\AjaxHandler\GetIlsDriverStatus::class => \KnihovnyCz\AjaxHandler\GetIlsDriverStatusFactory::class,
