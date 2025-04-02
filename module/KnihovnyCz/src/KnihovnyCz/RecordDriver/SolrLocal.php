@@ -253,7 +253,7 @@ class SolrLocal extends \KnihovnyCz\RecordDriver\SolrMarc
         // We need to check also if driver name is not empty
         return $this->ils != null
             && !empty($this->ils->getDriverName($this->getUniqueID()))
-            && $this->ils->supportsMethod('getHolding', ['id' => $this->getUniqueID()]);
+            && $this->ils->getDriver()->supportsMethod('getHolding', ['id' => $this->getUniqueID()]);
     }
 
     /**
