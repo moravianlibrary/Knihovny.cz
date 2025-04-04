@@ -41,7 +41,6 @@ class RecordCollection extends Base
         if (!isset($this->response['facets'])) {
             return $facets;
         }
-        $foundResults = (int)$this->response['response']['numFound'];
         foreach ($this->response['facets'] as $field => $facet) {
             if (is_array($facet)) {
                 $buckets = [];
@@ -54,7 +53,7 @@ class RecordCollection extends Base
                 foreach ($buckets as $bucket) {
                     $count = $bucket['real_count'] ?? $bucket['count'];
                     $count = (int)(is_array($count) ? $count['count'] : $count);
-                    $results[$bucket['val']] = min($count, $foundResults);
+                    $results[$bucket['val']] = $count;
                 }
                 arsort($results);
                 $facets[$field] = $results;
