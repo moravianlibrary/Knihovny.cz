@@ -760,6 +760,7 @@ $config = [
             \KnihovnyCz\Wikidata\SparqlService::class => \KnihovnyCz\Wikidata\SparqlServiceFactory::class,
             \KnihovnyCz\Autocomplete\SuggestionFilter::class => \KnihovnyCz\Autocomplete\SuggestionFilterFactory::class,
             \KnihovnyCz\Cache\Manager::class => \VuFind\Cache\ManagerFactory::class,
+            \KnihovnyCz\Search\Factory\UrlQueryHelperFactory::class => \Laminas\ServiceManager\Factory\InvokableFactory::class,
         ],
         'aliases' => [
             'VuFind\Http' => 'VuFindHttp\HttpService',
@@ -779,6 +780,7 @@ $config = [
             \VuFind\Search\Solr\Results::class => \KnihovnyCz\Search\Solr\Results::class,
             \VuFind\ILS\Logic\Holds::class => \KnihovnyCz\ILS\Logic\Holds::class,
             \VuFind\Cache\Manager::class => \KnihovnyCz\Cache\Manager::class,
+            \VuFind\Search\Factory\UrlQueryHelperFactory::class => \KnihovnyCz\Search\Factory\UrlQueryHelperFactory::class,
         ],
         'invokables' => [
             \KnihovnyCz\Service\GoogleBooksLinkService::class,
