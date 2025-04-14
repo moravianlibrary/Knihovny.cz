@@ -368,6 +368,9 @@ class SolrLocal extends \KnihovnyCz\RecordDriver\SolrMarc
         $source = $this->getSourceId();
         $fields994 = $this->getStructuredDataFieldArray('994');
         foreach ($fields994 as $field) {
+            if (empty($field['l']) && empty($field['b']) && empty($field['a']) && empty($field['n'])) {
+                continue;
+            }
             $base = $field['l'] ?? '';
             $id = $source . '.' . (empty($base) ? '' : $base . '-') . ($field['b'] ?? '');
             $linkType = $field['a'] ?? '';
