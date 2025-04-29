@@ -11,6 +11,12 @@
   // of the suppressed query:
   $extraUrlFields = $this->results->getUrlQuery()->getParamsWithConfiguredDefaults();
 ?>
+
+<?php if (empty($this->cluster['list'])): ?>
+  <div class="facet"><?=$this->transEsc('facet_list_empty')?></div>
+  <?php return; // We're done if the list is empty! ?>
+<?php endif; ?>
+
 <?php
   $truncateSettings = $this->facets_before_more < 1 ? false : [
     'rows' => $this->facets_before_more,
