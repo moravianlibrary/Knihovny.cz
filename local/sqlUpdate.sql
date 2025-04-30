@@ -618,3 +618,13 @@ INSERT INTO inst_configs (source_id, key_id, `value`) VALUES (
 );
 
 UPDATE `system` SET `value` = '128' WHERE `key`='DB_VERSION';
+
+-- #1136
+INSERT INTO inst_keys (key_name, section_id) VALUES ('cgiScriptBase', (SELECT id FROM inst_sections WHERE section_name = 'Catalog'));
+INSERT INTO inst_configs (source_id, key_id, `value`) VALUES (
+    (SELECT id FROM inst_sources WHERE source = 'nkp'),
+    (SELECT id FROM inst_keys WHERE key_name = 'cgiScriptBase'),
+    'https://aleph.nkp.cz/aleph-cgi/'
+);
+
+UPDATE `system` SET `value` = '129' WHERE `key`='DB_VERSION';

@@ -170,6 +170,62 @@ class Connection extends ConnectionBase
     }
 
     /**
+     * Check prolonging of registration link text
+     *
+     * A support method for checkFunction(). This is responsible for checking
+     * the driver configuration to determine if the system supports link
+     * for prolonging of registration.
+     *
+     * @param array $functionConfig The Hold configuration values
+     * @param array $params         An array of function-specific params (or null)
+     *
+     * @return mixed On success, an associative array with specific function keys
+     * and values either for placing holds via a form or a URL; on failure, false.
+     */
+    protected function checkMethodgetMyProlongRegistrationLinkText(
+        $functionConfig,
+        $params
+    ) {
+        if (
+            parent::checkCapability(
+                'getMyProlongRegistrationLinkText',
+                [$params ?: []]
+            )
+        ) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Check online fines payment link text
+     *
+     * A support method for checkFunction(). This is responsible for checking
+     * the driver configuration to determine if the system supports link
+     * for prolonging of registration.
+     *
+     * @param array $functionConfig The Hold configuration values
+     * @param array $params         An array of function-specific params (or null)
+     *
+     * @return mixed On success, an associative array with specific function keys
+     * and values either for placing holds via a form or a URL; on failure, false.
+     */
+    protected function checkMethodgetMyPaymentLinkText(
+        $functionConfig,
+        $params
+    ) {
+        if (
+            parent::checkCapability(
+                'getMyPaymentLinkText',
+                [$params ?: []]
+            )
+        ) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
      * Check getMyILLRequests
      *
      * A support method for checkFunction(). This is responsible for checking

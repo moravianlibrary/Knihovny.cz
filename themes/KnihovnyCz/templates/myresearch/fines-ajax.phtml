@@ -7,7 +7,15 @@
     <?=$this->transEsc('You do not have any fines')?>
   </div>
 <?php else: ?>
-    <?php
+  <?php if (isset($this->paymentLink)):?>
+    <a href="<?=$this->paymentLink?>" class="btn btn-primary">
+      <?=$this->transEsc('online_payment_fine_link_text')?>
+    </a>
+  <?php endif; ?>
+  <?php if ($this->paymentLinkText != null): ?>
+    <div class="alert alert-info"><?=$this->paymentLinkText?></div>
+  <?php endif; ?>
+  <?php
     // Collect the data to build the table; we process this in advance so we
     // can omit empty columns and simplify customization by separating data
     // processing from rendering.
@@ -84,9 +92,4 @@
       <td class="Fee"><?=$this->safeMoneyFormat($totalDue / 100.00) ?></td>
     </tr>
   </table>
-  <?php if (isset($this->paymentLink)):?>
-    <a href="<?=$this->paymentLink?>" class="btn btn-primary">
-      <?=$this->transEsc('online_payment_fine_link_text')?>
-    </a>
-  <?php endif; ?>
 <?php endif; ?>

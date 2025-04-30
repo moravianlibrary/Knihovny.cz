@@ -37,6 +37,9 @@
       <?=$this->transEsc('password_change_label')?>
     </a>
   <?php endif; ?>
+  <?php if ($this->prolongRegistrationText != null): ?>
+    <div class="alert alert-info"><?=$this->prolongRegistrationText?></div>
+  <?php endif; ?>
   <?php if ($this->changeEmailUrl != null):?>
    <a href="<?=$this->changeEmailUrl?>" class="btn btn-primary">
       <?=$this->transEsc('email_change_label')?>

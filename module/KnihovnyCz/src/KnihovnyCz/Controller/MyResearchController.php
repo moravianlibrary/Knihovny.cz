@@ -160,6 +160,13 @@ class MyResearchController extends MyResearchControllerBase
                     }
                 }
             }
+            $supportMyPaymentLinkText = $catalog->checkFunction('getMyPaymentLinkText', $patron);
+            if ($supportMyPaymentLinkText !== false) {
+                $linkText = $catalog->getMyPaymentLinkText($patron);
+                if ($linkText !== null) {
+                    $view->setVariable('paymentLinkText', $linkText);
+                }
+            }
         } else {
             $view = $this->createViewModel(
                 [
@@ -254,6 +261,14 @@ class MyResearchController extends MyResearchControllerBase
                 $blocks = $catalog->getMyBlocks($patron);
                 foreach ($blocks as $block) {
                     $this->flashMessenger()->addErrorMessage($block['label']);
+                }
+            }
+            $supportMyProlongRegistrationLinkText
+                    = $catalog->checkFunction('getMyProlongRegistrationLinkText', $patron);
+            if ($supportMyProlongRegistrationLinkText !== false) {
+                $linkText = $catalog->getMyProlongRegistrationLinkText($patron);
+                if ($linkText !== null) {
+                    $view->setVariable('prolongRegistrationText', $linkText);
                 }
             }
         } else {
