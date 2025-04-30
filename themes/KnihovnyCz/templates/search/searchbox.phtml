@@ -179,8 +179,7 @@
           <?=$this->contextHelp($contextHelpLinks[$this->layout()->templateDir], 'search')?>
         <?php endif; ?>
       </div>
-      <?php $geoUrl = $this->geocoords()->getSearchUrl($options); ?>
-      <?php if($advSearch || $geoUrl): ?>
+      <?php if($advSearch): ?>
       <div>
         <?php if ($advSearch): ?>
           <?php
@@ -188,9 +187,6 @@
             $advSearchLink = $this->url($advSearch, [], ['query' => $advSearchQuery]);
           ?>
           <a href="<?=$advSearchLink?>" class="advanced-search-link btn btn-link btn-lg" rel="nofollow"><?=$this->transEsc('Advanced')?></a>
-        <?php endif; ?>
-        <?php if ($geoUrl): ?>
-          <a href="<?=$geoUrl ?>" class="btn btn-link btn-lg"><?=$this->transEsc('Geographic Search')?></a>
         <?php endif; ?>
       </div>
       <?php endif; ?>
