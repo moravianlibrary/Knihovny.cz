@@ -130,24 +130,20 @@ class ChildDocDeduplicationListener extends DeduplicationListener
         } else {
             $fl = $fl[0];
         }
-        $newFieldList = $fl . ', childs:[subquery]';
-        $params->set('fl', $newFieldList);
+        $childFields = $this->getChildListOfFields($fl);
+        $limit = static::MAX_CHILD_DOCUMENTS;
         if (isset($searchConfig->RawHiddenFilters)) {
             $childFilters = array_merge(
                 $childFilters,
                 $searchConfig->RawHiddenFilters->toArray()
             );
         }
+        $childParams = '';
         if (!empty($childFilters)) {
-            $params->set('childs.fq', implode(' AND ', $childFilters));
+            $childParams = "childFilter='" . implode(' AND ', $childFilters) . "'";
         }
-        $params->set(
-            'childs.q',
-            '{!term f=parent_id_str v=$row.id} '
-            . DeduplicationHelper::CHILD_FILTER
-        );
-        $params->set('childs.fl', $this->getChildListOfFields($fl));
-        $params->set('childs.rows', static::MAX_CHILD_DOCUMENTS);
+        $newFieldList = $fl . ", [child fl='$childFields' limit=$limit $childParams]";
+        $params->set('fl', $newFieldList);
     }
 
     /**
@@ -179,7 +175,7 @@ class ChildDocDeduplicationListener extends DeduplicationListener
     protected function getLocalRecordIds($fields)
     {
         $ids = [];
-        $childs = $fields['childs']['docs'] ?? [];
+        $childs = $fields['_childDocuments_'] ?? [];
         foreach ($childs as $rawLocalRecord) {
             $ids[] = $rawLocalRecord['id'];
         }

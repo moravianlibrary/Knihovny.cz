@@ -35,7 +35,7 @@ class OneChildDocDeduplicationListener extends ChildDocDeduplicationListener
         $result = $command->getResult();
         foreach ($result->getRecords() as $record) {
             $parentRawData = $record->getRawData();
-            $childRawData = $parentRawData['childs']['docs'][0];
+            $childRawData = $parentRawData['_childDocuments_'][0];
             $childRawData['parent_data'] = $parentRawData;
             $childRawData['local_ids_str_mv'] = $this
                 ->getLocalRecordIds($parentRawData);
