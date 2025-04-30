@@ -64,6 +64,16 @@
     }
   }
 
+  $geoUrl = $this->geocoords()->getSearchUrl($this->options);
+
+  if (is_array($searchFilters)) {
+    foreach ($searchFilters as $searchFilter) {
+      foreach ($searchFilter as $filter) {
+        $geoUrl .= '&' . urlencode('filter[]') . '=' . urlencode($filter['field']) . ':' .
+          urlencode($filter['value']);
+      }
+    }
+  }
 ?>
 
 <?=$this->flashmessages()?>
@@ -80,20 +90,16 @@
         <input type="hidden" name="sort" value="<?=$this->escapeHtmlAttr($lastSort)?>">
       <?php endif; ?>
       <div class="clearfix">
-        <div class="context-help">
-          <h2 class="context-text"><?=$this->transEsc('Advanced Search')?></h2>
-          <?php
-          $contextHelpLinks = [
-            'search' => 'advanced-search',
-            'search2' => 'advanced-search',
-            'eds' => 'ci-advanced-search',
-            'summon' => 'ci-advanced-search',
-          ];
-          ?>
-          <?php if(isset($contextHelpLinks[$this->layout()->templateDir])): ?>
-          <?=$this->contextHelp($contextHelpLinks[$this->layout()->templateDir], 'heading')?>
-          <?php endif; ?>
-        </div>
+        <ul class="nav nav-tabs">
+          <li class="active">
+            <a href="">
+              <?=$this->transEsc('Advanced Search')?>
+            </a>
+          </li>
+          <li>
+            <a href="<?=$geoUrl ?>"><?=$this->transEsc('Geographic Search')?></a>
+          </li>
+        </ul>
         <div id="groupJoin" class="form-inline pull-right flip">
           <label for="groupJoinOptions"><?=$this->transEsc('search_match')?>:</label>
           <select id="groupJoinOptions" name="join" class="form-control">
@@ -102,13 +108,28 @@
           </select>
         </div>
       </div>
+      <div class="tab-content well">
+      <div class="context-help">
+        <h2 class="context-text"><?=$this->transEsc('Advanced Search')?></h2>
+        <?php
+        $contextHelpLinks = [
+          'search' => 'advanced-search',
+          'search2' => 'advanced-search',
+          'eds' => 'ci-advanced-search',
+          'summon' => 'ci-advanced-search',
+        ];
+        ?>
+        <?php if(isset($contextHelpLinks[$this->layout()->templateDir])): ?>
+          <?=$this->contextHelp($contextHelpLinks[$this->layout()->templateDir], 'heading')?>
+        <?php endif; ?>
+      </div>
       <a role="button" class="icon-link hidden" id="groupPlaceHolder" href="#">
         <?=$this->icon('ui-add', 'icon-link__icon') ?>
         <span class="icon-link__label"><?= $this->transEsc('add_search_group') ?></span>
       </a>
       <?php /* fallback to a fixed set of search groups/fields if JavaScript is turned off */ ?>
       <div class="no-js">
-        <?php if (!empty($this->formOverride)): ?>
+        <?php if (!empty($this->formOverride)):  ?>
           <?=$this->formOverride ?>
         <?php else: ?>
           <?php for($group = 0; $group < 3 || $group <= $setGroupCount; $group++): ?>
@@ -179,6 +200,7 @@
         </div>
       <?php endif; ?>
     </div>
+    </div>
 
     <div class="<?=$this->layoutClass('sidebar')?>">
       <?php if ($hasDefaultsApplied): ?>
@@ -226,10 +248,10 @@
 </div>
 <?php
 $script = <<<JS
-              $('#groupPlaceHolder').click(function(e) {
-                addGroup(null, null, null, true);
-                return false;
-              })
-              JS;
+            $('#groupPlaceHolder').click(function(e) {
+              addGroup(null, null, null, true);
+              return false;
+            })
+            JS;
 ?>
 <?=$this->inlineScript(\Laminas\View\Helper\HeadScript::SCRIPT, $script, 'SET');
