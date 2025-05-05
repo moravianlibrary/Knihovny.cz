@@ -190,6 +190,83 @@ VuFind.register('searchbox_controls', function SearchboxControls() {
     }
     var requestId = 0;
     var ajaxCalls = [];
+    const acHandler = function vufindACHandler(input, cb) {
+      ajaxCalls.forEach(function forEach(ajaxCall) {
+        ajaxCall.abort();
+      });
+      ajaxCalls = [];
+      var query = input.val();
+      var searcher = extractClassParams(input.get(0));
+      var hiddenFilters = [];
+      $('#searchForm').find('input[name="hiddenFilters[]"], input[name="filter[]"]').each(
+        function hiddenFiltersEach() {
+          hiddenFilters.push($(this).val());
+        });
+      const type = searcher.type ? searcher.type : $('#searchForm_type').val();
+      const searchTypes = {
+        'AllFields': ['Title', 'Author', 'Subject'],
+        'adv_search_without_fulltext': ['Title', 'Author', 'Subject'],
+        'AllLibraries': ['Name', 'Town'],
+      };
+      var types = searchTypes[type] ? searchTypes[type] : [type];
+      if (
+        (type === 'AllFields' || type === 'adv_search_without_fulltext')
+        && query.trim().split(/\s+/).length > 1
+      ) {
+        types.push('AuthorTitle');
+      }
+      const limit = (types.length > 1) ? 6 : 10;
+      types.forEach(function forEach(searchType) {
+        var ajaxCall = $.ajax({
+          url: VuFind.path + '/AJAX/JSON',
+          data: {
+            q: query,
+            method: 'getACSuggestions',
+            searcher: searcher.searcher,
+            type: searchType,
+            limit: limit,
+            hiddenFilters: hiddenFilters
+          },
+          context: {
+            type: searchType
+          },
+          dataType: 'json',
+        });
+        ajaxCalls.push(ajaxCall);
+      });
+      var onSuccess = function onSuccess(currentRequestId) {
+        return function newFunction() {
+          if (currentRequestId !== requestId) {
+            return;
+          }
+          var contexts = Array.isArray(this) ? this : [this];
+          var results = Array.isArray(this) ? Array.from(arguments) : [arguments];
+          var data = {
+            groups: []
+          };
+          var suggestions = new Map();
+          results.forEach(function forEach(result, index) {
+            var hasSuggestions = result[0].data.groups.length > 0;
+            if (hasSuggestions) {
+              suggestions.set(contexts[index].type, result[0].data.groups[0]);
+            }
+          });
+          if (
+            (type === 'AllFields' || type === 'adv_search_without_fulltext')
+            && suggestions.has('Author')
+            && suggestions.has('Title')
+          ) {
+            suggestions.delete('AuthorTitle');
+          }
+          for (const [, value] of suggestions.entries()) {
+            data.groups.push(value);
+          }
+          cb(data);
+        };
+      };
+      $.when.apply($, ajaxCalls).then(onSuccess(++requestId));
+    }
+    let timer = null;
     // Search autocomplete
     searchbox.autocomplete({
       rtl: $(document.body).hasClass("rtl"),
@@ -199,81 +276,13 @@ VuFind.register('searchbox_controls', function SearchboxControls() {
       // Auto-submit selected item
       callback: acCallback,
       // AJAX call for autocomplete results
-      handler: function vufindACHandler(input, cb) {
-        ajaxCalls.forEach(function forEach(ajaxCall) {
-          ajaxCall.abort();
-        });
-        ajaxCalls = [];
-        var query = input.val();
-        var searcher = extractClassParams(input.get(0));
-        var hiddenFilters = [];
-        $('#searchForm').find('input[name="hiddenFilters[]"], input[name="filter[]"]').each(
-          function hiddenFiltersEach() {
-            hiddenFilters.push($(this).val());
-          });
-        const type = searcher.type ? searcher.type : $('#searchForm_type').val();
-        const searchTypes = {
-          'AllFields': ['Title', 'Author', 'Subject'],
-          'adv_search_without_fulltext': ['Title', 'Author', 'Subject'],
-          'AllLibraries': ['Name', 'Town'],
-        };
-        var types = searchTypes[type] ? searchTypes[type] : [type];
-        if (
-          (type === 'AllFields' || type === 'adv_search_without_fulltext')
-          && query.trim().split(/\s+/).length > 1
-        ) {
-          types.push('AuthorTitle');
+      handler: function acAjax(input, cb) {
+        if (timer) {
+          clearTimeout(timer);
         }
-        const limit = (types.length > 1) ? 6 : 10;
-        types.forEach(function forEach(searchType) {
-          var ajaxCall = $.ajax({
-            url: VuFind.path + '/AJAX/JSON',
-            data: {
-              q: query,
-              method: 'getACSuggestions',
-              searcher: searcher.searcher,
-              type: searchType,
-              limit: limit,
-              hiddenFilters: hiddenFilters
-            },
-            context: {
-              type: searchType
-            },
-            dataType: 'json',
-          });
-          ajaxCalls.push(ajaxCall);
-        });
-        var onSuccess = function onSuccess(currentRequestId) {
-          return function newFunction() {
-            if (currentRequestId !== requestId) {
-              return;
-            }
-            var contexts = Array.isArray(this) ? this : [this];
-            var results = Array.isArray(this) ? Array.from(arguments) : [arguments];
-            var data = {
-              groups: []
-            };
-            var suggestions = new Map();
-            results.forEach(function forEach(result, index) {
-              var hasSuggestions = result[0].data.groups.length > 0;
-              if (hasSuggestions) {
-                suggestions.set(contexts[index].type, result[0].data.groups[0]);
-              }
-            });
-            if (
-              (type === 'AllFields' || type === 'adv_search_without_fulltext')
-              && suggestions.has('Author')
-              && suggestions.has('Title')
-            ) {
-              suggestions.delete('AuthorTitle');
-            }
-            for (const [, value] of suggestions.entries()) {
-              data.groups.push(value);
-            }
-            cb(data);
-          };
-        };
-        $.when.apply($, ajaxCalls).then(onSuccess(++requestId));
+        timer = setTimeout(function ajaxDelay() {
+          acHandler(input, cb);
+        }, 500);
       }
     });
     $('#searchForm_lookfor').on("ac:select", function onSelect(event, item) {
