@@ -187,7 +187,7 @@
                 <a href="<?=$this->escapeHtmlAttr($ilsDetails['renew_link'])?>"><?=$this->transEsc('renew_item')?></a>
               <?php endif; ?>
               <?php if (!empty($ilsDetails['fine'])): ?>
-                <strong><?=$this->transEsc('Checkout Fine')?>:</strong> <span class="label label-danger"><?=$ilsDetails['fine']?> Kč</span>
+                <strong><?=$this->transEsc('Accruing checkout fine')?>:</strong> <span class="label label-danger"><?=$ilsDetails['fine']?> Kč</span>
               <?php endif; ?>
             </div>
             <?php if ($thumbnail && $thumbnailAlignment == 'right'): ?>
