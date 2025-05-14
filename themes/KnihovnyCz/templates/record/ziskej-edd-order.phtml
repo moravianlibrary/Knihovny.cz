@@ -236,7 +236,7 @@ $this->headTitle($title);
                 <div class="col-sm-6">
                   <div class="form-group">
                     <label for="doc_issn"><?=$this->transEsc('ZiskejEdd::label_doc_issn')?>:</label>
-                    <input type="text" name="doc_issn" id="doc_issn" value="<?=$record->getISSN()?>" class="form-control" <?php if (!empty($record->getISSN())): ?>readonly<?php endif; ?>>
+                    <input type="text" name="doc_issn" id="doc_issn" value="<?=$record->getISSNs()[0] ?? ''?>" class="form-control" <?php if (!empty($record->getISSNs()[0])): ?>readonly<?php endif; ?>>
                   </div>
                 </div>
               <?php endif; ?>
@@ -252,7 +252,7 @@ $this->headTitle($title);
                 <div class="col-sm-6">
                   <div class="form-group">
                     <label for="doc_issn"><?=$this->transEsc('ZiskejEdd::label_doc_issn')?>:</label>
-                    <input type="text" name="doc_issn" id="doc_issn" value="<?=$record->getISSN()?>" class="form-control" <?php if (!empty($record->getISSN())): ?>readonly<?php endif; ?>>
+                    <input type="text" name="doc_issn" id="doc_issn" value="<?=$record->getISSNs()[0] ?? ''?>" class="form-control" <?php if (!empty($record->getISSNs()[0])): ?>readonly<?php endif; ?>>
                   </div>
                 </div>
               <?php endif; ?>

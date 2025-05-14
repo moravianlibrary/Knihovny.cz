@@ -217,7 +217,7 @@ class RecordDataFormatterFactory extends RecordDataFormatterFactoryBase
      *
      * @return array
      */
-    public function getDefaultCoreSpecs()
+    public function getDefaultCoreSpecs(): array
     {
         $spec = new SpecBuilder();
         $spec->setTemplateLine(
