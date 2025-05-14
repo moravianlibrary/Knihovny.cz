@@ -22,17 +22,6 @@ class SolrMarc extends SolrDefault
     use Feature\PatentTrait;
 
     /**
-     * ISSN from marc record
-     *
-     * @return array
-     */
-    public function getISSNFromMarc()
-    {
-        $issn = $this->getFieldArray('022', ['a']);
-        return $issn;
-    }
-
-    /**
      * Cartographic material scale from marc record
      *
      * @return array
@@ -369,39 +358,15 @@ class SolrMarc extends SolrDefault
     }
 
     /**
-     * Get ISSN (parsed from field 773)
+     * Get an array of all ISSNs associated with the record (may be empty).
      *
-     * @return string|null
+     * @return array
      */
-    public function getIssnFromField773(): ?string
+    public function getISSNs(): array
     {
-        $f773 = $this->getField773();
-        return isset($f773[0]['x']) ? trim((string)$f773[0]['x']) : null;
-    }
-
-    /**
-     * Get ISSN field
-     *
-     * @return string|null
-     *
-     * @throws \Exception
-     */
-    public function getISSN(): ?string
-    {
-        $field = 'issn';
-
-        $array = [];
-
-        if (isset($this->fields[$field])) {
-            $array = $this->fields[$field];
-        }
-
-        $parent = $this->getParentRecord();
-        if ($parent !== null && isset($parent->fields[$field])) {
-            $array = $parent->fields[$field];
-        }
-
-        return $array[0] ?? $this->getIssnFromField773();
+        return (isset($this->fields['issn_display_mv'])
+            && is_array($this->fields['issn_display_mv']))
+            ? $this->fields['issn_display_mv'] : [];
     }
 
     /**
