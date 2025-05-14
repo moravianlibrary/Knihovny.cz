@@ -122,9 +122,16 @@ class SolrLocal extends \KnihovnyCz\RecordDriver\SolrMarc
             $filters['year'][$year] = $this->extractYear($year);
             $filters['volume'][$volume] = $this->extractVolume($volume);
         }
-        usort($items, function ($a, $b) {
-            return strnatcmp($b['year'], $a['year']) ?: strnatcmp($b['issue'], $a['issue']);
-        });
+
+        // Sort periodicals by year and issue descending
+        $sortFunction = fn($a, $b) => strnatcmp($b['year'], $a['year']) ?: strnatcmp($b['issue'], $a['issue']);
+        // Sort monography series ascending
+        $issues = array_filter(array_map(fn($item) => $item['issue'], $items));
+        if (empty($issues)) {
+            $sortFunction = fn($a, $b) => strnatcmp($a['volume'], $b['volume']);
+        }
+        usort($items, $sortFunction);
+
         foreach ($filters as $key => &$values) {
             if (count($values) > 1) {
                 $reverse = ($key == 'year') ? 1 : -1;
