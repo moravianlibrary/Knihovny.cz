@@ -3,7 +3,7 @@
   if (!empty($addThis)) {
     $this->headScript()->appendFile('https://s7.addthis.com/js/250/addthis_widget.js?pub=' . urlencode($addThis));
   }
-  $this->headScript()->appendFile('https://unpkg.com/share-api-polyfill/dist/share-min.js');
+  $this->headScript()->appendFile('https://platform-api.sharethis.com/js/sharethis.js#property=682472957c84420012f178b6&product=inline-share-buttons', 'text/javascript', ['async' => true]);
 ?>
 <nav class="record-nav" aria-label="<?=$this->transEscAttr('ajaxview_label_tools'); ?>">
   <ul class="nav nav-pills nav-stacked">
@@ -80,7 +80,7 @@
     <?php endif; ?>
 
     <li role="none">
-      <a class="share-record">
+      <a class="share-record" data-lightbox href="<?=$this->escapeHtmlAttr($this->recordLinker()->getActionUrl($this->driver, 'Share'))?>" rel="nofollow">
         <?=$this->icon('share-record', 'icon-link__icon') ?>
         <span class="icon-link__label"><?=$this->transEsc('share_btn_text')?></span>
       </a>
@@ -119,31 +119,35 @@ $text = isset($text[0]) ? $this->escapeJs($text[0]) : '';
 $url = $this->escapeJs($this->serverUrl() . $this->recordLinker()->getUrl($this->driver));
 $language = $this->escapeJs($this->layout()->userLang);
 $js = <<<JS
+    // share using navigator.share
     const shareData = {
       title: '$title',
       text: '$text',
       url: '$url'
     }
-    const polyfillSettings = {
-        copy: false,
-        email: true,
-        print: true,
-        sms: false,
-        messenger: true,
-        facebook: true,
-        whatsapp: true,
-        twitter: true,
-        linkedin: false,
-        telegram: false,
-        skype: false,
-        pinterest: false,
-        language: '$language'
-      }
+
     const link = document.querySelector('.share-record');
 
-    link.addEventListener('click', async () => {
-        await navigator.share(shareData, polyfillSettings);
+    async function shareWithNavigator(shareData) {
+        await navigator.share(shareData);
+    }
+
+    // clicking share button either let the modal open or stops modal from opening and shares using navigator.share
+    link.addEventListener('click', function(event) {
+        if (navigator.canShare instanceof Function && navigator.canShare(shareData)) {
+            event.preventDefault();
+            $(this).off('click');
+            shareWithNavigator(shareData);
+        }
     });
+
+    // ininialize shathis buttons in modal after it opens
+    var observer = new MutationObserver(function() {
+        if (document.contains(document.getElementById('modal-sharethis-buttons'))) {
+            window.__sharethis__.initialize();
+      }
+    });
+    observer.observe(document, {attributes: false, childList: true, characterData: false, subtree:true});
     JS;
 ?>
 <?=$this->inlineScript(\Laminas\View\Helper\HeadScript::SCRIPT, $js, 'SET')?>

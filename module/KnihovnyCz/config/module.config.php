@@ -861,7 +861,7 @@ $staticRoutes = [
 ];
 
 $nonTabRecordActions = [
-    'shortLoan',
+    'shortLoan', 'Share',
 ];
 
 $routeGenerator = new \KnihovnyCz\Route\RouteGenerator();
