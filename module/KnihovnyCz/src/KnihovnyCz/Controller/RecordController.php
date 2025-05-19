@@ -367,6 +367,18 @@ class RecordController extends \VuFind\Controller\RecordController
     }
 
     /**
+     * Share record action
+     *
+     * @return \Laminas\View\Model\ViewModel
+     */
+    public function shareAction()
+    {
+        $view = $this->createViewModel();
+        $view->setTemplate('record/share');
+        return $view;
+    }
+
+    /**
      * Display a particular tab.
      *
      * @param string $tab  Name of tab to display
