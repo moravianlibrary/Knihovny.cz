@@ -466,6 +466,16 @@ class SolrMarc extends SolrDefault
     }
 
     /**
+     * Get cast from field 382
+     *
+     * @return array
+     */
+    public function getCast382(): array
+    {
+        return $this->getFieldArray('382', ['a'], true, ', ');
+    }
+
+    /**
      * Formatted Contents Note
      *
      * @return array
@@ -482,7 +492,7 @@ class SolrMarc extends SolrDefault
      */
     public function getNote510(): array
     {
-        return $this->getFieldArray('510', ['a'], false);
+        return $this->getFieldArray('510', ['a', 'c'], true);
     }
 
     /**

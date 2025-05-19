@@ -284,6 +284,11 @@ class RecordDataFormatterFactory extends RecordDataFormatterFactoryBase
             'data-childRecords.phtml',
             ['allowZero' => false]
         );
+        $spec->setTemplateLine(
+            'Cast',
+            'getCast382',
+            'data-cast.phtml',
+        );
         $spec->setLine('Item Description', 'getGeneralNotes');
         $spec->setLine('Publication Frequency', 'getPublicationFrequency');
         $spec->setLine('Playing Time', 'getPlayingTimes');
