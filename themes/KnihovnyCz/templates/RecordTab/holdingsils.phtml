@@ -325,6 +325,12 @@
   <?=$this->render('RecordTab/itemlinks.phtml', ['itemLinks' => $itemLinks]);?>
 <?php endif; ?>
 
+<?php if ($this->driver->tryMethod('showRetrisNkp')): ?>
+  <div class="alert alert-info">
+    <?=$this->translate('retris_nkp_info')?>
+  </div>
+<?php endif; ?>
+
 <?=$this->inlineScript(\Laminas\View\Helper\HeadScript::SCRIPT, $loadJs, 'SET')?>
 <noscript><?=$this->transEsc('Please enable JavaScript.')?></noscript>
 
