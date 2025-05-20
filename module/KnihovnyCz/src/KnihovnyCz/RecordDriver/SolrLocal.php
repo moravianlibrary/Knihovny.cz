@@ -493,4 +493,29 @@ class SolrLocal extends \KnihovnyCz\RecordDriver\SolrMarc
     {
         $this->solrIdResolver = $resolver;
     }
+
+    /**
+     * Show information about RetrIS for some NKP records
+     *
+     * @return bool
+     * @throws \Exception
+     */
+    public function showRetrisNkp(): bool
+    {
+        $isPublishedInCzechia = substr($this->getMarcReader()->getField('008') ?? '', 15, 2) === 'xr';
+        $publicationDate = intval($this->fields['publishDate_sort'] ?? 0);
+        $isArchive = true;
+        foreach ($this->getOfflineHoldings()['holdings'] ?? [] as $holding) {
+            foreach ($holding['items'] ?? [] as $item) {
+                if (($item['location'] ?? '') != 'NÁRODNÍ KONZERVAČNÍ FOND') {
+                    $isArchive = false;
+                    break 2;
+                }
+            }
+        }
+        return $isArchive
+            && str_starts_with($this->getUniqueID(), 'nkp.NKC01')
+            && $publicationDate <= 1995
+            && (($isPublishedInCzechia && $publicationDate >= 1900) || !$isPublishedInCzechia);
+    }
 }
