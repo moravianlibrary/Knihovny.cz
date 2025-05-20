@@ -56,9 +56,9 @@
         $escId = $this->escapeJs($notif->getId());
         $escSelectorId = $this->escapeJs($selectorId);
         $script = <<<JS
-            $('#confirm_delete_item_${escSelectorId}').click(function(e) {
+            $('#confirm_delete_item_{$escSelectorId}').click(function(e) {
                 e.preventDefault();
-                $.post('${deleteUrl}', {
+                $.post('{$deleteUrl}', {
                             'confirm':true
                         },
                         function() {

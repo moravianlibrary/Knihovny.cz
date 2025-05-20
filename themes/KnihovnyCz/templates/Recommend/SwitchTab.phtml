@@ -13,7 +13,7 @@
         <?php if (!$tab['selected']): ?><a id="switchTab<?=$tab['id']?>" href="<?=$this->escapeHtmlAttr($tab['url'])?>"><?php endif; ?>
           <?=$this->transEsc($tab['label']); ?>
         <?php if (!$tab['selected']): ?><span></span></a><?php endif; ?>
-        <?php $js .= $this->resultsCount()->getAjaxCode($tab['url'], "#switchTab${tab['id']} span"); ?>
+        <?php $js .= $this->resultsCount()->getAjaxCode($tab['url'], "#switchTab{$tab['id']} span"); ?>
       </li>
     <?php endforeach; ?>
     </ul>
