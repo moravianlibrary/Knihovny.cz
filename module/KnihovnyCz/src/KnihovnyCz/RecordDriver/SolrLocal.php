@@ -502,6 +502,9 @@ class SolrLocal extends \KnihovnyCz\RecordDriver\SolrMarc
      */
     public function showRetrisNkp(): bool
     {
+        if (!str_starts_with($this->getUniqueID(), 'nkp.NKC01')) {
+            return false;
+        }
         $isPublishedInCzechia = substr($this->getMarcReader()->getField('008') ?? '', 15, 2) === 'xr';
         $publicationDate = intval($this->fields['publishDate_sort'] ?? 0);
         $isArchive = true;
@@ -513,8 +516,7 @@ class SolrLocal extends \KnihovnyCz\RecordDriver\SolrMarc
                 }
             }
         }
-        return $isArchive
-            && str_starts_with($this->getUniqueID(), 'nkp.NKC01')
+        return ($isArchive || $this->isTypePeriodical())
             && $publicationDate <= 1995
             && (($isPublishedInCzechia && $publicationDate >= 1900) || !$isPublishedInCzechia);
     }

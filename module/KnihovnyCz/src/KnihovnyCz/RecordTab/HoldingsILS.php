@@ -22,13 +22,12 @@ class HoldingsILS extends \VuFind\RecordTab\HoldingsILS
      */
     public function isActive()
     {
-        $hasHoldings
-            = $this->getRecordDriver()->tryMethod('hasOfflineHoldings', [], false);
-        $hasSerialLinks
-            = $this->getRecordDriver()->tryMethod('getSerialLinks', [], false);
-        $hasItemLinks
-            = $this->getRecordDriver()->tryMethod('hasItemLinks', [], false);
+        $hasHoldings = $this->getRecordDriver()->tryMethod('hasOfflineHoldings', [], false);
+        $hasSerialLinks = $this->getRecordDriver()->tryMethod('getSerialLinks', [], false);
+        $hasItemLinks = $this->getRecordDriver()->tryMethod('hasItemLinks', [], false);
         $hasHoldingsNotice = !empty($this->getRecordDriver()->tryMethod('getHoldingsNotice', [], false));
-        return $this->hideWhenEmpty ? ($hasHoldings || $hasSerialLinks || $hasItemLinks || $hasHoldingsNotice) : true;
+        $showRetrisNkp = $this->getRecordDriver()->tryMethod('showRetrisNkp', [], false);
+        $notEmpty = $hasHoldings || $hasSerialLinks || $hasItemLinks || $hasHoldingsNotice || $showRetrisNkp;
+        return $this->hideWhenEmpty ? $notEmpty : true;
     }
 }
