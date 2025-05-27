@@ -505,7 +505,11 @@ class SolrLocal extends \KnihovnyCz\RecordDriver\SolrMarc
         if (!str_starts_with($this->getUniqueID(), 'nkp.NKC01')) {
             return false;
         }
-        $isPublishedInCzechia = substr($this->getMarcReader()->getField('008') ?? '', 15, 2) === 'xr';
+        $field008 = $this->getMarcReader()->getField('008');
+        if (empty($field008)) {
+            return false;
+        }
+        $isPublishedInCzechia = substr($field008, 15, 2) === 'xr';
         $publicationDate = intval($this->fields['publishDate_sort'] ?? 0);
         $isArchive = true;
         foreach ($this->getOfflineHoldings()['holdings'] ?? [] as $holding) {
