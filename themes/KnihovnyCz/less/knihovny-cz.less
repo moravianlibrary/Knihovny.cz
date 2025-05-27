@@ -678,6 +678,35 @@ h6:hover .heading-permalink {
   }
 }
 
+.record .media-left.img-col {
+  display: block;
+  text-align: center;
+
+  .ajaxcover {
+    display: inline-block;
+    margin: 0 0 .5rem 0;
+  }
+
+  .record-previews {
+    display: inline-block;
+    margin: 0 0 .5rem 0;
+  }
+}
+
+@media (max-width: @screen-xs) {
+  .record .media-left.img-col {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 10px;
+    flex-wrap: wrap;
+
+    div {
+      flex: 0 1 auto;
+    }
+  }
+}
+
 #content {
   margin-bottom: 20px;
 }
