@@ -39,13 +39,22 @@ function _fail {
 function last_commit {
   local branch=$1
   local data=$(printf '{"query":"{project(fullPath: \\"knihovny.cz/Knihovny-cz\\") { repository { tree(ref: \\"%s\\") { lastCommit { sha }}}}}"}' "$branch")
-  local response=`curl -s 'https://gitlab.mzk.cz/api/graphql' \
+  # need first declare response and then set it because we need the exit code of curl
+  local response
+  response=`curl -sS 'https://gitlab.mzk.cz/api/graphql' \
     --header 'Content-Type: application/json' \
     --header "Private-token: ${GITLAB_API_TOKEN}" \
     --request POST \
     --data "${data}"`
+  local curl_exit_code=$?
+  if [[ $curl_exit_code -ne 0 ]]; then
+    _fail "Failed to get last commit for '$branch' branch due to curl exit code $curl_exit_code"
+  fi
   local last_commit=$(echo $response | php -r "echo (string)json_decode(file_get_contents('php://stdin'))->data->project->repository->tree->lastCommit->sha;" 2> /dev/null)
-  [ ${#last_commit} -eq 0 ] &&  _fail "Failed to get last commit for '$branch' branch"
+  if [[ ${#last_commit} -eq 0  ]]; then
+    local error_msg=$(echo $response | php -r "echo (string)json_decode(file_get_contents('php://stdin'))->errors[0]->message;" 2> /dev/null)
+    _fail "Failed to get last commit for '$branch' branch due to error: '$error_msg'"
+  fi
   echo $last_commit
 }
 
