@@ -869,12 +869,12 @@ adv_search_location:
   ChildrenQuery: true
   CustomMunge:
     withPrefix:
+      - [lowercase]
       - [preg_replace, "/['|\"]/m", ""]
-      - [preg_replace, "/[\\-\\/()*]/m", " "]
-      - [preg_replace, "/\\s+$/m", ""]
-      - [preg_replace, "/(.+)/", "{!complexphrase inOrder=true df=local_location_txt_mv v='\"$1*\"'}"]
+      - [preg_replace, "/\\s+/m", ""]
+      - [preg_replace, "/(.+)/", "{!prefix f=local_location_callnumbersearch_mv v='$1'}"]
   QueryFields:
-    local_location_txt_mv:
+    local_location_callnumbersearch_mv:
       - [onephrase, 1000]
       - [withPrefix, ~]
   FilterQuery: "*:* NOT record_format:library"
