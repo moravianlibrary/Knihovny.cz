@@ -106,4 +106,22 @@ $this->jsTranslations()->addStrings(
     ]
 );
 
+// Translations for embedded url generator form
+$this->jsTranslations()->addStrings(
+    [
+    'record_format_facet_mv' => $this->transEsc('embedded_url_generator_facet_record_format_facet'),
+    'region_institution_facet_mv' => $this->transEsc('embedded_url_generator_facet_region_institution_facet'),
+    'statuses_facet_mv' => $this->transEsc('embedded_url_generator_facet_statuses_facet'),
+    'subject_facet_mv' => $this->transEsc('embedded_url_generator_facet_subject_facet'),
+    'ziskej_facet_mv' => $this->transEsc('embedded_url_generator_facet_ziskej_facet'),
+    'source_title_facet' => $this->transEsc('embedded_url_generator_facet_source_title_facet'),
+    'conspectus_facet_mv' => $this->transEsc('embedded_url_generator_facet_conspectus_facet'),
+    'publisher_facet_mv' => $this->transEsc('embedded_url_generator_facet_publisher_facet'),
+    'author_facet_mv' => $this->transEsc('embedded_url_generator_facet_author_facet'),
+    'language_facet_mv' => $this->transEsc('embedded_url_generator_facet_language_facet'),
+    'genre_facet_mv' => $this->transEsc('embedded_url_generator_facet_genre_facet'),
+    'country_facet_mv' => $this->transEsc('embedded_url_generator_facet_country_facet'),
+  ]
+);
+
 echo $this->jsTranslations()->getJSON();
