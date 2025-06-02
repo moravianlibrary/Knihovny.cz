@@ -59,6 +59,7 @@ final class EmbeddedSearchController extends EmbeddedController
         ];
         $database = strtolower($this->params()->fromQuery('database', ''));
         $search = $databases[$database] ?? $databases['default'];
+        $filters = $this->params()->fromQuery('filter');
         $router = $this->serviceLocator->get('HttpRouter');
         $serverUrl = $this->serviceLocator->get('ViewRenderer')->plugin('serverurl');
         $baseUrl = $serverUrl($router->assemble([], ['name' => 'home']));
@@ -71,6 +72,7 @@ final class EmbeddedSearchController extends EmbeddedController
                 'title' => $config->Embedded->title ?? 'logo_title',
                 'position' => $this->params()->fromQuery('position', 'left'),
                 'language' => $lang,
+                'filters' => $filters,
             ]
         );
         return $view;

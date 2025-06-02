@@ -764,6 +764,7 @@ $config = [
             \KnihovnyCz\Autocomplete\SuggestionFilter::class => \KnihovnyCz\Autocomplete\SuggestionFilterFactory::class,
             \KnihovnyCz\Cache\Manager::class => \VuFind\Cache\ManagerFactory::class,
             \KnihovnyCz\Search\Factory\UrlQueryHelperFactory::class => \Laminas\ServiceManager\Factory\InvokableFactory::class,
+            \KnihovnyCz\Markdown\EmbeddedUrlGenerator\EmbeddedUrlGeneratorExtension::class => \KnihovnyCz\Markdown\EmbeddedUrlGenerator\EmbeddedUrlGeneratorExtensionFactory::class,
         ],
         'aliases' => [
             'VuFind\Http' => 'VuFindHttp\HttpService',
