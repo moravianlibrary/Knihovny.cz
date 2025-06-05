@@ -3,7 +3,25 @@
   $itemIndex = 1;
   $this->headScript()->appendFile('checkouts.js');
 ?>
-<?php if (!empty($this->transactions)): ?>
+
+<?php if (!$this->error && count($this->sublibraries) > 1): ?>
+  <label for="sublibrary"><?=$this->transEsc('Sublibrary')?>:</label>
+  <select class="sublibrary">
+    <?php foreach ($this->sublibraries as $code => $label): ?>
+      <?php
+        $params = $this->params ?? [];
+        $params['sublibrary'] = $code;
+        $params['page'] = 1;
+        $href = $this->currentPath() . '?' . http_build_query($params);
+      ?>
+      <option data-href="<?=$href?>" <?=($code == $this->sublibrary) ? 'selected' : ''?> value="<?=$this->escapeHtmlAttr($code)?>">
+        <?=$this->transEsc('sublibrary.' . $label)?>
+      </option>
+    <?php endforeach; ?>
+  </select>
+<?php endif; ?>
+
+<?php if (!$this->error && !empty($this->transactions)): ?>
   <nav class="search-header hidden-print">
     <?php if ($this->paginator): ?>
       <div class="search-stats">

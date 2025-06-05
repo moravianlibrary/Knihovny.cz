@@ -360,6 +360,28 @@ class MultiBackend extends \VuFind\ILS\Driver\MultiBackend
     }
 
     /**
+     * Get sublibraries of patron.
+     *
+     * @param array $patron patron
+     *
+     * @return array An associative array with key = sublibrary id, value = sublibrary name.
+     */
+    public function getMySublibraries($patron)
+    {
+        $source = $this->getSource($patron['cat_username']);
+        $driver = $this->getDriver($source);
+        if (!$this->driverSupportsMethod($driver, 'getMySublibraries', compact('patron'))) {
+            return [];
+        }
+        return array_map(
+            function ($label) use ($source) {
+                return $source . '.' . $label;
+            },
+            $driver->getMySublibraries($patron)
+        );
+    }
+
+    /**
      * Set overdue status for expired transactions
      *
      * @param array $details details from ILS
