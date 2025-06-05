@@ -2,24 +2,28 @@
     $loadJs = <<<JS
           function loadMyAccount() {
             $('.library-card-ajax').each(function onEachLibraryCard() {
-              var element = this;
-              hideLibraryCardContent(element);
-              var callback = $(element).data('callback');
-              var ajaxCall = {
-                dataType: "html",
-                url: $(element).data('action') + "?cardId=" + $(element).data('card-id'),
-                method: "GET",
-                success: function show(content) {
-                  showLibraryCardContent(element, content, function onComplete() {
-                    if (callback != '') {
-                      window[callback](element);
-                    }
-                  });
-                }
-              };
-              $.ajax(ajaxCall);
+              hideLibraryCardContent(this, false);
+              const link = $(this).data('action') + "?cardId=" + $(this).data('card-id');
+              reloadLibraryCardContent(this, link);
           })}
           loadMyAccount();
+
+          function reloadLibraryCardContent(element, link) {
+            const callback = $(element).data('callback');
+            const ajaxCall = {
+              dataType: "html",
+              url: link,
+              method: "GET",
+              success: function show(content) {
+                showLibraryCardContent(element, content, function onComplete() {
+                  if (callback != '') {
+                    window[callback](element);
+                  }
+                });
+              }
+            };
+            $.ajax(ajaxCall);
+          }
 
           function showLibraryCardContent(element, content, callback) {
             $(element).hide(500, function onComplete() {
@@ -28,7 +32,7 @@
                 if (window.location.hash != null) {
                   const fragment = window.location.hash.substring(1);
                   if ($(element).data('card-id') == fragment || $(element).data('card-name') == fragment) {
-                    $(element).closest('.panel').get(0).scrollIntoView();
+                    scrollIntoView(element);
                   }
                 }
               });
@@ -38,10 +42,17 @@
             });
           }
 
-          function hideLibraryCardContent(element) {
+          function hideLibraryCardContent(element, scroll = false) {
             $(element).hide(500, function onComplete() {
               $(element).html(VuFind.spinner()).show(0);
+              if (scroll) {
+                scrollIntoView(element);
+              }
             });
+          }
+
+          function scrollIntoView(element) {
+            $(element).closest('.panel').get(0).scrollIntoView();
           }
 
         JS;

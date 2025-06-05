@@ -8,19 +8,19 @@
 $loadJs = <<<JS
       function loadHistoricLoans(element) {
         loadCovers();
+        const reloadContent = function reloadContent(link){
+          hideLibraryCardContent(element, true);
+          reloadLibraryCardContent(element, link);
+        };
         $(element).find("ul.pagination>li>a").click(function onClick(event){
           event.preventDefault();
-          hideLibraryCardContent(element);
           link = $(this).attr('href');
-          $.ajax({
-            type: "GET",
-            url: link,
-            success: function onSuccess(content) {
-              showLibraryCardContent(element, content, function onComplete() {
-                loadHistoricLoans(element);
-              });
-            }
-          });
+          reloadContent(link);
+        });
+        $(element).find("select.sublibrary").on('change', function onChange(event){
+          event.preventDefault();
+          const link = $(this).find(":selected").data('href');
+          reloadContent(link);
         });
       };
     JS;

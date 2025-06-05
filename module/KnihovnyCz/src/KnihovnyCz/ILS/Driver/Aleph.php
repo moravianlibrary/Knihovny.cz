@@ -128,6 +128,9 @@ class Aleph extends AlephBase implements TranslatorAwareInterface
         if ($method == 'getMyBlocks') {
             return !empty($this->config['ProfileBlocks']['enabled']);
         }
+        if ($method == 'getMySublibraries') {
+            return true;
+        }
         return parent::supportsMethod($method, $params);
     }
 
@@ -322,6 +325,10 @@ class Aleph extends AlephBase implements TranslatorAwareInterface
         $alephParams = [];
         if ($history) {
             $alephParams['type'] = 'history';
+        }
+        $sublibrary = $params['sublibrary'] ?? null;
+        if ($sublibrary != null) {
+            $alephParams['institution'] = $sublibrary;
         }
 
         $itemsNoKey = $history && !isset($params['page']) ? 'no_loans'
@@ -1394,6 +1401,19 @@ class Aleph extends AlephBase implements TranslatorAwareInterface
                 return !in_array($location['locationID'], $this->hiddenLocations);
             }
         );
+    }
+
+    /**
+     * Get sublibraries of patron.
+     *
+     * @param array $patron patron
+     *
+     * @return array An associative array with key = sublibrary id, value = sublibrary name.
+     */
+    public function getMySublibraries($patron): array
+    {
+        $libs = explode(',', $this->admlib);
+        return array_combine($libs, $libs);
     }
 
     /**
