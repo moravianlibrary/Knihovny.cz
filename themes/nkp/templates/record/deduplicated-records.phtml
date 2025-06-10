@@ -27,19 +27,31 @@
         'institutions/logos/' . $source . '/' . $source
       . $logosPostfix . '.png'
     );
+    sort($ids);
+    $bases = [];
     foreach($ids as $id) {
       preg_match('/[a-z]+\.([A-Z0-9]+)-[0-9]*/', $id, $matches);
       $base = $matches[1] ?? '';
+      if (!isset($bases[$base])) {
+        $bases[$base] = ['count' => 0, 'index' => 1];
+      }
+      $bases[$base]['count']++;
       $text = ($source === 'nkp' && $base !== '')
         ? $this->transEsc('Base::facet_base_' . $base)
         : $this->translate('Source::' . $source);
       $data[] = [
         'id' => $id,
         'href' => $this->recordLinker()->getUrl($id),
-        'selected' => str_starts_with($currentRecordId, $source . '.' . $base),
+        'selected' => $currentRecordId == $id,
         'text' => $text,
         'logoAltText' => $this->translate('logo_of', ['%%source%%' => $this->translate('Source::' . $source)]),
+        'base' => $base,
       ];
+    }
+    foreach ($data as &$record) {
+      if ($bases[$record['base']]['count'] > 1) {
+        $record['text'] .= ' - ' . $this->transEsc('record') . ' ' . ($bases[$record['base']]['index']++);
+      }
     }
   }
   $recordsCount = count($data);
