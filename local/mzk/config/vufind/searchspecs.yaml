@@ -915,3 +915,10 @@ adv_search_previous_owner:
     previous_owner_txt_mv:
       - [onephrase, 1]
   FilterQuery: "*:* NOT record_format:library"
+
+adv_search_original_language:
+  ChildrenQuery: true
+  QueryFields:
+    original_language_txt_mv:
+      - [ onephrase, 1 ]
+  FilterQuery: "*:* NOT record_format:library"
