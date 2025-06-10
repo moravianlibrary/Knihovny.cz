@@ -1,0 +1,6 @@
+<div class="alert alert-info <?=$this->class ?? ''?>">
+  <?=$this->transEsc($this->mainMessage)?>
+  <?php if ($this->driver->tryMethod('getZiskejBoolean') ?? false): ?>
+    <?=$this->translate('hold_available_in_ziskej', ['%%url%%' => $this->escapeHtmlAttr($this->recordLinker()->getTabUrl($this->driver, 'ZiskejMvs') . '#tabnav')])?>
+  <?php endif;?>
+</div>
