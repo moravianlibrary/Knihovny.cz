@@ -7,6 +7,8 @@ namespace KnihovnyCz\RecordTab;
 use KnihovnyCz\Ziskej\Ziskej;
 use Laminas\Cache\Storage\StorageInterface;
 use Mzk\ZiskejApi\Api;
+use Mzk\ZiskejApi\Exception\ApiResponseException;
+use Psr\Http\Client\ClientExceptionInterface;
 use VuFind\Auth\Manager;
 use VuFind\Cache\CacheTrait;
 use VuFind\ILS\Connection;
@@ -40,6 +42,8 @@ abstract class ZiskejBase extends AbstractBase
     protected bool $isZiskejActive = false;
 
     protected Ziskej $ziskej;
+
+    protected $isApiDown = false;
 
     /**
      * Constructor
@@ -220,21 +224,23 @@ abstract class ZiskejBase extends AbstractBase
      * @param string $type Ziskej type (mvs or edd)
      *
      * @return string[][]
-     *
-     * @throws \Mzk\ZiskejApi\Exception\ApiResponseException
-     * @throws \Psr\Http\Client\ClientExceptionInterface
      */
     protected function getZiskejLibsIds(string $type): array
     {
-        return match ($type) {
-            ZiskejMvs::TYPE => $this->convertLibsFromZiskej(
-                $this->ziskejApi->getLibrariesMvsActive()->getAll()
-            ),
-            ZiskejEdd::TYPE => $this->convertLibsFromZiskej(
-                $this->ziskejApi->getLibrariesEddActive()->getAll()
-            ),
-            default => [],
-        };
+        try {
+            return match ($type) {
+                ZiskejMvs::TYPE => $this->convertLibsFromZiskej(
+                    $this->ziskejApi->getLibrariesMvsActive()->getAll()
+                ),
+                ZiskejEdd::TYPE => $this->convertLibsFromZiskej(
+                    $this->ziskejApi->getLibrariesEddActive()->getAll()
+                ),
+                default => [],
+            };
+        } catch (ApiResponseException | ClientExceptionInterface $e) {
+            $this->isApiDown = true;
+            return [];
+        }
     }
 
     /**
@@ -258,5 +264,15 @@ abstract class ZiskejBase extends AbstractBase
         } else {
             return $this->getZiskejLibsIds($type);
         }
+    }
+
+    /**
+     * Is API down?
+     *
+     * @return bool
+     */
+    public function isApiDown(): bool
+    {
+        return $this->isApiDown;
     }
 }
