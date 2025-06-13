@@ -41,7 +41,8 @@ class ZiskejMvs extends ZiskejBase
      */
     public function isActive(): bool
     {
-        return $this->isActiveLibraries();
+        $isActiveLibraries = $this->isActiveLibraries();
+        return $isActiveLibraries || ($this->isZiskejActive && $this->isApiDown());
     }
 
     /**

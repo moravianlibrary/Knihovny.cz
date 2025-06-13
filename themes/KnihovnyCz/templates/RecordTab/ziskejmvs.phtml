@@ -31,6 +31,13 @@ $dedupedRecordIds = $tab->getDedupedRecordIds();
 ?>
 <?php if ($ziskejViewHelper->isEnabled()): ?>
 
+  <?php if ($tab->isApiDown()): ?>
+    <div class="alert alert-danger text-center" role="alert">
+      <?=$this->icon('ziskej-warning') ?>
+      <?=$this->translate('ziskej_service_not_available') ?>
+    </div>
+  <?php endif; ?>
+
   <?php if ($user == null): ?>
     <div class="alert alert-info">
       <?php $loginUrl = $this->escapeHtmlAttr($this->recordLinker()->getTabUrl($this->driver, 'ZiskejMvs', ['login' => 'true'])); ?>

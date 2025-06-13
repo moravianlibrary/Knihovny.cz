@@ -85,6 +85,9 @@
             <li id="record-tab-<?=$this->escapeHtmlAttr($tabName)?>" class="<?=implode(' ', $tabClasses)?>" role="tab" data-tab="<?=$this->escapeHtmlAttr($tabName)?>"<?php if ($obj->supportsAjax() && in_array($tab, $this->backgroundTabs)):?> data-background<?php endif ?>>
               <a href="<?=$this->escapeHtmlAttr($this->recordLinker()->getTabUrl($this->driver, $tab))?>#tabnav" data-lightbox-ignore>
                 <?=$this->transEsc($desc)?>
+                <?php if (method_exists($obj, 'isApiDown') && $obj->isApiDown()): ?>
+                  <?=$this->icon('ziskej-warning', 'text-danger') ?>
+                <?php endif; ?>
               </a>
             </li>
           <?php endforeach; ?>
