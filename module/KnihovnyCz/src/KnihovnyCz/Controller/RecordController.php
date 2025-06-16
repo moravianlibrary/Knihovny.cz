@@ -25,6 +25,7 @@ use VuFind\Validator\CsrfInterface;
  */
 class RecordController extends \VuFind\Controller\RecordController
 {
+    use ShareTrait;
     use ZiskejMvsTrait;
     use ZiskejEddTrait;
 
@@ -363,18 +364,6 @@ class RecordController extends \VuFind\Controller\RecordController
             )
         );
         $view->setTemplate('record/hold');
-        return $view;
-    }
-
-    /**
-     * Share record action
-     *
-     * @return \Laminas\View\Model\ViewModel
-     */
-    public function shareAction()
-    {
-        $view = $this->createViewModel();
-        $view->setTemplate('record/share');
         return $view;
     }
 
