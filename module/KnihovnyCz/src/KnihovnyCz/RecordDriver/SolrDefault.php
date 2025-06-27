@@ -170,6 +170,23 @@ class SolrDefault extends \VuFind\RecordDriver\SolrDefault
     }
 
     /**
+     * Record base
+     *
+     * @return string|null
+     * @throws \Exception
+     */
+    protected function getBase(): ?string
+    {
+        $base = null;
+
+        if (preg_match('/\.(.+?)-/', $this->getUniqueID(), $matches)) {
+            $base = $matches[1];
+        }
+
+        return $base;
+    }
+
+    /**
      * Returns first of ISSNs, ISBNs and ISMNs from SOLR
      *
      * @return string

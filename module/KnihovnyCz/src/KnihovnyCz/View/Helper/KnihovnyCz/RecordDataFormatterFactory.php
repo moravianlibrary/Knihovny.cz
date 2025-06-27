@@ -326,6 +326,11 @@ class RecordDataFormatterFactory extends RecordDataFormatterFactoryBase
             'data-digitization-request.phtml',
             ['context' => ['hiddenLabel' => true]]
         );
+        $spec->setTemplateLine(
+            'Callnumber',
+            'getMarcCallNumber',
+            'marc-call-number.phtml'
+        );
 
         return $spec->getArray();
     }

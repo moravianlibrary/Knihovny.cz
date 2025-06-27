@@ -533,7 +533,8 @@ class SolrMarc extends SolrDefault
      */
     public function getHoldingsNotice(): string
     {
-        [$source, $id] = explode('.', $this->getUniqueID());
+        $source = $this->getSourceId();
+        $base = $this->getBase();
 
         $normsDocumentType = '0/NORMS/';
         $documentType = $this->getFormats();
@@ -541,7 +542,6 @@ class SolrMarc extends SolrDefault
             return 'holdings_notice_norms';
         }
 
-        [$base] = explode('-', $id);
         if ($source === 'mzk' && $base === 'MZK03') {
             $field991k = $this->getFirstFieldValue('991', ['k']);
             $field991Mapping = [
@@ -582,5 +582,34 @@ class SolrMarc extends SolrDefault
             $ind2 = \IntlChar::isdigit($ind2) ? $ind2 : null;
         }
         return [$field, $ind1, $ind2];
+    }
+
+    /**
+     * Get book call number from marc fields
+     *
+     * @return string|null
+     * @throws \Exception
+     */
+    public function getMarcCallNumber(): ?string
+    {
+        $source = $this->getSourceId();
+        $base = $this->getBase();
+
+        if ($source === 'mzk' && $base === 'MZK03') {
+            $field991 = $this->getStructuredDataFieldArray('991');
+
+            if (isset($field991[0]['k']) && $field991[0]['k'] === 'mzk') {
+                $field910 = $this->getStructuredDataFieldArray('910');
+                $parts = array_filter([
+                    $field910[0]['b'] ?? null,
+                    $field910[0]['r'] ?? null,
+                    $field910[0]['s'] ?? null,
+                ]);
+
+                return implode(', ', $parts);
+            }
+        }
+
+        return null;
     }
 }
