@@ -39,7 +39,6 @@ $this->headMeta()->appendName('format-detection', 'telephone=no');
     <?php $this->setupThemeResources(); ?>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
-    <?=$this->googleTagManager()->getHeadCode()?>
 
     <?php
       // Format the page title using the translation system:
@@ -87,6 +86,8 @@ $this->headMeta()->appendName('format-detection', 'telephone=no');
     <?php
       // Collect small scripts together and append as one block:
       $appendScripts = [];
+
+      $appendScripts[] = $this->googleTagManager()->getHeadCode();
 
       if (!empty($this->themeConfig()['stickyElements'])) {
         $this->headScript()->appendFile('sticky_elements.js');

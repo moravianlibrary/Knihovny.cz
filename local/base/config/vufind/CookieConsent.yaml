@@ -120,17 +120,25 @@ CookieConsent:
       Essential: false
       Cookies:
         - Name: '_dc_gtm_UA-*'
-          Domain: '{{current_host_name}}'
+          Domain: '{{vufind_cookie_domain}}'
           Description: "Google Analytics"
           Expiration: 1
           ExpirationUnit: minute
+          ThirdParty: true
         - Name: '_ga_*'
-          Domain: '{{current_host_name}}'
+          Domain: '{{vufind_cookie_domain}}'
           Description: "Google Analytics"
           Expiration: 1
           ExpirationUnit: year
+          ThirdParty: true
         - Name: '_gid'
-          Domain: '{{current_host_name}}'
+          Domain: '{{vufind_cookie_domain}}'
           Description: "Google Analytics"
           Expiration: 1
           ExpirationUnit: day
+          ThirdParty: true
+      AutoClearCookies:
+        - Name: '/^(_dc_gtm.*|_ga.*|_gid)$/'
+          Domain: '.knihovny.cz'
+        - Name: '/^(_dc_gtm.*|_ga.*|_gid)$/'
+          Domain: '.mzk.cz'
