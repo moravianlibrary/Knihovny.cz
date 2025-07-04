@@ -2,6 +2,9 @@
 
 namespace KnihovnyCz\Service;
 
+use KnihovnyCz\Http\PerformanceLogger;
+use Laminas\Http\PhpEnvironment\Request;
+
 /**
  * Knihovny.cz HttpService
  *
@@ -14,20 +17,50 @@ namespace KnihovnyCz\Service;
 class HttpService extends \VuFindHttp\HttpService
 {
     /**
+     * Performance logger
+     *
+     * @var \KnihovnyCz\Http\PerformanceLogger
+     */
+    protected ?PerformanceLogger $performanceLogger;
+
+    /**
      * Constructor.
      *
-     * @param array $proxyConfig Proxy configuration
-     * @param array $defaults    Default HTTP options
-     * @param array $config      Other configuration
-     *
-     * @return void
+     * @param array                  $proxyConfig Proxy configuration
+     * @param array                  $defaults    Default HTTP options
+     * @param array                  $config      Other configuration
+     * @param PerformanceLogger|null $perfLogger  Performance logger
      */
     public function __construct(
         array $proxyConfig = [],
         array $defaults = [],
-        array $config = []
+        array $config = [],
+        PerformanceLogger $perfLogger = null
     ) {
         parent::__construct($proxyConfig, $defaults, $config);
+        $this->performanceLogger = $perfLogger;
+    }
+
+    /**
+     * Return a new HTTP client.
+     *
+     * @param string $url     Target URL
+     * @param string $method  Request method
+     * @param float  $timeout Request timeout in seconds
+     *
+     * @return \Laminas\Http\Client
+     */
+    public function createClient(
+        $url = null,
+        $method = \Laminas\Http\Request::METHOD_GET,
+        $timeout = null
+    ) {
+        $client = parent::createClient($url, $method, $timeout);
+        if ($this->performanceLogger != null) {
+            $wrapper = new \KnihovnyCz\Http\LoggingHttpAdapter($client->getAdapter(), $this->performanceLogger);
+            $client->setAdapter($wrapper);
+        }
+        return $client;
     }
 
     /**

@@ -38,7 +38,7 @@ class GuzzleHttpServiceFactory implements FactoryInterface
         $requestedName,
         array $options = null
     ) {
-        if (!empty($options)) {
+        if (! empty($options)) {
             throw new \Exception('Unexpected options passed to factory.');
         }
         $proxyUrl = null;
@@ -48,15 +48,14 @@ class GuzzleHttpServiceFactory implements FactoryInterface
          *
          * @var \Laminas\Config\Config $config
          */
-        $config = $container->get(\VuFind\Config\PluginManager::class)
-            ->get('config');
+        $config = $container->get(\VuFind\Config\PluginManager::class)->get('config');
         /**
          * Proxy configuration
          *
          * @var \Laminas\Config\Config $proxy
          */
         $proxy = $config->Proxy;
-        if (isset($proxy->host) && !empty($proxy->host)) {
+        if (isset($proxy->host) && ! empty($proxy->host)) {
             $host = $proxy->host;
             $port = $proxy->port ?? 80;
             $auth = $proxy->auth ?? null;
@@ -65,7 +64,7 @@ class GuzzleHttpServiceFactory implements FactoryInterface
             if ($auth != null && $auth != 'basic') {
                 throw new \Exception('Only basic auth is supported');
             }
-            if ($auth == 'basic' && !empty($user) && !empty($pass)) {
+            if ($auth == 'basic' && ! empty($user) && ! empty($pass)) {
                 $user = urlencode($user);
                 $pass = urlencode($pass);
                 $proxyUrl = "http://$user:$pass@$host:$port/";
@@ -76,6 +75,10 @@ class GuzzleHttpServiceFactory implements FactoryInterface
         if (isset($proxy->non_proxy_host)) {
             $nonProxyHosts = $proxy->non_proxy_host->toArray();
         }
-        return new $requestedName($proxyUrl, $nonProxyHosts);
+        $performanceLogger = null;
+        if ($config->Http?->performance_log_enabled ?? false) {
+            $performanceLogger = $container->get(\KnihovnyCz\Http\PerformanceLogger::class);
+        }
+        return new $requestedName($proxyUrl, $nonProxyHosts, $performanceLogger);
     }
 }

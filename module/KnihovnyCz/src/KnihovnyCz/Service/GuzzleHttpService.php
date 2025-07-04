@@ -5,6 +5,8 @@ namespace KnihovnyCz\Service;
 use GuzzleHttp\Handler\CurlMultiHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Request;
+use KnihovnyCz\Http\GuzzleClientAdapter;
+use KnihovnyCz\Http\PerformanceLogger;
 
 /**
  * Class GuzzleHttpService
@@ -32,15 +34,27 @@ class GuzzleHttpService
     protected array $nonProxyHosts;
 
     /**
+     * Performance logger
+     *
+     * @var \KnihovnyCz\Http\PerformanceLogger
+     */
+    protected ?PerformanceLogger $performanceLogger;
+
+    /**
      * GuzzleHttpService constructor.
      *
-     * @param string? $proxy         proxy server to use
-     * @param array   $nonProxyHosts list of host names to use without proxy
+     * @param string?            $proxy             proxy server to use
+     * @param array              $nonProxyHosts     list of host names to use without proxy
+     * @param PerformanceLogger? $performanceLogger performance logger
      */
-    public function __construct(string|null $proxy = null, array $nonProxyHosts = [])
-    {
+    public function __construct(
+        string|null $proxy = null,
+        array $nonProxyHosts = [],
+        ?PerformanceLogger $performanceLogger = null
+    ) {
         $this->proxy = $proxy;
         $this->nonProxyHosts = $nonProxyHosts;
+        $this->performanceLogger = $performanceLogger;
     }
 
     /**
@@ -48,14 +62,18 @@ class GuzzleHttpService
      *
      * @param array $config Configuration
      *
-     * @return Client
+     * @return ClientInterface
      */
     public function createClient($config = [])
     {
         $stack = new HandlerStack(new CurlMultiHandler());
         $this->configureProxy($stack);
         $config['handler'] = $stack;
-        return new \GuzzleHttp\Client($config);
+        $client = new \GuzzleHttp\Client($config);
+        if ($this->performanceLogger != null) {
+            $client = new GuzzleClientAdapter($client, $this->performanceLogger);
+        }
+        return $client;
     }
 
     /**
