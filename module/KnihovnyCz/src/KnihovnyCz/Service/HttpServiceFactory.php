@@ -65,6 +65,10 @@ class HttpServiceFactory implements FactoryInterface
         }
         $defaults = isset($config->Http)
             ? $config->Http->toArray() : [];
-        return new $requestedName($options, $defaults);
+        $performanceLogger = null;
+        if ($defaults['performance_log_enabled'] ?? false) {
+            $performanceLogger = $container->get(\KnihovnyCz\Http\PerformanceLogger::class);
+        }
+        return new $requestedName($options, $defaults, [], $performanceLogger);
     }
 }

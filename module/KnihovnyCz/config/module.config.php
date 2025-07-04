@@ -755,6 +755,7 @@ $config = [
             \KnihovnyCz\Autocomplete\Suggester::class => \VuFind\Autocomplete\SuggesterFactory::class,
             \KnihovnyCz\Service\HttpService::class => \KnihovnyCz\Service\HttpServiceFactory::class,
             \KnihovnyCz\Service\GuzzleHttpService::class => \KnihovnyCz\Service\GuzzleHttpServiceFactory::class,
+            \KnihovnyCz\Http\PerformanceLogger::class => \KnihovnyCz\Http\PerformanceLoggerFactory::class,
             \KnihovnyCz\Validator\DatabaseCsrf::class => \KnihovnyCz\Validator\DatabaseCsrfFactory::class,
             \KnihovnyCz\ILS\Connection::class => \VuFind\ILS\ConnectionFactory::class,
             \KnihovnyCz\ILS\MultiConnection::class => \KnihovnyCz\ILS\MultiConnectionFactory::class,
