@@ -50,7 +50,8 @@ class PageLocatorFactory extends \VuFind\Content\PageLocatorFactory
             $container->get(\VuFindTheme\ThemeInfo::class),
             $settings->getUserLocale(),
             $settings->getDefaultLocale(),
-            $configManager->get('content')->Repository->base_url ?? ''
+            $configManager->get('content')->Repository->base_url ?? '',
+            $configManager->get('content')->Repository->fallback_url ?? ''
         );
 
         // Populate cache storage if a setCacheStorage method is present:
