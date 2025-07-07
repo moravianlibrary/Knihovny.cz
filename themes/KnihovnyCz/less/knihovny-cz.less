@@ -1589,3 +1589,47 @@ html, body {
     text-transform: uppercase;
   }
 }
+
+.panel.custom-banner {
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  height: 180px;
+  padding: 0;
+  background-color: #f7e8d0;
+  border: 1px solid #d3b890;
+}
+
+.custom-banner .banner-image {
+  height: 100%;
+  margin-right: 40px;
+  padding: 0;
+}
+
+.custom-banner .banner-content {
+  padding: 0 15px;
+}
+
+.custom-banner .banner-image img {
+  height: 180px;
+  max-width: initial;
+  object-fit: cover
+}
+
+@media (max-width: @screen-sm) {
+  .panel.custom-banner {
+    height: auto;
+    min-height: 180px;
+    padding-bottom: 15px;
+  }
+  .custom-banner .banner-image {
+    display: none;
+  }
+}
+
+@media (max-width: @screen-xs) {
+  .panel.custom-banner {
+    padding-bottom: 15px;
+  }
+}
