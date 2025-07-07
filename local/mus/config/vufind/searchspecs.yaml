@@ -849,3 +849,13 @@ adv_search_occupation:
     occupation_txt_mv:
       - [onephrase, 1]
   FilterQuery: "*:* NOT record_format:library"
+
+adv_search_barcodes:
+  ChildrenQuery: true
+  CustomMunge:
+    removeSpaces:
+      - [preg_replace, '/\W+/', " "]
+  QueryFields:
+    barcodes:
+      - [removeSpaces, ~]
+  FilterQuery: "*:* NOT record_format:library"
