@@ -41,21 +41,34 @@ class PageLocator extends PageLocatorBase implements HttpServiceAwareInterface
     protected string $baseUrl;
 
     /**
+     * Fallback URL for getting pages from repository available through HTTP
+     *
+     * @var string
+     */
+    protected string $fallbackUrl;
+
+    /**
      * Page constructor.
      *
      * @param \VuFindTheme\ThemeInfo $themeInfo       Theme information service
      * @param string                 $language        Current language
      * @param string                 $defaultLanguage Main configuration
      * @param string                 $baseUrl         Base HTTP repository URL
+     * @param string                 $fallbackUrl     Fallback HTTP repository URL
      */
     public function __construct(
         $themeInfo,
         $language,
         $defaultLanguage,
-        string $baseUrl = ''
+        string $baseUrl = '',
+        string $fallbackUrl = ''
     ) {
         $this->baseUrl = $baseUrl;
         $this->baseUrl .= str_ends_with($baseUrl, '/') ? '' : '/';
+
+        $this->fallbackUrl = $fallbackUrl;
+        $this->fallbackUrl .= str_ends_with($fallbackUrl, '/') ? '' : '/';
+
         parent::__construct($themeInfo, $language, $defaultLanguage);
     }
 
@@ -77,22 +90,42 @@ class PageLocator extends PageLocatorBase implements HttpServiceAwareInterface
         string $pageName,
         string $pattern
     ): \Generator {
+        $branchUrl = preg_replace('#https:/#', 'https://', $this->baseUrl . $pathPrefix);
+        $masterUrl = preg_replace('#https:/#', 'https://', $this->fallbackUrl . $pathPrefix);
+
         yield 'urlLanguage' => $this->generateTemplateFromPattern(
-            preg_replace('#https:/#', 'https://', $this->baseUrl . $pathPrefix),
+            $branchUrl,
+            $pageName,
+            $pattern,
+            $this->language
+        );
+        yield 'urlLanguage' => $this->generateTemplateFromPattern(
+            $masterUrl,
             $pageName,
             $pattern,
             $this->language
         );
         if ($this->language != $this->defaultLanguage) {
             yield 'urlDefaultLanguage' => $this->generateTemplateFromPattern(
-                $this->baseUrl . $pathPrefix,
+                $branchUrl,
+                $pageName,
+                $pattern,
+                $this->defaultLanguage
+            );
+            yield 'urlDefaultLanguage' => $this->generateTemplateFromPattern(
+                $masterUrl,
                 $pageName,
                 $pattern,
                 $this->defaultLanguage
             );
         }
         yield 'urlPageName' => $this->generateTemplateFromPattern(
-            $this->baseUrl . $pathPrefix,
+            $branchUrl,
+            $pageName,
+            $pattern
+        );
+        yield 'urlPageName' => $this->generateTemplateFromPattern(
+            $masterUrl,
             $pageName,
             $pattern
         );
