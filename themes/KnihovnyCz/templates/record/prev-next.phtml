@@ -14,48 +14,50 @@
       </li>
     <?php endif; ?>
 
-    <span class="pager-direction">
-      <?php
-        $active = isset($this->scrollData['previousRecord']);
-        $firstRecord = isset($this->scrollData['firstRecord']);
-        $label = $firstRecord ? 'First Search Result' : 'Previous Search Result';
-        $text = $firstRecord ? 'First' : 'Prev';
-        $icon = $firstRecord ? 'page-first' : 'page-prev';
-        $link = null;
-        if ($active) {
-          $record = ($firstRecord) ? $this->scrollData['firstRecord']
-            : $this->scrollData['previousRecord'];
-          $link = ($multiplied) ? $recordLinker->getUrl($record)
-            : $recordLinker->getLinkToLocalRecord($record);
-        }
-      ?>
-      <?=$this->render('prev-next-link.phtml', ['active' => $active, 'link' => $link, 'label' => $label, 'icon' => $icon, 'text' => $text]); ?>
-    </span>
+    <?php if (isset($this->scrollData['previousRecord']) || isset($this->scrollData['nextRecord'])): ?>
+      <span class="pager-direction">
+        <?php
+          $active = isset($this->scrollData['previousRecord']);
+          $firstRecord = isset($this->scrollData['firstRecord']);
+          $label = $firstRecord ? 'First Search Result' : 'Previous Search Result';
+          $text = $firstRecord ? 'First' : 'Prev';
+          $icon = $firstRecord ? 'page-first' : 'page-prev';
+          $link = null;
+          if ($active) {
+            $record = ($firstRecord) ? $this->scrollData['firstRecord']
+              : $this->scrollData['previousRecord'];
+            $link = ($multiplied) ? $recordLinker->getUrl($record)
+              : $recordLinker->getLinkToLocalRecord($record);
+          }
+        ?>
+        <?=$this->render('prev-next-link.phtml', ['active' => $active, 'link' => $link, 'label' => $label, 'icon' => $icon, 'text' => $text]); ?>
+      </span>
 
-    <?php if(isset($this->scrollData['currentPosition'])): ?>
-      <?=$this->transEsc('of_num_results', [
-        '%%position%%' => $this->localizedNumber($this->scrollData['currentPosition']),
-        '%%total%%' => $this->localizedNumber($this->scrollData['resultTotal']),
-      ]) ?>
-    <?php endif;?>
+      <?php if(isset($this->scrollData['currentPosition'])): ?>
+        <?=$this->transEsc('of_num_results', [
+          '%%position%%' => $this->localizedNumber($this->scrollData['currentPosition']),
+          '%%total%%' => $this->localizedNumber($this->scrollData['resultTotal']),
+        ]) ?>
+      <?php endif;?>
 
-    <span class="pager-direction">
-      <?php
-        $active = isset($this->scrollData['nextRecord']);
-        $lastRecord = $this->scrollData['lastRecord'];
-        $label = $lastRecord ? 'Next Search Result' : 'Next Search Result';
-        $text = $lastRecord ? 'Last' : 'Next';
-        $icon = $lastRecord ? 'page-last' : 'page-next';
-        $link = null;
-        if ($active) {
-          $record = ($lastRecord) ? $this->scrollData['lastRecord']
-            : $this->scrollData['nextRecord'];
-          $link = ($multiplied) ? $recordLinker->getUrl($record)
-            : $recordLinker->getLinkToLocalRecord($record);
-        }
-      ?>
-      <?=$this->render('prev-next-link.phtml', ['active' => $active, 'link' => $link, 'label' => $label, 'icon' => $icon, 'text' => $text]); ?>
-    </span>
+      <span class="pager-direction">
+        <?php
+          $active = isset($this->scrollData['nextRecord']);
+          $lastRecord = $this->scrollData['lastRecord'];
+          $label = $lastRecord ? 'Next Search Result' : 'Next Search Result';
+          $text = $lastRecord ? 'Last' : 'Next';
+          $icon = $lastRecord ? 'page-last' : 'page-next';
+          $link = null;
+          if ($active) {
+            $record = ($lastRecord) ? $this->scrollData['lastRecord']
+              : $this->scrollData['nextRecord'];
+            $link = ($multiplied) ? $recordLinker->getUrl($record)
+              : $recordLinker->getLinkToLocalRecord($record);
+          }
+        ?>
+        <?=$this->render('prev-next-link.phtml', ['active' => $active, 'link' => $link, 'label' => $label, 'icon' => $icon, 'text' => $text]); ?>
+      </span>
+    <?php endif; ?>
 
   </ul>
 </nav>
