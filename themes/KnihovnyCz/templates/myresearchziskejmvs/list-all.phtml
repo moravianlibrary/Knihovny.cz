@@ -17,7 +17,12 @@ $loadJs = <<<JS
 </a>
 
 <div class="<?=$this->layoutClass('mainbody')?>">
-  <h2><?=$this->transEsc('ZiskejMvs::checked_out_items')?></h2>
+  <?php $this->slot('ziskej-mvs-title')->start(); ?>
+  <div class="context-help">
+    <h2 class="context-text"><?=$this->transEsc('ZiskejMvs::checked_out_items')?></h2>
+    <?=$this->contextHelp('ziskej_mvs', 'heading')?>
+  </div>
+  <?=$this->slot('ziskej-mvs-title')->end(); ?>
   <?=$this->flashmessages();?>
   <p>
     <?=$this->context($this)->renderInContext('librarycards/listcards.phtml', [

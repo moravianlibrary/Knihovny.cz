@@ -1,0 +1,7 @@
+<?php $this->slot('ill-requests-title')->start(); ?>
+  <div class="context-help">
+    <h2 class="context-text"><?=$this->transEsc('Interlibrary Loan Requests')?></h2>
+    <?=$this->contextHelp('ill', 'heading')?>
+  </div>
+<?php $this->slot('ill-requests-title')->end(); ?>
+<?php include $this->parentTemplate('myresearch/illrequests-all.phtml');?><?php
