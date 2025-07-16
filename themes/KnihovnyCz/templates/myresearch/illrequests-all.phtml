@@ -12,10 +12,11 @@
 </a>
 
 <div class="<?=$this->layoutClass('mainbody')?>">
-  <div class="context-help">
-    <h2 class="context-text"><?=$this->transEsc('Interlibrary Loan Requests')?></h2>
-      <?=$this->contextHelp('fines', 'heading')?>
-  </div>
+
+  <?php $this->slot('ill-requests-title')->start(); ?>
+    <h2><?=$this->transEsc('Interlibrary Loan Requests')?></h2>
+  <?=$this->slot('ill-requests-title')->end(); ?>
+
   <?=$this->flashmessages()?>
     <?=$this->context($this)->renderInContext('librarycards/listcards.phtml', [
       'user' => $this->auth()->getUserObject(),
