@@ -167,7 +167,7 @@ $this->headMeta()->appendName('format-detection', 'telephone=no');
       <?php $this->headScript()->appendFile('gtm.js', 'text/javascript', ['defer' => true]) ?>
     <?php endif; ?>
     <?=$this->cookieConsent()->render()?>
-    <?=$this->headScript()->appendFile('cookie_consent_x_button.js') ?>
+    <?php $this->headScript()->appendFile('cookie_consent_x_button.js') ?>
     <?=$this->headScript() ?>
   </head>
   <body class="template-dir-<?=$this->templateDir?> template-name-<?=$this->templateName?> <?=$this->layoutClass('offcanvas-row')?><?php if ($this->layout()->rtl): ?> rtl<?php endif; ?> ziskej-mode-<?=$this->ziskejMvs()->getCurrentMode()?>">
