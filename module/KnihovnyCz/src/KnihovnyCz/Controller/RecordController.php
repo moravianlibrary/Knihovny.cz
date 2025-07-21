@@ -26,6 +26,7 @@ use VuFind\Validator\CsrfInterface;
 class RecordController extends \VuFind\Controller\RecordController
 {
     use ShareTrait;
+    use ZiskejCommonTrait;
     use ZiskejMvsTrait;
     use ZiskejEddTrait;
 

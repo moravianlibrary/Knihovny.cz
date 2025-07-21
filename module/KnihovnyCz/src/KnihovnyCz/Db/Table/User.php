@@ -81,8 +81,10 @@ class User extends \VuFind\Db\Table\User
          * @var \KnihovnyCz\Db\Row\UserCard $fromCard
          */
         foreach ($from->getLibraryCards() as $fromCard) {
-            $prefix = explode('.', $fromCard->cat_username)[0];
-            $institutions[$prefix] = $fromCard;
+            [$prefix] = $fromCard->getPrefixAndUsername();
+            if ($prefix) {
+                $institutions[$prefix] = $fromCard;
+            }
         }
         /**
          * Merge target library card
@@ -90,11 +92,11 @@ class User extends \VuFind\Db\Table\User
          * @var \KnihovnyCz\Db\Row\UserCard $intoCard
          */
         foreach ($into->getLibraryCards() as $intoCard) {
-            $prefix = explode('.', $intoCard->cat_username)[0];
+            [$prefix] = $intoCard->getPrefixAndUsername();
             if (isset($institutions[$prefix])) {
                 $fromCard = $institutions[$prefix];
-                $srcEpui = $fromCard->edu_person_unique_id;
-                $targetEpui = $intoCard->edu_person_unique_id;
+                $srcEpui = $fromCard->getEduPersonUniqueId();
+                $targetEpui = $intoCard->getEduPersonUniqueId();
                 if ($srcEpui == $targetEpui) {
                     $fromCard->delete();
                 } else {

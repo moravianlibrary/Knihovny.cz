@@ -84,4 +84,19 @@ class UserCard extends Base
         $this->eppn = $eppn;
         return $this;
     }
+
+    /**
+     * Get library card prefix and username
+     *
+     * @return string[] Array of two strings, first is prefix, and second is username. Array of nulls when username
+     * cannot be split
+     */
+    public function getPrefixAndUsername(): array
+    {
+        $prefixAndUsername = explode('.', $this->getCatUsername(), 2);
+        if (count($prefixAndUsername) === 2) {
+            return [$prefixAndUsername[0], $prefixAndUsername[1]];
+        }
+        return [null, null];
+    }
 }

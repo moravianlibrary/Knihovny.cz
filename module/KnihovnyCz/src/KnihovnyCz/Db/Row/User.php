@@ -50,20 +50,11 @@ class User extends Base
      */
     public function getCardByCatName(?string $catUsername): ?UserCard
     {
-        if ($catUsername !== null && $catUsername !== '') {
-            /**
-             * User library card
-             *
-             * @var \KnihovnyCz\Db\Row\UserCard $userCard
-             */
-            foreach ($this->getUserCardService()->getLibraryCards($this) as $userCard) {
-                if ($userCard->cat_username === $catUsername) {
-                    return $userCard;
-                }
-            }
+        if (empty($catUsername)) {
+            return null;
         }
-
-        return null;
+        $cards = $this->getUserCardService()->getLibraryCards($this, null, $catUsername);
+        return !empty($cards) ? current($cards) : null;
     }
 
     /**
@@ -82,7 +73,7 @@ class User extends Base
          * @var \KnihovnyCz\Db\Row\UserCard $userCard
          */
         foreach ($this->getUserCardService()->getLibraryCards($this) as $userCard) {
-            if ($userCard->eppn === $eppn) {
+            if ($userCard->getEppn() === $eppn) {
                 return $userCard;
             }
         }
@@ -111,71 +102,6 @@ class User extends Base
         }
 
         return null;
-    }
-
-    /**
-     * Delete library card
-     *
-     * @param int $id Library card ID
-     *
-     * @return void
-     * @throws \VuFind\Exception\LibraryCard
-     */
-    public function deleteLibraryCard($id): void
-    {
-        if (!$this->capabilities->libraryCardsEnabled()) {
-            throw new \VuFind\Exception\LibraryCard('Library Cards Disabled');
-        }
-
-        $cards = $this->getUserCardService()->getLibraryCards($this);
-        if ($cards->count() <= 1) {
-            throw new \Exception('Library card cannot be deleted');
-        }
-
-        $userCard = $this->getDbTable('UserCard');
-        $row = $userCard->select(['id' => $id, 'user_id' => $this->id])->current();
-
-        if (empty($row)) {
-            throw new \Exception('Library card not found');
-        }
-        $row->delete();
-
-        if ($row->edu_person_unique_id != $this->username) {
-            return;
-        }
-
-        foreach ($cards as $card) {
-            if ($card->id != $row->id) {
-                $this->activateLibraryCard($card->id);
-                break;
-            }
-        }
-    }
-
-    /**
-     * Activate a library card for the given username
-     *
-     * @param int $id Library card ID
-     *
-     * @return void
-     * @throws \VuFind\Exception\LibraryCard
-     */
-    public function activateLibraryCard($id): void
-    {
-        if (!$this->capabilities->libraryCardsEnabled()) {
-            throw new \VuFind\Exception\LibraryCard('Library Cards Disabled');
-        }
-        $userCard = $this->getDbTable('UserCard');
-        $row = $userCard->select(['id' => $id, 'user_id' => $this->id])->current();
-
-        if (!empty($row)) {
-            $this->username = $row->edu_person_unique_id;
-            $this->cat_username = $row->cat_username;
-            $this->cat_password = $row->cat_password;
-            $this->cat_pass_enc = $row->cat_pass_enc;
-            $this->home_library = $row->home_library;
-            $this->save();
-        }
     }
 
     /**
@@ -212,39 +138,12 @@ class User extends Base
         }
         $myLibs = [];
         foreach ($this->getUserCardService()->getLibraryCards($this) as $libCard) {
-            $ids = explode('.', $libCard['cat_username'] ?? '', 2);
-            if (count($ids) == 2) {
-                $myLibs[] = $ids[0];
+            [$prefix] = $libCard->getPrefixAndUsername();
+            if ($prefix) {
+                $myLibs[] = $prefix;
             }
         }
         return array_unique($myLibs);
-    }
-
-    /**
-     * Verify that the current card information exists in user's library cards
-     * (if enabled) and is up to date.
-     *
-     * @return void
-     * @throws \VuFind\Exception\PasswordSecurity
-     */
-    protected function updateLibraryCardEntry(): void
-    {
-        if (!$this->capabilities->libraryCardsEnabled() || empty($this->cat_username)) {
-            return;
-        }
-
-        $userCard = $this->getDbTable('UserCard');
-        $row = $userCard->select(
-            ['user_id' => $this->id, 'cat_username' => $this->cat_username]
-        )->current();
-        if (empty($row)) {
-            return;
-        }
-        // Always update home library and password
-        $row->home_library = $this->home_library;
-        $row->cat_password = $this->cat_password;
-        $row->cat_pass_enc = $this->cat_pass_enc;
-        $row->save();
     }
 
     /**
@@ -252,14 +151,14 @@ class User extends Base
      *
      * @param string $source Library prefix
      *
-     * @return bool
+     * @return void
      * @throws \VuFind\Exception\LibraryCard
      */
     public function activateCardByPrefix(string $source): bool
     {
         foreach ($this->getUserCardService()->getLibraryCards($this) as $card) {
-            if (($card['home_library'] ?? '') == $source) {
-                $this->activateLibraryCard($card['id']);
+            if ($card->getHomeLibrary() === $source) {
+                $this->getUserCardService()->activateLibraryCard($this, $card->getId());
                 return true;
             }
         }
@@ -280,15 +179,11 @@ class User extends Base
             $filter = $this->config->LibraryCards->filter->toArray();
         }
         foreach ($this->getUserCardService()->getLibraryCards($this) as $card) {
-            [$prefix, $username] = explode(
-                '.',
-                $card['cat_username'] ?? '',
-                2
-            );
+            [$prefix, $username] = $card->getPrefixAndUsername();
             if (!empty($filter) && !in_array($prefix, $filter)) {
                 continue;
             }
-            if (!empty($username)) {
+            if ($username) {
                 $cards[] = $card;
             }
         }
@@ -328,7 +223,7 @@ class User extends Base
     }
 
     /**
-     * Returns salted sha1 hashed id for purposes of google analytics
+     * Returns salted sha1 hashed id for purposes of Google Analytics
      *
      * @return string
      */
@@ -336,7 +231,7 @@ class User extends Base
     {
         return hash(
             'sha1',
-            $this->cat_username . ($this->config->GoogleTagManager->salt ?? '')
+            $this->getCatUsername() . ($this->config->GoogleTagManager->salt ?? '')
         );
     }
 
@@ -355,7 +250,7 @@ class User extends Base
     /**
      * Return user settings
      *
-     * @return \KnihovnyCz\Db\Row\UserSettings
+     * @return UserSettings
      */
     public function getUserSettings(): UserSettings
     {
@@ -386,7 +281,7 @@ class User extends Base
     /**
      * Return true if user has permission
      *
-     * @param string $permission Permission, could be 'admin', 'widgets' or 'any'
+     * @param string $permission Permission, could be 'admin', 'widgets', 'notifications' or 'any'
      *
      * @return bool
      */

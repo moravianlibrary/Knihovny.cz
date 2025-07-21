@@ -213,12 +213,10 @@ class Shibboleth extends Base
              * @var \KnihovnyCz\Db\Row\UserCard $libCard
              */
             foreach ($this->getUserCardService()->getLibraryCards($connectingUser) as $libCard) {
-                $institution = explode(
-                    '.',
-                    $libCard->getCatUsername()
-                )[0];
+                [$institution] = $libCard->getPrefixAndUsername();
                 if (
-                    $institution == $prefix
+                    !empty($prefix)
+                    && $institution === $prefix
                     && $eduPersonUniqueId != $libCard->getEduPersonUniqueId()
                 ) {
                     throw new \VuFind\Exception\LibraryCard(

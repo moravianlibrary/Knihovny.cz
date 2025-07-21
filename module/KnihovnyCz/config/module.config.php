@@ -533,11 +533,12 @@ $config = [
                     \KnihovnyCz\Db\Service\NotificationsService::class => \VuFind\Db\Service\AbstractDbServiceFactory::class,
                     \KnihovnyCz\Db\Service\UserService::class => \VuFind\Db\Service\UserServiceFactory::class,
                     \KnihovnyCz\Db\Service\CsrfTokenService::class => \VuFind\Db\Service\AbstractDbServiceFactory::class,
+                    \KnihovnyCz\Db\Service\UserCardService::class => \VuFind\Db\Service\UserCardServiceFactory::class,
                 ],
                 'aliases' => [
                     \KnihovnyCz\Db\Service\NotificationsServiceInterface::class => \KnihovnyCz\Db\Service\NotificationsService::class,
                     \VuFind\Db\Service\UserService::class => \KnihovnyCz\Db\Service\UserService::class,
-
+                    \VuFind\Db\Service\UserCardService::class => \KnihovnyCz\Db\Service\UserCardService::class,
                 ],
             ],
             'db_table' => [
