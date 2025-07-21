@@ -9,7 +9,7 @@ use Laminas\Validator\EmailAddress;
 use Laminas\View\Model\ViewModel;
 use Mzk\ZiskejApi\RequestModel\Reader;
 use Mzk\ZiskejApi\RequestModel\TicketMvsRequest;
-use VuFind\Exception\LibraryCard;
+use VuFind\Db\Service\UserCardServiceInterface;
 
 /**
  * Ziskej MVS trait
@@ -35,63 +35,7 @@ trait ZiskejMvsTrait
      */
     public function ziskejOrderAction(): ViewModel
     {
-        //@todo try/catch
-
-        /**
-         * User
-         *
-         * @var ?\KnihovnyCz\Db\Row\User $user
-         */
-        $user = $this->getUser();
-        if (!$user) {
-            return $this->forceLogin();
-        }
-
-        $userCard = $user->getCardByEppnDomain(
-            $this->params()->fromRoute('eppnDomain')
-        );
-        if (!$userCard) {
-            throw new LibraryCard('Library Card Not Found');
-        }
-
-        $user->activateCardByPrefix($userCard->card_name);
-
-        $patron = $this->catalogLogin();
-        if (!is_array($patron)) {
-            throw new LibraryCard('ILS connection failed');
-        }
-
-        /**
-         * Ziskej API connector
-         *
-         * @var \Mzk\ZiskejApi\Api $ziskejApi
-         */
-        $ziskejApi = $this->serviceLocator->get('Mzk\ZiskejApi\Api');
-
-        $ziskejReader = $userCard->eppn
-            ? $ziskejApi->getReader($userCard->eppn)
-            : null;
-
-        $view = $this->createViewModel(
-            [
-                'user' => $user,
-                'userCard' => $userCard,
-                'patron' => $patron,
-                'ziskejReader' => $ziskejReader,
-                'serverName' => $this->getRequest()->getServer()->SERVER_NAME,
-                'entityId' =>
-                    $this->getRequest()->getServer('Shib-Identity-Provider'),
-            ]
-        );
-        $view->setTemplate('record/ziskej-mvs-order');
-
-        // getDeduplicatedRecordIds has to be placed after create view model:
-        $view->setVariable(
-            'dedupedRecordIds',
-            $this->driver->tryMethod('getDeduplicatedRecordIds', [], [])
-        );
-
-        return $view;
+        return $this->createViewForZiskejOrder('record/ziskej-mvs-order');
     }
 
     /**
@@ -190,7 +134,7 @@ trait ZiskejMvsTrait
             return $this->redirectToTabMvs();
         }
 
-        $user->activateCardByPrefix($userCard->card_name);
+        $user->getDbService(UserCardServiceInterface::class)->activateLibraryCard($user, $userCard->getId());
 
         $patron = $this->catalogLogin();
 
