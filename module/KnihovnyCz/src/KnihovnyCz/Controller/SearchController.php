@@ -63,6 +63,51 @@ class SearchController extends \VuFind\Controller\SearchController
                 ['query' => compact('type', 'lookfor', 'limit')]
             );
         }
+
+        $searches = $this->getConfig('searches')->toArray() ?? [];
+
+        $groupId = 0;
+        $advancedSearchesChanged = false;
+        $params = $this->params()->fromQuery();
+        $newGroupId = 0;
+
+        while (is_array($this->params()->fromQuery('type' . $groupId))) {
+            $types = $this->params()->fromQuery('type' . $groupId);
+            $lookfors = $this->params()->fromQuery('lookfor' . $groupId);
+            $bool = $this->params()->fromQuery('bool' . $groupId);
+
+            unset($params['type' . $groupId]);
+            unset($params['lookfor' . $groupId]);
+            unset($params['bool' . $groupId]);
+
+            $validTypes = [];
+            $validLookfors = [];
+
+            foreach ($types as $searchTypeIndex => $searchTypeName) {
+                if (array_key_exists($searchTypeName, $searches['Advanced_Searches'])) {
+                    $validTypes[] = $searchTypeName;
+                    $validLookfors[] = $lookfors[$searchTypeIndex];
+                }
+            }
+
+            if (!empty($validTypes)) {
+                $params['type' . $newGroupId] = $validTypes;
+                $params['lookfor' . $newGroupId] = $validLookfors;
+                $params['bool' . $newGroupId] = $bool;
+
+                $newGroupId++;
+            }
+
+            $advancedSearchesChanged |= $types != $validTypes;
+            $groupId++;
+        }
+
+        if ($advancedSearchesChanged) {
+            $params['advanced_searches_changed'] = 1;
+
+            return $this->redirect()->toUrl($this->url()->fromRoute() . '?' . http_build_query($params));
+        }
+
         return parent::dispatch($request, $response);
     }
 
@@ -92,7 +137,7 @@ class SearchController extends \VuFind\Controller\SearchController
     {
         // Get the user's referer, with the home page as a fallback; we'll
         // redirect here after the work is done.
-        $from = $this->getRequest()->getServer()->get('HTTP_REFERER') ?? null;
+        $from = $this->getRequest()->getServer()->get('HTTP_REFERER') ?? '';
         if (empty($from) || !$this->isLocalUrl($from)) {
             $from = $this->url()->fromRoute('home');
         }
@@ -180,6 +225,7 @@ class SearchController extends \VuFind\Controller\SearchController
     {
         $view = parent::getSearchResultsView($setupCallback);
         $this->disableLastInPagination($view);
+        $view->setVariable('isAdvancedSearchesChanged', $this->params()->fromQuery('advanced_searches_changed'));
         return $view;
     }
 
