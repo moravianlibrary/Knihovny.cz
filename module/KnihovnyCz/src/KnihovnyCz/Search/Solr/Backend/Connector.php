@@ -27,13 +27,6 @@ class Connector extends \VuFindSearch\Backend\Solr\Connector
     protected $request = null;
 
     /**
-     * Performance logger
-     *
-     * @var PerformanceLogger
-     */
-    protected $performanceLogger = null;
-
-    /**
      * Set request
      *
      * @param Request $request request
@@ -43,18 +36,6 @@ class Connector extends \VuFindSearch\Backend\Solr\Connector
     public function setRequest(Request $request)
     {
         $this->request = $request;
-    }
-
-    /**
-     * Set performance logger
-     *
-     * @param PerformanceLogger $logger performance logger
-     *
-     * @return void
-     */
-    public function setPerformanceLogger(PerformanceLogger $logger)
-    {
-        $this->performanceLogger = $logger;
     }
 
     /**
@@ -87,9 +68,6 @@ class Connector extends \VuFindSearch\Backend\Solr\Connector
             ),
             ['time' => $time]
         );
-        if ($this->performanceLogger != null) {
-            $this->performanceLogger->log($client, $time);
-        }
         if (!$response->isSuccess()) {
             throw HttpErrorException::createFromResponse($response);
         }
