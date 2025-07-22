@@ -771,6 +771,7 @@ $config = [
             \KnihovnyCz\Cache\Manager::class => \VuFind\Cache\ManagerFactory::class,
             \KnihovnyCz\Search\Factory\UrlQueryHelperFactory::class => \Laminas\ServiceManager\Factory\InvokableFactory::class,
             \KnihovnyCz\Markdown\EmbeddedUrlGenerator\EmbeddedUrlGeneratorExtension::class => \KnihovnyCz\Markdown\EmbeddedUrlGenerator\EmbeddedUrlGeneratorExtensionFactory::class,
+            \KnihovnyCz\Search\History::class  => \VuFind\Search\HistoryFactory::class,
         ],
         'aliases' => [
             'VuFind\Http' => 'VuFindHttp\HttpService',
@@ -791,6 +792,7 @@ $config = [
             \VuFind\ILS\Logic\Holds::class => \KnihovnyCz\ILS\Logic\Holds::class,
             \VuFind\Cache\Manager::class => \KnihovnyCz\Cache\Manager::class,
             \VuFind\Search\Factory\UrlQueryHelperFactory::class => \KnihovnyCz\Search\Factory\UrlQueryHelperFactory::class,
+            \VuFind\Search\History::class => \KnihovnyCz\Search\History::class,
         ],
         'invokables' => [
             \KnihovnyCz\Service\GoogleBooksLinkService::class,
