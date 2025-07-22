@@ -86,6 +86,12 @@
   </div>
   <?php /* End Listing Options */ ?>
 
+  <?php if ($this->isAdvancedSearchesChanged): ?>
+    <div class="alert alert-warning mt-2" role="alert">
+        <?=$this->transEsc('advanced_search_changed'); ?>
+    </div>
+  <?php endif; ?>
+
   <?php if ($recordTotal < 1): ?>
     <p>
       <?php
