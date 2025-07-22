@@ -8,7 +8,6 @@ use KnihovnyCz\Search\Solr\Backend\Backend as KnihovnyCzBackend;
 use KnihovnyCz\Search\Solr\Backend\Connector as KnihovnyCzConnector;
 use KnihovnyCz\Search\Solr\Backend\LuceneSyntaxHelper;
 use KnihovnyCz\Search\Solr\Backend\OrQueryRewriter;
-use KnihovnyCz\Search\Solr\Backend\PerformanceLogger;
 use KnihovnyCz\Search\Solr\Backend\QueryBuilder;
 use KnihovnyCz\Search\Solr\Backend\Response\Json\RecordCollection;
 use KnihovnyCz\Search\Solr\ChildDocDeduplicationListener;
@@ -99,14 +98,6 @@ class SolrDefaultBackendFactory extends ParentSolrDefaultBackendFactory
         $connector = parent::createConnector();
         $request = $this->serviceLocator->get('Request');
         $connector->setRequest($request);
-        $config = $this->config->get($this->mainConfig);
-        $perfLog = $config->Index->perf_log ?? null;
-        if ($perfLog != null) {
-            $siteConfig = $this->config->get($this->siteConfig);
-            $baseUrl = $siteConfig->Site->url ?? '';
-            $logger = new PerformanceLogger($perfLog, $baseUrl, $request);
-            $connector->setPerformanceLogger($logger);
-        }
         return $connector;
     }
 
