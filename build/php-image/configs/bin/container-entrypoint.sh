@@ -47,11 +47,12 @@ if [ -z "$VUFIND_LOCAL_DIR" ]; then
   exit 1
 fi
 
-envsubst.a8m -no-unset -i /etc/vufind/config.local.ini -o ${VUFIND_LOCAL_DIR}/config/vufind/config.local.ini
-envsubst.a8m -no-unset -i /etc/vufind/Search2.local.ini -o ${VUFIND_LOCAL_DIR}/config/vufind/Search2.local.ini
-envsubst.a8m -no-unset -i /etc/vufind/content.local.ini -o ${VUFIND_LOCAL_DIR}/config/vufind/content.local.ini
-envsubst.a8m -no-unset -i /etc/vufind/obalkyknih.local.ini -o ${VUFIND_LOCAL_DIR}/config/vufind/obalkyknih.local.ini
-envsubst.a8m -no-unset -i /etc/vufind/digitalizationrequest.ini -o ${VUFIND_LOCAL_DIR}/config/vufind/digitalizationrequest.ini
+for ini_file in /etc/vufind/*.ini; do
+    if [ -f "$ini_file" ]; then
+        filename=$(basename "$ini_file")
+        envsubst.a8m -no-unset -i "$ini_file" -o "${VUFIND_LOCAL_DIR}/config/vufind/$filename"
+    fi
+done
 
 
 if [[ -n "$PARAM_VUFIND_ROBOTS_TXT" && "$PARAM_VUFIND_ROBOTS_TXT" != "robots.txt" && -e "$VUFIND_ROOT/public/$PARAM_VUFIND_ROBOTS_TXT" ]]; then
