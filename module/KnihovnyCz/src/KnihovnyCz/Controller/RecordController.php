@@ -4,11 +4,15 @@ declare(strict_types=1);
 
 namespace KnihovnyCz\Controller;
 
+use KnihovnyCz\Db\Service\PalmknihyCheckoutsServiceInterface;
 use Laminas\Config\Config;
 use Laminas\ServiceManager\ServiceLocatorInterface;
 use Laminas\Stdlib\RequestInterface as Request;
 use Laminas\Stdlib\ResponseInterface as Response;
+use VuFind\Db\Service\UserCardServiceInterface;
 use VuFind\Validator\CsrfInterface;
+use VuFindHttp\HttpServiceAwareInterface;
+use VuFindHttp\HttpServiceAwareTrait;
 
 /**
  * Class RecordController
@@ -23,8 +27,9 @@ use VuFind\Validator\CsrfInterface;
  * @method \Laminas\Mvc\Plugin\FlashMessenger\FlashMessenger  flashMessenger
  * @method Plugin\ShortLoans shortLoans() Time slots controller plugin
  */
-class RecordController extends \VuFind\Controller\RecordController
+class RecordController extends \VuFind\Controller\RecordController implements HttpServiceAwareInterface
 {
+    use HttpServiceAwareTrait;
     use ShareTrait;
     use ZiskejCommonTrait;
     use ZiskejMvsTrait;
@@ -456,5 +461,78 @@ class RecordController extends \VuFind\Controller\RecordController
             $params = $query . '#' . $fragment;
         }
         return $this->redirect()->toUrl($target . $params);
+    }
+
+    /**
+     * Lend an ebook.
+     *
+     * @return \Laminas\View\Model\ViewModel
+     */
+    public function lendEbookAction()
+    {
+        // Stop now if the user does not have valid catalog credentials available:
+        if (!is_array($patron = $this->catalogLogin())) {
+            return $patron;
+        }
+        $email = trim($patron['email']);
+        $source = $this->params()->fromQuery('source', '');
+        $confirmed = $this->params()->fromQuery('confirmed', false);
+        $user = $this->getUser();
+        $userCard = $user->getLibraryCardByPrefix($source);
+        $dbServiceManager = $this->serviceLocator->get(\VuFind\Db\Service\PluginManager::class);
+        $userCardsService = $dbServiceManager->get(UserCardServiceInterface::class);
+        $userCardsService->activateLibraryCard($user, $userCard->getId());
+        $palmknihyService = $dbServiceManager->get(PalmknihyCheckoutsServiceInterface::class);
+        $palmknihyApiService = $this->serviceLocator->get(\KnihovnyCz\Service\PalmknihyApiService::class);
+        $driver = $this->loadRecord();
+        $activeCheckoutsCount = $user->getActivePalmknihyCheckoutsCount($email, $source);
+
+        $errors = [];
+        if (empty($source)) {
+            $errors[] = 'palmknihy_error_source_not_specified';
+        }
+
+        $errors += $palmknihyApiService->checkBeforeLending($patron, $user, $driver, $source);
+        $view = $this->createViewModel(
+            [
+                'driver' => $driver,
+                'source' => $source,
+                'errors' => $errors,
+                'email' => $email,
+                'maxCheckouts' => $palmknihyApiService->getPalmknihyMaxCheckouts($source),
+                'maxPrice' => $palmknihyApiService->getPalmknihyMaxPrice($source),
+                'lendingInterval' => $palmknihyApiService->getPalmknihyLendingInterval($source),
+                'infoUrl' => $palmknihyApiService->getPalmknihyInfoUrl($source) ?? '',
+                'confirmed' => 0,
+            ]
+        );
+
+        if (!$confirmed) {
+            $view->setVariables(
+                [
+                    'currentCheckoutsCount' => $activeCheckoutsCount,
+                ]
+            );
+        }
+
+        if (empty($errors) && $confirmed) {
+            [$errors, $debug] = $palmknihyApiService->lendEbook($driver, $email, $source);
+        }
+        if ($confirmed) {
+            $palmknihyCheckout = $palmknihyService->createEntity();
+            $palmknihyCheckout->setUser($user)
+                ->setUserCard($userCard)
+                ->setEmail($email)
+                ->setRecord($driver)
+                ->setLibraryId($source)
+                ->setTitle($driver->getTitle())
+                ->setAuthor($driver->getPrimaryAuthor())
+                ->setYear($driver->getPublicationDates()[0] ?? '')
+                ->setStatus(count($errors) ? 0 : 1)
+                ->setStatusText(implode(', ', $errors) . ($debug ?? ''));
+            $palmknihyService->persistEntity($palmknihyCheckout);
+            $view->setVariable('confirmed', 1);
+        }
+        return $view;
     }
 }

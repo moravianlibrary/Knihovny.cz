@@ -537,8 +537,7 @@ class SolrMarc extends SolrDefault
         $base = $this->getBase();
 
         $normsDocumentType = '0/NORMS/';
-        $documentType = $this->getFormats();
-        if ($source === 'unmz' && in_array($normsDocumentType, $documentType)) {
+        if ($source === 'unmz' && $this->checkFormat($normsDocumentType)) {
             return 'holdings_notice_norms';
         }
 

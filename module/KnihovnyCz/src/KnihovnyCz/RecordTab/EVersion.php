@@ -2,6 +2,8 @@
 
 namespace KnihovnyCz\RecordTab;
 
+use KnihovnyCz\Service\PalmknihyApiService;
+
 /**
  * Class EVersion
  *
@@ -13,6 +15,15 @@ namespace KnihovnyCz\RecordTab;
  */
 class EVersion extends \VuFind\RecordTab\AbstractBase
 {
+    /**
+     * Constructor
+     *
+     * @param PalmknihyApiService $palmknihyApiService Palmknihy API service class
+     */
+    public function __construct(protected PalmknihyApiService $palmknihyApiService)
+    {
+    }
+
     /**
      * Get the on-screen description for this tab.
      *
@@ -30,6 +41,12 @@ class EVersion extends \VuFind\RecordTab\AbstractBase
      */
     public function isActive()
     {
-        return $this->getRecordDriver()->tryMethod('hasLinks');
+        $hasLinks = $this->getRecordDriver()->tryMethod('hasLinks');
+        $isPalmknihy = $this->getRecordDriver()->tryMethod('isPalmknihyRecord');
+        $palmknihyConfig = $this->getRecordDriver()->tryMethod('isPalmknihyAudioBook')
+            ? $this->palmknihyApiService->getEnabledConfigForAudioBooks()
+            : $this->palmknihyApiService->getEnabledConfigForBooks();
+
+        return $hasLinks || ($isPalmknihy && !empty($palmknihyConfig));
     }
 }

@@ -1,0 +1,57 @@
+<?php
+  // Set page title.
+  $this->headTitle($this->translate('ebook_lending_title') . ': ' . $this->driver->getBreadcrumb());
+  // Set up breadcrumbs:
+  $this->layout()->breadcrumbs = $this->searchMemory()->getLastSearchLink($this->transEsc('Search'), '<li>', '</li> ')
+    . '<li>' . $this->recordLinker()->getBreadcrumbHtml($this->driver) . '</li> '
+    . '<li class="active">' . $this->transEsc('ebook_lending_title') . '</li>';
+  $recordLinker = $this->recordLinker();
+?>
+
+<h2><?=$this->transEsc('ebook_lending_title')?></h2>
+
+<?php if (!empty($this->errors)): ?>
+  <?php $failureMessage = $this->confirmed ? 'ebook_lending_failure' : 'ebook_lending_failure_check' ?>
+  <div class="alert alert-danger"><?=$this->transEsc($failureMessage)?>:
+    <ul>
+      <?php foreach($this->errors as $error): ?>
+        <li><?=$this->transEsc($error)?></li>
+      <?php endforeach; ?>
+    </ul>
+    <p>
+      <?=$this->translate('ebook_lending_failure_info', ['%%maxCheckouts%%' => $this->maxCheckouts, '%%lendingInterval%%' => $this->lendingInterval, '%%email%%' => $this->email])?>
+    </p>
+  </div>
+<?php endif; ?>
+
+<?php if (!empty($this->infoUrl)): ?>
+  <div class="alert alert-info"><?=$this->translate('ebook_lending_more_info_html', ['%%url%%' => $this->infoUrl])?></div>
+<?php endif; ?>
+
+<?php if (!($this->confirmed ?? false) && empty($this->errors)): ?>
+  <?php
+    $format = $this->driver->tryMethod('isPalmknihyBook')
+      ? $this->transEsc('ebook_lending_format_book')
+      : (
+          $this->driver->tryMethod('isPalmknihyAudioBook')
+        ? $this->transEsc('ebook_lending_format_audiobook')
+        : $this->transEsc('ebook_lending_format_unknown')
+      );
+
+  ?>
+  <div class="alert alert-info">
+    <p>
+      <?=$this->translate('ebook_lending_book_info', ['%%format%%' => $format, '%%title%%' => $this->driver->getTitle(), '%%url%%' => $recordLinker->getUrl($this->driver), '%%institution%%' => $this->transEsc('Source::' . $this->source), '%%email%%' => $this->email]); ?>
+    </p>
+    <p><?=$this->transEsc('ebook_lending_current_checkouts_count', ['count' => $this->currentCheckoutsCount, 'maxCount' => $this->maxCheckouts], null, true)?></p>
+    <p><strong><?=$this->transEsc('ebbok_lending_confirm_checkout')?></strong></p>
+  </div>
+  <?php $url = $recordLinker->getActionUrl($this->driver, 'lendebook', ['source' => $this->source, 'confirmed' => 1]); ?>
+  <a class="btn btn-primary" href="<?=$url?>"><?=$this->transEsc('ebook_lending_confirm_button_title')?></a>
+<?php endif; ?>
+
+<?php if (($this->confirmed ?? false) && empty($this->errors)): ?>
+  <div class="alert alert-success"><?=$this->translate('ebook_lending_success_html', ['%%email%%' => $this->email, '%%title%%' => $this->driver->getTitle(), '%%url%%' => $this->recordLinker()->getUrl($this->driver)])?></div>
+  <div class="alert alert-info"><?=$this->translate('ebook_lending_account_page_link_html', ['%%url%%' => $this->url('myresearch-ebooks')])?></div>
+<?php endif; ?>
+

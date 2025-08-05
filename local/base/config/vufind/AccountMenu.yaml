@@ -52,6 +52,13 @@ MenuItems:
     status: true
     checkMethod: checkHolds
 
+  - name: ebooks
+    label: ebooks_all_titles
+    route: myresearch-ebooks
+    icon: user-checked-out
+    status: false
+    checkMethod: checkEbooks
+
   - name: storageRetrievalRequests
     label: Storage Retrieval Requests
     route: myresearch-storageretrievalrequests

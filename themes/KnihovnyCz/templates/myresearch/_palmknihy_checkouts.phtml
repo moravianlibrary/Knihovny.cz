@@ -1,0 +1,50 @@
+<?php if (count($this->checkouts) > 0): ?>
+  <?php
+    $itemIndex = 1;
+  ?>
+  <ul class="record-list">
+    <?php foreach ($this->checkouts as $checkout): ?>
+      <li id="record<?=$this->escapeHtmlAttr($checkout['record']->getUniqueId())?>" class="result">
+        <div>
+          <strong class="pull-left order"><?= $itemIndex++ ?>.</strong>
+        </div>
+        <?php
+          $coverDetails = $this->record($checkout['record'])->getCoverDetails('checkedout', 'small', $this->recordLinker()->getUrl($checkout['record']));
+          $cover = $coverDetails['html'];
+          $thumbnail = false;
+          $thumbnailAlignment = $this->record($checkout['record'])->getThumbnailAlignment('account');
+          if ($cover):
+            ob_start(); ?>
+            <div class="media-<?=$thumbnailAlignment ?> <?=$this->escapeHtmlAttr($coverDetails['size'])?>">
+              <?=$cover ?>
+            </div>
+            <?php $thumbnail = ob_get_contents(); ?>
+            <?php ob_end_clean(); ?>
+        <?php endif; ?>
+        <div class="media">
+          <?php if ($thumbnail && $thumbnailAlignment == 'left'): ?>
+            <?=$thumbnail ?>
+          <?php endif ?>
+          <div class="media-body">
+            <?=$this->record($checkout['record'])->renderTemplate('account-entry.phtml')?>
+
+            <strong><?=$this->transEsc('ebooks_checked_out_date')?>:</strong>
+            <?=$this->escapeHtml($this->dateTime()->convertToDisplayDate('m-d-Y', $checkout['checkout']->getTimestamp()->format('m-d-Y')))?>
+            <br>
+
+            <strong><?=$this->transEsc('ebooks_expiration_date')?>:</strong>
+            <?=$this->escapeHtml($this->dateTime()->convertToDisplayDate('m-d-Y', $checkout['checkout']->getTimestamp()->add(new DateInterval('P' . $this->lendingInterval . 'D'))->format('m-d-Y')))?>
+            <br>
+          </div>
+          <?php if ($thumbnail && $thumbnailAlignment == 'right'): ?>
+            <?=$thumbnail ?>
+          <?php endif ?>
+        </div>
+      </li>
+    <?php endforeach; ?>
+  </ul>
+<?php else: ?>
+  <div class="alert alert-info">
+    <?=$this->transEsc('ebooks_lending_no_checkouts')?>
+  </div>
+<?php endif; ?>

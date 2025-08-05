@@ -90,3 +90,6 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local
 
 # Update mlocate's files database
 RUN updatedb
+
+ADD https://github.com/a8m/envsubst/releases/download/v1.4.3/envsubst-Linux-x86_64 /usr/bin/envsubst.a8m
+RUN chmod a+x /usr/bin/envsubst.a8m

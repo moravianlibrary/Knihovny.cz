@@ -17,6 +17,7 @@ class SolrDefault extends \VuFind\RecordDriver\SolrDefault
 {
     use Feature\BuyLinksTrait;
     use Feature\ObalkyKnihTrait;
+    use Feature\PalmknihyTrait;
     use Feature\WikidataTrait;
     use Feature\EodLinkTrait;
     use \VuFind\Cache\CacheTrait;
@@ -145,6 +146,18 @@ class SolrDefault extends \VuFind\RecordDriver\SolrDefault
     public function getFormats()
     {
         return $this->fields['format_display_mv'] ?? [];
+    }
+
+    /**
+     * Check the format
+     *
+     * @param string $format Format to check
+     *
+     * @return bool
+     */
+    public function checkFormat(string $format): bool
+    {
+        return in_array($format, $this->getFormats());
     }
 
     /**
@@ -482,9 +495,7 @@ class SolrDefault extends \VuFind\RecordDriver\SolrDefault
      */
     public function getEddSubtype(): string
     {
-        return in_array('0/ARTICLES/', $this->getFormats())
-            ? self::EDD_SUBTYPE_ARTICLE
-            : self::EDD_SUBTYPE_SELECTION;
+        return $this->checkFormat('0/ARTICLES/') ? self::EDD_SUBTYPE_ARTICLE : self::EDD_SUBTYPE_SELECTION;
     }
 
     /**
@@ -494,7 +505,7 @@ class SolrDefault extends \VuFind\RecordDriver\SolrDefault
      */
     public function isTypePeriodical(): bool
     {
-        return in_array('0/PERIODICALS/', $this->getFormats());
+        return $this->checkFormat('0/PERIODICALS/');
     }
 
     /**
@@ -504,7 +515,7 @@ class SolrDefault extends \VuFind\RecordDriver\SolrDefault
      */
     public function isTypeBook(): bool
     {
-        return in_array('0/BOOKS/', $this->getFormats());
+        return $this->checkFormat('0/BOOKS/');
     }
 
     /**

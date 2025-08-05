@@ -1,0 +1,12 @@
+<strong><?=$this->transEsc('ebook_lending_conditions')?></strong>:<br>
+<ul>
+  <li class="palmknihy-source">
+    <?=$this->translate('ebook_lending_info', ['count' => $this->config['max_checkouts'], 'period' => $this->config['lending_interval']], null, true)?>
+    <?=$this->translate('ebook_lending_more_info_html', ['%%url%%' => $this->config['info_url']])?>
+  </li>
+</ul>
+<?php $linker = $this->recordLinker(); ?>
+<?php $url = $linker->getActionUrl($this->driver, 'lendebook', ['source' => $this->source]); ?>
+<div>
+  <a class="btn btn-primary" href="<?=$url?>"><?=$this->transEsc('ebook_lending_button_title_single')?></a>
+</div>

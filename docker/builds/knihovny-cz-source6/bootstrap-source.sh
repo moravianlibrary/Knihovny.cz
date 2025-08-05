@@ -59,8 +59,13 @@ init_obalkyknih_config() {
     cp /tmp/obalkyknih.local.template.ini "$CONFIG_OBALKY"
 }
 
+init_palmknihy_config() {
+    envsubst.a8m -no-unset -i /tmp/palmknihy.local.template.ini -o ${PARAM_VUFIND_CONFIG_ABS_DIR}/config/vufind/palmknihy.local.ini
+}
+
 init_config_local "$@"
 init_search2_config "$@"
 init_content_config "$@"
 init_obalkyknih_config "$@"
+init_palmknihy_config "$@"
 exit $?

@@ -75,6 +75,16 @@ class AccountMenu extends \VuFind\View\Helper\Root\AccountMenu
     }
 
     /**
+     * Check whether to show ebooks item
+     *
+     * @return bool
+     */
+    public function checkEbooks(): bool
+    {
+        return !empty($this->getView()->plugin('palmknihy')->getEnabledPrefixes($this->getUser()));
+    }
+
+    /**
      * Get params for checking ILS capability/function
      *
      * @return array

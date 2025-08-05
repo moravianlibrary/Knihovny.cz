@@ -1,0 +1,35 @@
+<?=$this->flashmessages()?>
+<?php if (!empty($this->checkouts) || !empty($this->checkoutsHistory)): ?>
+  <div>
+    <ul class="nav nav-tabs" role="tablist">
+      <li role="presentation" class="active">
+        <a href="#current_<?=$userCard->card_name?>" aria-controls="current_<?=$userCard->card_name?>" role="tab" data-toggle="tab">
+          <?=$this->transEsc('ebooks_lending_current_checkouts')?>
+        </a>
+      </li>
+      <li role="presentation">
+        <a href="#history_<?=$userCard->card_name?>" aria-controls="history_<?=$userCard->card_name?>" role="tab" data-toggle="tab">
+          <?=$this->transEsc('ebooks_lending_history')?>
+        </a>
+      </li>
+    </ul>
+    <div class="tab-content well">
+      <div role="tabpanel" class="tab-pane active" id="current_<?=$userCard->card_name?>">
+        <?=$this->render('_palmknihy_checkouts.phtml', [
+          'checkouts' => $this->checkouts ?? [],
+          'lendingInterval' => $this->lendingInterval ?? 0,
+        ])?>
+      </div>
+      <div role="tabpanel" class="tab-pane" id="history_<?=$userCard->card_name?>">
+        <?=$this->render('_palmknihy_checkouts.phtml', [
+          'checkouts' => $this->checkoutsHistory ?? [],
+          'lendingInterval' => $this->lendingInterval ?? 0,
+        ])?>
+      </div>
+    </div>
+  </div>
+<?php else: ?>
+  <div class="alert alert-info">
+    <?=$this->transEsc('ebooks_lending_no_checkouts')?>.
+  </div>
+<?php endif; ?>
