@@ -2,12 +2,15 @@
 
 namespace KnihovnyCz\Controller;
 
+use KnihovnyCz\Db\Service\PalmknihyCheckoutsServiceInterface;
 use KnihovnyCz\Db\Table\UserListCategories;
+use KnihovnyCz\Record\Loader as RecordLoader;
 use Laminas\ServiceManager\ServiceLocatorInterface;
 use Laminas\Session\Container;
 use Laminas\Stdlib\ResponseInterface as Response;
 use Laminas\View\Model\ViewModel;
 use VuFind\Controller\MyResearchController as MyResearchControllerBase;
+use VuFind\Db\Service\UserCardServiceInterface;
 use VuFind\Db\Table\PluginManager as TableManager;
 use VuFind\Db\Table\UserList;
 use VuFind\Exception\Auth as AuthException;
@@ -917,6 +920,89 @@ class MyResearchController extends MyResearchControllerBase
             }
         }
         return $this->createProfileChangeView('password');
+    }
+
+    /**
+     * Checked out e-books action
+     *
+     * @return ViewModel|Response
+     */
+    public function ebooksAction(): ViewModel|Response
+    {
+        // Force login:
+        if (!$this->getUser()) {
+            return $this->forceLogin();
+        }
+        $view = $this->createViewModel();
+        $view->setTemplate('myresearch/ebooks-all');
+        return $view;
+    }
+
+    /**
+     * Checked out ebooks ajax action
+     *
+     * @return ViewModel|Response
+     * @throws \Psr\Container\ContainerExceptionInterface
+     * @throws \Psr\Container\NotFoundExceptionInterface
+     * @throws \VuFind\Exception\LibraryCard
+     */
+    public function ebooksAjaxAction(): ViewModel|Response
+    {
+        if (!is_array($patron = $this->catalogLogin())) {
+            return $patron;
+        }
+        if (!($user = $this->getUser())) {
+            return $this->forceLogin();
+        }
+        $this->flashRedirect()->restore();
+        $email = trim($patron['email']);
+
+        $dbServiceManager = $this->serviceLocator->get(\VuFind\Db\Service\PluginManager::class);
+        $palmknihyService = $dbServiceManager->get(PalmknihyCheckoutsServiceInterface::class);
+        $palmknihyApiService = $this->serviceLocator->get(\KnihovnyCz\Service\PalmknihyApiService::class);
+        $userCardService = $dbServiceManager->get(UserCardServiceInterface::class);
+        $card = $userCardService->getOrCreateLibraryCard($user, (int)$this->getCardId());
+        $source = $card->getCardName();
+
+        $view = $this->createViewModel();
+        $view->setTemplate('myresearch/ebooks-ajax');
+
+        if (!$palmknihyApiService->isPalmknihyEnabled($source)) {
+            $this->flashMessenger()->addErrorMessage('ils_action_unavailable');
+            $result = $this->getViewRenderer()->render($view);
+            return $this->getAjaxResponse('text/html', $result, 200);
+        }
+
+        $recordLoader = $this->serviceLocator->get(RecordLoader::class);
+        $checkoutsFunction = function ($dbCheckouts) use ($recordLoader) {
+            $checkouts = [];
+            $ids = [];
+            foreach ($dbCheckouts as $dbCheckout) {
+                $ids[] = [
+                    'source' => $dbCheckout->getSource(),
+                    'id' => $dbCheckout->getRecordId(),
+                ];
+                $checkouts[$dbCheckout->getRecordId()]['checkout'] = $dbCheckout;
+            }
+            $records = $recordLoader->loadBatch($ids);
+            foreach ($records as $record) {
+                $checkouts[$record->getUniqueID()]['record'] = $record;
+            }
+            return $checkouts;
+        };
+
+        $view->setVariables(
+            [
+                'checkouts' => $checkoutsFunction($palmknihyService->getCheckoutsForUser($email, $source)),
+                'checkoutsHistory'
+                    => $checkoutsFunction($palmknihyService->getCheckoutsHistoryForUser($email, $source)),
+                'lendingInterval' => $palmknihyApiService->getPalmknihyLendingInterval($source),
+                'source' => $source,
+                'userCard' => $card,
+            ]
+        );
+        $result = $this->getViewRenderer()->render($view);
+        return $this->getAjaxResponse('text/html', $result, 200);
     }
 
     /**

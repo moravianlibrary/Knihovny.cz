@@ -1,7 +1,8 @@
 <?php
-    // Set page title.
-    $this->headTitle($this->driver->getBreadcrumb());
-    $user = $this->auth()->getUserObject();
+  // Set page title.
+  $this->headTitle($this->driver->getBreadcrumb());
+  $user = $this->auth()->getUserObject();
+  $palmknihyPrefixesForUser = [];
 ?>
 
 <?php if ($user != null): ?>
@@ -11,7 +12,51 @@
       ['mainMessage' => 'eversion_no_physical_copies', 'class' => 'hidden',]
   );
 ?>
+<?php
+  $palmknihyPrefixesForUser = $this->driver->isPalmknihyAudioBook()
+    ? $this->palmknihy()->getEnabledPrefixesForAudioBooks($user)
+    : $this->palmknihy()->getEnabledPrefixesForBooks($user);
+?>
 <?php endif; ?>
+
+<?php if ($this->driver->isPalmknihyRecord()): ?>
+  <?php
+    $configs = $this->driver->isPalmknihyAudioBook()
+      ? $this->palmknihy()->getEnabledConfigForAudioBooks()
+      : $this->palmknihy()->getEnabledConfigForBooks();
+  ?>
+  <?php if (!empty($configs)): ?>
+    <?php if ($this->palmknihy()->isSingleInstitution()): ?>
+      <?=
+      $this->context($this)->renderInContext(
+        'RecordTab/eversion/palmknihy-single.phtml',
+        [
+          'config' => array_pop($configs),
+          'source' => array_pop($palmknihyPrefixesForUser),
+        ]
+      );
+      ?>
+    <?php else: ?>
+      <?=
+      $this->context($this)->renderInContext(
+        'RecordTab/eversion/palmknihy-multi.phtml',
+        [
+          'configs' => $configs,
+          'prefixes' => $palmknihyPrefixesForUser,
+          'driver' => $this->driver,
+        ]
+      );
+      ?>
+    <?php endif; ?>
+
+    <?php $linker = $this->recordLinker(); ?>
+    <?php if (!$user): ?>
+      <?php $loginUrl = $this->escapeHtmlAttr($linker->getTabUrl($this->driver, 'EVersion', ['login' => 'true'])); ?>
+      <div class="alert alert-warning"><?=$this->translate('ebook_lending_login_required', ['%%url%%' => $loginUrl ])?></div>
+    <?php endif; ?>
+  <?php endif; ?>
+<?php endif; ?>
+
 <?php $links = $this->driver->getLinks();
 if (!empty($links)): ?>
   <?=$this->render('RecordTab/links-table.phtml', ['links' => $links]);?>

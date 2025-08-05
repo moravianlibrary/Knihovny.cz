@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace KnihovnyCz\Db\Row;
 
+use KnihovnyCz\Db\Service\PalmknihyCheckoutsService;
+use KnihovnyCz\RecordDriver\SolrDefault;
+use VuFind\Db\Entity\UserCardEntityInterface;
 use VuFind\Db\Row\User as Base;
 
 /**
@@ -156,13 +159,30 @@ class User extends Base
      */
     public function activateCardByPrefix(string $source): bool
     {
-        foreach ($this->getUserCardService()->getLibraryCards($this) as $card) {
-            if ($card->getHomeLibrary() === $source) {
-                $this->getUserCardService()->activateLibraryCard($this, $card->getId());
-                return true;
-            }
+        $card = $this->getLibraryCardByPrefix($source);
+        if ($card) {
+            $this->getUserCardService()->activateLibraryCard($this, $card->getId());
+            return true;
         }
         return false;
+    }
+
+    /**
+     * Get library card by prefix.
+     *
+     * @param string $source Library prefix
+     *
+     * @return UserCardEntityInterface|null
+     * @throws \VuFind\Exception\LibraryCard
+     */
+    public function getLibraryCardByPrefix(string $source): ?UserCardEntityInterface
+    {
+        foreach ($this->getUserCardService()->getLibraryCards($this) as $card) {
+            if ($card->getHomeLibrary() == $source) {
+                return $card;
+            }
+        }
+        return null;
     }
 
     /**
@@ -307,5 +327,34 @@ class User extends Base
             return 0;
         }
         return parent::delete($removeComments, $removeRatings);
+    }
+
+    /**
+     * Get the number of active Palmknihy checkouts for a user.
+     * Only checkouts that are active and not older than the configured lending interval are counted.
+     *
+     * @param string $email  User email
+     * @param string $source Source identifier
+     *
+     * @return int
+     */
+    public function getActivePalmknihyCheckoutsCount(string $email, string $source): int
+    {
+        return $this->getDbService(PalmknihyCheckoutsService::class)->getCheckoutsCountByUserEmail($email, $source);
+    }
+
+    /**
+     * Check if a user has already checked out the same book.
+     * Only checkouts that are active and not older than the configured lending interval are considered.
+     *
+     * @param string      $email  User email
+     * @param SolrDefault $record Record to check
+     * @param string      $source Source identifier
+     *
+     * @return bool
+     */
+    public function hasSamePalmknihyCheckout(string $email, SolrDefault $record, string $source): bool
+    {
+        return $this->getDbService(PalmknihyCheckoutsService::class)->hasSameCheckout($email, $record, $source);
     }
 }

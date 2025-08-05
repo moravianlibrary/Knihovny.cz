@@ -1,0 +1,17 @@
+<strong><?=$this->transEsc('ebook_lending_available_libraries')?></strong>:<br>
+<?php foreach ($this->configs as $source => $config): ?>
+  <ul>
+    <li class="palmknihy-source">
+      <strong><?=$this->transEsc('Source::' . $source)?></strong>:
+      <?=$this->translate('ebook_lending_info', ['count' => $config['max_checkouts'], 'period' => $config['lending_interval']], null, true)?>
+      <?=$this->translate('ebook_lending_more_info_html', ['%%url%%' => $config['info_url']])?>
+    </li>
+  </ul>
+<?php endforeach; ?>
+<?php $linker = $this->recordLinker(); ?>
+<?php foreach ($this->prefixes as $source): ?>
+  <?php $url = $linker->getActionUrl($this->driver, 'lendebook', ['source' => $source]); ?>
+  <div>
+    <a class="btn btn-primary" href="<?=$url?>"><?=$this->transEsc('ebook_lending_button_title', ['%%institution%%' => $this->transEsc('Source::' . $source)])?></a>
+  </div>
+<?php endforeach; ?>

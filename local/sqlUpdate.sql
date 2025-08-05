@@ -628,3 +628,30 @@ INSERT INTO inst_configs (source_id, key_id, `value`) VALUES (
 );
 
 UPDATE `system` SET `value` = '129' WHERE `key`='DB_VERSION';
+
+-- #1296
+CREATE TABLE `palmknihy_checkouts` (
+                                     `id` int(11) NOT NULL AUTO_INCREMENT,
+                                     `user_id` int(11) DEFAULT NULL,
+                                     `user_card_id` int(11) DEFAULT NULL,
+                                     `email` varchar(255) DEFAULT NULL,
+                                     `library_id` varchar(255) DEFAULT NULL,
+                                     `record_id` varchar(255) DEFAULT NULL,
+                                     `source` varchar(50) NOT NULL DEFAULT 'Solr',
+                                     `title` varchar(255) DEFAULT NULL,
+                                     `author` varchar(255) DEFAULT NULL,
+                                     `year` mediumint(9) DEFAULT NULL,
+                                     `timestamp` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+                                     `status` tinyint(4) DEFAULT NULL,
+                                     `status_text` text DEFAULT NULL,
+                                     PRIMARY KEY (`id`),
+                                     KEY `user_id` (`user_id`),
+                                     KEY `user_card_id` (`user_card_id`),
+                                     CONSTRAINT `palmknihy_checkouts_ibfk_3` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
+                                     CONSTRAINT `palmknihy_checkouts_ibfk_4` FOREIGN KEY (`user_card_id`) REFERENCES `user_card` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE VIEW palmknihy_checkouts AS SELECT * FROM vufind6.palmknihy_checkouts;
+
+UPDATE `system` SET `value` = '130' WHERE `key`='DB_VERSION';
+

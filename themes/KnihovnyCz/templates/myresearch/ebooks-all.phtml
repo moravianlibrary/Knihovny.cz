@@ -1,0 +1,38 @@
+<?php
+// Set up page title:
+$this->headTitle($this->translate('ebooks_all_titles'));
+
+// Set up breadcrumbs:
+$this->layout()->breadcrumbs = '<li><a href="' . $this->url('myresearch-ebooks') . '">' . $this->transEsc('Your Account') . '</a></li> <li class="active">' . $this->transEsc('ebooks_all_titles') . '</li>';
+
+?>
+
+<a class="search-filter-toggle visible-xs" href="#myresearch-sidebar" data-toggle="offcanvas" title="Expand Sidebar">
+  <?=$this->transEsc('Your Account') ?>
+</a>
+
+<div class="<?=$this->layoutClass('mainbody')?>">
+  <h2><?=$this->transEsc('ebooks_all_titles')?></h2>
+  <?=$this->flashmessages();?>
+  <?=$this->context($this)->renderInContext('librarycards/listcards.phtml', [
+    'user' => $this->auth()->getUserObject(),
+    'action' => $this->url('myresearch-ebooksajax'),
+    'callback' => 'loadCheckedOut',
+  ]);
+  ?>
+</div>
+
+<div class="<?=$this->layoutClass('sidebar')?>" id="myresearch-sidebar">
+  <?=$this->accountMenu()->render('ebooks')?>
+</div>
+<?php
+$loadJs = <<<JS
+        function loadCheckedOut(element) {
+          loadCovers();
+        }
+      JS;
+?>
+<?=$this->inlineScript(\Laminas\View\Helper\HeadScript::SCRIPT, $loadJs, 'SET')?>
+<noscript><?=$this->transEsc('Please enable JavaScript.')?></noscript>
+
+

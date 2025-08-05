@@ -375,7 +375,6 @@ $config = [
             \KnihovnyCz\Controller\CheckoutsController::class => \VuFind\Controller\CheckoutsControllerFactory::class,
             \KnihovnyCz\Controller\Search2recordController::class => \VuFind\Controller\AbstractBaseFactory::class,
             \KnihovnyCz\Controller\SummonrecordController::class => \VuFind\Controller\AbstractBaseFactory::class,
-
         ],
         'aliases' => [
             'Inspiration' => \KnihovnyCz\Controller\InspirationController::class,
@@ -470,7 +469,6 @@ $config = [
                     'cites' => \KnihovnyCz\RecordTab\Cites::class,
                     'dedupedrecords' => \KnihovnyCz\RecordTab\DedupedRecords::class,
                     'sfxavailability' => \KnihovnyCz\RecordTab\SfxAvailability::class,
-                    'eversion' => \KnihovnyCz\RecordTab\EVersion::class,
                     'librarybranches' => \KnihovnyCz\RecordTab\LibraryBranches::class,
                     'librarycontacts' => \KnihovnyCz\RecordTab\LibraryContacts::class,
                     'libraryinfo' => \KnihovnyCz\RecordTab\LibraryInfo::class,
@@ -481,11 +479,13 @@ $config = [
                     \KnihovnyCz\RecordTab\HoldingsILS::class => \VuFind\RecordTab\HoldingsILSFactory::class,
                     \KnihovnyCz\RecordTab\ZiskejMvs::class => \KnihovnyCz\RecordTab\ZiskejMvsFactory::class,
                     \KnihovnyCz\RecordTab\ZiskejEdd::class => \KnihovnyCz\RecordTab\ZiskejEddFactory::class,
+                    \KnihovnyCz\RecordTab\EVersion::class => \KnihovnyCz\RecordTab\EVersionFactory::class,
                 ],
                 'aliases' => [
                     \VuFind\RecordTab\HoldingsILS::class => \KnihovnyCz\RecordTab\HoldingsILS::class,
                     'ziskejMvs' => \KnihovnyCz\RecordTab\ZiskejMvs::class,
                     'ziskejEdd' => \KnihovnyCz\RecordTab\ZiskejEdd::class,
+                    'eversion' => \KnihovnyCz\RecordTab\EVersion::class,
                 ],
             ],
             'contentblock' => [
@@ -519,6 +519,7 @@ $config = [
                     \KnihovnyCz\Db\Row\RecordStatus::class => \VuFind\Db\Row\RowGatewayFactory::class,
                     \KnihovnyCz\Db\Row\Notifications::class => \VuFind\Db\Row\RowGatewayFactory::class,
                     \KnihovnyCz\Db\Row\Search::class => \VuFind\Db\Row\RowGatewayFactory::class,
+                    \KnihovnyCz\Db\Row\PalmknihyCheckouts::class => \VuFind\Db\Row\RowGatewayFactory::class,
                 ],
                 'aliases' => [
                     \VuFind\Db\Row\User::class => \KnihovnyCz\Db\Row\User::class,
@@ -534,9 +535,11 @@ $config = [
                     \KnihovnyCz\Db\Service\UserService::class => \VuFind\Db\Service\UserServiceFactory::class,
                     \KnihovnyCz\Db\Service\CsrfTokenService::class => \VuFind\Db\Service\AbstractDbServiceFactory::class,
                     \KnihovnyCz\Db\Service\UserCardService::class => \VuFind\Db\Service\UserCardServiceFactory::class,
+                    \KnihovnyCz\Db\Service\PalmknihyCheckoutsService::class => \KnihovnyCz\Db\Service\PalmknihyCheckoutsServiceFactory::class,
                 ],
                 'aliases' => [
                     \KnihovnyCz\Db\Service\NotificationsServiceInterface::class => \KnihovnyCz\Db\Service\NotificationsService::class,
+                    \KnihovnyCz\Db\Service\PalmknihyCheckoutsServiceInterface::class => \KnihovnyCz\Db\Service\PalmknihyCheckoutsService::class,
                     \VuFind\Db\Service\UserService::class => \KnihovnyCz\Db\Service\UserService::class,
                     \VuFind\Db\Service\UserCardService::class => \KnihovnyCz\Db\Service\UserCardService::class,
                 ],
@@ -556,6 +559,7 @@ $config = [
                     \KnihovnyCz\Db\Table\RecordStatus::class => \VuFind\Db\Table\GatewayFactory::class,
                     \KnihovnyCz\Db\Table\Notifications::class => \VuFind\Db\Table\GatewayFactory::class,
                     \KnihovnyCz\Db\Table\Search::class => \VuFind\Db\Table\GatewayFactory::class,
+                    \KnihovnyCz\Db\Table\PalmknihyCheckouts::class => \VuFind\Db\Table\GatewayFactory::class,
                 ],
                 'aliases' => [
                     \VuFind\Db\Table\User::class => \KnihovnyCz\Db\Table\User::class,
@@ -565,6 +569,7 @@ $config = [
                     \VuFind\Db\Table\Resource::class => \KnihovnyCz\Db\Table\Resource::class,
                     'notifications' => \KnihovnyCz\Db\Table\Notifications::class,
                     'CsrfToken' => \KnihovnyCz\Db\Table\CsrfToken::class,
+                    'PalmknihyCheckouts' => \KnihovnyCz\Db\Table\PalmknihyCheckouts::class,
                 ],
             ],
             'ils_driver' => [
@@ -773,6 +778,7 @@ $config = [
             \KnihovnyCz\Search\Factory\UrlQueryHelperFactory::class => \Laminas\ServiceManager\Factory\InvokableFactory::class,
             \KnihovnyCz\Markdown\EmbeddedUrlGenerator\EmbeddedUrlGeneratorExtension::class => \KnihovnyCz\Markdown\EmbeddedUrlGenerator\EmbeddedUrlGeneratorExtensionFactory::class,
             \KnihovnyCz\Search\History::class  => \VuFind\Search\HistoryFactory::class,
+            \KnihovnyCz\Service\PalmknihyApiService::class => \KnihovnyCz\Service\PalmknihyApiServiceFactory::class,
         ],
         'aliases' => [
             'VuFind\Http' => 'VuFindHttp\HttpService',
@@ -868,10 +874,14 @@ $staticRoutes = [
     'MyResearch/ProfileChangePassword' => 'MyResearch/ProfileChangePassword',
     'LibraryCards/NotSupported' => 'LibraryCards/NotSupported',
     'Cart/Cite' => 'Cart/Cite',
+    'MyResearch/Ebooks' => 'MyResearch/Ebooks',
+    'MyResearch/EbooksAjax' => 'MyResearch/EbooksAjax',
 ];
 
 $nonTabRecordActions = [
-    'shortLoan', 'Share',
+    'lendEbook',
+    'Share',
+    'shortLoan',
 ];
 
 $routeGenerator = new \KnihovnyCz\Route\RouteGenerator();
