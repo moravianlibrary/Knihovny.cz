@@ -907,3 +907,42 @@ adv_search_original_language:
     original_language_txt_mv:
       - [ onephrase, 1 ]
   FilterQuery: "*:* NOT record_format:library"
+
+adv_search_distributor_number:
+  Dismaxfields:
+    - distributor_number_txt_mv^100
+  DismaxHandler: edismax
+  DismaxParams:
+    - [ bq, "inspiration:top_results^1" ]
+    - [ bf, "if(exists(merged_records_boolean),10000,0)" ]
+  QueryFields:
+    distributor_number_txt_mv:
+      - [ onephrase, 300 ]
+      - [ and, 150 ]
+  FilterQuery: "*:* NOT record_format:library"
+
+adv_search_numeric_designation:
+  Dismaxfields:
+    - numeric_designation_txt_mv^100
+  DismaxHandler: edismax
+  DismaxParams:
+    - [ bq, "inspiration:top_results^1" ]
+    - [ bf, "if(exists(merged_records_boolean),10000,0)" ]
+  QueryFields:
+    numeric_designation_txt_mv:
+      - [ onephrase, 300 ]
+      - [ and, 150 ]
+  FilterQuery: "*:* NOT record_format:library"
+
+adv_search_medium_of_performance:
+  Dismaxfields:
+    - medium_of_performance_txt_mv^100
+  DismaxHandler: edismax
+  DismaxParams:
+    - [ bq, "inspiration:top_results^1" ]
+    - [ bf, "if(exists(merged_records_boolean),10000,0)" ]
+  QueryFields:
+    medium_of_performance_txt_mv:
+      - [ onephrase, 300 ]
+      - [ and, 150 ]
+  FilterQuery: "*:* NOT record_format:library"
