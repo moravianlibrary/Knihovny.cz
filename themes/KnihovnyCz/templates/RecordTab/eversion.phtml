@@ -29,8 +29,8 @@
     <?php if ($this->palmknihy()->isSingleInstitution()): ?>
       <?=
       $this->context($this)->renderInContext(
-        'RecordTab/eversion/palmknihy-single.phtml',
-        [
+          'RecordTab/eversion/palmknihy-single.phtml',
+          [
           'config' => array_pop($configs),
           'source' => array_pop($palmknihyPrefixesForUser),
         ]
@@ -39,8 +39,8 @@
     <?php else: ?>
       <?=
       $this->context($this)->renderInContext(
-        'RecordTab/eversion/palmknihy-multi.phtml',
-        [
+          'RecordTab/eversion/palmknihy-multi.phtml',
+          [
           'configs' => $configs,
           'prefixes' => $palmknihyPrefixesForUser,
           'driver' => $this->driver,
