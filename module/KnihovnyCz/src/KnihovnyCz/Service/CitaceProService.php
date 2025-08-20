@@ -72,7 +72,14 @@ class CitaceProService implements \VuFindHttp\HttpServiceAwareInterface
         if ($results === false || !$item = $results->item(0)) {
             throw new \Exception('Citation not found');
         }
-        return $item->c14n();
+
+        $purifierConfig = \HTMLPurifier_Config::createDefault();
+        $purifierConfig->set('Cache.DefinitionImpl', null);
+        $purifierConfig->set('HTML.Allowed', 'p,b,i,strong,em,ul,ol,li,a[href],br');
+
+        $purifier = new \HTMLPurifier($purifierConfig);
+
+        return $purifier->purify($item->c14n());
     }
 
     /**
