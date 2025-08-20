@@ -28,25 +28,13 @@ trait EodLinkTrait
         if (!$isEOD) {
             return null;
         }
-        if (!isset($this->mainConfig->EedFormIds) || !isset($this->mainConfig->Eod->formLink)) {
+        if (!isset($this->mainConfig->EodFormIds) || !isset($this->mainConfig->Eod->formLink)) {
             return null;
         }
-        $eodFormIds = $this->mainConfig->EedFormIds->toArray();
-        [$source, $recordId] = explode('.', $this->getUniqueID());
-        $formIds = $eodFormIds[$source] ?? null;
-        $formId = null;
-        if (is_array($formIds)) {
-            foreach ($formIds as $prefix => $id) {
-                if (str_starts_with($recordId, $prefix)) {
-                    $formId = $id;
-                    $recordId = substr($recordId, strlen($prefix));
-                    break;
-                }
-            }
-        } else {
-            $formId = $formIds;
-        }
-        if ($formId == null) {
+        $eodFormIds = $this->mainConfig->EodFormIds->toArray();
+        $formIds = $eodFormIds[$this->getSourceId()] ?? null;
+        $formId = $formIds[$this->getBase()] ?? (is_string($formIds) ? $formIds : null);
+        if ($formId === null) {
             return null;
         }
         $lang = $this->getTranslatorLocale();
@@ -54,8 +42,28 @@ trait EodLinkTrait
         $separator = str_contains($baseLink, '?') ? '&' : '?';
         return $baseLink . $separator . http_build_query([
             'formular_id' => $formId,
-            'sys_id' => $recordId,
+            'sys_id' => $this->getSysnoForEod(),
             'lang' => $lang,
         ]);
+    }
+
+    /**
+     * Get the system number for EOD requests.
+     *
+     * @return string|null
+     */
+    protected function getSysnoForEod(): ?string
+    {
+        [$source, $recordId] = explode('.', $this->getUniqueID());
+        if ($source === 'nkp') {
+            // For NKP, we use the record ID directly as it is already in the correct format.
+            return $this->getIdFrom001();
+        }
+
+        if (str_contains($recordId, '-')) {
+            [, $sysno] = explode('-', $recordId, 2);
+            return $sysno;
+        }
+        return $recordId;
     }
 }
