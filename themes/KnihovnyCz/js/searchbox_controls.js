@@ -265,7 +265,7 @@ VuFind.register('searchbox_controls', function SearchboxControls() {
         };
       };
       $.when.apply($, ajaxCalls).then(onSuccess(++requestId));
-    }
+    };
     let timer = null;
     // Search autocomplete
     searchbox.autocomplete({
