@@ -53,7 +53,7 @@ class HoldsController extends HoldsControllerBase
         } catch (\Exception $ex) {
             $this->showException($ex);
         }
-        $error = ($view == null || !($view instanceof ViewModel));
+        $error = !($view instanceof ViewModel);
         if (!$error) {
             $recordList = $view->recordList ?? [];
             $this->addDetailsFromOfflineHoldings($recordList);
@@ -66,10 +66,18 @@ class HoldsController extends HoldsControllerBase
                 . $this->getCardId()
             );
         }
-        if ($view == null) {
+        if ($view === null) {
             $view = new ViewModel();
-            $view->error = $error;
+            $view->setVariable('error', $error);
         }
+        if (!$error) {
+            $patron = $this->catalogLogin();
+            $driverClass = $this->getIls()->getDriverName($patron['cat_username'] ?? '');
+            $showHoldsCancelWarning = is_subclass_of($driverClass, \VuFind\ILS\Driver\Aleph::class)
+                || is_subclass_of($driverClass, \VuFind\ILS\Driver\KohaRest::class);
+            $view->setVariable('showHoldsCancelWarning', $showHoldsCancelWarning);
+        }
+
         $view->setTemplate('holds/list-ajax');
         $result = $this->getViewRenderer()->render($view);
         return $this->getAjaxResponse('text/html', $result, null);

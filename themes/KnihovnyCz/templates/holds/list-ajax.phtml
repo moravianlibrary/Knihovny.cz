@@ -178,9 +178,7 @@
                 <?php endif; ?>
               <?php endforeach; ?>
             <?php endif; ?>
-            <?php if ($this->cancelForm && isset($ilsDetails['cancel_details'])): ?>
-              <div class="alert alert-success"><?=$this->transEsc("hold_could_be_cancelled")?></div>
-            <?php else: ?>
+            <?php if (($this->showHoldsCancelWarning ?? false) && !($this->cancelForm && isset($ilsDetails['cancel_details']))): ?>
               <div class="alert alert-danger"><?=$this->transEsc("hold_could_not_be_cancelled")?></div>
             <?php endif; ?>
 
