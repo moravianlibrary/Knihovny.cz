@@ -5,7 +5,6 @@
   $currentBase = $matches[1] ?? '';
 
   $logosPostfix = '_small';
-  $data = [];
   $records = $this->driver->tryMethod('getDeduplicatedRecords', [], false);
   $recordMissing = $records !== false && empty($records);
   if ($records === false) {
@@ -22,14 +21,15 @@
       $recordMissing = true;
     }
   }
+  $data = [];
+  $bases = [];
   foreach ($records as $source => $ids) {
     $imageSrc = $this->imageLink(
         'institutions/logos/' . $source . '/' . $source
       . $logosPostfix . '.png'
     );
     sort($ids);
-    $bases = [];
-    foreach($ids as $id) {
+    foreach ($ids as $id) {
       preg_match('/[a-z]+\.([A-Z0-9]+)-[0-9]*/', $id, $matches);
       $base = $matches[1] ?? '';
       if (!isset($bases[$base])) {
@@ -48,10 +48,10 @@
         'base' => $base,
       ];
     }
-    foreach ($data as &$record) {
-      if ($bases[$record['base']]['count'] > 1) {
-        $record['text'] .= ' - ' . $this->transEsc('record') . ' ' . ($bases[$record['base']]['index']++);
-      }
+  }
+  foreach ($data as &$record) {
+    if ($bases[$record['base']]['count'] > 1) {
+      $record['text'] .= ' - ' . $this->transEsc('record') . ' ' . ($bases[$record['base']]['index']++);
     }
   }
   $recordsCount = count($data);
