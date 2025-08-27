@@ -123,10 +123,11 @@ class GetHolding extends AbstractBase implements TranslatorAwareInterface
                  */
                 $availability = $item['availability'];
                 $status = $availability->getStatusDescription();
+                $tokens = $availability->getStatusDescriptionTokens();
                 $item['availability'] = $availability->isAvailable();
                 $holdingStatus = $this->holdingsLogic->getAvailabilityByStatus($status);
                 $item['label'] = $labels[$holdingStatus] ?? 'default';
-                $item['status'] = $this->translateWithSource($source, $status, 'HoldingStatus');
+                $item['status'] = $this->translateWithSource($source, $status, 'HoldingStatus', $tokens);
 
                 if (isset($item['linkText'])) {
                     $linkText = $item['linkText'];
@@ -164,18 +165,22 @@ class GetHolding extends AbstractBase implements TranslatorAwareInterface
     protected function translateWithSource(
         string $source,
         string $text,
-        string $domain
+        string $domain,
+        array $tokens = []
     ): string {
+        if (str_contains($text, '::')) {
+            [$domain, $text] = explode('::', $text, 2);
+        }
         $translated = $this->translateString(
             $source . '_' . $text,
-            [],
+            $tokens,
             $text,
             $domain
         );
         if ($translated == $text) {
             $translated = $this->translateString(
                 $text,
-                [],
+                $tokens,
                 $text,
                 $domain
             );
