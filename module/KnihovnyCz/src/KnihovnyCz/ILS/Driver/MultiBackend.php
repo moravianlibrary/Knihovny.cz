@@ -456,4 +456,24 @@ class MultiBackend extends \VuFind\ILS\Driver\MultiBackend
         }
         return $driver;
     }
+
+    /**
+     * Show warning when canceling holds
+     *
+     * @param array $patron Patron data
+     *
+     * @return bool
+     */
+    public function showHoldsCancelWarning(array $patron): bool
+    {
+        try {
+            return $this->callMethodIfSupported(
+                $this->getSource($patron['cat_username']),
+                __FUNCTION__,
+                []
+            );
+        } catch (ILSException $e) {
+            return false;
+        }
+    }
 }

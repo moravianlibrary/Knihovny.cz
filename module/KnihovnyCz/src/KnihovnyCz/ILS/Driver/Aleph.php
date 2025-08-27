@@ -1597,4 +1597,14 @@ class Aleph extends AlephBase implements TranslatorAwareInterface
     {
         $this->source = $source;
     }
+
+    /**
+     * Show warning when canceling holds
+     *
+     * @return bool
+     */
+    public function showHoldsCancelWarning(): bool
+    {
+        return true;
+    }
 }

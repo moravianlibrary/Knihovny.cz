@@ -72,10 +72,7 @@ class HoldsController extends HoldsControllerBase
         }
         if (!$error) {
             $patron = $this->catalogLogin();
-            $driverClass = $this->getIls()->getDriverName($patron['cat_username'] ?? '');
-            $showHoldsCancelWarning = is_subclass_of($driverClass, \VuFind\ILS\Driver\Aleph::class)
-                || is_subclass_of($driverClass, \VuFind\ILS\Driver\KohaRest::class);
-            $view->setVariable('showHoldsCancelWarning', $showHoldsCancelWarning);
+            $view->setVariable('showHoldsCancelWarning', $this->getILS()->showHoldsCancelWarning($patron));
         }
 
         $view->setTemplate('holds/list-ajax');

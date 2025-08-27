@@ -230,4 +230,14 @@ class KohaRest extends \VuFind\ILS\Driver\KohaRest
         }
         return $result;
     }
+
+    /**
+     * Show warning when canceling holds
+     *
+     * @return bool
+     */
+    public function showHoldsCancelWarning(): bool
+    {
+        return true;
+    }
 }
