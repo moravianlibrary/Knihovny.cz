@@ -445,4 +445,14 @@ class XCNCIP2 extends \VuFind\ILS\Driver\XCNCIP2
     {
         return !empty($nextItemToken) && !empty((string)$nextItemToken[0]);
     }
+
+    /**
+     * Show warning when canceling holds
+     *
+     * @return bool
+     */
+    public function showHoldsCancelWarning(): bool
+    {
+        return false;
+    }
 }
