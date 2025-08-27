@@ -7,6 +7,7 @@ use Laminas\ServiceManager\Exception\ServiceNotFoundException;
 use Laminas\ServiceManager\Factory\FactoryInterface;
 use Psr\Container\ContainerExceptionInterface as ContainerException;
 use Psr\Container\ContainerInterface;
+use VuFind\I18n\Locale\LocaleSettings;
 
 /**
  * RecordLinker
@@ -43,6 +44,14 @@ class RecordLinkerFactory implements FactoryInterface
         }
         $router = $container->get(\VuFind\Record\Router::class);
         $recordLoader = $container->get(\VuFind\Record\Loader::class);
-        return new $requestedName($router, $recordLoader);
+        $pluginManager = $container->get(\VuFind\Config\PluginManager::class);
+        $settings = $container->get(LocaleSettings::class);
+
+        return new $requestedName(
+            $router,
+            $recordLoader,
+            $pluginManager->get('searches')->toArray(),
+            $settings->getUserLocale()
+        );
     }
 }

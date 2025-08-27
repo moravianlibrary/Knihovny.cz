@@ -1603,15 +1603,18 @@ html, body {
   display: flex;
   align-items: center;
   flex-direction: row;
-  height: 180px;
   padding: 0;
   background-color: #f7e8d0;
   border: 1px solid #d3b890;
+
+  a {
+    outline: none;
+  }
 }
 
 .custom-banner .banner-image {
+  display: block;
   height: 100%;
-  margin-right: 40px;
   padding: 0;
 }
 
@@ -1620,18 +1623,46 @@ html, body {
 }
 
 .custom-banner .banner-image img {
-  height: 180px;
   max-width: initial;
   object-fit: cover
 }
 
+.panel.custom-banner.hp-survey-banner {
+  height: 180px;
+
+  .banner-image {
+    margin-right: 40px;
+  }
+
+  .banner-image img {
+    height: 180px;
+  }
+}
+
+.panel.custom-banner.record-go-to-knihovny-cz-banner {
+  height: 100px;
+
+  .banner-image {
+    margin-right: 0;
+  }
+
+  .banner-image img {
+    height: 80px;
+    margin: 10px;
+  }
+}
+
 @media (max-width: @screen-sm) {
-  .panel.custom-banner {
+  .panel.custom-banner.hp-survey-banner {
     height: auto;
     min-height: 180px;
     padding-bottom: 15px;
   }
-  .custom-banner .banner-image {
+  .panel.custom-banner.record-go-to-knihovny-cz-banner {
+    height: auto;
+    min-height: 100px;
+  }
+  .custom-banner.hp-survey-banner .banner-image {
     display: none;
   }
 }
@@ -1639,6 +1670,9 @@ html, body {
 @media (max-width: @screen-xs) {
   .panel.custom-banner {
     padding-bottom: 15px;
+  }
+  .custom-banner.record-go-to-knihovny-cz-banner .banner-image {
+    display: none;
   }
 }
 

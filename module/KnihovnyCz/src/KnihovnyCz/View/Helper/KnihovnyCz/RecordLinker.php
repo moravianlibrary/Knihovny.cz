@@ -24,17 +24,37 @@ class RecordLinker extends Base
     protected $recordLoader;
 
     /**
+     * Plugin manager
+     *
+     * @var array
+     */
+    protected $searchConfig;
+
+    /**
+     * Current language
+     *
+     * @var string
+     */
+    protected $language;
+
+    /**
      * Constructor
      *
      * @param \VuFind\Record\Router $router       Record router
      * @param \VuFind\Record\Loader $recordLoader Record loader
+     * @param array                 $searchConfig Search config
+     * @param string                $language     Current language
      */
     public function __construct(
         \VuFind\Record\Router $router,
-        \VuFind\Record\Loader $recordLoader
+        \VuFind\Record\Loader $recordLoader,
+        array $searchConfig,
+        string $language
     ) {
         parent::__construct($router);
         $this->recordLoader = $recordLoader;
+        $this->searchConfig = $searchConfig;
+        $this->language = $language;
     }
 
     /**
@@ -47,11 +67,12 @@ class RecordLinker extends Base
      */
     public function getLinkToMainPortal($driver)
     {
-        $baseUrl = $this->searchConfig->OtherPortals->main ?? null;
+        $baseUrl = $this->searchConfig['OtherPortals']['main'] ?? null;
+
         if ($baseUrl == null) {
             return null;
         }
-        return rtrim($baseUrl, '/') . $this->getTabUrl($driver);
+        return rtrim($baseUrl, '/') . $this->getTabUrl($driver) . '&lng=' . $this->language;
     }
 
     /**

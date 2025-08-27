@@ -1,0 +1,14 @@
+<?php $this->slot('record-go-to-knihovny-cz')->start(); ?>
+<?php $mainPortalLink = $this->recordLinker()->getLinkToMainPortal($this->driver); ?>
+<?php if ($mainPortalLink != null) : ?>
+  <div class="panel custom-banner record-go-to-knihovny-cz-banner">
+    <a class="banner-image" href="<?= $mainPortalLink ?>#dedupedrecord" target="_blank">
+      <img class="inline-icon" src="<?=$this->imageLink('knihovnycz-icon.png') ?>" alt="Logo Knihovny.cz">
+    </a>
+    <div class="banner-content">
+      <h3><?=$this->transEsc('record_go_to_knihovny_cz_heading') ?></h3>
+      <p><?=$this->translate('record_go_to_knihovny_cz_text', ['%%url%%' => $mainPortalLink . '#dedupedrecord']) ?></p>
+    </div>
+  </div>
+<?php endif; ?>
+<?php $this->slot('record-go-to-knihovny-cz')->end(); ?>
