@@ -331,6 +331,9 @@
   </div>
 <?php endif; ?>
 
+<?php $this->slot('record-go-to-knihovny-cz')->set(''); ?>
+<?=$this->slot('record-go-to-knihovny-cz'); ?>
+
 <?=$this->inlineScript(\Laminas\View\Helper\HeadScript::SCRIPT, $loadJs, 'SET')?>
 <noscript><?=$this->transEsc('Please enable JavaScript.')?></noscript>
 
