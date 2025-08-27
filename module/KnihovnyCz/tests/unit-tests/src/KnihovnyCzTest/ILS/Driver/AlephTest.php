@@ -4,7 +4,6 @@ namespace KnihovnyCzTest\ILS\Driver;
 
 use InvalidArgumentException;
 use KnihovnyCz\ILS\Driver\Aleph;
-use Laminas\Http\Client\Adapter\Test as TestAdapter;
 use Laminas\Http\Response as HttpResponse;
 
 /**
@@ -16,7 +15,7 @@ use Laminas\Http\Response as HttpResponse;
  * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://knihovny.cz Main Page
  */
-class AlephTest extends \PHPUnit\Framework\TestCase
+class AlephTest extends \VuFindTest\ILS\Driver\AlephTest
 {
     use \VuFindTest\Feature\TranslatorTrait;
 
@@ -141,35 +140,224 @@ class AlephTest extends \PHPUnit\Framework\TestCase
             ],
         ];
         $this->mockResponse(['cash.xml', 'loans.xml']);
-        $loans = $this->driver->getMyFines([]);
+        $patron = ['id' => 'TESTUSER'];
+        $loans = $this->driver->getMyFines($patron);
         $this->assertEquals($expected, $loans);
     }
 
     /**
-     * Mock fixture as HTTP client response
-     *
-     * @param string|array|null $fixture Fixture file
+     * Test getHolding with patron
      *
      * @return void
-     * @throws InvalidArgumentException Fixture file does not exist
+     * @throws \ReflectionException
      */
-    protected function mockResponse($fixture = null): void
+    public function testGetHoldingWithPatron(): void
     {
-        $adapter = new TestAdapter();
-        if (!empty($fixture)) {
-            $fixture = (array)$fixture;
-            $responseObj = $this->loadResponse($fixture[0]);
-            $adapter->setResponse($responseObj);
-            array_shift($fixture);
-            foreach ($fixture as $f) {
-                $responseObj = $this->loadResponse($f);
-                $adapter->addResponse($responseObj);
-            }
-        }
+        $config = $this->getDefaultConfig();
+        $this->configureDriver($config);
+        $this->mockResponse(['items_hold_with_patron.xml']);
+        $expected = $this->getExpectedGetHolding(true);
+        $patron = ['id' => 'TESTUSER'];
+        $items = $this->driver->getHolding('LIB01-0000001', $patron);
+        $this->assertEquals($expected, $items);
+    }
 
-        $service = new \VuFindHttp\HttpService();
-        $service->setDefaultAdapter($adapter);
-        $this->driver->setHttpService($service);
+    /**
+     * Test getHolding without patron
+     *
+     * @return void
+     * @throws \ReflectionException
+     */
+    public function testGetHoldingWithoutPatron(): void
+    {
+        $config = $this->getDefaultConfig();
+        $this->configureDriver($config);
+        $this->mockResponse(['items_hold_without_patron.xml']);
+        $expected = $this->getExpectedGetHolding(false);
+        $items = $this->driver->getHolding('LIB01-0000001');
+        $this->assertEquals($expected, $items);
+    }
+
+    /**
+     * Test getHolding with one item for short loan and patron
+     *
+     * @return void
+     * @throws \ReflectionException
+     */
+    public function testGetHoldingShortLoanWithPatron(): void
+    {
+        $config = $this->getDefaultConfig();
+        $this->configureDriver($config);
+        $this->mockResponse(['items_shortloan_with_patron.xml']);
+        $patron = ['id' => 'TESTUSER'];
+        $items = $this->driver->getHolding('LIB01-0000002', $patron);
+        $expected = [
+            'holdings' => [
+                0 => [
+                    'id' => 'LIB01-0000002',
+                    'item_id' => 'LIB50000000002000010',
+                    'holdtype' => 'shortloan',
+                    'availability' => false,
+                    'availability_status' => '6th Floor - at the desk',
+                    'status' => 'On Shelf',
+                    'location' => 'Keys',
+                    'reserve' => 'N',
+                    'callnumber' => 'Týmová studovna 7.p',
+                    'number' => '',
+                    'barcode' => 'S732',
+                    'description' => 'Týmová studovna 7.p',
+                    'item_notes' => null,
+                    'is_holdable' => true,
+                    'addLink' => true,
+                    'linkText' => 'Reserve',
+                    'collection' => '',
+                    'collection_desc' => '',
+                    'callnumber_second' => 'Týmová studovna 7.p',
+                    'sub_lib_desc' => 'Keys',
+                    'no_of_loans' => '',
+                    'requested' => '',
+                ],
+            ],
+            'filters' => [],
+        ];
+        $this->assertEquals($expected, $items);
+    }
+
+    /**
+     * Test getHolding with two checked out items and patron
+     *
+     * @return void
+     * @throws \ReflectionException
+     */
+    public function testGetHoldingCheckedoutWithPatronInEnglish()
+    {
+        $config = $this->getDefaultConfig();
+        $this->configureDriver($config);
+        $this->mockResponse(['items_hold_checkedout_with_patron_eng.xml']);
+        $patron = ['id' => 'TESTUSER'];
+        $items = $this->driver->getHolding('LIB01-0000003', $patron);
+        $expected = $this->getExpectedGetHoldingCheckedoutWithPatron();
+        $this->assertEquals($expected, $items);
+    }
+
+    /**
+     * Test getHolding with two checked out items and patron
+     *
+     * @return void
+     * @throws \ReflectionException
+     */
+    public function testGetHoldingCheckedoutWithPatronInCzech()
+    {
+        $config = $this->getDefaultConfig();
+        $this->configureDriver($config);
+        $this->mockResponse(['items_hold_checkedout_with_patron_cze.xml']);
+        $patron = ['id' => 'TESTUSER'];
+        $items = $this->driver->getHolding('LIB01-0000003', $patron);
+        $expected = $this->getExpectedGetHoldingCheckedoutWithPatron();
+        $expected['holdings'][1]['status'] = 'holding_due_date 08-11-2025 ;  Požadováno';
+        $this->assertEquals($expected, $items);
+    }
+
+    /**
+     * Return expected return value for testing checked out holdings.
+     *
+     * @return array
+     */
+    protected function getExpectedGetHoldingCheckedoutWithPatron()
+    {
+        return [
+            'holdings' => [
+                0 => [
+                    'id' => 'LIB01-0000003',
+                    'item_id' => 'LIB50000000003000010',
+                    'holdtype' => 'hold',
+                    'availability' => false,
+                    'availability_status' => 'Reference only',
+                    'status' => 'holding_due_date 08-11-2025',
+                    'location' => 'MZK?',
+                    'reserve' => 'N',
+                    'callnumber' => '1-1544.099',
+                    'number' => '2611001358',
+                    'barcode' => '2611001358',
+                    'description' => '',
+                    'item_notes' => null,
+                    'is_holdable' => true,
+                    'addLink' => false,
+                    'linkText' => 'Reserve',
+                    'collection' => 'Stock / within 1 hour',
+                    'collection_desc' => 'Stock / within 1 hour',
+                    'callnumber_second' => '',
+                    'sub_lib_desc' => 'MZK?',
+                    'no_of_loans' => '',
+                    'requested' => '',
+                ],
+                1 => [
+                    'id' => 'LIB01-0000003',
+                    'item_id' => 'LIB50000000003000020',
+                    'holdtype' => 'hold',
+                    'availability' => false,
+                    'availability_status' => 'Month',
+                    'status' => 'holding_due_date 08-11-2025 ;  Requested',
+                    'location' => 'MZK?',
+                    'reserve' => 'N',
+                    'callnumber' => '1-1544.099',
+                    'number' => '2611001359',
+                    'barcode' => '2611001359',
+                    'description' => '',
+                    'item_notes' => null,
+                    'is_holdable' => true,
+                    'addLink' => false,
+                    'linkText' => 'Reserve',
+                    'collection' => 'Stock / within 1 hour',
+                    'collection_desc' => 'Stock / within 1 hour',
+                    'callnumber_second' => '',
+                    'sub_lib_desc' => 'MZK?',
+                    'no_of_loans' => '',
+                    'requested' => '',
+                ],
+            ],
+            'filters' => [],
+        ];
+    }
+
+    /**
+     * Return expected return value for testGetHolding.
+     *
+     * @param bool $addLink value for attribute addLink
+     *
+     * @return array
+     */
+    protected function getExpectedGetHolding(bool $addLink)
+    {
+        return [
+            'holdings' => [
+                0 => [
+                    'id' => 'LIB01-0000001',
+                    'item_id' => 'LIB50000000001000010',
+                    'holdtype' => 'hold',
+                    'availability' => false,
+                    'availability_status' => 'Reference only',
+                    'status' => 'On Shelf',
+                    'location' => 'MZK?',
+                    'reserve' => 'N',
+                    'callnumber' => 'S-1546.440',
+                    'number' => '2611006762',
+                    'barcode' => '2611006762',
+                    'description' => '',
+                    'item_notes' => null,
+                    'is_holdable' => true,
+                    'addLink' => $addLink,
+                    'linkText' => 'Reserve',
+                    'collection' => 'Stock / within 24 hours',
+                    'collection_desc' => 'Stock / within 24 hours',
+                    'callnumber_second' => '',
+                    'sub_lib_desc' => 'MZK?',
+                    'no_of_loans' => '',
+                    'requested' => '',
+                ],
+            ],
+            'filters' => [],
+        ];
     }
 
     /**
