@@ -116,7 +116,13 @@ class SolrLocalTest extends \PHPUnit\Framework\TestCase
      */
     protected function createDriver(array $fieldData): \KnihovnyCz\RecordDriver\SolrLocal
     {
-        $config = new \Laminas\Config\Config([]);
+        $config = new \Laminas\Config\Config(
+            ['Record' =>
+                 [
+                     'itemLinks' => [],
+                 ],
+            ],
+        );
         $record = new \KnihovnyCz\RecordDriver\SolrLocal($config);
         $record->setRawData($fieldData);
         return $record;

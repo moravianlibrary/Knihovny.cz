@@ -1,4 +1,7 @@
-<phpunit backupGlobals="false" beStrictAboutTestsThatDoNotTestAnything="false" bootstrap="/var/www/knihovny-cz/module/VuFind/tests/bootstrap.php">
+<phpunit backupGlobals="false"
+  displayDetailsOnTestsThatTriggerWarnings="true"
+  beStrictAboutTestsThatDoNotTestAnything="false"
+  bootstrap="/var/www/knihovny-cz/module/VuFind/tests/bootstrap.php">
   <testsuites>
     <testsuite name="Knihovny.cz Tests">
       <directory>/var/www/knihovny-cz/module/KnihovnyCz/tests/</directory>
