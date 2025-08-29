@@ -159,6 +159,7 @@ class GetHolding extends AbstractBase implements TranslatorAwareInterface
      * @param string $source ILS driver source identifier
      * @param string $text   Text to translation
      * @param string $domain Translation domain
+     * @param array  $tokens Tokens for translation
      *
      * @return string
      */
