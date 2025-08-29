@@ -1,13 +1,13 @@
 <?php
   $truncateSettings = [
     // show just one row but hide the others only if there are two or more of them, hiding single row looks odd
-    'rows' => count($data) > 2 ? 1 : count($data),
+    'rows' => count($this->data) > 2 ? 1 : count($this->data),
     'top-toggle' => 30,
   ];
 ?>
-<div class="truncate-subjects" data-truncate="<?=$this->htmlSafeJsonEncode($truncateSettings)?>">
-  <?php foreach ($data as $field): ?>
-    <div class="subject-line">
+<div class="truncate-cast" data-truncate="<?=$this->htmlSafeJsonEncode($truncateSettings)?>">
+  <?php foreach ($this->data as $field): ?>
+    <div class="cast-line">
       <?=$this->escapeHtmlAttr($field)?>
     </div>
   <?php endforeach; ?>
