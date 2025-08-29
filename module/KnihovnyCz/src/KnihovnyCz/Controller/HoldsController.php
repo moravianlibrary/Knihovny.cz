@@ -53,7 +53,7 @@ class HoldsController extends HoldsControllerBase
         } catch (\Exception $ex) {
             $this->showException($ex);
         }
-        $error = ($view == null || !($view instanceof ViewModel));
+        $error = !($view instanceof ViewModel);
         if (!$error) {
             $recordList = $view->recordList ?? [];
             $this->addDetailsFromOfflineHoldings($recordList);
@@ -66,10 +66,15 @@ class HoldsController extends HoldsControllerBase
                 . $this->getCardId()
             );
         }
-        if ($view == null) {
+        if ($view === null) {
             $view = new ViewModel();
-            $view->error = $error;
+            $view->setVariable('error', $error);
         }
+        if (!$error) {
+            $patron = $this->catalogLogin();
+            $view->setVariable('showHoldsCancelWarning', $this->getILS()->showHoldsCancelWarning($patron));
+        }
+
         $view->setTemplate('holds/list-ajax');
         $result = $this->getViewRenderer()->render($view);
         return $this->getAjaxResponse('text/html', $result, null);
