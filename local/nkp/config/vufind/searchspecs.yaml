@@ -937,6 +937,6 @@ adv_search_numeric_designation:
 adv_search_medium_of_performance:
   ChildrenQuery: true
   QueryFields:
-    medium_of_performance_txt_mv:
+    local_medium_of_performance_txt_mv:
       - [ onephrase, 300 ]
   FilterQuery: "*:* NOT record_format:library"
