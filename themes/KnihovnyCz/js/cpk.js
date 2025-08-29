@@ -326,3 +326,7 @@ $(function cartPopoverReinit() {
       },
     });
 });
+
+$(function initCastTruncate() {
+  VuFind.truncate.initTruncate('.truncate-cast', '.cast-line');
+});

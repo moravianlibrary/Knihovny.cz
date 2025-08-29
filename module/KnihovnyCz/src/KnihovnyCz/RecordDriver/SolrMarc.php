@@ -472,7 +472,33 @@ class SolrMarc extends SolrDefault
      */
     public function getCast382(): array
     {
-        return $this->getFieldArray('382', ['a'], true, ', ');
+        $fields382 = $this->getMarcReader()->getFields('382');
+        $lines = [];
+        foreach ($fields382 as $field) {
+            $line = '';
+            foreach ($field['subfields'] as $subfield) {
+                if (!empty($line) && ($subfield['code'] === 'a' || $subfield['code'] === 'b')) {
+                    $line .= ' ; ';
+                }
+                if ($subfield['code'] === 'a' || $subfield['code'] === 'p') {
+                    $line .= $subfield['data'];
+                }
+                if ($subfield['code'] === 'b') {
+                    $line .= $this->translate('medium_solo') . ': ' . $subfield['data'];
+                }
+                if ($subfield['code'] === 'd') {
+                    $line .= ' + ' . $this->translate('medium_doubling') . ': ' . $subfield['data'];
+                }
+                if ($subfield['code'] === 'n' || $subfield['code'] === 'e' || $subfield['code'] === 'v') {
+                    $line .= ' (' . $subfield['data'] . ')';
+                }
+                if ($subfield['code'] === 's') {
+                    $line .= ' ; [' . $this->translate('medium_total') . ': ' . $subfield['data'] . ']';
+                }
+            }
+            $lines[] = $line;
+        }
+        return $lines;
     }
 
     /**

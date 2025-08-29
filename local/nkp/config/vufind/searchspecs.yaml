@@ -935,14 +935,8 @@ adv_search_numeric_designation:
   FilterQuery: "*:* NOT record_format:library"
 
 adv_search_medium_of_performance:
-  Dismaxfields:
-    - medium_of_performance_txt_mv^100
-  DismaxHandler: edismax
-  DismaxParams:
-    - [ bq, "inspiration:top_results^1" ]
-    - [ bf, "if(exists(merged_records_boolean),10000,0)" ]
+  ChildrenQuery: true
   QueryFields:
     medium_of_performance_txt_mv:
       - [ onephrase, 300 ]
-      - [ and, 150 ]
   FilterQuery: "*:* NOT record_format:library"
