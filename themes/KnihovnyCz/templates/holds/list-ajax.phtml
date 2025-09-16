@@ -179,7 +179,7 @@
               <?php endforeach; ?>
             <?php endif; ?>
             <?php if (($this->showHoldsCancelWarning ?? false) && !($this->cancelForm && isset($ilsDetails['cancel_details']))): ?>
-              <div class="alert alert-danger"><?=$this->transEsc("hold_could_not_be_cancelled")?></div>
+              <div class="alert alert-danger"><?=$this->transEsc('hold_could_not_be_cancelled')?></div>
             <?php endif; ?>
 
             <?php if (isset($ilsDetails['reqnum']) && !empty($this->updateResults[$ilsDetails['reqnum']])): ?>
