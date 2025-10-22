@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace KnihovnyCz\AjaxHandler;
 
+use GuzzleHttp\Promise\PromiseInterface;
 use GuzzleHttp\Promise\Utils;
 use GuzzleHttp\Psr7\Query;
 use Laminas\Mvc\Controller\Plugin\Params;
@@ -31,21 +32,21 @@ class Sfx extends AbstractBase implements
      *
      * @var \Laminas\Config\Config
      */
-    protected $config;
+    protected \Laminas\Config\Config $config;
 
     /**
      * Configuration
      *
      * @var \KnihovnyCz\Service\GuzzleHttpService
      */
-    protected $httpService;
+    protected \KnihovnyCz\Service\GuzzleHttpService $httpService;
 
     /**
      * Auth Manager
      *
      * @var \VuFind\Auth\Manager
      */
-    protected $authManager;
+    protected \VuFind\Auth\Manager $authManager;
 
     /**
      * Constructor
@@ -71,7 +72,7 @@ class Sfx extends AbstractBase implements
      *
      * @return array [response data, HTTP status code]
      */
-    public function handleRequest(Params $params)
+    public function handleRequest(Params $params): array
     {
         $directLinking = $this->config->Sfx->direct_linking ?? true;
         $queryParams = $this->getSfxQuery($params);
@@ -84,9 +85,17 @@ class Sfx extends AbstractBase implements
         $defaultLinks = [];
         $default = $servers['default'] ?? null;
         if ($default != null) {
-            $promise = $this->callSfx($default, $apiQueryParams);
-            $response = $promise->wait();
-            $defaultLinks = $this->parseResponse($response);
+            try {
+                $promise = $this->callSfx($default, $apiQueryParams);
+                $response = $promise->wait();
+                $defaultLinks = $this->parseResponse($response);
+            } catch (\Exception $ex) {
+                $url = $this->getSfxUrl($default, $apiQueryParams);
+                $this->logWarning(
+                    'Exception thrown when calling SFX',
+                    [$url, $ex]
+                );
+            }
         }
         if (!empty($defaultLinks)) {
             $directLink = ($directLinking && count($defaultLinks) == 1);
@@ -104,7 +113,7 @@ class Sfx extends AbstractBase implements
                 }
                 $promises[$code] = $this->callSfx($sfxUrl, $apiQueryParams);
             }
-            Utils::all($promises)->wait();
+            Utils::all($promises)->wait(false);
             foreach ($promises as $code => $promise) {
                 $links = [];
                 try {
@@ -157,7 +166,7 @@ class Sfx extends AbstractBase implements
      *
      * @return array
      */
-    protected function getSfxQuery(Params $params)
+    protected function getSfxQuery(Params $params): array
     {
         $query = [];
         foreach ($params->fromQuery() as $key => $value) {
@@ -184,7 +193,7 @@ class Sfx extends AbstractBase implements
      *
      * @return \Http\Promise\Promise promise
      */
-    protected function callSfx($sfxUrl, $query)
+    protected function callSfx(string $sfxUrl, array $query): PromiseInterface
     {
         $client = $this->httpService->createClient();
         $url = $this->getSfxUrl($sfxUrl, $query);
@@ -200,7 +209,7 @@ class Sfx extends AbstractBase implements
      *
      * @return string URL
      */
-    protected function getSfxUrl($sfxUrl, $query)
+    protected function getSfxUrl(string $sfxUrl, array $query): string
     {
         $queryPart = (string)parse_url($sfxUrl, PHP_URL_QUERY) ?? '';
         $sfxParams = Query::parse($queryPart);
@@ -215,7 +224,7 @@ class Sfx extends AbstractBase implements
      *
      * @return array fulltext links
      */
-    protected function parseResponse(ResponseInterface $response)
+    protected function parseResponse(ResponseInterface $response): array
     {
         $xml = simplexml_load_string($response->getBody()->getContents());
         if (!$xml) {
@@ -237,7 +246,7 @@ class Sfx extends AbstractBase implements
      *
      * @return array
      */
-    protected function extractParameters($url)
+    protected function extractParameters(string $url): array
     {
         $params = [];
         $queryPart = parse_url($url, PHP_URL_QUERY);

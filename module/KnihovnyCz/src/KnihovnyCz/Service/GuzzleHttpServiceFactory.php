@@ -79,6 +79,10 @@ class GuzzleHttpServiceFactory implements FactoryInterface
         if ($config->Http?->performance_log_enabled ?? false) {
             $performanceLogger = $container->get(\KnihovnyCz\Http\PerformanceLogger::class);
         }
-        return new $requestedName($proxyUrl, $nonProxyHosts, $performanceLogger);
+        $options = [];
+        if ($config->Http?->timeout ?? false) {
+            $options['timeout'] = $config->Http?->timeout;
+        }
+        return new $requestedName($proxyUrl, $nonProxyHosts, $performanceLogger, $options);
     }
 }
