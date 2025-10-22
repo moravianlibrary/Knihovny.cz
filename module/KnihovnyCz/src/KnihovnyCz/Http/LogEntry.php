@@ -226,8 +226,8 @@ class LogEntry
     {
         $result = [
             'time' => $this->time->format('c'),
-            'method' => $this->method,
-            'url' => $this->url,
+            'method' => $this->method ?? null,
+            'url' => $this->url ?? null,
             'totalTime' => number_format($this->totalTime, 3),
         ];
         $sessionId = session_id();
