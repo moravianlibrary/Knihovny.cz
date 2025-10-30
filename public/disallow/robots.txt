@@ -1,0 +1,3 @@
+# Disallow all web crawlers from accessing any part of the website
+User-agent: *
+Disallow: /
