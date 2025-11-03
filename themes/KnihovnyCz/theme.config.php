@@ -28,6 +28,7 @@ return [
             \KnihovnyCz\View\Helper\KnihovnyCz\SocialLinks::class => \KnihovnyCz\View\Helper\KnihovnyCz\SocialLinksFactory::class,
             \KnihovnyCz\View\Helper\KnihovnyCz\GoogleTagManager::class => \VuFind\View\Helper\Root\GoogleTagManagerFactory::class,
             \KnihovnyCz\View\Helper\KnihovnyCz\Palmknihy::class => \KnihovnyCz\View\Helper\KnihovnyCz\PalmknihyFactory::class,
+            \Laminas\View\Helper\ServerUrl::class => \KnihovnyCz\View\Helper\KnihovnyCz\ServerUrlFactory::class,
         ],
         'invokables' => [
             \KnihovnyCz\View\Helper\KnihovnyCz\FooterLink::class,
