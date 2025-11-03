@@ -63,7 +63,7 @@ class UpdateRecordStatusFactory implements FactoryInterface
     public function __invoke(
         ContainerInterface $container,
         $requestedName,
-        array $options = null
+        ?array $options = null
     ) {
         $adapter = $container->get(\Laminas\Db\Adapter\Adapter::class);
         $config = $container->get(\VuFind\Config\PluginManager::class);

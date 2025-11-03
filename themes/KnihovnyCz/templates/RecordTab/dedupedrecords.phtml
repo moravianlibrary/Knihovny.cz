@@ -37,22 +37,18 @@
   }
 ?>
 <?php if (!empty($results)): ?>
-  <h3 class="mt-0"><?=$this->transEsc('Institutions')?></h3>
-  <ul>
-<?php endif; ?>
-<?php foreach ($results as $record): ?>
-  <li>
-    <a class="hover-overlay" href="<?=$this->escapeHtmlAttr($this->recordLinker()->getUrl($record['id']))?>">
-      <?=$record['label']?>
-      <?php if ($record['index'] > 0): ?>
-        - <?=$this->transEsc('record') . ' ' . $record['index']?>
-      <?php endif; ?>
-      <?php if ($record['id'] == $recordId):?>
-        (<?=$this->transEsc('current record')?>)
-      <?php endif; ?>
-    </a>
-  </li>
-<?php endforeach; ?>
-<?php if (!empty($results)): ?>
-  </ul>
+  <h3><?=$this->transEsc('Institutions')?></h3>
+  <div class="list-group">
+    <?php foreach ($results as $record): ?>
+      <a class="list-group-item list-group-item-action<?=($record['id'] == $recordId) ? ' active' : '' ?>" href="<?=$this->escapeHtmlAttr($this->recordLinker()->getUrl($record['id']))?>">
+        <?=$record['label']?>
+        <?php if ($record['index'] > 0): ?>
+          - <?=$this->transEsc('record') . ' ' . $record['index']?>
+        <?php endif; ?>
+        <?php if ($record['id'] == $recordId):?>
+          (<?=$this->transEsc('current record')?>)
+        <?php endif; ?>
+      </a>
+    <?php endforeach; ?>
+  </div>
 <?php endif; ?>

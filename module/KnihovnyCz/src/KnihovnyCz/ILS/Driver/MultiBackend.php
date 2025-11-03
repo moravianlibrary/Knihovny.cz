@@ -425,7 +425,7 @@ class MultiBackend extends \VuFind\ILS\Driver\MultiBackend
      *
      * @throws DateException
      */
-    protected function dateDiff(string $base, string $target = null): int
+    protected function dateDiff(string $base, ?string $target = null): int
     {
         $baseDate = $this->dateConverter->parseDisplayDate($base);
         if ($baseDate == false) {

@@ -6,13 +6,13 @@ $dataLazy = ($this->lazy) ? 'true' : 'false';
 $dataDropdown = ($this->dropdown) ? 'true' : 'false';
 ?>
 <div class="context-help">
-  <h5 class="context-text mt-0"><?=$this->transEsc('sfx_availability')?>:</h5>
+  <h5 class="context-text"><?=$this->transEsc('sfx_availability')?>:</h5>
   <?=$this->contextHelp('ci-links', 'heading')?>
 </div>
-<?php if(!empty($fullTextLinks)): ?>
+<?php if (!empty($fullTextLinks)): ?>
   <div class="records-in-libraries-title">
     <strong class="header"><?=$this->transEsc('Fulltext is free')?></strong>
-    <?php foreach($fullTextLinks as $label => $url): ?>
+    <?php foreach ($fullTextLinks as $label => $url): ?>
       <ul class="list-unstyled">
         <li>
           <a href="<?=$this->escapeHtml($url)?>" title="<?=$this->translate($label)?>" target="_blank"><?=$this->transEsc($label)?></a>
@@ -23,9 +23,9 @@ $dataDropdown = ($this->dropdown) ? 'true' : 'false';
 <?php endif; ?>
 <div class='dedupInformation'>
   <span class="openurl" data-fulltext="<?=$dataFulltext?>" data-lazy="<?=$dataLazy?>" data-dropdown="<?=$dataDropdown?>" data-openurl="<?=$this->escapeHtml($openUrl)?>">
-    <?php if($this->lazy): ?>
+    <?php if ($this->lazy): ?>
       <button type="button" class="btn btn-primary">
-        <strong><?=$this->transEsc('Check fulltext availability')?></strong>
+        <?=$this->transEsc('Check fulltext availability')?>
       </button>
     <?php else: ?>
       <?=$this->icon('spinner')?>

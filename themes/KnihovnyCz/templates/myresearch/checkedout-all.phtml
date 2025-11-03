@@ -10,7 +10,7 @@
 
     $loadJs = <<<JS
           function loadCheckedOut(element) {
-            loadCovers();
+            VuFind.covers.init();
             // Checkbox select all
             $(element).find('.checkbox-select-all').on('change', function selectAllCheckboxes() {
               var form = this.form ? $(this.form) : $(this).closest('form');
@@ -84,7 +84,7 @@
         JS;
 ?>
 
-<a class="search-filter-toggle visible-xs" href="#myresearch-sidebar" data-toggle="offcanvas" title="Expand Sidebar">
+<a class="search-filter-toggle visible-xs" href="#myresearch-sidebar" data-bs-toggle="offcanvas" title="Expand Sidebar">
   <?=$this->transEsc('Your Account') ?>
 </a>
 
@@ -110,5 +110,5 @@
 
 <?=$this->render('myresearch/notify-account-status.phtml', ['method' => 'checkedOut', 'accountStatus' => $this->accountStatus]); ?>
 
-<?=$this->inlineScript(\Laminas\View\Helper\HeadScript::SCRIPT, $loadJs, 'SET')?>
+<?=$this->assetManager()->outputInlineScriptString($loadJs)?>
 <noscript><?=$this->transEsc('Please enable JavaScript.')?></noscript>

@@ -2,13 +2,15 @@
     // Set page title.
     $this->headTitle($this->translate('short_loan_request_text') . ': ' . $this->driver->getBreadcrumb());
 
+    $this->layout()->searchbox = false;
+
     // Set up breadcrumbs:
     $this->layout()->breadcrumbs = $this->searchMemory()->getLastSearchLink($this->transEsc('Search'), '<li>', '</li> ')
         . '<li>' . $this->recordLinker()->getBreadcrumbHtml($this->driver) . '</li> '
         . '<li class="active">' . $this->transEsc('short_loan_text') . '</li>';
 ?>
 
-<a href="<?=$this->recordLinker()->getTabUrl($this->driver, 'holdings')?>" class="backToRecord">
+<a href="<?=$this->recordLinker()->getTabUrl($this->driver, 'holdings')?>" class="btn btn-outline-primary">
   <?= $this->icon('back-to-record'); ?>
   <?= $this->transEsc('Back to record'); ?>
 </a>
@@ -30,16 +32,16 @@
   <div class="short-loan-form">
     <form class="form-record-shortloan form-inline" method="post" name="shortLoan" id="shortLoan">
       <input type="hidden" name="csrf" value="<?=$this->escapeHtmlAttr($this->auth()->getManager()->getCsrfHash())?>">
-      <table class="table table-striped responsive-table table-bordered table-condensed">
+      <table class="table responsive-table table-bordered border-light table-condensed align-middle">
         <tr class="visible-md visible-lg">
-          <th style="width: 150px;"><?=$this->translate('Date')?></th>
+          <th class="text-end" style="width: 150px;"><?=$this->translate('Date')?></th>
           <?php for ($i = 0; $i != $this->numOfSlots; $i++): ?>
             <th></th>
           <?php endfor; ?>
         </tr>
         <?php foreach ($this->slots as $date => $slotsInDay):?>
           <tr>
-            <td>
+            <td class="text-end">
               <?=$this->escapeHtml($date)?>
             </td>
             <?php foreach ($slotsInDay as $slot):?>
@@ -48,9 +50,9 @@
               ?>
               <?php if ($slot['available']):?>
                 <td class="short-loan-free" colspan='<?=$colspan?>'>
-                  <div class="form-group">
-                    <input type="checkbox" name="slot[]" value="<?=$this->escapeHtmlAttr($slot['slot'])?>" id="<?=$this->escapeHtmlAttr('slot' . $slot['slot'])?>">
-                    <label for="<?=$this->escapeHtmlAttr('slot' . $slot['slot'])?>">
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="slot[]" value="<?=$this->escapeHtmlAttr($slot['slot'])?>" id="<?=$this->escapeHtmlAttr('slot' . $slot['slot'])?>">
+                    <label class="form-check-label" for="<?=$this->escapeHtmlAttr('slot' . $slot['slot'])?>">
                       <?=$slot['start_time'] . ' - ' . $slot['end_time']?>
                     </label>
                   </div>

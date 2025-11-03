@@ -1,4 +1,4 @@
-/*global VuFind, extractClassParams */
+/*global Autocomplete, VuFind, extractClassParams */
 
 VuFind.register('searchbox_controls', function SearchboxControls() {
   let _KeyboardClass;
@@ -18,6 +18,9 @@ VuFind.register('searchbox_controls', function SearchboxControls() {
     "{lock}": "&#8681;",
   };
 
+  /**
+   * Show the virtual keyboard by applying a CSS class.
+   */
   function _showKeyboard() {
     if (_enabled) {
       _keyboard.setOptions({
@@ -26,17 +29,28 @@ VuFind.register('searchbox_controls', function SearchboxControls() {
     }
   }
 
+  /**
+   * Hide the virtual keyboard.
+   */
   function _hideKeyboard() {
     _keyboard.setOptions({
       theme: _defaultTheme
     });
   }
 
+  /**
+   * Handle changes from the virtual keyboard, updating the search input and dispatching an 'input' event.
+   * @param {string} input The new input value.
+   */
   function _onChange(input) {
     _textInput.value = input;
     _textInput.dispatchEvent(new Event("input"));
   }
 
+  /**
+   * Handle button presses on the virtual keyboard.
+   * @param {string} button The button pressed.
+   */
   function _onKeyPress(button) {
     if (button === "{shift}" || button === "{lock}") {
       let currentLayoutType = _keyboard.options.layoutName;
@@ -57,17 +71,22 @@ VuFind.register('searchbox_controls', function SearchboxControls() {
     });
   }
 
+  /**
+   * Update the virtual keyboard layout based on user selection.
+   * @param {string} layoutName The name of the layout to switch to.
+   */
   function _updateKeyboardLayout(layoutName) {
     $('.keyboard-selection-item').each(function deactivateItems() {
-      $(this).parent().removeClass("active");
+      $(this).removeClass("active");
     });
-    $(".keyboard-selection-item[data-value='" + layoutName + "']").parent().addClass("active");
-    window.Cookies.set("keyboard", layoutName);
+    $(".keyboard-selection-item[data-value='" + layoutName + "']").addClass("active");
     if (layoutName === "none") {
+      VuFind.cookie.remove("keyboard");
       $("#keyboard-selection-button").removeClass("activated");
       _enabled = false;
       _hideKeyboard();
     } else {
+      VuFind.cookie.set("keyboard", layoutName);
       $("#keyboard-selection-button").addClass("activated");
       _enabled = true;
       const keyboardLayout = new _KeyboardLayoutClass().get(layoutName);
@@ -76,6 +95,9 @@ VuFind.register('searchbox_controls', function SearchboxControls() {
     }
   }
 
+  /**
+   * Set up the virtual keyboard functionality.
+   */
   function setupKeyboard() {
     if (!_textInput) {
       return;
@@ -117,9 +139,21 @@ VuFind.register('searchbox_controls', function SearchboxControls() {
       if (!_keyboard.options.theme.includes('show-keyboard')) {
         return;
       }
+      /**
+       * Check if an element has a specific class
+       * @param {HTMLElement} el        The element to check. 
+       * @param {string}      className The class name to search for.
+       * @returns {boolean} Return true of the element has the class name.
+       */
       function hasClass(el, className) {
         return el.className !== undefined && el.className.includes(className);
       }
+      /**
+       * Check if an element has a specific id
+       * @param {HTMLElement} el The element to check.
+       * @param {string}      id The id to search for
+       * @returns {boolean} Return true if the element has the specific id.
+       */
       function hasId(el, id) {
         return el.id === id;
       }
@@ -160,7 +194,7 @@ VuFind.register('searchbox_controls', function SearchboxControls() {
 
     _keyboard.setInput(_textInput.value);
 
-    let layout = window.Cookies.get("keyboard");
+    let layout = VuFind.cookie.get("keyboard");
     if (layout == null) {
       layout = "none";
     }
@@ -168,132 +202,127 @@ VuFind.register('searchbox_controls', function SearchboxControls() {
     _hideKeyboard();
   }
 
+  /**
+   * Set up the searchbox autocomplete functionality.
+   */
   function setupAutocomplete() {
     // If .autocomplete class is missing, autocomplete is disabled and we should bail out.
-    var searchbox = $('#searchForm_lookfor.autocomplete');
-    if (searchbox.length < 1) {
-      return;
-    }
-    // Auto-submit based on config
-    var acCallback = function ac_cb_noop() {};
-    if (searchbox.hasClass("ac-auto-submit")) {
-      acCallback = function autoSubmitAC(item, input) {
-        var element = $(window.event.target.parentNode);
-        if (element.hasClass('autocomplete-link')) {
-          item.href = element.attr('href');
-          return true;
+    var $searchboxes = $('input.autocomplete');
+    $searchboxes.each(function processAutocompleteForSearchbox(i, searchboxElement) {
+      const $searchbox = $(searchboxElement);
+      const typeFieldSelector = $searchbox.data('autocompleteTypeFieldSelector');
+      const typePrefix = $searchbox.data('autocompleteTypePrefix');
+      const typeahead = new Autocomplete({
+        rtl: $(document.body).hasClass("rtl"),
+        limit: 10,
+        loadingString: VuFind.translate('loading_ellipsis'),
+        delay: 500,
+      });
+      let requestId = 0;
+      let ajaxCalls = [];
+
+      let cache = {};
+      const input = $searchbox[0];
+      typeahead(input, function vufindACHandler(query, callback) {
+        ajaxCalls.forEach(function forEach(ajaxCall) {
+          ajaxCall.abort();
+        });
+        ajaxCalls = [];
+        const classParams = extractClassParams(input);
+        const searcher = classParams.searcher;
+        const selectedType = classParams.type
+          ? classParams.type
+          : $(typeFieldSelector ? typeFieldSelector : '#searchForm_type').val();
+        const type = (typePrefix ? typePrefix : "") + selectedType;
+
+        const cacheKey = searcher + "|" + type;
+        if (typeof cache[cacheKey] === "undefined") {
+          cache[cacheKey] = {};
         }
-        input.val(item.value);
-        $("#searchForm").trigger("submit");
-        return false;
-      };
-    }
-    var requestId = 0;
-    var ajaxCalls = [];
-    const acHandler = function vufindACHandler(input, cb) {
-      ajaxCalls.forEach(function forEach(ajaxCall) {
-        ajaxCall.abort();
-      });
-      ajaxCalls = [];
-      var query = input.val();
-      var searcher = extractClassParams(input.get(0));
-      var hiddenFilters = [];
-      $('#searchForm').find('input[name="hiddenFilters[]"], input[name="filter[]"]').each(
-        function hiddenFiltersEach() {
-          hiddenFilters.push($(this).val());
-        });
-      const type = searcher.type ? searcher.type : $('#searchForm_type').val();
-      const searchTypes = {
-        'AllFields': ['Title', 'Author', 'Subject'],
-        'adv_search_without_fulltext': ['Title', 'Author', 'Subject'],
-        'AllLibraries': ['Name', 'Town'],
-      };
-      var types = searchTypes[type] ? searchTypes[type] : [type];
-      if (
-        (type === 'AllFields' || type === 'adv_search_without_fulltext')
-        && query.trim().split(/\s+/).length > 1
-      ) {
-        types.push('AuthorTitle');
-      }
-      const limit = (types.length > 1) ? 6 : 10;
-      types.forEach(function forEach(searchType) {
-        var ajaxCall = $.ajax({
-          url: VuFind.path + '/AJAX/JSON',
-          data: {
-            q: query,
-            method: 'getACSuggestions',
-            searcher: searcher.searcher,
-            type: searchType,
-            limit: limit,
-            hiddenFilters: hiddenFilters
-          },
-          context: {
-            type: searchType
-          },
-          dataType: 'json',
-        });
-        ajaxCalls.push(ajaxCall);
-      });
-      var onSuccess = function onSuccess(currentRequestId) {
-        return function newFunction() {
-          if (currentRequestId !== requestId) {
-            return;
+
+        if (typeof cache[cacheKey][query] !== "undefined") {
+          callback(cache[cacheKey][query]);
+          return;
+        }
+
+        var hiddenFilters = [];
+        $('#searchForm').find('input[name="hiddenFilters[]"], input[name="filter[]"]').each(
+          function hiddenFiltersEach() {
+            hiddenFilters.push($(this).val());
           }
-          var contexts = Array.isArray(this) ? this : [this];
-          var results = Array.isArray(this) ? Array.from(arguments) : [arguments];
-          var data = {
-            groups: []
-          };
-          var suggestions = new Map();
-          results.forEach(function forEach(result, index) {
-            var hasSuggestions = result[0].data.groups.length > 0;
-            if (hasSuggestions) {
-              suggestions.set(contexts[index].type, result[0].data.groups[0]);
-            }
-          });
-          if (
-            (type === 'AllFields' || type === 'adv_search_without_fulltext')
-            && suggestions.has('Author')
-            && suggestions.has('Title')
-          ) {
-            suggestions.delete('AuthorTitle');
-          }
-          for (const [, value] of suggestions.entries()) {
-            data.groups.push(value);
-          }
-          cb(data);
+        );
+        const searchTypes = {
+          'AllFields': ['Title', 'Author', 'Subject'],
+          'adv_search_without_fulltext': ['Title', 'Author', 'Subject'],
+          'AllLibraries': ['Name', 'Town'],
         };
-      };
-      $.when.apply($, ajaxCalls).then(onSuccess(++requestId));
-    };
-    let timer = null;
-    // Search autocomplete
-    searchbox.autocomplete({
-      rtl: $(document.body).hasClass("rtl"),
-      maxResults: 10,
-      highlight: false,
-      loadingString: VuFind.translate('loading_ellipsis'),
-      // Auto-submit selected item
-      callback: acCallback,
-      // AJAX call for autocomplete results
-      handler: function acAjax(input, cb) {
-        if (timer) {
-          clearTimeout(timer);
+        let types = searchTypes[type] ? searchTypes[type] : [type];
+        if (
+          (type === 'AllFields' || type === 'adv_search_without_fulltext')
+          && query.trim().split(/\s+/).length > 1
+        ) {
+          types.push('AuthorTitle');
         }
-        timer = setTimeout(function ajaxDelay() {
-          acHandler(input, cb);
-        }, 500);
+        const limit = (types.length > 1) ? 6 : 10;
+        types.forEach(function forEach(searchType) {
+          const ajaxCall = $.ajax({
+            url: VuFind.path + '/AJAX/JSON',
+            data: {
+              q: query,
+              method: 'getACSuggestions',
+              searcher: searcher,
+              type: searchType,
+              limit: limit,
+              hiddenFilters: hiddenFilters
+            },
+            context: {
+              type: searchType
+            },
+            dataType: 'json',
+          });
+          ajaxCalls.push(ajaxCall);
+        });
+        const onSuccess = function onSuccess(currentRequestId) {
+          return function onSuccessCallback() {
+            if (currentRequestId !== requestId) {
+              return;
+            }
+            const responses = Array.isArray(this) ? Array.from(arguments) : [arguments];
+            const result = [];
+            responses.forEach(function forEachResponse(response){
+              response[0].data.groups.forEach(function processGroup(group) {
+                result.push({ _header: group.label });
+                group.items.forEach(function processItem(item){
+                  result.push({ 'text': item.label, 'value': item.value, 'type': item.type });
+                });
+              });
+            });
+            callback(result);
+            cache[cacheKey][query] = result;
+          };
+        };
+        $.when.apply($, ajaxCalls).then(onSuccess(++requestId));
+      });
+
+      // Bind autocomplete auto submit
+      if ($searchbox.hasClass("ac-auto-submit")) {
+        input.addEventListener("ac-select", (event) => {
+          const type = typeof event.detail === "string" ? null : event.detail.type;
+          if (type !== undefined) {
+            $('#searchForm_type').val(type);
+          }
+          input.value = typeof event.detail === "string"
+            ? event.detail
+            : event.detail.value;
+          input.form.submit();
+        });
       }
-    });
-    $('#searchForm_lookfor').on("ac:select", function onSelect(event, item) {
-      $('#searchForm_type').val(item.type);
-    });
-    // Update autocomplete on type change
-    $('#searchForm_type').on("change", function searchTypeChange() {
-      searchbox.autocomplete().clearCache();
     });
   }
 
+  /**
+   * Set up the searchbox reset button.
+   */
   function setupSearchResetButton() {
     _resetButton = document.getElementById("searchForm-reset");
 
@@ -309,7 +338,8 @@ VuFind.register('searchbox_controls', function SearchboxControls() {
       _resetButton.classList.toggle("hidden", _textInput.value === "");
     });
 
-    _resetButton.addEventListener("click", function resetOnClick() {
+    _resetButton.addEventListener("click", function resetOnClick(e) {
+      e.preventDefault();
       requestAnimationFrame(() => {
         _textInput.value = "";
         _textInput.dispatchEvent(new Event("input"));
@@ -318,6 +348,9 @@ VuFind.register('searchbox_controls', function SearchboxControls() {
     });
   }
 
+  /**
+   * Initialize the searchbox controls module.
+   */
   function init() {
     _textInput = document.getElementById("searchForm_lookfor");
 
@@ -334,4 +367,3 @@ VuFind.register('searchbox_controls', function SearchboxControls() {
     init: init
   };
 });
-

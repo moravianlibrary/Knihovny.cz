@@ -4,49 +4,47 @@
   $maxInstitutionsShown = ($countRecords === 3) ? 3 : 2;
   $recordLinker = $this->recordLinker($this->results);
 ?>
-<div class="dedupInformation">
+<div class="card border-0 dedupInformation">
   <?php
     $string = $this->translate(($countRecords > 1) ? 'institutions-in-locale' : 'institution-in-locale');
     $titleHtml = $this->translate('Found in') . ' ' . $countRecords . ' ' . $string
   ?>
-  <p class='records-in-libraries-title'>
-    <strong><?=$titleHtml?></strong>
-  </p>
-  <ul class="list-unstyled">
+  <h5 class="card-header px-0 bg-transparent records-in-libraries-title">
+    <?=$titleHtml?>
+  </h5>
+  <ul class="list-group list-group-flush">
     <?php $i = 0; ?>
     <?php foreach (array_slice($dedupData, 0, $maxInstitutionsShown) as $source => $current): ?>
       <?php $i++; ?>
       <?php if ($i === 1): ?>
-        <li class="currentSource">
+        <li class="list-group-item px-0 currentSource">
           <a href="<?=$this->escapeHtmlAttr($recordLinker->getUrl($this->driver))?>">
             <?=$this->transEsc("Source::$source", [], $source)?>
           </a>
         </li>
       <?php else: ?>
-        <li class="otherSource">
+        <li class="list-group-item px-0 otherSource">
           <a href="<?=$this->escapeHtmlAttr($recordLinker->getUrl($current['id']))?>">
             <?=$this->transEsc("Source::$source", [], $source)?>
           </a>
         </li>
       <?php endif; ?>
     <?php endforeach; ?>
+    <?php if ($countRecords > $maxInstitutionsShown): ?>
+      <li class="list-group-item px-0 dropdown">
+        <a class="dropdown-toggle" type="button" data-bs-toggle="dropdown" tabindex="0">
+          <strong><?=$this->translate('Show next institutions')?></strong>
+        </a>
+        <ul class="dropdown-menu dropdown-menu-right">
+          <?php foreach (array_slice($dedupData, $maxInstitutionsShown) as $source => $current): ?>
+            <li class="otherSource">
+              <a class="dropdown-item" href="<?=$this->escapeHtmlAttr($recordLinker->getUrl($current['id']))?>">
+                <?=$this->transEsc("Source::$source", [], $source)?>
+              </a>
+            </li>
+          <?php endforeach; ?>
+        </ul>
+      </li>
+    <?php endif; ?>
   </ul>
-
-  <?php if ($countRecords > $maxInstitutionsShown): ?>
-    <div class="dropdown">
-      <a class="dropdown-toggle" type="button" data-toggle="dropdown" tabindex="0">
-        <strong><?=$this->translate('Show next institutions')?></strong> <span class="caret"></span>
-      </a>
-      <ul class="dropdown-menu dropdown-menu-right">
-        <?php foreach (array_slice($dedupData, $maxInstitutionsShown) as $source => $current): ?>
-          <li class="otherSource">
-            <a href="<?=$this->escapeHtmlAttr($recordLinker->getUrl($current['id']))?>">
-              <?=$this->transEsc("Source::$source", [], $source)?>
-            </a>
-          </li>
-        <?php endforeach; ?>
-      </ul>
-    </div>
-  <?php endif; ?>
-
 </div>

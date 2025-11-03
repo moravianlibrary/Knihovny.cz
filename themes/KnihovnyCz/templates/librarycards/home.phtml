@@ -3,7 +3,7 @@
     $this->headTitle($this->translate('Library Cards'));
 
     // Set up breadcrumbs:
-    $this->layout()->breadcrumbs = '<li><a href="' . $this->url('myresearch-home') . '">' . $this->transEsc('Your Account') . '</a></li> <li class="active">' . $this->transEsc('Library Cards') . '</li>';
+    $this->breadcrumbs()->set($this->translate('Your Account'), $this->url('myresearch-home'))->add($this->translate('Library Cards'), active: true);
     $delete = count($this->libraryCards) > 1;
 
     $loadJs = <<<JS
@@ -15,6 +15,9 @@
                 form.find('input[name="confirm"]').val(1);
                 form.submit();
               });
+            });
+            $('.confirm_delete_library_card_no').on("click", function doNotDeleteCard(e) {
+              e.preventDefault();
             });
           }
           initLibraryCards();
@@ -32,7 +35,7 @@
     <div><?=$this->transEsc('You do not have any library cards')?></div>
   <?php else: ?>
     <table class="table table-striped">
-      <caption class="sr-only"><?=$this->transEsc('Library Cards')?></caption>
+      <caption class="visually-hidden"><?=$this->transEsc('Library Cards')?></caption>
       <thead>
         <tr>
           <th style="width: 15%"></th>
@@ -58,18 +61,27 @@
             <?php if ($delete): ?>
               <div class="btn-group">
                 <form method="post" action="<?=$this->url('librarycards-deletecard') ?>">
-                  <input type="hidden" name="cardID" value="<?=$this->escapeHtmlAttr($record['id'])?>"/>
+                  <input type="hidden" name="cardID" value="<?=$this->escapeHtmlAttr($record->getId())?>"/>
                   <input type='hidden' name='csrf' value="<?=$this->escapeHtml($this->csrfHash)?>">
                   <input type="hidden" name="confirm" value="0"/>
-                  <button class="btn btn-primary" data-toggle="dropdown" data-lightbox-ignore>
-                    <?=$this->icon('profile-card-delete', 'icon-link__icon') ?>
-                    <?=$this->transEsc('Disconnect identity')?>
-                  </button>
-                  <ul class="dropdown-menu">
-                    <li class="disabled"><a><?=$this->transEsc('confirm_delete_library_card_brief')?></a></li>
-                    <li><a href="#" class="confirm_delete_library_card_yes"><?=$this->transEsc('confirm_dialog_yes')?></a></li>
-                    <li><a href="#" class="confirm_delete_library_card_no"><?=$this->transEsc('confirm_dialog_no')?></a></li>
-                  </ul>
+                  <?=
+                    $this->component(
+                        'confirm-button',
+                        [
+                        'buttonId' => 'delete_card_' . $record->getId(),
+                        'buttonName' => 'deleteCard',
+                        'buttonIcon' => 'profile-card-delete',
+                        'buttonLabel' => 'Disconnect identity',
+                        'buttonClass' => 'btn btn-primary',
+                        'header' => 'confirm_delete_library_card_brief',
+                        'confirmId' => 'confirm_delete_library_card_yes' . $record->getId(),
+                        'confirmClass' => 'confirm_delete_library_card_yes',
+                        'cancelClass' => 'confirm_delete_library_card_no',
+                        'clearAccountCache' => true,
+                        'ignoreLightbox' => true,
+                      ]
+                    )
+                  ?>
                 </form>
               </div>
             <?php endif; ?>
@@ -93,31 +105,39 @@
     </div>
   <?php endif;?>
 
-  <br>
+  <hr>
 
-  <div class="btn-group" style="margin-top: 15px">
-    <a class="btn btn-link dropdown-toggle" data-toggle="dropdown" href="<?=$this->url('myresearch-deleteuser') ?>">
-      <?=$this->icon('ui-delete') ?>
-      <?=$this->transEsc('delete_user_account')?>
-    </a>
-    <ul class="dropdown-menu">
-      <pre><?=$this->translate('delete_user_account_confirm')?></pre>
-      <li>
+  <div>
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#deleteUserAccountModal">
+      <?=$this->icon('ui-delete') ?> <?=$this->transEsc('delete_user_account')?>
+    </button>
+  </div>
+
+</div>
+
+<div class="modal fade" id="deleteUserAccountModal" tabindex="-1" aria-labelledby="deleteUserAccountModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="modal-title fs-2" id="deleteUserAccountModalLabel"><?=$this->transEsc('delete_user_account')?></h2>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="alert alert-warning"><?=$this->translate('delete_user_account_confirm')?></div>
         <form action="<?=$this->url('myresearch-deleteuser') ?>" method="post">
           <input type='hidden' name='csrf' value="<?=$this->escapeHtml($this->csrfHash)?>">
           <input type='hidden' name='confirm' value='1'>
-          <button type='submit' class="btn btn-link"><?=$this->transEscAttr('confirm_dialog_yes') ?></button>
+          <button type='submit' class="btn btn-primary"><?=$this->transEscAttr('confirm_dialog_yes') ?></button>
+          <button type="button" class="btn btn-link" data-bs-dismiss="modal"><?=$this->transEscAttr('confirm_dialog_no') ?></button>
         </form>
-      </li>
-      <button type='submit' class="btn btn-link"><?=$this->transEscAttr('confirm_dialog_no') ?></button>
-    </ul>
+      </div>
+    </div>
   </div>
-
 </div>
 
 <div class="<?=$this->layoutClass('sidebar')?>" id="myresearch-sidebar" role="navigation" aria-label="<?=$this->transEsc('account_menu_label')?>">
   <?=$this->accountMenu()->render('librarycards')?>
 </div>
 
-<?=$this->inlineScript(\Laminas\View\Helper\HeadScript::SCRIPT, $loadJs, 'SET')?>
+<?=$this->assetManager()->outputInlineScriptString($loadJs)?>
 <noscript><?=$this->transEsc('Please enable JavaScript.')?></noscript>

@@ -22,7 +22,7 @@
   <?=$heading?>
   -
   <?=$this->transEsc('Source::' . $institution) ?>
-  <img class="pull-right" height="30" src="<?=$this->imageLink($imageLink)?>" alt="<?=$this->transEsc('Source::' . $institution) ?>">
+  <img class="float-right" height="30" src="<?=$this->imageLink($imageLink)?>" alt="<?=$this->transEsc('Source::' . $institution) ?>">
 </h2>
 
 <?=$this->form()->openTag($form);?>
@@ -30,14 +30,14 @@
   <?php $csrf = $this->form->get('csrf'); ?>
   <?=$this->formHidden($csrf);?>
   <?=$this->formElementErrors()->render($csrf, ['class' => 'form-text error']) ?>
-  <?php foreach($groups as $id => $group): ?>
+  <?php foreach ($groups as $id => $group): ?>
     <?php if (isset($group['heading'])):?>
       <h2><?=$this->transEsc($group['heading']);?></h2>
     <?php endif; ?>
     <?php if (isset($group['text'])):?>
       <div><?=$this->translate($group['text']);?></div>
     <?php endif; ?>
-    <?php foreach($group['fields'] ?? [] as $name => $field): ?>
+    <?php foreach ($group['fields'] ?? [] as $name => $field): ?>
       <div class='form-group'>
         <?php
           $field = $this->form->get($name);
@@ -77,7 +77,7 @@
         <?php endif; ?>
         <?php if ($field instanceof \Laminas\Form\Element\Select): ?>
           <?=$label?>
-          <?php $field->setAttribute('class', 'form-control'); ?>
+          <?php $field->setAttribute('class', 'form-select'); ?>
           <?=$this->formSelect($field);?>
         <?php elseif ($field instanceof \Laminas\Form\Element\Checkbox): ?>
           <?=$this->formCheckbox($field);?>

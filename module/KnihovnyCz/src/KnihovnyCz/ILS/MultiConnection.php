@@ -30,19 +30,19 @@ class MultiConnection extends Connection
     /**
      * Constructor
      *
-     * @param \Laminas\Config\Config            $config        Configuration
-     * representing the [Catalog] section of config.ini
+     * @param \Vufind\Config\Config             $config        Configuration representing the [Catalog] section of
+     * config.ini
      * @param \VuFind\ILS\Driver\PluginManager  $driverManager Driver plugin manager
      * @param \VuFind\Config\PluginManager      $configReader  Configuration loader
      * @param \Laminas\Http\Request             $request       Request object
      * @param \Psr\Container\ContainerInterface $container     Container
      */
     public function __construct(
-        \Laminas\Config\Config $config,
+        \Vufind\Config\Config $config,
         \VuFind\ILS\Driver\PluginManager $driverManager,
         \VuFind\Config\PluginManager $configReader,
-        \Laminas\Http\Request $request = null,
-        \Psr\Container\ContainerInterface $container = null
+        ?\Laminas\Http\Request $request = null,
+        ?\Psr\Container\ContainerInterface $container = null
     ) {
         parent::__construct($config, $driverManager, $configReader, $request);
         $this->container = $container;

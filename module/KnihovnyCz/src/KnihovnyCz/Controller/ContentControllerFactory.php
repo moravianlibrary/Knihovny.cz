@@ -37,7 +37,7 @@ class ContentControllerFactory extends \VuFind\Controller\AbstractBaseFactory
     public function __invoke(
         ContainerInterface $container,
         $requestedName,
-        array $options = null
+        ?array $options = null
     ) {
         $controller = new $requestedName($container, ...($options ?: []));
 

@@ -32,7 +32,7 @@ class Backend extends Base
         AbstractQuery $query,
         $offset,
         $limit,
-        ParamBag $params = null
+        ?ParamBag $params = null
     ) {
         $params = $params ?: new ParamBag();
         $this->injectResponseWriter($params);

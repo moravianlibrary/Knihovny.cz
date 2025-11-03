@@ -2,9 +2,9 @@
   $language = $this->langugage ?? $this->layout()->userLang;
   $themeConfig = $this->config()->get('config')->Theme;
   $logo = "logo-knihovny.cz-$language.svg";
-  if($themeConfig) {
+  if ($themeConfig) {
     $logoPathLang = 'logo_path_' . $language;
-    if($themeConfig->$logoPathLang) {
+    if ($themeConfig->$logoPathLang) {
       $logo = $themeConfig->$logoPathLang;
     } elseif ($themeConfig->logo_path) {
       $logo = $themeConfig->logo_path;

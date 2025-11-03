@@ -1,9 +1,7 @@
 <?php
-    // Set up page title:
-    $this->headTitle($this->translate('My Profile'));
-
     // Set up breadcrumbs:
-    $this->layout()->breadcrumbs = '<li><a href="' . $this->url('myresearch-home') . '">' . $this->transEsc('Your Account') . '</a></li> <li class="active">' . $this->transEsc('Profile') . '</li>';
+    $this->breadcrumbs()->set($this->translate('Your Account'), $this->url('myresearch-home'))
+      ->add($this->translate('Profile'), active: true);
 
     // Template for use by the renderArray helper:
     $arrTemplate = '<tr><th>%%LABEL%%:</th><td> %%VALUE%%</td></tr>';
@@ -12,6 +10,7 @@
 <?=$this->component('show-account-menu-button')?>
 
 <div class="<?=$this->layoutClass('mainbody')?>">
+  <?=$this->component('page-title', ['title' => $this->translate('Your Profile'), 'headTitle' => $this->translate('My Profile')]);?>
   <?=$this->flashmessages();?>
 
   <div id="account-actions">
@@ -55,7 +54,7 @@
           <?php foreach ($tokens as $i => $token): ?>
             <tr>
               <td data-label="<?=$this->transEsc('saved_login_platform_and_browser')?>" id="login_platform_<?=$i?>"><?=$this->transEsc($token->getPlatform())?> / <?=$this->transEsc($token->getBrowser())?></td>
-              <td data-label="<?=$this->transEsc('Last Login')?>" id="login_date_<?=$i?>"><?=$this->dateTime()->convertToDisplayDateAndTime('U', $token->getLastLogin()->getTimestamp())?></td>
+              <td data-label="<?=$this->transEsc('Last Login')?>" id="login_date_<?=$i?>"><?=$token->getLastLogin()->format($this->config()->dateTimeFormat())?></td>
               <td data-label="<?=$this->transEsc('saved_login_actions')?>">
                 <form id="delete-login-token" method="post" action="<?=$this->url('myresearch-deletelogintoken')?>">
                   <input type="hidden" name="csrf" value="<?=$this->escapeHtmlAttr($this->auth()->getManager()->getCsrfHash())?>">
@@ -75,10 +74,8 @@
   <?php endif; ?>
 
   <?php if (is_array($this->profile)): ?>
-    <h2><?=$this->transEsc('Library Catalog Profile')?></h2>
-    <p>
-      <?=$this->context($this)->renderInContext('librarycards/selectcard.phtml', ['user' => $this->user]); ?>
-    </p>
+    <h3><?=$this->transEsc('Library Catalog Profile')?></h3>
+    <?=$this->context($this)->renderInContext('librarycards/selectcard.phtml', ['user' => $this->user]); ?>
     <table class="table table-striped catalog-profile">
       <?php
         $profile = $this->profile;
@@ -137,3 +134,4 @@
 <div class="<?=$this->layoutClass('sidebar')?>" id="myresearch-sidebar" role="navigation" aria-label="<?=$this->transEsc('account_menu_label')?>">
   <?=$this->accountMenu()->render('profile')?>
 </div>
+<?=$this->assetManager()->outputInlineScriptString('VuFind.account.clearAllCaches();')?>

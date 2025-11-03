@@ -34,7 +34,7 @@ class Config extends Gateway
         Adapter $adapter,
         PluginManager $tm,
         $cfg,
-        RowGateway $rowObj = null,
+        ?RowGateway $rowObj = null,
         $table = 'config'
     ) {
         parent::__construct($adapter, $tm, $cfg, $rowObj, $table);

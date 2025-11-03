@@ -59,6 +59,7 @@ class MyResearchZiskejEddController extends AbstractBase
     {
         $this->flashRedirect()->restore();
         $view = $this->createViewModel();
+        $view->setTemplate('myresearchziskejedd/list-ajax');
 
         $ignoreError = false;
         try {
@@ -90,7 +91,8 @@ class MyResearchZiskejEddController extends AbstractBase
             $isZiskejModeEnabled = $cpkZiskejEdd->isEnabled();
             $view->setVariable('isZiskejModeEnabled', $isZiskejModeEnabled);
             if (!$isZiskejModeEnabled) {
-                return $view;
+                $result = $this->getViewRenderer()->render($view);
+                return $this->getAjaxResponse('text/html', $result, null);
             }
 
             /**
@@ -160,7 +162,6 @@ class MyResearchZiskejEddController extends AbstractBase
                     ->addErrorMessage('ziskej_generic_error_message');
             }
         }
-        $view->setTemplate('myresearchziskejedd/list-ajax');
         $result = $this->getViewRenderer()->render($view);
         return $this->getAjaxResponse('text/html', $result, null);
     }

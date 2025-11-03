@@ -13,14 +13,14 @@ if ($cover):
 <?php endif; ?>
 
 <?php $itemUrl = $this->recordLinker()->getUrl($this->item); ?>
-<div class='list-group-item clearfix'>
+<div class='list-group-item'>
   <div class='row'>
     <?php
     $formats = $this->item->getFormats(); ?>
     <div class='col-xs-3 col-sm-2 col-md-3'>
-      <?php if($thumbnail): ?>
+      <?php if ($thumbnail): ?>
         <?=$thumbnail?>
-      <?php elseif(!empty($formats)): ?>
+      <?php elseif (!empty($formats)): ?>
         <div class='iconlabel'>
           <i class='cover-icon <?= $this->record($this->item)->getFormatClass(end($formats)) ?>'></i>
         </div>

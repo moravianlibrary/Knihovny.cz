@@ -33,7 +33,7 @@
         <?=$this->render('prev-next-link.phtml', ['active' => $active, 'link' => $link, 'label' => $label, 'icon' => $icon, 'text' => $text]); ?>
       </span>
 
-      <?php if(isset($this->scrollData['currentPosition'])): ?>
+      <?php if (isset($this->scrollData['currentPosition'])): ?>
         <?=$this->transEsc('of_num_results', [
           '%%position%%' => $this->localizedNumber($this->scrollData['currentPosition']),
           '%%total%%' => $this->localizedNumber($this->scrollData['resultTotal']),

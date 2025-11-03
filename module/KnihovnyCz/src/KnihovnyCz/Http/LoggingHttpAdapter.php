@@ -50,7 +50,7 @@ class LoggingHttpAdapter implements \Laminas\Http\Client\Adapter\AdapterInterfac
      * @param AdapterInterface       $delegate   Adapter to delegate to
      * @param PerformanceLogger|null $perfLogger Performance Logger
      */
-    public function __construct(AdapterInterface $delegate, PerformanceLogger $perfLogger = null)
+    public function __construct(AdapterInterface $delegate, ?PerformanceLogger $perfLogger = null)
     {
         $this->delegate = $delegate;
         $this->performanceLogger = $perfLogger;

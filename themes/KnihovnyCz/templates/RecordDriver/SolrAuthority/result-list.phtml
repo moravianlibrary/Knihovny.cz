@@ -29,7 +29,7 @@
           </h3>
 
           <div>
-            <?php if($this->driver->isCollection()): ?>
+            <?php if ($this->driver->isCollection()): ?>
               <?=implode('<br>', array_map([$this, 'escapeHtml'], $this->driver->getSummary())); ?>
             <?php else: ?>
               <?php $summAuthors = $this->driver->getPrimaryAuthorsWithHighlighting();
@@ -87,7 +87,7 @@
             </p>
           <?php endif; ?>
 
-          <?php if(!$this->driver->isCollection()): ?>
+          <?php if (!$this->driver->isCollection()): ?>
             <?php if ($snippet = $this->driver->getHighlightedSnippet()): ?>
               <?php if (!empty($snippet['caption'])): ?>
                 <strong><?=$this->transEsc($snippet['caption']) ?>:</strong>

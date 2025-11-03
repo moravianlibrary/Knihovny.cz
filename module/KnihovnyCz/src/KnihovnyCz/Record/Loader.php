@@ -47,8 +47,8 @@ class Loader extends LoaderBase
     public function __construct(
         SearchService $searchService,
         RecordFactory $recordFactory,
-        Cache $recordCache = null,
-        FallbackLoader $fallbackLoader = null,
+        ?Cache $recordCache = null,
+        ?FallbackLoader $fallbackLoader = null,
         bool $filterChildRecords = true
     ) {
         $this->searchService = $searchService;
@@ -74,7 +74,7 @@ class Loader extends LoaderBase
         $id,
         $source = DEFAULT_SEARCH_BACKEND,
         $tolerateMissing = false,
-        ParamBag $params = null
+        ?ParamBag $params = null
     ) {
         $record = parent::load($id, $source, $tolerateMissing, $params);
         $fields = $record->getRawData();

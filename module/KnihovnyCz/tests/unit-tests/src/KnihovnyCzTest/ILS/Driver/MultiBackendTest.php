@@ -177,7 +177,7 @@ class MultiBackendTest extends \PHPUnit\Framework\TestCase
     protected function getPluginManager()
     {
         $configData = ['config' => 'values'];
-        $config = new \Laminas\Config\Config($configData);
+        $config = new \VuFind\Config\Config($configData);
         $mockPM = $this->createMock(\VuFind\Config\PluginManager::class);
         $mockPM->expects($this->any())
             ->method('get')

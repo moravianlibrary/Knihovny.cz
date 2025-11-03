@@ -408,7 +408,7 @@ class SolrLocal extends \KnihovnyCz\RecordDriver\SolrMarc
      *
      * @return array
      */
-    protected function parseItemLinks(string $requiredType = null): array
+    protected function parseItemLinks(?string $requiredType = null): array
     {
         $config = $this->recordConfig->Record->itemLinks;
         $itemLinksConfig = $config[$this->getSourceId()] ?? null;

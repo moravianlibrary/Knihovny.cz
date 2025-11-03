@@ -36,7 +36,7 @@ class GuzzleHttpServiceFactory implements FactoryInterface
     public function __invoke(
         ContainerInterface $container,
         $requestedName,
-        array $options = null
+        ?array $options = null
     ) {
         if (! empty($options)) {
             throw new \Exception('Unexpected options passed to factory.');
@@ -46,13 +46,13 @@ class GuzzleHttpServiceFactory implements FactoryInterface
         /**
          * Main configuration
          *
-         * @var \Laminas\Config\Config $config
+         * @var \Vufind\Config\Config $config
          */
         $config = $container->get(\VuFind\Config\PluginManager::class)->get('config');
         /**
          * Proxy configuration
          *
-         * @var \Laminas\Config\Config $proxy
+         * @var \Vufind\Config\Config $proxy
          */
         $proxy = $config->Proxy;
         if (isset($proxy->host) && ! empty($proxy->host)) {

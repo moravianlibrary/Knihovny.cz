@@ -1,103 +1,118 @@
-<?php $this->headScript()->appendFile('embedded_url_generator.js'); ?>
+<?php $this->assetManager()->appendScriptLink('embedded_url_generator.js'); ?>
 
 <hr/>
-<h2><?=$this->transEsc('embedded_url_generator_heading')?></h2>
+<h2 class="mb-3"><?=$this->transEsc('embedded_url_generator_heading')?></h2>
 
 <!-- output URL -->
-<div class="panel panel-primary">
-  <div class="panel-heading"><?=$this->transEsc('embedded_url_generator_output_panel_heading')?></div>
-  <div class="panel-body">
-    <div class="form-group">
-      <div class="col-sm-12">
-<!--        <textarea id="embeddedUrl" class="form-control input-lg" rows="2" readonly></textarea>-->
-        <div id="embeddedUrl"
-             class="form-control bg-light border rounded"
-             style="min-height: 80px; white-space: pre-wrap; word-break: break-word;"
-             readonly>
-        </div>
-        <p class="help-block"><?=$this->translate('embedded_url_generator_output_panel_hint')?></p>
-        <button type="button" id="copyUrlBtn" class="btn btn-primary btn-sm" title="Zkopírovat URL">
-          <?=$this->transEscAttr('copy_to_clipboard_button_label')?>
-        </button>
-        <span id="copySuccess" class="text-success" style="margin-left: 10px; display: none;">
-          <?=$this->transEscAttr('copy_to_clipboard_success_message')?>
-        </span>
-        <span id="copyFail" class="text-danger" style="margin-left: 10px; display: none;">
-          <?=$this->transEscAttr('copy_to_clipboard_failure_message')?>
-        </span>
+<div class="card border-primary mb-3">
+  <div class="card-header bg-primary text-white">
+    <?=$this->transEsc('embedded_url_generator_output_panel_heading')?>
+  </div>
+  <div class="card-body">
+    <div class="mb-3">
+      <div id="embeddedUrl"
+           class="form-control bg-light border rounded"
+           style="min-height: 80px; white-space: pre-wrap; word-break: break-word;"
+           readonly>
       </div>
+      <div class="form-text"><?=$this->translate('embedded_url_generator_output_panel_hint')?></div>
+      <button type="button" id="copyUrlBtn" class="btn btn-primary btn-bg mt-2" title="Zkopírovat URL">
+        <?=$this->transEscAttr('copy_to_clipboard_button_label')?>
+      </button>
+      <span id="copySuccess" class="text-success p-2" style="display: none;">
+        <?=$this->transEscAttr('copy_to_clipboard_success_message')?>
+      </span>
+      <span id="copyFail" class="text-danger p-2" style="display: none;">
+        <?=$this->transEscAttr('copy_to_clipboard_failure_message')?>
+      </span>
     </div>
   </div>
 </div>
 
-<!-- Form -->
-<form id="filter-form" class="form-horizontal">
-  <div class="panel panel-default">
-    <div class="panel-heading"><?=$this->transEsc('embedded_url_generator_basic_panel_heading')?></div>
-    <div class="panel-body">
+<form id="filter-form">
+  <div class="card mb-3">
+    <div class="card-header"><?=$this->transEsc('embedded_url_generator_basic_panel_heading')?></div>
+    <div class="card-body">
 
       <!-- LOOKFOR INPUT -->
-      <div class="form-group">
-        <label for="lookfor" class="col-sm-6 control-label"><?=$this->translate('embedded_url_generator_basic_panel_look_for')?></label>
+      <div class="row mb-3">
+        <label for="lookfor" class="col-sm-6 col-form-label"><?=$this->translate('embedded_url_generator_basic_panel_look_for')?></label>
         <div class="col-sm-6">
           <input type="text" class="form-control" id="lookfor" name="lookfor" placeholder="<?=$this->transEsc('embedded_url_generator_basic_panel_look_for_placeholder')?>">
         </div>
       </div>
 
       <!-- POSITION CHECKBOX -->
-      <div class="form-group">
-        <label class="col-sm-6 control-label"><?=$this->translate('embedded_url_generator_basic_panel_position')?></label>
+      <div class="row mb-3">
+        <label class="col-sm-6 col-form-label"><?=$this->translate('embedded_url_generator_basic_panel_position')?></label>
         <div class="col-sm-6">
-          <div class="checkbox">
-            <label><input type="checkbox" id="position" name="position" value="top"><?=$this->transEsc('embedded_url_generator_basic_panel_position_checkbox')?></label>
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="position" name="position" value="top">
+            <label class="form-check-label" for="position">
+              <?=$this->transEsc('embedded_url_generator_basic_panel_position_checkbox')?>
+            </label>
           </div>
         </div>
       </div>
 
       <!-- LNG RADIO -->
-      <div class="form-group">
-        <label class="col-sm-6 control-label"><?=$this->translate('embedded_url_generator_basic_panel_position')?></label>
+      <div class="row mb-3">
+        <label class="col-sm-6 col-form-label"><?=$this->translate('embedded_url_generator_basic_panel_position')?></label>
         <div class="col-sm-6">
-          <label class="radio-inline"><input type="radio" name="lng" value="cs"><?=$this->transEsc('embedded_url_generator_basic_panel_lng_cs')?></label>
-          <label class="radio-inline"><input type="radio" name="lng" value="en"><?=$this->transEsc('embedded_url_generator_basic_panel_lng_en')?></label>
-          <label class="radio-inline"><input type="radio" name="lng" value="" checked><?=$this->transEsc('embedded_url_generator_basic_panel_lng_any')?></label>
+          <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="lng" value="cs" id="lngCs">
+            <label class="form-check-label" for="lngCs"><?=$this->transEsc('embedded_url_generator_basic_panel_lng_cs')?></label>
+          </div>
+          <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="lng" value="en" id="lngEn">
+            <label class="form-check-label" for="lngEn"><?=$this->transEsc('embedded_url_generator_basic_panel_lng_en')?></label>
+          </div>
+          <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="lng" value="" id="lngAny" checked>
+            <label class="form-check-label" for="lngAny"><?=$this->transEsc('embedded_url_generator_basic_panel_lng_any')?></label>
+          </div>
         </div>
       </div>
 
       <!-- DATABASE RADIO -->
-      <div class="form-group">
-        <label class="col-sm-6 control-label"><?=$this->translate('embedded_url_generator_basic_panel_database_label')?></label>
+      <div class="row mb-3">
+        <label class="col-sm-6 col-form-label"><?=$this->translate('embedded_url_generator_basic_panel_database_label')?></label>
         <div class="col-sm-6">
-          <label class="radio-inline"><input type="radio" name="database" value="eds"><?=$this->transEsc('embedded_url_generator_basic_panel_database_eds')?></label>
-          <label class="radio-inline"><input type="radio" name="database" value="libraries"><?=$this->transEsc('embedded_url_generator_basic_panel_database_libraries')?></label>
-          <label class="radio-inline"><input type="radio" name="database" value="" checked><?=$this->transEsc('embedded_url_generator_basic_panel_database_default')?></label>
+          <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="database" value="eds" id="dbEds">
+            <label class="form-check-label" for="dbEds"><?=$this->transEsc('embedded_url_generator_basic_panel_database_eds')?></label>
+          </div>
+          <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="database" value="libraries" id="dbLib">
+            <label class="form-check-label" for="dbLib"><?=$this->transEsc('embedded_url_generator_basic_panel_database_libraries')?></label>
+          </div>
+          <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="database" value="" id="dbAny" checked>
+            <label class="form-check-label" for="dbAny"><?=$this->transEsc('embedded_url_generator_basic_panel_database_default')?></label>
+          </div>
         </div>
       </div>
     </div>
   </div>
 
-  <div class="panel panel-default">
-    <div class="panel-heading"><?=$this->transEsc('embedded_url_generator_facet_panel_heading')?></div>
-    <div class="panel-body">
-
-      <!-- PARAMS TO PARSE -->
-      <div class="form-group">
-        <label for="urlToParse" class="col-sm-6 control-label">
-          <?=$this->transEsc('embedded_url_generator_facet_panel_url_label')?>
-        </label>
-
+  <!-- URL INPUT -->
+  <div class="card mb-3">
+    <div class="card-header"><?=$this->transEsc('embedded_url_generator_facet_panel_heading')?></div>
+    <div class="card-body">
+      <div class="row mb-3">
+        <label for="urlToParse" class="col-sm-6 col-form-label"><?=$this->transEsc('embedded_url_generator_facet_panel_url_label')?></label>
         <div class="col-sm-6">
           <input type="text" class="form-control" id="urlToParse" name="urlToParse" placeholder="<?=$this->transEsc('embedded_url_generator_facet_panel_url_placeholder')?>">
-          <p class="help-block"><?=$this->translate('embedded_url_generator_facet_panel_url_hint')?></p>
+          <div class="form-text"><?=$this->translate('embedded_url_generator_facet_panel_url_hint')?></div>
         </div>
       </div>
 
-      <!--  PARAMS PREVIEW -->
-      <div class="form-group">
-        <label for="usedFiltersOutput" class="col-sm-6 control-label"><?=$this->transEsc('embedded_url_generator_facet_panel_filters_label')?></label>
-        <div class="col-sm-6 form-control-static">
-          <div id="usedFiltersOutput"></div>
-          <p class="help-block"><?=$this->translate('embedded_url_generator_facet_panel_filters_hint')?></p>
+      <!-- FILTERS PREVIEW -->
+      <div class="row mb-3">
+        <label for="usedFiltersOutput" class="col-sm-6 col-form-label"><?=$this->transEsc('embedded_url_generator_facet_panel_filters_label')?></label>
+        <div class="col-sm-6">
+          <div id="usedFiltersOutput" class="form-control-plaintext"></div>
+          <div class="form-text"><?=$this->translate('embedded_url_generator_facet_panel_filters_hint')?></div>
         </div>
       </div>
     </div>

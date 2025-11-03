@@ -14,7 +14,7 @@
         <h3><?=$this->translate('footer_heading_2') ?></h3>
         <ul class="list-unstyled">
           <li><a href="https://listky.mzk.cz/" target="_blank"><?=$this->transEsc('card_catalogues')?></a></li>
-          <?php if($this->layout()->userLang === 'cs'): ?>
+          <?php if ($this->layout()->userLang === 'cs'): ?>
             <li><a href="https://www.mzk.cz/meziknihovni-vypujcni-sluzba" target="_blank"><?=$this->transEsc('interlibrary_loan')?></a></li>
           <?php else: ?>
             <li><a href="https://www.mzk.cz/en/services/borrowing/international-interlibrary-loan-service" target="_blank"><?=$this->transEsc('international_interlibrary_loan')?></a></li>
@@ -28,7 +28,7 @@
         <h3><?=$this->translate('footer_heading_3') ?></h3>
         <ul class="list-unstyled">
           <li><?=$this->footerLink('autocomplete', true) ?></li>
-          <?php if($this->layout()->userLang === 'cs'): ?>
+          <?php if ($this->layout()->userLang === 'cs'): ?>
             <li><a href="https://www.youtube.com/watch?v=5-zzsQKQ6gU" target="_blank"><?=$this->transEsc('search_video_help')?></a></li>
           <?php endif; ?>
           <li><a href="http://www.ptejteseknihovny.cz/zadani-dotazu?q=BOA001" target="_blank"><?=$this->transEsc('Ask a Librarian')?></a></li>

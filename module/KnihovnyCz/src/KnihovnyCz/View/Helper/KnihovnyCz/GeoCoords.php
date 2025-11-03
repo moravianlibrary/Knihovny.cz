@@ -27,7 +27,7 @@ class GeoCoords extends \VuFind\View\Helper\Root\GeoCoords
      *
      * @return string|bool
      */
-    public function getSearchUrl(Options $options = null, Results $results = null)
+    public function getSearchUrl(?Options $options = null, ?Results $results = null)
     {
         // If the relevant module is disabled, bail out now:
         if (!$this->recommendationEnabled($options->getRecommendationSettings())) {

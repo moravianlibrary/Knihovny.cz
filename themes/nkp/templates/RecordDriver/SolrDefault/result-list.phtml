@@ -29,7 +29,7 @@
           </h3>
 
           <div>
-            <?php if($this->driver->isCollection()): ?>
+            <?php if ($this->driver->isCollection()): ?>
               <?=implode('<br>', array_map([$this, 'escapeHtml'], $this->driver->getSummary())); ?>
             <?php else: ?>
               <?php $summAuthors = $this->driver->getPrimaryAuthorsWithHighlighting();
@@ -94,7 +94,7 @@
             </p>
           <?php endif; ?>
 
-          <?php if(!$this->driver->isCollection()): ?>
+          <?php if (!$this->driver->isCollection()): ?>
             <?php if ($snippet = $this->driver->getHighlightedSnippet()): ?>
               <?php if (!empty($snippet['caption'])): ?>
                 <strong><?=$this->transEsc($snippet['caption']) ?>:</strong>
@@ -130,24 +130,18 @@
           */
           $openUrl = $this->openUrl($this->driver, 'results');
           $openUrlActive = $openUrl->isActive();
-          $doi = $this->doi($this->driver, 'results');
-          $doiActive = $doi->isActive();
           // Account for replace_other_urls setting
           $urls = $this->record($this->driver)->getLinkDetails($openUrlActive);
 
-          if ($openUrlActive || $doiActive || !empty($urls)): ?>
+          if ($openUrlActive || !empty($urls)): ?>
             <?php if ($openUrlActive): ?>
               <br>
               <?=$openUrl->renderTemplate()?>
             <?php endif; ?>
-            <?php if ($doiActive): ?>
-              <br>
-              <?=$doi->renderTemplate()?>
-            <?php endif; ?>
             <?php if (!is_array($urls)) {
             $urls = [];
             }
-            if(!$this->driver->isCollection()):
+            if (!$this->driver->isCollection()):
               foreach ($urls as $current): ?>
                 <a href="<?=$this->escapeHtmlAttr($this->proxyUrl($current['url']))?>" class="fulltext" target="new"><?=$this->icon('external-link')?> <?=($current['url'] == $current['desc']) ? $this->transEsc('Get full text') : $this->escapeHtml($current['desc'])?></a><br>
               <?php endforeach; ?>
@@ -206,7 +200,6 @@
           <?=$this->driver->supportsCoinsOpenUrl() ? '<span class="Z3988" title="' . $this->escapeHtmlAttr($this->driver->getCoinsOpenUrl()) . '"></span>' : ''?>
         </div>
       </div>
-
       <div class="col-xs-12 col-sm-12 col-md-3">
         <?php if ($this->cart()->isActiveInSearch() && $this->params->getOptions()->supportsCart() && $this->cart()->isActive()): ?>
             <?=$this->render('record/cart-buttons.phtml', ['id' => $this->driver->getUniqueId(), 'source' => $this->driver->getSourceIdentifier()]); ?><br>

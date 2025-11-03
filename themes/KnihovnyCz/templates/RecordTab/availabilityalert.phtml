@@ -23,7 +23,7 @@
   <?php if (!empty($availableRecords)): ?>
     <?=$this->transEsc('hold_available_in_other_libraries');?>
     <ul>
-      <?php foreach($availableRecords as $ar): ?>
+      <?php foreach ($availableRecords as $ar): ?>
         <li><a href="<?=$ar['url']?>"><?=$ar['label']?></a></li>
       <?php endforeach; ?>
     </ul>

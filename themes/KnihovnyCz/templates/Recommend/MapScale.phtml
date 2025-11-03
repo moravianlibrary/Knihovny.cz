@@ -1,5 +1,5 @@
 <?php
-  [$min, $max] = $this->selectedMapScale;
+[$min, $max] = $this->selectedMapScale;
 ?>
 <div class="map-scale">
   <form class="map-scale-range-form" name="<?=$this->escapeHtmlAttr($this->mapScaleField)?>Filter" id="<?=$this->escapeHtmlAttr($this->mapScaleField)?>Filter">
@@ -23,61 +23,60 @@
         <input type="text" size="10" class="form-control" name="<?=$this->escapeHtmlAttr($this->mapScaleField)?>to" id="<?=$this->escapeHtmlAttr($this->mapScaleField)?>to" value="<?=$this->escapeHtmlAttr($max)?>">
       </span>
     </div>
-    <div class="slider-container"><input type="text" class="hidden" id="<?=$this->escapeHtmlAttr($this->mapScaleField)?>scaleSlider"></div>
+    <div class="slider-container">
+      <div id="noUiScaleSlider"></div>
+      <!--      <input type="text" class="hidden" id="--><?php //=$this->escapeHtmlAttr($this->mapScaleField)?><!--scaleSlider">-->
+    </div>
     <input class="btn btn-default" type="submit" value="<?=$this->transEscAttr('Set')?>">
   </form>
 </div>
-  <?php $this->headScript()->appendFile('vendor/bootstrap-slider.min.js'); ?>
-  <?php $this->headLink()->appendStylesheet('vendor/bootstrap-slider.min.css'); ?>
-  <?php
-    $sliderOptions = [
-      'min' => (int)1,
-      'max' => (int)160,
-      'handle' => 'square',
-      'tooltip' => 'hide',
-      'value' => [(int)$min, (int)$max],
-    ];
-    $sliderOptionsJson = json_encode($sliderOptions);
-    $script = <<<JS
+<?php $this->assetManager()->appendScriptLink('vendor/nouislider.min.js'); ?>
+<?php $this->assetManager()->appendStyleLink('vendor/nouislider.min.css'); ?>
+<?php
+$script = <<<JS
         $(document).ready(function() {
-        	const fromField = '#{$this->escapeHtmlAttr($this->mapScaleField)}from';
-        	const toField = '#{$this->escapeHtmlAttr($this->mapScaleField)}to';
-        	const scaleSliderSelector = '#{$this->escapeHtmlAttr($this->mapScaleField)}scaleSlider';
-        	const scaleBase = Math.pow(10, 0.05);
-          var toScale = function(number) {
+          var scaleSliderElement = document.getElementById('noUiScaleSlider');
+
+          const fromScaleField = '#{$this->escapeHtmlAttr($this->mapScaleField)}from';
+        	const toScaleField = '#{$this->escapeHtmlAttr($this->mapScaleField)}to';
+          const scaleBase = Math.pow(10, 0.05);
+
+          var sliderToScaleField = function(number) {
             var scale = Math.pow(scaleBase, number);
             var power = Math.floor(Math.log(scale) / Math.log(10));
             return Math.round(scale / Math.pow(10, power)) * Math.pow(10, power);
           };
-          var fromScale = function(number) {
+
+          var scaleFieldToSlider = function(number) {
             return Math.log(number) / Math.log(scaleBase);
           };
-          var fillTexts = function() {
-            var v = {$this->escapeHtmlAttr($this->mapScaleField)}scaleSlider.getValue();
-            $(fromField).val(toScale(v[0]));
-            $(toField).val(toScale(v[1]));
-          };
-          var sliderOptions = $sliderOptionsJson;
-          var value = sliderOptions['value'];
-          sliderOptions['value'] = [ fromScale(value[0]), fromScale(value[1]) ];
-          var {$this->escapeHtmlAttr($this->mapScaleField)}scaleSlider = $(scaleSliderSelector)
-            .slider(sliderOptions)
-            .on('change', fillTexts)
-            .data('slider');
 
-          $([fromField, toField].join(',')).change(function () {
-            var fromValue = Number($(fromField).val());
-            var toValue = Number($(toField).val());
-            $(scaleSliderSelector).slider(
-              'setValue',
-              [
-                isNaN(fromValue) || fromValue <= 0 ? {$min} : fromValue,
-                isNaN(toValue) || toValue <= 0 ? {$max} : toValue
-              ],
-              true
-            );
-          });
-        });
-        JS;
-  ?>
-  <?=$this->inlineScript(\Laminas\View\Helper\HeadScript::SCRIPT, $script, 'SET'); ?>
+          var fillScaleFields = function() {
+            var v = scaleSliderElement.noUiSlider.get();
+            $(fromScaleField).val(sliderToScaleField(v[0]));
+            $(toScaleField).val(sliderToScaleField(v[1]));
+          };
+
+          noUiSlider.create(scaleSliderElement, {
+            start: [scaleFieldToSlider({$min}), scaleFieldToSlider({$max})],
+            connect: true,
+            range: {
+              'min': 1,
+              'max': 160
+            }
+          })
+
+          scaleSliderElement.noUiSlider.on('update', fillScaleFields);
+
+              $([fromScaleField, toScaleField].join(',')).change(function () {
+                var fromValue = Number($(fromScaleField).val());
+                var toValue = Number($(toScaleField).val());
+                scaleSliderElement.noUiSlider.set([
+                    isNaN(fromValue) || fromValue <= 0 ? {$min} : fromValue,
+                    isNaN(toValue) || toValue <= 0 ? {$max} : toValue
+                  ])
+              });
+            });
+    JS;
+?>
+<?=$this->assetManager()->outputInlineScriptString($script)?>

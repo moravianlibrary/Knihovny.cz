@@ -75,21 +75,21 @@ class SolrDefault extends \VuFind\RecordDriver\SolrDefault
     /**
      * Library id mappings (by source)
      *
-     * @var \Laminas\Config\Config
+     * @var \Vufind\Config\Config
      */
     protected $libraryIdMappings;
 
     /**
      * Digitalization request configuration
      *
-     * @var \Laminas\Config\Config
+     * @var \Vufind\Config\Config
      */
-    protected \Laminas\Config\Config $digitalizationrequestConfig;
+    protected \Vufind\Config\Config $digitalizationrequestConfig;
 
     /**
      * Libraries with support for Ajax status
      *
-     * @var \Laminas\Config\Config
+     * @var \Vufind\Config\Config
      */
     protected $libraryAjaxStatus;
 
@@ -110,11 +110,11 @@ class SolrDefault extends \VuFind\RecordDriver\SolrDefault
     /**
      * Constructor
      *
-     * @param \Laminas\Config\Config $mainConfig     VuFind main configuration (omit
+     * @param \Vufind\Config\Config $mainConfig     VuFind main configuration (omit
      * for built-in defaults)
-     * @param \Laminas\Config\Config $recordConfig   Record-specific configuration
+     * @param \Vufind\Config\Config $recordConfig   Record-specific configuration
      * file (omit to use $mainConfig as $recordConfig)
-     * @param \Laminas\Config\Config $searchSettings Search-specific configuration
+     * @param \Vufind\Config\Config $searchSettings Search-specific configuration
      * file
      */
     public function __construct(
@@ -707,11 +707,11 @@ class SolrDefault extends \VuFind\RecordDriver\SolrDefault
     /**
      * Attach library id mappings
      *
-     * @param \Laminas\Config\Config $mappings Mappings from config
+     * @param \Vufind\Config\Config $mappings Mappings from config
      *
      * @return void
      */
-    public function attachLibraryIdMappings(\Laminas\Config\Config $mappings)
+    public function attachLibraryIdMappings(\Vufind\Config\Config $mappings)
     {
         $this->libraryIdMappings = $mappings;
     }
@@ -719,11 +719,11 @@ class SolrDefault extends \VuFind\RecordDriver\SolrDefault
     /**
      * Attach libary id mappings
      *
-     * @param \Laminas\Config\Config $mappings Mappings from config
+     * @param \Vufind\Config\Config $mappings Mappings from config
      *
      * @return void
      */
-    public function attachLibraryAjaxStatus(\Laminas\Config\Config $mappings)
+    public function attachLibraryAjaxStatus(\Vufind\Config\Config $mappings)
     {
         $this->libraryAjaxStatus = $mappings;
     }
@@ -1079,11 +1079,11 @@ class SolrDefault extends \VuFind\RecordDriver\SolrDefault
     /**
      * Attach digitalization request configuration
      *
-     * @param \Laminas\Config\Config $digitaliztationRequestConfig Digitalization request configuration
+     * @param \Vufind\Config\Config $digitaliztationRequestConfig Digitalization request configuration
      *
      * @return void
      */
-    public function attachDigitalizationRequestConfig(\Laminas\Config\Config $digitaliztationRequestConfig): void
+    public function attachDigitalizationRequestConfig(\Vufind\Config\Config $digitaliztationRequestConfig): void
     {
         $this->digitalizationrequestConfig = $digitaliztationRequestConfig;
     }

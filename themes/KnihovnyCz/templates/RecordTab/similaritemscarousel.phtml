@@ -1,13 +1,13 @@
 <h2><?=$this->transEsc('Similar Items')?></h2>
 <?php $similarRecords = $this->tab->getResults(); ?>
-<?php if (!empty($similarRecords)): ?>
+<?php if (count($similarRecords)): ?>
   <?php $perPage = 4 ?>
-  <div id="similar-items-carousel" class="carousel slide" data-ride="carousel">
+  <div id="similar-items-carousel" class="carousel slide" data-bs-ride="carousel">
     <!-- Indicators -->
     <ol class="carousel-indicators">
-      <li data-target="#similar-items-carousel" data-slide-to="0" class="active"></li>
-      <?php for($i = 1;$i < count($similarRecords) / $perPage;$i++): ?>
-        <li data-target="#similar-items-carousel" data-slide-to="<?=$i ?>"></li>
+      <li data-bs-target="#similar-items-carousel" data-bs-slide-to="0" class="active"></li>
+      <?php for ($i = 1;$i < count($similarRecords) / $perPage;$i++): ?>
+        <li data-bs-target="#similar-items-carousel" data-bs-slide-to="<?=$i ?>"></li>
       <?php endfor; ?>
     </ol>
 
@@ -48,11 +48,11 @@
     </div>
 
     <!-- Controls -->
-    <a class="left carousel-control" href="#similar-items-carousel" role="button" data-slide="prev">
+    <a class="left carousel-control" href="#similar-items-carousel" role="button" data-bs-slide="prev">
       <?=$this->icon('page-prev') ?>
       <span class="sr-only"><?=$this->transEscAttr('Prev') ?></span>
     </a>
-    <a class="right carousel-control" href="#similar-items-carousel" role="button" data-slide="next">
+    <a class="right carousel-control" href="#similar-items-carousel" role="button" data-bs-slide="next">
       <span class="sr-only"><?=$this->transEscAttr('Next') ?></span>
       <?=$this->icon('page-next') ?>
     </a>
@@ -78,4 +78,4 @@
       $('#similar-items-carousel img').on('load', normalizeHeights);
       JS;
 ?>
-<?=$this->inlineScript(\Laminas\View\Helper\HeadScript::SCRIPT, $script, 'SET') ?>
+<?=$this->assetManager()->outputInlineScriptString($script) ?>

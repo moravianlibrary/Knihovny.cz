@@ -28,13 +28,13 @@ if (!empty($selectedRegion)) {
 }
 $this->headTitle($headTitle);
 
-$this->headLink()->appendStylesheet('vendor/bootstrap.min.css');
-$this->headLink()->appendStylesheet('vendor/font-awesome.min.css');
-$this->headLink()->appendStylesheet('embedded-libraries.css');
+$this->assetManager()->appendStyleLink('vendor/bootstrap.min.css');
+$this->assetManager()->appendStyleLink('vendor/font-awesome.min.css');
+$this->assetManager()->appendStyleLink('embedded-libraries.css');
 
-$this->headScript()->appendFile('vendor/jquery.min.js');
-$this->headScript()->appendFile('vendor/bootstrap.min.js');
-$this->headScript()->appendFile('embedded-libraries.js');
+$this->assetManager()->appendScriptLink('vendor/jquery.min.js');
+$this->assetManager()->appendScriptLink('vendor/bootstrap.min.js');
+$this->assetManager()->appendScriptLink('embedded-libraries.js');
 
 $this->headStyle()->appendStyle("
     a {
@@ -101,7 +101,7 @@ $this->headStyle()->appendStyle("
       <?php foreach ($districts as $district => $libraries): ?>
         <div class="panel panel-default">
           <div class="panel-heading">
-            <h3 class="panel-title" data-toggle="collapse" href="#collapse_<?=$alnum->filter($district) ?>">
+            <h3 class="panel-title" data-bs-toggle="collapse" href="#collapse_<?=$alnum->filter($district) ?>">
               <?=$district ?>
             </h3>
           </div>
@@ -115,10 +115,10 @@ $this->headStyle()->appendStyle("
                         <div class="panel panel-default">
                           <div class="panel-body">
                             <h4>
-                              <?php if($library['is_professional']): ?>
-                                <span class="pull-right text-primary" title="<?=$this->translate('EmbeddedLibraries::function_professional_library') ?>"><i class="fa fa-fw fa-building" aria-hidden="true"></i></span>
+                              <?php if ($library['is_professional']): ?>
+                                <span class="float-right text-primary" title="<?=$this->translate('EmbeddedLibraries::function_professional_library') ?>"><i class="fa fa-fw fa-building" aria-hidden="true"></i></span>
                               <?php endif; ?>
-                              <span class="pull-right text-primary" title="<?=$this->translate('EmbeddedLibraries::function_regional_library') ?>"><i class="fa fa-fw fa-dot-circle-o" aria-hidden="true"></i></span>
+                              <span class="float-right text-primary" title="<?=$this->translate('EmbeddedLibraries::function_regional_library') ?>"><i class="fa fa-fw fa-dot-circle-o" aria-hidden="true"></i></span>
                               <a href="<?=$this->url('search2record', ['id' => $library['link']]) ?>" target="_blank" title="<?=$library['title'] ?>">
                                 <?=$library['title'] ?>
                               </a>
@@ -136,8 +136,8 @@ $this->headStyle()->appendStyle("
                         <div class="panel panel-default" data-filter="<?=$library['title'] ?> | <?=$library['town'] ?>">
                           <div class="panel-body">
                             <h4>
-                              <?php if($library['is_professional']): ?>
-                                <span class="pull-right text-primary" title="<?=$this->translate('EmbeddedLibraries::function_professional_library') ?>"><i class="fa fa-fw fa-building" aria-hidden="true"></i></span>
+                              <?php if ($library['is_professional']): ?>
+                                <span class="float-right text-primary" title="<?=$this->translate('EmbeddedLibraries::function_professional_library') ?>"><i class="fa fa-fw fa-building" aria-hidden="true"></i></span>
                               <?php endif; ?>
                               <a href="<?=$this->url('search2record', ['id' => $library['link']]) ?>" target="_blank" title="<?=$library['title'] ?>">
                                 <?=$library['title'] ?>
@@ -169,7 +169,7 @@ $this->headStyle()->appendStyle("
         <img class="knihovny-logo" src="<?=$this->render('layout/logoimagelink.phtml') ?>" alt="<?=$this->translate('logo_alt') ?>">
       </a>
     </p>
-    <p class="text-right">
+    <p class="text-end">
       <?=$this->translate('EmbeddedLibraries::data_by') ?>: <a href="https://www.nkp.cz/" target="_blank"><?=$this->translate('EmbeddedLibraries::nkp') ?></a>.
     </p>
   </div>

@@ -38,7 +38,7 @@ class GuzzleClientAdapter implements \GuzzleHttp\ClientInterface, \Psr\Http\Clie
      * @param \GuzzleHttp\ClientInterface $delegate   delegate
      * @param PerformanceLogger           $perfLogger performance logger
      */
-    public function __construct(\GuzzleHttp\ClientInterface $delegate, PerformanceLogger $perfLogger = null)
+    public function __construct(\GuzzleHttp\ClientInterface $delegate, ?PerformanceLogger $perfLogger = null)
     {
         $this->delegate = $delegate;
         $this->performanceLogger = $perfLogger;

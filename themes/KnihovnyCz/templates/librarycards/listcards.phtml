@@ -27,12 +27,12 @@
 
           function showLibraryCardContent(element, content, callback) {
             $(element).hide(500, function onComplete() {
-              $(element).parent('.panel-body').find('.loading-overlay').fadeOut(200);
+              $(element).parent('.card-body').find('.loading-overlay').fadeOut(200);
               $(element).html(content).slideDown(500, function onComplete(){
                 if (window.location.hash != null) {
                   const fragment = window.location.hash.substring(1);
                   if ($(element).data('card-id') == fragment || $(element).data('card-name') == fragment) {
-                    scrollIntoView(element);
+                    $(element).closest('.card').get(0).scrollIntoView();
                   }
                 }
               });
@@ -52,7 +52,7 @@
           }
 
           function scrollIntoView(element) {
-            $(element).closest('.panel').get(0).scrollIntoView();
+            $(element).closest('.card').get(0).scrollIntoView();
           }
 
         JS;
@@ -65,24 +65,22 @@
     $libraryCardEnabled = !($this->user->isSingleCard() || $this->user->hasLibraryCardsFilter());
     $i = 1;
   ?>
-  <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+  <div id="accordion" role="tablist" aria-multiselectable="true">
     <?php foreach ($cards as $card): ?>
-      <div class="panel panel-default">
+      <div class="card">
         <?php if (!$singleCard): ?>
           <?php
             $institution = $card->home_library;
             $imageLink = sprintf('institutions/logos/%s/%s_small.png', $institution, $institution);
           ?>
-          <div class="panel-heading panel-heading-with-img bg-white clearfix pointer" role="tab" data-toggle="collapse" data-target="#card_<?=$i?>">
-            <h3 class="panel-title pull-left">
-              <?=$this->transEsc('Source::' . $institution) ?>
-            </h3>
-            <img class="pull-right" height="30" src="<?=$this->imageLink($imageLink)?>" alt="<?=$this->transEsc('Source::' . $institution) ?>">
+          <div class="card-header d-flex justify-content-between align-items-center pointer" role="tab" data-bs-toggle="collapse" data-bs-target="#card_<?=$i?>" aria-expanded="true">
+            <h4 class="card-title m-0"><?=$this->transEsc('Source::' . $institution) ?></h4>
+            <img height="30" src="<?=$this->imageLink($imageLink)?>" alt="<?=$this->transEsc('Source::' . $institution) ?>">
           </div>
         <?php endif;?>
 
-        <div id="card_<?=$i ?>" class="panel-collapse collapse in" role="tabpanel">
-          <div class="panel-body">
+        <div id="card_<?=$i ?>" class="collapse multi-collapse show" role="tabpanel">
+          <div class="card-body position-relative">
             <div class="loading-overlay"></div>
             <div class='library-card-ajax' data-card-id='<?=$card->id?>' data-card-name="<?=$card->card_name?>" data-action='<?=$action?>' data-callback='<?=$this->callback?>'>
             </div>
@@ -111,5 +109,5 @@
   <?php endif; ?>
 <?php endif; ?>
 
-<?=$this->inlineScript(\Laminas\View\Helper\HeadScript::SCRIPT, $loadJs, 'SET')?>
+<?=$this->assetManager()->outputInlineScriptString($loadJs)?>
 <noscript><?=$this->transEsc('Please enable JavaScript.')?></noscript>

@@ -34,7 +34,7 @@ class SolrDefaultFactory extends \VuFind\RecordDriver\SolrDefaultFactory
     public function __invoke(
         ContainerInterface $container,
         $requestedName,
-        array $options = null
+        ?array $options = null
     ) {
         /**
          * Record driver

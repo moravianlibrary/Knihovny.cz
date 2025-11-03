@@ -36,7 +36,7 @@ class ZiskejEddFactory implements FactoryInterface
     public function __invoke(
         ContainerInterface $container,
         $requestedName,
-        array $options = null
+        ?array $options = null
     ): ZiskejEdd {
         return new $requestedName(
             $container->get(\VuFind\Auth\Manager::class),

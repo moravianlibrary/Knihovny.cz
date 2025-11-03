@@ -47,7 +47,7 @@ if [ ! -e "${VUFIND_XSL_DIR}/" ]; then
 fi
 
 # Compile CSS in themes
-grunt less custom
+npm run build
 
 # Local configs
 for config in ${EXTENSION_DIR}/local/*/; do

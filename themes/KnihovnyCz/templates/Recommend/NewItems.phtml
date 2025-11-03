@@ -13,24 +13,25 @@
 
   <div class="authorbox">
     <form name='newItemsFilter' id='newItemsFilter' class='form-inline' method='get'>
-      <?=
-        $results->getUrlQuery()->asHiddenFields(['page' => '/./', 'filter' => "/^{$dateField}:.*/"]);
-        $selectedDateRangeFilter = $this->recommend->getSelectedDateRangeFilter();
-      ?>
-      <label for="<?=$this->escapeHtml($dateField)?>">
-        <?=$this->translate('New items since')?>:&nbsp;
-      </label>
-      <select id="<?=$this->escapeHtml($dateField)?>" name="filter[]" class="jumpMenu form-control">
-        <option value="" selected disabled hidden></option>
-        <?php foreach($dateRanges as $key => $filter):?>
-          <option value="<?=$this->escapeHtml($filter)?>" <?php if ($filter == $selectedDateRangeFilter):?> selected <?php endif; ?>><?=$this->escapeHtml($key);?> </option>
-        <?php endforeach;?>
-      </select>
-      <noscript>
-        <input type="submit" class="btn btn-default">
-      </noscript>
-      <?=$this->inlineScript(\Laminas\View\Helper\HeadScript::SCRIPT, $loadJs, 'SET')?>
+      <div class="form-group form-group-inline">
+        <?=
+          $results->getUrlQuery()->asHiddenFields(['page' => '/./', 'filter' => "/^{$dateField}:.*/"]);
+          $selectedDateRangeFilter = $this->recommend->getSelectedDateRangeFilter();
+        ?>
+        <label for="<?=$this->escapeHtml($dateField)?>">
+          <?=$this->translate('New items since')?>:&nbsp;
+        </label>
+        <select id="<?=$this->escapeHtml($dateField)?>" name="filter[]" class="jumpMenu form-select w-auto">
+          <option value="" selected disabled hidden></option>
+          <?php foreach ($dateRanges as $key => $filter):?>
+            <option value="<?=$this->escapeHtml($filter)?>" <?php if ($filter == $selectedDateRangeFilter):?> selected <?php endif; ?>><?=$this->escapeHtml($key);?> </option>
+          <?php endforeach;?>
+        </select>
+        <noscript>
+          <input type="submit" class="btn btn-default">
+        </noscript>
+        <?=$this->assetManager()->outputInlineScriptString($loadJs)?>
+      </div>
     </form>
   </div>
-  <br>
 <?php endif; ?>

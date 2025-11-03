@@ -3,6 +3,7 @@
 namespace KnihovnyCz\Recommend;
 
 use VuFind\Recommend\SideFacetsDeferred as Base;
+use VuFind\Search\Solr\HierarchicalFacetHelper;
 
 /**
  * SideFacetsDeferred Recommendations Module
@@ -36,14 +37,13 @@ class SideFacetsDeferred extends Base
      * Constructor
      *
      * @param \VuFind\Config\PluginManager $configLoader Configuration loader
-     * @param HierarchicalFacetHelper      $facetHelper  Helper for handling
-     * hierarchical facets
-     * @param \VuFind\Auth\Manager         $authManager  Auth manager
+     * @param ?HierarchicalFacetHelper     $facetHelper  Helper for handling hierarchical facets
+     * @param ?\VuFind\Auth\Manager        $authManager  Auth manager
      */
     public function __construct(
         \VuFind\Config\PluginManager $configLoader,
-        \VuFind\Search\Solr\HierarchicalFacetHelper $facetHelper = null,
-        \VuFind\Auth\Manager $authManager
+        ?HierarchicalFacetHelper $facetHelper = null,
+        ?\VuFind\Auth\Manager $authManager = null
     ) {
         parent::__construct($configLoader, $facetHelper);
         $this->authManager = $authManager;

@@ -4,29 +4,19 @@
     $listUrl = $this->listUrl;
   ?>
 
-  <div class='col-md-4 widget'>
-    <div class='header'>
-      <a href='<?=$listUrl?>' title='<?= $this->translate('Show all') ?>'>
+  <div class="col-md-4 widget">
+    <div class="header">
+      <a href="<?=$listUrl?>" title="<?= $this->translate('Show all') ?>">
         <h2><?=$this->list->title ?? '' ?></h2>
       </a>
     </div>
-    <div class='list-group'>
-
+    <div class="list-group">
       <?php foreach ($this->items as $item):?>
         <?=$this->context($this)->renderInContext('ContentBlock/inspiration-item', ['item' => $item]); ?>
       <?php endforeach; ?>
-
-      <a href='<?=$listUrl ?>' class='list-group-item clearfix' title='<?= $this->translate('Show all')?> '>
-        <div class='row more-info'>
-          <div class='col-xs-10'>
-            <?=$this->translate('Show all') ?>
-          </div>
-          <div class='col-xs-2 text-right'>
-            <?=$this->icon('inspiration-show-more')?>
-          </div>
-        </div>
+      <a href="<?=$listUrl ?>" class="list-group-item-more list-group-item list-group-item-action list-group-item-light">
+        <?=$this->translate('Show all') ?> <?=$this->icon('inspiration-show-more')?>
       </a>
-
     </div>
   </div>
 <?php endif; ?>

@@ -65,19 +65,19 @@ if ($cover):
             <?php $dnnt = array_filter($links, function ($link) { return $link['status'] == 'dnnt'; }); ?>
             <?php if (!empty($online)): ?>
               <?php
-              foreach($online as $onlineLink) {
+              foreach ($online as $onlineLink) {
                 if (str_ends_with($onlineLink['url'], 'pdf')) {
                   $link = $onlineLink;
                   break;
                 }
               }
               $link ??= array_shift($online); ?>
-              <div class="text-right">
+              <div class="text-end">
                 <a class="btn btn-primary" target="_blank" href="<?=$this->escapeHtmlAttr($link['url']) ?>"><?=$this->transEsc('read_online') ?></a>
               </div>
             <?php elseif (!empty($dnnt)): ?>
               <?php $link = array_shift($dnnt); ?>
-              <div class="text-right">
+              <div class="text-end">
                 <a class="btn btn-primary" target="_blank" href="<?=$this->escapeHtmlAttr($link['url']) ?>"><?=$this->transEsc('read_online_dnnt') ?></a>
               </div>
             <?php endif; ?>

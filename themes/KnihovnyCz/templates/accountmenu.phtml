@@ -1,4 +1,0 @@
-<?php foreach ($this->accountMenu()->getItems() as $item): ?>
-  <?=$this->render('myresearch/menu-item.phtml', [...$item])?>
-<?php endforeach; ?>
-<?=$this->inlineScript(\Laminas\View\Helper\HeadScript::SCRIPT, 'VuFind.account.clearCache("fines");', 'SET') ?>

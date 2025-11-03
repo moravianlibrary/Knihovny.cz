@@ -37,7 +37,7 @@ class EVersionFactory implements FactoryInterface
     public function __invoke(
         ContainerInterface $container,
         $requestedName,
-        array $options = null
+        ?array $options = null
     ): EVersion {
         return new $requestedName(
             $container->get(\KnihovnyCz\Service\PalmknihyApiService::class),

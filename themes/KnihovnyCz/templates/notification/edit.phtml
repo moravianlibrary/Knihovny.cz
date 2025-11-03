@@ -8,7 +8,7 @@
   </div>
   <div class="form-group">
     <label for="notifications-"><?=$this->translate('Notifications::Language');?></label>:
-    <select class="form-control" id="notifications-language" name="language">
+    <select class="form-select" id="notifications-language" name="language">
       <option value="cs"<?=($this?->data?->getLanguage() ?? 'cs') === 'cs' ? ' selected' : '' ?>><?=$this->translate('Notifications::language_cs')?></option>
       <option value="en"<?=($this?->data?->getLanguage() ?? 'cs') === 'en' ? ' selected' : '' ?>><?=$this->translate('Notifications::language_en')?></option>
     </select>
@@ -18,8 +18,8 @@
       $priorities = $this->notifications()->getPriorityData();
     ?>
     <label for="notifications-priority"><?=$this->translate('Notification::Priority')?></label>
-    <select class="form-control" id="notifications-priority" name="priority">
-      <?php foreach($priorities as $priority => $class): ?>
+    <select class="form-select" id="notifications-priority" name="priority">
+      <?php foreach ($priorities as $priority => $class): ?>
         <option value="<?=$priority?>"<?=($this?->data?->getPriority() ?? '2') == $priority ? ' selected' : ''?> data-class="alert alert-<?=$class?>"><?=$this->transEsc('Notifications::priority_' . $class)?></option>
       <?php endforeach; ?>
     </select>
@@ -65,4 +65,4 @@
           });
       JS;
 
-echo $this->inlineScript(\Laminas\View\Helper\HeadScript::SCRIPT, $js, 'SET');
+echo $this->assetManager()->outputInlineScriptString($js);

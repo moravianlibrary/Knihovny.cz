@@ -6,9 +6,8 @@
   $this->layout()->searchbox = false;
 
   // Set up breadcrumbs:
-  $searchCrumb = $this->searchMemory()->getLastSearchLink($this->transEsc('Search')) ?: $this->transEsc('Search');
-  $this->layout()->breadcrumbs = "<li>$searchCrumb</li> ";
-  $this->layout()->breadcrumbs .= '<li class="active">' . $this->transEsc('Advanced') . '</li>';
+  $this->breadcrumbs()->set($this->translate('Search'), $this->searchMemory()->getLastSearchUrl())
+    ->add($this->translate('Advanced'), active: true);
 
   // Set up saved search details:
   if (isset($this->saved) && is_object($this->saved)) {
@@ -34,11 +33,11 @@
   }
 
   // Step 1: Load the javascript
-  $this->headScript()->appendFile(
+  $this->assetManager()->appendScriptLink(
       $this->advancedSearchJsOverride ?? 'advanced_search.js'
   );
   // Step 2: Build the page
-  $this->headScript()->appendScript(
+  $this->assetManager()->appendScriptString(
       $this->partial(
           $this->buildPageOverride ?? 'search/advanced/build_page.phtml',
           ['options' => $this->options, 'searchDetails' => $searchDetails]
@@ -84,31 +83,32 @@
         <input type="hidden" name="hiddenFilters[]" value="<?=$this->escapeHtmlAttr($key) . ':' . $this->escapeHtmlAttr($value)?>">
       <?php endforeach; ?>
     <?php endforeach; ?>
-    <div class="<?=$this->layoutClass('mainbody')?>">
+    <div class="<?=($checkboxFilters || $searchFilters) ? $this->layoutClass('mainbody') : '' ?>">
       <?php $lastSort = $this->searchMemory()->getLastSort($this->searchClassId); ?>
       <?php if (!empty($lastSort)): ?>
         <input type="hidden" name="sort" value="<?=$this->escapeHtmlAttr($lastSort)?>">
       <?php endif; ?>
-      <div class="clearfix">
-        <ul class="nav nav-tabs">
-          <li class="active">
-            <a href="">
+      <div class="card card-with-tabs">
+      <div class="card-header">
+        <ul class="nav nav-tabs card-header-tabs">
+          <li class="nav-item">
+            <a class="nav-link active" href="">
               <?=$this->transEsc('Advanced Search')?>
             </a>
           </li>
-          <li>
-            <a href="<?=$geoUrl ?>"><?=$this->transEsc('Geographic Search')?></a>
+          <li class="nav-item">
+            <a class="nav-link" href="<?=$geoUrl ?>"><?=$this->transEsc('Geographic Search')?></a>
           </li>
         </ul>
-        <div id="groupJoin" class="form-inline pull-right flip">
+        <div id="groupJoin" class="form-inline float-end">
           <label for="groupJoinOptions"><?=$this->transEsc('search_match')?>:</label>
-          <select id="groupJoinOptions" name="join" class="form-control">
+          <select id="groupJoinOptions" name="join" class="form-select">
             <option value="AND"<?php if ($searchDetails && $searchDetails->getOperator() == 'ALL'):?> selected<?php endif; ?>><?= $this->transEsc('group_AND') ?></option>
             <option value="OR"<?php if ($searchDetails && $searchDetails->getOperator() == 'OR'):?> selected<?php endif; ?>><?= $this->transEsc('group_OR') ?></option>
           </select>
         </div>
       </div>
-      <div class="tab-content well">
+      <div class="card-body tab-content">
       <div class="context-help">
         <h2 class="context-text"><?=$this->transEsc('Advanced Search')?></h2>
         <?php
@@ -119,7 +119,7 @@
           'summon' => 'ci-advanced-search',
         ];
         ?>
-        <?php if(isset($contextHelpLinks[$this->layout()->templateDir])): ?>
+        <?php if (isset($contextHelpLinks[$this->layout()->templateDir])): ?>
           <?=$this->contextHelp($contextHelpLinks[$this->layout()->templateDir], 'heading')?>
         <?php endif; ?>
       </div>
@@ -132,32 +132,32 @@
         <?php if (!empty($this->formOverride)):  ?>
           <?=$this->formOverride ?>
         <?php else: ?>
-          <?php for($group = 0; $group < 3 || $group <= $setGroupCount; $group++): ?>
+          <?php for ($group = 0; $group < 3 || $group <= $setGroupCount; $group++): ?>
             <?php if ($group == 0): ?>
               <div id="new_group_template">
             <?php endif; ?>
             <div id="group<?=$group ?>" class="adv-group">
               <div class="adv-group-terms">
                 <label class="adv-group-label"><?=$this->transEsc('adv_search_label')?>:</label>
-                <?php for($search = 0; $search < 3 || (isset($setQueries[$group]) && $search < count($setQueries[$group])); $search++): ?>
+                <?php for ($search = 0; $search < 3 || (isset($setQueries[$group]) && $search < count($setQueries[$group])); $search++): ?>
                   <?php if ($group == 0 && $search == 0): ?>
                     <div id="new_search_template">
                   <?php endif; ?>
                   <div id="search<?=$group . '_' . $search ?>" class="adv-search">
                     <input name="lookfor<?=$group ?>[]" id="search_lookfor<?=$group . '_' . $search ?>" class="adv-term-input form-control" type="text"<?php if (isset($setQueries[$group][$search])): ?> value="<?=$this->escapeHtmlAttr($setQueries[$group][$search]->getString())?>"<?php endif; ?> aria-label="<?=$this->transEscAttr('search_terms')?>">
-                    <select class="adv-term-type form-control" name="type<?=$group ?>[]" aria-label="<?=$this->transEscAttr('Search type')?>">
+                    <select class="adv-term-type form-select" name="type<?=$group ?>[]" aria-label="<?=$this->transEscAttr('Search type')?>">
                       <?php foreach ($this->options->getAdvancedHandlers() as $searchVal => $searchDesc): ?>
                         <option value="<?=$this->escapeHtmlAttr($searchVal)?>"<?php if (isset($setQueries[$group][$search]) && $searchVal == $setQueries[$group][$search]->getHandler()): ?> selected<?php endif; ?>><?=$this->transEsc($searchDesc)?></option>
                       <?php endforeach; ?>
                     </select>
                     <a href="#" class="adv-term-remove hidden">
                       <?=$this->icon('ui-remove') ?>
-                      <span class="sr-only"><?=$this->transEsc('remove') ?></span>
+                      <span class="visually-hidden"><?=$this->transEsc('remove') ?></span>
                     </a>
                   </div>
                   <?php if ($group == 0 && $search == 0): ?>
                     </div>
-                    <div class="float-left">
+                    <div>
                       <span class="search_place_holder hidden"></span>
                       <a href="#" class="add_search_link icon-link hidden" role="button">
                         <?=$this->icon('ui-add', 'icon-link__icon') ?>
@@ -169,7 +169,7 @@
               </div>
               <div class="adv-group-match">
                 <label class="search_bool"><?=$this->transEsc('search_match')?>:&nbsp;</label>
-                <select name="bool<?=$group ?>[]" id="search_bool<?=$group ?>" class="form-control">
+                <select name="bool<?=$group ?>[]" id="search_bool<?=$group ?>" class="form-select">
                   <option value="AND"<?php if (isset($setSearchGroups[$group]) && 'AND' == $setSearchGroups[$group]):?> selected<?php endif; ?>><?=$this->transEsc('search_AND')?></option>
                   <option value="OR"<?php if (isset($setSearchGroups[$group]) && 'OR' == $setSearchGroups[$group]):?> selected<?php endif; ?>><?=$this->transEsc('search_OR')?></option>
                   <option value="NOT"<?php if (isset($setSearchGroups[$group]) && 'NOT' == $setSearchGroups[$group]):?> selected<?php endif; ?>><?=$this->transEsc('search_NOT')?></option>
@@ -191,7 +191,7 @@
         <input class="btn btn-primary" type="submit" value="<?= $this->transEscAttr('Find')?>">
       </div>
       <?php if (isset($this->extraAdvancedControls)): ?>
-        <div class="clearfix">
+        <div>
           <?=$this->extraAdvancedControls ?>
         </div>
         <div class="adv-submit">
@@ -199,14 +199,15 @@
           <input class="btn btn-primary" type="submit" value="<?= $this->transEscAttr('Find')?>">
         </div>
       <?php endif; ?>
+      </div>
     </div>
     </div>
 
+    <?php if ($checkboxFilters || $searchFilters): ?>
     <div class="<?=$this->layoutClass('sidebar')?>">
       <?php if ($hasDefaultsApplied): ?>
         <input type="hidden" name="dfApplied" value="1">
       <?php endif ?>
-      <?php if ($checkboxFilters || $searchFilters): ?>
         <h2><?=$this->transEsc('adv_search_filters')?></h2>
         <div class="facet-group">
           <label class="checkbox">
@@ -216,7 +217,7 @@
         </div>
 
         <?php if ($checkboxFilters): ?>
-          <div class="checkboxFilter">
+          <div class="checkbox-filters">
             <?php foreach ($checkboxFilters as $data): ?>
               <div class="checkbox-filter">
                 <label class="facet checkbox"><input class="checkbox-select-item" type="checkbox" checked="checked" name="filter[]" value="<?=$this->escapeHtmlAttr($data['filter'])?>"> <?=$this->transEsc($data['desc'])?></label>
@@ -242,8 +243,8 @@
             <?php endforeach; ?>
           </div>
         <?php endforeach; ?>
-      <?php endif; ?>
     </div>
+    <?php endif; ?>
   </form>
 </div>
 <?php
@@ -254,4 +255,4 @@ $script = <<<JS
             })
             JS;
 ?>
-<?=$this->inlineScript(\Laminas\View\Helper\HeadScript::SCRIPT, $script, 'SET');
+<?=$this->assetManager()->outputInlineScriptString($script);

@@ -11,7 +11,7 @@
 
 ?>
 
-<a class="search-filter-toggle visible-xs" href="#myresearch-sidebar" data-toggle="offcanvas" title="Expand Sidebar">
+<a class="search-filter-toggle visible-xs" href="#myresearch-sidebar" data-bs-toggle="offcanvas" title="Expand Sidebar">
   <?=$this->transEsc('Your Account') ?>
 </a>
 
@@ -24,17 +24,17 @@
       $institution = $card->home_library;
       $imageLink = sprintf('institutions/logos/%s/%s_small.png', $institution, $institution);
       ?>
-      <div class="panel-heading panel-heading-with-img bg-white clearfix pointer" role="tab">
-        <h3 class="panel-title pull-left">
+      <div class="panel-heading panel-heading-with-img bg-white pointer" role="tab">
+        <h3 class="panel-title">
           <?=$this->transEsc('Source::' . $institution) ?>
         </h3>
-        <img class="pull-right" height="30" src="<?=$this->imageLink($imageLink)?>" alt="<?=$this->transEsc('Source::' . $institution) ?>">
+        <img class="float-right" height="30" src="<?=$this->imageLink($imageLink)?>" alt="<?=$this->transEsc('Source::' . $institution) ?>">
       </div>
     <?php endif;?>
 
     <div class="panel-body">
       <?=$this->flashmessages();?>
-      <form id="profileChange" class="profile-change" method="post" data-toggle="validator">
+      <form id="profileChange" class="profile-change" method="post" data-bs-toggle="validator">
         <input type="hidden" name="csrf" value="<?=$this->escapeHtmlAttr($this->auth()->getManager()->getCsrfHash())?>">
         <?=$this->context($this)->renderInContext($this->formLayout, []); ?>
         <div class="form-group">

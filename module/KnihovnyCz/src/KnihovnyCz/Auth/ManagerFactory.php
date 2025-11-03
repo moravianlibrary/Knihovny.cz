@@ -36,7 +36,7 @@ class ManagerFactory implements FactoryInterface
     public function __invoke(
         ContainerInterface $container,
         $requestedName,
-        array $options = null
+        ?array $options = null
     ) {
         if (!empty($options)) {
             throw new \Exception('Unexpected options sent to factory.');
@@ -53,6 +53,7 @@ class ManagerFactory implements FactoryInterface
         $loginTokenManager = $container->get(\VuFind\Auth\LoginTokenManager::class);
         $ils = $container->get(\VuFind\ILS\Connection::class);
         $userSettingsService = $container->get(\KnihovnyCz\Db\Service\UserSettingsService::class);
+        $viewRenderer = $container->get('ViewRenderer');
 
         // Build the object and make sure account credentials haven't expired:
         $manager = new $requestedName(
@@ -64,7 +65,8 @@ class ManagerFactory implements FactoryInterface
             $csrf,
             $loginTokenManager,
             $ils,
-            $userSettingsService
+            $userSettingsService,
+            $viewRenderer
         );
         $manager->checkForExpiredCredentials();
         return $manager;

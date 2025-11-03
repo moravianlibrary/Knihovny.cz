@@ -9,15 +9,13 @@ $this->layout()->searchbox = false;
 <?=$this->flashmessages() ?>
 
 <!-- ziskej select mode -->
-<div class="panel panel-default">
-  <div class="panel-heading">
-    <h3 class="panel-title"><?=$this->translate('Ziskej::settings_title_mode') ?></h3>
-  </div>
-  <div class="panel-body">
+<div class="card">
+  <h3 class="card-header"><?=$this->translate('Ziskej::settings_title_mode') ?></h3>
+  <div class="card-body">
     <form action="<?=$this->url('ziskej-admin') ?>" id="ziskejForm" method="post" name="ziskejForm">
       <div class="form-group">
         <label for="selectZiskejMode"><?=$this->translate('Ziskej::label_ziskej_mode') ?>: </label>
-        <select name="ziskejMode" class="form-control" id="selectZiskejMode">
+        <select name="ziskejMode" class="form-select" id="selectZiskejMode">
           <?php foreach ($this->ziskejMvs()->getModes() as $mode): ?>
             <option value="<?=$this->escapeHtmlAttr($mode) ?>" <?php if ($mode == $this->ziskejMvs()->getCurrentMode()): ?>selected="selected"<?php endif; ?>>
               <?=$this->translate(sprintf('Ziskej::mode_%s', $mode)) ?>
@@ -36,11 +34,9 @@ $this->layout()->searchbox = false;
 <?php if ($this->ziskejMvs()->isEnabled()): ?>
 
   <!-- user data -->
-  <div class="panel panel-default">
-    <div class="panel-heading">
-      <h3 class="panel-title"><?=$this->translate('Ziskej::settings_title_user') ?></h3>
-    </div>
-    <div class="panel-body">
+  <div class="card">
+    <h3 class="card-header"><?=$this->translate('Ziskej::settings_title_user') ?></h3>
+    <div class="card-body">
       <?php if (!empty($this->user)): ?>
         <div class="row">
           <div class="col-md-6">
@@ -71,19 +67,19 @@ $this->layout()->searchbox = false;
 
   <!-- ziskej data -->
   <?php if (!empty($this->data)): ?>
-    <div>
-      <!-- Nav tabs -->
-      <ul class="nav nav-tabs" role="tablist">
+    <div class="card card-with-tabs">
+      <div class="card-header bg-transparent">
+        <ul class="nav nav-tabs card-header-tabs" role="tablist">
         <?php $i = 1; ?>
         <?php foreach ($this->data as $eppn => $row): ?>
-          <li role="presentation" class="<?php if ($i === 1): ?>active<?php endif; ?>">
-            <a href="#tab_<?=$i ?>" role="tab" data-toggle="tab"><?=$eppn ?></a>
+          <li role="presentation" class="nav-item">
+            <a class="nav-link <?php if ($i === 1): ?>active<?php endif; ?>" href="#tab_<?=$i ?>" role="tab" data-bs-toggle="tab"><?=$eppn ?></a>
           </li>
           <?php $i++; ?>
         <?php endforeach; ?>
       </ul>
-      <!-- Tab panes -->
-      <div class="tab-content">
+      </div>
+      <div class="card-body tab-content">
         <?php $i = 1; ?>
         <?php foreach ($this->data as $eppn => $row): ?>
           <div class="tab-pane <?php if ($i === 1): ?>active<?php endif; ?>" id="tab_<?=$i ?>">
@@ -147,10 +143,10 @@ $this->layout()->searchbox = false;
                             <div class="panel panel-default">
                               <div class="panel-heading" role="tab">
                                 <h4 class="panel-title">
-                                  <a role="button" data-toggle="collapse" href="#ticket_<?=$ticket->hid ?>">
+                                  <a role="button" data-bs-toggle="collapse" href="#ticket_<?=$ticket->hid ?>">
                                     <?=$this->dateTime()->convertToDisplayDateAndTime('U', $ticket->createdAt->getTimestamp()) ?>
                                     | <?=$ticket->id ?>
-                                    <span class="pull-right">
+                                    <span class="float-right">
                                       <?php if (is_countable($ticketDuo['messages']) && count($ticketDuo['messages'])): ?>
                                         <span class="badge"><?=$this->translate('Ziskej::settings_label_count_messages') ?>: <?=count($ticketDuo['messages']) ?></span>
                                       <?php endif; ?>

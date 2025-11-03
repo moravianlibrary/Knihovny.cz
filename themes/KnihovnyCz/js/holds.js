@@ -1,7 +1,7 @@
 /* exported loadHolds */
-/* global loadCovers, VuFind, hideLibraryCardContent, showLibraryCardContent */
+/* global VuFind, hideLibraryCardContent, showLibraryCardContent */
 function loadHolds(element) {
-  loadCovers();
+  VuFind.covers.init();
 
   // Checkbox select all
   $(element).find('.checkbox-select-all').on('change', function selectAllCheckboxes() {

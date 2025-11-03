@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace KnihovnyCz\Controller;
 
 use KnihovnyCz\Db\Service\PalmknihyCheckoutsServiceInterface;
-use Laminas\Config\Config;
 use Laminas\ServiceManager\ServiceLocatorInterface;
 use Laminas\Stdlib\RequestInterface as Request;
 use Laminas\Stdlib\ResponseInterface as Response;
+use VuFind\Config\Config;
 use VuFind\Db\Service\UserCardServiceInterface;
 use VuFind\Validator\CsrfInterface;
 use VuFindHttp\HttpServiceAwareInterface;
@@ -71,7 +71,7 @@ class RecordController extends \VuFind\Controller\RecordController implements Ht
      *
      * @return Response|mixed
      */
-    public function dispatch(Request $request, Response $response = null)
+    public function dispatch(Request $request, ?Response $response = null)
     {
         if (
             $this->redirectToLibrary

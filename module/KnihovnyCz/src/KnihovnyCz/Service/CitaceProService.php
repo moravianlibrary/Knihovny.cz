@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace KnihovnyCz\Service;
 
-use Laminas\Config\Config;
+use VuFind\Config\Config;
 use VuFind\Record\Loader;
 
 /**

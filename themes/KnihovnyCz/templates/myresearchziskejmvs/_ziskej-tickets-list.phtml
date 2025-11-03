@@ -1,4 +1,4 @@
-<ul class="media-list">
+<ul class="list-unstyled">
   <?php
 
   use Mzk\ZiskejApi\Enum\StatusName;
@@ -10,8 +10,10 @@
     /** @var ?\KnihovnyCz\RecordDriver\SolrLocal $record */
     $record = $item['record'];
     ?>
-    <li class="media well" id="record_<?=$ticket->hid?>" data-ziskej="<?=$ticket->hid?>">
-      <strong class="pull-left order"><?= $itemIndex++ ?>.</strong>
+    <li class="d-flex well" id="record_<?=$ticket->hid?>" data-ziskej="<?=$ticket->hid?>">
+      <div class="flex-shrink-0">
+        <strong class="order"><?= $itemIndex++ ?>.</strong>
+      </div>
       <?php
       $thumbnail = false;
       if ($record) {
@@ -26,12 +28,12 @@
       }
       ?>
       <?php if ($thumbnail): ?>
-        <div class="media-left small">
+        <div class="flex-shrink-0">
           <?=$thumbnail?>
         </div>
       <?php endif ?>
-      <div class="media-body">
-        <h4 class="media-heading">
+      <div class="flex-grow-1 ms-3">
+        <h4>
           <?php if ($record): ?>
             <?php
             $title = !empty($record->getTitle())
@@ -84,7 +86,7 @@
               </dd>
             <?php endif; ?>
           </dl>
-          <div class="text-right">
+          <div class="text-end">
             <?php if ($ticket->status == StatusName::CREATED && !empty($ticket->paymentUrl)): ?>
               <a class="btn btn-sm btn-warning" href="<?=$ticket->paymentUrl->getAbsoluteUrl()?>" target="_blank" title="<?=$this->transEsc('ZiskejMvs::btn_order_pay_title')?>">
                 <?=$this->icon('ziskej-order')?> <?=$this->transEsc('ZiskejMvs::btn_order_pay')?>

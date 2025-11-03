@@ -162,7 +162,7 @@ form.was-validated select:valid ~ .select2-container--bootstrap3 .select2-select
 }
 
 .select2-container--bootstrap3 .select2-selection--single {
-  height: calc(1.5em + 0.75rem + 2px) !important;
+  height: 42px !important;
 }
 
 .input-group-lg .select2-container--bootstrap3 .select2-selection--single {
@@ -171,7 +171,7 @@ form.was-validated select:valid ~ .select2-container--bootstrap3 .select2-select
 }
 
 .select2-container--bootstrap3 .select2-selection--single .select2-selection__placeholder {
-  line-height: calc(1.5em + 0.75rem);
+  line-height: 40px;
   color: #6c757d;
 }
 
@@ -197,7 +197,7 @@ form.was-validated select:valid ~ .select2-container--bootstrap3 .select2-select
 
 .select2-container--bootstrap3 .select2-selection--single .select2-selection__rendered {
   padding-left: 0.75rem;
-  line-height: calc(1.5em + 0.75rem);
+  line-height: 40px;
   color: #495057;
 }
 

@@ -17,7 +17,7 @@ $this->layout()->breadcrumbs = '<li><a href="' . $this->url('myresearch-ebooks')
   <?=$this->context($this)->renderInContext('librarycards/listcards.phtml', [
     'user' => $this->auth()->getUserObject(),
     'action' => $this->url('myresearch-ebooksajax'),
-    'callback' => 'loadCheckedOut',
+    'callback' => 'loadEbooks',
   ]);
   ?>
 </div>
@@ -27,12 +27,12 @@ $this->layout()->breadcrumbs = '<li><a href="' . $this->url('myresearch-ebooks')
 </div>
 <?php
 $loadJs = <<<JS
-        function loadCheckedOut(element) {
-          loadCovers();
+        function loadEbooks(element) {
+          VuFind.covers.init();
         }
       JS;
 ?>
-<?=$this->inlineScript(\Laminas\View\Helper\HeadScript::SCRIPT, $loadJs, 'SET')?>
+<?=$this->assetManager()->outputInlineScriptString($loadJs)?>
 <noscript><?=$this->transEsc('Please enable JavaScript.')?></noscript>
 
 

@@ -3,8 +3,8 @@
   $coreFields = $formatter->getData($formatter->getDefaults($this->defaults ?? 'core'));
 ?>
 <?php if (!empty($coreFields)): ?>
-  <h4 class="sr-only"><?=$this->transEsc($this->caption ?? 'Bibliographic Details')?></h4>
-  <dl <?php if (!empty($this->tableId)): ?>id="<?=$this->tableId ?>" <?php endif; ?>class="dl-horizontal">
+  <h4 class="visually-hidden"><?=$this->transEsc($this->caption ?? 'Bibliographic Details')?></h4>
+  <dl class="dl-horizontal" <?php if (!empty($this->tableId)): ?>id="<?=$this->tableId ?>" <?php endif; ?>>
     <?php foreach ($coreFields as $current): ?>
       <dt>
         <span <?=($current['context']['hiddenLabel'] ?? false) ? 'class="sr-only"' : ''?>><?=$this->transEsc($current['label'])?></span>

@@ -36,7 +36,7 @@ class SummonFactory extends \VuFind\RecordDriver\SummonFactory
     public function __invoke(
         ContainerInterface $container,
         $requestedName,
-        array $options = null
+        ?array $options = null
     ) {
         /**
          * Record driver

@@ -2,7 +2,7 @@
 
 namespace KnihovnyCz\Search\Solr\Backend;
 
-use Laminas\Config\Config;
+use VuFind\Config\Config;
 use VuFindSearch\ParamBag;
 use VuFindSearch\Query\AbstractQuery;
 use VuFindSearch\Query\Query;
@@ -36,7 +36,7 @@ class QueryBuilder extends \VuFindSearch\Backend\Solr\QueryBuilder
     public function __construct(
         array $specs = [],
         $defaultDismaxHandler = 'dismax',
-        Config $searchConfig = null
+        ?Config $searchConfig = null
     ) {
         parent::__construct($specs, $defaultDismaxHandler);
         $this->searchConfig = $searchConfig;

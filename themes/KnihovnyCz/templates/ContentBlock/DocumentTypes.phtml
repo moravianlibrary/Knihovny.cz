@@ -5,28 +5,28 @@
 
 ?>
 
-<div class='col-md-4 widget document-type-widget'>
-  <div class='header'>
+<div class="col-md-4 widget document-type-widget">
+  <div class="header">
     <h2><?=$this->transEsc('Document_Types_Widget')?></h2>
 </div>
-<div class='list-group'>
+<div class="list-group">
   <?php foreach ($this->results as $item): ?>
   <?php $url = $this->url($searchAction) . '?' . http_build_query([
           'filter' => '~' . $this->facetField . ':"' . $item['value'] . '"',
         ]);
   ?>
-    <a href='<?=$url?>' class='list-group-item clearfix' title='<?=$this->transEsc($item['title'])?>'>
-      <div class='row'>
-        <div class='col-xs-3 col-sm-2 col-md-2 text-center'>
-          <div class='iconlabel'>
-            <i class='widget-icon <?=$this->escapeHtml($item['icon'])?>'></i>
+    <a href="<?=$url?>" class="list-group-item list-group-item-action" title="<?=$this->transEsc($item['title'])?>">
+      <div class="d-flex gap-2 py-1">
+        <div class="text-center">
+          <div class="iconlabel">
+            <i class="widget-icon <?=$this->escapeHtml($item['icon'])?>"></i>
           </div>
         </div>
-        <div class='col-xs-9 col-sm-10 col-md-10 content'>
-          <h4 class='list-group-item-heading'>
+        <div class="content">
+          <h4 class="list-group-item-heading m-0">
             <?=$this->transEsc($item['title'])?>
           </h4>
-          <p class='list-group-item-text'>
+          <p class="list-group-item-text m-0">
             <?=$this->transEsc($item['description'])?>
           </p>
         </div>

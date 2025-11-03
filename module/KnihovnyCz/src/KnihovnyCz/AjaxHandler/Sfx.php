@@ -30,7 +30,7 @@ class Sfx extends AbstractBase implements
     /**
      * Configuration
      *
-     * @var \Laminas\Config\Config
+     * @var \Vufind\Config\Config
      */
     protected \Laminas\Config\Config $config;
 
@@ -51,12 +51,12 @@ class Sfx extends AbstractBase implements
     /**
      * Constructor
      *
-     * @param \Laminas\Config\Config                $config      Configuration
+     * @param \Vufind\Config\Config                 $config      Configuration
      * @param \KnihovnyCz\Service\GuzzleHttpService $httpService HTTP service
      * @param \VuFind\Auth\Manager                  $authManager Auth manager
      */
     public function __construct(
-        \Laminas\Config\Config $config,
+        \Vufind\Config\Config $config,
         \KnihovnyCz\Service\GuzzleHttpService $httpService,
         \VuFind\Auth\Manager $authManager
     ) {

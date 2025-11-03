@@ -1,7 +1,7 @@
 <?php $similarRecords = $this->related->getResults(); ?>
 <?php if (!empty($similarRecords)): ?>
   <h2><?=$this->transEsc('Similar Items')?></h2>
-  <ul class='similar-items-container list-group'>
+  <div>
     <?php foreach ($similarRecords as $data): ?>
       <?php
         $format = $data->format ?? null;
@@ -15,37 +15,43 @@
           }
         }
       ?>
-      <li class="row list-group-item clearfix">
-        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-3 similar-item">
-          <a href="<?=$this->escapeHtmlAttr($url)?>" title='<?=$this->escapeHtml($data->title)?> (<?=$this->transEscWithPrefix('Format::', $format)?>)' tabindex='-1'>
-              <div class="ajaxcoverobalkyknih">
-                <?php if ($format !== null): ?>
-                  <?php $formatClass = 'format-' . preg_replace('/[^a-z]/', '', strtolower($format)); ?>
-                  <div class="spinner"><i class="cover-icon <?=$formatClass?>"></i></div>
-                <?php else: ?>
-                  <div class="spinner"><?=$this->icon('spinner') . $this->translate('loading_ellipsis')?></div>
-                <?php endif; ?>
-                <div class="cover-container">
-                  <img <?=$dataAttrs?>  data-coversize="small" class="recordcover ajax" alt="<?=$alt ?>">
+      <div class="card mb-1">
+        <div class="row">
+          <div class="col-md-4">
+            <div class="card-body text-center">
+              <a href="<?=$this->escapeHtmlAttr($url)?>" title='<?=$this->escapeHtml($data->title)?> (<?=$this->transEscWithPrefix('Format::', $format)?>)' tabindex='-1'>
+                <div class="ajaxcoverobalkyknih">
+                  <?php if ($format !== null): ?>
+                    <?php $formatClass = 'format-' . preg_replace('/[^a-z]/', '', strtolower($format)); ?>
+                    <div class="spinner"><i class="cover-icon <?=$formatClass?>"></i></div>
+                  <?php else: ?>
+                    <div class="spinner"><?=$this->icon('spinner') . $this->translate('loading_ellipsis')?></div>
+                  <?php endif; ?>
+                  <div class="cover-container">
+                    <img <?=$dataAttrs?>  data-coversize="small" class="recordcover ajax" alt="<?=$alt ?>">
+                  </div>
                 </div>
-              </div>
-          </a>
+              </a>
+            </div>
+          </div>
+          <div class="col-md-8">
+            <div class="card-body">
+              <h5 class="card-title">
+                <a href='<?=$this->escapeHtmlAttr($url)?>' title='<?=$this->escapeHtml($data->title)?> (<?=$this->transEscWithPrefix('Format::', $format)?>)'>
+                  <?=$this->escapeHtml($data->title)?>
+                </a>
+              </h5>
+              <?php $author = $data->author ?? null;
+              if (isset($author)): ?>
+                <p class="card-text">
+                  <?=$this->escapeHtml($author);?>
+                </p>
+              <?php endif; ?>
+            </div>
+          </div>
         </div>
-        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-9 similar-item content">
-          <h5 class="list-group-item-heading">
-            <a href='<?=$this->escapeHtmlAttr($url)?>' title='<?=$this->escapeHtml($data->title)?> (<?=$this->transEscWithPrefix('Format::', $format)?>)'>
-              <strong><?=$this->escapeHtml($data->title)?></strong>
-            </a>
-          </h5>
-          <p class="list-group-item-text">
-            <?php $author = $data->author ?? null;
-            if (isset($author)): ?>
-              <?=$this->escapeHtml($author);?>
-            <?php endif; ?>
-          </p>
-        </div>
-      </li>
+      </div>
     <?php endforeach; ?>
-  </ul>
+  </div>
 <?php endif;
-$this->headScript()->appendFile('obalkyknih.js');
+$this->assetManager()->appendScriptLink('obalkyknih.js');

@@ -6,10 +6,10 @@ $summary = $summary[0] ?? false; ?>
     $exp = $this->expandable ?? false;
   ?>
   <p>
-    <span class="text-first"><?=$this->escapeHtml($splitText->first())?><?=($splitText->last() && !$exp) ? '…' : '' ?></span>
+    <span class="text-first"><?=$this->escapeOrCleanHtml($splitText->first())?><?=($splitText->last() && !$exp) ? '…' : '' ?></span>
     <?php if ($splitText->last() && $exp): ?>
-      <span class="text-last hidden"><?=$this->escapeHtml($splitText->last())?></span>
-      <span class="btn-show-full-text">… <a><?=$this->transEsc('full_description')?></a></span>
+      <span class="text-last hidden"><?=$this->escapeOrCleanHtml($splitText->last())?></span>
+      <span class="btn-show-full-text">… <a href="#" title="<?=$this->transEsc('full_description')?>"><?=$this->transEsc('full_description')?></a></span>
     <?php endif; ?>
   </p>
 <?php endif; ?>

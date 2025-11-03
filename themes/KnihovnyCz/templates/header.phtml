@@ -1,24 +1,112 @@
 <?php
-  $loginTarget = $this->loginTarget ?? $this->url('myresearch-userlogin');
-  $account = $this->auth()->getManager();
-  $accountLabel = $this->translate('Your Account');
-  $user = $account->getIdentity();
-  if ($user && $user->firstname && $user->lastname) {
-    $accountLabel = $user->firstname . ' ' . $user->lastname;
-  }
+$loginTarget = $this->loginTarget ?? $this->url('myresearch-userlogin');
+$account = $this->auth()->getManager();
+$accountLabel = $this->translate('Your Account');
+$user = $account->getIdentity();
+if ($user && $user->firstname && $user->lastname) {
+  $accountLabel = $user->firstname . ' ' . $user->lastname;
+}
 ?>
-<div class="banner container navbar">
-  <div class="navbar-header">
-    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#header-collapse" aria-label="<?=$this->transEscAttr('mobile_toggle_navigation_text')?>">
-      <?=$this->icon('ui-menu', 'fa-fw') ?>
-    </button>
-    <a class="navbar-brand lang-<?=$this->layout()->userLang ?>" href="<?=$this->url('home') ?>">
+<nav class="banner navbar navbar-expand-sm">
+  <div class="container">
+    <a class="navbar-brand lang-<?=$this->layout()->userLang ?>" href="<?=$this->url('home')?>">
       <img class="knihovny-logo" src="<?=$this->render('layout/logoimagelink.phtml');?>" alt="<?= $this->translate('logo_alt') ?>">
     </a>
-  </div>
-  <?php if (!isset($this->layout()->renderingError)): ?>
-    <div class="collapse navbar-collapse" id="header-collapse">
-      <nav>
+    <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#header-collapse" aria-label="<?=$this->transEscAttr('mobile_toggle_navigation_text')?>">
+      <?=$this->icon('ui-menu') ?>
+    </button>
+    <?php if (!isset($this->layout()->renderingError)): ?>
+      <div class="collapse navbar-collapse justify-content-end" id="header-collapse">
+
+        <ul class="nav navbar-nav">
+
+          <?php // inspirations: ?>
+          <?php $this->slot('inspiration-link')->start(); ?>
+          <li class="nav-item">
+            <a class="nav-link" href="<?=$this->url('inspiration') ?>"><?=$this->icon('inspiration', 'fa-fw')?> <?=$this->transEsc('Inspiration') ?></a>
+          </li>
+          <?=$this->slot('inspiration-link')->end(); ?>
+
+          <?php if ($this->feedback()->tabEnabled()): ?>
+            <li class="nav-item">
+              <a class="nav-link icon-link" id="feedbackLink" data-lightbox href="<?=$this->url('feedback-home') ?>">
+                <?=$this->icon('feedback', 'icon-link__icon') ?>
+                <span class="icon-link__label"><?=$this->transEsc('Feedback')?></span>
+              </a>
+            </li>
+          <?php endif; ?>
+          <?php $cart = $this->cart(); ?>
+          <?php if ($cart->isActive()): ?>
+            <li class="nav-item" id="cartSummary" aria-live="polite" aria-atomic="true">
+              <a id="cartItems" class="nav-link icon-link position-relative" data-lightbox title="<?=$this->transEscAttr('View Book Bag')?>" href="<?=$this->url('cart-home')?>">
+                <?=$this->icon('cart', 'icon-link__icon') ?>
+                <?=$this->transEsc('Book Bag')?>
+                <sup class="badge text-bg-info">
+                  <small>
+                    <span role="status"><strong><?=count($cart->getItems())?></strong> <span class="visually-hidden"><?=$this->transEsc('items')?></span></span>
+                    <span class="full<?=!$cart->isFull() ? ' hidden' : '' ?>">(<?=$this->transEsc('bookbag_full') ?>)</span>
+                  </small>
+                </sup>
+              </a>
+            </li>
+          <?php endif; ?>
+
+          <?php if (isset($this->layout()->themeOptions) && count($this->layout()->themeOptions) > 1): ?>
+              <?=$this->component('menu-button', [
+                  'toggleLabel' => 'Theme',
+                  'toggleAttrs' => [
+                    'class' => 'nav-link dropdown-toggle',
+                  ],
+                  'wrapperClass' => 'nav-item theme-selector',
+                  'wrapperTag' => 'li',
+                  'iconName' => 'theme',
+                  'menuItems' => array_map(
+                      function ($item) {
+                          $item['label'] = $item['desc'];
+                          $item['url'] = $this->url()->addQueryParameters(['ui' => $item['name']]);
+
+                          return $item;
+                      },
+                      $this->layout()->themeOptions
+                  ),
+              ]) ?>
+          <?php endif; ?>
+
+          <?php if (isset($this->layout()->allLangs) && count($this->layout()->allLangs) > 1): ?>
+            <li class="nav-item dropdown language">
+              <button type="button" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">
+                <span class="fi flags flag-<?=$this->layout()->userLang ?>" role="img" aria-hidden="true"></span>
+                <?=$this->displayLanguageOption($this->layout()->allLangs[$this->layout()->userLang]) ?>
+              </button>
+              <ul class="dropdown-menu">
+                <?php foreach ($this->layout()->allLangs as $langCode => $langName): ?>
+                  <?php if ($langCode !== $this->layout()->userLang): ?>
+                    <li>
+                      <a class="dropdown-item" href="<?=$this->url()->addQueryParameters(['lng' => $langCode]) ?>" rel="nofollow">
+                        <span class="fi flags flag-<?=$langCode ?>" role="img" aria-hidden="true"></span>
+                        <?=$this->displayLanguageOption($langName) ?>
+                      </a>
+                    </li>
+                  <?php endif; ?>
+                <?php endforeach; ?>
+              </ul>
+            </li>
+          <?php endif; ?>
+
+          <?php if (is_object($account) && $account->loginEnabled()): // hide login/logout if unavailable ?>
+            <?php if ($account->getIdentity()): ?>
+              <li id="account-home-nav" class="nav-item dropdown">
+                <button type="button" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">
+                  <?=$this->icon('my-account') ?>
+                  <?=$this->escapeHtml($accountLabel)?>
+                </button>
+                <?=$this->accountMenu()->render('', 'header_')?>
+              </li>
+            <?php endif; ?>
+          <?php endif; ?>
+        </ul>
+
+        <?php // register/login button: ?>
         <?php if (!$account->getIdentity()): ?>
           <div class="navbar-form navbar-right" id="loginOptions">
             <?=$this->slot('registration-link')->set('');?>
@@ -35,88 +123,7 @@
             <?php endif; ?>
           </div>
         <?php endif ?>
-
-        <ul class="nav navbar-nav navbar-right">
-          <?php $this->slot('inspiration-link')->start(); ?>
-            <li>
-              <a href="<?=$this->url('inspiration') ?>"><?=$this->icon('inspiration', 'fa-fw')?> <?=$this->transEsc('Inspiration') ?></a>
-            </li>
-          <?=$this->slot('inspiration-link')->end(); ?>
-          <?php if ($this->feedback()->tabEnabled()): ?>
-            <li>
-              <a id="feedbackLink" data-lightbox href="<?=$this->url('feedback-home') ?>">
-                <?=$this->icon('feedback') ?>
-                <?=$this->transEsc('Feedback')?>
-              </a>
-            </li>
-          <?php endif; ?>
-          <?php $cart = $this->cart(); ?>
-          <?php if ($cart->isActive()): ?>
-            <li id="cartSummary" aria-live="polite" aria-atomic="true">
-              <a id="cartItems" title="<?=$this->transEscAttr('View Book Bag')?>" href="<?=$this->url('cart-home')?>">
-                <span role="status"><span class="sr-only"><?=$this->transEsc('Book Bag')?>:</span>
-                  <sup class="badge badge-info">
-                    <strong><?=count($cart->getItems())?></strong><span class="sr-only"> <?=$this->transEsc('items')?></span>
-                  </sup>
-                  <?=$this->icon('cart') ?>
-                </span>
-                <?=$this->transEsc('Book Bag')?>
-                <span class="full<?=!$cart->isFull() ? ' hidden' : '' ?>">(<?=$this->transEsc('bookbag_full') ?>)</span>
-              </a>
-            </li>
-          <?php endif; ?>
-          <?php if (isset($this->layout()->themeOptions) && count($this->layout()->themeOptions) > 1): ?>
-              <?=$this->component('menu-button', [
-                  'toggleLabel' => 'Theme',
-                  'wrapperClass' => 'theme-selector',
-                  'wrapperTag' => 'li',
-                  'menuItems' => array_map(
-                      function ($item) {
-                          $item['label'] = $item['desc'];
-                          $item['url'] = $this->url()->addQueryParameters(['ui' => $item['name']]);
-
-                          return $item;
-                      },
-                      $this->layout()->themeOptions
-                  ),
-              ]) ?>
-          <?php endif; ?>
-          <?php if (isset($this->layout()->allLangs) && count($this->layout()->allLangs) > 1): ?>
-          <li class="language dropdown">
-            <button class="dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false" aria-haspopup="true">
-              <span class="fi flags flag-<?=$this->layout()->userLang ?>" role="img" aria-hidden="true"></span>
-              <?=$this->displayLanguageOption($this->layout()->allLangs[$this->layout()->userLang]) ?>
-              <span class="icon icon--font fa fa-caret-down fa-fw" role="img" aria-hidden="true"></span>
-            </button>
-            <ul class="dropdown-menu">
-              <?php foreach ($this->layout()->allLangs as $langCode => $langName): ?>
-              <?php if($langCode !== $this->layout()->userLang): ?>
-              <li>
-                <a href="<?=$this->url()->addQueryParameters(['lng' => $langCode]) ?>" rel="nofollow">
-                  <span class="fi flags flag-<?=$langCode ?>" role="img" aria-hidden="true"></span>
-                  <?=$this->displayLanguageOption($langName) ?>
-                </a>
-              </li>
-              <?php endif; ?>
-              <?php endforeach; ?>
-            </ul>
-          </li>
-          <?php endif; ?>
-          <?php if (is_object($account) && $account->loginEnabled()): // hide login/logout if unavailable ?>
-            <?php if($account->getIdentity()): ?>
-              <li class="dropdown">
-                <a href="#" data-toggle="dropdown">
-                  <span id="account-icon"><?=$this->icon('my-account') ?></span>
-                  <?=$this->escapeHtml($accountLabel)?><?=$this->icon('dropdown-caret') ?>
-                </a>
-                <ul class="dropdown-menu">
-                  <?=$this->render('accountmenu'); ?>
-                </ul>
-              </li>
-            <?php endif ?>
-          <?php endif; ?>
-        </ul>
-      </nav>
-    </div>
-  <?php endif; ?>
-</div>
+      </div>
+    <?php endif; ?>
+  </div>
+</nav>

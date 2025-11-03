@@ -3,8 +3,9 @@
 namespace KnihovnyCz\Config;
 
 use KnihovnyCz\Db\Table\Config as ConfigTable;
-use Laminas\Config\Config;
+use Laminas\Config\Config as LaminasConfig;
 use Psr\Container\ContainerInterface;
+use VuFind\Config\Config as VuFindConfig;
 
 /**
  * Class PluginFactory
@@ -22,7 +23,7 @@ class PluginFactory extends \VuFind\Config\PluginFactory
      *
      * @var ConfigTable
      */
-    protected $configTable;
+    protected ConfigTable $configTable;
 
     /**
      * Create a service for the specified name.
@@ -31,30 +32,25 @@ class PluginFactory extends \VuFind\Config\PluginFactory
      * @param string             $requestedName Name of service
      * @param array              $options       Options (unused)
      *
-     * @return Config
+     * @return VuFindConfig
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __invoke(
         ContainerInterface $container,
         $requestedName,
-        array $options = null
+        ?array $options = null
     ) {
-        // There is settings to database connection in main file, so it could not be
-        // loaded from database
-        if ($requestedName === 'config') {
-            $dbConfig = new Config([]);
-        } else {
-            $this->configTable = $container
-                ->get(\VuFind\Db\Table\PluginManager::class)
-                ->get(ConfigTable::class);
+        $dbConfig = new LaminasConfig([]);
+        // There is settings to database connection in main file, so it could not be loaded from
+        if ($requestedName !== 'config') {
+            $this->configTable = $container->get(\VuFind\Db\Table\PluginManager::class)->get(ConfigTable::class);
             $dbConfig = $this->loadConfigFromDb($requestedName);
         }
-        $pathResolver = $container->get(\VuFind\Config\PathResolver::class);
-        $fileConfig = $this->loadConfigFile(
-            $pathResolver->getConfigPath($requestedName . '.ini')
-        );
-        return $fileConfig->merge($dbConfig);
+        $fileConfig = parent::__invoke($container, $requestedName, $options);
+        $fileLaminasConfig = new LaminasConfig($fileConfig->toArray());
+        $mergedConfig = $fileLaminasConfig->merge($dbConfig);
+        return new VuFindConfig($mergedConfig->toArray());
     }
 
     /**
@@ -62,9 +58,9 @@ class PluginFactory extends \VuFind\Config\PluginFactory
      *
      * @param string $filename config file name
      *
-     * @return Config
+     * @return LaminasConfig
      */
-    protected function loadConfigFromDb(string $filename)
+    protected function loadConfigFromDb(string $filename): LaminasConfig
     {
         return $this->configTable->getConfigByFile($filename);
     }

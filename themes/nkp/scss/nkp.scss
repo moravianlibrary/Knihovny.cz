@@ -1,0 +1,110 @@
+@use "sass:color";
+
+$primary: #16799B;
+$nav-link-hover-bg: transparent;
+
+@import "../../KnihovnyCz/scss/common/common";
+
+#searchForm .tab-content.well {
+  row-gap: 10px;
+  padding-bottom: 10px;
+
+  .searchForm-query {
+    width: 55%;
+  }
+}
+
+@media (max-width: 991px) {
+  #searchForm .tab-content.well {
+    .searchForm-query, .form-control {
+      width: 100%;
+    }
+  }
+}
+
+header {
+  background-color: $primary;
+  box-shadow: 0 1px 5px #ccc;
+
+  a {
+    color: #ffffff;
+    text-decoration: none;
+
+    &:hover,
+    &:focus {
+      color: #ffffff;
+    }
+  }
+
+  .nav > li > a:hover,
+  .nav > li > a:focus {
+    color: #ffffff;
+  }
+
+  a,
+  .icon-link__label,
+  .searchForm .advanced-search-link {
+    text-decoration: none;
+
+    &:hover {
+      color: #ffffff;
+      text-decoration: $link-hover-decoration;
+    }
+  }
+
+  .navbar-nav {
+    .nav-item {
+      .nav-link {
+        color: #ffffff;
+        background-color: var(--bs-btn-hover-bg);
+      }
+    }
+
+    button.dropdown-toggle {
+      color: #ffffff;
+    }
+
+    button.dropdown-toggle:hover,
+    button.dropdown-toggle:focus,
+    button.dropdown-toggle:active,
+    button.dropdown-toggle:active:focus {
+      color: #ffffff;
+    }
+
+    .dropdown-menu a:hover {
+      color: #ffffff;
+    }
+
+    .dropdown-menu > li > a,
+    .dropdown-menu > li > a .icon-link__label:hover {
+      color: #333333;
+    }
+
+    .dropdown-menu > li.active > a {
+      color: #ffffff;
+    }
+
+    .dropdown-menu > li.active > a:hover,
+    .dropdown-menu > li.active > a .icon-link__label:hover {
+      color: #ffffff;
+    }
+
+    .dropdown-menu > li > a .icon-link__label:hover {
+      color: #ffffff;
+      text-decoration: none;
+    }
+  }
+
+  .navbar-toggler {
+    color: #ffffff;
+  }
+}
+
+footer {
+  .infobar {
+    .logo {
+      max-width: 165px;
+      max-height: 30px;
+    }
+  }
+}

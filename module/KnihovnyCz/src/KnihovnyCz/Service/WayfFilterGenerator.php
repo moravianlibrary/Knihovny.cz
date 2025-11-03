@@ -18,9 +18,9 @@ class WayfFilterGenerator
     /**
      * Enabled identity providers
      *
-     * @var \Laminas\Config\Config
+     * @var \Vufind\Config\Config
      */
-    protected \Laminas\Config\Config $shibbolethConfig;
+    protected \Vufind\Config\Config $shibbolethConfig;
 
     /**
      * Template for creating filter data
@@ -47,10 +47,10 @@ class WayfFilterGenerator
     /**
      * WayfFilterGenerator constructor.
      *
-     * @param \Laminas\Config\Config $config Shibboleth config - list of enabled
+     * @param \Vufind\Config\Config $config Shibboleth config - list of enabled
      * Identity providers
      */
-    public function __construct(\Laminas\Config\Config $config)
+    public function __construct(\Vufind\Config\Config $config)
     {
         $this->shibbolethConfig = $config;
     }

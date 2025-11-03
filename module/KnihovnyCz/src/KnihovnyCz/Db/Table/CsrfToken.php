@@ -35,7 +35,7 @@ class CsrfToken extends Gateway
         Adapter $adapter,
         PluginManager $tm,
         $cfg,
-        RowGateway $rowObj = null,
+        ?RowGateway $rowObj = null,
         $table = 'csrf_token'
     ) {
         parent::__construct($adapter, $tm, $cfg, $rowObj, $table);

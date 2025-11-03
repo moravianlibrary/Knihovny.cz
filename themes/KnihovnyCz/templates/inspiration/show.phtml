@@ -11,7 +11,7 @@ $this->layout()->searchbox = false;
 <?php endif; ?>
 <div class="row">
   <div class="col-xs-12">
-    <a class="btn btn-default pull-right mb-1" href="<?=$this->searchUrl?>"><?=$this->transEsc('show_list_as_search_results')?></a>
+    <a class="btn btn-default float-right mb-1" href="<?=$this->searchUrl?>"><?=$this->transEsc('show_list_as_search_results')?></a>
   </div>
 </div>
 <div class="row">
@@ -22,8 +22,5 @@ $this->layout()->searchbox = false;
     <?php endif; ?>
     <?php $i++; ?>
     <?=$this->context($this)->renderInContext('item', ['item' => $item]); ?>
-    <?php if ($i % 2 == 0): ?>
-      <div class="clearfix"></div>
-    <?php endif; ?>
     <?php endforeach; ?>
 </div>

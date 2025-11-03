@@ -1,0 +1,102 @@
+/**
+ * Basic alignment and styling for icons
+ * generated through the Icon view helper.
+ */
+
+.icon-link:not(.dropdown-toggle) {
+  display: inline-flex;
+  gap: 0.25rem;
+  vertical-align: middle;
+  align-items: flex-start;
+}
+.icon-link,
+.icon-link:active,
+.icon-link:focus,
+.icon-link:hover {
+  text-decoration: none;
+}
+.icon-link__icon {
+  flex: none;
+  padding: 0;
+  line-height: inherit;
+  color: inherit;
+}
+span.icon-link .icon-link__label,
+.disabled .icon-link__label,
+[disabled] .icon-link__label {
+  text-decoration: none;
+}
+.icon-link.active .icon-link__icon,
+.icon-link.active .icon-link__label {
+  color: #fff;
+}
+
+// Exceptions
+.banner .icon-link__label,
+.pager .icon-link__label,
+.action-toolbar .icon-link__label,
+button .icon-link__label {
+  text-decoration: none;
+}
+
+/**
+ * Styling by type
+ */
+
+.icon--font {
+  display: inline-block;
+  max-width: 1.25em;
+  height: min-content; /* FF */
+  height: fit-content;
+  line-height: inherit;
+  text-align: center;
+  vertical-align: top;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon--img {
+  display: inline-block;
+  max-width: 1.25em;
+  height: min-content; /* FF */
+  height: fit-content;
+  text-align: center;
+  vertical-align: top;
+}
+
+.icon--svg {
+  display: inline-block;
+  max-width: 1.25em;
+  max-height: 1.25em;
+  fill: currentColor;
+  vertical-align: text-bottom;
+}
+
+.icon--unicode:before {
+  content: attr(data-icon);
+}
+
+.myresearch-menu {
+  .icon-link__icon {
+    width: 1rem;
+    text-align: center;
+  }
+
+  .icon-link__label {
+    display: inline-flex;
+    flex: 1 1 0%;
+  }
+}
+
+.account-menu {
+  .icon-link__icon {
+    width: 1rem;
+    text-align: center;
+  }
+
+  .icon-link__label {
+    display: inline-flex;
+    flex: 1 1 0%;
+  }
+}
+

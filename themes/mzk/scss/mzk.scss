@@ -1,0 +1,35 @@
+@use "sass:color";
+
+$primary: #297e84;
+
+@import "../../KnihovnyCz/scss/common/common";
+
+body.template-name-checkedout-all,
+body.template-name-illrequests-all,
+body.template-dir-holds.template-name-list-all,
+body.template-name-fines-all,
+body.template-name-profile-all,
+body.template-dir-myresearch.template-name-mylist
+{
+  div.mainbody a.context-help-link
+  {
+    display:none !important;
+  }
+}
+
+#searchForm .tab-content.well {
+  row-gap: 10px;
+  padding-bottom: 10px;
+
+  .searchForm-query {
+    width: 55%;
+  }
+}
+
+@include media-breakpoint-down(sm) {
+  #searchForm .tab-content.well {
+    .searchForm-query, .form-control {
+      width: 100%;
+    }
+  }
+}

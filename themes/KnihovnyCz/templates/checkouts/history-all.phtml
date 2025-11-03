@@ -7,7 +7,7 @@
 
 $loadJs = <<<JS
       function loadHistoricLoans(element) {
-        loadCovers();
+        VuFind.covers.init();
         const reloadContent = function reloadContent(link){
           hideLibraryCardContent(element, true);
           reloadLibraryCardContent(element, link);
@@ -26,7 +26,7 @@ $loadJs = <<<JS
     JS;
 ?>
 
-<a class="search-filter-toggle visible-xs" href="#myresearch-sidebar" data-toggle="offcanvas" title="Expand Sidebar">
+<a class="search-filter-toggle visible-xs" href="#myresearch-sidebar" data-bs-toggle="offcanvas" title="Expand Sidebar">
   <?=$this->transEsc('Your Account') ?>
 </a>
 
@@ -47,5 +47,5 @@ $loadJs = <<<JS
   <?=$this->accountMenu()->render('historicloans')?>
 </div>
 
-<?=$this->inlineScript(\Laminas\View\Helper\HeadScript::SCRIPT, $loadJs, 'SET')?>
+<?=$this->assetManager()->outputInlineScriptString($loadJs)?>
 <noscript><?=$this->transEsc('Please enable JavaScript.')?></noscript>

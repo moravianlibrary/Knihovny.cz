@@ -1,4 +1,4 @@
-<?php $this->headLink()->appendStylesheet('EDS.css'); ?>
+<?php $this->assetManager()->appendStyleLink('EDS.css'); ?>
 <?php
     $items = $this->driver->getItems('core');
     $dbLabel = $this->driver->getDbLabel();
@@ -7,6 +7,9 @@
     $restrictedView = empty($accessLevel) ? false : true;
     $coverDetails = $this->record($this->driver)->getCoverDetails('core', 'medium');
     $cover = $coverDetails['html'];
+    $edsConfig = $this->config()->get('EDS');
+    $authorDisplay = strtolower($edsConfig->AuthorDisplay->DetailPageFormat ?? 'Long');
+    $searchOptions = $this->searchOptions($this->driver->getSourceIdentifier());
 ?>
 <div class="media"<?=$this->schemaOrg()->getAttributes(['vocab' => 'http://schema.org/', 'resource' => '#record', 'typeof' => $this->schemaOrg()->getRecordTypes($this->driver)])?>>
   <div class="media-left medium img-col">
@@ -31,15 +34,48 @@
         <?=$this->transEsc('cached_record_warning')?>
       </div>
     <?php endif; ?>
+    <?=$this->record($this->driver)->getLabelList() ?>
+
+    <?php if ($searchOptions->showRestrictedViewWarning() && $restrictedView): ?>
+      <?=$this->render('error/restrictedViewWarning.phtml')?>
+    <?php endif; ?>
 
     <table class="table table-striped">
-      <caption class="sr-only"><?=$this->transEsc('Bibliographic Details')?></caption>
+      <caption class="visually-hidden"><?=$this->transEsc('Bibliographic Details')?></caption>
       <?php foreach ($items as $key => $item): ?>
         <?php if (!empty($item['Data'])): ?>
-        <tr>
-          <th><?=empty($item['Label']) ? '' : $this->transEsc($item['Label']) . ':'?></th>
-          <td class="record__biblio-value"><?=$this->driver->linkUrls($item['Data'])?></td>
-        </tr>
+          <?php if ('Au' == $item['Group'] && $authorDisplay == 'short'): ?>
+            <tr>
+              <th><?=empty($item['Label']) ? '' : $this->transEsc($item['Label']) . ':'?></th>
+              <?php
+                $authors = $driver->getPrimaryAuthorsWithHighlighting();
+                $authorCount = count($authors);
+                $authorNameLimit = $edsConfig->AuthorDisplay->ShortAuthorLimit ?? 3;
+              ?>
+              <?php if ($authorCount > 1): ?>
+                <td class="record__biblio-value">
+                <?php foreach ($authors as $i => $author): ?>
+                  <span class="author"><a href="<?=$this->record($driver)->getLink('author', $this->highlight($author, null, true, false))?>"><?=$this->highlight($author)?></a></span><?php
+                    if ($authorCount == ($i + 1)) {
+                      break;
+                    } elseif (($i + 1) >= $authorNameLimit) {
+                      echo ' ' . $this->transEsc('more_authors_abbrev');
+                      break;
+                    }
+                  ?><?php endforeach; ?>
+                </td>
+              <?php else: ?>
+                <?=$this->driver->linkUrls($item['Data'])?>
+              <?php endif; ?>
+            </tr>
+          <?php elseif ('AuInfo' == $item['Group'] && $authorDisplay == 'short'): ?>
+            <?php /* Do nothing: skip AuInfo data in short author mode... */ ?>
+          <?php else: ?>
+            <tr>
+              <th><?=empty($item['Label']) ? '' : $this->transEsc($item['Label']) . ':'?></th>
+              <td class="record__biblio-value"><?=$this->driver->linkUrls($item['Data'])?></td>
+            </tr>
+          <?php endif; ?>
         <?php endif; ?>
       <?php endforeach; ?>
 
@@ -62,9 +98,7 @@
           <td colspan="2">
             <div class="alert alert-info">
               <?=$this->transEsc('Full text is not displayed to guests')?>
-              <a class="login" href="<?=$this->url('myresearch-userlogin')?>" rel="nofollow">
-                <strong><?=$this->transEsc('Login for full access')?></strong>
-              </a>
+              <?=$this->render('error/loginForAccess.phtml')?>
             </div>
           </td>
         </tr>
@@ -90,9 +124,9 @@
       <?php endforeach; ?>
     <?php endif; ?>
 
-    <?php $doi = $this->doi($this->driver, 'record'); ?>
-    <?php if ($doi->isActive()): ?>
-      <div><?=$doi->renderTemplate()?></div>
+    <?php $identifierLinksHtml = $this->identifierLinker($this->driver, 'record'); ?>
+    <?php if ($identifierLinksHtml): ?>
+      <div><?=$identifierLinksHtml?></div>
     <?php endif; ?>
 
     </div>

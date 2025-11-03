@@ -90,7 +90,7 @@
             </p>
           <?php endif; ?>
 
-          <?php if(!$this->driver->isCollection()): ?>
+          <?php if (!$this->driver->isCollection()): ?>
             <?php if ($snippet = $this->driver->getHighlightedSnippet()): ?>
               <?php if (!empty($snippet['caption'])): ?>
                 <strong><?=$this->transEsc($snippet['caption']) ?>:</strong>

@@ -65,4 +65,4 @@ $JS = <<<JS
       });
     JS;
 ?>
-<?=$this->inlineScript(\Laminas\View\Helper\HeadScript::SCRIPT, $JS, 'SET')?>
+<?=$this->assetManager()->outputInlineScriptString($JS)?>

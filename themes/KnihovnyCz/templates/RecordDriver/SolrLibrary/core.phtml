@@ -107,10 +107,11 @@
                                       map.panToBounds(bounds);
                                     }
                                   }
+                                  $(document).ready(function(){ initMap(); });
                   JS;
-            $googleMapsScript = 'https://maps.googleapis.com/maps/api/js?key=' . $this->escapeUrl($apiKey) . '&callback=initMap';
-            $this->inlineScript(\Laminas\View\Helper\HeadScript::SCRIPT, $initMap, 'SET');
-            echo $this->inlineScript()->appendFile($googleMapsScript);
+
+            $this->assetManager()->appendScriptLink('https://maps.googleapis.com/maps/api/js?key=' . $this->escapeUrl($apiKey));
+            $this->assetManager()->prependScriptString($initMap);
           ?>
         <?php endif; ?>
     </div>

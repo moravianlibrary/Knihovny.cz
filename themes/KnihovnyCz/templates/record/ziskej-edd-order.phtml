@@ -43,7 +43,7 @@ $this->headTitle($title);
 ?>
 
 <?php if ($this->layout()->getTemplate() !== 'layout/lightbox'): ?>
-  <a href="<?=$this->recordLinker()->getTabUrl($this->driver, 'ZiskejEdd')?>" class="backToRecord">
+  <a href="<?=$this->recordLinker()->getTabUrl($this->driver, 'ZiskejEdd')?>" class="btn btn-outline-primary">
     <?= $this->icon('back-to-record'); ?>
     <?= $this->transEsc('Back to record'); ?>
   </a>
@@ -71,12 +71,12 @@ $this->headTitle($title);
           <fieldset>
             <h4><?=$this->transEsc('ZiskejEdd::fieldset_label_user')?></h4>
             <div class="form-group required">
-              <label for="fullname"><?=$this->transEsc('ZiskejEdd::label_fullname')?>:*</label>
+              <label for="fullname"><?=$this->transEsc('ZiskejEdd::label_fullname')?>:</label>
               <?php $fullName = $this->escapeHtml($patron['firstname']) . ' ' . $this->escapeHtml($patron['lastname']) ?>
               <input type="text" name="fullname" id="fullname" value="<?=$fullName?>" class="form-control" readonly required>
             </div>
             <div class="form-group required">
-              <label for="email"><?=$this->transEsc('ZiskejEdd::label_email')?>:*</label>
+              <label for="email"><?=$this->transEsc('ZiskejEdd::label_email')?>:</label>
               <input type="email" name="email" id="email" value="<?=!empty($ziskejReader) ? $ziskejReader->email : (!empty($patron['email']) ? $patron['email'] : '')?>" class="form-control" required>
               <span class="help-block"><?=$this->transEsc('ZiskejEdd::help_email')?></span>
             </div>
@@ -87,7 +87,7 @@ $this->headTitle($title);
               <?php if ($isArticle): ?>
                 <div class="col-sm-12">
                   <div class="form-group required">
-                    <label for="doc_title"><?=$this->transEsc('ZiskejEdd::label_article_doc_title')?>:*</label>
+                    <label for="doc_title"><?=$this->transEsc('ZiskejEdd::label_article_doc_title')?>:</label>
                     <input type="text" name="doc_title" id="doc_title" value="<?=$this->escapeHtml($record->getTitle())?>" class="form-control" <?php if (!empty($record->getTitle())): ?>readonly<?php endif; ?> required>
                   </div>
                 </div>
@@ -95,7 +95,7 @@ $this->headTitle($title);
               <?php if ($isSelection && $isPeriodical): ?>
                 <div class="col-sm-12">
                   <div class="form-group required">
-                    <label for="doc_title"><?=$this->transEsc('ZiskejEdd::label_selection_periodical_doc_title')?>:*</label>
+                    <label for="doc_title"><?=$this->transEsc('ZiskejEdd::label_selection_periodical_doc_title')?>:</label>
                     <input type="text" name="doc_title" id="doc_title" value="" class="form-control" required>
                   </div>
                 </div>
@@ -103,7 +103,7 @@ $this->headTitle($title);
               <?php if ($isSelection && $isBook): ?>
                 <div class="col-sm-12">
                   <div class="form-group required">
-                    <label for="doc_title"><?=$this->transEsc('ZiskejEdd::label_selection_doc_title')?>:*</label>
+                    <label for="doc_title"><?=$this->transEsc('ZiskejEdd::label_selection_doc_title')?>:</label>
                     <input type="text" name="doc_title" id="doc_title" value="" class="form-control" required>
                   </div>
                 </div>
@@ -127,7 +127,7 @@ $this->headTitle($title);
               <?php if ($isSelection && $isPeriodical): ?>
                 <div class="col-sm-6">
                   <div class="form-group required">
-                    <label for="doc_number_year"><?=$this->transEsc('ZiskejEdd::label_doc_number_year')?>:*</label>
+                    <label for="doc_number_year"><?=$this->transEsc('ZiskejEdd::label_doc_number_year')?>:</label>
                     <input type="text" name="doc_number_year" id="doc_number_year" value="" class="form-control" required>
                   </div>
                 </div>
@@ -143,7 +143,7 @@ $this->headTitle($title);
               <?php if ($isSelection && $isPeriodical): ?>
                 <div class="col-sm-6">
                   <div class="form-group required">
-                    <label for="doc_number_pnumber"><?=$this->transEsc('ZiskejEdd::label_doc_number_pnumber')?>:*</label>
+                    <label for="doc_number_pnumber"><?=$this->transEsc('ZiskejEdd::label_doc_number_pnumber')?>:</label>
                     <input type="text" name="doc_number_pnumber" id="doc_number_pnumber" value="" class="form-control" required>
                   </div>
                 </div>
@@ -211,7 +211,7 @@ $this->headTitle($title);
               <?php if ($isArticle): ?>
                 <div class="col-sm-12">
                   <div class="form-group required">
-                    <label for="doc_title_in"><?=$this->transEsc('ZiskejEdd::label_article_doc_title_in')?>:*</label>
+                    <label for="doc_title_in"><?=$this->transEsc('ZiskejEdd::label_article_doc_title_in')?>:</label>
                     <input type="text" name="doc_title_in" id="doc_title_in" value="<?=$this->escapeHtml($record->getSourceTitleFacet())?>" class="form-control" <?php if (!empty($record->getSourceTitleFacet())): ?>readonly<?php endif; ?> required>
                   </div>
                 </div>
@@ -219,7 +219,7 @@ $this->headTitle($title);
               <?php if ($isSelection): ?>
                 <div class="col-sm-12">
                   <div class="form-group required">
-                    <label for="doc_title_in"><?=$this->transEsc('ZiskejEdd::label_selection_doc_title_in')?>:*</label>
+                    <label for="doc_title_in"><?=$this->transEsc('ZiskejEdd::label_selection_doc_title_in')?>:</label>
                     <input type="text" name="doc_title_in" id="doc_title_in" value="<?=$this->escapeHtml($record->getTitle())?>" class="form-control" <?php if (!empty($record->getTitle())): ?>readonly<?php endif; ?> required>
                   </div>
                 </div>
@@ -407,4 +407,4 @@ $script = <<<JS
       });
     JS;
 ?>
-<?=$this->inlineScript(\Laminas\View\Helper\HeadScript::SCRIPT, $script, 'SET')?>
+<?=$this->assetManager()->outputInlineScriptString($script)?>

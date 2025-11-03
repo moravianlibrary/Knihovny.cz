@@ -116,7 +116,7 @@ class SolrMarcTest extends \PHPUnit\Framework\TestCase
      */
     protected function createDriver(array $fieldData): \KnihovnyCz\RecordDriver\SolrMarc
     {
-        $config = new \Laminas\Config\Config([]);
+        $config = new \VuFind\Config\Config([]);
         $record = new \KnihovnyCz\RecordDriver\SolrMarc($config);
         $record->setRawData($fieldData);
         return $record;

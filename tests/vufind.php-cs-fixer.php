@@ -5,7 +5,7 @@ $finder->in(__DIR__ . '/../module')
     ->in(__DIR__ . '/../public');
 
 $rules = [
-    '@PHP81Migration' => true,
+    '@PHP84Migration' => true,
     '@PHPUnit100Migration:risky' => true,
     '@PSR12' => true,
     'align_multiline_comment' => true,
@@ -71,4 +71,5 @@ $config = new PhpCsFixer\Config();
 return $config->setCacheFile($cacheDir . '/.code.cache')
     ->setRiskyAllowed(true)
     ->setRules($rules)
-    ->setFinder($finder);
+    ->setFinder($finder)
+    ->setParallelConfig(\PhpCsFixer\Runner\Parallel\ParallelConfigFactory::detect());

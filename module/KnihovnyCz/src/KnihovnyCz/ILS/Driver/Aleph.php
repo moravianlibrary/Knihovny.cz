@@ -2,10 +2,9 @@
 
 namespace KnihovnyCz\ILS\Driver;
 
+use Laminas\Mvc\I18n\Translator;
 use VuFind\Date\DateException;
 use VuFind\Exception\ILS as ILSException;
-use VuFind\I18n\Translator\TranslatorAwareInterface;
-use VuFind\I18n\Translator\TranslatorAwareTrait;
 use VuFind\ILS\Driver\Aleph as AlephBase;
 
 /**
@@ -17,10 +16,8 @@ use VuFind\ILS\Driver\Aleph as AlephBase;
  * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://knihovny.cz Main Page
  */
-class Aleph extends AlephBase implements TranslatorAwareInterface
+class Aleph extends AlephBase
 {
-    use TranslatorAwareTrait;
-
     protected const MAX_LOANS = 989;
 
     public const DATE_FORMATS = [
@@ -148,7 +145,7 @@ class Aleph extends AlephBase implements TranslatorAwareInterface
      * keys: id, availability (boolean), status, location, reserve, callnumber,
      * duedate, number, barcode.
      */
-    public function getHolding($id, array $patron = null, array $options = [])
+    public function getHolding($id, ?array $patron = null, array $options = [])
     {
         $holding = [];
         [$bib, $sys_no] = $this->parseId($id);
@@ -241,15 +238,14 @@ class Aleph extends AlephBase implements TranslatorAwareInterface
             $item_id = $item->attributes()->href;
             $item_id = substr($item_id, strrpos($item_id, '/') + 1);
             $note = (string)$z30->{'z30-note-opac'};
-            $fullStatus = !empty($duedate)
-                ? $this->translate('holding_due_date') . ' ' . $duedate
-                : '';
+            $label = ($this->translator != null)
+                ? $this->translator->translate('holding_due_date')
+                : 'Due';
+            $fullStatus = !empty($duedate) ? ($label . ' ' . $duedate) : '';
             if (empty($fullStatus)) {
                 $fullStatus = $status;
             } else {
-                $fullStatus = empty($status)
-                    ? $fullStatus
-                    : implode(' ; ', [$fullStatus, $status]);
+                $fullStatus = empty($status) ? $fullStatus : implode(' ; ', [$fullStatus, $status]);
             }
             $holding[] = [
                 'id' => $id,
@@ -611,7 +607,7 @@ class Aleph extends AlephBase implements TranslatorAwareInterface
         $status = $xml->xpath('//institution/z305-bor-status');
         $expiry = $xml->xpath('//institution/z305-expiry-date');
         $profile['expiration_date'] = $this->parseDate($expiry[0]);
-        $profile['group'] = !empty($status[0]) ? $status[0] : null;
+        $profile['group'] = !empty($status[0]) ? (string)$status[0] : null;
         return $profile;
     }
 
@@ -656,9 +652,10 @@ class Aleph extends AlephBase implements TranslatorAwareInterface
                 }
                 $updated = (string)$xml->{$parent}->{$parent . '-delinq-' . $i . '-update-date'};
                 $blockId = 'block_' . $block;
-                $label = $this->translate(
-                    'ILSMessages::' . (!empty($this->source) ? $this->source . '.' : '') . $blockId
-                );
+                $textToTranslate = (!empty($this->source) ? $this->source . '.' : '') . $blockId;
+                $label = ($this->translator != null)
+                    ? $this->translator->translate($textToTranslate, 'ILSMessages')
+                    : $textToTranslate;
                 $blocks[] = [
                     'id' => $blockId,
                     'label' => $label,
@@ -991,6 +988,7 @@ class Aleph extends AlephBase implements TranslatorAwareInterface
                 $title = (string)$z13->{'z13-title'};
                 $barcode = (string)$z30->{'z30-barcode'};
                 $adm_id = (string)$z30->{'z30-doc-number'};
+                $fineLabel = ($this->translator != null) ? $this->translator->translate('loan_fine') : 'Loan fine';
                 $fines[] = [
                     'title'   => $title,
                     'barcode' => $barcode,
@@ -1000,7 +998,7 @@ class Aleph extends AlephBase implements TranslatorAwareInterface
                     'balance'  => $fineAmount,
                     'id'  => $adm_id,
                     'printLink' => 'test',
-                    'fine' => $this->translate('loan_fine'),
+                    'fine' => $fineLabel,
                 ];
             }
         }
@@ -1606,5 +1604,17 @@ class Aleph extends AlephBase implements TranslatorAwareInterface
     public function showHoldsCancelWarning(): bool
     {
         return true;
+    }
+
+    /**
+     * Set translator
+     *
+     * @param Translator $translator Translator object
+     *
+     * @return void
+     */
+    public function setTranslator(Translator $translator): void
+    {
+        $this->translator = $translator;
     }
 }

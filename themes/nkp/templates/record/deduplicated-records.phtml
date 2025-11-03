@@ -58,22 +58,21 @@
   $showInstitutionPanel = $this->showInstitutionPanel ?? true;
 ?>
 <?php if ($recordsCount >= 1): ?>
-  <div class="well panel-select-institution">
-    <?php if ($showInstitutionPanel): ?>
-      <?php if ($recordsCount > 1): ?>
-        <h3><label for="institutions"><?=$this->translate('Select institution');?></label>:</h3>
-        <div id="records-in-groups-container">
-          <div class="input-group input-group-lg">
-            <select id="institutions" class="form-control" style="width: 100%" name="institutions"></select>
+  <div class="card panel-select-institution">
+    <div class="card-body">
+      <?php if ($showInstitutionPanel): ?>
+        <?php if ($recordsCount > 1): ?>
+          <h3><label for="institutions"><?=$this->translate('Select institution');?></label>:</h3>
+          <div class="d-sm-flex gap-1">
+            <select id="institutions" class="form-select form-select-lg w-100" name="institutions"></select>
             <?php if ($libraryId = $this->driver->getOwningLibraryId()): ?>
               <?=$this->render('library-detail-link.phtml', ['libraryId' => $libraryId, 'base' => $currentBase])?>
             <?php endif; ?>
           </div>
-        </div>
-      <?php elseif ($recordsCount == 1): ?>
-        <h3><?=$this->translate('Institution');?>:</h3>
-        <div class="input-group input-group-lg">
-          <span class="select2 select2-container select2-container--bootstrap3">
+        <?php elseif ($recordsCount == 1): ?>
+          <h3><?=$this->translate('Institution');?>:</h3>
+          <div class="d-sm-flex gap-1">
+            <span class="select2 select2-container select2-container--bootstrap3 w-100">
               <span class="select2-selection select2-selection--single select2-text" role="combobox" aria-haspopup="true" aria-expanded="false" tabindex="0" aria-disabled="false" aria-labelledby="select2-institutions-container">
                 <span class="select2-selection__rendered" id="select2-institutions-container" role="textbox" aria-readonly="true" title="<?=$data[0]['text']?>">
                   <span class="institutions-selector">
@@ -81,15 +80,14 @@
                   </span>
                 </span>
               </span>
-          </span>
-          <?php if ($libraryId = $this->driver->getOwningLibraryId()): ?>
-            <?=$this->render('library-detail-link.phtml', ['libraryId' => $libraryId, 'base' => $currentBase])?>
-          <?php endif; ?>
-        </div>
+            </span>
+            <?php if ($libraryId = $this->driver->getOwningLibraryId()): ?>
+              <?=$this->render('library-detail-link.phtml', ['libraryId' => $libraryId, 'base' => $currentBase])?>
+            <?php endif; ?>
+          </div>
+        <?php endif; ?>
       <?php endif; ?>
-      <br>
-    <?php endif; ?>
-    <?php if ($recordMissing): ?>
+      <?php if ($recordMissing): ?>
       <div class="alert alert-warning" role="alert">
         <?php if (($link = $this->recordLinker()->getLinkToMainPortal($this->driver)) != null) : ?>
           <?=$this->translate('record_missing_in_view_with_link', ['%%url%%' => $link])?>
@@ -98,6 +96,7 @@
         <?php endif; ?>
       </div>
     <?php endif; ?>
+    </div>
   </div>
 <?php endif;?>
 
@@ -127,5 +126,5 @@ if ($showInstitutionPanel && $recordsCount > 1) {
         });
       });
       JS;
-  echo $this->inlineScript(\Laminas\View\Helper\HeadScript::SCRIPT, $select2, 'SET');
+  echo $this->assetManager()->outputInlineScriptString($select2);
 }

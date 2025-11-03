@@ -30,8 +30,6 @@
     $url = $this->recordLinker()->getUrl("library.$this->libraryId");
   }
 ?>
-<span class="input-group-btn">
-  <a href='<?=$this->escapeHtmlAttr($url)?>' class="btn btn-light" target="_blank" title="<?=$this->translate('Information about library')?>">
+  <a href='<?=$this->escapeHtmlAttr($url)?>' class="btn btn-lg btn-secondary mt-1 mt-sm-0" target="_blank" title="<?=$this->translate('Information about library')?>">
     <?=$this->icon('information')?> <?=$this->translate('Information about library')?>
   </a>
-</span>

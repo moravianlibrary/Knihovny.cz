@@ -5,15 +5,15 @@
       'rectangle_center_message' => 'rectangle_center_message',
     ]);
 
-    $this->headScript()->appendFile('vendor/leaflet/leaflet.js');
-    $this->headScript()->appendFile('vendor/leaflet/leaflet.draw.js');
-    $this->headScript()->appendFile('vendor/leaflet/leaflet.markercluster.js');
-    $this->headScript()->appendFile('map_selection_leaflet.js');
-    $this->headLink()->appendStylesheet('vendor/leaflet/leaflet.css');
-    $this->headLink()->appendStylesheet('vendor/leaflet/leaflet.draw.css');
-    $this->headLink()->appendStylesheet('vendor/leaflet/MarkerCluster.css');
-    $this->headLink()->appendStylesheet('vendor/leaflet/MarkerCluster.Default.css');
-    $this->headLink()->appendStylesheet('geofeatures.css');
+    $this->assetManager()->appendScriptLink('vendor/leaflet/leaflet.js');
+    $this->assetManager()->appendScriptLink('vendor/leaflet/leaflet.draw.js');
+    $this->assetManager()->appendScriptLink('vendor/leaflet/leaflet.markercluster.js');
+    $this->assetManager()->appendScriptLink('map_selection_leaflet.js');
+    $this->assetManager()->appendStyleLink('vendor/leaflet/leaflet.css');
+    $this->assetManager()->appendStyleLink('vendor/leaflet/leaflet.draw.css');
+    $this->assetManager()->appendStyleLink('vendor/leaflet/MarkerCluster.css');
+    $this->assetManager()->appendStyleLink('vendor/leaflet/MarkerCluster.Default.css');
+    $this->assetManager()->appendStyleLink('geofeatures.css');
 
     $basemap = $this->recommend->getBasemap();
     $geoField = $this->recommend->getGeoField();
@@ -37,7 +37,7 @@
     $jsLoad = 'loadMapSelection(' . $jsParams . ');';
   ?>
   <div class="context-help">
-    <h2 class="context-text mt-0"><?=$this->transEsc('Geographic Search') ?></h2>
+    <h2 class="context-text "><?=$this->transEsc('Geographic Search') ?></h2>
     <?=$this->contextHelp('geosearch', 'heading')?>
   </div>
   <div class="authorbox">
@@ -45,7 +45,7 @@
       <button id="draw_box"><?php echo $this->transEsc('Draw Search Box')?></button>
       <div id="geo_search_map" style="height: <?php echo $height?>px;"></div>
     </div>
-    <?=$this->inlineScript(\Laminas\View\Helper\HeadScript::SCRIPT, $jsLoad, 'SET')?>
+    <?=$this->assetManager()->outputInlineScriptString($jsLoad)?>
     <?=
     $this->context($this)->renderInContext(
         'Recommend/MapScale.phtml',
@@ -62,5 +62,5 @@
       = 'L.drawLocal.draw.handlers.rectangle.tooltip.start = "' . $this->transEsc('draw_searchbox_start') . '";'
       . 'L.drawLocal.draw.handlers.simpleshape.tooltip.end = "' . $this->transEsc('draw_searchbox_end') . '";'
   ?>
-  <?=$this->inlineScript(\Laminas\View\Helper\HeadScript::SCRIPT, $loadTranslations, 'SET')?>
+  <?=$this->assetManager()->outputInlineScriptString($loadTranslations)?>
 <?php endif; ?>
