@@ -4,7 +4,7 @@ $this->headTitle($this->driver->getBreadcrumb());
 $data = $this->driver->getCitedDocuments();
 ?>
 <h3><?= $this->translate('Cited documents'); ?></h3>
-<?php foreach($data as $document): ?>
+<?php foreach ($data as $document): ?>
   <?php
     $searchAction = $this->searchOptions($this->driver->getSourceIdentifier())->getSearchAction();
     $url = $this->url($searchAction) . '?' . http_build_query(

@@ -1,209 +1,209 @@
 <?php
-    // Set up convenience variables:
-    $account = $this->auth()->getManager();
-    $user = $account->getUserObject();
-    $source = $this->driver->getSourceId();
-    $offlineMode = $this->ils()->getOfflineMode();
-    $holdings = $this->driver->getOfflineHoldings();
-    $itemsCount = count($holdings['holdings'][0]['items'] ?? []);
-    $filters = $holdings['filters'] ?? [];
-    // Set page title.
-    $this->headTitle($this->driver->getBreadcrumb());
+// Set up convenience variables:
+$account = $this->auth()->getManager();
+$user = $account->getUserObject();
+$source = $this->driver->getSourceId();
+$offlineMode = $this->ils()->getOfflineMode();
+$holdings = $this->driver->getOfflineHoldings();
+$itemsCount = count($holdings['holdings'][0]['items'] ?? []);
+$filters = $holdings['filters'] ?? [];
+// Set page title.
+$this->headTitle($this->driver->getBreadcrumb());
 
-    $showRequestLink = $user ? (int)$user->activateCardByPrefix($source) : 0;
+$showRequestLink = $user ? (int)$user->activateCardByPrefix($source) : 0;
 
-    $data = [];
-    $recordId = $holdings['recordId'] ?? $this->driver->getUniqueID();
-    if ($recordId != null) {
-      $data['id'] = $recordId;
-    }
+$data = [];
+$recordId = $holdings['recordId'] ?? $this->driver->getUniqueID();
+if ($recordId != null) {
+  $data['id'] = $recordId;
+}
 
-    if ($recordId != $this->driver->getUniqueID()) {
-      $data['childrenId'] = $this->driver->getUniqueID();
-    }
-    $recordIdJson = json_encode($data, JSON_HEX_QUOT);
-    $preselectFilter = (int)($itemsCount > 30);
-    $supportsAjaxHoldings = (int)$this->driver->tryMethod('supportsAjaxHoldings', [], false);
-    $supportsAjaxFilters = (int)($holdings['ajaxFilters'] ?? 0);
-    $loadJs = <<<JS
-          const statusUnknownHtml = '<span class="label label-default">' + VuFind.translate('status_unknown_message') + '</span>';
-          const showRequestLink = $showRequestLink;
-          const preselectFilter = $preselectFilter;
-          const supportsAjaxHoldings = $supportsAjaxHoldings;
-          const supportsAjaxFilters = $supportsAjaxFilters;
+if ($recordId != $this->driver->getUniqueID()) {
+  $data['childrenId'] = $this->driver->getUniqueID();
+}
+$recordIdJson = json_encode($data, JSON_HEX_QUOT);
+$preselectFilter = (int)($itemsCount > 30);
+$supportsAjaxHoldings = (int)$this->driver->tryMethod('supportsAjaxHoldings', [], false);
+$supportsAjaxFilters = (int)($holdings['ajaxFilters'] ?? 0);
+$loadJs = <<<JS
+      const statusUnknownHtml = '<span class="label label-default">' + VuFind.translate('status_unknown_message') + '</span>';
+      const showRequestLink = $showRequestLink;
+      const preselectFilter = $preselectFilter;
+      const supportsAjaxHoldings = $supportsAjaxHoldings;
+      const supportsAjaxFilters = $supportsAjaxFilters;
 
-          function updateHoldingsTable() {
-            ['availability', 'request', 'collection_desc', 'callnumber_second', 'description', 'callnumber', 'item_notes'].forEach(function hideTableColumn(column) {
-              const hide = $('td[data-type="' + column + '"]').text().trim() === '';
-              const columns = $('th[data-type="' + column + '"], td[data-type="' + column + '"]');
-              (hide) ? columns.hide() : columns.show();
-            });
-          }
+      function updateHoldingsTable() {
+        ['availability', 'request', 'collection_desc', 'callnumber_second', 'description', 'callnumber', 'item_notes'].forEach(function hideTableColumn(column) {
+          const hide = $('td[data-type="' + column + '"]').text().trim() === '';
+          const columns = $('th[data-type="' + column + '"], td[data-type="' + column + '"]');
+          (hide) ? columns.hide() : columns.show();
+        });
+      }
 
-          var _ajaxStatus = function _ajaxStatus(record, filter, value) {
-            const holds = $("table[id='holding_items']");
-            let data = record;
-            let selector = '';
-            if (filter != null && value != null) {
-              data[filter] = value;
-              selector = "[data-" + filter + "='" + value + "']";
-            }
-            var handleMissingHoldings = function handleMissingHoldings(status) {
-              const tr = holds.find('tr' + selector + '[data-ajax-status="running"]');
-              tr.attr('data-ajax-status', status);
-              tr.find('div.status-loader').remove();
-              tr.find('td[data-type="status"]').html(statusUnknownHtml);
-            }
-            const waiting = holds.find('tr' + selector + '[data-ajax-status="waiting"]');
-            if (waiting.length == 0) { // already finished or already running
-              return;
-            } else {
-              waiting.attr("data-ajax-status", "running");
-            }
-            $.ajax({
-              url: VuFind.path + '/AJAX/JSON?method=getHolding',
-              method: 'POST',
-              data: data,
-              dataType: 'json',
-            })
-              .done(function ajaxLookupDone(response) {
-                response.data.holding.forEach(function (item) {
-                  var elm = null;
-                  if (item.item_id) {
-                    elm = holds.find('tr[data-item-id="' + item.item_id + '"]');
-                  } else if (item.number) {
-                    elm = holds.find('tr[data-copy-number="' + item.number.trim() + '"]');
-                  } else {
-                    return;
-                  }
-                  elm.attr('data-ajax-status', 'finished');
-                  elm.find('div.status-loader').remove();
-                  if (item.hasOwnProperty('availability_status') && item.availability_status) {
-                    elm.find('td[data-type="availability"] > div').text(item.availability_status);
-                  }
-
-                  if (item.hasOwnProperty('status') && item.status) {
-                    if (item.label !== '') {
-                      elm.find('td[data-type="status"]').html(
-                        '<span class="status label label-' + item.label + '">'
-                        + htmlEncode(item.status) + '</span>'
-                      );
-                    } else {
-                      elm.find('td[data-type="status"]').html(
-                        '<span class="status">' + htmlEncode(item.status) + '</span>'
-                      );
-                    }
-                    if (item.hasOwnProperty('duedate') && item.duedate ) {
-                      elm.find('td[data-type="status"]').append(
-                        ' ' + VuFind.translate('Due') + ' ' + htmlEncode(item.duedate)
-                      );
-                    }
-                  } else {
-                    elm.find('td[data-type="status"]').html(statusUnknownHtml);
-                  }
-
-                  if (item.hasOwnProperty('location') && item.location) {
-                    elm.find('td[data-type="location"]').text(item.location);
-                  }
-                  if (item.hasOwnProperty('collection_desc') && item.collection_desc) {
-                    elm.find('td[data-type="collection_desc"]').text(item.collection_desc);
-                  }
-                  if (item.hasOwnProperty('callnumber_second') && item.callnumber_second ) {
-                    elm.find('td[data-type="callnumber_second"]').text(item.callnumber_second);
-                  }
-                  if (item.hasOwnProperty('description') && item.description) {
-                    elm.find('td[data-type="description"]').text(item.description);
-                  }
-                  if (item.hasOwnProperty('callnumber') && item.callnumber) {
-                    elm.find('td[data-type="callnumber"]').text(item.callnumber);
-                  }
-                  if (item.hasOwnProperty('item_notes') && item.item_notes && Array.isArray(item.item_notes)) {
-                    elm.find('td[data-type="item_notes"]').text(item.item_notes.join(', '));
-                  }
-                  if (item.link && showRequestLink) {
-                    const linkText = item.linkText ?? 'Place a Hold';
-                    const baseUrl = new URL(window.location);
-                    const url = new URL(item.link, baseUrl);
-                    const sid = baseUrl.searchParams.get('sid');
-                    if (sid != null) {
-                      url.searchParams.set('sid', sid);
-                    }
-                    const newLink = url.href;
-                    elm.find('td[data-type="request"]')
-                      .html('<a href="' + newLink + '">' + VuFind.translate(linkText) + '</a>');
-                  }
-                  const possiblyDuplicateData = [
-                    { primary: 'callnumber', secondary: 'callnumber_second' },
-                    { primary: 'location', secondary: 'collection_desc' }
-                  ];
-                  possiblyDuplicateData.forEach(function removeDuplicates(columns) {
-                    if (elm.find('td[data-type="' + columns.primary + '"]').text().trim()
-                      === elm.find('td[data-type="' + columns.secondary + '"]').text().trim()
-                    ) {
-                        elm.find('td[data-type="' + columns.secondary + '"]').text('');
-                    }
-                  });
-                });
-                handleMissingHoldings('missing');
-                updateHoldingsTable();
-              })
-              .fail(function ajaxLookupFail() {
-                handleMissingHoldings('failed');
-                updateHoldingsTable();
-              });
-          };
-
-          var _filterHoldings = function _filterHoldings(key, value) {
-            const all = (value == 'ALL');
-            let values = new Set();
-            if (!all) {
-              values.add(value)
-            }
-            var rows = $('#holding_items>tbody>tr');
-            rows.each(function filterRow() {
-              const rowVal = $(this).data(key);
-              let show = (all) || rowVal == value;
-              (show)? $(this).show() : $(this).hide();
-              if (all) {
-                values.add(rowVal);
+      var _ajaxStatus = function _ajaxStatus(record, filter, value) {
+        const holds = $("table[id='holding_items']");
+        let data = record;
+        let selector = '';
+        if (filter != null && value != null) {
+          data[filter] = value;
+          selector = "[data-" + filter + "='" + value + "']";
+        }
+        var handleMissingHoldings = function handleMissingHoldings(status) {
+          const tr = holds.find('tr' + selector + '[data-ajax-status="running"]');
+          tr.attr('data-ajax-status', status);
+          tr.find('div.status-loader').remove();
+          tr.find('td[data-type="status"]').html(statusUnknownHtml);
+        }
+        const waiting = holds.find('tr' + selector + '[data-ajax-status="waiting"]');
+        if (waiting.length == 0) { // already finished or already running
+          return;
+        } else {
+          waiting.attr("data-ajax-status", "running");
+        }
+        $.ajax({
+          url: VuFind.path + '/AJAX/JSON?method=getHolding',
+          method: 'POST',
+          data: data,
+          dataType: 'json',
+        })
+          .done(function ajaxLookupDone(response) {
+            response.data.holding.forEach(function (item) {
+              var elm = null;
+              if (item.item_id) {
+                elm = holds.find('tr[data-item-id="' + item.item_id + '"]');
+              } else if (item.number) {
+                elm = holds.find('tr[data-copy-number="' + item.number.trim() + '"]');
+              } else {
+                return;
               }
-            });
-            if (supportsAjaxFilters) {
-              values.forEach((value) => _ajaxStatus({$recordIdJson}, key, value));
-            }
-          };
+              elm.attr('data-ajax-status', 'finished');
+              elm.find('div.status-loader').remove();
+              if (item.hasOwnProperty('availability_status') && item.availability_status) {
+                elm.find('td[data-type="availability"] > div').text(item.availability_status);
+              }
 
-          $('select.holding_filter').each(function addListener() {
-            $(this).on('change', function onChange() {
-              const key = $(this).attr('name');
-              $('select.holding_filter').each(function switchOtherSelect() {
-                if ($(this).attr('name') !== key) {
-                  $(this).val('ALL');
+              if (item.hasOwnProperty('status') && item.status) {
+                if (item.label !== '') {
+                  elm.find('td[data-type="status"]').html(
+                    '<span class="status label label-' + item.label + ' m-0">'
+                    + htmlEncode(item.status) + '</span>'
+                  );
+                } else {
+                  elm.find('td[data-type="status"]').html(
+                    '<span class="status">' + htmlEncode(item.status) + '</span>'
+                  );
+                }
+                if (item.hasOwnProperty('duedate') && item.duedate ) {
+                  elm.find('td[data-type="status"]').append(
+                    ' ' + VuFind.translate('Due') + ' ' + htmlEncode(item.duedate)
+                  );
+                }
+              } else {
+                elm.find('td[data-type="status"]').html(statusUnknownHtml);
+              }
+
+              if (item.hasOwnProperty('location') && item.location) {
+                elm.find('td[data-type="location"]').text(item.location);
+              }
+              if (item.hasOwnProperty('collection_desc') && item.collection_desc) {
+                elm.find('td[data-type="collection_desc"]').text(item.collection_desc);
+              }
+              if (item.hasOwnProperty('callnumber_second') && item.callnumber_second ) {
+                elm.find('td[data-type="callnumber_second"]').text(item.callnumber_second);
+              }
+              if (item.hasOwnProperty('description') && item.description) {
+                elm.find('td[data-type="description"]').text(item.description);
+              }
+              if (item.hasOwnProperty('callnumber') && item.callnumber) {
+                elm.find('td[data-type="callnumber"]').text(item.callnumber);
+              }
+              if (item.hasOwnProperty('item_notes') && item.item_notes && Array.isArray(item.item_notes)) {
+                elm.find('td[data-type="item_notes"]').text(item.item_notes.join(', '));
+              }
+              if (item.link && showRequestLink) {
+                const linkText = item.linkText ?? 'Place a Hold';
+                const baseUrl = new URL(window.location);
+                const url = new URL(item.link, baseUrl);
+                const sid = baseUrl.searchParams.get('sid');
+                if (sid != null) {
+                  url.searchParams.set('sid', sid);
+                }
+                const newLink = url.href;
+                elm.find('td[data-type="request"]')
+                  .html('<a href="' + newLink + '">' + VuFind.translate(linkText) + '</a>');
+              }
+              const possiblyDuplicateData = [
+                { primary: 'callnumber', secondary: 'callnumber_second' },
+                { primary: 'location', secondary: 'collection_desc' }
+              ];
+              possiblyDuplicateData.forEach(function removeDuplicates(columns) {
+                if (elm.find('td[data-type="' + columns.primary + '"]').text().trim()
+                  === elm.find('td[data-type="' + columns.secondary + '"]').text().trim()
+                ) {
+                    elm.find('td[data-type="' + columns.secondary + '"]').text('');
                 }
               });
-              const value = $(this).find(":selected").attr('value');
-              _filterHoldings(key, value);
             });
-          });
-
-          if (!supportsAjaxHoldings) {
+            handleMissingHoldings('missing');
             updateHoldingsTable();
-          } else if (preselectFilter) {
-            $(document).ready(function setFilters() {
-              $('select.holding_filter[name="year"]').change();
-            });
-            if (!supportsAjaxFilters) {
-              _ajaxStatus({$recordIdJson});
-            }
-          } else {
-            _ajaxStatus({$recordIdJson});
+          })
+          .fail(function ajaxLookupFail() {
+            handleMissingHoldings('failed');
+            updateHoldingsTable();
+          });
+      };
+
+      var _filterHoldings = function _filterHoldings(key, value) {
+        const all = (value == 'ALL');
+        let values = new Set();
+        if (!all) {
+          values.add(value)
+        }
+        var rows = $('#holding_items>tbody>tr');
+        rows.each(function filterRow() {
+          const rowVal = $(this).data(key);
+          let show = (all) || rowVal == value;
+          (show)? $(this).show() : $(this).hide();
+          if (all) {
+            values.add(rowVal);
           }
-        JS;
+        });
+        if (supportsAjaxFilters) {
+          values.forEach((value) => _ajaxStatus({$recordIdJson}, key, value));
+        }
+      };
+
+      $('select.holding_filter').each(function addListener() {
+        $(this).on('change', function onChange() {
+          const key = $(this).attr('name');
+          $('select.holding_filter').each(function switchOtherSelect() {
+            if ($(this).attr('name') !== key) {
+              $(this).val('ALL');
+            }
+          });
+          const value = $(this).find(":selected").attr('value');
+          _filterHoldings(key, value);
+        });
+      });
+
+      if (!supportsAjaxHoldings) {
+        updateHoldingsTable();
+      } else if (preselectFilter) {
+        $(document).ready(function setFilters() {
+          $('select.holding_filter[name="year"]').change();
+        });
+        if (!supportsAjaxFilters) {
+          _ajaxStatus({$recordIdJson});
+        }
+      } else {
+        _ajaxStatus({$recordIdJson});
+      }
+    JS;
 
 ?>
 
 <div class="context-help">
-  <h3 class="context-text mt-0"><?=$this->transEsc('Holdings')?></h3>
+  <h3 class="context-text"><?=$this->transEsc('Holdings')?></h3>
   <?=$this->contextHelp('core-tabs-holdings', 'heading')?>
 </div>
 
@@ -226,36 +226,36 @@
   </div>
 <?php endif; ?>
 <?php if (($this->ils()->getHoldsMode() == 'driver' && !empty($holdings['holdings'])) || $this->ils()->getTitleHoldsMode() == 'driver'): ?>
-    <?php if ($account->loginEnabled() && $offlineMode != 'ils-offline'): ?>
-        <?php if (!$user): ?>
-          <div class="alert alert-info">
-            <?php $loginUrl = $this->escapeHtmlAttr($this->recordLinker()->getTabUrl($this->driver, 'Holdings', ['login' => 'true'])); ?>
-            <?=$this->translate('hold_login', ['%%url%%' => $loginUrl, '%%attributes%%' => 'id="hold-login"'])?>
-          </div>
-        <?php elseif (!$user->cat_username): ?>
+  <?php if ($account->loginEnabled() && $offlineMode != 'ils-offline'): ?>
+    <?php if (!$user): ?>
+      <div class="alert alert-info hidden-print">
+        <?php $loginUrl = $this->escapeHtmlAttr($this->recordLinker()->getTabUrl($this->driver, 'Holdings', ['login' => 'true'])); ?>
+        <?=$this->translate('hold_login', ['%%url%%' => $loginUrl, '%%attributes%%' => 'id="hold-login"'])?>
+      </div>
+    <?php elseif (!$user->getCatUsername()): ?>
       <div class="alert alert-info">
         <?php
-          // Add a data-lightbox attribute to the link in the translation; we do this here to keep
-          // the HTML in the language files as simple/generic/future-proof as possible.
-          $catalogLoginUrl = $this->recordLinker()
-            ->getTabUrl($this->driver, 'Holdings', ['catalogLogin' => 'true']);
-          $tokens = ['%%url%%' => $this->escapeHtmlAttr($catalogLoginUrl)];
-          echo str_replace('<a ', '<a data-lightbox ', $this->translate('hold_profile_html', $tokens));
+        // Add a data-lightbox attribute to the link in the translation; we do this here to keep
+        // the HTML in the language files as simple/generic/future-proof as possible.
+        $catalogLoginUrl = $this->recordLinker()
+          ->getTabUrl($this->driver, 'Holdings', ['catalogLogin' => 'true']);
+        $tokens = ['%%url%%' => $this->escapeHtmlAttr($catalogLoginUrl)];
+        echo str_replace('<a ', '<a data-lightbox ', $this->translate('hold_profile_html', $tokens));
         ?>
       </div>
-        <?php elseif (!$showRequestLink): ?>
-          <?=
-            $this->context($this)->renderInContext(
-                'RecordTab/availabilityalert.phtml',
-                ['mainMessage' => 'hold_current_library_not_connected',]
-            );
-        ?>
-        <?php endif; ?>
+    <?php elseif (!$showRequestLink): ?>
+      <?=
+      $this->context($this)->renderInContext(
+          'RecordTab/availabilityalert.phtml',
+          ['mainMessage' => 'hold_current_library_not_connected',]
+      );
+      ?>
     <?php endif; ?>
+  <?php endif; ?>
 <?php endif; ?>
 <?php $holdingTitleHold = $this->driver->tryMethod('getRealTimeTitleHold'); ?>
 <?php if (!empty($holdingTitleHold)): ?>
-  <a class="placehold icon-link" data-lightbox title="<?=$this->transEscAttr('request_place_text')?>" href="<?=$this->escapeHtmlAttr($this->recordLinker()->getRequestUrl($holdingTitleHold))?>">
+  <a class="placehold icon-link hidden-print" data-lightbox title="<?=$this->transEscAttr('request_place_text')?>" href="<?=$this->escapeHtmlAttr($this->recordLinker()->getRequestUrl($holdingTitleHold))?>">
     <?=$this->icon('place-hold', 'icon-link__icon') ?>
     <span class="icon-link__label"><?=$this->transEsc('title_hold_place')?></span>
   </a>
@@ -263,23 +263,26 @@
 
 <?php if (!empty($holdings['electronic_holdings'])): ?>
   <?=
-    $this->context($this)->renderInContext(
-        'RecordTab/holdingsils/electronic.phtml',
-        ['holdings' => $holdings['electronic_holdings']]
-    );
+  $this->context($this)->renderInContext(
+      'RecordTab/holdingsils/electronic.phtml',
+      ['holdings' => $holdings['electronic_holdings']]
+  );
   ?>
 <?php endif; ?>
 
-<?php foreach($filters as $filter => $values): if (!empty($values)): ?>
-  <div class="col-md-5">
-    <label for="<?=$this->escapeHtml($filter)?>"><?=$this->transEsc($filter . '_filter')?>: </label>
-    <select name="<?=$this->escapeHtml($filter)?>" class='holding_filter'>
+<?php if ($filters): ?>
+<div class="row row-cols-auto">
+<?php foreach ($filters as $filter => $values): if (!empty($values)): ?>
+  <div class="col">
+    <div class="form-group">
+    <label class="form-label" for="<?=$this->escapeHtml($filter)?>"><?=$this->transEsc($filter . '_filter')?>: </label>
+    <select name="<?=$this->escapeHtml($filter)?>" id="<?=$this->escapeHtml($filter)?>" class="holding_filter form-select">
       <option value="ALL"><?=$this->transEsc('All')?></option>
       <?php $count = 0; ?>
       <?php foreach ($values as $key => $value): ?>
         <?php $count++;?>
         <option value="<?=$this->escapeHtml($key)?>" <?=$filter === 'year' && $count === 1 && $preselectFilter ? ' selected' : ''?>>
-          <?php if(!empty($key)):?>
+          <?php if (!empty($key)):?>
             <?=$this->escapeHtml($key)?>
           <?php else:?>
             <?=$this->transEsc('no_filter_value')?>
@@ -287,41 +290,44 @@
         </option>
       <?php endforeach; ?>
     </select>
+    </div>
   </div>
 <?php endif; endforeach; ?>
+</div>
+<?php endif; ?>
 
 <?php if (!empty($holdings['holdings'] ?? [])): ?>
   <table class="table table-striped responsive-table" id="holding_items">
-    <thead>
-      <tr>
-        <th data-type="availability"><?=$this->transEsc('Availability')?></th>
-        <th data-type="status"><?=$this->transEsc('Status')?></th>
-        <th data-type="request"></th>
-        <th data-type="location"><?=$this->transEsc('Department')?></th>
-        <th data-type="collection_desc"><?=$this->transEsc('Collection')?></th>
-        <th data-type="callnumber_second"><?=$this->transEsc('Location')?></th>
-        <th data-type="description"><?=$this->transEsc('Description')?></th>
-        <th data-type="item_notes"><?=$this->transEsc('Item notes')?></th>
-        <th data-type="callnumber"><?=$this->transEsc('callnumber_abbrev')?></th>
-      </tr>
+    <thead class="table-light">
+    <tr>
+      <th data-type="availability"><?=$this->transEsc('Availability')?></th>
+      <th data-type="status"><?=$this->transEsc('Status')?></th>
+      <th data-type="request"></th>
+      <th data-type="location"><?=$this->transEsc('Department')?></th>
+      <th data-type="collection_desc"><?=$this->transEsc('Collection')?></th>
+      <th data-type="callnumber_second"><?=$this->transEsc('Location')?></th>
+      <th data-type="description"><?=$this->transEsc('Description')?></th>
+      <th data-type="item_notes"><?=$this->transEsc('Item notes')?></th>
+      <th data-type="callnumber"><?=$this->transEsc('callnumber_abbrev')?></th>
+    </tr>
     </thead>
     <tbody>
-      <?php foreach ($holdings['holdings'] ?? [] as $holding): ?>
-        <?php foreach ($holding['items'] as $row): ?>
-          <?php
-            echo $this->context($this)->renderInContext(
+    <?php foreach ($holdings['holdings'] ?? [] as $holding): ?>
+      <?php foreach ($holding['items'] as $row): ?>
+        <?php
+        echo $this->context($this)->renderInContext(
       'RecordTab/holdingsils/' . $this->tab->getTemplate() . '.phtml',
       ['holding' => $row, 'source' => $source, 'ajax' => $supportsAjaxHoldings]
   );
-          ?>
-        <?php endforeach; ?>
+        ?>
       <?php endforeach; ?>
+    <?php endforeach; ?>
     </tbody>
   </table>
 <?php endif; ?>
 
 <?php if ($itemLinks = $this->driver->tryMethod('getItemLinks')) : ?>
-  <h3 class="context-text mt-0"><?=$this->transEsc('Documents bound in a composite volume')?></h3>
+  <h3 class="context-text"><?=$this->transEsc('Documents bound in a composite volume')?></h3>
   <?=$this->render('RecordTab/itemlinks.phtml', ['itemLinks' => $itemLinks]);?>
 <?php endif; ?>
 
@@ -334,11 +340,11 @@
 <?php $this->slot('record-go-to-knihovny-cz')->set(''); ?>
 <?=$this->slot('record-go-to-knihovny-cz'); ?>
 
-<?=$this->inlineScript(\Laminas\View\Helper\HeadScript::SCRIPT, $loadJs, 'SET')?>
+<?=$this->assetManager()->outputInlineScriptString($loadJs)?>
 <noscript><?=$this->transEsc('Please enable JavaScript.')?></noscript>
 
 <?php if (!empty($holdings['total']) && $paginator = $this->tab->getPaginator($holdings['total'], $holdings['page'], $holdings['itemLimit'])): ?>
-    <?=$this->paginationControl($paginator, 'Sliding', 'Helpers/pagination.phtml', ['page' => $holdings['page']])?>
+  <?=$this->paginationControl($paginator, 'Sliding', 'Helpers/pagination.phtml', ['page' => $holdings['page']])?>
 <?php endif; ?>
 <?php $history = $this->driver->getRealTimeHistory(); ?>
 <?php if (is_array($history) && !empty($history)): ?>

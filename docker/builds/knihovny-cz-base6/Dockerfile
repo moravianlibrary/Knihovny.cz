@@ -19,7 +19,7 @@ ENV PARAM_VUFIND_GOOGLE_API_KEY=${PARAM_VUFIND_GOOGLE_API_KEY}
 ENV PARAM_VUFIND_CAPTCHA_SITE_KEY=${PARAM_VUFIND_CAPTCHA_SITE_KEY}
 ENV PARAM_VUFIND_CAPTCHA_SECRET_KEY=${PARAM_VUFIND_CAPTCHA_SECRET_KEY}
 ENV PARAM_VUFIND_MYSQL_URL=${PARAM_VUFIND_MYSQL_URL}
-ENV PARAM_VUFIND_COMMIT="46e80b83ed4fed8b86142b7159b50aa99c015517"
+ENV PARAM_VUFIND_COMMIT="e11e3b9f8f8e6e67b1c812dcd06dda0260898b8d"
 ENV PARAM_PORTAL_PAGES_BRANCH=${PARAM_PORTAL_PAGES_BRANCH}
 ENV PARAM_VUFIND_ROBOTS_TXT=${PARAM_VUFIND_ROBOTS_TXT}
 ENV PARAM_VUFIND_SUMMON_API_ID=${PARAM_VUFIND_SUMMON_API_ID}
@@ -58,7 +58,6 @@ COPY package.json /var/www/knihovny-cz/
 RUN npm install -g grunt-cli && npm install
 
 # Copy node modules
-RUN cp ./node_modules/autocomplete.js/autocomplete.js ./themes/bootstrap3/js/vendor/
-RUN cp ./node_modules/vanilla-cookieconsent/dist/cookieconsent.umd.js ./themes/bootstrap3/js/vendor/
+RUN cp ./node_modules/vanilla-cookieconsent/dist/cookieconsent.umd.js ./themes/bootstrap5/js/vendor/
 
 CMD ["knihovny-cz-foreground"]

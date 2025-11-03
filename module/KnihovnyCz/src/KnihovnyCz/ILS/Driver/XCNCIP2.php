@@ -79,6 +79,23 @@ class XCNCIP2 extends \VuFind\ILS\Driver\XCNCIP2
     }
 
     /**
+     * Patron Login
+     *
+     * This is responsible for authenticating a patron against the catalog.
+     *
+     * @param string $username The patron username
+     * @param string $password The patron's password
+     *
+     * @throws ILSException
+     * @return mixed          Associative array of patron info on successful login,
+     * null on unsuccessful login.
+     */
+    public function patronLogin($username, $password)
+    {
+        return parent::patronLogin($username, $password);
+    }
+
+    /**
      * Get Hold Type
      *
      * @param string $status Status string from CirculationStatus NCIP element
@@ -111,7 +128,7 @@ class XCNCIP2 extends \VuFind\ILS\Driver\XCNCIP2
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function getHolding($id, array $patron = null, array $options = [])
+    public function getHolding($id, ?array $patron = null, array $options = [])
     {
         $holdings = parent::getHolding($id, $patron, $options);
         $holdings = array_map(

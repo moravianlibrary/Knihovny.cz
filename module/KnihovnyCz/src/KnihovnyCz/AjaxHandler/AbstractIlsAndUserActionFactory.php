@@ -9,7 +9,8 @@ use Psr\Container\ContainerExceptionInterface as ContainerException;
 use Psr\Container\ContainerInterface;
 
 /**
- * Factory for AbstractIlsAndUserAction AJAX handlers.
+ * Factory for AbstractIlsAndUserAction AJAX handlers. We need to use
+ * MultiConnection instead of Connection in AJAX handlers.
  *
  * @category VuFind
  * @package  KnihovnyCz\AjaxHandler
@@ -38,7 +39,7 @@ class AbstractIlsAndUserActionFactory implements FactoryInterface
     public function __invoke(
         ContainerInterface $container,
         $requestedName,
-        array $options = null
+        ?array $options = null
     ) {
         return new $requestedName(
             $container->get(\VuFind\Session\Settings::class),

@@ -36,7 +36,7 @@ class UpdateResourcesFromSolrCommandFactory implements FactoryInterface
     public function __invoke(
         ContainerInterface $container,
         $requestedName,
-        array $options = null
+        ?array $options = null
     ) {
         $tableManager = $container->get(\VuFind\Db\Table\PluginManager::class);
         $recordLoader = $container->get(\KnihovnyCz\Record\Loader::class);

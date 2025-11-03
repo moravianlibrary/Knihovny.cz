@@ -2,7 +2,18 @@
 /*exported loadMapSelection */
 //Coordinate order:  Storage and Query: WENS ; Display: WSEN
 
-function loadMapSelection(geoField, boundingBox, selectBoundingBox, baseURL, homeURL, searchParams, resultsCoords, basemap) {
+/**
+ * Initialize a Leaflet map.
+ * @param {string}       geoField      The name of the geospatial field.
+ * @param {Array}        boundingBox   An array of four numbers representing the initial search box coordinates.
+ * @param {boolean}      selectedBoundingBox   Was bounding box set by user?
+ * @param {string}       baseURL       The base URL for the search results page.
+ * @param {string}       homeURL       The URL for VuFind's home page (root of application).
+ * @param {string}       searchParams  Existing search parameters to be appended to new search URLs.
+ * @param {Array<Array>} resultsCoords An array of search results; each result is [id, title, west, east, north, south].
+ * @param {Array}        basemap       An array containing the URL template and attribution for the map's basemap.
+ */
+function loadMapSelection(geoField, boundingBox, selectedBoundingBox, baseURL, homeURL, searchParams, resultsCoords, basemap) {
   // Initialize variables
   var searchboxLayer = L.featureGroup();
   var drawnItemsLayer = L.featureGroup();
@@ -24,23 +35,23 @@ function loadMapSelection(geoField, boundingBox, selectBoundingBox, baseURL, hom
 
   // Red will be used for search results display
   var redIcon = new searchIcon({
-    iconUrl: VuFind.path + '/themes/bootstrap3/css/vendor/leaflet/images/marker-icon-2x-red.png',
-    shadowUrl: VuFind.path + '/themes/bootstrap3/css/vendor/leaflet/images/marker-shadow.png'
+    iconUrl: VuFind.path + '/themes/bootstrap5/css/vendor/leaflet/images/marker-icon-2x-red.png',
+    shadowUrl: VuFind.path + '/themes/bootstrap5/css/vendor/leaflet/images/marker-shadow.png'
   });
 
   var redRectIcon = new searchIcon({
-    iconUrl: VuFind.path + '/themes/bootstrap3/css/vendor/leaflet/images/rectangle-icon-2x-red.png',
-    shadowUrl: VuFind.path + '/themes/bootstrap3/css/vendor/leaflet/images/marker-shadow.png'
+    iconUrl: VuFind.path + '/themes/bootstrap5/css/vendor/leaflet/images/rectangle-icon-2x-red.png',
+    shadowUrl: VuFind.path + '/themes/bootstrap5/css/vendor/leaflet/images/marker-shadow.png'
   });
 
   // Blue will be used when a user selects a geofeature
   var blueIcon = new searchIcon({
-    iconUrl: VuFind.path + '/themes/bootstrap3/css/vendor/leaflet/images/marker-icon-2x-blue.png',
-    shadowUrl: VuFind.path + '/themes/bootstrap3/css/vendor/leaflet/images/marker-shadow.png'
+    iconUrl: VuFind.path + '/themes/bootstrap5/css/vendor/leaflet/images/marker-icon-2x-blue.png',
+    shadowUrl: VuFind.path + '/themes/bootstrap5/css/vendor/leaflet/images/marker-shadow.png'
   });
   var blueRectIcon = new searchIcon({
-    iconUrl: VuFind.path + '/themes/bootstrap3/css/vendor/leaflet/images/rectangle-icon-2x-blue.png',
-    shadowUrl: VuFind.path + '/themes/bootstrap3/css/vendor/leaflet/images/marker-shadow.png'
+    iconUrl: VuFind.path + '/themes/bootstrap5/css/vendor/leaflet/images/rectangle-icon-2x-blue.png',
+    shadowUrl: VuFind.path + '/themes/bootstrap5/css/vendor/leaflet/images/marker-shadow.png'
   });
 
   // Initialize marker clusters with icon colors
@@ -63,8 +74,9 @@ function loadMapSelection(geoField, boundingBox, selectBoundingBox, baseURL, hom
     }
   });
 
-  // Handle user interaction with markers and rectangles
-  //----------------------------------------------------//
+  /**
+   * Handle user interaction with markers and rectangles
+   */
   function onClick() {
     mapSearch.eachLayer(function msl(layer) {
       if (layer.options.id === "mRect") {
@@ -175,7 +187,8 @@ function loadMapSelection(geoField, boundingBox, selectBoundingBox, baseURL, hom
 
   var sb_bounds = searchboxFeature.getBounds();
   var sb_center = sb_bounds.getCenter();
-  if (selectBoundingBox) {
+
+  if (selectedBoundingBox) {
     searchboxFeature.addTo(searchboxLayer);
   }
 

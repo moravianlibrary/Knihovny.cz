@@ -37,7 +37,7 @@ class InvolvedLibrariesServiceFactory
     public function __invoke(
         ContainerInterface $container,
         $requestedName,
-        array $options = null
+        ?array $options = null
     ) {
         $service = new $requestedName(
             $container->get(\VuFind\Search\Results\PluginManager::class)

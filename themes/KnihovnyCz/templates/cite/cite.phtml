@@ -8,7 +8,7 @@
   <div id='citation-loader' class="hidden"><?=$this->icon('spinner', 'fa-fw') . $this->translate('loading_ellipsis')?></div>
 
   <div id='citation-placeholder'>
-    <?php foreach($this->citations as $recordId => $citation): ?>
+    <?php foreach ($this->citations as $recordId => $citation): ?>
       <?php
         if (empty($citation)) {
           $missingCitation = true;
@@ -36,11 +36,11 @@
 <?php if (!empty($citationStyles)) :?>
   <div id='citation-style-selector'>
     <select class='style'>
-      <?php foreach($citationStyles as $style => $description): ?>
+      <?php foreach ($citationStyles as $style => $description): ?>
         <option value='<?=$style?>'<?=($style == $this->currentStyle) ? 'selected="selected"' : ''?>><?=$description?></option>
       <?php endforeach; ?>
     </select>
-    <?php if(isset($citationLink)): ?>
+    <?php if (isset($citationLink)): ?>
       <a id="citace-pro" href="<?=$citationLink?>" target="_blank">
         <img src="/themes/KnihovnyCz/images/logoCitacePROkatalog.png" alt="Citace PRO">
       </a>
@@ -131,7 +131,7 @@
             });
           });
         JS;
-    echo $this->inlineScript(\Laminas\View\Helper\HeadScript::SCRIPT, $script, 'SET');
+    echo $this->assetManager()->outputInlineScriptString($script);
 ?>
 <br>
-<?=$this->copyToClipboardButton('#citation-placeholder');?>
+<?=$this->copyToClipboardButton('#citation-placeholder', false);?>

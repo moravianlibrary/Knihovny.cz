@@ -1,7 +1,7 @@
 <?=$this->flashmessages()?>
 <?php
   $itemIndex = 1;
-  $this->headScript()->appendFile('checkouts.js');
+  $this->assetManager()->appendScriptLink('checkouts.js');
 ?>
 
 <?php if (!$this->error && count($this->sublibraries) > 1): ?>
@@ -95,18 +95,22 @@
       <?php $ilsDetails = $resource->getExtraDetail('ils_details'); ?>
       <li id="record<?=$this->escapeHtmlAttr($resource->getUniqueId())?>" class="result">
         <?php if ($this->purgeSelectedAllowed): ?>
-          <div class="checkbox">
-            <?php if (isset($ilsDetails['row_id'])): ?>
-              <?php $safeId = preg_replace('/[^a-zA-Z0-9]/', '', $ilsDetails['row_id']); ?>
-              <label>
-                <input class="checkbox-select-item" type="checkbox" name="purgeSelectedIDs[]" value="<?=$this->escapeHtmlAttr($ilsDetails['row_id'])?>" id="checkbox_<?=$safeId?>" />
-              </label>
-            <?php else: ?>
-              <label> </label>
-            <?php endif; ?>
+          <div class="d-flex">
+            <div class="checkbox">
+              <?php if (isset($ilsDetails['row_id'])): ?>
+                <?php $safeId = preg_replace('/[^a-zA-Z0-9]/', '', $ilsDetails['row_id']); ?>
+                <label>
+                  <input class="checkbox-select-item" type="checkbox" name="purgeSelectedIDs[]" value="<?=$this->escapeHtmlAttr($ilsDetails['row_id'])?>" id="checkbox_<?=$safeId?>" />
+                </label>
+              <?php else: ?>
+                <label> </label>
+              <?php endif; ?>
+            </div>
+            <strong class="order"><?= $itemIndex++ ?>.</strong>
           </div>
+        <?php else: ?>
+          <strong class="order"><?= $itemIndex++ ?>.</strong>
         <?php endif; ?>
-        <strong class="pull-left order"><?= $itemIndex++ ?>.</strong>
         <?php
           $coverDetails = $this->record($resource)->getCoverDetails('checkedout', 'small', $this->recordLinker()->getUrl($resource));
           $cover = $coverDetails['html'];

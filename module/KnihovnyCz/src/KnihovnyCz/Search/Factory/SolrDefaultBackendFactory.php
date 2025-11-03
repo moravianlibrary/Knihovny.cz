@@ -14,8 +14,7 @@ use KnihovnyCz\Search\Solr\ChildDocDeduplicationListener;
 use KnihovnyCz\Search\Solr\DeduplicationListener;
 use KnihovnyCz\Search\Solr\MultiplyingDeduplicationListener;
 use KnihovnyCz\Search\Solr\OneChildDocDeduplicationListener;
-use VuFind\Search\Factory\SolrDefaultBackendFactory
-as ParentSolrDefaultBackendFactory;
+use VuFind\Search\Factory\SolrDefaultBackendFactory as ParentSolrDefaultBackendFactory;
 use VuFindSearch\Backend\Solr\Backend;
 
 /**

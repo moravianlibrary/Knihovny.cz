@@ -3,7 +3,7 @@ $js = '';
 if (!empty($links)): ?>
   <div class="alert alert-info">
     <ul>
-      <?php foreach($links as $portal => $url): ?>
+      <?php foreach ($links as $portal => $url): ?>
         <li>
           <a id="recommend<?=$portal?>" target="_blank" href="<?=$url?>"><?=$this->transEsc('recommend_link_to_portal_' . $portal)?> <span></span></a>
         </li>
@@ -12,4 +12,4 @@ if (!empty($links)): ?>
     </ul>
   </div>
 <?php endif;?>
-<?=$this->inlineScript(\Laminas\View\Helper\HeadScript::SCRIPT, $js, 'SET')?>
+<?=$this->assetManager()->outputInlineScriptString($js)?>

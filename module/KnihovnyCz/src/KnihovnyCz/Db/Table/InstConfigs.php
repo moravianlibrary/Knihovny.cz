@@ -31,7 +31,7 @@ class InstConfigs extends \VuFind\Db\Table\Gateway
         Adapter $adapter,
         PluginManager $tm,
         $cfg,
-        RowGateway $rowObj = null,
+        ?RowGateway $rowObj = null,
         $table = 'inst_configs'
     ) {
         parent::__construct($adapter, $tm, $cfg, $rowObj, $table);

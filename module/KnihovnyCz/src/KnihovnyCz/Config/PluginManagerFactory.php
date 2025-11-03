@@ -35,7 +35,7 @@ class PluginManagerFactory extends \VuFind\Config\PluginManagerFactory
     public function __invoke(
         ContainerInterface $container,
         $requestedName,
-        array $options = null
+        ?array $options = null
     ) {
         /**
          * Config plugin manager

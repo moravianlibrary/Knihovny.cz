@@ -51,7 +51,7 @@ class Shibboleth extends Base
     /**
      * Set configuration.
      *
-     * @param \Laminas\Config\Config $config Configuration to set
+     * @param \Vufind\Config\Config $config Configuration to set
      *
      * @return void
      */

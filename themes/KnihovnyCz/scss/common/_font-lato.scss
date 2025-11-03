@@ -1,0 +1,46 @@
+$srcFontLato: "../../KnihovnyCz/css/fonts/Lato";
+
+@font-face {
+  font-family: 'Lato';
+  src:
+    url('#{$srcFontLato}/Lato-Regular.woff2') format('woff2'),
+    url('#{$srcFontLato}/Lato-Regular.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+  text-rendering: optimizeLegibility
+}
+
+@font-face {
+  font-family: 'Lato';
+  src:
+    url('#{$srcFontLato}/Lato-Italic.woff2') format('woff2'),
+    url('#{$srcFontLato}/Lato-Italic.woff') format('woff');
+  font-weight: normal;
+  font-style: italic;
+  font-display: swap;
+  text-rendering: optimizeLegibility
+}
+
+@font-face {
+  font-family: 'Lato';
+  src:
+    url('#{$srcFontLato}/Lato-Bold.woff2') format('woff2'),
+    url('#{$srcFontLato}/Lato-Bold.woff') format('woff');
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
+  text-rendering: optimizeLegibility
+}
+
+@font-face {
+  font-family: 'Lato';
+  src:
+    url('#{$srcFontLato}/Lato-BoldItalic.woff2') format('woff2'),
+    url('#{$srcFontLato}/Lato-BoldItalic.woff') format('woff');
+  font-weight: bold;
+  font-style: italic;
+  font-display: swap;
+  text-rendering: optimizeLegibility
+}
+

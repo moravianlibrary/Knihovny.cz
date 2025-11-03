@@ -33,9 +33,9 @@ class ObalkyKnihService extends \VuFind\Content\ObalkyKnihService
     /**
      * Constructor
      *
-     * @param \Laminas\Config\Config $config Configuration for service
+     * @param \Vufind\Config\Config $config Configuration for service
      */
-    public function __construct(\Laminas\Config\Config $config)
+    public function __construct(\Vufind\Config\Config $config)
     {
         parent::__construct($config);
         if (!isset($config->authority_endpoint)) {

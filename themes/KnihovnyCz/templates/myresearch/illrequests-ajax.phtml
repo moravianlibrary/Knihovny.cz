@@ -5,7 +5,7 @@
 
 <?php if (isset($this->forms)): ?>
   <ul>
-    <?php foreach($this->forms as $label => $link):?>
+    <?php foreach ($this->forms as $label => $link):?>
       <?php
         $translation = $this->transEsc($label . '_' . $this->card->getHomeLibrary(), [], '');
         if (empty($translation)) {
@@ -60,7 +60,7 @@
       <?php $iteration++; ?>
       <?php $ilsDetails = $resource->getExtraDetail('ils_details'); ?>
       <li id="record<?=$this->escapeHtmlAttr($resource->getUniqueId()) ?>" class="result">
-        <strong class="pull-left order"><?= $itemIndex++ ?>.</strong>
+        <strong class="order"><?= $itemIndex++ ?>.</strong>
         <?php if ($this->cancelForm && isset($ilsDetails['cancel_details'])): ?>
           <?php $safeId = preg_replace('/[^a-zA-Z0-9]/', '', $resource->getUniqueId()); ?>
           <div class="checkbox">

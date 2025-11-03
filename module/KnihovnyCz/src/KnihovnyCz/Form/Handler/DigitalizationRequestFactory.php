@@ -39,7 +39,7 @@ class DigitalizationRequestFactory implements FactoryInterface
     public function __invoke(
         ContainerInterface $container,
         $requestedName,
-        array $options = null
+        ?array $options = null
     ) {
         $config = $container
             ->get(\VuFind\Config\PluginManager::class)

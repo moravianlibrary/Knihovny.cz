@@ -102,7 +102,7 @@ class SolrAuthorityTest extends \PHPUnit\Framework\TestCase
      */
     protected function createDriver(array $fieldData): \KnihovnyCz\RecordDriver\SolrAuthority
     {
-        $config = new \Laminas\Config\Config([]);
+        $config = new \VuFind\Config\Config([]);
         $record = new \KnihovnyCz\RecordDriver\SolrAuthority($config);
         $record->setRawData($fieldData);
         return $record;

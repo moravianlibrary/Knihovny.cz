@@ -56,7 +56,7 @@ class PerformanceLogger
      * @param Request|null $request Request
      * @param string       $file    File to log to (null to use logging instead)
      */
-    public function __construct(Request $request = null, $file = null)
+    public function __construct(?Request $request = null, $file = null)
     {
         $ipAddress = $request?->getHeader('X-Forwarded-For', null)?->getFieldValue()
             ?? $request?->getServer('REMOTE_ADDR');

@@ -40,44 +40,42 @@
   $showInstitutionPanel = $this->showInstitutionPanel ?? true;
 ?>
 <?php if ($recordsCount >= 1 || $internalMultiplicityCount > 1): ?>
-  <div class="well panel-select-institution">
+  <div class="card panel-select-institution">
+  <div class="card-body">
     <?php if ($showInstitutionPanel): ?>
       <?php if ($recordsCount > 1): ?>
-        <h3><label for="institutions"><?=$this->translate('Select institution');?></label>:</h3>
-        <div id="records-in-groups-container">
-          <div class="input-group input-group-lg">
-            <select id="institutions" class="form-control" style="width: 100%" name="institutions"></select>
-            <?php if ($libraryId = $this->driver->getOwningLibraryId()): ?>
-              <?=$this->render('library-detail-link.phtml', ['libraryId' => $libraryId])?>
-            <?php endif; ?>
-          </div>
+        <h3><?=$this->translate('Select institution');?>:</h3>
+        <div class="d-flex gap-1">
+          <select id="institutions" class="form-select form-select-lg w-100" name="institutions"></select>
+          <?php if ($libraryId = $this->driver->getOwningLibraryId()): ?>
+            <?=$this->render('library-detail-link.phtml', ['libraryId' => $libraryId])?>
+          <?php endif; ?>
         </div>
       <?php elseif ($recordsCount == 1): ?>
         <h3><?=$this->translate('Institution');?>:</h3>
-        <div class="input-group input-group-lg">
-          <span class="select2 select2-container select2-container--bootstrap3">
-              <span class="select2-selection select2-selection--single select2-text" role="combobox" aria-haspopup="true" aria-expanded="false" tabindex="0" aria-disabled="false" aria-labelledby="select2-institutions-container">
-                <span class="select2-selection__rendered" id="select2-institutions-container" role="textbox" aria-readonly="true" title="<?=$data[0]['text']?>">
-                  <span class="institutions-selector">
-                    <span class="image">
-                      <?php if (!empty($data[0]['image'])): ?>
-                        <img src="<?=$data[0]['image']?>">
-                      <?php endif; ?>
-                    </span>
-                    <span class="text"><?=$data[0]['text']?></span>
+        <div class="d-flex gap-1">
+          <span class="select2 select2-container select2-container--bootstrap3 w-100">
+            <span class="select2-selection select2-selection--single select2-text" role="combobox" aria-haspopup="true" aria-expanded="false" tabindex="0" aria-disabled="false" aria-labelledby="select2-institutions-container">
+              <span class="select2-selection__rendered" id="select2-institutions-container" role="textbox" aria-readonly="true" title="<?=$data[0]['text']?>">
+                <span class="institutions-selector">
+                  <span class="image">
+                    <?php if (!empty($data[0]['image'])): ?>
+                      <img src="<?=$data[0]['image']?>">
+                    <?php endif; ?>
                   </span>
+                  <span class="text"><?=$data[0]['text']?></span>
                 </span>
               </span>
+            </span>
           </span>
           <?php if ($libraryId = $this->driver->getOwningLibraryId()): ?>
             <?=$this->render('library-detail-link.phtml', ['libraryId' => $libraryId])?>
           <?php endif; ?>
         </div>
       <?php endif; ?>
-      <br>
     <?php endif; ?>
     <?php if ($internalMultiplicityCount > 1): ?>
-      <span>
+      <div class="alert alert-info mt-2">
         <?=$this->translate('The library has another records for this publication');?>
         <?php foreach ($internalMultiplicity as $index => $recordId): ?>
           <?php
@@ -97,7 +95,7 @@
             <?=$label?><?=$sep?>
           <?php endif; ?>
         <?php endforeach;?>
-      </span>
+      </div>
     <?php endif;?>
     <?php if ($recordMissing): ?>
       <div class="alert alert-warning" role="alert">
@@ -108,6 +106,7 @@
         <?php endif; ?>
       </div>
     <?php endif; ?>
+  </div>
   </div>
 <?php endif;?>
 
@@ -140,5 +139,5 @@ if ($showInstitutionPanel && $recordsCount > 1) {
         });
       });
       JS;
-  echo $this->inlineScript(\Laminas\View\Helper\HeadScript::SCRIPT, $select2, 'SET');
+  echo $this->assetManager()->outputInlineScriptString($select2);
 }

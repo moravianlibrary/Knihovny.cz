@@ -4,11 +4,14 @@
 <div class="media"<?=$this->schemaOrg()->getAttributes(['vocab' => 'http://schema.org/', 'resource' => '#record', 'typeof' => $this->schemaOrg()->getRecordTypes($this->driver)])?>>
   <?php
     $sigla = $this->driver->tryMethod('getSiglaDisplay');
-    $QRCode = $this->record($this->driver)->getQRCode('core');
-    $coverDetails = $this->record($this->driver)->getCoverDetails('core', 'medium', $this->record($this->driver)->getThumbnail('large'));
+    $recordHelper = $this->record($this->driver);
+    $QRCode = $recordHelper->getQRCode('core');
+    $largeImage = $recordHelper->getThumbnail('large');
+    $linkAttributes = $largeImage ? ['href' => $largeImage, 'data-lightbox-image' => 'true'] : [];
+    $coverDetails = $recordHelper->getCoverDetails('core', 'medium', $linkAttributes);
     $cover = $coverDetails['html'];
     $preview = ($this->previewOverride ?? false)
-      ? $this->previewOverride : $this->record($this->driver)->getPreviews();
+      ? $this->previewOverride : $recordHelper->getPreviews();
     $rating = $this->driver->isRatingAllowed();
   ?>
   <?php if ($QRCode || $cover || $preview || $rating): ?>
@@ -20,14 +23,14 @@
 
       <?php /* Display qrcode if appropriate: */ ?>
       <?php if ($QRCode): ?>
-        <span class="hidden-xs">
+        <span class="record-qrcode">
           <br><img alt="<?=$this->transEscAttr('QR Code')?>" class="qrcode" src="<?=$this->escapeHtmlAttr($QRCode);?>">
         </span>
       <?php endif; ?>
 
       <?php /* Display rating if enabled: */ ?>
       <?php if ($rating): ?>
-        <?=$this->record($this->driver)->renderTemplate('rating.phtml')?>
+        <?=$recordHelper->renderTemplate('rating.phtml')?>
       <?php endif; ?>
 
       <?php // if you have a preview tab but want to move or remove the preview link
@@ -42,19 +45,20 @@
     </div>
   <?php endif; ?>
   <div class="media-body">
-    <h1<?=$this->schemaOrg()->getAttributes(['property' => 'name'])?> class="record-title" data-sigla="<?=$sigla ?: 'undefined' ?>"><?=$this->escapeHtml($this->driver->getShortTitle())?></h1>
+    <h1<?=$this->schemaOrg()->getAttributes(['property' => 'name'])?> class="record-title" data-sigla="<?=$sigla ?: 'undefined' ?>"><?=$this->escapeOrCleanHtml($this->driver->getShortTitle())?></h1>
 
     <?php if ($this->driver->getExtraDetail('cached_record') && !$this->translationEmpty('cached_record_warning')): ?>
       <div class="alert alert-warning">
         <?=$this->transEsc('cached_record_warning')?>
       </div>
     <?php endif; ?>
+    <?=$this->record($this->driver)->getLabelList() ?>
 
     <?=$this->record($this->driver)->renderTemplate('wantit.phtml');?>
 
     <?php foreach ($this->driver->tryMethod('getFullTitlesAltScript', [], []) as $altTitle): ?>
       <div class="title-alt">
-        <?=$this->escapeHtml($altTitle)?>
+        <?=$this->escapeOrCleanHtml($altTitle, 'title-alt')?>
       </div>
     <?php endforeach; ?>
 
@@ -64,7 +68,7 @@
     <?php endif; ?>
 
     <?php if ($this->searchOptions($this->driver->getSourceIdentifier())->getVersionsAction()): ?>
-      <?=$this->record($this->driver)->renderTemplate('versions-link.phtml')?>
+      <?=$recordHelper->renderTemplate('versions-link.phtml')?>
     <?php endif; ?>
 
     <?=$this->record($this->driver)->renderTemplate('summary.phtml', ['driver' => $this->driver, 'length' => 360, 'expandable' => true])?>
@@ -78,7 +82,7 @@
 
     <?php /* Display Main Details */ ?>
     <?=
-      $this->record($this->driver)->renderTemplate(
+      $recordHelper->renderTemplate(
           'core-fields.phtml',
           [
             'driver' => $this->driver,

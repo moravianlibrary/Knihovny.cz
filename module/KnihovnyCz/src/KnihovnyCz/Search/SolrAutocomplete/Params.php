@@ -27,9 +27,9 @@ class Params extends \KnihovnyCz\Search\Solr\Params
     public function __construct(
         $options,
         \VuFind\Config\PluginManager $configLoader,
-        HierarchicalFacetHelper $facetHelper = null,
-        \KnihovnyCz\Geo\Parser $parser = null,
-        \KnihovnyCz\Date\Converter $converter = null
+        ?HierarchicalFacetHelper $facetHelper = null,
+        ?\KnihovnyCz\Geo\Parser $parser = null,
+        ?\KnihovnyCz\Date\Converter $converter = null
     ) {
         parent::__construct($options, $configLoader, $facetHelper, $parser, $converter);
         $this->deduplicationType = 'child';

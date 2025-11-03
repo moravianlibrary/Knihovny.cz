@@ -2,9 +2,9 @@
   $configureDatePicker = null;
   if (!$this->initialized) {
     $lang = $this->layout()->userLang;
-    $this->headLink()->appendStylesheet('vendor/jquery-ui.min.css');
-    $this->headScript()->appendFile('lib/jquery-ui/jquery-ui.min.js');
-    $this->headScript()->appendFile("lib/jquery-ui/jquery-ui-i18n-datepicker-$lang.js");
+    $this->assetManager()->appendStyleLink('vendor/jquery-ui.min.css');
+    $this->assetManager()->appendScriptLink('lib/jquery-ui/jquery-ui.min.js');
+    $this->assetManager()->appendScriptLink("lib/jquery-ui/jquery-ui-i18n-datepicker-$lang.js");
     $dateFormat = $this->dateTime()->getDisplayDateFormatForJQuery();
     $configureDatePicker = <<<JS
           $(function jQueryReady($) {
@@ -21,7 +21,7 @@
   $selector = json_encode(($formName != null) ? "form[name='$formName']" : null);
 ?>
 <?php if ($configureDatePicker != null): ?>
-  <?=$this->inlineScript(\Laminas\View\Helper\HeadScript::SCRIPT, $configureDatePicker, 'SET');?>
+  <?=$this->assetManager()->outputInlineScriptString($configureDatePicker)?>
 <?php endif; ?>
 <?php
   $loadJs = <<<JS
@@ -30,4 +30,4 @@
         });
       JS;
 ?>
-<?=$this->inlineScript(\Laminas\View\Helper\HeadScript::SCRIPT, $loadJs, 'SET')?>
+<?=$this->assetManager()->outputInlineScriptString($loadJs)?>

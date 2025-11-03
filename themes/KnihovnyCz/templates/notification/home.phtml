@@ -12,7 +12,7 @@
     </thead>
 <?php endif; ?>
 <tbody>
-  <?php foreach($this->data as $notif): ?>
+  <?php foreach ($this->data as $notif): ?>
     <tr>
       <td data-title="<?=$this->translate('Notifications::Visibility');?>"><?=$notif->getVisibility()
           ? '<span class="label label-success">' . $this->transEsc('Notifications::visibility_show') . '</span>'
@@ -68,7 +68,7 @@
             });
             JS;
       ?>
-      <?=$this->inlineScript(\Laminas\View\Helper\HeadScript::SCRIPT, $script, 'SET');?>
+      <?=$this->assetManager()->outputInlineScriptString($script)?>
     </tr>
   <?php endforeach; ?>
 </tbody>

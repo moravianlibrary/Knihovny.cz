@@ -36,7 +36,7 @@ class PerformanceLoggerFactory implements FactoryInterface
     public function __invoke(
         ContainerInterface $container,
         $requestedName,
-        array $options = null
+        ?array $options = null
     ) {
         $request = $container->get('Request');
         $config = $container->get(\VuFind\Config\PluginManager::class)

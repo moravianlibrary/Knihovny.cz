@@ -45,11 +45,9 @@ $dedupedRecordIds = $tab->getDedupedRecordIds();
     </div>
   <?php endif; ?>
 
-  <div class="panel panel-default">
-    <div class="panel-heading">
-      <h3 class="panel-title"><?=$this->translate('ZiskejEdd::service_header') ?></h3>
-    </div>
-    <div class="panel-body">
+  <div class="card">
+    <h3 class="card-header"><?=$this->translate('ZiskejEdd::service_header') ?></h3>
+    <div class="card-body">
       <div class="col-md-9">
         <p><?=$this->translate('ZiskejEdd::service_description') ?></p>
       </div>
@@ -78,11 +76,9 @@ $dedupedRecordIds = $tab->getDedupedRecordIds();
   </div>
 
   <?php if ($user != null): ?>
-    <div class="panel panel-default">
-      <div class="panel-heading">
-        <h4 class="panel-title"><?=$this->translate('ZiskejEdd::connected_libraries') ?></h4>
-      </div>
-      <div class="panel-body">
+    <div class="card">
+      <h4 class="card-header"><?=$this->translate('ZiskejEdd::connected_libraries') ?></h4>
+      <div class="card-body">
         <?php if ($tab->isZiskejActive()): ?>
           <?php
             $libs = [];
@@ -103,13 +99,11 @@ $dedupedRecordIds = $tab->getDedupedRecordIds();
                 /** @var \Mzk\ZiskejApi\ResponseModel\Reader $ziskejReader */
                 $ziskejReader = $data['ziskejReader'];
                 ?>
-                <li class="list-group-item clearfix">
+                <li class="list-group-item d-flex justify-content-between align-items-center">
                   <?=$this->translate('Source::' . $libId) ?>
-                  <span class="pull-right">
-                    <a class="btn btn-primary ziskej-order-btn" data-lightbox href="<?=$this->url('ziskej-edd-order', ['id' => $driver->getUniqueId(), 'eppnDomain' => $userCard->getEppnDomain()]) ?>">
-                      <?=$this->icon('ziskej-order')?> <?=$this->transEsc('ZiskejEdd::btn_order') ?>
-                    </a>
-                </span>
+                  <a class="btn btn-primary ziskej-order-btn" data-lightbox href="<?=$this->url('ziskej-edd-order', ['id' => $driver->getUniqueId(), 'eppnDomain' => $userCard->getEppnDomain()]) ?>">
+                    <?=$this->icon('ziskej-order')?> <?=$this->transEsc('ZiskejEdd::btn_order') ?>
+                  </a>
                 </li>
               <?php endforeach; ?>
             </ul>

@@ -82,7 +82,7 @@ class ZiskejMvs extends AbstractHelper
      *
      * @return string
      */
-    public function getStatusClass(StatusName $status = null): string
+    public function getStatusClass(?StatusName $status = null): string
     {
         return match ($status) {
             StatusName::CREATED, StatusName::PAID => 'warning',

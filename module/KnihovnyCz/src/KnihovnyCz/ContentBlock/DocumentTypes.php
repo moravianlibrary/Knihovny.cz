@@ -39,7 +39,7 @@ class DocumentTypes implements \VuFind\ContentBlock\ContentBlockInterface
     /**
      * Content configuration
      *
-     * @var \Laminas\Config\Config
+     * @var \Vufind\Config\Config
      */
     protected $itemsConfig;
 
@@ -68,7 +68,7 @@ class DocumentTypes implements \VuFind\ContentBlock\ContentBlockInterface
         /**
          * Search configuration
          *
-         * @var \Laminas\Config\Config
+         * @var \Vufind\Config\Config
          */
         $searchConfig = $this->configManager->get('searches');
         $config = $searchConfig->get($settings);

@@ -35,7 +35,7 @@ class HttpService extends \VuFindHttp\HttpService
         array $proxyConfig = [],
         array $defaults = [],
         array $config = [],
-        PerformanceLogger $perfLogger = null
+        ?PerformanceLogger $perfLogger = null
     ) {
         parent::__construct($proxyConfig, $defaults, $config);
         $this->performanceLogger = $perfLogger;

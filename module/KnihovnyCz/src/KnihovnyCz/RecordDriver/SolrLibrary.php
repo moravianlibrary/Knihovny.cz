@@ -39,7 +39,7 @@ class SolrLibrary extends \KnihovnyCz\RecordDriver\SolrMarc
     /**
      * Facets configuration
      *
-     * @var \Laminas\Config\Config
+     * @var \Vufind\Config\Config
      */
     protected $facetsConfig = null;
 
@@ -53,11 +53,11 @@ class SolrLibrary extends \KnihovnyCz\RecordDriver\SolrMarc
     /**
      * Constructor
      *
-     * @param \Laminas\Config\Config $mainConfig     VuFind main configuration (omit
+     * @param \Vufind\Config\Config $mainConfig     VuFind main configuration (omit
      * for built-in defaults)
-     * @param \Laminas\Config\Config $recordConfig   Record-specific configuration
+     * @param \Vufind\Config\Config $recordConfig   Record-specific configuration
      * file (omit to use $mainConfig as $recordConfig)
-     * @param \Laminas\Config\Config $searchSettings Search-specific configuration
+     * @param \Vufind\Config\Config $searchSettings Search-specific configuration
      * file
      */
     public function __construct(
@@ -450,7 +450,7 @@ class SolrLibrary extends \KnihovnyCz\RecordDriver\SolrMarc
     /**
      * Attach facets config to property
      *
-     * @param \Laminas\Config\Config $facetsConfig Config for facets
+     * @param \Vufind\Config\Config $facetsConfig Config for facets
      *
      * @return void
      */

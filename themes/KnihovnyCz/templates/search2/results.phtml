@@ -2,16 +2,16 @@
   $resultsCount = $this->results->getResultTotal();
   $filterList = $this->results->getParams()->getFilterList();
   $filters = [];
-  foreach($filterList as $filterSetting) {
-    foreach($filterSetting as $filter) {
+  foreach ($filterList as $filterSetting) {
+    foreach ($filterSetting as $filter) {
       $filters[] = $filter['field'] . ':"' . $filter['value'] . '"';
     }
   }
   if ($resultsCount != 0) {
     $apiKey = $this->config()->get('config')->GoogleMaps->apikey;
-    $this->headScript()->appendFile('library-map.js');
-    $this->headScript()->appendFile('lib/marker-clusterer.js');
-    $this->headScript()->appendFile('https://maps.googleapis.com/maps/api/js?key=' . $this->escapeUrl($apiKey) . '&amp;callback=initMap');
+    $this->assetManager()->appendScriptLink('library-map.js');
+    $this->assetManager()->appendScriptLink('lib/marker-clusterer.js');
+    $this->assetManager()->appendScriptLink('https://maps.googleapis.com/maps/api/js?key=' . $this->escapeUrl($apiKey));
 
     $query = $this->results->getParams()->getQuery();
     $lookfor = $this->librariesApiLookfor($query);
@@ -32,5 +32,5 @@
     $script = <<<JS
               initMap('$url');
         JS;
-    echo $this->inlineScript(\Laminas\View\Helper\HeadScript::SCRIPT, $script, 'SET');
+    echo $this->assetManager()->outputInlineScriptString($script);
   }

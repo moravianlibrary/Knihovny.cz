@@ -14,85 +14,40 @@ namespace KnihovnyCz\View\Helper\KnihovnyCz;
 class AccountMenu extends \VuFind\View\Helper\Root\AccountMenu
 {
     /**
-     * Check whether to show shortloans item
+     * Render account menu
      *
-     * @return bool
+     * @param ?string $activeItem The name of current active item (optional)
+     * @param string  $idPrefix   Element ID prefix
+     *
+     * @return string
      */
-    public function checkShortloans(): bool
+    public function render(?string $activeItem = null, string $idPrefix = ''): string
     {
-        return $this->checkIlsCapability('getMyShortLoans');
-    }
+        $contextHelper = $this->getView()->plugin('context');
+        $menu = $this->getMenu();
 
-    /**
-     * Check whether to show ziskej-mvs item
-     *
-     * @return bool
-     */
-    public function checkZiskejMvs(): bool
-    {
-        return $this->getView()->plugin('ziskejMvs')?->isEnabled() ?? false;
-    }
+        if ($idPrefix === 'header_') {
+            return $contextHelper->renderInContext(
+                'myresearch/menu-header.phtml',
+                [
+                    'menu' => $menu,
+                    'active' => $activeItem,
+                    'idPrefix' => $idPrefix,
+                    // set items for backward compatibility, might be removed in future releases
+                    'items' => $menu['Account']['MenuItems'],
+                ]
+            );
+        }
 
-    /**
-     * Check whether to show ziskej-edd item
-     *
-     * @return bool
-     */
-    public function checkZiskejEdd(): bool
-    {
-        return $this->getView()->plugin('ziskejEdd')?->isEnabled() ?? false;
-    }
-
-    /**
-     * Check whether to show librarycards item
-     *
-     * @return bool
-     */
-    public function checkLibraryCards(): bool
-    {
-        $showLibraryCards = $this->getView()->plugin('config')?->get('config')?->Catalog?->show_library_cards ?? true;
-        return parent::checkLibraryCards() && $showLibraryCards;
-    }
-
-    /**
-     * Check whether to show usersettings item
-     *
-     * @return bool
-     */
-    public function checkUserSettings(): bool
-    {
-        return $this->getView()->plugin('accountCapabilities')()?->isUserSettingsEnabled() ?? false;
-    }
-
-    /**
-     * Check whether to show notifications management item
-     *
-     * @return bool
-     */
-    public function checkNotifications(): bool
-    {
-        return $this->getUser()?->couldManageNotifications() ?? false;
-    }
-
-    /**
-     * Check whether to show ebooks item
-     *
-     * @return bool
-     */
-    public function checkEbooks(): bool
-    {
-        return !empty($this->getView()->plugin('palmknihy')->getEnabledPrefixes($this->getUser()));
-    }
-
-    /**
-     * Get params for checking ILS capability/function
-     *
-     * @return array
-     */
-    protected function getCapabilityParams(): array
-    {
-        $params = parent::getCapabilityParams();
-        $params['user'] = $this->getUser();
-        return $params;
+        return $contextHelper->renderInContext(
+            'myresearch/menu.phtml',
+            [
+                'menu' => $menu,
+                'active' => $activeItem,
+                'idPrefix' => $idPrefix,
+                // set items for backward compatibility, might be removed in future releases
+                'items' => $menu['Account']['MenuItems'],
+            ]
+        );
     }
 }

@@ -6,6 +6,7 @@ use InvalidArgumentException;
 use KnihovnyCz\ILS\Driver\XCNCIP2;
 use Laminas\Http\Response as HttpResponse;
 use PHPUnit\Framework\ExpectationFailedException;
+use VuFindTest\Feature\ConfigRelatedServicesTrait;
 
 /**
  * Class XCNCIP2Test
@@ -18,6 +19,8 @@ use PHPUnit\Framework\ExpectationFailedException;
  */
 class XCNCIP2Test extends \VuFindTest\ILS\Driver\XCNCIP2Test
 {
+    use ConfigRelatedServicesTrait;
+
     /**
      * ILS driver
      *
@@ -2218,7 +2221,7 @@ class XCNCIP2Test extends \VuFindTest\ILS\Driver\XCNCIP2Test
      */
     protected function configureDriver($config = null)
     {
-        $this->driver = new XCNCIP2(new \VuFind\Date\Converter());
+        $this->driver = new XCNCIP2(new \VuFind\Date\Converter(), $this->getPathResolver());
         $this->driver->setConfig($config ?? [
                 'Catalog' => [
                     'url' => 'https://test.ncip.example',

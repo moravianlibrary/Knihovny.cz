@@ -1,6 +1,6 @@
 <?php if (!empty($this->links)):?>
   <ul>
-    <?php foreach($this->links as $link): ?>
+    <?php foreach ($this->links as $link): ?>
       <li>
         <a href="<?=$this->recordLinker()->getUrl($link['id'])?>"><?=$this->transEsc($link['label'])?></a>
       </li>

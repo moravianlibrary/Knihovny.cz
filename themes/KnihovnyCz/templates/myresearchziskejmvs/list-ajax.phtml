@@ -49,20 +49,22 @@ $error = ($this->error ?? false);
             }
           }
           ?>
-          <div>
-            <ul class="nav nav-tabs" role="tablist">
-              <li role="presentation" class="active">
-                <a href="#current_<?=$userCard->card_name?>" aria-controls="current_<?=$userCard->card_name?>" role="tab" data-toggle="tab">
+          <div class="card card-with-tabs">
+            <div class="card-header bg-transparent">
+              <ul class="nav nav-tabs card-header-tabs" role="tablist">
+              <li role="presentation" class="nav-item">
+                <a href="#current_<?=$userCard->card_name?>" class="nav-link active" aria-controls="current_<?=$userCard->card_name?>" role="tab" data-bs-toggle="tab">
                   <?=$this->transEsc('ZiskejMvs::tab_active')?>
                 </a>
               </li>
-              <li role="presentation">
-                <a href="#history_<?=$userCard->card_name?>" aria-controls="history_<?=$userCard->card_name?>" role="tab" data-toggle="tab">
+              <li role="presentation" class="nav-item">
+                <a href="#history_<?=$userCard->card_name?>" class="nav-link" aria-controls="history_<?=$userCard->card_name?>" role="tab" data-bs-toggle="tab">
                   <?=$this->transEsc('ZiskejMvs::tab_history')?>
                 </a>
               </li>
             </ul>
-            <div class="tab-content well">
+            </div>
+            <div class="card-body tab-content">
               <div role="tabpanel" class="tab-pane active" id="current_<?=$userCard->card_name?>">
                 <?php if (count($currentTickets)): ?>
                   <?=$this->render('_ziskej-tickets-list.phtml', [

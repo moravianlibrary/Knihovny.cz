@@ -1,12 +1,12 @@
 /* exported initDatePicker */
-/* global VuFind, extractClassParams, htmlEncode */
+/* global bootstrap, VuFind, Autocomplete, htmlEncode */
 
 // We only need to observe change of type childList
 const config = { attributes: false, childList: true, subtree: false };
 
 // Function to hide or show cart badge
 const toggleCartBadge = function toggleCartBadge(targetNode) {
-  targetNode.parentNode.style.display = targetNode.innerText === '0' ? 'none' : 'block';
+  targetNode.parentNode.parentNode.parentNode.style.display = targetNode.innerText === '0' ? 'none' : 'block';
 };
 
 // Callback function to execute when mutations are observed
@@ -137,7 +137,7 @@ $(function openUrl() {
 });
 
 function setLibraryAutoComplete(element) {
-  var libraries = new Map();
+  const libraries = new Map();
   const list = element.querySelectorAll('ul li:not(.facet-tree__parent) a');
   for (const item of list) {
     const value = item.dataset.value;
@@ -148,56 +148,52 @@ function setLibraryAutoComplete(element) {
     });
   }
 
-  var input = $('<input></input>').addClass('autocomplete-institutions form-control')
+  const inputField = $('<input></input>').addClass('autocomplete-institutions form-control')
     .attr('placeholder', VuFind.translate('Autocomplete institutions placeholder'));
   function normalizeString(str) {
     return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
   }
   // Search autocomplete
-  input.autocomplete({
+  const autocomplete = new Autocomplete({
     rtl: $(document.body).hasClass("rtl"),
     maxResults: 10,
     loadingString: VuFind.translate('loading_ellipsis'),
-    // AJAX call for autocomplete institutions
-    handler: function vufindACHandler(inputField, cb) {
-      const query = inputField.val();
-      const terms = normalizeString(query).split(' ');
-      var searcher = extractClassParams(inputField);
-      $.fn.autocomplete.ajax({
-        url: VuFind.path + '/AJAX/JSON',
-        data: {
-          q: query,
-          method: 'getLibrariesACSuggestions',
-          searcher: searcher.searcher
-        },
-        dataType: 'json',
-        success: function autocompleteJSON(json) {
-          var results = new Map();
-          json.data.forEach(function onEach(item) {
-            const library = libraries.get(item.value);
-            if (typeof library !== "undefined") {
-              results.set(item.value, library);
-            }
-          });
-          for (const [key, item] of libraries.entries()) {
-            const searchValue = normalizeString(item.label);
-            const add = terms.every(function hasTerm(term) {
-              return searchValue.startsWith(term) || searchValue.includes(' ' + term);
-            });
-            if (add) {
-              results.set(key, item);
-            }
-          }
-          var ac = [];
-          for (const item of results.values()) {
-            ac.push(item);
-          }
-          cb(ac);
-        }
-      });
-    }
   });
-  $(element).prepend(input);
+  autocomplete(inputField[0], function vufindACHandler(query, cb) {
+    const terms = normalizeString(query).split(' ');
+    $.ajax({
+      url: VuFind.path + '/AJAX/JSON',
+      data: {
+        q: query,
+        method: 'getLibrariesACSuggestions',
+      },
+      dataType: 'json',
+      success: function autocompleteJSON(json) {
+        const results = new Map();
+        json.data.forEach(function onEach(item) {
+          const library = libraries.get(item.value);
+          if (typeof library !== "undefined") {
+            results.set(item.value, library);
+          }
+        });
+        for (const [key, item] of libraries.entries()) {
+          const searchValue = normalizeString(item.label);
+          const add = terms.every(function hasTerm(term) {
+            return searchValue.startsWith(term) || searchValue.includes(' ' + term);
+          });
+          if (add) {
+            results.set(key, item);
+          }
+        }
+        const ac = [];
+        for (const item of results.values()) {
+          ac.push({text: item.label, 'href': item.href});
+        }
+        cb(ac);
+      }
+    });
+  });
+  $(element).prepend(inputField);
 }
 
 // We only need to observe change of type childList
@@ -225,22 +221,16 @@ document.addEventListener('DOMContentLoaded', function runObserver() {
 
 $(function saveInstitutionFilter() {
   var element = $('#my-institution-filter-save');
-  var hidePopover = function hidePopover(){
-    var callback = null;
-    return function onTimeout() {
-      if (callback != null) {
-        clearTimeout(callback);
-      }
-      callback = setTimeout(function hidePopoverInner() {
-        element.popover('hide');
-      }, 5000);
-    };
-  }();
-  element.on('click', function onClick() {
+  var hidePopover = function hidePopover(popover){
+    setTimeout(function hidePopoverInner() {
+      popover.dispose();
+    }, 5000);
+  };
+  element.on('click', function onClick(event) {
     event.stopPropagation();
-    element.popover('show');
-    element.data('bs.popover').options.content = element.data('content-progress');
-    element.popover('show');
+    element.attr('data-bs-content', element.data('content-progress'));
+    const progressPopover = new bootstrap.Popover(element);
+    progressPopover.show();
     var institutions = element.data('institutions').split(';');
     var url = VuFind.path + '/AJAX/JSON?method=saveInstitutionFilter';
     $.ajax({
@@ -250,18 +240,21 @@ $(function saveInstitutionFilter() {
       data: {'institutions[]': institutions},
       success: function onSuccess(){
         $('#my-institution-filter').attr('href', window.location);
-        element.data('bs.popover').options.content = element.data('content-ok');
-        element.popover('show');
-        hidePopover();
+        progressPopover.dispose();
+        element.attr('data-bs-content', element.data('content-ok'));
+        const okPopover = new bootstrap.Popover(element);
+        okPopover.show();
+        hidePopover(okPopover);
       },
       error: function onError(json){
         var message = element.data('content-error');
         if ('responseJSON' in json) {
           message = json.responseJSON.data;
         }
-        element.data('bs.popover').options.content = message;
-        element.popover('show');
-        hidePopover();
+        element.attr('data-bs-content', message);
+        const errorPopover = new bootstrap.Popover(element);
+        errorPopover.show();
+        hidePopover(errorPopover);
       },
     });
     return true;
@@ -313,7 +306,7 @@ function initDatePicker(form) {
 
 $(function cartPopoverReinit() {
   $('#updateCart, #bottom_updateCart')
-    .popover('destroy')
+    .popover('dispose')
     .popover({
       title: VuFind.translate('bookbag'),
       content: '',

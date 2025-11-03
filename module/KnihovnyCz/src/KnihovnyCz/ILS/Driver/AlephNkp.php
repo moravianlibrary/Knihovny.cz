@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace KnihovnyCz\ILS\Driver;
 
+use KnihovnyCz\Service\TranslationService;
+use Laminas\Mvc\I18n\Translator;
 use VuFind\Exception\ILS as ILSException;
 
 /**
@@ -18,6 +20,22 @@ use VuFind\Exception\ILS as ILSException;
 class AlephNkp extends Aleph
 {
     protected ?string $cgiScriptBase;
+
+    /**
+     * Constructor
+     *
+     * @param \VuFind\Date\Converter $dateConverter      Date converter
+     * @param ?\VuFind\Cache\Manager $cacheManager       Cache manager (optional)
+     * @param ?Translator            $translator         Translator (optional)
+     * @param ?TranslationService    $translationService Translation service (optional)
+     */
+    public function __construct(
+        protected \VuFind\Date\Converter $dateConverter,
+        protected ?\VuFind\Cache\Manager $cacheManager = null,
+        protected ?Translator $translator = null,
+        protected ?TranslationService $translationService = null
+    ) {
+    }
 
     /**
      * Initialize the driver.
@@ -114,12 +132,15 @@ class AlephNkp extends Aleph
             }
             $textParts = [];
             $link = array_shift($parts);
-            if (!empty($link)) {
+            if ($link !== null) {
                 $textParts[] = $link;
             }
             $parts = array_map(fn ($part) => floatval(trim($part)), $parts);
             if ($parts[2] != 0) {
-                $textParts[] = $this->translate('ILSMessages::not_closed_fee_all', ['%%amount%%' => $parts[2]]);
+                $textParts[] = $this->translationService->translate(
+                    'ILSMessages::not_closed_fee_all',
+                    ['%%amount%%' => $parts[2]]
+                );
             }
             $textParts = array_map(fn ($part) => rtrim($part, ".\n"), $textParts);
             return implode('. ', $textParts) . '.';

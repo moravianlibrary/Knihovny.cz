@@ -3,11 +3,12 @@
 namespace KnihovnyCz\Auth;
 
 use KnihovnyCz\Db\Service\UserSettingsService as UserSettingsService;
-use Laminas\Config\Config;
 use Laminas\Session\SessionManager;
+use Laminas\View\Renderer\RendererInterface;
 use VuFind\Auth\LoginTokenManager;
 use VuFind\Auth\Manager as Base;
 use VuFind\Auth\PluginManager;
+use VuFind\Config\Config;
 use VuFind\Cookie\CookieManager;
 use VuFind\Db\Row\User as UserRow;
 use VuFind\Db\Service\UserServiceInterface;
@@ -44,6 +45,7 @@ class Manager extends Base
      * @param LoginTokenManager    $loginTokenManager Login Token manager
      * @param Connection           $ils               ILS Connection
      * @param UserSettingsService  $userSettings      Restorer
+     * @param RendererInterface    $viewRenderer      View renderer
      */
     public function __construct(
         Config $config,
@@ -54,7 +56,8 @@ class Manager extends Base
         CsrfInterface $csrf,
         LoginTokenManager $loginTokenManager,
         Connection $ils,
-        UserSettingsService $userSettings
+        UserSettingsService $userSettings,
+        RendererInterface $viewRenderer
     ) {
         parent::__construct(
             $config,
@@ -65,7 +68,8 @@ class Manager extends Base
             $cookieManager,
             $csrf,
             $loginTokenManager,
-            $ils
+            $ils,
+            $viewRenderer
         );
         $this->userSettingsService = $userSettings;
     }
@@ -93,7 +97,7 @@ class Manager extends Base
      * @return string     Redirect URL (usually same as $url, but modified in
      * some authentication modules).
      */
-    public function logout($url, $destroy = true, $extLogout = true)
+    public function logout($url, $destroy = true, $extLogout = true): string
     {
         $extLogoutUrl = parent::logout($url, $destroy);
         return ($extLogout) ? $extLogoutUrl : $url;
@@ -106,7 +110,7 @@ class Manager extends Base
      *
      * @return void
      */
-    public function updateSession($user)
+    public function updateSession($user): void
     {
         parent::updateSession($user);
         // add user data to session even if privacy mode is disabled

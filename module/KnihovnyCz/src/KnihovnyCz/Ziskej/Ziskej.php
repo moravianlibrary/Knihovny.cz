@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace KnihovnyCz\Ziskej;
 
-use Laminas\Config\Config;
+use VuFind\Config\Config;
 use VuFind\Cookie\CookieManager;
 
 /**

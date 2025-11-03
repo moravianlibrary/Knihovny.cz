@@ -1,5 +1,6 @@
 <?php
-  $this->headScript()->appendFile('facets.js');
+  $this->layout()->sideFacetsInstanceCounter = ($this->layout()->sideFacetsInstanceCounter ?? 0) + 1;
+  $this->assetManager()->appendScriptLink('facets.js');
 
   $results = $this->recommend->getResults();
   $activeFacets = $this->recommend->getActiveFacets();
@@ -21,8 +22,9 @@
 
   foreach ($activeFacets as $field => $facetName) {
     if (isset($rangeFacets[$field]) && 'date' === $rangeFacets[$field]['type']) {
-      $this->headScript()->appendFile('vendor/bootstrap-slider.min.js');
-      $this->headLink()->appendStylesheet('vendor/bootstrap-slider.min.css');
+      $this->assetManager()->appendScriptLink('vendor/nouislider.min.js');
+      $this->assetManager()->appendStyleLink('vendor/nouislider.min.css');
+      $this->assetManager()->appendScriptLink('date_range_slider.js');
       break;
     }
   }
@@ -43,6 +45,10 @@
 <?php if ($results->getResultTotal() > 0 || $hasVisibleCheckboxes): ?>
   <div class="context-help">
     <h2 class="context-text"><?=$this->transEsc($this->slot('side-facet-caption')->get('Refine Results')) ?></h2>
+    <?php if ($this->multiFacetsSelection !== 'false' && $this->layout()->sideFacetsInstanceCounter === 1): ?>
+      <?= $this->render('Recommend/SideFacets/multiFacetsSelection.phtml'); ?>
+    <?php endif; ?>
+    <span class="visually-hidden"><?=$this->transEsc('page_reload_on_select_hint') ?></span>
     <?=$this->contextHelp('facets', 'heading')?>
   </div>
   <?php
@@ -61,7 +67,7 @@
   <div class="side-facets-container-ajax" data-search-class-id="<?=$this->escapeHtmlAttr($this->searchClassId) ?>" data-location="<?=$this->escapeHtmlAttr($this->location) ?>" data-config-index="<?=$this->escapeHtmlAttr($this->configIndex)?>" data-query="<?=$this->escapeHtmlAttr($urlQuery)?>" data-query-suppressed="<?=$querySuppressed ? '1' : '0' ?>" data-extra-fields="<?=$this->escapeHtml(implode(',', $extraUrlFields))?>">
 <?php endif; ?>
 <?php if ($hasVisibleCheckboxes): ?>
-  <div class="checkboxFilter">
+  <div class="checkbox-filters">
     <?=$this->context($this)->renderInContext('Recommend/SideFacets/checkbox-filters.phtml', ['checkboxFilters' => $checkboxFilters, 'results' => $results]); ?>
   </div>
 <?php endif; ?>
@@ -70,34 +76,38 @@
 <?php if (!empty($activeFacets) && $results->getResultTotal() > 0): ?>
   <?php foreach ($activeFacets as $field => $facetName): ?>
     <?php $collapsed = in_array($field, $collapsedFacets); ?>
-    <?php // Data-title attribute is for analytics use.  Do not remove. ?>
-    <div class="facet-group" id="side-panel-<?=$this->escapeHtmlAttr($field) ?>" data-title="<?=$this->escapeHtmlAttr($facetName) ?>">
-      <button class="title<?php if ($collapsed): ?> collapsed<?php endif ?>" data-toggle="collapse" data-target="#side-collapse-<?=$this->escapeHtmlAttr($field) ?>" >
-	<span class="facet-title"><?=$this->transEsc($facetName)?>
-        <?php if ($field == $this->recommend->getInstitutionField() && $this->auth()->getUserObject() != null):?>
-          <?php if (($myFilterLink = $this->recommend->getMyFilter()) !== false): ?>
-            <a href='<?=$myFilterLink?>'
-               id='my-institution-filter'
-               title="<?=$this->translate('my_institution_filter_load_title')?>">
-              <?=$this->icon('load-institution-filter') ?>
-            </a>
-          <?php endif; ?>
-          <?php if(!empty($institutions = $this->recommend->getSelectedInstitutionFilter())): ?>
-            <span title='<?= $this->transEsc('my_institution_filter_save_title')?>'>
-              <a id="my-institution-filter-save" style="display:none;"
-                data-institutions="<?=$this->escapeHtmlAttr(implode(';', $institutions)) ?>"
-                data-content-progress="<?= $this->transEsc('my_institution_filter_saving')?>"
-                data-content-ok="<?= $this->transEsc('my_institution_filter_saved')?>"
-                data-content-error="<?= $this->transEsc('my_institution_filter_not_saved')?>">
-                <?=$this->icon('save-institution-filter') ?>
-              </a>
-            </span>
-          <?php endif; ?>
+    <?php // Data-title attribute is for analytics use.  Do not remove.
+      $showFilter = $field == $this->recommend->getInstitutionField() && $this->auth()->getUserObject() != null;
+      $showLoadFilter = $showFilter && ($myFilterLink = $this->recommend->getMyFilter()) !== false;
+      $showSaveFilter = $showFilter && !empty($institutions = $this->recommend->getSelectedInstitutionFilter());
+     ?>
+    <div class="facet-group" data-title="<?=$this->escapeHtmlAttr($facetName) ?>" id="side-panel-<?=$this->escapeHtmlAttr($field) ?>">
+      <?php if ($showFilter):?>
+        <span class="institution-filter-icons">
+          <?php if ($showLoadFilter): ?>
+          <a href='<?=$myFilterLink?>' id='my-institution-filter' title="<?=$this->translate('my_institution_filter_load_title')?>">
+            <?=$this->icon('load-institution-filter') ?>
+          </a>
         <?php endif; ?>
-        </span><!-- .facet-title -->
+          <?php if ($showSaveFilter): ?>
+          <span title='<?= $this->transEsc('my_institution_filter_save_title')?>'>
+            <a id="my-institution-filter-save" style="display:none;"
+               data-institutions="<?=$this->escapeHtmlAttr(implode(';', $institutions)) ?>"
+               data-content-progress="<?= $this->transEsc('my_institution_filter_saving')?>"
+               data-content-ok="<?= $this->transEsc('my_institution_filter_saved')?>"
+               data-content-error="<?= $this->transEsc('my_institution_filter_not_saved')?>"
+            >
+              <?=$this->icon('save-institution-filter') ?>
+            </a>
+          </span>
+        <?php endif; ?>
+        </span>
+      <?php endif; ?>
+      <button class="title<?php if ($collapsed): ?> collapsed<?php endif ?>" data-bs-toggle="collapse" data-bs-target="#side-collapse-<?=$this->escapeHtmlAttr($field) ?>" >
+	      <span class="facet-title"><?=$this->transEsc($facetName)?></span>
         <?=$this->icon('collapse', 'facet-title-icon') ?>
       </button>
-      <div id="side-collapse-<?=$this->escapeHtmlAttr($field) ?>" class="collapse<?php if (!in_array($field, $collapsedFacets)): ?> in<?php endif ?>" data-facet="<?=$this->escapeHtmlAttr($field) ?>"<?php if (in_array($field, $forceUncollapsedFacets)): ?> data-force-in="1"<?php endif ?>>
+      <div id="side-collapse-<?=$this->escapeHtmlAttr($field) ?>" class="collapse<?php if (!in_array($field, $collapsedFacets)): ?> show<?php endif ?>" data-facet="<?=$this->escapeHtmlAttr($field) ?>"<?php if (in_array($field, $forceUncollapsedFacets)): ?> data-force-uncollapsed="1"<?php endif ?>>
         <span class="facet-load-failed hidden"> <?=$this->transEsc('ajax_load_interrupted')?></span>
         <div class="facet-load-indicator hidden">
           <?=$this->icon('spinner') ?> <?=$this->transEsc('loading_ellipsis')?>
@@ -109,12 +119,3 @@
 <?php if ($results->getResultTotal() > 0 || $hasVisibleCheckboxes): ?>
   </div>
 <?php endif; ?>
-
-<?php
-
-$script = <<<JS
-      $('#my-institution-filter').click(function myInstitutionFilterHandler(event) {
-        event.stopPropagation();
-      });
-    JS;
-echo $this->inlineScript(\Laminas\View\Helper\HeadScript::SCRIPT, $script, 'SET');

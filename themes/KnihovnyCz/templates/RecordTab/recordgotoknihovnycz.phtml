@@ -1,7 +1,7 @@
 <?php $this->slot('record-go-to-knihovny-cz')->start(); ?>
 <?php $mainPortalLink = $this->recordLinker()->getLinkToMainPortal($this->driver); ?>
 <?php if ($mainPortalLink != null) : ?>
-  <div class="panel custom-banner record-go-to-knihovny-cz-banner">
+  <div class="card custom-banner record-go-to-knihovny-cz-banner">
     <a class="banner-image" href="<?= $mainPortalLink ?>#dedupedrecord" target="_blank">
       <img class="inline-icon" src="<?=$this->imageLink('knihovnycz-icon.png') ?>" alt="Logo Knihovny.cz">
     </a>

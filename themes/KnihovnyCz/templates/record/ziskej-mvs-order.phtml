@@ -18,7 +18,7 @@ $ziskejReader = $this->ziskejReader;
 ?>
 
 <?php if ($this->layout()->getTemplate() !== 'layout/lightbox'): ?>
-  <a href="<?=$this->recordLinker()->getTabUrl($this->driver, 'ZiskejMvs')?>" class="backToRecord">
+  <a href="<?=$this->recordLinker()->getTabUrl($this->driver, 'ZiskejMvs')?>" class="btn btn-outline-primary">
     <?= $this->icon('back-to-record'); ?>
     <?= $this->transEsc('Back to record'); ?>
   </a>
@@ -44,7 +44,7 @@ $ziskejReader = $this->ziskejReader;
               <?=$this->escapeHtml($patron['firstname'] ?? '') ?>
               <?=$this->escapeHtml($patron['lastname'] ?? '') ?>
             </p>
-            <div class="form-group">
+            <div class="form-group required">
               <label for="email"><?=$this->transEsc('ZiskejMvs::label_email') ?>:</label>
               <input type="email" name="email" id="email" value="<?=!empty($ziskejReader) ? $ziskejReader->email : (!empty($patron['email']) ? $patron['email'] : '') ?>" class="form-control" required>
               <span class="help-block"><?=$this->transEsc('ZiskejMvs::help_email') ?></span>

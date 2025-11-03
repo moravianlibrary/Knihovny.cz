@@ -37,7 +37,7 @@ class UserListFactory extends \VuFind\Db\Row\UserListFactory
     public function __invoke(
         ContainerInterface $container,
         $requestedName,
-        array $options = null
+        ?array $options = null
     ) {
         $config = $container->get(\VuFind\Config\PluginManager::class);
         $content = $config->get('content')->toArray();

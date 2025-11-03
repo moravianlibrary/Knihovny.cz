@@ -132,7 +132,7 @@ class InspirationController extends \VuFind\Controller\AbstractBase
     {
         $blocks = $this->serviceLocator->get(\VuFind\ContentBlock\BlockLoader::class)
             ->getFromConfigObject(
-                new \Laminas\Config\Config(['Conspectus' => ['block' => ['FacetList:Solr']]]),
+                new \VuFind\Config\Config(['Conspectus' => ['block' => ['FacetList:Solr']]]),
                 'Conspectus',
                 'block'
             );

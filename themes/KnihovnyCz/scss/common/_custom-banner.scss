@@ -1,0 +1,78 @@
+.card.custom-banner {
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  padding: 0;
+  background-color: #f7e8d0;
+  border: 1px solid #d3b890;
+
+  a {
+    outline: none;
+  }
+}
+
+.custom-banner .banner-image {
+  display: block;
+  height: 100%;
+  padding: 0;
+}
+
+.custom-banner .banner-content {
+  padding: 0 15px;
+}
+
+.custom-banner .banner-image img {
+  max-width: initial;
+  object-fit: cover
+}
+
+.card.custom-banner.hp-survey-banner {
+  height: 180px;
+
+  .banner-image {
+    margin-right: 40px;
+  }
+
+  .banner-image img {
+    height: 180px;
+  }
+}
+
+.card.custom-banner.record-go-to-knihovny-cz-banner {
+  height: 100px;
+
+  .banner-image {
+    margin-right: 0;
+  }
+
+  .banner-image img {
+    height: 80px;
+    margin: 10px;
+  }
+}
+
+@media (max-width: 768px) {
+  .card.custom-banner.hp-survey-banner {
+    height: auto;
+    min-height: 180px;
+    padding-bottom: 15px;
+  }
+  .card.custom-banner.record-go-to-knihovny-cz-banner {
+    height: auto;
+    min-height: 100px;
+  }
+  .custom-banner.hp-survey-banner .banner-image {
+    display: none;
+  }
+}
+
+
+@media (max-width: 576px) {
+  .card.custom-banner {
+    padding-bottom: 15px;
+  }
+  .custom-banner.record-go-to-knihovny-cz-banner .banner-image {
+    display: none;
+  }
+}

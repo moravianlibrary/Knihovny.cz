@@ -2,29 +2,32 @@
 // Set page title.
 $this->headTitle($this->translate('Inspiration'));
 $this->layout()->breadcrumbs = false;
+$this->layout()->searchbox = false;
 ?>
 <div class="row">
   <?=implode('', array_map([$this, 'contentBlock'], $blocks ?? []))?>
 </div>
-<div class="row">
-  <div class="col-xs-12">
-    <h2><?=$this->translate('more_inspiration_lists')?></h2>
+
+<div>
+  <h2><?=$this->translate('more_inspiration_lists')?></h2>
+  <div class="row">
+    <?php $categoryIterator = 0; ?>
+    <?php foreach ($this->widgets as $category => $list): ?>
+      <?php $categoryIterator++; ?>
+      <div class="col-sm-4">
+        <div class="card">
+          <h3 class="card-header"><?=$this->translate('widget_category_' . $category)?></h3>
+          <div class="list-group list-group-flush">
+            <?php
+            foreach ($list as $widget):
+              $listUrl = $widget['listUrl'];
+              $title = $widget['list']->title_cs ?? $widget['list']->title ?? '';
+            ?>
+              <a class="list-group-item list-group-item-action" href="<?=$listUrl?>" title="<?=$title?>"><?=$title?></a>
+            <?php endforeach; ?>
+          </div>
+        </div>
+      </div>
+    <?php endforeach; ?>
   </div>
-  <?php $categoryIterator = 0; ?>
-  <?php foreach($this->widgets as $category => $list): ?>
-    <?php $categoryIterator++; ?>
-    <div class="col-sm-4">
-      <h3><?=$this->translate('widget_category_' . $category)?></h3>
-      <?php
-        foreach ($list as $widget):
-          $listUrl = $widget['listUrl'];
-          $title = $widget['list']->title_cs ?? $widget['list']->title ?? '';
-      ?>
-        <a href="<?=$listUrl?>" title="<?=$title?>"><?=$title?></a><br>
-      <?php endforeach; ?>
-    </div>
-    <?php if ($categoryIterator % 3 == 0): ?>
-      <div class="clearfix"></div>
-    <?php endif; ?>
-  <?php endforeach; ?>
 </div>

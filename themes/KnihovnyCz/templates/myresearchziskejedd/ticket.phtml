@@ -21,356 +21,345 @@ $viewHelperZiskej = $this->ziskejEdd();
 $this->headTitle($this->translate('ZiskejEdd::header_order_ziskej_num') . ' ' . $ticket->hid);
 ?>
 
-<div class="row">
-  <div class="<?=$this->layoutClass('mainbody')?>">
+<div class="<?=$this->layoutClass('mainbody')?>">
 
-    <div class="clearfix">
+  <h2>
+    <?=$this->transEsc('ZiskejEdd::header_order_ziskej_num') . ' ' . $ticket->hid?>
+    <span class="badge text-bg-<?=$viewHelperZiskej->getStatusClass($ticket->status)?>">
+      <?=$this->translate('ZiskejEdd::order_status_' . $ticket->status->value)?>
+    </span>
+  </h2>
 
-      <h2 class="pull-left">
-        <?=$this->transEsc('ZiskejEdd::header_order_ziskej_num') . ' ' . $ticket->hid?>
-      </h2>
+  <?=$this->flashmessages()?>
 
-      <div class="pull-left h2-label">
-        <span class="label label-<?=$viewHelperZiskej->getStatusClass($ticket->status)?>">
-          <?=$this->translate('ZiskejEdd::order_status_' . $ticket->status->value)?>
-        </span>
-      </div>
+  <?php
+  $histories = $ticket->statusHistory;
+  $historyArray = [];
+  foreach ($histories as $history) {
+    $historyArray[$history->statusName->value] = $this->dateTime()->convertToDisplayDate('U', $history->createdAt->getTimestamp());
+  }
 
-    </div>
+  $classDone = 'visited';
+  $classActive = 'visited current';
+  $classWaiting = '';
 
-    <?=$this->flashmessages()?>
+  ?>
 
-    <?php
-    $histories = $ticket->statusHistory;
-    $historyArray = [];
-    foreach ($histories as $history) {
-      $historyArray[$history->statusName->value] = $this->dateTime()->convertToDisplayDate('U', $history->createdAt->getTimestamp());
-    }
-
-    $classDone = 'visited';
-    $classActive = 'visited current';
-    $classWaiting = '';
-
-    ?>
-
-    <div class="well">
-      <ul class="nav-wizard row">
+  <div class="well">
+    <ul class="nav-wizard row">
+      <li class="part col-md-2">
+        <?php if (isset($historyArray[StatusName::CREATED->value])): ?>
+          <span class="text-icon text-success"><?=$this->icon('ziskej-done')?></span>
+        <?php else: ?>
+          <span class="text-icon text-muted"><?=$this->icon('ziskej-waiting')?></span>
+        <?php endif; ?>
+        <?=$this->transEsc('ZiskejEdd::order_status_created')?>
+        <?php if (isset($historyArray[StatusName::CREATED->value])): ?>
+          <small><?=$historyArray[StatusName::CREATED->value]?></small>
+        <?php endif; ?>
+      </li>
+      <?php
+      if (in_array($ticket->status, [
+        StatusName::CREATED,
+        StatusName::ACCEPTED,
+        StatusName::UNPAID,
+        StatusName::PREPARED,
+        StatusName::LENT,
+        StatusName::CLOSED,
+      ])) : ?>
         <li class="part col-md-2">
-          <?php if (isset($historyArray[StatusName::CREATED->value])): ?>
+          <?php if (isset($historyArray[StatusName::ACCEPTED->value])): ?>
             <span class="text-icon text-success"><?=$this->icon('ziskej-done')?></span>
           <?php else: ?>
             <span class="text-icon text-muted"><?=$this->icon('ziskej-waiting')?></span>
           <?php endif; ?>
-          <?=$this->transEsc('ZiskejEdd::order_status_created')?>
-          <?php if (isset($historyArray[StatusName::CREATED->value])): ?>
-            <small><?=$historyArray[StatusName::CREATED->value]?></small>
+          <?=$this->transEsc('ZiskejEdd::order_status_accepted')?>
+          <?php if (isset($historyArray[StatusName::ACCEPTED->value])): ?>
+            <small><?=$historyArray[StatusName::ACCEPTED->value]?></small>
           <?php endif; ?>
         </li>
-        <?php
-        if (in_array($ticket->status, [
-          StatusName::CREATED,
-          StatusName::ACCEPTED,
-          StatusName::UNPAID,
-          StatusName::PREPARED,
-          StatusName::LENT,
-          StatusName::CLOSED,
-        ])) : ?>
-          <li class="part col-md-2">
-            <?php if (isset($historyArray[StatusName::ACCEPTED->value])): ?>
-              <span class="text-icon text-success"><?=$this->icon('ziskej-done')?></span>
-            <?php else: ?>
-              <span class="text-icon text-muted"><?=$this->icon('ziskej-waiting')?></span>
-            <?php endif; ?>
-            <?=$this->transEsc('ZiskejEdd::order_status_accepted')?>
-            <?php if (isset($historyArray[StatusName::ACCEPTED->value])): ?>
-              <small><?=$historyArray[StatusName::ACCEPTED->value]?></small>
-            <?php endif; ?>
-          </li>
-          <li class="part col-md-2">
-            <?php if (isset($historyArray[StatusName::UNPAID->value])): ?>
-              <span class="text-icon text-success"><?=$this->icon('ziskej-done')?></span>
-            <?php else: ?>
-              <span class="text-icon text-muted"><?=$this->icon('ziskej-waiting')?></span>
-            <?php endif; ?>
-            <?=$this->transEsc('ZiskejEdd::order_status_unpaid')?>
-            <?php if (isset($historyArray[StatusName::UNPAID->value])): ?>
-              <small><?=$historyArray[StatusName::UNPAID->value]?></small>
-            <?php endif; ?>
-          </li>
-          <li class="part col-md-2">
-            <?php if (isset($historyArray[StatusName::PREPARED->value])): ?>
-              <span class="text-icon text-success"><?=$this->icon('ziskej-done')?></span>
-            <?php else: ?>
-              <span class="text-icon text-muted"><?=$this->icon('ziskej-waiting')?></span>
-            <?php endif; ?>
-            <?=$this->transEsc('ZiskejEdd::order_status_prepared')?>
-            <?php if (isset($historyArray[StatusName::PREPARED->value])): ?>
-              <small><?=$historyArray[StatusName::PREPARED->value]?></small>
-            <?php endif; ?>
-          </li>
-          <li class="part col-md-2">
-            <?php if (isset($historyArray[StatusName::LENT->value])): ?>
-              <span class="text-icon text-success"><?=$this->icon('ziskej-done')?></span>
-            <?php else: ?>
-              <span class="text-icon text-muted"><?=$this->icon('ziskej-waiting')?></span>
-            <?php endif; ?>
-            <?=$this->transEsc('ZiskejEdd::order_status_lent')?>
-            <?php if (isset($historyArray[StatusName::LENT->value])): ?>
-              <small><?=$historyArray[StatusName::LENT->value]?></small>
-            <?php endif; ?>
-          </li>
-          <li class="part col-md-2">
-            <?php if (isset($historyArray[StatusName::CLOSED->value])): ?>
-              <span class="text-icon text-success"><?=$this->icon('ziskej-done')?></span>
-            <?php else: ?>
-              <span class="text-icon text-muted"><?=$this->icon('ziskej-waiting')?></span>
-            <?php endif; ?>
-            <?=$this->transEsc('ZiskejEdd::order_status_closed')?>
-            <?php if (isset($historyArray[StatusName::CLOSED->value])): ?>
-              <small><?=$historyArray[StatusName::CLOSED->value]?></small>
-            <?php endif; ?>
-          </li>
-        <?php endif; ?>
-        <?php if ($ticket->status == StatusName::CANCELLED) : ?>
-          <li class="part col-md-2">
-            <?php if (isset($historyArray[StatusName::CANCELLED->value])): ?>
-              <span class="text-icon text-success"><?=$this->icon('ziskej-done')?></span>
-            <?php else: ?>
-              <span class="text-icon text-muted"><?=$this->icon('ziskej-waiting')?></span>
-            <?php endif; ?>
-            <?=$this->transEsc('ZiskejEdd::order_status_cancelled')?>
-            <?php if (isset($historyArray[StatusName::CANCELLED->value])): ?>
-              <small><?=$historyArray[StatusName::CANCELLED->value]?></small>
-            <?php endif; ?>
-          </li>
-        <?php endif; ?>
-        <?php if ($ticket->status == StatusName::REJECTED) : ?>
-          <li class="part col-md-2">
-            <?php if (isset($historyArray[StatusName::REJECTED->value])): ?>
-              <span class="text-icon text-success"><?=$this->icon('ziskej-done')?></span>
-            <?php else: ?>
-              <span class="text-icon text-muted"><?=$this->icon('ziskej-waiting')?></span>
-            <?php endif; ?>
-            <?=$this->transEsc('ZiskejEdd::order_status_rejected')?>
-            <?php if (isset($historyArray[StatusName::REJECTED->value])): ?>
-              <small><?=$historyArray[StatusName::REJECTED->value]?></small>
-            <?php endif; ?>
-          </li>
-        <?php endif; ?>
-      </ul>
-    </div>
+        <li class="part col-md-2">
+          <?php if (isset($historyArray[StatusName::UNPAID->value])): ?>
+            <span class="text-icon text-success"><?=$this->icon('ziskej-done')?></span>
+          <?php else: ?>
+            <span class="text-icon text-muted"><?=$this->icon('ziskej-waiting')?></span>
+          <?php endif; ?>
+          <?=$this->transEsc('ZiskejEdd::order_status_unpaid')?>
+          <?php if (isset($historyArray[StatusName::UNPAID->value])): ?>
+            <small><?=$historyArray[StatusName::UNPAID->value]?></small>
+          <?php endif; ?>
+        </li>
+        <li class="part col-md-2">
+          <?php if (isset($historyArray[StatusName::PREPARED->value])): ?>
+            <span class="text-icon text-success"><?=$this->icon('ziskej-done')?></span>
+          <?php else: ?>
+            <span class="text-icon text-muted"><?=$this->icon('ziskej-waiting')?></span>
+          <?php endif; ?>
+          <?=$this->transEsc('ZiskejEdd::order_status_prepared')?>
+          <?php if (isset($historyArray[StatusName::PREPARED->value])): ?>
+            <small><?=$historyArray[StatusName::PREPARED->value]?></small>
+          <?php endif; ?>
+        </li>
+        <li class="part col-md-2">
+          <?php if (isset($historyArray[StatusName::LENT->value])): ?>
+            <span class="text-icon text-success"><?=$this->icon('ziskej-done')?></span>
+          <?php else: ?>
+            <span class="text-icon text-muted"><?=$this->icon('ziskej-waiting')?></span>
+          <?php endif; ?>
+          <?=$this->transEsc('ZiskejEdd::order_status_lent')?>
+          <?php if (isset($historyArray[StatusName::LENT->value])): ?>
+            <small><?=$historyArray[StatusName::LENT->value]?></small>
+          <?php endif; ?>
+        </li>
+        <li class="part col-md-2">
+          <?php if (isset($historyArray[StatusName::CLOSED->value])): ?>
+            <span class="text-icon text-success"><?=$this->icon('ziskej-done')?></span>
+          <?php else: ?>
+            <span class="text-icon text-muted"><?=$this->icon('ziskej-waiting')?></span>
+          <?php endif; ?>
+          <?=$this->transEsc('ZiskejEdd::order_status_closed')?>
+          <?php if (isset($historyArray[StatusName::CLOSED->value])): ?>
+            <small><?=$historyArray[StatusName::CLOSED->value]?></small>
+          <?php endif; ?>
+        </li>
+      <?php endif; ?>
+      <?php if ($ticket->status == StatusName::CANCELLED) : ?>
+        <li class="part col-md-2">
+          <?php if (isset($historyArray[StatusName::CANCELLED->value])): ?>
+            <span class="text-icon text-success"><?=$this->icon('ziskej-done')?></span>
+          <?php else: ?>
+            <span class="text-icon text-muted"><?=$this->icon('ziskej-waiting')?></span>
+          <?php endif; ?>
+          <?=$this->transEsc('ZiskejEdd::order_status_cancelled')?>
+          <?php if (isset($historyArray[StatusName::CANCELLED->value])): ?>
+            <small><?=$historyArray[StatusName::CANCELLED->value]?></small>
+          <?php endif; ?>
+        </li>
+      <?php endif; ?>
+      <?php if ($ticket->status == StatusName::REJECTED) : ?>
+        <li class="part col-md-2">
+          <?php if (isset($historyArray[StatusName::REJECTED->value])): ?>
+            <span class="text-icon text-success"><?=$this->icon('ziskej-done')?></span>
+          <?php else: ?>
+            <span class="text-icon text-muted"><?=$this->icon('ziskej-waiting')?></span>
+          <?php endif; ?>
+          <?=$this->transEsc('ZiskejEdd::order_status_rejected')?>
+          <?php if (isset($historyArray[StatusName::REJECTED->value])): ?>
+            <small><?=$historyArray[StatusName::REJECTED->value]?></small>
+          <?php endif; ?>
+        </li>
+      <?php endif; ?>
+    </ul>
+  </div>
 
-    <?php if ($ticket->status == StatusName::CREATED): ?>
-      <div class="alert alert-info">
-        <?=$this->transEsc('ZiskejEdd::message_ziskej_message_wait_processing')?>
-      </div>
+  <?php if ($ticket->status == StatusName::CREATED): ?>
+    <div class="alert alert-info">
+      <?=$this->transEsc('ZiskejEdd::message_ziskej_message_wait_processing')?>
+    </div>
+  <?php endif; ?>
+
+  <div class="text-center well border mb-1">
+    <?php if ($ticket->status == StatusName::UNPAID && $ticket->downloadUrl): ?>
+      <a class="btn btn-warning" href="<?=$ticket->downloadUrl->getAbsoluteUrl()?>" target="_blank" title="<?=$this->transEsc('ZiskejEdd::btn_order_pay_title')?>">
+        <?=$this->icon('ziskej-order')?> <?=$this->transEsc('ZiskejEdd::btn_order_pay')?>
+      </a>
     <?php endif; ?>
 
-    <div class="text-center well border mb-1">
-      <?php if ($ticket->status == StatusName::UNPAID && $ticket->downloadUrl): ?>
-        <a class="btn btn-warning" href="<?=$ticket->downloadUrl->getAbsoluteUrl()?>" target="_blank" title="<?=$this->transEsc('ZiskejEdd::btn_order_pay_title')?>">
-          <?=$this->icon('ziskej-order')?> <?=$this->transEsc('ZiskejEdd::btn_order_pay')?>
-        </a>
-      <?php endif; ?>
-
-      <?php if (($ticket->status == StatusName::PREPARED || $ticket->status == StatusName::LENT) && $ticket->downloadUrl): ?>
-        <a class="btn btn-info" href="<?=$ticket->downloadUrl->getAbsoluteUrl()?>" target="_blank" title="<?=$this->transEsc('ZiskejEdd::btn_order_download_title')?>">
-          <?=$this->icon('ziskej-download')?> <?=$this->transEsc('ZiskejEdd::btn_order_download')?>
-        </a>
-      <?php endif; ?>
-
-      <?php if (in_array($ticket->status, [StatusName::CREATED, StatusName::PAID])): ?>
-        <a id="cancelButton" class="btn btn-warning" href="<?=$this->url('myresearch-ziskej-edd-ticket-cancel', ['eppnDomain' => $userCard->getEppnDomain(), 'ticketId' => $ticket->id])?>" title="<?=$this->transEsc('ZiskejEdd::btn_order_cancel_title')?>">
-          <?=$this->icon('ui-remove')?> <?=$this->transEsc('ZiskejEdd::btn_order_cancel')?>
-        </a>
-      <?php endif; ?>
-
-      <?php if ($ticket->status == StatusName::CANCELLED): ?>
-        <div class="alert alert-info"><?=$this->transEsc('ZiskejEdd::msg_order_canceled')?></div>
-      <?php endif; ?>
-      <a class="btn btn-info" href="#messages" title="<?=$this->transEsc('ZiskejMvs::btn_order_goto_messages_title') ?>">
-        <?=$this->icon('ziskej-order-messages') ?> <?=$this->transEsc('ZiskejMvs::btn_order_goto_messages') ?>
+    <?php if (($ticket->status == StatusName::PREPARED || $ticket->status == StatusName::LENT) && $ticket->downloadUrl): ?>
+      <a class="btn btn-info" href="<?=$ticket->downloadUrl->getAbsoluteUrl()?>" target="_blank" title="<?=$this->transEsc('ZiskejEdd::btn_order_download_title')?>">
+        <?=$this->icon('ziskej-download')?> <?=$this->transEsc('ZiskejEdd::btn_order_download')?>
       </a>
-      <?php if (in_array($ticket->status, [StatusName::PREPARED, StatusName::LENT]) && !empty($ticket->downloadUrl)): ?>
-      <a class="btn btn-default" href="<?=$ticket->downloadUrl->getAbsoluteUrl()?>" target="_blank" title="<?=$this->transEsc('ZiskejEdd::btn_order_complaint_title')?>">
-        <?=$this->icon('ziskej-warning')?>
-        <?=$this->transEsc('ZiskejEdd::btn_order_complaint')?>
+    <?php endif; ?>
+
+    <?php if (in_array($ticket->status, [StatusName::CREATED, StatusName::PAID])): ?>
+      <a id="cancelButton" class="btn btn-warning" href="<?=$this->url('myresearch-ziskej-edd-ticket-cancel', ['eppnDomain' => $userCard->getEppnDomain(), 'ticketId' => $ticket->id])?>" title="<?=$this->transEsc('ZiskejEdd::btn_order_cancel_title')?>">
+        <?=$this->icon('ui-remove')?> <?=$this->transEsc('ZiskejEdd::btn_order_cancel')?>
       </a>
+    <?php endif; ?>
+
+    <?php if ($ticket->status == StatusName::CANCELLED): ?>
+      <div class="alert alert-info"><?=$this->transEsc('ZiskejEdd::msg_order_canceled')?></div>
+    <?php endif; ?>
+    <a class="btn btn-info" href="#messages" title="<?=$this->transEsc('ZiskejMvs::btn_order_goto_messages_title') ?>">
+      <?=$this->icon('ziskej-order-messages') ?> <?=$this->transEsc('ZiskejMvs::btn_order_goto_messages') ?>
+    </a>
+    <?php if (in_array($ticket->status, [StatusName::PREPARED, StatusName::LENT]) && !empty($ticket->downloadUrl)): ?>
+    <a class="btn btn-default" href="<?=$ticket->downloadUrl->getAbsoluteUrl()?>" target="_blank" title="<?=$this->transEsc('ZiskejEdd::btn_order_complaint_title')?>">
+      <?=$this->icon('ziskej-warning')?>
+      <?=$this->transEsc('ZiskejEdd::btn_order_complaint')?>
+    </a>
+    <?php endif; ?>
+  </div>
+
+  <h3><?=$this->transEsc('ZiskejEdd::header_order_detail')?></h3>
+  <div class="well border">
+
+    <dl class="dl-horizontal dl-left">
+      <?php if (!empty($ticket->createdAt)): ?>
+        <dt><?=$this->transEsc('ZiskejEdd::date_ordered')?>:</dt>
+        <dd><?=$this->dateTime()->convertToDisplayDateAndTime('U', $ticket->createdAt->getTimestamp())?></dd>
       <?php endif; ?>
-    </div>
 
-    <h3><?=$this->transEsc('ZiskejEdd::header_order_detail')?></h3>
-    <div class="well border">
-
-      <dl class="dl-horizontal dl-left">
-        <?php if (!empty($ticket->createdAt)): ?>
-          <dt><?=$this->transEsc('ZiskejEdd::date_ordered')?>:</dt>
-          <dd><?=$this->dateTime()->convertToDisplayDateAndTime('U', $ticket->createdAt->getTimestamp())?></dd>
-        <?php endif; ?>
-
-        <?php if (!empty($ticket->updatedAt) && ($ticket->updatedAt->getTimestamp() != $ticket->createdAt->getTimestamp())): ?>
-          <dt><?=$this->transEsc('ZiskejEdd::date_updated')?>:</dt>
-          <dd><?=$this->dateTime()->convertToDisplayDate('U', $ticket->updatedAt->getTimestamp())?></dd>
-        <?php endif; ?>
-
-        <?php if (!empty($ticket->requestedAt)): ?>
-          <dt><?=$this->transEsc('ZiskejEdd::date_requested')?>:</dt>
-          <dd><?=$this->dateTime()->convertToDisplayDate('U', $ticket->requestedAt->getTimestamp())?></dd>
-        <?php endif; ?>
-
-        <?php if (!empty($ticket->returnAt)): ?>
-          <dt><?=$this->transEsc('ZiskejEdd::label_date_return')?>:</dt>
-          <dd><?=$this->dateTime()->convertToDisplayDate('U', $ticket->returnAt->getTimestamp())?></dd>
-        <?php endif; ?>
-
-        <?php if (!empty($ticket->eddSubtype)): ?>
-          <dt><?=$this->transEsc('ZiskejEdd::label_subtype')?>:</dt>
-          <dd><?=$this->transEsc('ZiskejEdd::value_subtype_' . $ticket->eddSubtype->value)?></dd>
-        <?php endif; ?>
-
-        <?php if (!empty($ticket->docTitleIn)): ?>
-          <dt><?=$this->transEsc('ZiskejEdd::label_article_doc_title_in')?>:</dt>
-          <dd><?=$ticket->docTitleIn?></dd>
-        <?php endif; ?>
-
-        <?php if (!empty($ticket->docTitle)): ?>
-          <dt><?=$this->transEsc('ZiskejEdd::label_selection_doc_title')?>:</dt>
-          <dd><?=$ticket->docTitle?></dd>
-        <?php endif; ?>
-
-        <?php if (!empty($ticket->docVolume)): ?>
-          <dt><?=$this->transEsc('ZiskejEdd::label_doc_volume')?>:</dt>
-          <dd><?=$ticket->docVolume?></dd>
-        <?php endif; ?>
-
-        <?php if (!empty($ticket->docNumberYear)): ?>
-          <dt><?=$this->transEsc('ZiskejEdd::label_doc_number_year')?>:</dt>
-          <dd><?=$ticket->docNumberYear?></dd>
-        <?php endif; ?>
-
-        <?php if (!empty($ticket->docNumberPyear)): ?>
-          <dt><?=$this->transEsc('ZiskejEdd::label_doc_number_pyear')?>:</dt>
-          <dd><?=$ticket->docNumberPyear?></dd>
-        <?php endif; ?>
-
-        <?php if (!empty($ticket->docNumberPnumber)): ?>
-          <dt><?=$this->transEsc('ZiskejEdd::label_doc_number_pnumber')?>:</dt>
-          <dd><?=$ticket->docNumberPnumber?></dd>
-        <?php endif; ?>
-
-        <?php if (!empty($ticket->docAuthor)): ?>
-          <dt><?=$this->transEsc('ZiskejEdd::label_doc_author')?>:</dt>
-          <dd><?=$ticket->docAuthor?></dd>
-        <?php endif; ?>
-
-        <?php if (!empty($ticket->docIssuer)): ?>
-          <dt><?=$this->transEsc('ZiskejEdd::label_doc_issuer')?>:</dt>
-          <dd><?=$ticket->docIssuer?></dd>
-        <?php endif; ?>
-
-        <?php if (!empty($ticket->docIsbn)): ?>
-          <dt><?=$this->transEsc('ZiskejEdd::label_doc_isbn')?>:</dt>
-          <dd><?=$ticket->docIsbn?></dd>
-        <?php endif; ?>
-
-        <?php if (!empty($ticket->docIssn)): ?>
-          <dt><?=$this->transEsc('ZiskejEdd::label_doc_issn')?>:</dt>
-          <dd><?=$ticket->docIssn?></dd>
-        <?php endif; ?>
-
-        <?php if (!empty($ticket->docCitation)): ?>
-          <dt><?=$this->transEsc('ZiskejEdd::label_doc_citation')?>:</dt>
-          <dd><?=$ticket->docCitation?></dd>
-        <?php endif; ?>
-
-        <?php if (!empty($ticket->pagesFrom)): ?>
-          <dt><?=$this->transEsc('ZiskejEdd::label_pages_from')?>:</dt>
-          <dd><?=$ticket->pagesFrom?></dd>
-        <?php endif; ?>
-
-        <?php if (!empty($ticket->pagesTo)): ?>
-          <dt><?=$this->transEsc('ZiskejEdd::label_pages_to')?>:</dt>
-          <dd><?=$ticket->pagesTo?></dd>
-        <?php endif; ?>
-
-        <?php if (!empty($ticket->docNote)): ?>
-          <dt><?=$this->transEsc('ZiskejEdd::label_doc_note')?>:</dt>
-          <dd><?=$ticket->docNote?></dd>
-        <?php endif; ?>
-
-      </dl>
-    </div>
-
-    <h3><?=$this->transEsc('ZiskejEdd::header_order_document')?></h3>
-    <div class="well border">
-      <?php if ($this->driver): ?>
-        <?=$this->render('_ziskejticket-core.phtml')?>
-        <div class="text-right">
-          <a href="<?=$this->recordLinker()->getUrl($this->driver)?>" class="title" title="<?=$this->transEsc('ZiskejEdd::btn_order_document_title')?>"><?=$this->transEsc('ZiskejEdd::btn_order_document')?></a>
-        </div>
-      <?php else: ?>
-        <div class="alert alert-warning">
-          <?=$this->transEsc('record_info_not_available')?>
-        </div>
+      <?php if (!empty($ticket->updatedAt) && ($ticket->updatedAt->getTimestamp() != $ticket->createdAt->getTimestamp())): ?>
+        <dt><?=$this->transEsc('ZiskejEdd::date_updated')?>:</dt>
+        <dd><?=$this->dateTime()->convertToDisplayDate('U', $ticket->updatedAt->getTimestamp())?></dd>
       <?php endif; ?>
-    </div>
 
-    <div id="messages">
-      <h3>
-        <?=$this->transEsc('ZiskejEdd::header_order_messages')?>
-        <?php if ($ticket->countMessages > 0): ?>
-          <span class="badge"><?=$ticket->countMessages?></span>
-        <?php endif; ?>
-      </h3>
-      <div class="well border">
-        <?php if (is_countable($messages->getAll()) && count($messages->getAll())): ?>
-          <?php
-          foreach ($messages->getAll() as $message): ?>
-            <ul class="media-list">
-              <li class="media">
-                <div class="media-body">
-                  <p class="media-heading">
-                    <?php if ($message->sender == 'reader'): ?>
-                      <span title="<?=$this->transEsc('ZiskejEdd::label_user')?>"><?=$this->icon('profile')?></span>
-                    <?php else: ?>
-                      <?=$this->transEsc('ZiskejEdd::label_library')?>
-                    <?php endif; ?>
-                    <?=$this->dateTime()->convertToDisplayDateAndTime('U', $message->createdAt->getTimestamp())?>
-                  </p>
-                  <div>
-                    <?=$message->text?>
-                  </div>
+      <?php if (!empty($ticket->requestedAt)): ?>
+        <dt><?=$this->transEsc('ZiskejEdd::date_requested')?>:</dt>
+        <dd><?=$this->dateTime()->convertToDisplayDate('U', $ticket->requestedAt->getTimestamp())?></dd>
+      <?php endif; ?>
+
+      <?php if (!empty($ticket->returnAt)): ?>
+        <dt><?=$this->transEsc('ZiskejEdd::label_date_return')?>:</dt>
+        <dd><?=$this->dateTime()->convertToDisplayDate('U', $ticket->returnAt->getTimestamp())?></dd>
+      <?php endif; ?>
+
+      <?php if (!empty($ticket->eddSubtype)): ?>
+        <dt><?=$this->transEsc('ZiskejEdd::label_subtype')?>:</dt>
+        <dd><?=$this->transEsc('ZiskejEdd::value_subtype_' . $ticket->eddSubtype->value)?></dd>
+      <?php endif; ?>
+
+      <?php if (!empty($ticket->docTitleIn)): ?>
+        <dt><?=$this->transEsc('ZiskejEdd::label_article_doc_title_in')?>:</dt>
+        <dd><?=$ticket->docTitleIn?></dd>
+      <?php endif; ?>
+
+      <?php if (!empty($ticket->docTitle)): ?>
+        <dt><?=$this->transEsc('ZiskejEdd::label_selection_doc_title')?>:</dt>
+        <dd><?=$ticket->docTitle?></dd>
+      <?php endif; ?>
+
+      <?php if (!empty($ticket->docVolume)): ?>
+        <dt><?=$this->transEsc('ZiskejEdd::label_doc_volume')?>:</dt>
+        <dd><?=$ticket->docVolume?></dd>
+      <?php endif; ?>
+
+      <?php if (!empty($ticket->docNumberYear)): ?>
+        <dt><?=$this->transEsc('ZiskejEdd::label_doc_number_year')?>:</dt>
+        <dd><?=$ticket->docNumberYear?></dd>
+      <?php endif; ?>
+
+      <?php if (!empty($ticket->docNumberPyear)): ?>
+        <dt><?=$this->transEsc('ZiskejEdd::label_doc_number_pyear')?>:</dt>
+        <dd><?=$ticket->docNumberPyear?></dd>
+      <?php endif; ?>
+
+      <?php if (!empty($ticket->docNumberPnumber)): ?>
+        <dt><?=$this->transEsc('ZiskejEdd::label_doc_number_pnumber')?>:</dt>
+        <dd><?=$ticket->docNumberPnumber?></dd>
+      <?php endif; ?>
+
+      <?php if (!empty($ticket->docAuthor)): ?>
+        <dt><?=$this->transEsc('ZiskejEdd::label_doc_author')?>:</dt>
+        <dd><?=$ticket->docAuthor?></dd>
+      <?php endif; ?>
+
+      <?php if (!empty($ticket->docIssuer)): ?>
+        <dt><?=$this->transEsc('ZiskejEdd::label_doc_issuer')?>:</dt>
+        <dd><?=$ticket->docIssuer?></dd>
+      <?php endif; ?>
+
+      <?php if (!empty($ticket->docIsbn)): ?>
+        <dt><?=$this->transEsc('ZiskejEdd::label_doc_isbn')?>:</dt>
+        <dd><?=$ticket->docIsbn?></dd>
+      <?php endif; ?>
+
+      <?php if (!empty($ticket->docIssn)): ?>
+        <dt><?=$this->transEsc('ZiskejEdd::label_doc_issn')?>:</dt>
+        <dd><?=$ticket->docIssn?></dd>
+      <?php endif; ?>
+
+      <?php if (!empty($ticket->docCitation)): ?>
+        <dt><?=$this->transEsc('ZiskejEdd::label_doc_citation')?>:</dt>
+        <dd><?=$ticket->docCitation?></dd>
+      <?php endif; ?>
+
+      <?php if (!empty($ticket->pagesFrom)): ?>
+        <dt><?=$this->transEsc('ZiskejEdd::label_pages_from')?>:</dt>
+        <dd><?=$ticket->pagesFrom?></dd>
+      <?php endif; ?>
+
+      <?php if (!empty($ticket->pagesTo)): ?>
+        <dt><?=$this->transEsc('ZiskejEdd::label_pages_to')?>:</dt>
+        <dd><?=$ticket->pagesTo?></dd>
+      <?php endif; ?>
+
+      <?php if (!empty($ticket->docNote)): ?>
+        <dt><?=$this->transEsc('ZiskejEdd::label_doc_note')?>:</dt>
+        <dd><?=$ticket->docNote?></dd>
+      <?php endif; ?>
+
+    </dl>
+  </div>
+
+  <h3><?=$this->transEsc('ZiskejEdd::header_order_document')?></h3>
+  <div class="well border">
+    <?php if ($this->driver): ?>
+      <?=$this->render('_ziskejticket-core.phtml')?>
+      <div class="text-end">
+        <a href="<?=$this->recordLinker()->getUrl($this->driver)?>" class="title" title="<?=$this->transEsc('ZiskejEdd::btn_order_document_title')?>"><?=$this->transEsc('ZiskejEdd::btn_order_document')?></a>
+      </div>
+    <?php else: ?>
+      <div class="alert alert-warning">
+        <?=$this->transEsc('record_info_not_available')?>
+      </div>
+    <?php endif; ?>
+  </div>
+
+  <div id="messages">
+    <h3>
+      <?=$this->transEsc('ZiskejEdd::header_order_messages')?>
+      <?php if ($ticket->countMessages > 0): ?>
+        <span class="badge"><?=$ticket->countMessages?></span>
+      <?php endif; ?>
+    </h3>
+    <div class="well border">
+      <?php if (is_countable($messages->getAll()) && count($messages->getAll())): ?>
+        <?php
+        foreach ($messages->getAll() as $message): ?>
+          <ul class="list-unstyled">
+            <li class="media">
+              <div class="media-body">
+                <h4>
+                  <?php if ($message->sender == 'reader'): ?>
+                    <span title="<?=$this->transEsc('ZiskejEdd::label_user')?>"><?=$this->icon('profile')?></span>
+                  <?php else: ?>
+                    <?=$this->transEsc('ZiskejEdd::label_library')?>
+                  <?php endif; ?>
+                  <?=$this->dateTime()->convertToDisplayDateAndTime('U', $message->createdAt->getTimestamp())?>
+                </h4>
+                <div>
+                  <?=$message->text?>
                 </div>
-              </li>
-            </ul>
-          <?php endforeach; ?>
-        <?php else: ?>
-          <div class="alert alert-info">
-            <?=$this->transEsc('ZiskejEdd::msg_order_no_messages')?>
-          </div>
-        <?php endif; ?>
-
-        <div>
-          <hr>
-          <h4><?=$this->transEsc('ZiskejEdd::header_order_new_message')?></h4>
-          <form method="post" action="<?=$this->url('myresearch-ziskej-edd-message-post', ['eppnDomain' => $userCard->getEppnDomain(), 'ticketId' => $ticket->id])?>">
-            <div class="form-group">
-              <label for="ticketMessage"><?=$this->transEsc('ZiskejEdd::label_ticketMessage')?>:</label>
-              <textarea name="ticketMessage" id="ticketMessage" class="form-control" rows="3" required></textarea>
-            </div>
-            <button type="submit" class="btn btn-primary"><?=$this->transEsc('ZiskejEdd::btn_message_send')?></button>
-          </form>
+              </div>
+            </li>
+          </ul>
+        <?php endforeach; ?>
+      <?php else: ?>
+        <div class="alert alert-info">
+          <?=$this->transEsc('ZiskejEdd::msg_order_no_messages')?>
         </div>
+      <?php endif; ?>
+
+      <div>
+        <hr>
+        <h4><?=$this->transEsc('ZiskejEdd::header_order_new_message')?></h4>
+        <form method="post" action="<?=$this->url('myresearch-ziskej-edd-message-post', ['eppnDomain' => $userCard->getEppnDomain(), 'ticketId' => $ticket->id])?>">
+          <div class="form-group">
+            <label for="ticketMessage"><?=$this->transEsc('ZiskejEdd::label_ticketMessage')?>:</label>
+            <textarea name="ticketMessage" id="ticketMessage" class="form-control" rows="3" required></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary"><?=$this->transEsc('ZiskejEdd::btn_message_send')?></button>
+        </form>
       </div>
     </div>
-
   </div>
 
+</div>
 
-  <div class="<?=$this->layoutClass('sidebar')?>">
-    <?=$this->accountMenu()->render('ziskej-edd')?>
-  </div>
-
+<div class="<?=$this->layoutClass('sidebar')?>">
+  <?=$this->accountMenu()->render('ziskej-edd')?>
 </div>
 
 <?php
@@ -380,4 +369,4 @@ $script = <<<JS
         return confirm('$confirmationText');
       });
     JS;
-echo $this->inlineScript(\Laminas\View\Helper\HeadScript::SCRIPT, $script, 'SET');
+echo $this->assetManager()->outputInlineScriptString($script);

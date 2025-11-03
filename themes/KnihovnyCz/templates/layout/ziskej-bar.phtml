@@ -1,9 +1,9 @@
-<?php if(!$this->ziskejMvs()->isProduction()
+<?php if (!$this->ziskejMvs()->isProduction()
   || ($this->ziskejEdd()->isEnabled() && !$this->ziskejEdd()->isProduction())
 ): ?>
   <div class="bar-ziskej">
     <?=$this->icon('ziskej-warning', ['aria-hidden' => 'true'])?>
-    <?php if(!$this->ziskejMvs()->isProduction()): ?>
+    <?php if (!$this->ziskejMvs()->isProduction()): ?>
       <?=$this->translate('Ziskej::ziskej_bar_info', ['%%mode%%' => $this->ziskejMvs()->getCurrentMode()]) ?>
     <?php endif; ?>
     <a href="<?=$this->url('ziskej-admin') ?>" title="<?=$this->translate('Ziskej::ziskej_bar_change_mode_title') ?>"><?=$this->translate('Ziskej::ziskej_bar_change_mode') ?></a>

@@ -14,7 +14,7 @@
   <?php $failureMessage = $this->confirmed ? 'ebook_lending_failure' : 'ebook_lending_failure_check' ?>
   <div class="alert alert-danger"><?=$this->transEsc($failureMessage)?>:
     <ul>
-      <?php foreach($this->errors as $error): ?>
+      <?php foreach ($this->errors as $error): ?>
         <li><?=$this->transEsc($error)?></li>
       <?php endforeach; ?>
     </ul>

@@ -102,6 +102,7 @@ class AlephTest extends \VuFindTest\ILS\Driver\AlephTest
         $config = $this->getDefaultConfig();
         $config['Catalog']['showAccruingFines'] = 'true';
         $this->configureDriver($config);
+        $this->driver->setTranslator($this->getMockTranslator([], 'cs'));
         $expected = [
             [
                 'title' => '',
@@ -254,7 +255,7 @@ class AlephTest extends \VuFindTest\ILS\Driver\AlephTest
         $patron = ['id' => 'TESTUSER'];
         $items = $this->driver->getHolding('LIB01-0000003', $patron);
         $expected = $this->getExpectedGetHoldingCheckedoutWithPatron();
-        $expected['holdings'][1]['status'] = 'holding_due_date 08-11-2025 ;  Požadováno';
+        $expected['holdings'][1]['status'] = 'Due 08-11-2025 ;  Požadováno';
         $this->assertEquals($expected, $items);
     }
 
@@ -273,7 +274,7 @@ class AlephTest extends \VuFindTest\ILS\Driver\AlephTest
                     'holdtype' => 'hold',
                     'availability' => false,
                     'availability_status' => 'Reference only',
-                    'status' => 'holding_due_date 08-11-2025',
+                    'status' => 'Due 08-11-2025',
                     'location' => 'MZK?',
                     'reserve' => 'N',
                     'callnumber' => '1-1544.099',
@@ -297,7 +298,7 @@ class AlephTest extends \VuFindTest\ILS\Driver\AlephTest
                     'holdtype' => 'hold',
                     'availability' => false,
                     'availability_status' => 'Month',
-                    'status' => 'holding_due_date 08-11-2025 ;  Requested',
+                    'status' => 'Due 08-11-2025 ;  Requested',
                     'location' => 'MZK?',
                     'reserve' => 'N',
                     'callnumber' => '1-1544.099',

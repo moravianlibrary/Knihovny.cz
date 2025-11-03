@@ -7,7 +7,6 @@
 
 .autocomplete-results {
   position: absolute;
-  display: table;
   max-width: 500px; /* CUSTOMIZED */
   margin: 2px 0 0;
   padding: 0;
@@ -31,6 +30,18 @@
     &:hover {
       background-color: @autocomplete-hover-bg;
       color: #ffffff;
+    }
+
+    &.ac-header {
+      margin: 0;
+      padding: .5rem;
+      color: #fff;
+      background-color: #555;
+      &:hover {
+        cursor: default !important;
+        background: #555 !important;
+        color: #fff !important;
+      }
     }
 
     &.loading,

@@ -44,7 +44,7 @@ class Highlighter
         );
         foreach ($parts as $part) {
             $part = preg_quote($part);
-            $this->patterns[] = "/(^|\s+)(${part})/ui";
+            $this->patterns[] = "/(^|\s+)({$part})/ui";
         }
     }
 

@@ -33,7 +33,7 @@ class UserSettings extends Gateway
         Adapter $adapter,
         PluginManager $tm,
         $cfg,
-        RowGateway $rowObj = null,
+        ?RowGateway $rowObj = null,
         $table = 'user_settings'
     ) {
         parent::__construct($adapter, $tm, $cfg, $rowObj, $table);

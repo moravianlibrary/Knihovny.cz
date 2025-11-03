@@ -1,0 +1,9 @@
+<?php if (isset($this->menu['Account'])): ?>
+<?php $menuGroup = $this->menu['Account'] ?>
+<ul class="dropdown-menu dropdown-menu dropdown-menu-end myresearch-menu<?=!empty($menuGroup['class']) ? ' ' . $menuGroup['class'] : ''?>">
+  <?php foreach ($menuGroup['MenuItems'] as $item): ?>
+    <?=$this->render($item['template'] ?? 'myresearch/menu-header-item.phtml', ['active' => $this->active, ...$item])?>
+  <?php endforeach; ?>
+</ul>
+<?php endif; ?>
+<?=$this->assetManager()->outputInlineScriptString('VuFind.account.clearCache("fines");')?>

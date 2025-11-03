@@ -24,7 +24,7 @@ COPY ./Gruntfile.local.js ${THEMES_BUILD_DIR}/
 
 COPY ./themes ${THEMES_BUILD_DIR}/themes
 WORKDIR ${THEMES_BUILD_DIR}/
-RUN npm install --omit dev && grunt less custom -v
+RUN npm install --omit dev && npm run build
 RUN rm ${THEMES_BUILD_DIR}/themes/root/css/.htaccess
 
 ########### install PHP libraries
@@ -76,8 +76,7 @@ COPY ./module ${VUFIND_ROOT}/module
 COPY --from=themes /vufind-build-themes/themes ${VUFIND_ROOT}/themes
 COPY --from=vufind-src /src/vufind/build.xml ${VUFIND_ROOT}/build.xml
 COPY ./xsl ${VUFIND_ROOT}/xsl
-COPY --from=themes /vufind-build-themes/node_modules/autocomplete.js/autocomplete.js ${VUFIND_ROOT}/themes/bootstrap3/js/vendor/
-COPY --from=themes /vufind-build-themes/node_modules/vanilla-cookieconsent/dist/cookieconsent.umd.js ${VUFIND_ROOT}/themes/bootstrap3/js/vendor/
+COPY --from=themes /vufind-build-themes/node_modules/vanilla-cookieconsent/dist/cookieconsent.umd.js ${VUFIND_ROOT}/themes/bootstrap5/js/vendor/
 
 RUN chown vufind:vufind -R ${VUFIND_ROOT}
 

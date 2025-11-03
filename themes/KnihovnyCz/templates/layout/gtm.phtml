@@ -16,7 +16,7 @@ $gtmUser = <<<JS
     });
     JS;
 
-echo $this->inlineScript(\Laminas\View\Helper\HeadScript::SCRIPT, $gtmUser, 'SET');
+echo $this->assetManager()->outputInlineScriptString($gtmUser);
 
 /* Chapter 3.1 - page information */
 /*
@@ -90,4 +90,4 @@ $gtmPage = <<<JS
       });
     JS;
 
-echo $this->inlineScript(\Laminas\View\Helper\HeadScript::SCRIPT, $gtmPage, 'SET');
+echo $this->assetManager()->outputInlineScriptString($gtmPage);

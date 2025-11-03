@@ -147,7 +147,7 @@ class UpdateRecordStatus extends \Symfony\Component\Console\Command\Command
      * @param string|null $name    The name of the command; passing null means it
      *                             must be set in configure()
      */
-    public function __construct(Adapter $adapter, array $config, string $name = null)
+    public function __construct(Adapter $adapter, array $config, ?string $name = null)
     {
         parent::__construct($name);
         $this->adapter = $adapter;

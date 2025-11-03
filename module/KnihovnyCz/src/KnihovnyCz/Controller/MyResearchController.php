@@ -10,6 +10,7 @@ use Laminas\Session\Container;
 use Laminas\Stdlib\ResponseInterface as Response;
 use Laminas\View\Model\ViewModel;
 use VuFind\Controller\MyResearchController as MyResearchControllerBase;
+use VuFind\Db\Entity\UserEntityInterface;
 use VuFind\Db\Service\UserCardServiceInterface;
 use VuFind\Db\Table\PluginManager as TableManager;
 use VuFind\Db\Table\UserList;
@@ -781,7 +782,7 @@ class MyResearchController extends MyResearchControllerBase
         if ($this->getAuthManager()->getUserObject() != null) {
             return $this->redirect()->toRoute('home');
         }
-        if ($si = $this->getSessionInitiator()) {
+        if ($si = $this->getAuthManager()->getSessionInitiator()) {
             return $this->redirect()->toUrl($si);
         }
         return $this->forwardTo('MyResearch', 'Login');
@@ -1083,5 +1084,52 @@ class MyResearchController extends MyResearchControllerBase
             'Account',
             $this->serviceLocator->get(\Laminas\Session\SessionManager::class)
         );
+    }
+
+    /**
+     * Process the submission of the edit favorite form.
+     *
+     * @param UserEntityInterface               $user   Logged-in user
+     * @param \VuFind\RecordDriver\AbstractBase $driver Record driver for favorite
+     * @param int                               $listID List being edited (null if editing all favorites)
+     *
+     * @return object
+     * @throws \VuFind\Exception\LoginRequired
+     *
+     * @todo Remove this method after fixed in VuFind parent class
+     */
+    protected function processEditSubmit(UserEntityInterface $user, $driver, $listID)
+    {
+        $lists = $this->params()->fromPost('lists', []);
+        $tagsService = $this->getService(\VuFind\Tags\TagsService::class);
+        $favorites = $this->getService(\VuFind\Favorites\FavoritesService::class);
+        $didSomething = false;
+        foreach ($lists as $list) {
+            $tags = $this->params()->fromPost('tags' . $list);
+            $favorites->saveRecordToFavorites(
+                [
+                    'list'  => $list,
+                    'mytags'  => $tags ? $tagsService->parse($tags) : null,  // fixed line
+                    'notes' => $this->params()->fromPost('notes' . $list),
+                ],
+                $user,
+                $driver
+            );
+            $didSomething = true;
+        }
+        // add to a new list?
+        $addToList = $this->params()->fromPost('addToList');
+        if ($addToList > -1) {
+            $didSomething = true;
+            $favorites->saveRecordToFavorites(['list' => $addToList], $user, $driver);
+        }
+        if ($didSomething) {
+            $this->flashMessenger()->addMessage('edit_list_success', 'success');
+        }
+
+        $newUrl = null === $listID
+            ? $this->url()->fromRoute('myresearch-favorites')
+            : $this->url()->fromRoute('userList', ['id' => $listID]);
+        return $this->redirect()->toUrl($newUrl);
     }
 }

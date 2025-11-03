@@ -5,8 +5,7 @@ declare(strict_types=1);
 namespace KnihovnyCz\Search\Factory;
 
 use KnihovnyCz\Search\EDS\Backend\Connector;
-use VuFind\Search\Factory\EdsBackendFactory
-as ParentEdsBackendFactory;
+use VuFind\Search\Factory\EdsBackendFactory as ParentEdsBackendFactory;
 
 /**
  * Factory for the default EDS backend.

@@ -9,7 +9,7 @@
     $arrTemplate = '<tr><th>%%LABEL%%:</th><td> %%VALUE%%</td></tr>';
 ?>
 
-<a class="search-filter-toggle visible-xs" href="#myresearch-sidebar" data-toggle="offcanvas" title="Expand Sidebar">
+<a class="search-filter-toggle visible-xs" href="#myresearch-sidebar" data-bs-toggle="offcanvas" title="Expand Sidebar">
   <?=$this->transEsc('Your Account') ?>
 </a>
 
@@ -22,7 +22,7 @@
     <div class="form-group">
       <?php if (!empty($this->recordsPerPage['values'])): ?>
         <label for="recordsPerPage"><?=$this->transEsc('Results per page setting')?></label>
-        <select id="recordsPerPage" name="recordsPerPage" class="jumpMenu form-control">
+        <select id="recordsPerPage" name="recordsPerPage" class="jumpMenu form-select">
           <?php foreach ($this->recordsPerPage['values'] as $limit): ?>
             <option value="<?=$this->escapeHtmlAttr($limit)?>"<?=$limit == $this->recordsPerPage['selected'] ? ' selected="selected"' : ''?>><?=$this->escapeHtml($limit)?></option>
           <?php endforeach; ?>
@@ -33,7 +33,7 @@
     <div class="form-group">
       <?php if (!empty($this->citationStyle['values'])): ?>
         <label for="citationStyle"><?=$this->transEsc('Citation style')?></label>
-        <select id="citationStyle" name="citationStyle" class="jumpMenu form-control">
+        <select id="citationStyle" name="citationStyle" class="jumpMenu form-select">
           <?php foreach ($this->citationStyle['values'] as $code => $label): ?>
             <option value="<?=$this->escapeHtmlAttr($code)?>"<?=$code == $this->citationStyle['selected'] ? ' selected="selected"' : ''?>><?=$this->escapeHtml($label)?></option>
           <?php endforeach; ?>

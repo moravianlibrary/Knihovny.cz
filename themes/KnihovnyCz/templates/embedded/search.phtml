@@ -5,7 +5,7 @@
 ?>
 <?php
 $this->headTitle($this->title);
-$this->headLink()->appendStylesheet('embedded-search.css');
+$this->assetManager()->appendStyleLink('embedded-search.css');
 $center = $this->position == 'top' ? 'center' : '';
 $language = $this->language ?? $this->layout()->userLang;
 $logo = $this->render('layout/logoimagelink.phtml', ['language' => $language]);
@@ -20,7 +20,7 @@ $logo = $this->render('layout/logoimagelink.phtml', ['language' => $language]);
   <input type="hidden" name="type" value="<?=$this->escapeHtmlAttr($this->type) ?>">
   <input type="hidden" name="lng" value="<?=$this->escapeHtmlAttr($language) ?>">
   <?php if (!empty($filters)): ?>
-    <?php foreach($filters as $filter): ?>
+    <?php foreach ($filters as $filter): ?>
       <input type="hidden" name="filter[]" value='<?=$filter?>'>
     <?php endforeach; ?>
   <?php endif; ?>

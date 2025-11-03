@@ -24,7 +24,7 @@ class DatePicker extends AbstractHelper
      *
      * @return string
      */
-    public function __invoke(string $name = null): string
+    public function __invoke(?string $name = null): string
     {
         $result = $this->getView()->render('Helpers/date-picker.phtml', [
             'formName' => $name,

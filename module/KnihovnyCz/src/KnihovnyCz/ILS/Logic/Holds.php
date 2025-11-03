@@ -30,7 +30,7 @@ class Holds extends \VuFind\ILS\Logic\Holds
 
         if ($result['total']) {
             foreach ($result['holdings'] as $copy) {
-                $show = !in_array($copy['location'], $this->hideHoldings);
+                $show = !in_array($copy['location'], $this->getSuppressedLocations());
                 if ($show) {
                     if ($holdConfig) {
                         // Is this copy holdable / linkable

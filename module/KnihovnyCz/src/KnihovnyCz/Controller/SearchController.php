@@ -49,7 +49,7 @@ class SearchController extends \VuFind\Controller\SearchController
      *
      * @return Response|mixed
      */
-    public function dispatch(Request $request, Response $response = null)
+    public function dispatch(Request $request, ?Response $response = null)
     {
         $type = $this->params()->fromQuery('type0');
         if (is_array($type) ? in_array('Libraries', $type) : $type == 'Libraries') {

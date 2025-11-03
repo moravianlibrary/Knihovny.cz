@@ -3,7 +3,7 @@
 use Psr\Container\ContainerInterface;
 
 return [
-    'extends' => 'bootstrap3',
+    'extends' => 'bootstrap5',
     'helpers' => [
         'factories' => [
             \KnihovnyCz\View\Helper\KnihovnyCz\AccountMenu::class => \VuFind\View\Helper\Root\AccountMenuFactory::class,
@@ -118,12 +118,14 @@ return [
             'sign-in' => 'FontAwesome:sign-in:fa-fw',
             'sign-out' => 'FontAwesome:sign-out:fa-fw',
             'sign-up' => 'FontAwesome:user-plus:fa-fw',
+            'spinner' => 'FontAwesome:spinner:fa-spin-pulse',
             'ui-menu' => 'FontAwesome:bars:fa-fw',
             'user-favorites' => 'FontAwesome:star',
             'user-list-add' => 'FontAwesome:star:fa-fw',
             'user-settings' => 'FontAwesome:gear:fa-fw',
             'user-ziskej' => 'FontAwesome:file-text:fa-fw',
             'user-ziskej-edd' => 'FontAwesome:file-text:fa-fw',
+            'theme' => 'FontAwesome:sun-o:fa-fw',
             'wantit' => 'FontAwesome:hand-paper-o',
             'website' => 'FontAwesome:globe',
             'wheelchair-accessible' => 'FontAwesome:wheelchair-alt',

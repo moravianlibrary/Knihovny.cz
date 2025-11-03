@@ -83,7 +83,7 @@
     <?php endif; ?>
     <?php if (isset($ilsDetails['renewable']) && $ilsDetails['renewable'] && isset($ilsDetails['renew_details'])): ?>
       <?php $safeId = preg_replace('/[^a-zA-Z0-9]/', '', $ilsDetails['renew_details']); ?>
-      <input class="pull-left flip" type="hidden" name="renewAllIDS[]" value="<?=$this->escapeHtmlAttr($ilsDetails['renew_details'])?>" >
+      <input class="flip" type="hidden" name="renewAllIDS[]" value="<?=$this->escapeHtmlAttr($ilsDetails['renew_details'])?>" >
     <?php endif; ?>
   <?php endforeach; ?>
 
@@ -91,25 +91,26 @@
     <?php $i = 0;
     foreach ($this->transactions as $resource): ?>
       <?php $ilsDetails = $resource->getExtraDetail('ils_details'); ?>
-        <li id="record<?=$this->escapeHtmlAttr($resource->getUniqueId())?>" class="result">
-        <div>
-          <strong class="pull-left order"><?= $itemIndex++ ?>.</strong>
-          <?php if ($this->renewForm): ?>
+      <li id="record<?=$this->escapeHtmlAttr($resource->getUniqueId())?>" class="result">
+        <?php if ($this->renewForm): ?>
+          <div class="d-flex">
             <div class="checkbox">
-              <?php if (isset($ilsDetails['renewable']) && $ilsDetails['renewable'] && isset($ilsDetails['renew_details'])): ?>
-                <?php $safeId = preg_replace('/[^a-zA-Z0-9]/', '', $ilsDetails['renew_details']); ?>
-                  <label>
-                    <input class="checkbox-select-item" type="checkbox" name="renewSelectedIDS[]" value="<?=$this->escapeHtmlAttr($ilsDetails['renew_details'])?>" id="checkbox_<?=$safeId?>" >
-                  </label>
-                  <input type="hidden" name="selectAllIDS[]" value="<?=$this->escapeHtmlAttr($ilsDetails['renew_details'])?>" >
-                  <input type="hidden" name="renewAllIDS[]" value="<?=$this->escapeHtmlAttr($ilsDetails['renew_details'])?>" >
-              <?php else: ?>
-                <label> </label>
-              <?php endif; ?>
-            </div>
-          <?php endif; ?>
-        </div>
-
+            <?php if (isset($ilsDetails['renewable']) && $ilsDetails['renewable'] && isset($ilsDetails['renew_details'])): ?>
+              <?php $safeId = preg_replace('/[^a-zA-Z0-9]/', '', $ilsDetails['renew_details']); ?>
+                <label>
+                  <input class="checkbox-select-item" type="checkbox" name="renewSelectedIDS[]" value="<?=$this->escapeHtmlAttr($ilsDetails['renew_details'])?>" id="checkbox_<?=$safeId?>" >
+                </label>
+                <input type="hidden" name="selectAllIDS[]" value="<?=$this->escapeHtmlAttr($ilsDetails['renew_details'])?>" >
+                <input type="hidden" name="renewAllIDS[]" value="<?=$this->escapeHtmlAttr($ilsDetails['renew_details'])?>" >
+            <?php else: ?>
+              <label> </label>
+            <?php endif; ?>
+          </div>
+            <strong class="order"><?= $itemIndex++ ?>.</strong>
+          </div>
+        <?php else: ?>
+          <strong class="order"><?= $itemIndex++ ?>.</strong>
+        <?php endif; ?>
         <?php
           $coverDetails = $this->record($resource)->getCoverDetails('checkedout', 'small', $this->recordLinker()->getUrl($resource));
           $cover = $coverDetails['html'];
@@ -206,4 +207,4 @@
   </div>
 <?php endif; ?>
 
-<?=$this->inlineScript(\Laminas\View\Helper\HeadScript::FILE, 'checkouts.js') ?>
+<?php $this->assetManager()->appendScriptLink('checkouts.js'); ?>
