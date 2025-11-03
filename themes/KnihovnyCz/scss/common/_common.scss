@@ -1469,53 +1469,14 @@ html, body {
   padding: 12px 14px;
 }
 
-/* Portal selector dropdown menu */
-.portal-selector {
-
-  .dropdown-toggle {
-    padding: 0.4rem 0.5rem !important;
-  }
-
-  .dropdown-toggle::after {
-    vertical-align: .6em !important;
-  }
-
-  .dropdown-menu {
-    min-width: 16rem;
-  }
-
-  .dropdown-divider {
-    margin: 0;
-  }
-
-  .dropdown-item {
-    padding: .7rem;
-
-    img {
-      height: 40px;
-    }
-
-    &:hover, &:focus {
-      img {
-        //filter: none;
-        filter: brightness(0) invert(1);
+// fix trees.scss
+.facet-tree, .hierarchy-tree {
+  li {
+    .facet-tree__toggle-expanded, .hierarchy-tree__toggle-expanded {
+      &:hover {
+        color: $list-group-hover-bg;
+        background-color: transparent !important;
       }
     }
-
-  }
-
-  .dropdown-item.portal-selector-knihovny:hover,
-  .dropdown-item.portal-selector-knihovny:focus {
-    background-color: #e5004b;
-  }
-
-  .dropdown-item.portal-selector-mzk:hover,
-  .dropdown-item.portal-selector-mzk:focus {
-    background-color: #297e84;
-  }
-
-  .dropdown-item.portal-selector-nkp:hover,
-  .dropdown-item.portal-selector-nkp:focus {
-    background-color: #16799B;
   }
 }
