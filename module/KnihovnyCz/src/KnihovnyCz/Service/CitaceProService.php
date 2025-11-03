@@ -37,15 +37,20 @@ class CitaceProService implements \VuFindHttp\HttpServiceAwareInterface
     /**
      * Get citation style
      *
-     * @param string      $recordId Record identifier
-     * @param string|null $style    Citation style
-     * @param string|null $source   Record source
+     * @param string      $recordId  Record identifier
+     * @param string|null $style     Citation style
+     * @param string|null $source    Record source
+     * @param bool        $plainText Whether to return plain text (true) or HTML (false)
      *
      * @return string Generated citation as HTML snippet
      * @throws \Exception
      */
-    public function getCitation(string $recordId, ?string $style = null, ?string $source = 'Solr'): string
-    {
+    public function getCitation(
+        string $recordId,
+        ?string $style = null,
+        ?string $source = 'Solr',
+        bool $plainText = false
+    ): string {
         $record = null;
         if (str_contains($recordId, '|')) {
             [$source, $recordId] = explode('|', $recordId);
@@ -72,14 +77,16 @@ class CitaceProService implements \VuFindHttp\HttpServiceAwareInterface
         if ($results === false || !$item = $results->item(0)) {
             throw new \Exception('Citation not found');
         }
+        $citation = $item->c14n();
 
         $purifierConfig = \HTMLPurifier_Config::createDefault();
         $purifierConfig->set('Cache.DefinitionImpl', null);
-        $purifierConfig->set('HTML.Allowed', 'p,b,i,strong,em,ul,ol,li,a[href],br');
-
+        $htmlAllowed = $plainText ? '' : 'p,b,i,strong,em,ul,ol,li,a[href],br';
+        $purifierConfig->set('HTML.Allowed', $htmlAllowed);
         $purifier = new \HTMLPurifier($purifierConfig);
 
-        return $purifier->purify($item->c14n());
+        $purifiedCitation = $purifier->purify($citation);
+        return  $plainText ? html_entity_decode($purifiedCitation) : $purifiedCitation;
     }
 
     /**

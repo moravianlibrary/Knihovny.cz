@@ -1,0 +1,10 @@
+<?=b"\xEF\xBB\xBF";?>
+<?php
+  $textFormatter = $this->textFormatter($this->driver);
+?>
+<?=$textFormatter->formatString('Identifier', 'getUniqueId')?>
+<?=$this->driver->tryMethod('getCitationPlaintext', [], '');?><?="\r\n"?><?="\r\n"?>
+<?=$textFormatter->formatString('Patent', 'getPatentInfo')?>
+<?=$textFormatter->formatArray('Subjects', 'getAllSubjectHeadings', '', true)?>
+<?=$textFormatter->formatArray('Callnumber', 'getCallNumbers')?>
+<?="\r\n"?>
