@@ -68,6 +68,19 @@ trait CitaceProTrait
     }
 
     /**
+     * Get Citation as plain text
+     *
+     * @param string|null $style Style identifier
+     *
+     * @return string
+     * @throws \Exception
+     */
+    public function getCitationPlaintext(?string $style = null): string
+    {
+        return $this->citacePro->getCitation($this->getUniqueID(), $style, $this->getSourceIdentifier(), true);
+    }
+
+    /**
      * Get link to citacepro.com
      *
      * @return string
