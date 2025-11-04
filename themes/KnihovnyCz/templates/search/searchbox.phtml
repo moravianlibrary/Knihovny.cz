@@ -95,8 +95,8 @@
         <?= $this->context($this)->renderInContext('search/searchTabs', ['searchTabs' => $tabConfig['tabs'], 'showCounts' => $tabConfig['showCounts']]); ?>
       </div>
       <div class="card-body pb-1">
-        <div class="d-flex gap-1 mb-1">
-          <div class="searchForm-inputs">
+        <div class="d-sm-flex gap-1 mb-1">
+          <div class="searchForm-inputs mb-1 mb-sm-0">
             <?php
             // Note: we need type="text" for autocomplete role="combobox"
             $searchboxAttributes = [
@@ -158,7 +158,7 @@
             </div>
           </div>
           <?php if ($handlerCount > 1): ?>
-            <select id="searchForm_type" class="searchForm_type form-select form-select-lg" name="type" data-native-menu="false" aria-label="<?=$this->transEscAttr('Search type')?>">
+            <select id="searchForm_type" class="searchForm_type form-select form-select-lg mb-1 mb-sm-0" name="type" data-native-menu="false" aria-label="<?=$this->transEscAttr('Search type')?>">
               <?php $currentGroup = $insideGroup = false; ?>
               <?php foreach ($handlers as $handler): ?>
                 <?php
