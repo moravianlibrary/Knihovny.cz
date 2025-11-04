@@ -27,9 +27,9 @@ trait MyResearchTrait
      */
     protected function showException(\Exception $ex)
     {
-        $message = 'ils_offline_home_message';
+        $message = $this->translate('ils_offline_home_message');
         if (in_array($ex::class, self::$EXCEPTIONS_TO_SHOW)) {
-            $message = $ex->getMessage();
+            $message .= ' ' . $ex->getMessage();
         }
         $this->flashMessenger()->addErrorMessage($message);
     }
