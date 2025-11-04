@@ -823,7 +823,7 @@ class MyResearchController extends MyResearchControllerBase
                         $this->flashMessenger()->addErrorMessage('email_change_error');
                     }
                 } catch (ILSException $ex) {
-                    $this->flashMessenger()->addErrorMessage('ils_offline_home_message');
+                    $this->showException($ex);
                 }
             }
         }
@@ -864,7 +864,7 @@ class MyResearchController extends MyResearchControllerBase
                         $this->flashMessenger()->addErrorMessage('nickname_change_error');
                     }
                 } catch (ILSException $ex) {
-                    $this->flashMessenger()->addErrorMessage('ils_offline_home_message');
+                    $this->showException($ex);
                 }
             }
         }
@@ -872,7 +872,7 @@ class MyResearchController extends MyResearchControllerBase
         try {
             $nickname ??= $this->getILS()->getNickname($patron);
         } catch (ILSException $ex) {
-            $this->flashMessenger()->addErrorMessage('ils_offline_home_message');
+            $this->showException($ex);
         }
         $view->nickname = $nickname;
         return $view;
@@ -916,7 +916,7 @@ class MyResearchController extends MyResearchControllerBase
                         $this->flashMessenger()->addErrorMessage('password_change_error');
                     }
                 } catch (ILSException $ex) {
-                    $this->flashMessenger()->addErrorMessage('ils_offline_home_message');
+                    $this->showException($ex);
                 }
             }
         }
