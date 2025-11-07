@@ -32,7 +32,7 @@ class Sfx extends AbstractBase implements
      *
      * @var \Vufind\Config\Config
      */
-    protected \Laminas\Config\Config $config;
+    protected \Vufind\Config\Config $config;
 
     /**
      * Configuration
