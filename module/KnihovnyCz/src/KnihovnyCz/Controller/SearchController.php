@@ -225,7 +225,9 @@ class SearchController extends \VuFind\Controller\SearchController
     {
         $view = parent::getSearchResultsView($setupCallback);
         $this->disableLastInPagination($view);
-        $view->setVariable('isAdvancedSearchesChanged', $this->params()->fromQuery('advanced_searches_changed'));
+        if ($view instanceof \Laminas\View\Model\ViewModel) {
+            $view->setVariable('isAdvancedSearchesChanged', $this->params()->fromQuery('advanced_searches_changed'));
+        }
         return $view;
     }
 
