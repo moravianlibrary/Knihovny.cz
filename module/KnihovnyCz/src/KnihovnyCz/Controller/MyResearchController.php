@@ -133,11 +133,12 @@ class MyResearchController extends MyResearchControllerBase
      */
     public function finesAjaxAction()
     {
+        $this->flashRedirect()->restore();
+        $view = null;
+        $error = null;
         try {
-            $this->flashRedirect()->restore();
             $view = parent::finesAction();
         } catch (\Exception $ex) {
-            $view = $this->createViewModel();
             $this->showException($ex);
         }
         if ($view instanceof ViewModel) {
@@ -172,11 +173,10 @@ class MyResearchController extends MyResearchControllerBase
                 }
             }
         } else {
-            $view = $this->createViewModel(
-                [
-                    'error' => 'ils_offline_home_message',
-                ]
-            );
+            $error = 'ils_offline_home_message';
+        }
+        if ($view === null) {
+            $view = new ViewModel(['error' => $error]);
         }
         $view->setTemplate('myresearch/fines-ajax');
         $result = $this->getViewRenderer()->render($view);
@@ -206,15 +206,15 @@ class MyResearchController extends MyResearchControllerBase
      */
     public function profileAjaxAction()
     {
+        $this->flashRedirect()->restore();
+        $view = null;
+        $error = null;
         try {
-            $this->flashRedirect()->restore();
             $view = parent::profileAction();
         } catch (\Exception $ex) {
-            $view = $this->createViewModel();
-            $view->error = true;
             $this->showException($ex);
         }
-        if ($view instanceof \Laminas\View\Model\ViewModel) {
+        if ($view instanceof ViewModel) {
             if (isset($view->profile) && ($view->profile['expired'] ?? false)) {
                 $this->flashMessenger()->addErrorMessage(
                     'library_card_expirated_warning'
@@ -276,11 +276,10 @@ class MyResearchController extends MyResearchControllerBase
                 }
             }
         } else {
-            $view = $this->createViewModel(
-                [
-                    'error' => 'ils_offline_home_message',
-                ]
-            );
+            $error = 'ils_offline_home_message';
+        }
+        if ($view === null) {
+            $view = new ViewModel(['error' => $error]);
         }
         $view->setTemplate('myresearch/profile-ajax');
         $view->cardId = $this->getCardId();
@@ -415,7 +414,7 @@ class MyResearchController extends MyResearchControllerBase
     /**
      * User settings action
      *
-     * @return \Laminas\View\Model\ViewModel|mixed
+     * @return ViewModel|mixed
      */
     public function userSettingsAction()
     {
@@ -460,7 +459,7 @@ class MyResearchController extends MyResearchControllerBase
     /**
      * Short loans action
      *
-     * @return \Laminas\View\Model\ViewModel|mixed
+     * @return ViewModel|mixed
      */
     public function shortLoansAction()
     {
@@ -591,7 +590,7 @@ class MyResearchController extends MyResearchControllerBase
             );
         }
         $parentView = parent::mylistAction();
-        if ($parentView instanceof \Laminas\View\Model\ViewModel) {
+        if ($parentView instanceof ViewModel) {
             $categoriesTable = $tables->get(UserListCategories::class);
             $categories = $categoriesTable->select();
             $parentView->setVariable('categories', $categories);
@@ -733,7 +732,7 @@ class MyResearchController extends MyResearchControllerBase
             $this->showException($ex);
         }
 
-        if (!($view instanceof \Laminas\View\Model\ViewModel)) {
+        if (!($view instanceof ViewModel)) {
             $view = $this->createViewModel(
                 [
                     'error' => 'ils_offline_home_message',
