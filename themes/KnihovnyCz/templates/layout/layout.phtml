@@ -30,10 +30,6 @@ $this->headMeta()->appendName('format-detection', 'telephone=no');
   // this covers case 1.  Cases 2 and 3 are then covered by logic below.
   // Note: The searchbox needs to be rendered before the HTML header is build.
   // Otherwise, the Javascript will not be loaded correctly.
-  // Disable the search box on myresearch pages:
-  if ($this->layout()->templateDir === 'myresearch') {
-    $this->layout()->searchbox = false;
-  }
   if (!isset($this->layout()->searchbox)) {
     $this->layout()->searchbox = $this->context($this)->renderInContext('search/searchbox.phtml', []);
   }
