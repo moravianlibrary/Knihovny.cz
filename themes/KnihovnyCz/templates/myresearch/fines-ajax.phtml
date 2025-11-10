@@ -1,12 +1,5 @@
-<?php if (isset($this->error)):?>
-  <div class="alert alert-danger">
-    <?=$this->transEsc($this->error)?>
-  </div>
-<?php elseif (empty($this->fines)): ?>
-  <div class="alert alert-info">
-    <?=$this->transEsc('You do not have any fines')?>
-  </div>
-<?php else: ?>
+<?=$this->flashmessages();?>
+<?php if (!empty($this->fines)): ?>
   <?php if (isset($this->paymentLink)):?>
     <a href="<?=$this->paymentLink?>" class="btn btn-primary">
       <?=$this->transEsc('online_payment_fine_link_text')?>
@@ -67,7 +60,6 @@
     $columns = array_keys($tableData);
     $rowCount = count($this->fines);
     ?>
-  <?=$this->flashmessages()?>
   <?php if (isset($this->missingEmailLink)):?>
     <div class="alert alert-danger">
       <?=$this->translate('payment_warning_missing_email_in_profile_with_link', ['%%url%%' => $this->missingEmailLink])?>
@@ -92,4 +84,8 @@
       <td class="Fee"><?=$this->safeMoneyFormat($totalDue / 100.00) ?></td>
     </tr>
   </table>
+<?php elseif (!(isset($this->error) && $this->error)): ?>
+  <div class="alert alert-info">
+    <?=$this->transEsc('You do not have any fines')?>
+  </div>
 <?php endif; ?>
