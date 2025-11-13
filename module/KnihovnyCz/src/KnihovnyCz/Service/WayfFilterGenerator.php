@@ -64,10 +64,12 @@ class WayfFilterGenerator
     {
         $filter = self::FILTER_PROTOTYPE;
         foreach ($this->shibbolethConfig as $idp) {
-            $feed = $idp->feed ?? $this->defaultFeed;
-            $filter['allowFeeds'][$feed]['allowIdPs'][] = $idp->entityId;
+            if (isset($idp['entityId'])) {
+                $feed = $idp['feed'] ?? $this->defaultFeed;
+                $filter['allowFeeds'][$feed]['allowIdPs'][] = $idp['entityId'];
+            }
         }
         $jsonFilter = json_encode($filter, JSON_UNESCAPED_SLASHES);
-        return base64_encode($jsonFilter ? $jsonFilter : '');
+        return base64_encode($jsonFilter ?: '');
     }
 }
