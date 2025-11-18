@@ -90,9 +90,10 @@ class XCNCIP2 extends \VuFind\ILS\Driver\XCNCIP2
      * @return mixed          Associative array of patron info on successful login,
      * null on unsuccessful login.
      */
-    public function patronLogin($username, $password='')
+    public function patronLogin($username, $password = '')
     {
-        $password = $password ?? '';
+        // @phpstan-ignore nullCoalesce.variable
+        $password ??= '';
         return parent::patronLogin($username, $password);
     }
 
