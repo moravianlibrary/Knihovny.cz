@@ -139,7 +139,14 @@ class ShortLoans extends \Laminas\Mvc\Controller\Plugin\AbstractPlugin
         } elseif ($numOfFailures == count($slots)) {
             $flashMsg->addErrorMessage('short_loan_request_error_text');
         } elseif ($numOfFailures > 0) {
-            $flashMsg->addErrorMessage('short_loan_request_partial_error_text');
+            $msg = [
+                'html' => true,
+                'msg' => 'short_loan_request_partial_error_text',
+                'tokens' => [
+                    '%%url%%' => $this->getController()->url()->fromRoute('myresearch-shortloans'),
+                ],
+            ];
+            $flashMsg->addSuccessMessage($msg);
         } else {
             $msg = [
                 'html' => true,
