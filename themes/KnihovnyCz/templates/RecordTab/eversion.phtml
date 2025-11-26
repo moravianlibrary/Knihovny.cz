@@ -32,7 +32,7 @@
           'RecordTab/eversion/palmknihy-single.phtml',
           [
           'config' => array_pop($configs),
-          'source' => array_pop($palmknihyPrefixesForUser),
+          'source' => $this->config()->get('config')->Record->defaultSource,
         ]
       );
       ?>
