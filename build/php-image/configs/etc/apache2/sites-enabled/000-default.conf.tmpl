@@ -9,7 +9,6 @@
 
     AllowEncodedSlashes On
 
-
     <Location />
         AuthType shibboleth
         ShibRequireSession Off
@@ -26,6 +25,13 @@
    <Directory ~ "^/var/www/knihovny-cz/themes/([0-9a-zA-Z-_]*)/(css|images|js|assets)/">
       require all granted
       AllowOverride None
+   </Directory>
+
+   # Configuration for public cache (used for asset pipeline minification)
+   AliasMatch ^/cache/(.*)$ ${VUFIND_CACHE_DIR}/public/$$1
+   <Directory "${VUFIND_CACHE_DIR}/public">
+     Require all granted
+     AllowOverride None
    </Directory>
 
    <Proxy "fcgi://${PHP_FPM_BACKEND}:9000/"> # APP worker
