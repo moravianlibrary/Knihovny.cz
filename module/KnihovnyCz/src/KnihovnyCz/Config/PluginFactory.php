@@ -19,6 +19,16 @@ use VuFind\Config\Config as VuFindConfig;
 class PluginFactory extends \VuFind\Config\PluginFactory
 {
     /**
+     * List of configuration services that can be loaded from a database
+     *
+     * @var array|string[]
+     */
+    protected static $DATABASE_CONFIGS = [
+        'content',
+        'searches',
+    ];
+
+    /**
      * Configuration table
      *
      * @var ConfigTable
@@ -43,7 +53,7 @@ class PluginFactory extends \VuFind\Config\PluginFactory
     ) {
         $dbConfig = new LaminasConfig([]);
         // There is settings to database connection in main file, so it could not be loaded from
-        if ($requestedName !== 'config') {
+        if (in_array($requestedName, self::$DATABASE_CONFIGS)) {
             $this->configTable = $container->get(\VuFind\Db\Table\PluginManager::class)->get(ConfigTable::class);
             $dbConfig = $this->loadConfigFromDb($requestedName);
         }
