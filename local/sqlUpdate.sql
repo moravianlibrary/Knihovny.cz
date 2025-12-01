@@ -655,3 +655,6 @@ CREATE VIEW palmknihy_checkouts AS SELECT * FROM vufind6.palmknihy_checkouts;
 
 UPDATE `system` SET `value` = '130' WHERE `key`='DB_VERSION';
 
+-- #1537
+DELETE FROM resource WHERE id NOT IN (SELECT resource_id FROM user_resource )
+DELETE FROM record WHERE record_id NOT IN (SELECT record_id FROM resource)
