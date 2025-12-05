@@ -97,7 +97,7 @@ if ($user && $user->firstname && $user->lastname) {
             <?php if ($account->getIdentity()): ?>
               <li id="account-home-nav" class="nav-item dropdown">
                 <button type="button" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">
-                  <?=$this->icon('my-account') ?>
+                  <span id="account-icon"><?=$this->icon('my-account') ?></span>
                   <?=$this->escapeHtml($accountLabel)?>
                 </button>
                 <?=$this->accountMenu()->render('', 'header_')?>
