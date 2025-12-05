@@ -46,3 +46,9 @@ $icons-knihovnycz-font-path: "../../KnihovnyCz/css/fonts";
   }
 }
 
+.ikcz-dots {
+  &:before {
+    content: "\e903";
+  }
+}
+
