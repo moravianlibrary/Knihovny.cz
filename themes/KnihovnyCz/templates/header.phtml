@@ -123,6 +123,47 @@ if ($user && $user->firstname && $user->lastname) {
             <?php endif; ?>
           </div>
         <?php endif ?>
+
+        <div class="dropdown portal-selector">
+          <button class="btn btn-outline-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" title="<?=$this->transEscAttr('portal_selector_dropdown_title') ?>">
+            <span class="ikcz-dots" role="img" aria-hidden="true"></span>
+            <span class="sr-only"><?=$this->translate('portal_selector_dropdown_title') ?></span>
+          </button>
+          <ul class="dropdown-menu dropdown-menu-sm-end shadow" aria-labelledby="dropdownMenuButton">
+            <li>
+              <a class="dropdown-item portal-selector-knihovny" href="<?=$this->transEscAttr('portal_selector_knihovny_link')?>" target="_blank" rel="nofollow" title="<?=$this->transEscAttr('portal_selector_knihovny_title')?>">
+                <img class="knihovny-logo" src="<?=$this->transEscAttr('portal_selector_knihovny_img')?>" alt="<?=$this->transEscAttr('portal_selector_knihovny_alt')?>">
+              </a>
+            </li>
+            <li>
+              <h6 class="dropdown-header fs-5 fw-bold p-2 bg-body-secondary"><?=$this->translate('portal_selector_subheading_catalogs') ?></h6>
+            </li>
+            <li class="border-bottom">
+              <a class="dropdown-item portal-selector-mzk" href="<?=$this->transEscAttr('portal_selector_mzk_link')?>" target="_blank" rel="nofollow" title="<?=$this->transEscAttr('portal_selector_mzk_title')?>">
+                <img class="knihovny-logo" src="<?=$this->transEscAttr('portal_selector_mzk_img')?>" alt="<?=$this->transEscAttr('portal_selector_mzk_alt')?>">
+              </a>
+            </li>
+            <li>
+              <a class="dropdown-item portal-selector-nkp" href="<?=$this->transEscAttr('portal_selector_nkp_link')?>" target="_blank" rel="nofollow" title="<?=$this->transEscAttr('portal_selector_nkp_title')?>">
+                <img class="knihovny-logo" src="<?=$this->transEscAttr('portal_selector_nkp_img')?>" alt="<?=$this->transEscAttr('portal_selector_nkp_alt')?>">
+              </a>
+            </li>
+            <li>
+              <h6 class="dropdown-header fs-5 fw-bold p-2 bg-body-secondary"><?=$this->translate('portal_selector_subheading_other') ?></h6>
+            </li>
+            <li class="border-bottom">
+              <a class="dropdown-item" href="<?=$this->transEscAttr('portal_selector_portals_link')?>" target="_blank" title="<?=$this->transEscAttr('portal_selector_portals_text')?>">
+                <?=$this->translate('portal_selector_portals_text') ?>
+              </a>
+            </li>
+            <li>
+              <a class="dropdown-item" href="<?=$this->transEscAttr('portal_selector_microportals_link')?>" target="_blank" title="<?=$this->transEscAttr('portal_selector_microportals_text')?>">
+                <?=$this->translate('portal_selector_microportals_text') ?>
+              </a>
+            </li>
+          </ul>
+        </div>
+
       </div>
     <?php endif; ?>
   </div>

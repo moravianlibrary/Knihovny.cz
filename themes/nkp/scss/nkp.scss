@@ -1,7 +1,7 @@
 @use "sass:color";
 
 $primary: #16799B;
-$nav-link-hover-bg: transparent;
+$nav-link-hover-bg: #115b74;
 
 @import "../../KnihovnyCz/scss/common/common";
 
@@ -69,6 +69,7 @@ header {
     button.dropdown-toggle:active,
     button.dropdown-toggle:active:focus {
       color: #ffffff;
+      background-color: $nav-link-hover-bg;
     }
 
     .dropdown-menu a:hover {
@@ -105,6 +106,21 @@ footer {
     .logo {
       max-width: 165px;
       max-height: 30px;
+    }
+  }
+}
+
+/* Portal selector dropdown menu */
+.portal-selector {
+
+  .dropdown-toggle {
+    color: #ffffff !important;
+    background-color: #16799B !important;
+
+    &:hover,
+    &:focus {
+      color: #ffffff !important;
+      background-color: #115b74 !important;
     }
   }
 }

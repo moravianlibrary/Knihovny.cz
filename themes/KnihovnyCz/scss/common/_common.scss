@@ -1480,3 +1480,67 @@ html, body {
     }
   }
 }
+
+/* Portal selector dropdown menu */
+.portal-selector {
+
+  .dropdown-toggle {
+    line-height: 1.1;
+    color: var(--bs-btn-color);
+    background-color: var(--bs-btn-bg);
+    border-color: transparent;
+
+    .ikcz-dots {
+      font-size: 1.5em;
+    }
+
+    &:hover,
+    &:focus {
+      color: var(--bs-btn-hover-color);
+      background-color: var(--bs-btn-hover-bg);
+    }
+  }
+
+  .dropdown-toggle::after {
+    vertical-align: 6px !important;
+  }
+
+  .dropdown-menu {
+    min-width: 16rem;
+  }
+
+  .dropdown-divider {
+    margin: 0;
+  }
+
+  .dropdown-item {
+    padding: 10px;
+
+    img {
+      height: 40px;
+    }
+
+    &:hover, &:focus {
+      img {
+        //filter: none;
+        filter: brightness(0) invert(1);
+      }
+    }
+
+  }
+
+  .dropdown-item.portal-selector-knihovny:hover,
+  .dropdown-item.portal-selector-knihovny:focus {
+    background-color: #e5004b;
+  }
+
+  .dropdown-item.portal-selector-mzk:hover,
+  .dropdown-item.portal-selector-mzk:focus {
+    background-color: #297e84;
+  }
+
+  .dropdown-item.portal-selector-nkp:hover,
+  .dropdown-item.portal-selector-nkp:focus {
+    background-color: #16799B;
+  }
+}
