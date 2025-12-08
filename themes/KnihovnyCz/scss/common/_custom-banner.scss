@@ -27,18 +27,6 @@
   object-fit: cover
 }
 
-.card.custom-banner.hp-survey-banner {
-  height: 180px;
-
-  .banner-image {
-    margin-right: 40px;
-  }
-
-  .banner-image img {
-    height: 180px;
-  }
-}
-
 .card.custom-banner.record-go-to-knihovny-cz-banner {
   height: 100px;
 
@@ -53,20 +41,11 @@
 }
 
 @media (max-width: 768px) {
-  .card.custom-banner.hp-survey-banner {
-    height: auto;
-    min-height: 180px;
-    padding-bottom: 15px;
-  }
   .card.custom-banner.record-go-to-knihovny-cz-banner {
     height: auto;
     min-height: 100px;
   }
-  .custom-banner.hp-survey-banner .banner-image {
-    display: none;
-  }
 }
-
 
 @media (max-width: 576px) {
   .card.custom-banner {
