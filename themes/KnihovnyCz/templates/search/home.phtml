@@ -30,16 +30,6 @@
 </div>
 
 <?php $this->slot('homepage-survey-cta')->start(); ?>
-  <div class="panel custom-banner hp-survey-banner">
-    <div class="banner-image">
-      <img src="<?=$this->imageLink('dotaznik_knihovny_cz.png') ?>" alt="<?=$this->transEsc('survey_banner_image_alt') ?>">
-    </div>
-    <div class="banner-content">
-      <h2><?=$this->transEsc('survey_banner_heading') ?></h2>
-      <p><?=$this->transEsc('survey_banner_text') ?></p>
-      <a href="https://forms.gle/fz4P7HsC78ETx8eLA" class="btn btn-primary" target="_blank"><?=$this->transEsc('survey_banner_button') ?></a>
-    </div>
-  </div>
 <?=$this->slot('homepage-survey-cta')->end(); ?>
 
 <?=$this->content()->renderTranslated('homepage'); ?>
