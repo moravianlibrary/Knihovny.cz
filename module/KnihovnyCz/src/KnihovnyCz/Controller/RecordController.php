@@ -455,10 +455,15 @@ class RecordController extends \VuFind\Controller\RecordController implements Ht
         $target = $this->url()->fromRoute($details['route'], $details['params']);
         $sid = $this->params()->fromQuery('sid');
         if ($sid !== null) {
-            [$query, $fragment] = explode('#', $params, 2);
-            $query .= str_starts_with($query, '?') ? '&' : '?';
-            $query .= 'sid=' . urlencode($sid);
-            $params = $query . '#' . $fragment;
+            $query = $params;
+            $fragment = '';
+            if (str_contains($params, '#')) {
+                [$query, $fragment] = explode('#', $params, 2);
+                $fragment = '#' . $fragment;
+            }
+            $separator = str_starts_with($query, '?') ? '&' : '?';
+            $query .= $separator . 'sid=' . urlencode($sid);
+            $params = $query . $fragment;
         }
         return $this->redirect()->toUrl($target . $params);
     }
