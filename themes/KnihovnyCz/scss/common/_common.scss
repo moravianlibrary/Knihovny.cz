@@ -1453,6 +1453,12 @@ html, body {
   z-index: 1000;
 }
 
+.content-modified-date {
+  float: right;
+  font-size: $font-size-sm;
+  padding-top: 20px;
+}
+
 /* custom banner */
 @import "custom-banner";
 

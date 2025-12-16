@@ -788,6 +788,8 @@ $config = [
             \KnihovnyCz\Markdown\EmbeddedUrlGenerator\EmbeddedUrlGeneratorExtension::class => \KnihovnyCz\Markdown\EmbeddedUrlGenerator\EmbeddedUrlGeneratorExtensionFactory::class,
             \KnihovnyCz\Search\History::class  => \VuFind\Search\HistoryFactory::class,
             \KnihovnyCz\Service\PalmknihyApiService::class => \KnihovnyCz\Service\PalmknihyApiServiceFactory::class,
+            \KnihovnyCz\Markdown\ModifiedDate\ModifiedDateExtension::class => \KnihovnyCz\Markdown\ModifiedDate\ModifiedDateExtensionFactory::class,
+            \KnihovnyCz\Content\GitLabService::class => \KnihovnyCz\Content\GitLabServiceFactory::class,
         ],
         'aliases' => [
             'VuFind\Http' => 'VuFindHttp\HttpService',
