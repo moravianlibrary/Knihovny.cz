@@ -1,32 +1,32 @@
 module.exports = function (grunt) {
   grunt.registerTask("custom", function custom() {
-    var lessFileSettings = [
+    var sassFileSettings = [
       {
         expand: true,
-        src: "themes/*/less/embedded-search.less",
+        src: "themes/*/scss/embedded-search.scss",
         rename: function (dest, src) {
-          return src.replace('/less/', '/css/').replace('.less', '.css');
+          return src.replace('/scss/', '/css/').replace('.scss', '.css');
         }
       },
       {
         expand: true,
-        src: "themes/*/less/embedded-libraries.less",
+        src: "themes/*/scss/embedded-libraries.scss",
         rename: function (dest, src) {
-          return src.replace('/less/', '/css/').replace('.less', '.css');
+          return src.replace('/scss/', '/css/').replace('.scss', '.css');
         }
       }
     ];
     grunt.initConfig({
-      // LESS compilation
-      less: {
+      // SCSS compilation via dart-sass (already loaded in main Gruntfile)
+      'dart-sass': {
         compile: {
-          files: lessFileSettings,
+          files: sassFileSettings,
           options: {
-            compress: true,
+            outputStyle: "compressed",
           }
         }
       },
     });
-    grunt.task.run('less');
+    grunt.task.run('dart-sass');
   });
 };

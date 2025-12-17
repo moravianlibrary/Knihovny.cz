@@ -10,8 +10,8 @@ nohup.out
 local/*/cache/
 local/*/config/vufind/*.local.ini
 themes/*/css/compiled.css
-themes/*/css/embedded-search.css
-themes/*/css/embedded-libraries.css
+#themes/*/css/embedded-search.css
+#themes/*/css/embedded-libraries.css
 themes/*/images/content
 themes/*/templates/ContentBlock/TemplateBased
 !themes/KnihovnyCz/templates/ContentBlock/TemplateBased/markdown.phtml

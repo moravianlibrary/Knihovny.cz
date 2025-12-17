@@ -25,6 +25,7 @@ COPY ./Gruntfile.local.js ${THEMES_BUILD_DIR}/
 COPY ./themes ${THEMES_BUILD_DIR}/themes
 WORKDIR ${THEMES_BUILD_DIR}/
 RUN npm install --omit dev && npm run build
+#RUN npm run build:scss:custom
 RUN rm ${THEMES_BUILD_DIR}/themes/root/css/.htaccess
 
 ########### install PHP libraries

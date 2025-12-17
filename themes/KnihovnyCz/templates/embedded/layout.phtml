@@ -11,12 +11,10 @@
   <meta name="viewport" content="width=device-width,initial-scale=1.0">
   <?=$this->headTitle() ?>
   <?=$this->headMeta() ?>
-  <?=$this->headLink() ?>
-  <?=$this->headStyle() ?>
-  <?=$this->headScript() ?>
+  <?=$this->assetManager()->outputHeaderAssets()?>
 </head>
 <body class="template-dir-<?=$this->templateDir?> template-name-<?=$this->templateName?> <?=$this->layoutClass('offcanvas-row')?><?php if ($this->layout()->rtl): ?> rtl<?php endif; ?>">
   <?=$this->content ?>
-  <?=$this->footScript() ?>
+  <?=$this->assetManager()->outputFooterAssets() ?>
 </body>
 </html>
