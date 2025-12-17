@@ -1,0 +1,118 @@
+@import "common/bootstrap";
+
+a {
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+h2 {
+  font-size: 1.3em;
+  font-weight: normal;
+  margin-top: 1em;
+}
+
+h3 {
+  font-size: 1.1em;
+  font-weight: normal;
+}
+
+h4 {
+  font-size: 1.1em;
+  font-weight: normal;
+  margin-bottom: .3rem;
+  line-height: 1.3;
+}
+
+label {
+  font-weight: 400;
+}
+
+.container-fluid {
+  max-width: 1200px !important;
+}
+
+.card {
+  .card-header {
+    cursor: pointer !important;
+
+    h3.card-title{
+      margin: 0;
+    }
+  }
+}
+
+a.link-image:hover {
+  filter: none !important;
+}
+
+.knihovny-logo {
+  height: 51px;
+  max-width: 100%;
+}
+
+.row.display-flex {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.row.display-flex > [class*='col-'] {
+  display: flex;
+  flex-direction: column;
+  padding: 0 9px;
+}
+
+.mb-0 {
+  margin-bottom: 0 !important;
+}
+
+// Nav pills
+.nav-pills {
+  > li {
+    + li {
+      margin-left: 4px;
+    }
+
+    > a {
+      color: #333333 !important;
+      padding: 8px 15px;
+      border: 1px solid #555555;
+
+      &:hover,
+      &:focus {
+        color: #ffffff !important;
+        background-color: #555555;
+        filter: none !important;
+      }
+    }
+
+    // Active state
+    &.active > a {
+      &,
+      &:hover,
+      &:focus {
+        color: #ffffff !important;
+        background-color: #555555;
+      }
+    }
+  }
+}
+
+.search-checkbox-controls {
+  margin-top: 5px;
+  margin-left: 3.5em;
+}
+
+@media (max-width: 767px) {
+  .search-checkbox-controls {
+    margin-left: 0;
+
+    .checkbox-inline {
+      margin-left: 0;
+      display: block;
+    }
+  }
+}
+

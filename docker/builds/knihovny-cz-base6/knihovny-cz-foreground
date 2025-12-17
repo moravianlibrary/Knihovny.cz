@@ -48,6 +48,7 @@ fi
 
 # Compile CSS in themes
 npm run build
+#npm run build:scss:custom
 
 # Local configs
 for config in ${EXTENSION_DIR}/local/*/; do

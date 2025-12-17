@@ -54,7 +54,7 @@ $(function libraryListHandlers() {
 
       let row = card.closest('.row');
       let numOfDisplayedColumns = row.children('.card-library.show').length;
-      let panel = row.closest('.panel');
+      let panel = row.closest('.card');
       if (numOfDisplayedColumns > 0) {
         showElement(panel);
       } else {

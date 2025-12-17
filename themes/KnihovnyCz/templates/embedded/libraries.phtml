@@ -28,8 +28,6 @@ if (!empty($selectedRegion)) {
 }
 $this->headTitle($headTitle);
 
-$this->assetManager()->appendStyleLink('vendor/bootstrap.min.css');
-$this->assetManager()->appendStyleLink('vendor/font-awesome.min.css');
 $this->assetManager()->appendStyleLink('embedded-libraries.css');
 
 $this->assetManager()->appendScriptLink('vendor/jquery.min.js');
@@ -48,120 +46,133 @@ $this->headStyle()->appendStyle("
     }
   ");
 ?>
-<div>
-  <nav class="navbar navbar-default">
-    <div class="container-fluid">
-      <div class="row">
-        <div class="col-xs-12">
-          <div class="input-group">
-            <div class="input-group-addon"><i class="fa fa-search" aria-hidden="true"></i></div>
-            <input type="text" class="form-control" id="search" placeholder="<?= $this->translate('EmbeddedLibraries::search_input_placeholder') ?>">
-            <div class="input-group-btn hidden">
-              <button type="button" class="btn" id="btn_filter">Filter</button>
-            </div>
-          </div>
-          <div class="search-checkbox-controls">
-            <label class="checkbox-inline" for="is_professional">
-              <input class="form-check-input" type="checkbox" id="is_professional">
-              <?=$this->translate('EmbeddedLibraries::label_is_professional') ?>
-            </label>
-            <label class="checkbox-inline" for="is_nonprofessional">
-              <input class="form-check-input" type="checkbox" id="is_nonprofessional">
-              <?=$this->translate('EmbeddedLibraries::label_is_nonprofessional') ?>
-            </label>
-            <label class="checkbox-inline" for="is_regional">
-              <input class="form-check-input" type="checkbox" value="true" id="is_regional">
-              <?=$this->translate('EmbeddedLibraries::label_is_regional') ?>
-            </label>
-          </div>
+
+<nav class="bg-body-secondary p-3">
+  <div class="container-fluid">
+    <div class="row justify-content-center">
+      <div class="col-12 col-md-10">
+        <div class="input-group mb-3">
+          <span class="input-group-text">
+            <i class="fa fa-search" aria-hidden="true"></i>
+          </span>
+          <input type="text" class="form-control" id="search" placeholder="<?= $this->translate('EmbeddedLibraries::search_input_placeholder') ?>">
+          <button type="button" class="btn btn-primary d-none" id="btn_filter">Filter</button>
+        </div>
+        <div class="search-checkbox-controls">
+          <ul class="list-unstyled d-flex flex-column flex-md-row justify-content-start justify-content-md-center gap-2">
+            <li>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="checkbox" id="is_professional">
+                <label class="form-check-label" for="is_professional">
+                  <?=$this->translate('EmbeddedLibraries::label_is_professional') ?>
+                </label>
+              </div>
+            </li>
+            <li>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="checkbox" id="is_nonprofessional">
+                <label class="form-check-label" for="is_nonprofessional">
+                  <?=$this->translate('EmbeddedLibraries::label_is_nonprofessional') ?>
+                </label>
+              </div>
+            </li>
+            <li>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="checkbox" value="true" id="is_regional">
+                <label class="form-check-label" for="is_regional">
+                  <?=$this->translate('EmbeddedLibraries::label_is_regional') ?>
+                </label>
+              </div>
+            </li>
+          </ul>
         </div>
       </div>
     </div>
-  </nav>
+  </div>
+</nav>
 
-  <div class="container-fluid">
-    <?php foreach ($tree as $region => $districts): ?>
-      <h2><?=$region ?></h2>
-      <?php if ($selectedRegion): ?>
-        <ul class="nav nav-pills mb-0">
-          <?php if ($selectedDistrict): ?>
-            <li class="nav-item">
-              <a class="nav-link" href="<?=$this->url('embedded-libraries', ['region' => $selectedRegion], ['query' => ['color' => $color]]) ?>">&laquo; <?=$this->translate('EmbeddedLibraries::btn_all_districts') ?></a>
-            </li>
-          <?php endif; ?>
-          <?php foreach ($districts as $district => $libraries): ?>
-            <li class="nav-item <?=($district === $selectedDistrict) ? 'active' : '' ?>">
-              <a class="nav-link" href="<?=$this->url('embedded-libraries', ['region' => $selectedRegion, 'district' => $district], ['query' => ['color' => $color]]) ?>"><?=$district ?></a>
-            </li>
-          <?php endforeach; ?>
-        </ul>
-        <hr>
-      <?php endif; ?>
+<div class="container-fluid">
+  <?php foreach ($tree as $region => $districts): ?>
+    <h2><?=$region ?></h2>
+    <?php if ($selectedRegion): ?>
+      <ul class="nav nav-pills mb-0">
+        <?php if ($selectedDistrict): ?>
+          <li class="nav-item">
+            <a class="nav-link" href="<?=$this->url('embedded-libraries', ['region' => $selectedRegion], ['query' => ['color' => $color]]) ?>">&laquo; <?=$this->translate('EmbeddedLibraries::btn_all_districts') ?></a>
+          </li>
+        <?php endif; ?>
+        <?php foreach ($districts as $district => $libraries): ?>
+          <li class="nav-item <?=($district === $selectedDistrict) ? 'active' : '' ?>">
+            <a class="nav-link" href="<?=$this->url('embedded-libraries', ['region' => $selectedRegion, 'district' => $district], ['query' => ['color' => $color]]) ?>"><?=$district ?></a>
+          </li>
+        <?php endforeach; ?>
+      </ul>
+      <hr>
+    <?php endif; ?>
 
-      <?php foreach ($districts as $district => $libraries): ?>
-        <div class="panel panel-default">
-          <div class="panel-heading">
-            <h3 class="panel-title" data-bs-toggle="collapse" href="#collapse_<?=$alnum->filter($district) ?>">
-              <?=$district ?>
-            </h3>
-          </div>
-          <div id="collapse_<?=$alnum->filter($district) ?>" class="collapse in">
-            <div class="panel-body">
-              <?php if (count($libraries)): ?>
-                <div class="row display-flex">
-                  <?php foreach ($libraries as $library): ?>
-                    <?php if ($library['is_regional']): ?>
-                      <div class="col-xs-12 col-sm-6 col-md-6 col-lg-4 card-library" data-regional="<?= $library['is_regional'] ? 1 : 0 ?>" data-professional="<?= $library['is_professional'] ? 1 : 0 ?>">
-                        <div class="panel panel-default">
-                          <div class="panel-body">
-                            <h4>
-                              <?php if ($library['is_professional']): ?>
-                                <span class="float-right text-primary" title="<?=$this->translate('EmbeddedLibraries::function_professional_library') ?>"><i class="fa fa-fw fa-building" aria-hidden="true"></i></span>
-                              <?php endif; ?>
-                              <span class="float-right text-primary" title="<?=$this->translate('EmbeddedLibraries::function_regional_library') ?>"><i class="fa fa-fw fa-dot-circle-o" aria-hidden="true"></i></span>
-                              <a href="<?=$this->url('search2record', ['id' => $library['link']]) ?>" target="_blank" title="<?=$library['title'] ?>">
-                                <?=$library['title'] ?>
-                              </a>
-                            </h4>
-                            <span class="text-muted"><i class="fa fa-fw fa-map-marker" aria-hidden="true"></i> <?=$library['town'] ?></span>
-                          </div>
+    <?php foreach ($districts as $district => $libraries): ?>
+      <div class="card mb-3">
+        <div class="card-header">
+          <h3 class="card-title" data-bs-toggle="collapse" data-bs-target="#collapse_<?=$alnum->filter($district) ?>" aria-expanded="true" aria-controls="collapse_<?=$alnum->filter($district) ?>">
+            <?=$district ?>
+          </h3>
+        </div>
+        <div id="collapse_<?=$alnum->filter($district) ?>" class="collapse show">
+          <div class="card-body">
+            <?php if (count($libraries)): ?>
+              <div class="row g-3 d-flex">
+                <?php foreach ($libraries as $library): ?>
+                  <?php if ($library['is_regional']): ?>
+                    <div class="col-12 col-sm-6 col-md-6 col-lg-4 card-library" data-regional="<?= $library['is_regional'] ? 1 : 0 ?>" data-professional="<?= $library['is_professional'] ? 1 : 0 ?>">
+                      <div class="card">
+                        <div class="card-body">
+                          <h4>
+                            <?php if ($library['is_professional']): ?>
+                              <span class="float-end text-primary" title="<?=$this->translate('EmbeddedLibraries::function_professional_library') ?>"><i class="fa fa-fw fa-building" aria-hidden="true"></i></span>
+                            <?php endif; ?>
+                            <span class="float-end text-primary" title="<?=$this->translate('EmbeddedLibraries::function_regional_library') ?>"><i class="fa fa-fw fa-dot-circle-o" aria-hidden="true"></i></span>
+                            <a href="<?=$this->url('search2record', ['id' => $library['link']]) ?>" target="_blank" title="<?=$library['title'] ?>">
+                              <?=$library['title'] ?>
+                            </a>
+                          </h4>
+                          <span class="text-muted"><i class="fa fa-fw fa-map-marker" aria-hidden="true"></i> <?=$library['town'] ?></span>
                         </div>
                       </div>
-                    <?php endif; ?>
-                  <?php endforeach; ?>
-
-                  <?php foreach ($libraries as $library): ?>
-                    <?php if (!$library['is_regional']): ?>
-                      <div class="col-xs-12 col-sm-6 col-md-6 col-lg-4 card-library" data-regional="<?= $library['is_regional'] ? 1 : 0 ?>" data-professional="<?= $library['is_professional'] ? 1 : 0 ?>">
-                        <div class="panel panel-default" data-filter="<?=$library['title'] ?> | <?=$library['town'] ?>">
-                          <div class="panel-body">
-                            <h4>
-                              <?php if ($library['is_professional']): ?>
-                                <span class="float-right text-primary" title="<?=$this->translate('EmbeddedLibraries::function_professional_library') ?>"><i class="fa fa-fw fa-building" aria-hidden="true"></i></span>
-                              <?php endif; ?>
-                              <a href="<?=$this->url('search2record', ['id' => $library['link']]) ?>" target="_blank" title="<?=$library['title'] ?>">
-                                <?=$library['title'] ?>
-                              </a>
-                            </h4>
-                            <span class="text-muted"><i class="fa fa-fw fa-map-marker" aria-hidden="true"></i> <?=$library['town'] ?></span>
-                          </div>
+                    </div>
+                  <?php endif; ?>
+                <?php endforeach; ?>
+                <?php foreach ($libraries as $library): ?>
+                  <?php if (!$library['is_regional']): ?>
+                    <div class="col-12 col-sm-6 col-md-6 col-lg-4 card-library" data-regional="<?= $library['is_regional'] ? 1 : 0 ?>" data-professional="<?= $library['is_professional'] ? 1 : 0 ?>">
+                      <div class="card" data-filter="<?=$library['title'] ?> | <?=$library['town'] ?>">
+                        <div class="card-body">
+                          <h4>
+                            <?php if ($library['is_professional']): ?>
+                              <span class="float-end text-primary" title="<?=$this->translate('EmbeddedLibraries::function_professional_library') ?>"><i class="fa fa-fw fa-building" aria-hidden="true"></i></span>
+                            <?php endif; ?>
+                            <a href="<?=$this->url('search2record', ['id' => $library['link']]) ?>" target="_blank" title="<?=$library['title'] ?>">
+                              <?=$library['title'] ?>
+                            </a>
+                          </h4>
+                          <span class="text-muted"><i class="fa fa-fw fa-map-marker" aria-hidden="true"></i> <?=$library['town'] ?></span>
                         </div>
                       </div>
-                    <?php endif; ?>
-                  <?php endforeach; ?>
-                </div>
-              <?php else: ?>
-                <div class="alert alert-info">
-                  <?=$this->translate('EmbeddedLibraries::no_items_region') ?>
-                </div>
-              <?php endif; ?>
-            </div>
+                    </div>
+                  <?php endif; ?>
+                <?php endforeach; ?>
+              </div>
+            <?php else: ?>
+              <div class="alert alert-info">
+                <?=$this->translate('EmbeddedLibraries::no_items_region') ?>
+              </div>
+            <?php endif; ?>
           </div>
         </div>
-      <?php endforeach; ?>
+      </div>
     <?php endforeach; ?>
-  </div>
+  <?php endforeach; ?>
 </div>
+
 <footer>
   <div class="container-fluid">
     <p class="text-center">
