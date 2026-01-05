@@ -38,7 +38,7 @@ ARG VUFIND_ROOT=/var/www/knihovny-cz
 RUN apt-get update && apt-get install -y unzip git
 
 ## Install Composer
-COPY --from=docker.io/composer:latest /usr/bin/composer /usr/local/bin/composer
+COPY --from=docker.io/composer:2.9.2 /usr/bin/composer /usr/local/bin/composer
 
 # Prepare vufind build directories
 COPY --from=vufind-src  /src/vufind/composer.json ${VUFIND_ROOT}/composer.json

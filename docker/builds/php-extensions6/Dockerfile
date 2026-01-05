@@ -87,6 +87,7 @@ RUN apt-get purge -y \
         ${TMP_DEV_PKGS}
 
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+RUN composer self-update 2.9.2
 
 # Update mlocate's files database
 RUN updatedb
