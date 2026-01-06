@@ -25,6 +25,7 @@ Available params
   --push                   Push image after successful build to docker hub
   --push-only              Push image after successful build to docker hub without running container
   --no-run                 Don't run 'docker compose up'
+  --no-cache               Do not use cache when building the image
   --private-registry       Push image after successful build to private registry
   --help|-h                Print usage
 
@@ -72,6 +73,7 @@ detached=false
 service=vufind6
 container_name=""
 push_to_private_registry="false"
+no_cache="false"
 # extract options and their arguments into variables.
 while true ; do
     case "$1" in
@@ -145,6 +147,10 @@ while true ; do
                    container_name=$2
                    shift 2 ;;
             esac ;;
+         --no-cache)
+            no_cache="true"
+            shift
+            ;;
          --version|-v)
             case "$2" in
                 "") shift 2 ;;
@@ -204,8 +210,13 @@ cp "../composer.local.json" "./builds/knihovny-cz-base6/"
 cp "../composer.json" "./builds/knihovny-cz-base6/"
 cp "../package.json" "./builds/knihovny-cz-base6/"
 
+build_args=""
+if [[ $no_cache == "true" ]]; then
+    build_args="--no-cache"
+fi
+
 for srv in php-extensions6 apache-shibboleth6 knihovny-cz; do
-    docker compose build "$srv"
+    docker compose build $build_args "$srv"
     if [ $? -ne 0 ]; then
         echo "Can't build $srv, exiting"
         exit 1
