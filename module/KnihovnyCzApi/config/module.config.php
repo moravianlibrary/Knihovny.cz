@@ -28,10 +28,10 @@ $config = [
                 'type' => 'Laminas\Router\Http\Literal',
                 'verb' => 'get,post,options',
                 'options' => [
-                    'route'    => '/api/v1/item',
+                    'route' => '/api/v1/item',
                     'defaults' => [
                         'controller' => 'SearchApi',
-                        'action'     => 'item',
+                        'action' => 'item',
                     ],
                 ],
             ],
@@ -39,10 +39,10 @@ $config = [
                 'type' => 'Laminas\Router\Http\Literal',
                 'verb' => 'get,post,options',
                 'options' => [
-                    'route'    => '/api/v1/libraries/search',
+                    'route' => '/api/v1/libraries/search',
                     'defaults' => [
                         'controller' => 'Search2Api',
-                        'action'     => 'search',
+                        'action' => 'search',
                     ],
                 ],
             ],
@@ -50,10 +50,10 @@ $config = [
                 'type' => 'Laminas\Router\Http\Literal',
                 'verb' => 'get,post,options',
                 'options' => [
-                    'route'    => '/api/v1/libraries/record',
+                    'route' => '/api/v1/libraries/record',
                     'defaults' => [
                         'controller' => 'Search2Api',
-                        'action'     => 'record',
+                        'action' => 'record',
                     ],
                 ],
             ],

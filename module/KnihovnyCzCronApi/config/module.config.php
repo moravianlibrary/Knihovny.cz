@@ -8,12 +8,12 @@ $config = [
     'router' => [
         'routes' => [
             'cronjobs' => [
-                'type'    => 'Laminas\Router\Http\Segment',
+                'type' => 'Laminas\Router\Http\Segment',
                 'options' => [
-                    'route'    => '/cronjobs-' . $secret . '/[:action]',
+                    'route' => '/cronjobs-' . $secret . '/[:action]',
                     'constraints' => [
                         'controller' => '[a-zA-Z][a-zA-Z0-9_-]*',
-                        'action'     => '[a-zA-Z][a-zA-Z0-9_-]*',
+                        'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
                     ],
                     'defaults' => [
                         'controller' => 'cronjob',
