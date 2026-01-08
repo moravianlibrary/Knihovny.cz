@@ -7,7 +7,7 @@ namespace KnihovnyCz\Controller;
 use Laminas\Mvc\MvcEvent;
 
 /**
- * Summon Record Controller
+ * Class SummonController
  *
  * @category Knihovny.cz
  * @package  KnihovnyCz\Controller
@@ -15,9 +15,8 @@ use Laminas\Mvc\MvcEvent;
  * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://knihovny.cz Main Page
  */
-class SummonrecordController extends \VuFind\Controller\SummonrecordController
+class SummonController extends \VuFind\Controller\SummonController
 {
-    use ShareTrait;
     use GeoIpAccessTrait;
 
     /**

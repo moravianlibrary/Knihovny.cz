@@ -375,6 +375,7 @@ $config = [
             \KnihovnyCz\Controller\CheckoutsController::class => \VuFind\Controller\CheckoutsControllerFactory::class,
             \KnihovnyCz\Controller\Search2recordController::class => \VuFind\Controller\AbstractBaseFactory::class,
             \KnihovnyCz\Controller\SummonrecordController::class => \VuFind\Controller\AbstractBaseFactory::class,
+            \KnihovnyCz\Controller\SummonController::class => \VuFind\Controller\AbstractBaseFactory::class,
         ],
         'aliases' => [
             'Inspiration' => \KnihovnyCz\Controller\InspirationController::class,
@@ -399,6 +400,7 @@ $config = [
             \VuFind\Controller\CheckoutsController::class => \KnihovnyCz\Controller\CheckoutsController::class,
             \VuFind\Controller\Search2recordController::class => \KnihovnyCz\Controller\Search2recordController::class,
             \VuFind\Controller\SummonrecordController::class => \KnihovnyCz\Controller\SummonrecordController::class,
+            \VuFind\Controller\SummonController::class => \KnihovnyCz\Controller\SummonController::class,
         ],
     ],
     'controller_plugins' => [
