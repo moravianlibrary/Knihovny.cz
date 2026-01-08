@@ -3,354 +3,354 @@
 namespace KnihovnyCz\Module\Configuration;
 
 $config = [
-     'router' => [
-         'routes' => [
-             'inspiration' => [
-                 'type' => \Laminas\Router\Http\Segment::class,
-                 'options' => [
-                     'route' => '/Inspiration',
-                     'defaults' => [
-                         'controller' => 'Inspiration',
-                         'action' => 'Home',
-                     ],
-                 ],
-             ],
-             'inspiration-show-legacy' => [
-                 'type' => \Laminas\Router\Http\Segment::class,
-                 'options' => [
-                     'route' => '/inspirace/[:list]',
-                     'defaults' => [
-                         'controller' => 'Inspiration',
-                         'action' => 'Show',
-                     ],
-                 ],
-             ],
-             'inspiration-show' => [
-                 'type' => \Laminas\Router\Http\Segment::class,
-                 'options' => [
-                     'route' => '/Inspiration/[:list]',
-                     'defaults' => [
-                         'controller' => 'Inspiration',
-                         'action' => 'Show',
-                     ],
-                 ],
-             ],
+    'router' => [
+        'routes' => [
+            'inspiration' => [
+                'type' => \Laminas\Router\Http\Segment::class,
+                'options' => [
+                    'route' => '/Inspiration',
+                    'defaults' => [
+                        'controller' => 'Inspiration',
+                        'action' => 'Home',
+                    ],
+                ],
+            ],
+            'inspiration-show-legacy' => [
+                'type' => \Laminas\Router\Http\Segment::class,
+                'options' => [
+                    'route' => '/inspirace/[:list]',
+                    'defaults' => [
+                        'controller' => 'Inspiration',
+                        'action' => 'Show',
+                    ],
+                ],
+            ],
+            'inspiration-show' => [
+                'type' => \Laminas\Router\Http\Segment::class,
+                'options' => [
+                    'route' => '/Inspiration/[:list]',
+                    'defaults' => [
+                        'controller' => 'Inspiration',
+                        'action' => 'Show',
+                    ],
+                ],
+            ],
 
-             'inspiration-home-legacy' => [
-                 'type' => \Laminas\Router\Http\Segment::class,
-                 'options' => [
-                     'route' => '/Search/Inspiration',
-                     'defaults' => [
-                         'controller' => 'Inspiration',
-                         'action' => 'HomeLegacy',
-                     ],
-                 ],
-             ],
-             'portal-pages' => [
-                 'type' => \Laminas\Router\Http\Segment::class,
-                 'options' => [
-                     'route' => '/Portal/Page/[:page]',
-                     'constraints' => [
-                         'page'     => '[a-zA-Z][a-zA-Z0-9_-]*',
-                     ],
-                     'defaults' => [
-                         'controller' => 'PortalPage',
-                         'action' => 'Index',
-                     ],
-                 ],
-             ],
-             'wayf' => [
-                 'type' => \Laminas\Router\Http\Segment::class,
-                 'options' => [
-                     'route' => '/Wayf',
-                     'defaults' => [
-                         'controller' => 'Wayf',
-                         'action' => 'Index',
-                     ],
-                 ],
-             ],
-             'search-legacy' => [
-                 'type' => \Laminas\Router\Http\Literal::class,
-                 'options' => [
-                     'route' => '/Search/Results/',
-                     'defaults' => [
-                         'controller' => 'Search',
-                         'action' => 'Results',
-                     ],
-                 ],
-             ],
-             'ziskej-admin' => [
-                 'type' => \Laminas\Router\Http\Segment::class,
-                 'options' => [
-                     'route' => '/ziskej',
-                     'defaults' => [
-                         'controller' => 'ZiskejAdmin',
-                         'action' => 'Home',
-                     ],
-                 ],
-             ],
-             'myresearch-ziskej-mvs-home' => [
-                 'type' => \Laminas\Router\Http\Segment::class,
-                 'options' => [
-                     'route' => '/MyResearch/Ziskej',
-                     'defaults' => [
-                         'controller' => 'MyResearchZiskejMvs',
-                         'action' => 'Home',
-                     ],
-                 ],
-             ],
-             'myresearch-ziskej-edd-home' => [
-                 'type' => \Laminas\Router\Http\Segment::class,
-                 'options' => [
-                     'route' => '/MyResearch/ZiskejEdd',
-                     'defaults' => [
-                         'controller' => 'MyResearchZiskejEdd',
-                         'action' => 'Home',
-                     ],
-                 ],
-             ],
-             'myresearch-ziskej-mvs-ticket' => [
-                 'type' => \Laminas\Router\Http\Segment::class,
-                 'options' => [
-                     'route' => '/MyResearch/ZiskejTicket/[:eppnDomain]/[:ticketId]',
-                     'constraints' => [
-                         'eppnDomain'     => '.*',
-                         'ticketId'     => '.*',
-                     ],
-                     'defaults' => [
-                         'controller' => 'MyResearchZiskejMvs',
-                         'action' => 'Ticket',
-                     ],
-                 ],
-             ],
-             'myresearch-ziskej-edd-ticket' => [
-                 'type' => \Laminas\Router\Http\Segment::class,
-                 'options' => [
-                     'route' => '/MyResearch/ZiskejEddTicket/[:eppnDomain]/[:ticketId]',
-                     'constraints' => [
-                         'eppnDomain'     => '.*',
-                         'ticketId'     => '.*',
-                     ],
-                     'defaults' => [
-                         'controller' => 'MyResearchZiskejEdd',
-                         'action' => 'Ticket',
-                     ],
-                 ],
-             ],
-             'myresearch-ziskej-mvs-ticket-cancel' => [
-                 'type' => \Laminas\Router\Http\Segment::class,
-                 'options' => [
-                     'route' => '/MyResearch/ZiskejTicket/[:eppnDomain]/[:ticketId]/Cancel',
-                     'constraints' => [
-                         'eppnDomain'     => '.*',
-                         'ticketId'     => '.*',
-                     ],
-                     'defaults' => [
-                         'controller' => 'MyResearchZiskejMvs',
-                         'action' => 'TicketCancel',
-                     ],
-                 ],
-             ],
-             'myresearch-ziskej-edd-ticket-cancel' => [
-                 'type' => \Laminas\Router\Http\Segment::class,
-                 'options' => [
-                     'route' => '/MyResearch/ZiskejEddTicket/[:eppnDomain]/[:ticketId]/Cancel',
-                     'constraints' => [
-                         'eppnDomain'     => '.*',
-                         'ticketId'     => '.*',
-                     ],
-                     'defaults' => [
-                         'controller' => 'MyResearchZiskejEdd',
-                         'action' => 'TicketCancel',
-                     ],
-                 ],
-             ],
-             'myresearch-ziskej-mvs-message-post' => [
-                 'type' => \Laminas\Router\Http\Segment::class,
-                 'options' => [
-                     'route' => '/MyResearch/ZiskejTicket/[:eppnDomain]/[:ticketId]/Message',
-                     'constraints' => [
-                         'eppnDomain'     => '.*',
-                         'ticketId'     => '.*',
-                     ],
-                     'defaults' => [
-                         'controller' => 'MyResearchZiskejMvs',
-                         'action' => 'TicketMessage',
-                     ],
-                 ],
-             ],
-             'myresearch-ziskej-edd-message-post' => [
-                 'type' => \Laminas\Router\Http\Segment::class,
-                 'options' => [
-                     'route' => '/MyResearch/ZiskejEddTicket/[:eppnDomain]/[:ticketId]/Message',
-                     'constraints' => [
-                         'eppnDomain'     => '.*',
-                         'ticketId'     => '.*',
-                     ],
-                     'defaults' => [
-                         'controller' => 'MyResearchZiskejEdd',
-                         'action' => 'TicketMessage',
-                     ],
-                 ],
-             ],
-             'ziskej-mvs-order' => [
-                 'type' => \Laminas\Router\Http\Segment::class,
-                 'options' => [
-                     'route' => '/Record/[:id]/ZiskejOrder/:eppnDomain',
-                     'constraints' => [
-                         'id' => '.*',
-                         'eppnDomain' => '.*',
-                     ],
-                     'defaults' => [
-                         'controller' => 'Record',
-                         'action' => 'ZiskejOrder',
-                     ],
-                 ],
-             ],
-             'ziskej-edd-order' => [
-                 'type' => \Laminas\Router\Http\Segment::class,
-                 'options' => [
-                     'route' => '/Record/[:id]/ZiskejEddOrder/:eppnDomain',
-                     'constraints' => [
-                         'id' => '.*',
-                         'eppnDomain' => '.*',
-                     ],
-                     'defaults' => [
-                         'controller' => 'Record',
-                         'action' => 'ZiskejEddOrder',
-                     ],
-                 ],
-             ],
-             'ziskej-mvs-order-post' => [
-                 'type' => \Laminas\Router\Http\Segment::class,
-                 'options' => [
-                     'route' => '/Record/[:id]/ZiskejOrderPost',
-                     'constraints' => [
-                         'id' => '.*',
-                     ],
-                     'defaults' => [
-                         'controller' => 'Record',
-                         'action' => 'ZiskejOrderPost',
-                     ],
-                 ],
-             ],
-             'ziskej-edd-order-post' => [
-                 'type' => \Laminas\Router\Http\Segment::class,
-                 'options' => [
-                     'route' => '/Record/[:id]/ZiskejEddOrderPost',
-                     'constraints' => [
-                         'id' => '.*',
-                     ],
-                     'defaults' => [
-                         'controller' => 'Record',
-                         'action' => 'ZiskejEddOrderPost',
-                     ],
-                 ],
-             ],
-             'ziskej-payment' => [
-                 'type' => \Laminas\Router\Http\Segment::class,
-                 'options' => [
-                     'route' => '/ziskej/payment/:eppnDomain/:ticketId/:paymentTransactionId',
-                     'constraints' => [
-                         'eppnDomain' => '.*',
-                         'ticketId' => '.*',
-                     ],
-                     'defaults' => [
-                         'controller' => 'Ziskej',
-                         'action' => 'Payment',
-                     ],
-                 ],
-             ],
-             'ziskej-mvs-order-finished' => [
-                 'type' => \Laminas\Router\Http\Segment::class,
-                 'options' => [
-                     'route' => '/Ziskej/Finished/:eppnDomain/:ticketId',
-                     'constraints' => [
-                         'eppnDomain' => '.*',
-                         'ticketId' => '.*',
-                     ],
-                     'defaults' => [
-                         'controller' => 'Ziskej',
-                         'action' => 'Finished',
-                     ],
-                 ],
-             ],
-             'embedded-libraries' => [
-                 'type' => \Laminas\Router\Http\Segment::class,
-                 'options' => [
-                     'route' => '/Embedded/Libraries[/:region[/:district]]',
-                     'constraints' => [
-                         'region' => '[^\/]+',
-                         'district' => '[^\/]+',
-                     ],
-                     'defaults' => [
-                         'controller' => 'EmbeddedLibraries',
-                         'action' => 'Index',
-                     ],
-                 ],
-             ],
-             'embedded-search' => [
-                 'type' => \Laminas\Router\Http\Segment::class,
-                 'options' => [
-                     'route' => '/Search/Embedded',
-                     'defaults' => [
-                         'controller' => 'EmbeddedSearch',
-                         'action' => 'Index',
-                     ],
-                 ],
-             ],
-             'embedded-search-lowercased' => [
-                 'type' => \Laminas\Router\Http\Segment::class,
-                 'options' => [
-                     'route' => '/Search/embedded',
-                     'defaults' => [
-                         'controller' => 'EmbeddedSearch',
-                         'action' => 'Index',
-                     ],
-                 ],
-             ],
-             'adminils' => [
-                 'type' => 'Laminas\Router\Http\Segment',
-                 'options' => [
-                     'route'    => '/Admin/Ils/Status',
-                     'defaults' => [
-                         'controller' => 'AdminIls',
-                         'action'     => 'Status',
-                     ],
-                 ],
-             ],
-             'notifications' => [
-                 'type' => 'Laminas\Router\Http\Segment',
-                 'options' => [
-                     'route' => '/Notifications',
-                     'defaults' => [
-                         'controller' => 'Notification',
-                         'action' => 'Home',
-                     ],
-                 ],
-             ],
-             'notifications-edit' => [
-                 'type' => 'Laminas\Router\Http\Segment',
-                 'options' => [
-                     'route' => '/Notifications/Edit/[:id]',
-                     'defaults' => [
-                         'controller' => 'Notification',
-                         'action' => 'Edit',
-                     ],
-                 ],
-             ],
-             'notifications-delete' => [
-                 'type' => 'Laminas\Router\Http\Segment',
-                 'options' => [
-                     'route' => '/Notifications/Delete/[:id]',
-                     'defaults' => [
-                         'controller' => 'Notification',
-                         'action' => 'Delete',
-                     ],
-                 ],
-             ],
-         ],
-     ],
+            'inspiration-home-legacy' => [
+                'type' => \Laminas\Router\Http\Segment::class,
+                'options' => [
+                    'route' => '/Search/Inspiration',
+                    'defaults' => [
+                        'controller' => 'Inspiration',
+                        'action' => 'HomeLegacy',
+                    ],
+                ],
+            ],
+            'portal-pages' => [
+                'type' => \Laminas\Router\Http\Segment::class,
+                'options' => [
+                    'route' => '/Portal/Page/[:page]',
+                    'constraints' => [
+                        'page' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                    ],
+                    'defaults' => [
+                        'controller' => 'PortalPage',
+                        'action' => 'Index',
+                    ],
+                ],
+            ],
+            'wayf' => [
+                'type' => \Laminas\Router\Http\Segment::class,
+                'options' => [
+                    'route' => '/Wayf',
+                    'defaults' => [
+                        'controller' => 'Wayf',
+                        'action' => 'Index',
+                    ],
+                ],
+            ],
+            'search-legacy' => [
+                'type' => \Laminas\Router\Http\Literal::class,
+                'options' => [
+                    'route' => '/Search/Results/',
+                    'defaults' => [
+                        'controller' => 'Search',
+                        'action' => 'Results',
+                    ],
+                ],
+            ],
+            'ziskej-admin' => [
+                'type' => \Laminas\Router\Http\Segment::class,
+                'options' => [
+                    'route' => '/ziskej',
+                    'defaults' => [
+                        'controller' => 'ZiskejAdmin',
+                        'action' => 'Home',
+                    ],
+                ],
+            ],
+            'myresearch-ziskej-mvs-home' => [
+                'type' => \Laminas\Router\Http\Segment::class,
+                'options' => [
+                    'route' => '/MyResearch/Ziskej',
+                    'defaults' => [
+                        'controller' => 'MyResearchZiskejMvs',
+                        'action' => 'Home',
+                    ],
+                ],
+            ],
+            'myresearch-ziskej-edd-home' => [
+                'type' => \Laminas\Router\Http\Segment::class,
+                'options' => [
+                    'route' => '/MyResearch/ZiskejEdd',
+                    'defaults' => [
+                        'controller' => 'MyResearchZiskejEdd',
+                        'action' => 'Home',
+                    ],
+                ],
+            ],
+            'myresearch-ziskej-mvs-ticket' => [
+                'type' => \Laminas\Router\Http\Segment::class,
+                'options' => [
+                    'route' => '/MyResearch/ZiskejTicket/[:eppnDomain]/[:ticketId]',
+                    'constraints' => [
+                        'eppnDomain' => '.*',
+                        'ticketId' => '.*',
+                    ],
+                    'defaults' => [
+                        'controller' => 'MyResearchZiskejMvs',
+                        'action' => 'Ticket',
+                    ],
+                ],
+            ],
+            'myresearch-ziskej-edd-ticket' => [
+                'type' => \Laminas\Router\Http\Segment::class,
+                'options' => [
+                    'route' => '/MyResearch/ZiskejEddTicket/[:eppnDomain]/[:ticketId]',
+                    'constraints' => [
+                        'eppnDomain' => '.*',
+                        'ticketId' => '.*',
+                    ],
+                    'defaults' => [
+                        'controller' => 'MyResearchZiskejEdd',
+                        'action' => 'Ticket',
+                    ],
+                ],
+            ],
+            'myresearch-ziskej-mvs-ticket-cancel' => [
+                'type' => \Laminas\Router\Http\Segment::class,
+                'options' => [
+                    'route' => '/MyResearch/ZiskejTicket/[:eppnDomain]/[:ticketId]/Cancel',
+                    'constraints' => [
+                        'eppnDomain' => '.*',
+                        'ticketId' => '.*',
+                    ],
+                    'defaults' => [
+                        'controller' => 'MyResearchZiskejMvs',
+                        'action' => 'TicketCancel',
+                    ],
+                ],
+            ],
+            'myresearch-ziskej-edd-ticket-cancel' => [
+                'type' => \Laminas\Router\Http\Segment::class,
+                'options' => [
+                    'route' => '/MyResearch/ZiskejEddTicket/[:eppnDomain]/[:ticketId]/Cancel',
+                    'constraints' => [
+                        'eppnDomain' => '.*',
+                        'ticketId' => '.*',
+                    ],
+                    'defaults' => [
+                        'controller' => 'MyResearchZiskejEdd',
+                        'action' => 'TicketCancel',
+                    ],
+                ],
+            ],
+            'myresearch-ziskej-mvs-message-post' => [
+                'type' => \Laminas\Router\Http\Segment::class,
+                'options' => [
+                    'route' => '/MyResearch/ZiskejTicket/[:eppnDomain]/[:ticketId]/Message',
+                    'constraints' => [
+                        'eppnDomain' => '.*',
+                        'ticketId' => '.*',
+                    ],
+                    'defaults' => [
+                        'controller' => 'MyResearchZiskejMvs',
+                        'action' => 'TicketMessage',
+                    ],
+                ],
+            ],
+            'myresearch-ziskej-edd-message-post' => [
+                'type' => \Laminas\Router\Http\Segment::class,
+                'options' => [
+                    'route' => '/MyResearch/ZiskejEddTicket/[:eppnDomain]/[:ticketId]/Message',
+                    'constraints' => [
+                        'eppnDomain' => '.*',
+                        'ticketId' => '.*',
+                    ],
+                    'defaults' => [
+                        'controller' => 'MyResearchZiskejEdd',
+                        'action' => 'TicketMessage',
+                    ],
+                ],
+            ],
+            'ziskej-mvs-order' => [
+                'type' => \Laminas\Router\Http\Segment::class,
+                'options' => [
+                    'route' => '/Record/[:id]/ZiskejOrder/:eppnDomain',
+                    'constraints' => [
+                        'id' => '.*',
+                        'eppnDomain' => '.*',
+                    ],
+                    'defaults' => [
+                        'controller' => 'Record',
+                        'action' => 'ZiskejOrder',
+                    ],
+                ],
+            ],
+            'ziskej-edd-order' => [
+                'type' => \Laminas\Router\Http\Segment::class,
+                'options' => [
+                    'route' => '/Record/[:id]/ZiskejEddOrder/:eppnDomain',
+                    'constraints' => [
+                        'id' => '.*',
+                        'eppnDomain' => '.*',
+                    ],
+                    'defaults' => [
+                        'controller' => 'Record',
+                        'action' => 'ZiskejEddOrder',
+                    ],
+                ],
+            ],
+            'ziskej-mvs-order-post' => [
+                'type' => \Laminas\Router\Http\Segment::class,
+                'options' => [
+                    'route' => '/Record/[:id]/ZiskejOrderPost',
+                    'constraints' => [
+                        'id' => '.*',
+                    ],
+                    'defaults' => [
+                        'controller' => 'Record',
+                        'action' => 'ZiskejOrderPost',
+                    ],
+                ],
+            ],
+            'ziskej-edd-order-post' => [
+                'type' => \Laminas\Router\Http\Segment::class,
+                'options' => [
+                    'route' => '/Record/[:id]/ZiskejEddOrderPost',
+                    'constraints' => [
+                        'id' => '.*',
+                    ],
+                    'defaults' => [
+                        'controller' => 'Record',
+                        'action' => 'ZiskejEddOrderPost',
+                    ],
+                ],
+            ],
+            'ziskej-payment' => [
+                'type' => \Laminas\Router\Http\Segment::class,
+                'options' => [
+                    'route' => '/ziskej/payment/:eppnDomain/:ticketId/:paymentTransactionId',
+                    'constraints' => [
+                        'eppnDomain' => '.*',
+                        'ticketId' => '.*',
+                    ],
+                    'defaults' => [
+                        'controller' => 'Ziskej',
+                        'action' => 'Payment',
+                    ],
+                ],
+            ],
+            'ziskej-mvs-order-finished' => [
+                'type' => \Laminas\Router\Http\Segment::class,
+                'options' => [
+                    'route' => '/Ziskej/Finished/:eppnDomain/:ticketId',
+                    'constraints' => [
+                        'eppnDomain' => '.*',
+                        'ticketId' => '.*',
+                    ],
+                    'defaults' => [
+                        'controller' => 'Ziskej',
+                        'action' => 'Finished',
+                    ],
+                ],
+            ],
+            'embedded-libraries' => [
+                'type' => \Laminas\Router\Http\Segment::class,
+                'options' => [
+                    'route' => '/Embedded/Libraries[/:region[/:district]]',
+                    'constraints' => [
+                        'region' => '[^\/]+',
+                        'district' => '[^\/]+',
+                    ],
+                    'defaults' => [
+                        'controller' => 'EmbeddedLibraries',
+                        'action' => 'Index',
+                    ],
+                ],
+            ],
+            'embedded-search' => [
+                'type' => \Laminas\Router\Http\Segment::class,
+                'options' => [
+                    'route' => '/Search/Embedded',
+                    'defaults' => [
+                        'controller' => 'EmbeddedSearch',
+                        'action' => 'Index',
+                    ],
+                ],
+            ],
+            'embedded-search-lowercased' => [
+                'type' => \Laminas\Router\Http\Segment::class,
+                'options' => [
+                    'route' => '/Search/embedded',
+                    'defaults' => [
+                        'controller' => 'EmbeddedSearch',
+                        'action' => 'Index',
+                    ],
+                ],
+            ],
+            'adminils' => [
+                'type' => 'Laminas\Router\Http\Segment',
+                'options' => [
+                    'route' => '/Admin/Ils/Status',
+                    'defaults' => [
+                        'controller' => 'AdminIls',
+                        'action' => 'Status',
+                    ],
+                ],
+            ],
+            'notifications' => [
+                'type' => 'Laminas\Router\Http\Segment',
+                'options' => [
+                    'route' => '/Notifications',
+                    'defaults' => [
+                        'controller' => 'Notification',
+                        'action' => 'Home',
+                    ],
+                ],
+            ],
+            'notifications-edit' => [
+                'type' => 'Laminas\Router\Http\Segment',
+                'options' => [
+                    'route' => '/Notifications/Edit/[:id]',
+                    'defaults' => [
+                        'controller' => 'Notification',
+                        'action' => 'Edit',
+                    ],
+                ],
+            ],
+            'notifications-delete' => [
+                'type' => 'Laminas\Router\Http\Segment',
+                'options' => [
+                    'route' => '/Notifications/Delete/[:id]',
+                    'defaults' => [
+                        'controller' => 'Notification',
+                        'action' => 'Delete',
+                    ],
+                ],
+            ],
+        ],
+    ],
     'controllers' => [
         'factories' => [
             \KnihovnyCz\Controller\InspirationController::class => \VuFind\Controller\AbstractBaseFactory::class,
@@ -427,7 +427,7 @@ $config = [
                     \VuFind\Auth\Shibboleth::class => \KnihovnyCz\Auth\Shibboleth::class,
                 ],
             ],
-            'recorddriver' =>  [
+            'recorddriver' => [
                 'factories' => [
                     \KnihovnyCz\RecordDriver\SolrAuthority::class => \KnihovnyCz\RecordDriver\SolrDefaultFactory::class,
                     \KnihovnyCz\RecordDriver\SolrDefault::class => \KnihovnyCz\RecordDriver\SolrDefaultFactory::class,
@@ -684,7 +684,7 @@ $config = [
                     \KnihovnyCz\Search\SolrAutocomplete\Results::class => \VuFind\Search\Solr\ResultsFactory::class,
                 ],
                 'aliases' => [
-                   'SolrAutocomplete' => \KnihovnyCz\Search\SolrAutocomplete\Results::class,
+                    'SolrAutocomplete' => \KnihovnyCz\Search\SolrAutocomplete\Results::class,
                     \VuFind\Search\Solr\Results::class => \KnihovnyCz\Search\Solr\Results::class,
                 ],
             ],
@@ -786,7 +786,7 @@ $config = [
             \KnihovnyCz\Cache\Manager::class => \VuFind\Cache\ManagerFactory::class,
             \KnihovnyCz\Search\Factory\UrlQueryHelperFactory::class => \Laminas\ServiceManager\Factory\InvokableFactory::class,
             \KnihovnyCz\Markdown\EmbeddedUrlGenerator\EmbeddedUrlGeneratorExtension::class => \KnihovnyCz\Markdown\EmbeddedUrlGenerator\EmbeddedUrlGeneratorExtensionFactory::class,
-            \KnihovnyCz\Search\History::class  => \VuFind\Search\HistoryFactory::class,
+            \KnihovnyCz\Search\History::class => \VuFind\Search\HistoryFactory::class,
             \KnihovnyCz\Service\PalmknihyApiService::class => \KnihovnyCz\Service\PalmknihyApiServiceFactory::class,
             \KnihovnyCz\Markdown\ModifiedDate\ModifiedDateExtension::class => \KnihovnyCz\Markdown\ModifiedDate\ModifiedDateExtensionFactory::class,
             \KnihovnyCz\Content\GitLabService::class => \KnihovnyCz\Content\GitLabServiceFactory::class,
