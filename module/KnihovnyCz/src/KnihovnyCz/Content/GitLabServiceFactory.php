@@ -33,7 +33,7 @@ class GitLabServiceFactory
     public function __invoke(
         ContainerInterface $container,
         $requestedName,
-        array $options = null
+        ?array $options = null
     ) {
         $service = new $requestedName(
             $_ENV['GITLAB_API_TOKEN']
