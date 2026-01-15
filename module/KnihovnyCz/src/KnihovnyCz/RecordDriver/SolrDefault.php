@@ -120,7 +120,7 @@ class SolrDefault extends \VuFind\RecordDriver\SolrDefault
     public function __construct(
         $mainConfig = null,
         $recordConfig = null,
-        $searchSettings = null
+        private $searchSettings = null
     ) {
         parent::__construct($mainConfig, $recordConfig, $searchSettings);
         if (isset($mainConfig->RecordLinks->filter)) {
@@ -178,7 +178,19 @@ class SolrDefault extends \VuFind\RecordDriver\SolrDefault
      */
     public function getSourceId()
     {
-        [$source] = explode('.', $this->getUniqueID());
+        return $this->getSourceIdByRecordId($this->getUniqueId());
+    }
+
+    /**
+     * Identificator of record source by record unique id
+     *
+     * @param string $recordId Record unique id
+     *
+     * @return string
+     */
+    protected function getSourceIdByRecordId(string $recordId)
+    {
+        [$source] = explode('.', $recordId);
         return $source;
     }
 
@@ -755,11 +767,25 @@ class SolrDefault extends \VuFind\RecordDriver\SolrDefault
      * Get related record data
      *
      * @return array
+     * @throws \Exception
      */
     public function getSimilarFromSolrField(): array
     {
         $field = $this->fields['similar_display_mv'] ?? [];
-        return array_map('json_decode', $field);
+        $similarRecords = [];
+
+        if (empty($this->searchSettings->ChildRecordFilters->toArray())) {
+            $similarRecords = array_map('json_decode', $field);
+        } else {
+            foreach ($field as $recordEncoded) {
+                $record = json_decode($recordEncoded);
+                if ($this->getSourceId() === $this->getSourceIdByRecordId($record->id)) {
+                    $similarRecords[] = $record;
+                }
+            }
+        }
+
+        return $similarRecords;
     }
 
     /**
