@@ -29,6 +29,7 @@ return [
             \KnihovnyCz\View\Helper\KnihovnyCz\GoogleTagManager::class => \VuFind\View\Helper\Root\GoogleTagManagerFactory::class,
             \KnihovnyCz\View\Helper\KnihovnyCz\Palmknihy::class => \KnihovnyCz\View\Helper\KnihovnyCz\PalmknihyFactory::class,
             \Laminas\View\Helper\ServerUrl::class => \KnihovnyCz\View\Helper\KnihovnyCz\ServerUrlFactory::class,
+            \KnihovnyCz\View\Helper\KnihovnyCz\Url::class => \VuFind\View\Helper\Root\UrlFactory::class,
         ],
         'invokables' => [
             \KnihovnyCz\View\Helper\KnihovnyCz\FooterLink::class,
@@ -65,6 +66,7 @@ return [
             'socialLinks' => \KnihovnyCz\View\Helper\KnihovnyCz\SocialLinks::class,
             \VuFind\View\Helper\Root\GoogleTagManager::class => \KnihovnyCz\View\Helper\KnihovnyCz\GoogleTagManager::class,
             'palmknihy' => \KnihovnyCz\View\Helper\KnihovnyCz\Palmknihy::class,
+            'url' => \KnihovnyCz\View\Helper\KnihovnyCz\Url::class,
         ],
     ],
     'icons' => [
