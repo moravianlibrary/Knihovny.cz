@@ -34,15 +34,17 @@ RUN curl "https://github.com/vufind-org/vufind/archive/${PARAM_VUFIND_COMMIT}.ta
     rm /tmp/vufind.tar.gz
 
 # Add local dependecies
+
 COPY ./composer.local.json /var/www/knihovny-cz/
+COPY ./composer.json /var/www/knihovny-cz/
 COPY ./Gruntfile.local.js /var/www/knihovny-cz/
 
 # We need to remove original VuFind composer.lock file to composer.local.json be taken into account
 RUN rm /var/www/knihovny-cz/composer.lock
 
 # Install composer dependencies
-RUN COMPOSER_ALLOW_SUPERUSER=1 composer install --no-interaction -q --ignore-platform-req=php
-RUN COMPOSER_ALLOW_SUPERUSER=1 composer update --no-interaction -q --ignore-platform-req=php
+RUN COMPOSER_ALLOW_SUPERUSER=1 composer install --no-interaction --ignore-platform-req=php
+RUN COMPOSER_ALLOW_SUPERUSER=1 composer update --no-interaction --ignore-platform-req=php
 
 #TODO: sentry/sentry still missing
 

@@ -1,6 +1,5 @@
 .idea/*
 !.idea/runConfigurations/
-composer.json
 composer.lock
 docker/*.env
 docker/builds/knihovny-cz-base6/composer.local.json
