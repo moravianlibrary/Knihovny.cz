@@ -210,9 +210,8 @@ cp "../composer.local.json" "./builds/knihovny-cz-base6/"
 cp "../composer.json" "./builds/knihovny-cz-base6/"
 cp "../package.json" "./builds/knihovny-cz-base6/"
 
-build_args=""
 if [[ $no_cache == "true" ]]; then
-    build_args="--no-cache"
+    build_args="$build_args --no-cache"
 fi
 
 for srv in php-extensions6 apache-shibboleth6 knihovny-cz; do
