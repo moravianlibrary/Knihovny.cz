@@ -88,6 +88,6 @@ trait CitaceProTrait
      */
     public function getCitationLink(): string
     {
-        return $this->citacePro->getCitationLink($this->getUniqueID());
+        return $this->citacePro->getCitationLink($this->getUniqueID(), $this->getSourceIdentifier());
     }
 }
