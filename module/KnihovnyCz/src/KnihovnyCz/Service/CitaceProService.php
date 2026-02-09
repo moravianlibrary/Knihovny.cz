@@ -6,6 +6,7 @@ namespace KnihovnyCz\Service;
 
 use VuFind\Config\Config;
 use VuFind\Record\Loader;
+use VuFind\RecordDriver\AbstractBase;
 
 /**
  * Class CitaceProService
@@ -55,9 +56,7 @@ class CitaceProService implements \VuFindHttp\HttpServiceAwareInterface
         if (str_contains($recordId, '|')) {
             [$source, $recordId] = explode('|', $recordId);
         }
-        if ($source != 'Solr') {
-            $record = $this->recordLoader->load($recordId, $source);
-        }
+        $record = $this->getNotLocalRecord($recordId, $source);
         $style = $style && $this->isCitationStyleValid($style) ? $style : $this->getDefaultCitationStyle();
         $openUrl = $record != null
             ? $record->tryMethod('getOpenUrlLinkForCitations', [$style])
@@ -109,14 +108,20 @@ class CitaceProService implements \VuFindHttp\HttpServiceAwareInterface
     /**
      * Get link to citacepro.com
      *
-     * @param string $recordId Record identifier
+     * @param string      $recordId Record identifier
+     * @param string|null $source   Record source identifier (optional)
      *
      * @return string
      */
-    public function getCitationLink(string $recordId): string
+    public function getCitationLink(string $recordId, ?string $source = 'Solr'): string
     {
-        return 'https://www.citacepro.com/nacist-dokument-sysno/'
-            . $recordId . '?katalog=cpk';
+        if ($record = $this->getNotLocalRecord($recordId, $source)) {
+            $params = $record->tryMethod('getOpenUrlParamsForCitation');
+            if (!empty($params)) {
+                return 'https://www.citacepro.com/sfx?' . http_build_query($params);
+            }
+        }
+        return 'https://www.citacepro.com/nacist-dokument-sysno/' . $recordId . '?katalog=cpk';
     }
 
     /**
@@ -152,5 +157,21 @@ class CitaceProService implements \VuFindHttp\HttpServiceAwareInterface
     public function getDefaultCitationStyle(): string
     {
         return $this->defaultCitationStyle;
+    }
+
+    /**
+     * Get record not from local Solr
+     *
+     * @param string      $recordId Record identifier
+     * @param string|null $source   Record source identifier (optional)
+     *
+     * @return AbstractBase|null
+     */
+    protected function getNotLocalRecord(string $recordId, ?string $source = 'Solr'): ?AbstractBase
+    {
+        if ($source != 'Solr') {
+            return $this->recordLoader->load($recordId, $source);
+        }
+        return null;
     }
 }
