@@ -1133,4 +1133,29 @@ class SolrDefault extends \VuFind\RecordDriver\SolrDefault
     {
         return $this->fields['multiplied'] ?? false;
     }
+
+    /**
+     * Get UUIDs (Universally unique identifier). These are commonly used in, for example, digital library or
+     * repository systems and can be a useful match point with third party systems.
+     *
+     * @return array
+     */
+    public function getDisplayUuids(): array
+    {
+        return (array)($this->fields['uuid_display_mv'] ?? []);
+    }
+
+    /**
+     * Get just the first listed UUID (Universally unique identifier), or false if none available.
+     *
+     * @return mixed
+     */
+    public function getCleanUuid()
+    {
+        $uuids = $this->getDisplayUuids();
+        if (empty($uuids) && $parent = $this->getParentRecord()) {
+            $uuids = $parent->getDisplayUuids();
+        }
+        return $uuids[0] ?? false;
+    }
 }

@@ -45,7 +45,7 @@ function loadObalkyKnih() {
       recordId: img.data('id'),
       size: img.data('coversize'),
     };
-    ['isbn', 'ismn', 'issn', 'ean', 'cnb', 'format'].forEach(function createData(key) {
+    ['isbn', 'ismn', 'issn', 'ean', 'cnb', 'uuid', 'format'].forEach(function createData(key) {
       let value = img.data(key);
       if (value) {
         data[key] = value;
