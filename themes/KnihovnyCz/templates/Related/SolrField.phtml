@@ -8,7 +8,7 @@
         $url = $this->recordLinker()->getUrl($data->id);
         $alt = $this->escapeHtmlAttr($data->title);
         $dataAttrs = '';
-        foreach (['id', 'ean', 'cnb', 'isbn', 'issn', 'ismn', 'format'] as $attrName) {
+        foreach (['id', 'ean', 'cnb', 'isbn', 'issn', 'ismn', 'uuid', 'format'] as $attrName) {
           if (isset($data->$attrName)) {
             $value = is_array($data->$attrName) ? $data->$attrName[0] : $data->$attrName;
             $dataAttrs .= sprintf('data-%s="%s" ', $attrName, $value);
