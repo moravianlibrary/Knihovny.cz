@@ -22,6 +22,23 @@ $loadJs = <<<JS
           const link = $(this).find(":selected").data('href');
           reloadContent(link);
         });
+
+        var confirmPurgeRequest = function confirmPurgeRequest(link, action) {
+          $('#submitType').attr('name', action);
+          $(link).parents('form').trigger("submit");
+        }
+        // Purge loan history:
+        $('#confirm_purge_selected_yes').on("click", function renewSelectedRequests(e) {
+          e.preventDefault();
+          confirmPurgeRequest(this, 'purgeSelected');
+        });
+        $('#confirm_purge_all_yes').on("click", function renewAllRequests(e) {
+          e.preventDefault();
+          confirmPurgeRequest(this, 'purgeAll');
+        });
+        $('.confirm_purge_no').on("click", function doNotRenewRequest(e) {
+          e.preventDefault();
+        });
       };
     JS;
 ?>
