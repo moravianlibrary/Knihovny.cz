@@ -1,7 +1,25 @@
 <?php $recordLinker = $this->recordLinker($this->results); ?>
 <?php if ($this->driver->tryMethod('isAvailableForDigitalization')): ?>
   <?php $source = $this->driver->tryMethod('getSourceId', [], '') ?>
-  <a class="btn btn-light" href="<?=$this->url('feedback-form', ['id' => 'DigitalizationSuggestion'], ['query' => ['recordId' => $this->driver->getUniqueID()]]);?>">
+  <?php
+    $query = ['recordId' => $this->driver->getUniqueID()];
+    if ($source === 'nkp') {
+      $query['citation'] = $this->driver->tryMethod('getCitationPlaintext', [], '');
+      $query['recordLink'] = $this->serverUrl($this->recordLinker()->getUrl($this->driver));
+      $query['registerLinkTitle'] = sprintf(
+          'https://registrdigitalizace.cz/results;adv={"title":"%s","autor":"%s","rokvyd":"%s"}',
+          $this->driver->getTitle(),
+          $this->driver->getPrimaryAuthor(),
+          $this->driver->getPublicationDates()[0] ?? ''
+      );
+      $query['registerLinkCnb'] = sprintf(
+          'https://registrdigitalizace.cz/results;adv={"ccnb":"%s"}',
+          $this->driver->getCnb()
+      );
+      $query['callnumber'] = implode(', ', $this->driver->getCallNumbers());
+    }
+  ?>
+  <a class="btn btn-default" href="<?=$this->url('feedback-form', ['id' => 'DigitalizationSuggestion-' . $source], ['query' => $query]);?>">
     <?=$this->transEsc('digitalization_suggestion_button_text');?>
   </a>
 <?php else: ?>

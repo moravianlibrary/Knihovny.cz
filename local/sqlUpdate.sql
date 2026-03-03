@@ -658,3 +658,18 @@ UPDATE `system` SET `value` = '130' WHERE `key`='DB_VERSION';
 -- #1537
 DELETE FROM resource WHERE id NOT IN (SELECT resource_id FROM user_resource )
 DELETE FROM record WHERE record_id NOT IN (SELECT record_id FROM resource)
+
+-- #1134
+--
+-- Table structure for table `nkp_digitalization_requests`
+--
+CREATE TABLE `nkp_digitalization_requests` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `cat_username` varchar(50) DEFAULT NULL,
+  `created` datetime NOT NULL DEFAULT '2000-01-01 00:00:00',
+  `request_data` json DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `cat_username` (`cat_username`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+CREATE VIEW nkp_digitalization_requests AS SELECT * FROM vufind.nkp_digitalization_requests;

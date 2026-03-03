@@ -251,7 +251,7 @@ forms:
             label: "Agriculture"
 
 
-  DigitalizationSuggestion:
+  DigitalizationSuggestion-mzk:
     title: digitalization_suggestion_title
     enabled: true
     useCaptcha: true
@@ -287,4 +287,67 @@ forms:
         label: digitalization_reason
         required: true
       - name: recordId
+        type: hidden
+
+  DigitalizationSuggestion-nkp:
+    title: digitalization_suggestion_title
+    enabled: true
+    useCaptcha: true
+    reportReferrer: true
+    reportUserAgent: true
+    recipient:
+      name: NK ČR
+      email: moravec@mzk.cz
+      #email: NavrhDigitalizace@nkp.cz
+    emailFrom:
+         name: 'Knihovny.cz'
+         email: 'noreply@knihovny.cz'
+
+    onlyForLoggedUsers: true
+    emailSubject: '%%subject%%'
+    response: digitalization_suggestion_response
+    senderNameRequired: false
+    senderEmailRequired: true
+
+    primaryHandler: digitalizationrequestnkp
+    secondaryHandlers:
+      - database
+
+    prefillFields:
+      - recordId
+      - recordLink
+      - citation
+      - registerLinkTitle
+      - registerLinkCnb
+      - callnumber
+
+    help:
+      pre: digitalization_suggestion_help_pre_nkp
+
+    fields:
+      - name: subject
+        type: hidden
+        settings:
+          - [ value, 'Návrh na digitalizaci' ]
+      - name: reason
+        type: textarea
+        label: digitalization_reason
+        required: true
+      - name: recordId
+        label: nkp_digitalization_record_id
+        type: hidden
+      - name: recordLink
+        label: nkp_digitalization_record_link
+        type: hidden
+      - name: citation
+        label: Citation
+        type: hidden
+      - name: registerLinkTitle
+        label: nkp_digitalization_register_link_title
+        type: hidden
+      - name: registerLinkCnb
+        label: nkp_digitalization_register_link_cnb
+        type: hidden
+      - name: callnumber
+        label: Callnumber
         type: hidden
