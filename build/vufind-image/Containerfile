@@ -42,6 +42,7 @@ COPY --from=docker.io/composer:2.9.2 /usr/bin/composer /usr/local/bin/composer
 
 # Prepare vufind build directories
 COPY composer.json ${VUFIND_ROOT}/composer.json
+#COPY --from=vufind-src  /src/vufind/composer.json ${VUFIND_ROOT}/composer.json
 COPY --from=vufind-src /src/vufind/build.xml ${VUFIND_ROOT}/build.xml
 COPY composer.local.json ${VUFIND_ROOT}/composer.local.json
 

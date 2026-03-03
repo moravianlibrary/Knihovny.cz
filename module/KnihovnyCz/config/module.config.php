@@ -522,6 +522,7 @@ $config = [
                     \KnihovnyCz\Db\Row\Notifications::class => \VuFind\Db\Row\RowGatewayFactory::class,
                     \KnihovnyCz\Db\Row\Search::class => \VuFind\Db\Row\RowGatewayFactory::class,
                     \KnihovnyCz\Db\Row\PalmknihyCheckouts::class => \VuFind\Db\Row\RowGatewayFactory::class,
+                    \KnihovnyCz\Db\Row\NkpDigitalizationRequests::class => \VuFind\Db\Row\RowGatewayFactory::class,
                 ],
                 'aliases' => [
                     \VuFind\Db\Row\User::class => \KnihovnyCz\Db\Row\User::class,
@@ -538,10 +539,12 @@ $config = [
                     \KnihovnyCz\Db\Service\CsrfTokenService::class => \VuFind\Db\Service\AbstractDbServiceFactory::class,
                     \KnihovnyCz\Db\Service\UserCardService::class => \VuFind\Db\Service\UserCardServiceFactory::class,
                     \KnihovnyCz\Db\Service\PalmknihyCheckoutsService::class => \KnihovnyCz\Db\Service\PalmknihyCheckoutsServiceFactory::class,
+                    \KnihovnyCz\Db\Service\NkpDigitalizationRequestsService::class => \KnihovnyCz\Db\Service\NkpDigitalizationRequestsServiceFactory::class,
                 ],
                 'aliases' => [
                     \KnihovnyCz\Db\Service\NotificationsServiceInterface::class => \KnihovnyCz\Db\Service\NotificationsService::class,
                     \KnihovnyCz\Db\Service\PalmknihyCheckoutsServiceInterface::class => \KnihovnyCz\Db\Service\PalmknihyCheckoutsService::class,
+                    \KnihovnyCz\Db\Service\NkpDigitalizationRequestsServiceInterface::class => \KnihovnyCz\Db\Service\NkpDigitalizationRequestsService::class,
                     \VuFind\Db\Service\UserService::class => \KnihovnyCz\Db\Service\UserService::class,
                     \VuFind\Db\Service\UserCardService::class => \KnihovnyCz\Db\Service\UserCardService::class,
                 ],
@@ -562,6 +565,7 @@ $config = [
                     \KnihovnyCz\Db\Table\Notifications::class => \VuFind\Db\Table\GatewayFactory::class,
                     \KnihovnyCz\Db\Table\Search::class => \VuFind\Db\Table\GatewayFactory::class,
                     \KnihovnyCz\Db\Table\PalmknihyCheckouts::class => \VuFind\Db\Table\GatewayFactory::class,
+                    \KnihovnyCz\Db\Table\NkpDigitalizationRequests::class => \VuFind\Db\Table\GatewayFactory::class,
                 ],
                 'aliases' => [
                     \VuFind\Db\Table\User::class => \KnihovnyCz\Db\Table\User::class,
@@ -572,6 +576,7 @@ $config = [
                     'notifications' => \KnihovnyCz\Db\Table\Notifications::class,
                     'CsrfToken' => \KnihovnyCz\Db\Table\CsrfToken::class,
                     'PalmknihyCheckouts' => \KnihovnyCz\Db\Table\PalmknihyCheckouts::class,
+                    'nkpDigitalizationRequests' => \KnihovnyCz\Db\Table\NkpDigitalizationRequests::class,
                 ],
             ],
             'ils_driver' => [
@@ -730,10 +735,12 @@ $config = [
                 'factories' => [
                     \KnihovnyCz\Form\Handler\AskLibrary::class => \Laminas\ServiceManager\Factory\InvokableFactory::class,
                     \KnihovnyCz\Form\Handler\DigitalizationRequest::class => \KnihovnyCz\Form\Handler\DigitalizationRequestFactory::class,
+                    \KnihovnyCz\Form\Handler\DigitalizationRequestNkp::class => \KnihovnyCz\Form\Handler\DigitalizationRequestNkpFactory::class,
                 ],
                 'aliases' => [
                     'asklibrary' => \KnihovnyCz\Form\Handler\AskLibrary::class,
                     'digitalizationrequest' => \KnihovnyCz\Form\Handler\DigitalizationRequest::class,
+                    'digitalizationrequestnkp' => \KnihovnyCz\Form\Handler\DigitalizationRequestNkp::class,
                 ],
             ],
             'record_fallbackloader' => [

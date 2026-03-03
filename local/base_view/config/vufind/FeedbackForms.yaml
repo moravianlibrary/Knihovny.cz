@@ -152,7 +152,7 @@ forms:
         settings:
         # help: message_help
 
-  DigitalizationSuggestion:
+  DigitalizationSuggestion-mzk:
     title: digitalization_suggestion_title
     enabled: true
     useCaptcha: true

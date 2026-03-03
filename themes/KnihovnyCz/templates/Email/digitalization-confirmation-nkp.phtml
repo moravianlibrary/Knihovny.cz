@@ -1,0 +1,29 @@
+<?php if ($this->layout()->userLang === 'en'): ?>
+Thank you for your suggestion to digitise the document.
+
+<?php if (!empty($citation)): ?>
+Document: <?=$citation ?>
+
+
+<?php endif; ?>
+We will notify you by email regarding the outcome of your proposal. If the digitisation is successful, we will publish the document in the National Digital Library (https://ndk.cz).
+
+Due to legal restrictions, only works that are not subject to copyright or publishing rights will be freely accessible, allowing viewing outside the library building, as well as downloading and printing. Works that are subject to these rights but are included in the List of Out-of-Commerce Works (https://sdnnt.nkp.cz/sdnnt/home) under a licence for online access will be available for registered users to read online, but not download or print. Works that are protected by copyright and do not have this licence can only be accessed on computers in the library building (again, without the possibility of downloading or printing). Copyright applies to documents whose contributors (authors, translators, illustrators, etc.) died less than 70 years ago. Publishing rights permit the publication of a work no earlier than 50 years after its release.
+
+Further information about the Suggest for Digitisation service can be found on the National Library website - https://www.nkp.cz/en/services/suggest-for-digitisation.
+
+<?php else: ?>
+Děkujeme za Váš návrh na digitalizaci dokumentu.
+
+<?php if (!empty($citation)): ?>
+Dokument: <?=$citation ?>
+
+
+<?php endif; ?>
+O přijetí návrhu i o výsledku Vás budeme informovat e-mailem. V případě úspěšné digitalizace dokument zveřejníme v Národní digitální knihovně (https://ndk.cz)
+
+Vzhledem k zákonným omezením v ní budou volně (s možností prohlížení mimo budovu knihovny, stahování a tisku) zpřístupněna jen díla, na která se nevztahují autorská ani nakladatelská práva. Pokud se na dílo tato práva vztahují, ale zároveň je zařazeno na Seznam děl nedostupných na trhu (https://sdnnt.nkp.cz/) pod licencí pro online přístup, bude pro přihlášené uživatele dostupné pro čtení online (bez možnosti stažení nebo tisku). Chráněná díla, která tuto licenci nemají, pak mohou být zpřístupněna pouze na počítačích v budově knihovny (rovněž bez možnosti stažení nebo tisku). Autorská práva se vztahují na dokumenty, u kterých osoby s podílem na jejich vzniku (autoři, překladatelé, ilustrátoři apod.) zemřely před méně než 70 lety. Nakladatelská práva umožňují zveřejnění díla nejdříve 50 let po jejich vydání.
+
+Více informací ke službě Navrhnout k digitalizaci najdete na webových stránkách Národní knihovny - https://www.nkp.cz/sluzby/navrhnout-k-digitalizaci.
+
+<?php endif; ?>

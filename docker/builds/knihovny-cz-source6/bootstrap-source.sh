@@ -59,6 +59,12 @@ init_obalkyknih_config() {
     cp /tmp/obalkyknih.local.template.ini "$CONFIG_OBALKY"
 }
 
+init_digitalizationrequest_config() {
+    CONFIG_DIGITIZATIONREQUEST="${PARAM_VUFIND_CONFIG_ABS_DIR}/config/vufind/digitalizationrequest.ini"
+
+    cp /tmp/digitalizationrequest.ini "$CONFIG_DIGITIZATIONREQUEST"
+}
+
 init_palmknihy_config() {
     envsubst.a8m -no-unset -i /tmp/palmknihy.local.template.ini -o ${PARAM_VUFIND_CONFIG_ABS_DIR}/config/vufind/palmknihy.local.ini
 }
@@ -68,4 +74,5 @@ init_search2_config "$@"
 init_content_config "$@"
 init_obalkyknih_config "$@"
 init_palmknihy_config "$@"
+init_digitalizationrequest_config "$@"
 exit $?

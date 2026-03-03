@@ -1105,13 +1105,13 @@ class SolrDefault extends \VuFind\RecordDriver\SolrDefault
     /**
      * Attach digitalization request configuration
      *
-     * @param \Vufind\Config\Config $digitaliztationRequestConfig Digitalization request configuration
+     * @param \Vufind\Config\Config $digitalizationRequestConfig Digitalization request configuration
      *
      * @return void
      */
-    public function attachDigitalizationRequestConfig(\Vufind\Config\Config $digitaliztationRequestConfig): void
+    public function attachDigitalizationRequestConfig(\Vufind\Config\Config $digitalizationRequestConfig): void
     {
-        $this->digitalizationrequestConfig = $digitaliztationRequestConfig;
+        $this->digitalizationrequestConfig = $digitalizationRequestConfig;
     }
 
     /**
