@@ -8,6 +8,7 @@ use DateInterval;
 use DatePeriod;
 use DateTime;
 use IntlDateFormatter;
+use Laminas\View\Renderer\RendererInterface;
 
 /**
  * Class NewItems
@@ -34,6 +35,13 @@ class NewItems implements \VuFind\Recommend\RecommendInterface
      * @var bool
      */
     protected $active = false;
+
+    /**
+     * Is new items activated by URL parameter?
+     *
+     * @var bool
+     */
+    protected $isNewItemsParam = false;
 
     /**
      * Translator
@@ -85,10 +93,15 @@ class NewItems implements \VuFind\Recommend\RecommendInterface
     /**
      * NewItems constructor.
      *
-     * @param \Laminas\Mvc\I18n\Translator $translator translator
+     * @param \Laminas\Mvc\I18n\Translator      $translator translator
+     * @param RendererInterface                 $renderer   Renderer
+     * @param \Laminas\Stdlib\ResponseInterface $response   response
      */
-    public function __construct(\Laminas\Mvc\I18n\Translator $translator)
-    {
+    public function __construct(
+        \Laminas\Mvc\I18n\Translator $translator,
+        private readonly RendererInterface $renderer,
+        private readonly \Laminas\Stdlib\ResponseInterface $response
+    ) {
         $this->translator = $translator;
     }
 
@@ -142,7 +155,7 @@ class NewItems implements \VuFind\Recommend\RecommendInterface
     public function init($params, $request)
     {
         $months = $request->get($this->activatingParameter);
-        $this->active = $months ?? false;
+        $this->active = $this->isNewItemsParam = $months ?? false;
         $filters = $params->getRawFilters();
         $hasFilter = false;
         foreach ($filters as $key => $value) {
@@ -170,6 +183,16 @@ class NewItems implements \VuFind\Recommend\RecommendInterface
      */
     public function process($results)
     {
+        if ($this->isNewItemsParam) {
+            $url = $this->renderer->url($results->getOptions()->getSearchAction()) .
+                $results->getUrlQuery()->getParams();
+
+            $this->response->getHeaders()->addHeaderLine('Location', $url);
+            $this->response->setStatusCode(302);
+
+            $this->response->send();
+            exit;
+        }
     }
 
     /**
