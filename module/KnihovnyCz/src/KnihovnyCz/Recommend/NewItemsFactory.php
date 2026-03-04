@@ -45,8 +45,9 @@ class NewItemsFactory implements FactoryInterface
         if (!empty($options)) {
             throw new \Exception('Unexpected options passed to factory.');
         }
-        $translator = $container
-            ->get(\Laminas\Mvc\I18n\Translator::class);
-        return new $requestedName($translator);
+        $translator = $container->get(\Laminas\Mvc\I18n\Translator::class);
+        $renderer = $container->get('ViewRenderer');
+        $response = $container->get('Response');
+        return new $requestedName($translator, $renderer, $response);
     }
 }
