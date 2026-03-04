@@ -17,6 +17,13 @@ use VuFind\Exception\ILS as ILSException;
 class XCNCIP2 extends \VuFind\ILS\Driver\XCNCIP2
 {
     /**
+     * ILS type identifier
+     *
+     * @var string
+     */
+    protected $ilsType;
+
+    /**
      * Lowercased request type strings identifying holds
      *
      * @var string[]
@@ -45,6 +52,9 @@ class XCNCIP2 extends \VuFind\ILS\Driver\XCNCIP2
      */
     public function init()
     {
+        // Set ILS type from configuration
+        $this->ilsType = $this->config['Catalog']['ils_type'] ?? null;
+
         // Needed to make ARL NCIP respond correctly on LookupUser and LookupItem
         $this->schemes['UserIdentifierType']
             = 'http://www.niso.org/ncip/v1_0/imp1/schemes/' .
@@ -52,6 +62,7 @@ class XCNCIP2 extends \VuFind\ILS\Driver\XCNCIP2
         $this->schemes['ItemIdentifierType']
             = 'http://www.niso.org/ncip/v1_0/imp1/schemes/' .
             'visibleitemidentifiertype/visibleitemidentifiertype.scm';
+
         parent::init();
     }
 
@@ -107,8 +118,10 @@ class XCNCIP2 extends \VuFind\ILS\Driver\XCNCIP2
      */
     protected function getHoldType(string $status)
     {
-        // If it work, we keep it hardcoded. If not, we should use 'Estimate' for
-        // some of ILSs
+        // If it works, we keep it as is. If not, we should use 'Estimate' for some of ILSs
+        if (strtolower($this->ilsType ?? '') === 'arl' && strtolower($status) === 'in library use only') {
+            return 'Loan';
+        }
         return 'Hold';
     }
 

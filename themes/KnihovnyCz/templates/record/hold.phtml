@@ -22,10 +22,9 @@
   <?= $this->transEsc('Back to record'); ?>
 </a>
 
-<h2 id="tabnav"><?=$this->transEsc('HoldingLinkText::' . $this->linkText)?></h2>
 <?=$this->component('page-title', ['title' => $this->translate('request_place_text'), 'headTitle' => $this->translate('request_place_text') . ': ' . $this->driver->getBreadcrumb()]);?>
 <?php if ($this->helpTextHtml): ?>
-  <div class="helptext <?=strtolower($this->linkText)?>"><?=$this->helpTextHtml?></div>
+  <div class="helptext <?=strtolower($this->linkText ?? 'reserve')?>"><?=$this->helpTextHtml?></div>
 <?php endif; ?>
 
 <form class="form-record-hold" method="post" name="placeHold" data-clear-account-cache="holds">
