@@ -93,10 +93,13 @@ class PalmknihyCheckoutsService extends AbstractDbService implements
      * @param string $email    User email address
      * @param string $sourceId Source identifier
      *
-     * @return ResultSetInterface
+     * @return ?ResultSetInterface
      */
-    public function getCheckoutsForUser(string $email, string $sourceId): ResultSetInterface
+    public function getCheckoutsForUser(string $email, string $sourceId): ?ResultSetInterface
     {
+        if (empty($email)) {
+            return null;
+        }
         return $this->dbTable->select($this->getCallbackFunction($email, $sourceId));
     }
 
@@ -106,10 +109,13 @@ class PalmknihyCheckoutsService extends AbstractDbService implements
      * @param string $email    User email address
      * @param string $sourceId Source identifier
      *
-     * @return ResultSetInterface
+     * @return ?ResultSetInterface
      */
-    public function getCheckoutsHistoryForUser(string $email, string $sourceId): ResultSetInterface
+    public function getCheckoutsHistoryForUser(string $email, string $sourceId): ?ResultSetInterface
     {
+        if (empty($email)) {
+            return null;
+        }
         return $this->dbTable->select($this->getCallbackFunction($email, $sourceId, null, true));
     }
 

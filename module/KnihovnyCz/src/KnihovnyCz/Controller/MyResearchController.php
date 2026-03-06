@@ -955,7 +955,7 @@ class MyResearchController extends MyResearchControllerBase
             return $this->forceLogin();
         }
         $this->flashRedirect()->restore();
-        $email = trim($patron['email']);
+        $email = trim($patron['email'] ?? '');
 
         $dbServiceManager = $this->serviceLocator->get(\VuFind\Db\Service\PluginManager::class);
         $palmknihyService = $dbServiceManager->get(PalmknihyCheckoutsServiceInterface::class);
@@ -975,6 +975,9 @@ class MyResearchController extends MyResearchControllerBase
 
         $recordLoader = $this->serviceLocator->get(RecordLoader::class);
         $checkoutsFunction = function ($dbCheckouts) use ($recordLoader) {
+            if ($dbCheckouts === null) {
+                return [];
+            }
             $checkouts = [];
             $ids = [];
             foreach ($dbCheckouts as $dbCheckout) {
@@ -1002,6 +1005,9 @@ class MyResearchController extends MyResearchControllerBase
             ]
         );
         $result = $this->getViewRenderer()->render($view);
+        if (empty($email)) {
+            $this->flashMessenger()->addErrorMessage('palmknihy_error_patron_has_no_email_address');
+        }
         return $this->getAjaxResponse('text/html', $result, 200);
     }
 

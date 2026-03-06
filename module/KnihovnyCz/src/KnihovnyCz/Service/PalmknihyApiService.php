@@ -59,7 +59,7 @@ class PalmknihyApiService implements HttpServiceAwareInterface
         $palmknihyEnabled = $this->isPalmknihyEnabled($source);
         $booksEnabled = $this->isPalmknihyBooksEnabled($source);
         $audiobooksEnabled = $this->isPalmknihyAudiobooksEnabled($source);
-        $email = $patron['email'];
+        $email = $patron['email'] ?? null;
         $errors = [];
         try {
             $expireDate = $this->dateConverter->parseDisplayDate($patron['expiration_date']);
@@ -84,14 +84,19 @@ class PalmknihyApiService implements HttpServiceAwareInterface
         if ($palmknihyEnabled && $record->tryMethod('isPalmknihyAudioBook') && !$audiobooksEnabled) {
             $errors[] = 'palmknihy_error_audiobooks_lending_disabled';
         }
+        if ($record->tryMethod('getPalmknihyId') === null) {
+            $errors[] = 'palmknihy_error_record_id_not_found';
+        }
+        if (empty($email)) {
+            $errors[] = 'palmknihy_error_patron_has_no_email_address';
+            // return early, as there is no point in checking further
+            return $errors;
+        }
         if ($user->getActivePalmknihyCheckoutsCount($email, $source) >= $this->getPalmknihyMaxCheckouts($source)) {
             $errors[] = 'palmknihy_error_too_many_issues';
         }
         if ($user->hasSamePalmknihyCheckout($email, $record, $source)) {
             $errors[] = 'palmknihy_error_duplicated_loan';
-        }
-        if ($record->tryMethod('getPalmknihyId') === null) {
-            $errors[] = 'palmknihy_error_record_id_not_found';
         }
 
         return $errors;
