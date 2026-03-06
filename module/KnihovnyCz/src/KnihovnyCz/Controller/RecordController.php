@@ -479,7 +479,7 @@ class RecordController extends \VuFind\Controller\RecordController implements Ht
         if (!is_array($patron = $this->catalogLogin())) {
             return $patron;
         }
-        $email = trim($patron['email']);
+        $email = trim($patron['email'] ?? '');
         $source = $this->params()->fromQuery('source', '');
         $confirmed = $this->params()->fromQuery('confirmed', false);
         $user = $this->getUser();
@@ -490,7 +490,7 @@ class RecordController extends \VuFind\Controller\RecordController implements Ht
         $palmknihyService = $dbServiceManager->get(PalmknihyCheckoutsServiceInterface::class);
         $palmknihyApiService = $this->serviceLocator->get(\KnihovnyCz\Service\PalmknihyApiService::class);
         $driver = $this->loadRecord();
-        $activeCheckoutsCount = $user->getActivePalmknihyCheckoutsCount($email, $source);
+        $activeCheckoutsCount = !empty($email) ? $user->getActivePalmknihyCheckoutsCount($email, $source) : 0;
 
         $errors = [];
         if (empty($source)) {
