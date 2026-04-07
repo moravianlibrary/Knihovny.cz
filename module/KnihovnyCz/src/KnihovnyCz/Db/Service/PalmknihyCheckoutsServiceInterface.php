@@ -56,9 +56,9 @@ interface PalmknihyCheckoutsServiceInterface extends \VuFind\Db\Service\DbServic
      * @param string $email    User email address
      * @param string $sourceId Source identifier
      *
-     * @return ResultSetInterface
+     * @return ?ResultSetInterface
      */
-    public function getCheckoutsForUser(string $email, string $sourceId): ResultSetInterface;
+    public function getCheckoutsForUser(string $email, string $sourceId): ?ResultSetInterface;
 
     /**
      * Get the past checkouts for a given user.
@@ -66,7 +66,7 @@ interface PalmknihyCheckoutsServiceInterface extends \VuFind\Db\Service\DbServic
      * @param string $email    User email address
      * @param string $sourceId Source identifier
      *
-     * @return ResultSetInterface
+     * @return ?ResultSetInterface
      */
-    public function getCheckoutsHistoryForUser(string $email, string $sourceId): ResultSetInterface;
+    public function getCheckoutsHistoryForUser(string $email, string $sourceId): ?ResultSetInterface;
 }

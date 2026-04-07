@@ -232,6 +232,29 @@ class SearchController extends \VuFind\Controller\SearchController
     }
 
     /**
+     * Support method for getSearchResultsView() -- return the search results
+     * reformatted as an RSS feed.
+     *
+     * @param $view ViewModel View model
+     *
+     * @return Response
+     */
+    protected function getRssSearchResponse(ViewModel $view): Response
+    {
+        // Build the RSS feed:
+        $feedHelper = $this->getViewRenderer()->plugin('resultfeed');
+        $feed = $feedHelper($view->results);
+        $writer = new \Laminas\Feed\Writer\Renderer\Feed\Rss($feed);
+        $writer->render();
+
+        // Format the response:
+        $response = $this->getResponse();
+        $response->getHeaders()->addHeaderLine('Content-type', 'text/xml');
+        $response->setContent($writer->saveXml());
+        return $response;
+    }
+
+    /**
      * Disable link to page with the last results in pagination if the limit on
      * number of results is exceeded.
      *

@@ -44,6 +44,7 @@ $loadJs = <<<JS
         const holds = $("table[id='holding_items']");
         let data = record;
         let selector = '';
+        let showAvailabilityStatus15Info = false;
         if (filter != null && value != null) {
           data[filter] = value;
           selector = "[data-" + filter + "='" + value + "']";
@@ -69,6 +70,9 @@ $loadJs = <<<JS
           .done(function ajaxLookupDone(response) {
             response.data.holding.forEach(function (item) {
               var elm = null;
+              if (item?.availability_status_code == 15) {
+                showAvailabilityStatus15Info = true;
+              }
               if (item.item_id) {
                 elm = holds.find('tr[data-item-id="' + item.item_id + '"]');
               } else if (item.number) {
@@ -146,6 +150,9 @@ $loadJs = <<<JS
             });
             handleMissingHoldings('missing');
             updateHoldingsTable();
+            if (showAvailabilityStatus15Info) {
+              $('#availabilityStatus15Info').removeClass('hidden');
+            }
           })
           .fail(function ajaxLookupFail() {
             handleMissingHoldings('failed');
@@ -324,6 +331,7 @@ $loadJs = <<<JS
     <?php endforeach; ?>
     </tbody>
   </table>
+  <div id="availabilityStatus15Info" class="alert alert-secondary hidden"><?=$this->translate('availabilityStatus15Info')?></div>
 <?php endif; ?>
 
 <?php if ($itemLinks = $this->driver->tryMethod('getItemLinks')) : ?>

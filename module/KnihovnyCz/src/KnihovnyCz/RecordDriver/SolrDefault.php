@@ -410,7 +410,7 @@ class SolrDefault extends \VuFind\RecordDriver\SolrDefault
              * @var \KnihovnyCz\RecordDriver\SolrDefault|null $parent
              */
             $parent = $this->getParentRecord();
-            $summary = ($parent !== null) ? $parent->getSummary() : [];
+            $summary = $parent->fields['obalky_annotation_txt_mv'] ?? [];
         }
         return $summary;
     }

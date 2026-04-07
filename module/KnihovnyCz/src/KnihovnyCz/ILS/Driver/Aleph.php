@@ -253,6 +253,7 @@ class Aleph extends AlephBase
                 'holdtype' => $holdType,
                 'availability' => $availability,
                 'availability_status' => (string)$z30->{'z30-item-status'},
+                'availability_status_code' => $item_status_code,
                 'status' => $fullStatus,
                 'location' => (string)$z30->{'z30-sub-library'},
                 'reserve' => 'N',
