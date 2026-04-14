@@ -4,6 +4,11 @@
   $textFormatter = $this->textFormatter($this->driver);
 ?>
 <?=$textFormatter->formatArray('Published', 'getPublicationDetails', '', false, true)?>
+<?=$textFormatter->formatString('Published in', 'getContainerTitle')?>
+<?=$textFormatter->formatString('Volume', 'getContainerVolume')?>
+<?=$textFormatter->formatString('Issue', 'getContainerIssue')?>
+<?=$textFormatter->formatString('Pages', 'getContainerPages')?>
+<?=$textFormatter->formatString('Year', 'getYearFromField773')?>
 <?=$textFormatter->formatArray('Language', 'getLanguages')?>
 <?=$textFormatter->formatArray('From monographic series', 'getMonographicSeries', 'desc')?>
 <?=$textFormatter->formatArray('Physical Description', 'getPhysicalDescriptions')?>

@@ -108,6 +108,82 @@ class SolrMarcTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Test container methods read from MARC field 773
+     *
+     * @return void
+     */
+    public function testContainerMethodsFromField773(): void
+    {
+        $filename = 'records/article-with-773.json';
+        $fixture = $this->getJsonFixture($filename, 'KnihovnyCz');
+        $record = $this->createDriver($fixture['response']['docs'][0]);
+
+        $this->assertEquals('Ekonom', $record->getContainerTitle());
+        $this->assertEquals('69', $record->getContainerVolume());
+        $this->assertEquals('12', $record->getContainerIssue());
+        $this->assertEquals('34', $record->getContainerStartPage());
+        $this->assertEquals('36', $record->getContainerEndPage());
+        $this->assertEquals('34-36', $record->getContainerPages());
+        $this->assertEquals('2025', $record->getYearFromField773());
+    }
+
+    /**
+     * Test getting container pages
+     *
+     * @return void
+     * @throws \Exception
+     */
+    public function testContainerPages(): void
+    {
+        $filename = 'records/article-with-773.json';
+        $fixture = $this->getJsonFixture($filename, 'KnihovnyCz');
+        $record = $this->createDriver($fixture['response']['docs'][0]);
+        $this->assertEquals('34', $record->getContainerStartPage());
+        $this->assertEquals('36', $record->getContainerEndPage());
+        $this->assertEquals('34-36', $record->getContainerPages());
+
+        $filename = 'records/article-with-773strana.json';
+        $fixture = $this->getJsonFixture($filename, 'KnihovnyCz');
+        $record = $this->createDriver($fixture['response']['docs'][0]);
+        $this->assertEquals('34', $record->getContainerStartPage());
+        $this->assertEquals('36', $record->getContainerEndPage());
+        $this->assertEquals('34-36', $record->getContainerPages());
+
+        $filename = 'records/article-with-773start.json';
+        $fixture = $this->getJsonFixture($filename, 'KnihovnyCz');
+        $record = $this->createDriver($fixture['response']['docs'][0]);
+        $this->assertEquals('34', $record->getContainerStartPage());
+        $this->assertEquals(null, $record->getContainerEndPage());
+        $this->assertEquals('34', $record->getContainerPages());
+
+        $filename = 'records/article-with-773stranaStart.json';
+        $fixture = $this->getJsonFixture($filename, 'KnihovnyCz');
+        $record = $this->createDriver($fixture['response']['docs'][0]);
+        $this->assertEquals('34', $record->getContainerStartPage());
+        $this->assertEquals(null, $record->getContainerEndPage());
+        $this->assertEquals('34', $record->getContainerPages());
+    }
+
+    /**
+     * Test container methods return empty string when field 773 is absent
+     *
+     * @return void
+     */
+    public function testContainerMethodsEmptyWithoutField773(): void
+    {
+        $filename = 'records/record1.json';
+        $fixture = $this->getJsonFixture($filename, 'KnihovnyCz');
+        $record = $this->createDriver($fixture['response']['docs'][0]);
+
+        $this->assertEquals('', $record->getContainerTitle());
+        $this->assertEquals('', $record->getContainerVolume());
+        $this->assertEquals('', $record->getContainerIssue());
+        $this->assertEquals('', $record->getContainerStartPage());
+        $this->assertEquals('', $record->getContainerEndPage());
+        $this->assertEquals('', $record->getContainerPages());
+    }
+
+    /**
      * Create new record driver
      *
      * @param array $fieldData Field data from SOLR response
