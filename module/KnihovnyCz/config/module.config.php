@@ -845,6 +845,7 @@ $config = [
                 'X-Frame-Options' => 'deny',
                 'X-Permitted-Cross-Domain-Policies' => 'none',
                 'X-XSS-Protection' => '1; mode=block',
+                'Cross-Origin-Opener-Policy' => 'same-origin',
             ],
             // specific routes:
             'embedded-libraries' => [
