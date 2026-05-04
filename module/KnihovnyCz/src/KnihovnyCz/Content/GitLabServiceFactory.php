@@ -35,9 +35,6 @@ class GitLabServiceFactory
         $requestedName,
         ?array $options = null
     ) {
-        $service = new $requestedName(
-            $_ENV['GITLAB_API_TOKEN']
-        );
-        return $service;
+        return new $requestedName(getenv('GITLAB_API_TOKEN'));
     }
 }
