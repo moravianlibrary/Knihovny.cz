@@ -344,4 +344,31 @@ class Connection extends ConnectionBase
         }
         return false;
     }
+
+    /**
+     * Get holdings
+     *
+     * Retrieve holdings from ILS driver class and normalize result array and availability if needed.
+     *
+     * @param string $id      The record id to retrieve the holdings for
+     * @param array  $patron  Patron data
+     * @param array  $options Additional options
+     *
+     * @return array Array with holding data
+     */
+    public function getHolding($id, $patron = null, $options = [])
+    {
+        $holdingsFromIls = parent::getHolding($id, $patron, $options);
+        $purifierConfig = \HTMLPurifier_Config::createDefault();
+        $purifierConfig->set('HTML.Allowed', '');
+        $htmlPurifier = new \HTMLPurifier($purifierConfig);
+        foreach ($holdingsFromIls['holdings'] as &$holding) {
+            foreach ($holding as &$item) {
+                if (is_string($item)) {
+                    $item = $htmlPurifier->purify($item);
+                }
+            }
+        }
+        return $holdingsFromIls;
+    }
 }
