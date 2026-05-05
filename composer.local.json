@@ -27,9 +27,9 @@
             "VuFindSearch\\": "module/VuFindSearch/src/VuFindSearch",
             "VuFindTheme\\": "module/VuFindTheme/src/VuFindTheme",
             "KnihovnyCz\\": "module/KnihovnyCz/src/KnihovnyCz",
-            "KnihovnyCzApi\\": "module/KnihovnyCz/src/KnihovnyCz",
-            "KnihovnyCzConsole\\": "module/KnihovnyCz/src/KnihovnyCz",
-            "KnihovnyCzCronApi\\": "module/KnihovnyCz/src/KnihovnyCz"
+            "KnihovnyCzApi\\": "module/KnihovnyCzApi/src/KnihovnyCzApi",
+            "KnihovnyCzConsole\\": "module/KnihovnyCzConsole/src/KnihovnyCzConsole",
+            "KnihovnyCzCronApi\\": "module/KnihovnyCzCronApi/src/KnihovnyCzCronApi"
         },
         "psr-0": {
             "minSO": "module/VuFind/src/VuFind/Search"

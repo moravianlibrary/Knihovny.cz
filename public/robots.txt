@@ -18,4 +18,4 @@ Disallow: /Record/*/Cite
 Disallow: /Record/*/ZiskejMvs
 Disallow: /Record/*/Buy
 Disallow: /Record/*/Email
-Disallow: /Record/*?mylang=*
+Disallow: /Record/*?lng=*

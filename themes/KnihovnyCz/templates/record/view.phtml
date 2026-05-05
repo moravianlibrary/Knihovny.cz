@@ -31,6 +31,53 @@
   $canonicalUrl = $this->recordLinker()->getUrl($this->driver, ['excludeSearchId' => true]);
   $this->headLink(['rel' => 'canonical', 'href' => $canonicalUrl]);
 
+  // SEO: set record-specific Open Graph and meta data
+  $this->layout()->seoOgType = 'book';
+  $this->layout()->seoOgUrl = $canonicalUrl;
+  $recordSummary = $this->driver->getSummary();
+  if (!empty($recordSummary)) {
+    $seoDescription = mb_substr(strip_tags(implode(' ', (array)$recordSummary)), 0, 160);
+    $this->layout()->seoDescription = $seoDescription;
+  }
+
+  // JSON-LD structured data (schema.org Book)
+  $jsonLdData = [
+    '@context' => 'https://schema.org',
+    '@type' => 'Book',
+    'name' => $this->driver->getTitle(),
+    'url' => $canonicalUrl,
+  ];
+  $jsonLdAuthors = $this->driver->getPrimaryAuthors();
+  if (!empty($jsonLdAuthors)) {
+    $jsonLdData['author'] = array_map(
+        fn ($a) => ['@type' => 'Person', 'name' => $a],
+        $jsonLdAuthors
+    );
+  }
+  $jsonLdIsbns = $this->driver->getISBNs();
+  if (!empty($jsonLdIsbns)) {
+    $jsonLdData['isbn'] = $jsonLdIsbns[0];
+  }
+  $jsonLdPublishers = $this->driver->getPublishers();
+  if (!empty($jsonLdPublishers)) {
+    $jsonLdData['publisher'] = ['@type' => 'Organization', 'name' => $jsonLdPublishers[0]];
+  }
+  $jsonLdDates = $this->driver->getPublicationDates();
+  if (!empty($jsonLdDates)) {
+    $jsonLdData['datePublished'] = $jsonLdDates[0];
+  }
+  $jsonLdLanguages = $this->driver->getLanguages();
+  if (!empty($jsonLdLanguages)) {
+    $jsonLdData['inLanguage'] = $jsonLdLanguages[0];
+  }
+  if (isset($seoDescription)) {
+    $jsonLdData['description'] = $seoDescription;
+  }
+  $this->layout()->jsonLd = json_encode(
+      $jsonLdData,
+      JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_HEX_TAG
+  );
+
   // Set up breadcrumbs:
   $this->breadcrumbs()->reset();
   if ($url = $this->searchMemory()->getLastSearchUrl()) {

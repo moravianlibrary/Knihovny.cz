@@ -5,7 +5,8 @@
 ?>
 <?=$this->doctype()?>
 <?php
-$description = $this->translate('meta_description');
+// Use page-specific description if set by a page template, otherwise fall back to portal default
+$description = $this->layout()->seoDescription ?? $this->translate('meta_description');
 $this->headMeta()->appendName('description', $description);
 $this->headMeta()->appendName('referrer', 'unsafe-url');
 $this->headMeta()->setProperty('og:description', $description);
@@ -59,6 +60,13 @@ $this->headMeta()->appendName('format-detection', 'telephone=no');
       $this->headTitle()->setAutoEscape(true);
       echo $this->headTitle($fullTitle, \Laminas\View\Helper\Placeholder\Container\AbstractContainer::SET);
       $this->headMeta()->setProperty('og:title', $fullTitle);
+      $this->headMeta()->setProperty('og:url', $this->layout()->seoOgUrl ?? $this->serverUrl(true));
+      $this->headMeta()->setProperty('og:type', $this->layout()->seoOgType ?? 'website');
+      $this->headMeta()->setProperty('og:site_name', $siteConfig->title);
+      $this->headMeta()->appendName('twitter:card', 'summary_large_image');
+      $this->headMeta()->appendName('twitter:title', $fullTitle);
+      $this->headMeta()->appendName('twitter:description', $description);
+      $this->headMeta()->appendName('twitter:image', $imageUrl);
 
       // Set up OpenSearch link:
       $this->headLink(
@@ -76,6 +84,9 @@ $this->headMeta()->appendName('format-detection', 'telephone=no');
       $icons = !isset($this->renderingError) ? $this->render('js-icons.phtml') : '{}';
     ?>
     <?=$this->headMeta()?>
+    <?php if (!empty($this->layout()->jsonLd)): ?>
+    <script type="application/ld+json"><?=$this->layout()->jsonLd?></script>
+    <?php endif; ?>
 
     <?php if ($this->layout()->rtl) {
       // RTL styling

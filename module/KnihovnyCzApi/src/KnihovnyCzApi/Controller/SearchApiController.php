@@ -132,20 +132,44 @@ class SearchApiController extends \VuFindApi\Controller\SearchApiController
      */
     public function recordAction()
     {
-        $request = $this->getRequest()->getQuery()->toArray()
-            + $this->getRequest()->getPost()->toArray();
+        $request = $this->getRequest()->getQuery()->toArray() + $this->getRequest()->getPost()->toArray();
         $uriPath = $this->getRequest()->getUri()->getPath();
         $id = $request['id'] ?? '';
-        if (
-            str_starts_with($id, 'library')
-            && str_starts_with($uriPath ?? '', '/api/v1/record')
-        ) {
-            $url = $this->url()->fromRoute('record2Apiv1');
-            $url .= str_contains($url, '?') ? '&' : '?';
-            $url .= http_build_query($request);
-            return $this->redirect()->toUrl($url);
+        try {
+            if (str_starts_with($uriPath, '/api/v1/record') && $this->redirectToLibraryRoute($id)) {
+                return $this->redirect()->toRoute('record2Apiv1', [], ['query' => $request]);
+            }
+        } catch (\InvalidArgumentException $e) {
+            return $this->output(
+                [],
+                self::STATUS_ERROR,
+                500,
+                $e->getMessage()
+            );
         }
         return parent::recordAction();
+    }
+
+    /**
+     * Check if the request should be redirected to library route
+     *
+     * @param string|array $ids Single ID or array of IDs to check
+     *
+     * @return bool True if should redirect to library route, false otherwise
+     * @throws \InvalidArgumentException If not all identifiers are of the same type
+     */
+    protected function redirectToLibraryRoute(string|array $ids): bool
+    {
+        $checkFunction = fn ($id) => str_starts_with($id, 'library');
+        $redirectToLibraryRoute = false;
+        if (is_array($ids)) {
+            $libraryIds = array_filter($ids, $checkFunction);
+            if (count($libraryIds) > 0 && count($libraryIds) !== count($ids)) {
+                throw new \InvalidArgumentException('All identifiers should be the same type, biblio or library');
+            }
+            $redirectToLibraryRoute = count($libraryIds) > 0;
+        }
+        return $redirectToLibraryRoute || $checkFunction(is_string($ids) ? $ids : '');
     }
 
     /**

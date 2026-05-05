@@ -1,0 +1,26 @@
+{
+  "responseHeader": {
+    "status": 0,
+    "QTime": 1,
+    "params": {
+      "q": "id:anl.ANL01-002083283"
+    }
+  },
+  "response": {
+    "numFound": 1,
+    "start": 0,
+    "docs": [
+      {
+        "id": "anl.ANL01-002083283",
+        "record_format": "marc21",
+        "format_display_mv": ["0/ARTICLES/"],
+        "title_display": "Stravenky nebo zaměstnanecké akcie? Generace Z chce od práce něco úplně jiného",
+        "author_display": "Michael Mareš, 1984-",
+        "publishDate_display": ["2025"],
+        "issn_display_mv": ["1210-0714"],
+        "fullrecord": "{\"leader\":\"00000naa a2200000   4500\",\"fields\":[{\"001\":\"ANL01-002083283\"},{\"100\":{\"ind1\":\"1\",\"ind2\":\" \",\"subfields\":[{\"a\":\"Michael Mareš, 1984-\"}]}},{\"245\":{\"ind1\":\"1\",\"ind2\":\"0\",\"subfields\":[{\"a\":\"Stravenky nebo zaměstnanecké akcie? Generace Z chce od práce něco úplně jiného\"}]}},{\"773\":{\"ind1\":\"0\",\"ind2\":\" \",\"subfields\":[{\"t\":\"Ekonom\"},{\"x\":\"1210-0714\"},{\"q\":\"69:12\"},{\"g\":\"Roč. 69, č. 12 (2025), strana 34\"},{\"9\":\"2025\"}]}}]}"
+
+      }
+    ]
+  }
+}

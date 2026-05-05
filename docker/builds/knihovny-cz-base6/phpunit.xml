@@ -5,6 +5,7 @@
   <testsuites>
     <testsuite name="Knihovny.cz Tests">
       <directory>/var/www/knihovny-cz/module/KnihovnyCz/tests/</directory>
+      <directory>/var/www/knihovny-cz/module/KnihovnyCzApi/tests/</directory>
     </testsuite>
   </testsuites>
 </phpunit>

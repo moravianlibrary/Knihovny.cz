@@ -21,6 +21,8 @@ class SolrMarc extends SolrDefault
     use Feature\BibframeTrait;
     use Feature\PatentTrait;
 
+    protected const PAGE_PATTERN = '/(s\.|strana)\s(\d+)(?:-(\d+))?/';
+
     /**
      * Cartographic material scale from marc record
      *
@@ -429,7 +431,7 @@ class SolrMarc extends SolrDefault
     {
         $f773 = $this->getField773();
         if (isset($f773[0]['g'])) {
-            if (preg_match('/(s\.)\s(\d+)-(\d+)/', $f773[0]['g'], $matches)) {
+            if (preg_match(self::PAGE_PATTERN, $f773[0]['g'], $matches)) {
                 return $matches[2] ?? null;
             }
         }
@@ -446,12 +448,78 @@ class SolrMarc extends SolrDefault
     {
         $f773 = $this->getField773();
         if (isset($f773[0]['g'])) {
-            if (preg_match('/(s\.)\s(\d+)-(\d+)/', $f773[0]['g'], $matches)) {
+            if (preg_match(self::PAGE_PATTERN, $f773[0]['g'], $matches)) {
                 return $matches[3] ?? null;
             }
         }
 
         return null;
+    }
+
+    /**
+     * Get container title (journal name) from field 773 subfield t
+     *
+     * @return string
+     */
+    public function getContainerTitle(): string
+    {
+        $f773 = $this->getField773();
+        return $f773[0]['t'] ?? parent::getContainerTitle();
+    }
+
+    /**
+     * Get container volume from field 773
+     *
+     * @return string
+     */
+    public function getContainerVolume(): string
+    {
+        return $this->getPYearFromField773() ?? parent::getContainerVolume();
+    }
+
+    /**
+     * Get container issue from field 773
+     *
+     * @return string
+     */
+    public function getContainerIssue(): string
+    {
+        return $this->getPNumberFromField773() ?? parent::getContainerIssue();
+    }
+
+    /**
+     * Get container start page from field 773
+     *
+     * @return string
+     */
+    public function getContainerStartPage(): string
+    {
+        return $this->parsePageStartFromField773() ?? parent::getContainerStartPage();
+    }
+
+    /**
+     * Get container end page from field 773
+     *
+     * @return string
+     */
+    public function getContainerEndPage(): string
+    {
+        return $this->parsePageEndFromField773() ?? parent::getContainerEndPage();
+    }
+
+    /**
+     * Get container page range from field 773 (e.g. "34-36" or "34")
+     *
+     * @return string
+     */
+    public function getContainerPages(): string
+    {
+        $start = $this->getContainerStartPage();
+        if (empty($start)) {
+            return '';
+        }
+        $end = $this->getContainerEndPage();
+        return empty($end) || $end === $start ? $start : "$start-$end";
     }
 
     /**
