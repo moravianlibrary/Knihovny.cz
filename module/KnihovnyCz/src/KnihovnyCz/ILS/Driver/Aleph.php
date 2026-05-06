@@ -1208,6 +1208,11 @@ class Aleph extends AlephBase
             $data['media'] = $media;
             $data['delivery-method'] = $deliveryMethod;
         }
+        $sourceData = [
+            'original' => '',
+            'node' => null,
+            'append' => '',
+        ];
         foreach ($form as $id => $group) {
             $fields = $group['fields'] ?? [];
             foreach ($fields as $key => $config) {
@@ -1220,7 +1225,7 @@ class Aleph extends AlephBase
                         $value = $lastInterestDate->format('Ymd');
                     }
                 }
-                if ($value == null) {
+                if ($value == null && $key != 'source') {
                     continue;
                 }
                 $target = $config['target'] ?? 'xml';
@@ -1235,18 +1240,30 @@ class Aleph extends AlephBase
                         'variableField' => $config['variableField'],
                         'value' =>  $value,
                     ];
+                    if (!empty($value)) {
+                        $sourceData['append'] .= ', ' . $key . ': ' . $value;
+                    }
                     continue;
                 }
+                $value ??= '';
                 $element = $illDom->createElement($key);
-                $element->appendChild($illDom->createTextNode($this->escapeTextNode($value)));
+                $textNode = $illDom->createTextNode($this->escapeTextNode($value));
+                $element->appendChild($textNode);
                 $illRootNode->appendChild($element);
+                if ($key == 'source') {
+                    $sourceData['node'] = $textNode;
+                    $sourceData['original'] = $value;
+                }
             }
+        }
+        if (!empty($sourceData['append']) && $sourceData['node'] != null) {
+            $sourceData['node']->appendData($sourceData['append']);
         }
         $xml = $illDom->saveXML();
         $this->getLogger()->debug($xml);
+        $request = ($type == 'serial') ? 'SE' : 'MN';
+        $path = ['patron', $patronId, 'record', $request, 'ill'];
         try {
-            $request = ($type == 'serial') ? 'SE' : 'MN';
-            $path = ['patron', $patronId, 'record', $request, 'ill'];
             $result = $this->doRestDLFRequest(
                 $path,
                 null,
@@ -1263,36 +1280,53 @@ class Aleph extends AlephBase
         if (empty($variableFields)) {
             return ['success' => true, 'id' => $docNum];
         }
+
         $findDocParams = ['base' => $base, 'doc_num' => $docNum];
-        $document = $this->doXRequest('find-doc', $findDocParams, true);
-        foreach ($variableFields as $variableField) {
-            $target = $variableField['variableField'];
-            $value = $variableField['value'];
-            $id = substr($target, 0, 3);
-            $i1 = substr($target, 3, 1) ?: ' ';
-            $i2 = substr($target, 4, 1) ?: ' ';
-            $label = substr($target, 5, 1) ?: 'a';
-            $variableField = $document->xpath("//varfield[@id='$id' and @i1='$i1' and @i2='$i2']");
-            if (empty($variableField)) {
-                $variableField = $document->{'record'}->{'metadata'}->{'oai_marc'}->addChild('varfield');
-                $variableField->addAttribute('id', $id);
-                $variableField->addAttribute('i1', $i1);
-                $variableField->addAttribute('i2', $i2);
-            } else {
-                $variableField = $variableField[0];
+        // repeat request in a case of failure and fetch the document again in case of a concurrent modifications. If
+        // both attempts fail, do not return error - fields are backed in source.
+        for ($i = 1; $i <= 2; $i++) {
+            $document = $this->doXRequest('find-doc', $findDocParams, true);
+            foreach ($variableFields as $variableField) {
+                $target = $variableField['variableField'];
+                $value = $variableField['value'];
+                $id = substr($target, 0, 3);
+                $i1 = substr($target, 3, 1) ?: ' ';
+                $i2 = substr($target, 4, 1) ?: ' ';
+                $label = substr($target, 5, 1) ?: 'a';
+                $variableField = $document->xpath("//varfield[@id='$id' and @i1='$i1' and @i2='$i2']");
+                if (empty($variableField)) {
+                    $variableField = $document->{'record'}->{'metadata'}->{'oai_marc'}->addChild('varfield');
+                    $variableField->addAttribute('id', $id);
+                    $variableField->addAttribute('i1', $i1);
+                    $variableField->addAttribute('i2', $i2);
+                } else {
+                    $variableField = $variableField[0];
+                }
+                $subfield = $variableField->addChild('subfield', $value);
+                $subfield->addAttribute('label', $label);
             }
-            $subfield = $variableField->addChild('subfield', $value);
-            $subfield->addAttribute('label', $label);
-        }
-        $updateDocParams = ['library' => $base, 'doc_num' => $docNum];
-        $xml = $document->asXml();
-        $updateDocParams['xml_full_req'] = $xml;
-        $this->getLogger()->debug($xml);
-        $updateDocParams['doc_action'] = 'UPDATE';
-        try {
-            $update = $this->doXRequestUsingPost('update-doc', $updateDocParams, true);
-        } catch (\Exception $ex) {
-            return ['success' => false, 'sysMessage' => $ex->getMessage()];
+            if (!empty($sourceData['original'])) {
+                $sourceField = $document->xpath("//varfield[@id='590' and @i1=' ' and @i2=' ']/subfield[@label='a']");
+                if (! empty($sourceField[0])) {
+                    $sourceField[0][0] = $this->escapeTextNode($sourceData['original']);
+                }
+            }
+            $updateDocParams = ['library' => $base, 'doc_num' => $docNum];
+            $xml = $document->asXml();
+            $updateDocParams['xml_full_req'] = $xml;
+            $this->getLogger()->debug($xml);
+            $updateDocParams['doc_action'] = 'UPDATE';
+            try {
+                $update = $this->doXRequestUsingPost(
+                    'update-doc',
+                    $updateDocParams,
+                    true
+                );
+                $lastEx = null;
+                break;
+            } catch (\Exception $ex) {
+                // ignore
+            }
         }
         return ['success' => true, 'id' => $docNum];
     }
