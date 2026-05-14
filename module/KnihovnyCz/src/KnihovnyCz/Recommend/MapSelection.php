@@ -18,11 +18,11 @@ use VuFindSearch\Service;
  */
 class MapSelection extends \VuFind\Recommend\MapSelection
 {
-    public const BOOST_PATTERN = '/Intersects\((ENVELOPE\([0-9 \\-\\.,]+\))\)/';
+    protected const BOOST_PATTERN = '/Intersects\((ENVELOPE\([0-9 \\-\\.,]+\))\)/';
 
-    public const ENVELOPE_PATTERN = '/ENVELOPE\((.*),(.*),(.*),(.*)\)/';
+    protected const ENVELOPE_PATTERN = '/ENVELOPE\((.*),(.*),(.*),(.*)\)/';
 
-    public const POLYGON_PATTERN = '/POLYGON\(\((.*),(.*),(.*),(.*),(.*)\)\)/';
+    protected const POLYGON_PATTERN = '/POLYGON\(\((.*),(.*),(.*),(.*),(.*)\)\)/';
 
     /**
      * Geo parser
@@ -141,12 +141,6 @@ class MapSelection extends \VuFind\Recommend\MapSelection
     {
         parent::init($params, $request);
         $this->active = $request->get('geographicSearch') ?? false;
-        $from = $request->get($this->mapScaleField . 'from') ?? null;
-        $to = $request->get($this->mapScaleField . 'to') ?? null;
-        if (($filter = $this->getRangeFilter($from, $to)) != null) {
-            $params->addFilter($filter);
-            $this->active = true;
-        }
         $filters = $params->getRawFilters();
         foreach ($filters as $key => $value) {
             if ($key == $this->geoField) {
@@ -159,8 +153,13 @@ class MapSelection extends \VuFind\Recommend\MapSelection
                         $params->addBoostFunction("geo_overlap('$value', $field)");
                     }
                 }
-            } elseif ($key == $this->mapScaleField) {
+            } elseif ($key == $this->mapScaleField && is_array($value)) {
                 $this->active = true;
+                $range = $value[0];
+                $range = $this->parser->parseRangeQuery($range);
+                if ($range != null) {
+                    $this->selectedMapScale = $range;
+                }
             }
         }
     }
@@ -221,24 +220,5 @@ class MapSelection extends \VuFind\Recommend\MapSelection
     public function getSelectedMapScale()
     {
         return $this->selectedMapScale;
-    }
-
-    /**
-     * Parse range query and return filter to apply
-     *
-     * @param string $from from
-     * @param string $to   to
-     *
-     * @return null|string filter to apply
-     */
-    protected function getRangeFilter($from, $to)
-    {
-        $result = $this->parser->normalizeRange($from, $to);
-        if ($result != null) {
-            $this->selectedMapScale = $result;
-            $min = $result[0];
-            $max = $result[1];
-            return "scale_int_facet_mv:[$min TO $max]";
-        }
     }
 }
