@@ -27,7 +27,8 @@ $autocomplete-secondary: darkgray; // item description
       border: 0;
     }
 
-    &:hover {
+    &:hover,
+    &.is-selected {
       background-color: $autocomplete-hover-bg;
       color: #ffffff;
     }
