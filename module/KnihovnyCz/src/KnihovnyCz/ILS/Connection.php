@@ -361,6 +361,7 @@ class Connection extends ConnectionBase
         $holdingsFromIls = parent::getHolding($id, $patron, $options);
         $purifierConfig = \HTMLPurifier_Config::createDefault();
         $purifierConfig->set('HTML.Allowed', '');
+        $purifierConfig->set('Cache.DefinitionImpl', null);
         $htmlPurifier = new \HTMLPurifier($purifierConfig);
         foreach ($holdingsFromIls['holdings'] as &$holding) {
             foreach ($holding as &$item) {
