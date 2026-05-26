@@ -209,6 +209,7 @@ export PARAM_VUFIND_CONFIG_DIR=${PARAM_VUFIND_CONFIG_DIR:-knihovny.cz}
 cp "../composer.local.json" "./builds/knihovny-cz-base6/"
 cp "../composer.json" "./builds/knihovny-cz-base6/"
 cp "../package.json" "./builds/knihovny-cz-base6/"
+cp "../Gruntfile.local.js" "./builds/knihovny-cz-base6/"
 
 if [[ $no_cache == "true" ]]; then
     build_args="$build_args --no-cache"

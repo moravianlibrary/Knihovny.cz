@@ -4,62 +4,62 @@
 $fa-font-path: "../../bootstrap5/css/vendor/font-awesome/webfonts";
 
 // Include Font Awesome
-@import "../../../bootstrap5/scss/vendor/font-awesome/fontawesome";
-@import "../../../bootstrap5/scss/vendor/font-awesome/brands";
-@import "../../../bootstrap5/scss/vendor/font-awesome/regular";
-@import "../../../bootstrap5/scss/vendor/font-awesome/solid";
-@import "../../../bootstrap5/scss/vendor/font-awesome/v4-shims";
+@import "vendor/font-awesome/fontawesome";
+@import "vendor/font-awesome/brands";
+@import "vendor/font-awesome/regular";
+@import "vendor/font-awesome/solid";
+@import "vendor/font-awesome/v4-shims";
 
 // Include Bootstrap functions first (so you can manipulate colors, SVGs, calc, etc)
-@import "../../../bootstrap5/node_modules/bootstrap/scss/functions";
+@import "bootstrap/scss/functions";
 
 // Include any variable overrides here
 @import "bootstrap-variable-overrides";
 
 // Include remainder of required Bootstrap stylesheets (including any separate color mode stylesheets)
-@import "../../../bootstrap5/node_modules/bootstrap/scss/variables";
+@import "bootstrap/scss/variables";
 //@import "bootstrap/scss/variables-dark";
 
 // Include any map overrides here
 @import "bootstrap-map-overrides";
 
 // Include remainder of required parts
-@import "../../../bootstrap5/node_modules/bootstrap/scss/maps";
-@import "../../../bootstrap5/node_modules/bootstrap/scss/mixins";
-@import "../../../bootstrap5/node_modules/bootstrap/scss/root";
-@import "../../../bootstrap5/node_modules/bootstrap/scss/reboot";
+@import "bootstrap/scss/maps";
+@import "bootstrap/scss/mixins";
+@import "bootstrap/scss/root";
+@import "bootstrap/scss/reboot";
 
 // Optionally include any other parts as needed
-@import "../../../bootstrap5/node_modules/bootstrap/scss/accordion";
-@import "../../../bootstrap5/node_modules/bootstrap/scss/alert";
-@import "../../../bootstrap5/node_modules/bootstrap/scss/badge";
-@import "../../../bootstrap5/node_modules/bootstrap/scss/breadcrumb";
-@import "../../../bootstrap5/node_modules/bootstrap/scss/buttons";
-@import "../../../bootstrap5/node_modules/bootstrap/scss/button-group";
-@import "../../../bootstrap5/node_modules/bootstrap/scss/card";
-@import "../../../bootstrap5/node_modules/bootstrap/scss/carousel";
-@import "../../../bootstrap5/node_modules/bootstrap/scss/containers";
-@import "../../../bootstrap5/node_modules/bootstrap/scss/dropdown";
-@import "../../../bootstrap5/node_modules/bootstrap/scss/forms";
-@import "../../../bootstrap5/node_modules/bootstrap/scss/grid";
-@import "../../../bootstrap5/node_modules/bootstrap/scss/helpers";
-@import "../../../bootstrap5/node_modules/bootstrap/scss/images";
-@import "../../../bootstrap5/node_modules/bootstrap/scss/list-group";
-@import "../../../bootstrap5/node_modules/bootstrap/scss/modal";
-@import "../../../bootstrap5/node_modules/bootstrap/scss/nav";
-@import "../../../bootstrap5/node_modules/bootstrap/scss/navbar";
-@import "../../../bootstrap5/node_modules/bootstrap/scss/offcanvas";
-@import "../../../bootstrap5/node_modules/bootstrap/scss/pagination";
-@import "../../../bootstrap5/node_modules/bootstrap/scss/popover";
-@import "../../../bootstrap5/node_modules/bootstrap/scss/tables";
-@import "../../../bootstrap5/node_modules/bootstrap/scss/tooltip";
-@import "../../../bootstrap5/node_modules/bootstrap/scss/transitions";
-@import "../../../bootstrap5/node_modules/bootstrap/scss/type";
-@import "../../../bootstrap5/node_modules/bootstrap/scss/utilities";
-@import "../../../bootstrap5/node_modules/bootstrap/scss/close";
+@import "bootstrap/scss/accordion";
+@import "bootstrap/scss/alert";
+@import "bootstrap/scss/badge";
+@import "bootstrap/scss/breadcrumb";
+@import "bootstrap/scss/buttons";
+@import "bootstrap/scss/button-group";
+@import "bootstrap/scss/card";
+@import "bootstrap/scss/carousel";
+@import "bootstrap/scss/containers";
+@import "bootstrap/scss/dropdown";
+@import "bootstrap/scss/forms";
+@import "bootstrap/scss/grid";
+@import "bootstrap/scss/helpers";
+@import "bootstrap/scss/images";
+@import "bootstrap/scss/list-group";
+@import "bootstrap/scss/modal";
+@import "bootstrap/scss/nav";
+@import "bootstrap/scss/navbar";
+@import "bootstrap/scss/offcanvas";
+@import "bootstrap/scss/pagination";
+@import "bootstrap/scss/popover";
+@import "bootstrap/scss/tables";
+@import "bootstrap/scss/tooltip";
+@import "bootstrap/scss/transitions";
+@import "bootstrap/scss/type";
+@import "bootstrap/scss/utilities";
+@import "bootstrap/scss/close";
 
 // Optionally include utilities API last to generate classes based on the Sass map in `_utilities.scss`
-@import "../../../bootstrap5/node_modules/bootstrap/scss/utilities/api";
+@import "bootstrap/scss/utilities/api";
 
 // Include variables
 @import "_variables";
@@ -67,20 +67,20 @@ $fa-font-path: "../../bootstrap5/css/vendor/font-awesome/webfonts";
 $state-danger-text: $danger;
 
 // Include custom (non-vendor) mixins
-@import "../../../bootstrap5/scss/mixins/mixins";
+@import "mixins/mixins";
 
-//@import "../../../bootstrap5/scss/components/accessibility";  //temporary disabled
+//@import "components/accessibility";  //temporary disabled
 @import "components/advanced-search";
-@import "../../../bootstrap5/scss/components/alphabrowse";
-@import "../../../bootstrap5/scss/components/autocomplete";
+@import "components/alphabrowse";
+@import "components/autocomplete";
 @import "components/badges";
-@import "../../../bootstrap5/scss/components/buttons";
-@import "../../../bootstrap5/scss/components/channels";
-@import "../../../bootstrap5/scss/components/cookie-consent/index";
-//@import "../../../bootstrap5/scss/components/copy-to-clipboard";  // disabled becouse of inline display
-@import "../../../bootstrap5/scss/components/devtools";
-@import "../../../bootstrap5/scss/components/explain";
-//@import "../../../bootstrap5/scss/components/form"; // use default bootstrap styles
+@import "components/buttons";
+@import "components/channels";
+@import "components/cookie-consent/index";
+//@import "components/copy-to-clipboard";  // disabled becouse of inline display
+@import "components/devtools";
+@import "components/explain";
+//@import "components/form"; // use default bootstrap styles
 
 // fix search form:
 form {
@@ -111,17 +111,17 @@ form {
 
 @import "components/icons";
 @import "components/icon-link";
-@import "../../../bootstrap5/scss/components/keyboard";
-//@import "../../../bootstrap5/scss/components/lightbox";
-@import "../../../bootstrap5/scss/components/offcanvas";
-@import "../../../bootstrap5/scss/components/pager";
-@import "../../../bootstrap5/scss/components/panel";
-@import "../../../bootstrap5/scss/components/record";
+@import "components/keyboard";
+//@import "components/lightbox";
+@import "components/offcanvas";
+@import "components/pager";
+@import "components/panel";
+@import "components/record";
 @import "components/search";
 @import "components/sidebar";
-@import "../../../bootstrap5/scss/components/similar-carousel";
-@import "../../../bootstrap5/scss/components/sliders";
-@import "../../../bootstrap5/scss/components/trees";
+@import "components/similar-carousel";
+@import "components/sliders";
+@import "components/trees";
 
 /**
  * Notes
