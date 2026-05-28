@@ -126,6 +126,7 @@ class AlephTest extends \VuFindTest\ILS\Driver\AlephTest
                 'id' => '000812790',
                 'printLink' => 'test',
                 'fine' => 'loan_fine',
+                'accruing' => true,
             ],
             [
                 'title'
@@ -138,6 +139,7 @@ class AlephTest extends \VuFindTest\ILS\Driver\AlephTest
                 'id' => '001156544',
                 'printLink' => 'test',
                 'fine' => 'loan_fine',
+                'accruing' => true,
             ],
         ];
         $this->mockResponse(['cash.xml', 'loans.xml']);

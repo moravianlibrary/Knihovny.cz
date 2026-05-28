@@ -1,89 +1,32 @@
 <?=$this->flashmessages();?>
 <?php if (!empty($this->fines)): ?>
   <?php if (isset($this->paymentLink)):?>
-    <a href="<?=$this->paymentLink?>" class="btn btn-primary">
+    <a href="<?=$this->paymentLink?>" class="btn btn-primary payment-link">
       <?=$this->transEsc('online_payment_fine_link_text')?>
     </a>
   <?php endif; ?>
   <?php if ($this->paymentLinkText != null): ?>
     <div class="alert alert-info"><?=$this->paymentLinkText?></div>
   <?php endif; ?>
+
   <?php
-    // Collect the data to build the table; we process this in advance so we
-    // can omit empty columns and simplify customization by separating data
-    // processing from rendering.
-    $tableData = [];
-    $totalDue = 0;
-    foreach ($this->fines as $record) {
-        if (empty($record['title'])) {
-            $title = '';
-        } elseif (!is_object($record['driver'] ?? null)
-            || is_a($record['driver'], \VuFind\RecordDriver\Missing::class)
-        ) {
-            $title = $this->escapeHtml(trim($record['title'], '/:'));
-        } else {
-            $title = '<a href="'
-                . $this->escapeHtmlAttr($this->recordLinker()->getUrl($record['driver']))
-                . '">' . $this->escapeHtml(trim($record['title'], '/:')) . '</a>';
-        }
-        $tableData['Title'][] = $title;
-        $tableData['Checked Out'][] = $this->escapeHtml($record['checkout'] ?? '');
-        $tableData['Due Date'][] = $this->escapeHtml($record['duedate'] ?? '');
-        $tableData['Fine'][] = $this->transEsc($record['fine'] ?? '');
-        $tableData['Fine Date'][] = $this->escapeHtml($record['createdate'] ?? '');
-        $tableData['Fee'][] = isset($record['amount'])
-            ? $this->safeMoneyFormat($record['amount'] / 100.00) : '';
-        $tableData['Balance'][] = isset($record['balance'])
-            ? $this->safeMoneyFormat($record['balance'] / 100.00) : '';
-        $totalDue += $record['balance'] ?? 0;
+    $fines = [
+      'Not paid fines' => array_filter($this->fines, fn ($fine) => !($fine['accruing'] ?? false)),
+      'Accruing checkout fines' => array_filter($this->fines, fn ($fine) => ($fine['accruing'] ?? false)),
+    ];
+    $fines = array_filter($fines);
+    foreach ($fines as $heading => $finesPart) {
+      echo '<h2>' . $this->transEsc($heading) . '</h2>';
+      echo $this->render('myresearch/_fines_table.phtml', ['fines' => $finesPart, 'caption' => $heading]);
     }
+  ?>
 
-    if ($tableData['Fee'] === $tableData['Balance']) {
-      unset($tableData['Balance']);
-    }
-
-    // Now empty out any unused columns:
-    foreach ($tableData as $column => $values) {
-        $empty = true;
-        foreach ($values as $value) {
-            if (strlen($value) > 0) {
-                $empty = false;
-                break;
-            }
-        }
-        if ($empty) {
-            unset($tableData[$column]);
-        }
-    }
-
-    // Create the final list of columns and count of rows:
-    $columns = array_keys($tableData);
-    $rowCount = count($this->fines);
-    ?>
   <?php if (isset($this->missingEmailLink)):?>
     <div class="alert alert-danger">
       <?=$this->translate('payment_warning_missing_email_in_profile_with_link', ['%%url%%' => $this->missingEmailLink])?>
     </div>
   <?php endif; ?>
-  <table class="table table-striped">
-    <caption class="sr-only"><?=$this->transEsc('Your Fines')?></caption>
-    <tr>
-      <?php foreach ($columns as $header): ?>
-          <th><?=$this->transEsc($header)?></th>
-      <?php endforeach; ?>
-    </tr>
-      <?php for ($row = 0; $row < $rowCount; $row++): ?>
-          <tr>
-        <?php foreach ($columns as $column): ?>
-            <td class="<?=str_replace(' ', '-', $column)?>"><?=$tableData[$column][$row]?></td>
-        <?php endforeach; ?>
-      </tr>
-      <?php endfor; ?>
-      <tr style="font-weight:bold">
-      <td colspan="<?=count($columns) - 1?>"><?=$this->transEsc('Total Balance Due')?></td>
-      <td class="Fee"><?=$this->safeMoneyFormat($totalDue / 100.00) ?></td>
-    </tr>
-  </table>
+
 <?php elseif (!(isset($this->error) && $this->error)): ?>
   <div class="alert alert-info">
     <?=$this->transEsc('You do not have any fines')?>
