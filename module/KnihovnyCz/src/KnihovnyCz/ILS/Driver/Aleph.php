@@ -1000,6 +1000,7 @@ class Aleph extends AlephBase
                     'id'  => $adm_id,
                     'printLink' => 'test',
                     'fine' => $fineLabel,
+                    'accruing' => true,
                 ];
             }
         }
