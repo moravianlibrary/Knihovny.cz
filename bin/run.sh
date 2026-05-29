@@ -39,24 +39,28 @@ function _fail {
 
 function last_commit {
   local branch=$1
-  local data=$(printf '{"query":"{project(fullPath: \\"knihovny.cz/Knihovny-cz\\") { repository { tree(ref: \\"%s\\") { lastCommit { sha }}}}}"}' "$branch")
+  local data
+  data=$(printf '{"query":"{project(fullPath: \\"knihovny.cz/Knihovny-cz\\") { repository { tree(ref: \\"%s\\") { lastCommit { sha }}}}}"}' "$branch")
   # need first declare response and then set it because we need the exit code of curl
   local response
-  response=`curl -sS 'https://gitlab.mzk.cz/api/graphql' \
+  local curl_exit_code
+  response=$(curl -sS 'https://gitlab.mzk.cz/api/graphql' \
     --header 'Content-Type: application/json' \
     --header "Private-token: ${GITLAB_API_TOKEN}" \
     --request POST \
-    --data "${data}"`
-  local curl_exit_code=$?
+    --data "${data}")
+  curl_exit_code=$?
   if [[ $curl_exit_code -ne 0 ]]; then
     _fail "Failed to get last commit for '$branch' branch due to curl exit code $curl_exit_code"
   fi
-  local last_commit=$(echo $response | php -r "echo (string)json_decode(file_get_contents('php://stdin'))->data->project->repository->tree->lastCommit->sha;" 2> /dev/null)
+  local last_commit
+  last_commit=$(echo "$response" | php -r "echo (string)json_decode(file_get_contents('php://stdin'))->data->project->repository->tree->lastCommit->sha;" 2> /dev/null)
   if [[ ${#last_commit} -eq 0  ]]; then
-    local error_msg=$(echo $response | php -r "echo (string)json_decode(file_get_contents('php://stdin'))->errors[0]->message;" 2> /dev/null)
+    local error_msg
+    error_msg=$(echo "$response" | php -r "echo (string)json_decode(file_get_contents('php://stdin'))->errors[0]->message;" 2> /dev/null)
     _fail "Failed to get last commit for '$branch' branch due to error: '$error_msg'"
   fi
-  echo $last_commit
+  echo "$last_commit"
 }
 
 # default variable values
@@ -165,7 +169,7 @@ while true ; do
     esac
 done
 
-cd $(dirname "$0")"/../docker" || exit
+cd "$(dirname "$0")/../docker" || exit
 
 compose_args=""
 
@@ -174,17 +178,18 @@ if [[ $detached == "true" ]]; then
 fi
 
 env_file="${build_type}.env"
-export $(cat $env_file | xargs)
+# shellcheck disable=SC2046
+export $(xargs < "$env_file")
 
 # We need this to enforce docker to run git clone when the branch is updated
-if [[ ! -z "$CI_COMMIT_SHA" ]]; then
+if [[ -n "$CI_COMMIT_SHA" ]]; then
     LAST_COMMIT="$CI_COMMIT_SHA"
 else
-    LAST_COMMIT=$(last_commit ${branch})
+    LAST_COMMIT=$(last_commit "$branch")
 fi
 build_args="$build_args --build-arg PARAM_VUFIND_BRANCH=$branch --build-arg PARAM_VUFIND_COMMIT_HASH=${LAST_COMMIT} --build-arg GITLAB_DEPLOY_USER=$GITLAB_DEPLOY_USER --build-arg GITLAB_DEPLOY_PASSWORD=$GITLAB_DEPLOY_PASSWORD"
 
-if [[ ! -z  "$branch" ]]; then
+if [[ -n "$branch" ]]; then
     if [[ -z "$image_name" ]]; then
         image_name="knihovny_cz_${branch}"
     fi
@@ -216,20 +221,20 @@ if [[ $no_cache == "true" ]]; then
 fi
 
 for srv in php-extensions6 apache-shibboleth6 knihovny-cz; do
-    docker compose build $build_args "$srv"
-    if [ $? -ne 0 ]; then
+    # shellcheck disable=SC2086
+    if ! docker compose build $build_args "$srv"; then
         echo "Can't build $srv, exiting"
         exit 1
     fi
 done
 
-docker compose -f "$docker_compose_file" build $build_args $service
-if [ $? -ne 0 ]; then
+# shellcheck disable=SC2086
+if ! docker compose -f "$docker_compose_file" build $build_args "$service"; then
     echo "Can't build Knihovny.cz containers, exiting"
     exit 3
 fi
 if [[ $push == "true" ]]; then
-    docker compose -f "$docker_compose_file" push $service
+    docker compose -f "$docker_compose_file" push "$service"
 fi
 if [[ $push_to_private_registry == "true" ]]; then
     # CI uses $HOME/.docker/config.json
@@ -247,6 +252,6 @@ if [[ $push_to_private_registry == "true" ]]; then
     docker push "$tag"
 fi
 if [[ $run == "true" ]]; then
-    docker compose -f "$docker_compose_file" up $compose_args $service
+    # shellcheck disable=SC2086
+    docker compose -f "$docker_compose_file" up $compose_args "$service"
 fi
-

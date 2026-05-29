@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 function print_usage {
-    name=$(basename $0)
+    name=$(basename "$0")
     cat <<EOF
 Script for deploying testing containers on cpk-front.mzk.cz.
 After successful build and deploy, script echoes URL on which container
@@ -69,7 +69,7 @@ while true ; do
 done
 
 if [ "$port" != "0" ]; then
-    docker_port=$(($port+10000))
+    docker_port=$((port+10000))
     if netstat -ln | grep ":$docker_port " | grep -q 'LISTEN'; then
         echo "Port $port is already in use, exiting"
         exit 1
@@ -89,36 +89,35 @@ else
         fi
     done
 
-    if [ $port = 0 ]; then
+    if [ "$port" = 0 ]; then
         echo "No free available port"
         exit 1
     fi
 fi
 
-if [ ! -z "$config_dir" ]; then
+if [ -n "$config_dir" ]; then
     export PARAM_VUFIND_CONFIG_DIR="$config_dir"
 fi
 
 service="devel6-${port}"
-http_port=$(($port+10000))
-https_port=$(($port+10443))
+http_port=$((port+10000))
+https_port=$((port+10443))
 container_name="knihovny-$type-$branch"
 
-PROJECT_PATH=`dirname $(readlink -nf $0)`/..
-cd $PROJECT_PATH
+PROJECT_PATH="$(dirname "$(readlink -nf "$0")")/.."
+cd "$PROJECT_PATH" || exit 1
 
 CURRENT_BRANCH=$(git symbolic-ref --short -q HEAD)
 CURRENT_BRANCH=${CURRENT_BRANCH:-HEAD}
 
 git fetch
-git checkout "origin/$branch"
-if [[ $? != 0 ]]; then
+if ! git checkout "origin/$branch"; then
   echo 'Cannot run git checkout, ensure you have ale changes committed'
   exit 1
 fi
 
 
-$PROJECT_PATH/bin/run.sh -d -t $type -p $http_port -s $https_port -b $branch -service $service -n $container_name
+"$PROJECT_PATH/bin/run.sh" -d -t "$type" -p "$http_port" -s "$https_port" -b "$branch" -service "$service" -n "$container_name"
 
 git checkout "$CURRENT_BRANCH"
 
