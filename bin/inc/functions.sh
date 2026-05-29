@@ -9,8 +9,9 @@ function last_commit {
     local branch=$1
     local repo=$2
     local url="https://api.github.com/repos/$repo/commits?sha=$branch"
-    local sha=`curl -s "$url" | php -r "echo (string) json_decode(file_get_contents('php://stdin'))[0]->sha;"`
-    echo $sha
+    local sha
+    sha=$(curl -s "$url" | php -r "echo (string) json_decode(file_get_contents('php://stdin'))[0]->sha;")
+    echo "$sha"
 }
 
 function echo_debug {
@@ -34,7 +35,7 @@ function merge_directory
     local baseApiUrl="https://raw.githubusercontent.com/$repository"
 
     shopt -s nullglob
-    for current in $localDir/*{.ini,.yaml,.phtml,.js,/}
+    for current in "$localDir"/*{.ini,.yaml,.phtml,.js,/}
     do
         local coreEquivalent=$coreDir${current:$localDirLength}
         if [ -d "$current" ]
@@ -62,21 +63,21 @@ function merge_file
     local newCommit=$4
     local repository=$5
     local baseApiUrl="https://raw.githubusercontent.com/$repository"
-    local oldOriginalFile="/tmp/tmp-merge-old-original-`basename "$coreEquivalent"`"
-    local updatedOriginalFile="/tmp/tmp-merge-old-updated-`basename "$coreEquivalent"`"
-    local mergedFile="/tmp/tmp-merge-merged-`basename "$coreEquivalent"`"
-    curl -s -f "$baseApiUrl/$oldCommit/$coreEquivalent" > $oldOriginalFile
-    if [ $? -eq 0 ]
+    local oldOriginalFile
+    oldOriginalFile="/tmp/tmp-merge-old-original-$(basename "$coreEquivalent")"
+    local updatedOriginalFile
+    updatedOriginalFile="/tmp/tmp-merge-old-updated-$(basename "$coreEquivalent")"
+    local mergedFile
+    mergedFile="/tmp/tmp-merge-merged-$(basename "$coreEquivalent")"
+    if curl -s -f "$baseApiUrl/$oldCommit/$coreEquivalent" > "$oldOriginalFile"
     then
-        curl -s "$baseApiUrl/$newCommit/$coreEquivalent" > $updatedOriginalFile
-        diff3 -L 'Our original' -L 'Upstream original' -L 'Upstream updated' -m "$filename" "$oldOriginalFile" "$updatedOriginalFile" > "$mergedFile"
-        if [ $? == 1 ]
+        curl -s "$baseApiUrl/$newCommit/$coreEquivalent" > "$updatedOriginalFile"
+        if ! diff3 -L 'Our original' -L 'Upstream original' -L 'Upstream updated' -m "$filename" "$oldOriginalFile" "$updatedOriginalFile" > "$mergedFile"
         then
           echo -e "\e[1;31mCONFLICT: $filename\e[0m"
         fi
-        cp $mergedFile $filename
+        cp "$mergedFile" "$filename"
     else
         echo_debug "Skipping $filename; no equivalent in core code."
     fi
 }
-
