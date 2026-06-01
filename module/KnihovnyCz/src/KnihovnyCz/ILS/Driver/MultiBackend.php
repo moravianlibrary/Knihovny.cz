@@ -342,7 +342,7 @@ class MultiBackend extends \VuFind\ILS\Driver\MultiBackend
     {
         $source = $this->getSource($recordId);
         return (!empty($source) && !empty($driver = $this->getDriver($source)))
-            ? (new \ReflectionClass($driver))->getName()
+            ? new \ReflectionClass($driver)->getName()
             : '';
     }
 

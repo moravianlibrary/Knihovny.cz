@@ -375,7 +375,7 @@ class UpdateRecordStatus extends \Symfony\Component\Console\Command\Command
             $line++;
         }
         if ($line === 0) {
-            throw new \Exception("File is empty: " . $file);
+            throw new \Exception('File is empty: ' . $file);
         }
         fclose($csv);
         $this->output->writeln('CSV validation finished, elapsed time (in seconds): '

@@ -1,4 +1,4 @@
-FROM docker.io/php:8.2.22-fpm-bullseye
+FROM docker.io/php:8.4.8-fpm-bookworm
 ARG ADD_EXTRA_PACKAGES=""
 
 LABEL maintainer="mzk.cz"
