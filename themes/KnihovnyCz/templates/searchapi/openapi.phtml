@@ -47,7 +47,9 @@
                         "description": "Language for returned translated strings.",
                         "schema": {
                             "type": "string",
-                            "enum": [<?=implode(', ', array_map(function ($v) { return '"' . addslashes($v) . '"'; }, array_keys($this->config->Languages->toArray()))) ?>],
+                            "enum": [<?=implode(', ', array_map(function ($v) {
+                              return '"' . addslashes($v) . '"';
+                            }, array_keys($this->config->Languages->toArray()))) ?>],
                             "default": "<?=addslashes($this->config->Site->language) ?>"
                         }
                     },
@@ -191,7 +193,9 @@
                         "description": "Sort method.",
                         "schema": {
                             "type": "string",
-                            "enum": [<?=implode(', ', array_map(function ($v) { return '"' . addslashes($v) . '"'; }, array_keys($this->sortOptions))) ?>],
+                            "enum": [<?=implode(', ', array_map(function ($v) {
+                            return '"' . addslashes($v) . '"';
+                            }, array_keys($this->sortOptions))) ?>],
                             "default": "<?=addslashes($this->defaultSort) ?>"
                         }
                     },

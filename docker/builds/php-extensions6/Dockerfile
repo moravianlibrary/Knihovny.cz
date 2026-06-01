@@ -1,7 +1,7 @@
-FROM php:8.2-apache-bullseye
+FROM php:8.4-apache-bookworm
 LABEL maintainer="Moravian Library <cpk-dev@mzk.cz>"
 LABEL version="2.0"
-LABEL description="Based on the 'php:8.1-apache-buster' build with appended modules to php & apache2 + productivity tools included (vim, mc, htop, ping, traceroute, dig, ssh, mysql-client, locate, git, curl, bash-completion)"
+LABEL description="Based on the 'php:8.4-apache-bookworm' build with appended modules to php & apache2 + productivity tools included (vim, mc, htop, ping, traceroute, dig, ssh, mysql-client, locate, git, curl, bash-completion)"
 
 #
 # See the docs for the php docker image:
@@ -40,7 +40,8 @@ RUN apt-get update && apt-get install -y \
         mc \
         mlocate \
         net-tools \
-        python \
+        python-is-python3 \
+        2to3 \
         ssh \
         vim \
         ${TMP_DEV_PKGS} \
@@ -87,7 +88,6 @@ RUN apt-get purge -y \
         ${TMP_DEV_PKGS}
 
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
-RUN composer self-update 2.9.2
 
 # Update mlocate's files database
 RUN updatedb

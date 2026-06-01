@@ -5,8 +5,8 @@ $finder->in(__DIR__ . '/../module')
     ->in(__DIR__ . '/../public');
 
 $rules = [
-    '@PHP84Migration' => true,
-    '@PHPUnit100Migration:risky' => true,
+    '@PHP8x4Migration' => true,
+    '@PHPUnit10x0Migration:risky' => true,
     '@PSR12' => true,
     'align_multiline_comment' => true,
     'binary_operator_spaces' => [

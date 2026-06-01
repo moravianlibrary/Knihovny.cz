@@ -93,7 +93,7 @@ class SolrLocal extends \KnihovnyCz\RecordDriver\SolrMarc
                 $description, $notes, $year, $volume, $issue, $status,
                 $collection_desc, $agency_id, $sequenceNo, $copy_number,
                 $catalog_link
-            ] = str_getcsv($line);
+            ] = str_getcsv($line, escape : '\\');
             if (!preg_match('/^https?:\/\//', $catalog_link) && !empty($catalog_link)) {
                 $catalog_link = 'https://' . $catalog_link;
             }
