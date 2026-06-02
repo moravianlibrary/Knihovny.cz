@@ -284,6 +284,8 @@ Title:
     - title_new^100
     - title_old
     - title_original_language_search_txt_mv^300
+    - contents_titles_txt_mv^100
+    - related_titles_txt_mv^100
   DismaxParams:
     - [bq, "inspiration:top_results^1"]
     - [bf, "if(exists(merged_records_boolean),10000,0)"]

@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 function print_usage {
-    name=$(basename $0)
+    name=$(basename "$0")
     cat <<EOF
 Script for copying new config file to config base and add configs for all instances
 
@@ -40,7 +40,7 @@ while true ; do
     esac
 done
 
-if [ "$VUFIND_DIR" = "" -o "$CONFIG_NAME" = "" ] ; then
+if [ "$VUFIND_DIR" = "" ] || [ "$CONFIG_NAME" = "" ] ; then
   print_usage
   exit 1
 fi
@@ -58,17 +58,16 @@ if [ ! -f "$CONFIG_PATH" ] ; then
 fi
 
 INSTANCES="knihovny.cz irel kiv mus tech mzk geo knav nkp"
-PROJECT_PATH=`dirname $(readlink -nf $0)`/..
+PROJECT_PATH=$(dirname "$(readlink -nf "$0")")/..
 BASE_CONFIG_DIR="$PROJECT_PATH/local/base/config/vufind/"
 CONFIG_FILE_EXT="${CONFIG_NAME##*.}"
 TEMPLATE_FILE="$PROJECT_PATH/local/templates/config/vufind/view.$CONFIG_FILE_EXT"
 
 echo "Copying $CONFIG_NAME from codebase in $VUFIND_DIR"
-cp "$CONFIG_PATH" $BASE_CONFIG_DIR
+cp "$CONFIG_PATH" "$BASE_CONFIG_DIR"
 
 for VIEW in $INSTANCES ; do
   VIEW_CONFIG_FULLPATH="$PROJECT_PATH/local/$VIEW/config/vufind/$CONFIG_NAME"
   echo "Creating view config file: $VIEW_CONFIG_FULLPATH"
-  sed -e "s#__CONFIG_NAME__#$CONFIG_NAME#" "$TEMPLATE_FILE" > $VIEW_CONFIG_FULLPATH
+  sed -e "s#__CONFIG_NAME__#$CONFIG_NAME#" "$TEMPLATE_FILE" > "$VIEW_CONFIG_FULLPATH"
 done
-

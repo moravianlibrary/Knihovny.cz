@@ -15,6 +15,7 @@ EOF
 }
 
 DIRNAME=$(dirname "$0");
+# shellcheck source=bin/inc/functions.sh
 .  "${DIRNAME}/inc/functions.sh"
 FILENAME="${DIRNAME}/../docker/builds/knihovny-cz-base6/Dockerfile"
 CI_FILENAME="${DIRNAME}/../.gitlab-ci.yml"
@@ -48,7 +49,7 @@ while true ; do
     esac
 done
 
-REMOTE_VERSION=$(last_commit $branch $repository)
+REMOTE_VERSION=$(last_commit "$branch" "$repository")
 OUR_VERSION=$(grep "ENV PARAM_VUFIND_COMMIT" "${FILENAME}" | sed 's/ENV PARAM_VUFIND_COMMIT="\(.*\)"/\1/g')
 OUR_CI_VERSION=$(grep "VUFIND_COMMIT_ID" "${CI_FILENAME}" | sed 's/\s*VUFIND_COMMIT_ID: \(.*\)/\1/g')
 if [ "$OUR_VERSION" != "$OUR_CI_VERSION" ]; then
@@ -63,9 +64,9 @@ if [ "$REMOTE_VERSION" == "$OUR_VERSION" ]; then
   exit 0;
 fi;
 echo "Is available update to version $REMOTE_VERSION. Your current version is $OUR_VERSION."
-echo "Update base VuFind" > $commit_message_file
-echo "" >> $commit_message_file
-echo "See changes here: https://github.com/vufind-org/vufind/compare/$OUR_VERSION...$REMOTE_VERSION" >> $commit_message_file
+echo "Update base VuFind" > "$commit_message_file"
+echo "" >> "$commit_message_file"
+echo "See changes here: https://github.com/vufind-org/vufind/compare/$OUR_VERSION...$REMOTE_VERSION" >> "$commit_message_file"
 
 if [ "$dryrun" == "true" ]; then
   echo "Running in testing mode. Exiting without making any changes"
@@ -75,22 +76,22 @@ fi
 sed -i "s/ENV PARAM_VUFIND_COMMIT=\"\(.*\)\"/ENV PARAM_VUFIND_COMMIT=\"${REMOTE_VERSION}\"/g" "${FILENAME}"
 sed -i "s/\(\s*\)VUFIND_COMMIT_ID: \(.*\)/\1VUFIND_COMMIT_ID: ${REMOTE_VERSION}/g" "${CI_FILENAME}"
 
-merge_directory local/base/config/vufind config/vufind $OUR_VERSION $REMOTE_VERSION ${repository}
-merge_directory themes/KnihovnyCz/templates themes/bootstrap5/templates $OUR_VERSION $REMOTE_VERSION ${repository}
-merge_directory themes/irel/templates themes/bootstrap5/templates $OUR_VERSION $REMOTE_VERSION ${repository}
-merge_directory themes/kiv/templates themes/bootstrap5/templates $OUR_VERSION $REMOTE_VERSION ${repository}
-merge_directory themes/mus/templates themes/bootstrap5/templates $OUR_VERSION $REMOTE_VERSION ${repository}
-merge_directory themes/mzk/templates themes/bootstrap5/templates $OUR_VERSION $REMOTE_VERSION ${repository}
-merge_directory themes/tech/templates themes/bootstrap5/templates $OUR_VERSION $REMOTE_VERSION ${repository}
-merge_directory themes/knav/templates themes/bootstrap5/templates $OUR_VERSION $REMOTE_VERSION ${repository}
-merge_directory themes/nkp/templates themes/bootstrap5/templates $OUR_VERSION $REMOTE_VERSION ${repository}
-merge_directory themes/geo/templates themes/bootstrap5/templates $OUR_VERSION $REMOTE_VERSION ${repository}
-merge_directory themes/KnihovnyCz/templates/searchapi themes/root/templates/searchapi $OUR_VERSION $REMOTE_VERSION ${repository}
-merge_file package.json package.json $OUR_VERSION $REMOTE_VERSION ${repository}
-merge_file tests/vufind.php-cs-fixer.php tests/vufind.php-cs-fixer.php $OUR_VERSION $REMOTE_VERSION ${repository}
-merge_file tests/vufind_templates.php-cs-fixer.php tests/vufind_templates.php-cs-fixer.php $OUR_VERSION $REMOTE_VERSION ${repository}
-merge_file tests/phpcs.xml tests/phpcs.xml $OUR_VERSION $REMOTE_VERSION ${repository}
-merge_directory themes/KnihovnyCz/js themes/bootstrap5/js $OUR_VERSION $REMOTE_VERSION ${repository}
+merge_directory local/base/config/vufind config/vufind "$OUR_VERSION" "$REMOTE_VERSION" "${repository}"
+merge_directory themes/KnihovnyCz/templates themes/bootstrap5/templates "$OUR_VERSION" "$REMOTE_VERSION" "${repository}"
+merge_directory themes/irel/templates themes/bootstrap5/templates "$OUR_VERSION" "$REMOTE_VERSION" "${repository}"
+merge_directory themes/kiv/templates themes/bootstrap5/templates "$OUR_VERSION" "$REMOTE_VERSION" "${repository}"
+merge_directory themes/mus/templates themes/bootstrap5/templates "$OUR_VERSION" "$REMOTE_VERSION" "${repository}"
+merge_directory themes/mzk/templates themes/bootstrap5/templates "$OUR_VERSION" "$REMOTE_VERSION" "${repository}"
+merge_directory themes/tech/templates themes/bootstrap5/templates "$OUR_VERSION" "$REMOTE_VERSION" "${repository}"
+merge_directory themes/knav/templates themes/bootstrap5/templates "$OUR_VERSION" "$REMOTE_VERSION" "${repository}"
+merge_directory themes/nkp/templates themes/bootstrap5/templates "$OUR_VERSION" "$REMOTE_VERSION" "${repository}"
+merge_directory themes/geo/templates themes/bootstrap5/templates "$OUR_VERSION" "$REMOTE_VERSION" "${repository}"
+merge_directory themes/KnihovnyCz/templates/searchapi themes/root/templates/searchapi "$OUR_VERSION" "$REMOTE_VERSION" "${repository}"
+merge_file package.json package.json "$OUR_VERSION" "$REMOTE_VERSION" "${repository}"
+merge_file tests/vufind.php-cs-fixer.php tests/vufind.php-cs-fixer.php "$OUR_VERSION" "$REMOTE_VERSION" "${repository}"
+merge_file tests/vufind_templates.php-cs-fixer.php tests/vufind_templates.php-cs-fixer.php "$OUR_VERSION" "$REMOTE_VERSION" "${repository}"
+merge_file tests/phpcs.xml tests/phpcs.xml "$OUR_VERSION" "$REMOTE_VERSION" "${repository}"
+merge_directory themes/KnihovnyCz/js themes/bootstrap5/js "$OUR_VERSION" "$REMOTE_VERSION" "${repository}"
 
 echo "Version was updated."
 echo "Please commit with command: "

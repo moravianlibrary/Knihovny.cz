@@ -25,7 +25,7 @@ class Parser
      *
      * @var string
      */
-    protected const RANGE_PATTERN = '/\\[([0-9]+) TO ([0-9]+)\\]/';
+    protected const RANGE_PATTERN = '/\\[(\d+) TO (\d+)\\]/';
 
     /**
      * Pattern for parsing bounding box filter

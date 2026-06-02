@@ -5,7 +5,7 @@ function print_usage {
 	echo "	$0 x.y.z"
 }
 
-if [ -z $1 ]; then
+if [ -z "$1" ]; then
 	echo "Parameter	version is not set"
 	print_usage
 	exit 1
@@ -16,7 +16,7 @@ FORMAT='[0-9]\+\.[0-9]\+\.[0-9]\+'
 
 COUNT=$(echo "$1" | sed -n "/^$FORMAT$/p" | wc -l)
 
-if ! [ $COUNT -gt 0 ]; then
+if ! [ "$COUNT" -gt 0 ]; then
 	echo "Parameter version is not in the right format"
 	print_usage
 	exit 2

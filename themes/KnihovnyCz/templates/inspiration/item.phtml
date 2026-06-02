@@ -61,8 +61,12 @@ if ($cover):
 
           <?php $links = $this->item->getLinks();
           if (!empty($links)): ?>
-            <?php $online = array_filter($links, function ($link) { return $link['status'] == 'online'; }); ?>
-            <?php $dnnt = array_filter($links, function ($link) { return $link['status'] == 'dnnt'; }); ?>
+            <?php $online = array_filter($links, function ($link) {
+              return $link['status'] == 'online';
+            }); ?>
+            <?php $dnnt = array_filter($links, function ($link) {
+              return $link['status'] == 'dnnt';
+            }); ?>
             <?php if (!empty($online)): ?>
               <?php
               foreach ($online as $onlineLink) {
