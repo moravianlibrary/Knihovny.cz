@@ -5,6 +5,7 @@ namespace KnihovnyCz\Service;
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Handler\CurlMultiHandler;
 use GuzzleHttp\HandlerStack;
+use GuzzleHttp\Middleware;
 use GuzzleHttp\Psr7\Request;
 use KnihovnyCz\Http\GuzzleClientAdapter;
 use KnihovnyCz\Http\PerformanceLogger;
@@ -78,6 +79,10 @@ class GuzzleHttpService
     public function createClient(array $config = []): ClientInterface
     {
         $stack = new HandlerStack(new CurlMultiHandler());
+        // Follow HTTP redirects (e.g. knihovny.cz -> www.knihovny.cz). Pushed before the
+        // proxy middleware so it stays outermost and the proxy decision is re-evaluated
+        // for the redirected (possibly cross-host) request.
+        $stack->push(Middleware::redirect(), 'allow_redirects');
         $this->configureProxy($stack);
         $config['handler'] = $stack;
         if (isset($this->options['timeout'])) {
