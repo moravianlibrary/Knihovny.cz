@@ -13,6 +13,7 @@ $config = [
                     \KnihovnyCzConsole\Command\Util\UpdateResourcesFromSolrCommand::class => \KnihovnyCzConsole\Command\Util\UpdateResourcesFromSolrCommandFactory::class,
                     \KnihovnyCzConsole\Command\Util\UpdateRecordStatus::class => \KnihovnyCzConsole\Command\Util\UpdateRecordStatusFactory::class,
                     \KnihovnyCzConsole\Command\Util\MigrateSearchCommand::class => \KnihovnyCzConsole\Command\Util\MigrateSearchCommandFactory::class,
+                    \KnihovnyCzConsole\Command\Util\GenerateSiglaTranslationsCommand::class => \KnihovnyCzConsole\Command\Util\GenerateSiglaTranslationsCommandFactory::class,
                 ],
                 'aliases' => [
                     'util/clear_cache' => \KnihovnyCzConsole\Command\Util\ClearCacheCommand::class,
@@ -21,6 +22,7 @@ $config = [
                     'util/update_resources_from_solr' => \KnihovnyCzConsole\Command\Util\UpdateResourcesFromSolrCommandFactory::class,
                     'util/update_record_status' => \KnihovnyCzConsole\Command\Util\UpdateRecordStatusFactory::class,
                     'util/migrate_search' => \KnihovnyCzConsole\Command\Util\MigrateSearchCommand::class,
+                    'util/generate_sigla_translations' => \KnihovnyCzConsole\Command\Util\GenerateSiglaTranslationsCommand::class,
                 ],
             ],
         ],
