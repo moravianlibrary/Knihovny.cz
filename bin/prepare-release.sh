@@ -104,7 +104,7 @@ docker exec -it \
     -e VUFIND_LOCAL_DIR="$WWW_ROOT/local/base" \
     -e VUFIND_LOCAL_MODULES="KnihovnyCz,KnihovnyCzConsole" \
     docker-vufind6-1 \
-    php "$WWW_ROOT/public/index.php" util/generate_sigla_translations
+    php "$WWW_ROOT/public/index.php" util/generate_sigla_translations --skc
 
 CS_FILE="$REPO_ROOT/local/base/languages/Sigla/cs.ini"
 EN_FILE="$REPO_ROOT/local/base/languages/Sigla/en.ini"
