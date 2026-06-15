@@ -15,19 +15,22 @@
         <?php endif; ?>
         <?php /* Display Main Details */ ?>
         <?php
-            $formatter = $this->recordDataFormatter();
-            $coreFields = $formatter->getData($driver, $formatter->getDefaults('library'));
+            $formatter = $this->recordDataFormatter($this->driver);
+            $coreFields = $formatter->getData($this->driver, $formatter->getDefaults('core'));
         ?>
         <?php if (!empty($coreFields)): ?>
+            <?php
+              $defaultIcon = 'library-general-info';
+            ?>
             <table class="table table-striped">
                 <caption class="sr-only"><?=$this->transEsc('Library Details')?></caption>
                 <?php foreach ($coreFields as $current): ?>
-                  <?php if ($current['context']['heading']):?>
-                    <h2><?=$this->icon($current['context']['icon'])?> <?=$this->transEsc($current['label'])?></h2>
+                  <?php if ($current['context']['heading'] ?? true):?>
+                    <h2><?=$this->icon($current['context']['icon'] ?? $defaultIcon)?> <?=$this->transEsc($current['label'])?></h2>
                     <p>
                   <?php else: ?>
                     <h2 class="hidden"><?=$this->transEsc($current['label'])?></h2>
-                    <p class="<?=$current['context']['content-class']?>"><?=$this->icon($current['context']['icon'])?>
+                    <p class="<?=$current['context']['content-class'] ?? ''?>"><?=$this->icon($current['context']['icon'] ?? $defaultIcon)?>
                   <?php endif; ?>
                   <?=$current['value']?></p>
                 <?php endforeach; ?>

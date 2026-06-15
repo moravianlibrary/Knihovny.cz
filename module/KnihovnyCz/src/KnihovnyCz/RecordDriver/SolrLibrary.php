@@ -707,4 +707,14 @@ class SolrLibrary extends \KnihovnyCz\RecordDriver\SolrMarc
         }
         return $accessibilities;
     }
+
+    /**
+     * Get a class name for RecordDataFormatter spec.
+     *
+     * @return ?string
+     */
+    public function getRecordDataFormatterSpecClass(): ?string
+    {
+        return \KnihovnyCz\RecordDataFormatter\Specs\LibraryRecord::class;
+    }
 }
