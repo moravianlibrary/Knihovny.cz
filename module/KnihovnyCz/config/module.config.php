@@ -723,6 +723,17 @@ $config = [
                     'sidefacetsdeferred' => \KnihovnyCz\Recommend\SideFacetsDeferred::class,
                 ],
             ],
+            'recorddataformatter_specs' => [
+                'factories' => [
+                    \KnihovnyCz\RecordDataFormatter\Specs\AuthorityRecord::class => \KnihovnyCz\RecordDataFormatter\Specs\AuthorityRecordFactory::class,
+                    \KnihovnyCz\RecordDataFormatter\Specs\DefaultRecord::class => \VuFind\RecordDataFormatter\Specs\DefaultRecordFactory::class,
+                    \KnihovnyCz\RecordDataFormatter\Specs\DictionaryRecord::class => \KnihovnyCz\RecordDataFormatter\Specs\DictionaryRecordFactory::class,
+                    \KnihovnyCz\RecordDataFormatter\Specs\LibraryRecord::class => \KnihovnyCz\RecordDataFormatter\Specs\LibraryRecordFactory::class,
+                ],
+                'aliases' => [
+                    \VuFind\RecordDataFormatter\Specs\DefaultRecord::class => \KnihovnyCz\RecordDataFormatter\Specs\DefaultRecord::class,
+                ],
+            ],
             'sitemap' => [
                 'factories' => [
                     \KnihovnyCz\Sitemap\Plugin\Index::class => \KnihovnyCz\Sitemap\Plugin\IndexFactory::class,

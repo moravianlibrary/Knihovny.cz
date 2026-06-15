@@ -48,13 +48,6 @@ class SolrAuthority extends \KnihovnyCz\RecordDriver\SolrMarc
     ];
 
     /**
-     * Record data formatter key
-     *
-     * @return string
-     */
-    protected string $recordDataFormatterKey = 'authority';
-
-    /**
      * Record data description
      *
      * @return string
@@ -571,5 +564,15 @@ class SolrAuthority extends \KnihovnyCz\RecordDriver\SolrMarc
     {
         $links = $this->getExternalLinksByType('identifiers');
         return $links['wikidata']['url'] ?? '';
+    }
+
+    /**
+     * Get a class name for RecordDataFormatter spec.
+     *
+     * @return ?string
+     */
+    public function getRecordDataFormatterSpecClass(): ?string
+    {
+        return \KnihovnyCz\RecordDataFormatter\Specs\AuthorityRecord::class;
     }
 }
