@@ -8,8 +8,7 @@
       "wt":"json"}},
   "response":{"numFound":1,"start":0,"maxScore":17.620237,"docs":[
     {
-      "institution_view_facet_str_mv":["MENDELU"],
-      "local_region_institution_facet_str_mv":["0/Library/",
+      "local_region_institution_str_mv":["0/Library/",
         "1/Library/JM/",
         "2/Library/JM/MENDELU/"],
       "publishDate_display":["2005"],
@@ -27,7 +26,6 @@
       "sigla_display":"BOD006",
       "title_display":"1. letní škola elektrochemické a coulochemické detekce ve spojení s kapalinovou chromatografií : sborník pracovních textů",
       "isbn_display_mv":["80-7157-872-X"],
-      "recordtype":"local",
       "view_txt_mv":["viewonly",
         "brno",
         "cpk"],
@@ -38,10 +36,6 @@
       "metaproxy_boolean":false,
       "barcodes":["I-03920/2005",
         "J-1/2020"],
-      "local_statuses_facet_str_mv":["0/absent/",
-        "0/freestack/"],
-      "local_statuses_facet_mv":["0/absent/",
-        "0/freestack/"],
       "id":"mendelu.55567",
       "author2_authority_id_display_mv":[""],
       "merged_child_boolean":true,
