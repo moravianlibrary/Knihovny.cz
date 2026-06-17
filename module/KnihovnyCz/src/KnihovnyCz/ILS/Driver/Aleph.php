@@ -1306,11 +1306,9 @@ class Aleph extends AlephBase
                 $subfield = $variableField->addChild('subfield', $value);
                 $subfield->addAttribute('label', $label);
             }
-            if (!empty($sourceData['original'])) {
-                $sourceField = $document->xpath("//varfield[@id='590' and @i1=' ' and @i2=' ']/subfield[@label='a']");
-                if (! empty($sourceField[0])) {
-                    $sourceField[0][0] = $this->escapeTextNode($sourceData['original']);
-                }
+            $sourceField = $document->xpath("//varfield[@id='590' and @i1=' ' and @i2=' ']/subfield[@label='a']");
+            if (! empty($sourceField[0])) {
+                $sourceField[0][0] = $this->escapeTextNode($sourceData['original']);
             }
             $updateDocParams = ['library' => $base, 'doc_num' => $docNum];
             $xml = $document->asXml();
