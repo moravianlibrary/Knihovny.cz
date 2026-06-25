@@ -141,7 +141,7 @@ VuFind.register('searchbox_controls', function SearchboxControls() {
       }
       /**
        * Check if an element has a specific class
-       * @param {HTMLElement} el        The element to check. 
+       * @param {HTMLElement} el        The element to check.
        * @param {string}      className The class name to search for.
        * @returns {boolean} Return true of the element has the class name.
        */
@@ -212,9 +212,10 @@ VuFind.register('searchbox_controls', function SearchboxControls() {
       const $searchbox = $(searchboxElement);
       const typeFieldSelector = $searchbox.data('autocompleteTypeFieldSelector');
       const typePrefix = $searchbox.data('autocompleteTypePrefix');
+      const acLimit = 12;
       const typeahead = new Autocomplete({
         rtl: $(document.body).hasClass("rtl"),
-        limit: 10,
+        limit: acLimit,
         loadingString: VuFind.translate('loading_ellipsis'),
         delay: 500,
       });
@@ -297,8 +298,12 @@ VuFind.register('searchbox_controls', function SearchboxControls() {
                 });
               });
             });
-            callback(result);
-            cache[cacheKey][query] = result;
+            // Slice to display limit and remove any header that would appear without items after it.
+            const visible = result.slice(0, acLimit).filter(
+              (item, index, arr) => !item._header || (arr[index + 1] && !arr[index + 1]._header)
+            );
+            callback(visible);
+            cache[cacheKey][query] = visible;
           };
         };
         $.when.apply($, ajaxCalls).then(onSuccess(++requestId));
