@@ -14,13 +14,6 @@ namespace KnihovnyCz\RecordDriver;
 class SolrDictionary extends \KnihovnyCz\RecordDriver\SolrMarc
 {
     /**
-     * Record data formatter key
-     *
-     * @return string
-     */
-    protected string $recordDataFormatterKey = 'dictionary';
-
-    /**
      * Get explanation.
      *
      * @return array $field
@@ -152,5 +145,15 @@ class SolrDictionary extends \KnihovnyCz\RecordDriver\SolrMarc
             },
             $info
         );
+    }
+
+    /**
+     * Get a class name for RecordDataFormatter spec.
+     *
+     * @return ?string
+     */
+    public function getRecordDataFormatterSpecClass(): ?string
+    {
+        return \KnihovnyCz\RecordDataFormatter\Specs\DictionaryRecord::class;
     }
 }

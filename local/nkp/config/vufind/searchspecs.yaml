@@ -343,7 +343,7 @@ AllFields:
     - genre^300
     - subject_viz^100
     - genre_viz^100
-    - publishDate_txt_mv^50
+    - publishDate_nkp_txt_mv^50
     - allfields
     - fulltext
     - toc_txt_mv^15
@@ -602,7 +602,7 @@ adv_search_publisher:
 
 adv_search_year_of_publication:
   Dismaxfields:
-     - publishDate_txt_mv
+     - publishDate_nkp_txt_mv
   DismaxParams:
     - [bq, "inspiration:top_results^1"]
     - [bf, "if(exists(merged_records_boolean),10000,0)" ]
@@ -611,7 +611,7 @@ adv_search_year_of_publication:
     - [bf, ord(publishDateSort)^1]
   DismaxHandler: edismax
   QueryFields:
-    publishDate_txt_mv:
+    publishDate_nkp_txt_mv:
       - [onephrase, 100]
       - [and, 50]
   FilterQuery: "*:* NOT record_format:library"
@@ -719,7 +719,7 @@ adv_search_without_fulltext:
     - genre^300
     - subject_viz^100
     - genre_viz^100
-    - publishDate_txt_mv^50
+    - publishDate_nkp_txt_mv^50
     - allfields
     - isbn^15
     - issn^15

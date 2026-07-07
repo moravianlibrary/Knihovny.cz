@@ -30,6 +30,7 @@
 namespace KnihovnyCzConsole\Command\Util;
 
 use Laminas\Db\Adapter\Adapter;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -43,6 +44,10 @@ use Symfony\Component\Console\Output\OutputInterface;
  * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://knihovny.cz Main Page
  */
+#[AsCommand(
+    name: 'util/update_record_status',
+    description: 'Update record status'
+)]
 class UpdateRecordStatus extends \Symfony\Component\Console\Command\Command
 {
     protected const UPDATE_TOTALS_CMD = <<<EOF
@@ -105,34 +110,6 @@ class UpdateRecordStatus extends \Symfony\Component\Console\Command\Command
     protected const SUPPORTED_TYPES = ['loans', 'totals'];
 
     /**
-     * Help description for the command.
-     *
-     * @var string
-     */
-    protected string $commandDescription = 'Update record status';
-
-    /**
-     * The name of the command (the part after "public/index.php")
-     *
-     * @var string
-     */
-    protected static $defaultName = 'util/update_record_status';
-
-    /**
-     * Database adapter
-     *
-     * @var \Laminas\Db\Adapter\Adapter
-     */
-    protected Adapter $adapter;
-
-    /**
-     * Record status configuration
-     *
-     * @var array
-     */
-    protected array $recordStatus;
-
-    /**
      * Output interface
      *
      * @var \Symfony\Component\Console\Output\OutputInterface
@@ -144,14 +121,11 @@ class UpdateRecordStatus extends \Symfony\Component\Console\Command\Command
      *
      * @param Adapter     $adapter Database adapter
      * @param array       $config  Configuration
-     * @param string|null $name    The name of the command; passing null means it
-     *                             must be set in configure()
+     * @param string|null $name    The name of the command
      */
-    public function __construct(Adapter $adapter, array $config, ?string $name = null)
+    public function __construct(protected Adapter $adapter, protected array $config, ?string $name = null)
     {
         parent::__construct($name);
-        $this->adapter = $adapter;
-        $this->recordStatus = $config;
     }
 
     /**
@@ -161,31 +135,27 @@ class UpdateRecordStatus extends \Symfony\Component\Console\Command\Command
      */
     protected function configure(): void
     {
-        $this->setDescription($this->commandDescription)
-            ->addOption(
-                'type',
-                null,
-                InputOption::VALUE_REQUIRED,
-                'Type of import - totals or loans'
-            )
-            ->addOption(
-                'config',
-                null,
-                InputOption::VALUE_OPTIONAL,
-                'Use configuration from recordstatus.ini instead of parameters'
-            )
-            ->addOption(
-                'source',
-                null,
-                InputOption::VALUE_OPTIONAL,
-                'Source - shortcut (e.g. mzk), required when file option is used'
-            )
-            ->addOption(
-                'file',
-                null,
-                InputOption::VALUE_OPTIONAL,
-                'File to import in CSV format, only if option config is missing or false'
-            );
+        $this->addOption(
+            'type',
+            null,
+            InputOption::VALUE_REQUIRED,
+            'Type of import - totals or loans'
+        )->addOption(
+            'config',
+            null,
+            InputOption::VALUE_OPTIONAL,
+            'Use configuration from recordstatus.ini instead of parameters'
+        )->addOption(
+            'source',
+            null,
+            InputOption::VALUE_OPTIONAL,
+            'Source - shortcut (e.g. mzk), required when file option is used'
+        )->addOption(
+            'file',
+            null,
+            InputOption::VALUE_OPTIONAL,
+            'File to import in CSV format, only if option config is missing or false'
+        );
     }
 
     /**
@@ -223,10 +193,10 @@ class UpdateRecordStatus extends \Symfony\Component\Console\Command\Command
             $this->process($optionSource, $optionFile, $optionType);
             return 0;
         }
-        if (empty($this->recordStatus)) {
+        if (empty($this->config)) {
             throw new \Exception('Configuration is missing, nothing to do');
         }
-        $config = $this->recordStatus;
+        $config = $this->config;
         if ($optionSource != null) {
             $config = $config[$optionSource] ?? null;
             if ($config == null) {

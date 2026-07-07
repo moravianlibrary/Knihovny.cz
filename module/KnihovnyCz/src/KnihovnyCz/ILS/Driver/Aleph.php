@@ -92,6 +92,26 @@ class Aleph extends AlephBase
     }
 
     /**
+     * Patron Login
+     *
+     * This is responsible for authenticating a patron against the catalog.
+     *
+     * @param string $user     The patron username
+     * @param string $password The patron's password
+     *
+     * @throws ILSException
+     * @return mixed          Associative array of patron info on successful login,
+     * null on unsuccessful login.
+     */
+    public function patronLogin($user, $password)
+    {
+        return [
+            'id' => $user,
+            'cat_username' => $user,
+        ];
+    }
+
+    /**
      * Helper method to determine whether or not a certain method can be
      * called on this driver.  Required method for any smart drivers.
      *
@@ -1306,11 +1326,9 @@ class Aleph extends AlephBase
                 $subfield = $variableField->addChild('subfield', $value);
                 $subfield->addAttribute('label', $label);
             }
-            if (!empty($sourceData['original'])) {
-                $sourceField = $document->xpath("//varfield[@id='590' and @i1=' ' and @i2=' ']/subfield[@label='a']");
-                if (! empty($sourceField[0])) {
-                    $sourceField[0][0] = $this->escapeTextNode($sourceData['original']);
-                }
+            $sourceField = $document->xpath("//varfield[@id='590' and @i1=' ' and @i2=' ']/subfield[@label='a']");
+            if (! empty($sourceField[0])) {
+                $sourceField[0][0] = $this->escapeTextNode($sourceData['original']);
             }
             $updateDocParams = ['library' => $base, 'doc_num' => $docNum];
             $xml = $document->asXml();

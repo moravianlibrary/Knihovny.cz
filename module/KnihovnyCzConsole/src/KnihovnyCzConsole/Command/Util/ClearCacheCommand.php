@@ -4,6 +4,7 @@ namespace KnihovnyCzConsole\Command\Util;
 
 use GlobIterator;
 use Laminas\Stdlib\ErrorHandler;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use VuFind\Cache\Manager as CacheManager;
@@ -17,31 +18,20 @@ use VuFind\Cache\Manager as CacheManager;
  * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://knihovny.cz Main Page
  */
+#[AsCommand(
+    name: 'util/clear_cache',
+    description: 'Clear cache'
+)]
 class ClearCacheCommand extends \Symfony\Component\Console\Command\Command
 {
-    /**
-     * The name of the command (the part after "public/index.php")
-     *
-     * @var string
-     */
-    protected static $defaultName = 'util/clear_cache';
-
-    /**
-     * Cache manager
-     *
-     * @var CacheManager
-     */
-    protected $cacheManager;
-
     /**
      * Constructor
      *
      * @param CacheManager $cacheManager VuFind cache manager
      * @param string|null  $name         Command name
      */
-    public function __construct(CacheManager $cacheManager, $name = null)
+    public function __construct(protected CacheManager $cacheManager, ?string $name = null)
     {
-        $this->cacheManager = $cacheManager;
         parent::__construct($name);
     }
 
@@ -52,11 +42,9 @@ class ClearCacheCommand extends \Symfony\Component\Console\Command\Command
      */
     protected function configure()
     {
-        $this->setDescription('Clear cache')
-            ->setHelp(
-                'Clear VuFind instance cache. Note, that VUFIND_LOCAL_DIR ' .
-                'environment variable needs to be set'
-            );
+        $this->setHelp(
+            'Clear VuFind instance cache. Note, that VUFIND_LOCAL_DIR environment variable needs to be set'
+        );
     }
 
     /**

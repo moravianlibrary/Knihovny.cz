@@ -5,5 +5,9 @@
     <?=$this->render($item['template'] ?? 'myresearch/menu-header-item.phtml', ['active' => $this->active, ...$item])?>
   <?php endforeach; ?>
 </ul>
+<?=$this->assetManager()->outputInlineScriptString(<<<'JS'
+    document.getElementById("account-home-nav")?.addEventListener("show.bs.dropdown", function() {
+      VuFind.account.notify("fines", { total: NaN });
+    });
+    JS)?>
 <?php endif; ?>
-<?=$this->assetManager()->outputInlineScriptString('VuFind.account.clearCache("fines");')?>

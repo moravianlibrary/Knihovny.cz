@@ -7,7 +7,6 @@ return [
     'helpers' => [
         'factories' => [
             \KnihovnyCz\View\Helper\KnihovnyCz\AccountMenu::class => \VuFind\View\Helper\Root\AccountMenuFactory::class,
-            'VuFind\View\Helper\Root\RecordDataFormatter' => 'KnihovnyCz\View\Helper\KnihovnyCz\RecordDataFormatterFactory',
             KnihovnyCz\View\Helper\KnihovnyCz\ZiskejMvs::class => function (ContainerInterface $container, $requestedName) {
                 $dependency = $container->get(KnihovnyCz\Ziskej\ZiskejMvs::class);
                 return new $requestedName($dependency);

@@ -2,6 +2,8 @@
 
 namespace KnihovnyCzConsole\Command\Util;
 
+use Symfony\Component\Console\Attribute\AsCommand;
+
 /**
  * Class ExpireCsrfTokensCommand
  *
@@ -11,6 +13,9 @@ namespace KnihovnyCzConsole\Command\Util;
  * @license  https://opensource.org/licenses/gpl-2.0.php GNU General Public License
  * @link     https://knihovny.cz Main Page
  */
+#[AsCommand(
+    name: 'util/expire_csrf_tokens',
+)]
 class ExpireCsrfTokensCommand extends \VuFindConsole\Command\Util\AbstractExpireCommand
 {
     /**
@@ -26,11 +31,4 @@ class ExpireCsrfTokensCommand extends \VuFindConsole\Command\Util\AbstractExpire
      * @var string
      */
     protected $rowLabel = 'csrf tokens';
-
-    /**
-     * The name of the command (the part after "public/index.php")
-     *
-     * @var string
-     */
-    protected static $defaultName = 'util/expire_csrf_tokens';
 }
