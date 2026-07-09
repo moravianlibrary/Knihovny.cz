@@ -253,7 +253,7 @@ class MyResearchController extends MyResearchControllerBase
                 $patron
             );
             if ($functionConfig !== false) {
-                $link = $catalog->getMyProlongRegistrationLink($patron);
+                $link = $catalog->getMyProlongRegistrationLink($view->getVariable('profile'));
                 if ($link !== null && $view->profile['email'] == null) {
                     $this->flashMessenger()->addErrorMessage('payment_warning_missing_email_in_profile');
                     $link = null;
