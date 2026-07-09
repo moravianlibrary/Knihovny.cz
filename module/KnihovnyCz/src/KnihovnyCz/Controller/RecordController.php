@@ -479,7 +479,9 @@ class RecordController extends \VuFind\Controller\RecordController implements Ht
         if (!is_array($patron = $this->catalogLogin())) {
             return $patron;
         }
-        $email = trim($patron['email'] ?? '');
+        $catalog = $this->getILS();
+        $profile = $catalog->getMyProfile($patron);
+        $email = trim($profile['email'] ?? '');
         $source = $this->params()->fromQuery('source', '');
         $confirmed = $this->params()->fromQuery('confirmed', false);
         $user = $this->getUser();
@@ -497,7 +499,7 @@ class RecordController extends \VuFind\Controller\RecordController implements Ht
             $errors[] = 'palmknihy_error_source_not_specified';
         }
 
-        $errors += $palmknihyApiService->checkBeforeLending($patron, $user, $driver, $source);
+        $errors += $palmknihyApiService->checkBeforeLending($profile, $user, $driver, $source);
         $view = $this->createViewModel(
             [
                 'driver' => $driver,
