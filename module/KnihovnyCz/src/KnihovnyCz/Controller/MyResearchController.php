@@ -955,7 +955,8 @@ class MyResearchController extends MyResearchControllerBase
             return $this->forceLogin();
         }
         $this->flashRedirect()->restore();
-        $email = trim($patron['email'] ?? '');
+        $profile = $this->getILS()->getMyProfile($patron);
+        $email = trim($profile['email'] ?? '');
 
         $dbServiceManager = $this->serviceLocator->get(\VuFind\Db\Service\PluginManager::class);
         $palmknihyService = $dbServiceManager->get(PalmknihyCheckoutsServiceInterface::class);
