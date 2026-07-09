@@ -165,10 +165,11 @@ trait ZiskejEddTrait
         $user->getDbService(UserCardServiceInterface::class)->activateLibraryCard($user, $userCard->getId());
 
         $patron = $this->catalogLogin();
+        $profile = $this->getILS()->getMyProfile($patron);
 
         $requestReader = new Reader(
-            !empty($patron['firstname']) ? $patron['firstname'] : '–',
-            !empty($patron['lastname']) ? $patron['lastname'] : '–',
+            !empty($profile['firstname']) ? $profile['firstname'] : '–',
+            !empty($profile['lastname']) ? $profile['lastname'] : '–',
             $email,
             $multibackend->sourceToSigla($userCard->home_library) ?? '',
             true,
