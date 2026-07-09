@@ -58,6 +58,7 @@ trait ZiskejCommonTrait
         if (!is_array($patron)) {
             throw new LibraryCard('ILS connection failed');
         }
+        $profile = $this->getILS()->getMyProfile($patron);
 
         /**
          * Ziskej API connector
@@ -73,7 +74,7 @@ trait ZiskejCommonTrait
             [
                 'user' => $user,
                 'userCard' => $userCard,
-                'patron' => $patron,
+                'patron' => $profile,
                 'ziskejReader' => $ziskejReader,
                 'serverName' => $this->getRequest()->getServer()->SERVER_NAME,
                 'entityId' => $this->getRequest()->getServer('Shib-Identity-Provider'),
