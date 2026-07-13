@@ -632,7 +632,7 @@ class SolrMarc extends SolrDefault
 
         $normsDocumentType = '0/NORMS/';
         if ($source === 'unmz' && $this->checkFormat($normsDocumentType)) {
-            return 'holdings_notice_norms';
+            return 'holdings_notice_norms_html';
         }
 
         if ($source === 'mzk' && $base === 'MZK03') {
