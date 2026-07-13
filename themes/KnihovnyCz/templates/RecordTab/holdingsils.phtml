@@ -229,7 +229,7 @@ $loadJs = <<<JS
 <?php $holdingsNotice = $this->driver->tryMethod('getHoldingsNotice'); ?>
 <?php if (!empty($holdingsNotice)): ?>
   <div class="holdings-notice alert alert-info">
-    <?=$this->transEsc($holdingsNotice);?>
+    <?=str_ends_with($holdingsNotice, '_html') ? $this->translate($holdingsNotice) : $this->transEsc($holdingsNotice);?>
   </div>
 <?php endif; ?>
 <?php if (($this->ils()->getHoldsMode() == 'driver' && !empty($holdings['holdings'])) || $this->ils()->getTitleHoldsMode() == 'driver'): ?>
