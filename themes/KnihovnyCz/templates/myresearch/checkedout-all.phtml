@@ -8,7 +8,7 @@
     // Check if "Renew All" button can be displayed:
     $renewAll = !$this->ilsPaging || !$paginator;
 
-    $loadJs = <<<JS
+    $loadJsCheckedOut = <<<JS
           function loadCheckedOut(element) {
             VuFind.covers.init();
             // Checkbox select all
@@ -82,6 +82,43 @@
             });
           };
         JS;
+
+    $loadJsHistory = <<<JS
+          function loadHistoricLoans(element) {
+            VuFind.covers.init();
+            const reloadContent = function reloadContent(link){
+              hideLibraryCardContent(element, true);
+              reloadLibraryCardContent(element, link);
+            };
+            $(element).find("ul.pagination>li>a").click(function onClick(event){
+              event.preventDefault();
+              link = $(this).attr('href');
+              reloadContent(link);
+            });
+            $(element).find("select.sublibrary").on('change', function onChange(event){
+              event.preventDefault();
+              const link = $(this).find(":selected").data('href');
+              reloadContent(link);
+            });
+
+            var confirmPurgeRequest = function confirmPurgeRequest(link, action) {
+              $('#submitType').attr('name', action);
+              $(link).parents('form').trigger("submit");
+            }
+            // Purge loan history:
+            $('#confirm_purge_selected_yes').on("click", function renewSelectedRequests(e) {
+              e.preventDefault();
+              confirmPurgeRequest(this, 'purgeSelected');
+            });
+            $('#confirm_purge_all_yes').on("click", function renewAllRequests(e) {
+              e.preventDefault();
+              confirmPurgeRequest(this, 'purgeAll');
+            });
+            $('.confirm_purge_no').on("click", function doNotRenewRequest(e) {
+              e.preventDefault();
+            });
+          };
+        JS;
 ?>
 
 <a class="search-filter-toggle visible-xs" href="#myresearch-sidebar" data-bs-toggle="offcanvas" title="Expand Sidebar">
@@ -90,15 +127,26 @@
 
 <div class="<?=$this->layoutClass('mainbody')?>">
   <div class="context-help">
-    <h2 class="context-text"><?=$this->transEsc('Your Checked Out Items')?></h2>
+    <h2 class="context-text"><?=$this->transEsc('Checked Out Items')?></h2>
     <?=$this->contextHelp('checked-out', 'heading')?>
   </div>
   <?=$this->flashmessages();?>
   <p>
     <?=$this->context($this)->renderInContext('librarycards/listcards.phtml', [
-        'user' => $this->auth()->getUserObject(),
-        'action' => $this->url('myresearch-checkedoutajax'),
-        'callback' => 'loadCheckedOut',
+      'user' => $this->auth()->getUserObject(),
+      'action' => [
+        'current_loans' => $this->url('myresearch-checkedoutajax'),
+        'loan_history' => $this->url('checkouts-historyajax'),
+      ],
+      'callback' => [
+        'current_loans' => 'loadCheckedOut',
+        'loan_history' => 'loadHistoricLoans',
+      ],
+      'tabNames' => [
+        'current_loans' => $this->transEsc('Your Checked Out Items'),
+        'loan_history' => $this->transEsc('Loan History'),
+      ],
+      'useTabsForCardIds' => $this->isLoanHistoryAvailableForCardIds,
     ]);
     ?>
   </p>
@@ -110,5 +158,8 @@
 
 <?=$this->render('myresearch/notify-account-status.phtml', ['method' => 'checkedOut', 'accountStatus' => $this->accountStatus]); ?>
 
-<?=$this->assetManager()->outputInlineScriptString($loadJs)?>
+<?=$this->assetManager()->outputInlineScriptString($loadJsCheckedOut)?>
+<?php if (!empty($this->isLoanHistoryAvailableForCardIds)):
+  echo $this->assetManager()->outputInlineScriptString($loadJsHistory);
+endif;?>
 <noscript><?=$this->transEsc('Please enable JavaScript.')?></noscript>
