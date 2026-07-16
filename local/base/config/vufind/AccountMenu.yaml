@@ -36,11 +36,11 @@ MenuItems:
     icon: short-loans
     checkMethod: checkShortloans
 
-  - name: historicloans
-    label: Loan History
-    route: checkouts-history
-    icon: user-loan-history
-    checkMethod: checkHistoricloans
+#  - name: historicloans
+#    label: Loan History
+#    route: checkouts-history
+#    icon: user-loan-history
+#    checkMethod: checkHistoricloans
 
   - name: ziskej
     label: ZiskejMvs::service_name

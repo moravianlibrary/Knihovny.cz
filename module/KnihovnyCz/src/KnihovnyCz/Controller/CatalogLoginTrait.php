@@ -23,13 +23,25 @@ trait CatalogLoginTrait
      */
     protected function catalogLogin()
     {
+        return $this->catalogLoginWithCardId($this->getCardId() === null ? null : (int)$this->getCardId());
+    }
+
+    /**
+     * Check user catalog credentials for given card id.
+     *
+     * @param ?int $cardId Card id
+     *
+     * @return bool|array|\Laminas\View\Model\ViewModel
+     */
+    protected function catalogLoginWithCardId(?int $cardId)
+    {
         $user = $this->getAuthManager()->getUserObject();
         if ($user == null) {
             return $this->forceLogin();
         }
-        $cardId = $this->getCardId();
+
         if ($cardId != null) {
-            $card = $user->getLibraryCard((int)$cardId);
+            $card = $user->getLibraryCard($cardId);
             if ($card != null) {
                 $user->cat_username = $card->cat_username;
                 $user->cat_password = $card->cat_password;

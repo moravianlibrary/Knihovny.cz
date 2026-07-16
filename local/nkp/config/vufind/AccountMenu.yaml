@@ -60,11 +60,11 @@ MenuItems:
     status: true
     checkMethod: checkZiskejEdd
 
-  - name: historicloans
-    label: Loan History
-    route: checkouts-history
-    icon: user-loan-history
-    checkMethod: checkHistoricloans
+#  - name: historicloans
+#    label: Loan History
+#    route: checkouts-history
+#    icon: user-loan-history
+#    checkMethod: checkHistoricloans
 
   - name: profile
     label: Profile

@@ -27,7 +27,7 @@
 
           function showLibraryCardContent(element, content, callback) {
             $(element).hide(500, function onComplete() {
-              $(element).parent('.card-body').find('.loading-overlay').fadeOut(200);
+              $(element).parents('.card-body').find('.loading-overlay').first().fadeOut(200);
               $(element).html(content).slideDown(500, function onComplete(){
                 if (window.location.hash != null) {
                   const fragment = window.location.hash.substring(1);
@@ -82,8 +82,39 @@
         <div id="card_<?=$i ?>" class="collapse multi-collapse show" role="tabpanel">
           <div class="card-body position-relative">
             <div class="loading-overlay"></div>
-            <div class='library-card-ajax' data-card-id='<?=$card->id?>' data-card-name="<?=$card->card_name?>" data-action='<?=$action?>' data-callback='<?=$this->callback?>'>
+            <?php if (isset($this->tabNames) &&
+              is_array($this->tabNames) &&
+              is_array($this->callback) &&
+              is_array($this->action) &&
+              in_array($card->getId(), $this->useTabsForCardIds)): ?>
+            <?php $firstTabId = array_key_first($this->tabNames);?>
+            <div class="card card-with-tabs">
+              <div class="card-header bg-transparent">
+                <ul class="nav nav-tabs card-header-tabs" role="tablist">
+                <?php foreach ($this->tabNames as $tabId => $tabName): ?>
+                  <li role="presentation" class="nav-item">
+                    <a href="#<?=$card->id . $tabId?>" class="nav-link<?=$tabId === $firstTabId ? ' active' : '';?>" aria-controls="<?=$card->id . $tabId?>" role="tab" data-bs-toggle="tab">
+                      <?=$tabName?>
+                    </a>
+                  </li>
+                <?php endforeach; ?>
+                </ul>
+              </div>
+              <div class="card-body tab-content">
+                <?php foreach ($this->tabNames as $tabId => $tabName): ?>
+                <div role="tabpanel" class="tab-pane<?=$tabId === $firstTabId ? ' active' : '';?>" id="<?=$card->id . $tabId?>">
+                  <div class='library-card-ajax' data-card-id='<?=$card->id?>' data-card-name="<?=$card->card_name?>" data-action='<?=$this->action[$tabId]?>' data-callback='<?=$this->callback[$tabId]?>'>
+                  </div>
+                </div>
+                <?php endforeach; ?>
+              </div>
             </div>
+            <?php else: ?>
+              <?php $action = is_array($this->action) ? $this->action[array_key_first($this->action)] : $this->action; ?>
+              <?php $callback = is_array($this->callback) ? $this->callback[array_key_first($this->callback)] : $this->callback; ?>
+              <div class='library-card-ajax' data-card-id='<?=$card->id?>' data-card-name="<?=$card->card_name?>" data-action='<?=$action?>' data-callback='<?=$callback?>'>
+              </div>
+            <?php endif ?>
           </div>
         </div>
 

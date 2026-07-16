@@ -295,11 +295,31 @@ class MyResearchController extends MyResearchControllerBase
     public function checkedoutAction()
     {
         // Force login:
-        if (!$this->getUser()) {
+        if (!($user = $this->getUser())) {
             return $this->forceLogin();
         }
+
+        $isLoanHistoryAvailableForCardIds = [];
+        $catalog = $this->getILS();
+
+        foreach ($user->getLibraryCardsWithILS() as $card) {
+            // Stop now if the user does not have valid catalog credentials available:
+            if (!is_array($patron = $this->catalogLoginWithCardId($card->getId()))) {
+                return $patron;
+            }
+            $patron['user'] = $user;
+            $historyFunctionConfig = $catalog->checkFunction(
+                'getMyTransactionHistory',
+                $patron
+            );
+            if ($historyFunctionConfig !== false) {
+                $isLoanHistoryAvailableForCardIds[] = $card->getId();
+            }
+        }
+
         $view = $this->createViewModel();
         $view->setTemplate('myresearch/checkedout-all');
+        $view->setVariable('isLoanHistoryAvailableForCardIds', $isLoanHistoryAvailableForCardIds);
         return $view;
     }
 

@@ -40,11 +40,11 @@ MenuItems:
     checkMethod: checkFines
     iconMethod: finesIcon
 
-  - name: historicloans
-    label: Loan History
-    route: checkouts-history
-    icon: user-loan-history
-    checkMethod: checkHistoricloans
+#  - name: historicloans
+#    label: Loan History
+#    route: checkouts-history
+#    icon: user-loan-history
+#    checkMethod: checkHistoricloans
 
   - name: shortloans
     label: short_loan_title_text
