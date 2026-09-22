@@ -84,6 +84,9 @@ $this->headMeta()->appendName('format-detection', 'telephone=no');
       $icons = !isset($this->renderingError) ? $this->render('js-icons.phtml') : '{}';
     ?>
     <?=$this->headMeta()?>
+
+    <?= $this->slot('additional-head-meta')->set('');?>
+
     <?php if (!empty($this->layout()->jsonLd)): ?>
     <script type="application/ld+json"><?=$this->layout()->jsonLd?></script>
     <?php endif; ?>
