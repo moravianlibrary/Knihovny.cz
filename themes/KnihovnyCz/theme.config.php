@@ -40,6 +40,7 @@ return [
             KnihovnyCz\View\Helper\KnihovnyCz\ContextHelp::class,
             KnihovnyCz\View\Helper\KnihovnyCz\DatePicker::class,
             \KnihovnyCz\View\Helper\KnihovnyCz\ResultsCount::class,
+            \KnihovnyCz\View\Helper\KnihovnyCz\InstitutionsSorter::class,
         ],
         'aliases' => [
             'accountMenu' => \KnihovnyCz\View\Helper\KnihovnyCz\AccountMenu::class,
@@ -66,6 +67,7 @@ return [
             \VuFind\View\Helper\Root\GoogleTagManager::class => \KnihovnyCz\View\Helper\KnihovnyCz\GoogleTagManager::class,
             'palmknihy' => \KnihovnyCz\View\Helper\KnihovnyCz\Palmknihy::class,
             'url' => \KnihovnyCz\View\Helper\KnihovnyCz\Url::class,
+            'institutionsSorter' => \KnihovnyCz\View\Helper\KnihovnyCz\InstitutionsSorter::class,
         ],
     ],
     'icons' => [

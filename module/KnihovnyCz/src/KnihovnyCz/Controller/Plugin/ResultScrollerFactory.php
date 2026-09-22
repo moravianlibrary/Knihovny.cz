@@ -48,6 +48,7 @@ class ResultScrollerFactory implements FactoryInterface
             ),
             $container->get(\VuFind\Search\Results\PluginManager::class),
             $container->get(\VuFind\Search\Memory::class),
+            $container->get(\KnihovnyCz\Service\PreferredInstitutionsService::class),
             $container->get('ViewRenderer')->plugin('url'),
             true
         );

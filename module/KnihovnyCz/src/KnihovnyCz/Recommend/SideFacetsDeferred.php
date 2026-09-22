@@ -2,6 +2,7 @@
 
 namespace KnihovnyCz\Recommend;
 
+use KnihovnyCz\Service\PreferredInstitutionsService;
 use VuFind\Recommend\SideFacetsDeferred as Base;
 use VuFind\Search\Solr\HierarchicalFacetHelper;
 
@@ -24,29 +25,23 @@ class SideFacetsDeferred extends Base
      *
      * @var string
      */
-    protected $institutionField;
-
-    /**
-     * Auth Manager
-     *
-     * @var \VuFind\Auth\Manager
-     */
-    protected $authManager;
+    protected string $institutionField;
 
     /**
      * Constructor
      *
-     * @param \VuFind\Config\PluginManager $configLoader Configuration loader
-     * @param ?HierarchicalFacetHelper     $facetHelper  Helper for handling hierarchical facets
-     * @param ?\VuFind\Auth\Manager        $authManager  Auth manager
+     * @param \VuFind\Config\PluginManager  $configLoader                 Configuration loader
+     * @param ?HierarchicalFacetHelper      $facetHelper                  Helper for handling hierarchical facets
+     * @param ?\VuFind\Auth\Manager         $authManager                  Auth manager
+     * @param ?PreferredInstitutionsService $preferredInstitutionsService Preferred institutions service
      */
     public function __construct(
         \VuFind\Config\PluginManager $configLoader,
         ?HierarchicalFacetHelper $facetHelper = null,
-        ?\VuFind\Auth\Manager $authManager = null
+        protected readonly ?\VuFind\Auth\Manager $authManager = null,
+        protected readonly ?PreferredInstitutionsService $preferredInstitutionsService = null
     ) {
         parent::__construct($configLoader, $facetHelper);
-        $this->authManager = $authManager;
     }
 
     /**
@@ -96,49 +91,15 @@ class SideFacetsDeferred extends Base
      */
     public function getMyFilter()
     {
-        $institutions = $this->getMyInstitutions();
+        $institutions = $this->preferredInstitutionsService->getFiltersFromUser();
         if (empty($institutions)) {
             return false;
         }
         $url = $this->getResults()->getUrlQuery()
             ->removeFilterByField($this->getInstitutionField());
-        foreach ($this->getMyInstitutions() as $filterValue) {
+        foreach ($institutions as $filterValue) {
             $url = $url->addFacet($this->institutionField, $filterValue, 'OR');
         }
         return $url;
-    }
-
-    /**
-     * Get values for my institutions filter
-     *
-     * @return array
-     */
-    protected function getMyInstitutions()
-    {
-        /**
-         * User model
-         *
-         * @var \KnihovnyCz\Db\Row\User|false $user
-         */
-        $user = $this->authManager->getUserObject();
-        if ($user == null) {
-            return [];
-        }
-        $savedInstitutions = $user->getUserSettings()->getSavedInstitutions();
-        if (!empty($savedInstitutions)) {
-            return $savedInstitutions;
-        }
-        $prefixes = $user->getLibraryPrefixes();
-        $filters = [];
-        $facetConfig = $this->configLoader->get('facets');
-        if (!isset($facetConfig->InstitutionsMappings)) {
-            return [];
-        }
-        foreach ($facetConfig->InstitutionsMappings as $source => $filter) {
-            if (in_array($source, $prefixes)) {
-                $filters[] = $filter;
-            }
-        }
-        return $filters;
     }
 }

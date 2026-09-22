@@ -27,7 +27,7 @@
             $record = ($firstRecord) ? $this->scrollData['firstRecord']
               : $this->scrollData['previousRecord'];
             $link = ($multiplied) ? $recordLinker->getUrl($record)
-              : $recordLinker->getLinkToLocalRecord($record);
+              : $recordLinker->getLinkToLocalRecord($record, $this->scrollData['sources']);
           }
         ?>
         <?=$this->render('prev-next-link.phtml', ['active' => $active, 'link' => $link, 'label' => $label, 'icon' => $icon, 'text' => $text]); ?>
@@ -52,7 +52,7 @@
             $record = ($lastRecord) ? $this->scrollData['lastRecord']
               : $this->scrollData['nextRecord'];
             $link = ($multiplied) ? $recordLinker->getUrl($record)
-              : $recordLinker->getLinkToLocalRecord($record);
+              : $recordLinker->getLinkToLocalRecord($record, $this->scrollData['sources']);
           }
         ?>
         <?=$this->render('prev-next-link.phtml', ['active' => $active, 'link' => $link, 'label' => $label, 'icon' => $icon, 'text' => $text]); ?>

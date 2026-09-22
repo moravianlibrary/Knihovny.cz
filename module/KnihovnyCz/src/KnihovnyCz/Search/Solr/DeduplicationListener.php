@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace KnihovnyCz\Search\Solr;
 
+use KnihovnyCz\Service\PreferredInstitutionsService;
 use Laminas\EventManager\EventInterface;
 use Psr\Container\ContainerInterface;
 use VuFind\Search\Solr\DeduplicationListener as ParentDeduplicationListener;
@@ -23,34 +24,30 @@ use VuFindSearch\ParamBag;
  */
 class DeduplicationListener extends ParentDeduplicationListener
 {
-    public const OR_FACETS_REGEX = '/(\\{[^\\}]*\\})*([^\\(\s]+):\\(([^\\)]+)\\)/';
-
-    public const FILTER_REGEX = '/"([^"]+)"/';
-
     public const UNDEF_PRIORITY = 99999;
 
     public const MIN_PRIORITY = 999999;
 
     /**
-     * Facet configuration file id
+     * Institution mappings service
      *
-     * @var string
+     * @var PreferredInstitutionsService
      */
-    protected $facetConfig;
+    protected PreferredInstitutionsService $preferredInstitutionsService;
 
     /**
      * Auth Manager
      *
      * @var \VuFind\Auth\Manager
      */
-    protected $authManager;
+    protected \VuFind\Auth\Manager $authManager;
 
     /**
      * Solr institution field
      *
      * @var string
      */
-    protected $institutionField = 'region_institution_facet_mv';
+    protected string $institutionField = 'region_institution_facet_mv';
 
     /**
      * Constructor.
@@ -60,16 +57,15 @@ class DeduplicationListener extends ParentDeduplicationListener
      * @param string             $searchCfg      Search config file id
      * @param string             $facetCfg       Facet config file id
      * @param string             $dataSourceCfg  Data source file id
-     * @param bool               $enabled        Whether deduplication is
-     * enabled
+     * @param bool               $enabled        Whether deduplication is enabled
      */
     public function __construct(
         Backend $backend,
         ContainerInterface $serviceLocator,
-        $searchCfg,
-        $facetCfg,
-        $dataSourceCfg = 'datasources',
-        $enabled = true
+        string $searchCfg,
+        private string $facetCfg,
+        string $dataSourceCfg = 'datasources',
+        bool $enabled = true
     ) {
         parent::__construct(
             $backend,
@@ -78,7 +74,8 @@ class DeduplicationListener extends ParentDeduplicationListener
             $dataSourceCfg,
             $enabled
         );
-        $this->facetConfig = $facetCfg;
+        $this->preferredInstitutionsService = $this->serviceLocator->
+            get(\KnihovnyCz\Service\PreferredInstitutionsService::class);
         $config = $this->serviceLocator->get(\VuFind\Config\PluginManager::class);
         $this->authManager = $this->serviceLocator->get('VuFind\AuthManager');
         $searchConfig = $config->get($this->searchConfig);
@@ -119,16 +116,16 @@ class DeduplicationListener extends ParentDeduplicationListener
             // Find the document that matches the source priority best:
             $dedupData = [];
             foreach ($localIds as $localId) {
-                $localPriority = null;
                 [$source] = explode('.', $localId, 2);
-                if (isset($sourcePriority[$source])) {
-                    $localPriority = $sourcePriority[$source];
-                } else {
+                $localPriority = $order = $sourcePriority[$source] ?? null;
+                if ($localPriority === null) {
                     $localPriority = ++$undefPriority;
+                    $order = PHP_INT_MAX;
                 }
                 $dedupData[$source] = [
                     'id' => $localId,
                     'priority' => $localPriority,
+                    'order' => $order,
                 ];
             }
 
@@ -202,10 +199,7 @@ class DeduplicationListener extends ParentDeduplicationListener
      */
     protected function determineRecordPriority($params)
     {
-        $cards = $this->getSourcesFromLibraryCards();
-        $filters = $this->getSourcesFromFilters($params);
-        $common = array_intersect($cards, $filters);
-        $sources = array_unique(array_merge($common, $filters, $cards));
+        $sources = $this->preferredInstitutionsService->getSourcesFromParametersAndUser($params);
         $sourcePriority = [];
         $index = 0;
         foreach ($sources as $source) {
@@ -218,78 +212,6 @@ class DeduplicationListener extends ParentDeduplicationListener
             }
         }
         return $sourcePriority;
-    }
-
-    /**
-     * Get institutions from user's library cards
-     *
-     * @return array
-     */
-    public function getSourcesFromLibraryCards()
-    {
-        /**
-         * User model
-         *
-         * @var \KnihovnyCz\Db\Row\User|false $user
-         */
-        $user = $this->authManager->getUserObject();
-        if ($user == null) {
-            return [];
-        }
-        return $user->getLibraryPrefixes();
-    }
-
-    /**
-     * Get sources from facet filters
-     *
-     * @param ParamBag $params parameters
-     *
-     * @return array preferred institutions from user library cards
-     */
-    public function getSourcesFromFilters($params)
-    {
-        $config = $this->serviceLocator->get(\VuFind\Config\PluginManager::class);
-        $facetConfig = $config->get($this->facetConfig);
-        if (!isset($facetConfig->InstitutionsMappings)) {
-            return [];
-        }
-        $institutionMappings = [];
-        foreach ($facetConfig->InstitutionsMappings as $source => $filter) {
-            $index = 0;
-            $path = '';
-            $elements = array_slice(explode('/', $filter), 1);
-            foreach ($elements as $element) {
-                if (empty($element)) {
-                    break;
-                }
-                $path .= '/' . $element;
-                $institutionMappings[$index . $path . '/'][] = $source;
-                $index++;
-            }
-        }
-        $values = [];
-        foreach ($params->get('fq') as $fq) {
-            if (preg_match(self::OR_FACETS_REGEX, $fq, $matches)) {
-                $field = $matches[2];
-                if ($field != $this->institutionField) {
-                    continue;
-                }
-                $filters = explode('OR', $matches[3]);
-                foreach ($filters as $filter) {
-                    if (preg_match(self::FILTER_REGEX, $filter, $matches)) {
-                        $values[] = $matches[1];
-                    }
-                }
-            }
-        }
-        $priorities = [];
-        foreach ($values as $value) {
-            $prefixes = $institutionMappings[$value] ?? null;
-            if ($prefixes) {
-                array_push($priorities, ...$prefixes);
-            }
-        }
-        return $priorities;
     }
 
     /**

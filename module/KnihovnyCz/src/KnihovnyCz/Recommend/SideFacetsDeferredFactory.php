@@ -46,7 +46,8 @@ class SideFacetsDeferredFactory implements FactoryInterface
         return new $requestedName(
             $container->get(\VuFind\Config\PluginManager::class),
             $container->get(\VuFind\Search\Solr\HierarchicalFacetHelper::class),
-            $container->get(\VuFind\Auth\Manager::class)
+            $container->get(\VuFind\Auth\Manager::class),
+            $container->get(\KnihovnyCz\Service\PreferredInstitutionsService::class)
         );
     }
 }

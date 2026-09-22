@@ -41,8 +41,7 @@ class ChildDocDeduplicationListener extends DeduplicationListener
      * @param string             $searchCfg      Search config file id
      * @param string             $facetCfg       Facet config file id
      * @param string             $dataSourceCfg  Data source file id
-     * @param bool               $enabled        Whether deduplication is
-     * enabled
+     * @param bool               $enabled        Whether deduplication is enabled
      */
     public function __construct(
         Backend $backend,
