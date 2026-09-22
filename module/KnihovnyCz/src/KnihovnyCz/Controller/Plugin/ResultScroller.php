@@ -2,6 +2,7 @@
 
 namespace KnihovnyCz\Controller\Plugin;
 
+use KnihovnyCz\Service\PreferredInstitutionsService;
 use Laminas\Session\Container as SessionContainer;
 use VuFind\Controller\Plugin\ResultScroller as Base;
 use VuFind\Search\Memory as SearchMemory;
@@ -20,30 +21,24 @@ use VuFind\View\Helper\Root\Url as UrlHelper;
 class ResultScroller extends Base
 {
     /**
-     * Url helper
-     *
-     * @var UrlHelper
-     */
-    protected $urlHelper;
-
-    /**
      * Constructor. Create a new search result scroller.
      *
-     * @param SessionContainer $session   Session container
-     * @param ResultsManager   $rm        Results manager
-     * @param SearchMemory     $sm        Search memory
-     * @param UrlHelper        $urlHelper Url helper
-     * @param bool             $enabled   Is the scroller enabled?
+     * @param SessionContainer             $session                      Session container
+     * @param ResultsManager               $rm                           Results manager
+     * @param SearchMemory                 $sm                           Search memory
+     * @param PreferredInstitutionsService $preferredInstitutionsService Preferred institutions service
+     * @param UrlHelper                    $urlHelper                    Url helper
+     * @param bool                         $enabled                      Is the scroller enabled?
      */
     public function __construct(
         SessionContainer $session,
         ResultsManager $rm,
         SearchMemory $sm,
-        UrlHelper $urlHelper,
+        private readonly PreferredInstitutionsService $preferredInstitutionsService,
+        private readonly UrlHelper $urlHelper,
         bool $enabled = true
     ) {
         parent::__construct($session, $rm, $sm, $enabled);
-        $this->urlHelper = $urlHelper;
     }
 
     /**
@@ -64,13 +59,16 @@ class ResultScroller extends Base
             'firstRecord' => null, 'lastRecord' => null,
             'previousRecord' => null, 'nextRecord' => null,
             'currentPosition' => null, 'resultTotal' => null,
-            'linkToResults' => null,
+            'linkToResults' => null, 'sources' => $this->preferredInstitutionsService->getSourcesFromUser(),
         ];
 
         // Process scroll data only if enabled and data exists:
         if (!$this->enabled || ($search = $this->restoreCurrentSearch()) == null) {
             return $retVal;
         }
+        $retVal['sources'] = $this->preferredInstitutionsService->getSourcesFromParametersAndUser(
+            $search->getParams()->getBackendParameters()
+        );
         $this->data = $this->session->s[$search->getSearchId()] ?? null;
         if ($this->data == null) {
             // no data for scroller - return only link to results

@@ -1,5 +1,10 @@
 <?php
-  $dedupData = $this->data;
+  $dedupData = [];
+  foreach ($this->data as $source => $record) {
+    $record['text'] = $this->transEsc("Source::$source", [], $source);
+    $dedupData[] = $record;
+  }
+  $this->institutionsSorter()->sort($dedupData);
   $countRecords = count($dedupData);
   $maxInstitutionsShown = ($countRecords === 3) ? 3 : 2;
   $recordLinker = $this->recordLinker($this->results);
@@ -14,21 +19,16 @@
   </h5>
   <ul class="list-group list-group-flush">
     <?php $i = 0; ?>
-    <?php foreach (array_slice($dedupData, 0, $maxInstitutionsShown) as $source => $current): ?>
-      <?php $i++; ?>
-      <?php if ($i === 1): ?>
-        <li class="list-group-item px-0 currentSource">
-          <a href="<?=$this->escapeHtmlAttr($recordLinker->getUrl($this->driver))?>">
-            <?=$this->transEsc("Source::$source", [], $source)?>
-          </a>
-        </li>
-      <?php else: ?>
-        <li class="list-group-item px-0 otherSource">
-          <a href="<?=$this->escapeHtmlAttr($recordLinker->getUrl($current['id']))?>">
-            <?=$this->transEsc("Source::$source", [], $source)?>
-          </a>
-        </li>
-      <?php endif; ?>
+    <?php foreach (array_slice($dedupData, 0, $maxInstitutionsShown) as $current): ?>
+      <?php
+        $i++;
+        $itemClass = ($i === 1) ? 'currentSource' : 'otherSource';
+      ?>
+      <li class="list-group-item px-0 <?=$itemClass?>">
+        <a href="<?=$this->escapeHtmlAttr($recordLinker->getUrl($this->driver))?>">
+          <?=$current['text']?>
+        </a>
+      </li>
     <?php endforeach; ?>
     <?php if ($countRecords > $maxInstitutionsShown): ?>
       <li class="list-group-item px-0 dropdown">
@@ -36,10 +36,10 @@
           <strong><?=$this->translate('Show next institutions')?></strong>
         </a>
         <ul class="dropdown-menu dropdown-menu-right">
-          <?php foreach (array_slice($dedupData, $maxInstitutionsShown) as $source => $current): ?>
+          <?php foreach (array_slice($dedupData, $maxInstitutionsShown) as $current): ?>
             <li class="otherSource">
               <a class="dropdown-item" href="<?=$this->escapeHtmlAttr($recordLinker->getUrl($current['id']))?>">
-                <?=$this->transEsc("Source::$source", [], $source)?>
+                <?=$current['text']?>
               </a>
             </li>
           <?php endforeach; ?>

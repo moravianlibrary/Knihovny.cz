@@ -83,7 +83,7 @@ class SolrDefaultBackendFactory extends ParentSolrDefaultBackendFactory
             $this->searchConfig,
             $this->facetConfig,
             'datasources',
-            $enabled
+            (bool)$enabled
         );
     }
 

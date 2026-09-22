@@ -79,21 +79,31 @@ class RecordLinker extends Base
      * Given a source and record ID, get a URL for that record that links to local
      * record.
      *
-     * @param string      $recordId    source|id pipe-delimited string
-     * @param string|null $institution Institution to prefer
+     * @param string $recordId     source|id pipe-delimited string
+     * @param ?array $institutions institutions to prefer
      *
      * @return string
      */
     public function getLinkToLocalRecord(
         string $recordId,
-        ?string $institution = null
+        ?array $institutions = []
     ): string {
         $record = $this->loadRecord($recordId);
         $records = $record->tryMethod('getDeduplicatedRecords', [], []);
         if (!empty($records)) {
-            $first = $records[$institution] ?? reset($records);
             $source = $record->getSourceIdentifier();
-            $recordId = $source . '|' . reset($first);
+            $localRecordId = null;
+            foreach (($institutions ?? []) as $institution) {
+                if (($ids = $records[$institution] ?? null) != null) {
+                    $localRecordId = $source . '|' . $ids[0];
+                    break;
+                }
+            }
+            if ($localRecordId == null) {
+                $first = reset($records);
+                $localRecordId = $source . '|' . reset($first);
+            }
+            $recordId = $localRecordId;
         }
         return $this->getUrl($recordId);
     }
