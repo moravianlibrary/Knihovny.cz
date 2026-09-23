@@ -52,3 +52,14 @@ $icons-knihovnycz-font-path: "../../KnihovnyCz/css/fonts";
   }
 }
 
+.ikcz-cdk-sign {
+  &:before {
+    content: "\e904";
+  }
+}
+
+.ikcz-cdk {
+  &:before {
+    content: "\e905";
+  }
+}
