@@ -89,16 +89,18 @@ class InvolvedLibrariesService implements \VuFind\I18n\HasSorterInterface
         $params->getOptions()->setLimitOptions([1000]);
         $params->initFromRequest(new Parameters(['filter' => $filters]));
         $libraries = [];
+        $sourceIds = [];
         foreach ($results->getResults() as $library) {
             $name = $library->getTranslatedNameBySource();
             $region = $library->getRegion();
             $sourceId = $library->getCpkCode();
-            if ($name !== '' && !isset($libraries[$region][$sourceId])) {
+            if ($name !== '' && !in_array($sourceId, $sourceIds)) {
                 $libraries[$region][$sourceId] = [
                     'name' => $name,
                     'id' => $library->getUniqueID(),
                 ];
             }
+            $sourceIds[] = $sourceId;
         }
         foreach ($libraries as &$librariesByRegion) {
             usort(
