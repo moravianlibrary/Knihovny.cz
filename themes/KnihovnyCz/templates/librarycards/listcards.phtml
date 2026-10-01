@@ -86,7 +86,7 @@
               is_array($this->tabNames) &&
               is_array($this->callback) &&
               is_array($this->action) &&
-              in_array($card->getId(), $this->useTabsForCardIds)): ?>
+              in_array($card->getId(), $this->useTabsForCardIds ?? [])): ?>
             <?php $firstTabId = array_key_first($this->tabNames);?>
             <div class="card card-with-tabs">
               <div class="card-header bg-transparent">
