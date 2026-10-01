@@ -298,14 +298,17 @@ class MyResearchController extends MyResearchControllerBase
         if (!($user = $this->getUser())) {
             return $this->forceLogin();
         }
-
+        $view = $this->createViewModel();
         $isLoanHistoryAvailableForCardIds = [];
         $catalog = $this->getILS();
-
         foreach ($user->getLibraryCardsWithILS() as $card) {
             // Stop now if the user does not have valid catalog credentials available:
-            if (!is_array($patron = $this->catalogLoginWithCardId($card->getId()))) {
-                return $patron;
+            try {
+                if (!is_array($patron = $this->catalogLoginWithCardId($card->getId()))) {
+                    continue;
+                }
+            } catch (\VuFind\Exception\ILS $ex) {
+                continue;
             }
             $patron['user'] = $user;
             $historyFunctionConfig = $catalog->checkFunction(
@@ -316,10 +319,8 @@ class MyResearchController extends MyResearchControllerBase
                 $isLoanHistoryAvailableForCardIds[] = $card->getId();
             }
         }
-
-        $view = $this->createViewModel();
-        $view->setTemplate('myresearch/checkedout-all');
         $view->setVariable('isLoanHistoryAvailableForCardIds', $isLoanHistoryAvailableForCardIds);
+        $view->setTemplate('myresearch/checkedout-all');
         return $view;
     }
 
