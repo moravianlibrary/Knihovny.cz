@@ -147,7 +147,11 @@
                     ?>
                     <li role="presentation" id="record-tab-<?=$this->escapeHtmlAttr($tabName)?>" class="<?=implode(' ', $liClasses)?>" data-tab="<?=$this->escapeHtmlAttr($tabName)?>"<?php if ($obj->supportsAjax() && in_array($tab, $this->backgroundTabs)):?> data-background<?php endif ?>>
                       <a<?=$aAttrs?>>
+                      <?php if ($tabName == 'details'): ?>
+                        <i class="fa-solid fa-code"></i>
+                      <?php else: ?>
                         <?=$this->transEsc($desc)?>
+                      <?php endif ?>
                         <?php if (method_exists($obj, 'isApiDown') && $obj->isApiDown()): ?>
                           <?=$this->icon('ziskej-warning', 'text-danger') ?>
                         <?php endif; ?>
