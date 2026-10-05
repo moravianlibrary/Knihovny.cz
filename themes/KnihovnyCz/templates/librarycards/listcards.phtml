@@ -84,7 +84,6 @@
             <div class="loading-overlay"></div>
             <?php if (isset($this->tabNames) &&
               is_array($this->tabNames) &&
-              is_array($this->callback) &&
               is_array($this->action) &&
               in_array($card->getId(), $this->useTabsForCardIds)): ?>
             <?php $firstTabId = array_key_first($this->tabNames);?>
@@ -103,7 +102,7 @@
               <div class="card-body tab-content">
                 <?php foreach ($this->tabNames as $tabId => $tabName): ?>
                 <div role="tabpanel" class="tab-pane<?=$tabId === $firstTabId ? ' active' : '';?>" id="<?=$card->id . $tabId?>">
-                  <div class='library-card-ajax' data-card-id='<?=$card->id?>' data-card-name="<?=$card->card_name?>" data-action='<?=$this->action[$tabId]?>' data-callback='<?=$this->callback[$tabId]?>'>
+                  <div class='library-card-ajax' data-card-id='<?=$card->id?>' data-card-name="<?=$card->card_name?>" data-action='<?=$this->action[$tabId]?>' data-callback='<?=$this->callback[$tabId] ?? ''?>'>
                   </div>
                 </div>
                 <?php endforeach; ?>

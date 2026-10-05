@@ -654,6 +654,24 @@ class MyResearchController extends MyResearchControllerBase
         $view = $this->createViewModel();
         $new = $this->getRequest()->getQuery('new');
         if ($new == null) {
+            $isIllRequestsHistoryAvailableForCardIds = [];
+            $catalog = $this->getILS();
+
+            foreach ($user->getLibraryCardsWithILS() as $card) {
+                // Stop now if the user does not have valid catalog credentials available:
+                if (!is_array($patron = $this->catalogLoginWithCardId($card->getId()))) {
+                    return $patron;
+                }
+                $historyFunctionConfig = $catalog->checkFunction(
+                    'ILLRequests',
+                    $patron
+                );
+                if ($historyFunctionConfig !== false) {
+                    $isIllRequestsHistoryAvailableForCardIds[] = $card->getId();
+                }
+            }
+
+            $view->setVariable('isIllHistoryAvailableForCardIds', $isIllRequestsHistoryAvailableForCardIds);
             $view->setTemplate('myresearch/illrequests-all');
             return $view;
         }
@@ -713,6 +731,9 @@ class MyResearchController extends MyResearchControllerBase
     public function illRequestsAjaxAction(): ViewModel|Response
     {
         $view = null;
+        $patron = [];
+        $user = null;
+
         try {
             if (($user = $this->getAuthManager()->getUserObject()) == null) {
                 throw new \Exception('User not logged in');
@@ -725,29 +746,120 @@ class MyResearchController extends MyResearchControllerBase
             $functionConfig = $catalog->checkFunction('ILLRequests', $patron);
             if ($functionConfig !== false) {
                 $view = parent::illRequestsAction();
-                $forms = [];
-                $hasForms = $catalog->checkFunction(
-                    'getBlankIllRequestTypes',
-                    compact('patron')
-                );
-                if ($hasForms) {
-                    $result = $catalog->getBlankIllRequestTypes($patron);
-                    foreach ($result as $name) {
-                        $options = [
-                            'query' => [
-                                'new' => $name,
-                                'cardId' => $this->getCardId(),
-                            ],
-                        ];
-                        $label = 'ill_blank_new_request_for_' . $name;
-                        $forms[$label] = $this->url()->fromRoute('myresearch-illrequests', [], $options);
-                    }
-                }
-                $view->setVariable('forms', $forms);
-                $view->setVariable('card', $user->getLibraryCard((int)$this->getCardId()));
             } else {
                 $this->flashMessenger()->addErrorMessage('ils_action_unavailable');
             }
+        } catch (\Exception $ex) {
+            $this->showException($ex);
+        }
+
+        if (!($view instanceof ViewModel)) {
+            $view = $this->createViewModel(
+                [
+                    'error' => 'ils_offline_home_message',
+                ]
+            );
+        }
+
+        return $this->baseIllRequestsAjaxAction($view, $patron, $user);
+    }
+
+    /**
+     * Send list of ill history requests to view
+     *
+     * @return mixed
+     *
+     * @throws \Exception
+     */
+    public function illHistoryRequestsAjaxAction()
+    {
+        $view = null;
+        $patron = [];
+        $user = null;
+
+        // Stop now if the user does not have valid catalog credentials available:
+        if (!is_array($patron = $this->catalogLogin())) {
+            return $patron;
+        }
+
+        try {
+            if (($user = $this->getAuthManager()->getUserObject()) == null) {
+                throw new \Exception('User not logged in');
+            }
+            // Connect to the ILS:
+            $catalog = $this->getILS();
+
+            $view = $this->createViewModel();
+            $view->cancelForm = false;
+
+            $functionConfig = $catalog->checkFunction('ILLRequests', $patron);
+
+            $result = [];
+
+            if ($functionConfig !== false) {
+                $result = $catalog->getMyILLHistoryRequests($patron);
+            } else {
+                $this->flashMessenger()->addErrorMessage('ils_action_unavailable');
+            }
+
+            $this->ILLRequests()->resetValidation();
+
+            $view->recordList = $this->ilsRecords()->getDrivers($result);
+            $view->accountStatus = $this->ilsRecords()
+                ->collectRequestStats($view->recordList);
+        } catch (\Exception $ex) {
+            $this->showException($ex);
+        }
+
+        if (!($view instanceof ViewModel)) {
+            $view = $this->createViewModel(
+                [
+                    'error' => 'ils_offline_home_message',
+                ]
+            );
+        }
+
+        return $this->baseIllRequestsAjaxAction($view, $patron, $user);
+    }
+
+    /**
+     * Finalize data response for both functions illRequestsAjaxAction and illHistoryRequestsAjaxAction
+     *
+     * @param ViewModel|null           $view   View
+     * @param array                    $patron Patron
+     * @param UserEntityInterface|null $user   User
+     *
+     * @return ViewModel|Response
+     *
+     * @throws \Exception
+     */
+    private function baseIllRequestsAjaxAction(
+        ?ViewModel $view,
+        array $patron,
+        ?UserEntityInterface $user
+    ): ViewModel|Response {
+        try {
+            $catalog = $this->getILS();
+            $forms = [];
+            $hasForms = $catalog->checkFunction(
+                'getBlankIllRequestTypes',
+                compact('patron')
+            );
+            if ($hasForms) {
+                $result = $catalog->getBlankIllRequestTypes($patron);
+                foreach ($result as $name) {
+                    $options = [
+                        'query' => [
+                            'new' => $name,
+                            'cardId' => $this->getCardId(),
+                        ],
+                    ];
+                    $label = 'ill_blank_new_request_for_' . $name;
+                    $forms[$label] = $this->url()->fromRoute('myresearch-illrequests', [], $options);
+                }
+            }
+            $view->setVariable('forms', $forms);
+            $view->setVariable('card', $user->getLibraryCard((int)$this->getCardId()));
         } catch (\Exception $ex) {
             $this->showException($ex);
         }
