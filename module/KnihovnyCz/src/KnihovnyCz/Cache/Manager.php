@@ -18,6 +18,23 @@ use VuFind\Cache\Manager as BaseManager;
 class Manager extends BaseManager
 {
     /**
+     * Constructor
+     *
+     * @param array ...$args Arguments
+     */
+    public function __construct(...$args)
+    {
+        parent::__construct(...$args);
+
+        $this->cacheSpecs['requests'] = [
+            'directory' => 'requests',
+            'options' => [
+                'ttl' => 5,
+            ],
+        ];
+    }
+
+    /**
      * Wrap cache storage in fail-safe delegating storage
      *
      * @param string $name      name

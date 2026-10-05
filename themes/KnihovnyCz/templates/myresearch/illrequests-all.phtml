@@ -20,7 +20,15 @@
   <?=$this->flashmessages()?>
     <?=$this->context($this)->renderInContext('librarycards/listcards.phtml', [
       'user' => $this->auth()->getUserObject(),
-      'action' => $this->url('myresearch-illrequestsajax'),
+      'action' => [
+        'active_ill_requests' => $this->url('myresearch-illrequestsajax'),
+        'ill_requests_history' => $this->url('myresearch-illhistoryrequestsajax'),
+      ],
+      'tabNames' => [
+        'active_ill_requests' => $this->transEsc('ill tab active'),
+        'ill_requests_history' => $this->transEsc('ill tab history'),
+      ],
+      'useTabsForCardIds' => $this->isIllHistoryAvailableForCardIds,
     ]);
     ?>
 </div>

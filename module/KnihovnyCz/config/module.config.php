@@ -894,6 +894,7 @@ $staticRoutes = [
     'MyResearch/ShortLoans' => 'MyResearch/ShortLoans',
     'MyResearch/ShortLoansAjax' => 'MyResearch/ShortLoansAjax',
     'MyResearch/IllRequestsAjax' => 'MyResearch/IllRequestsAjax',
+    'MyResearch/IllHistoryRequestsAjax' => 'MyResearch/IllHistoryRequestsAjax',
     'MyResearch/IllRequestNew' => 'MyResearch/IllRequestNew',
     'MyResearch/Directlogin' => 'MyResearch/Directlogin',
     'Holds/ListAjax' => 'Holds/ListAjax',

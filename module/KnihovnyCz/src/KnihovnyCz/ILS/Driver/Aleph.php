@@ -33,6 +33,9 @@ class Aleph extends AlephBase
 
     protected const ILL_BLANK_FORM_LABEL_PREFIX = 'ill_blank_form_';
 
+    protected const LOANS_CACHE_PREFIX = 'loans_';
+    protected const ACTIVE_LOANS_IDS_CACHE_PREFIX = 'active_loans_ids_';
+
     protected bool $showAlephLabelBlocks = false;
 
     protected bool $showAccruingFines = false;
@@ -1041,51 +1044,234 @@ class Aleph extends AlephBase
     }
 
     /**
-     * Get Patron ILL requests
-     *
-     * This is responsible for retrieving all ILL requests by a specific patron.
+     * Get Patron active ILL requests
      *
      * @param array $user The patron array from patronLogin
      *
-     * @throws ILSException
+     * @throws AlephBase\RestfulException
+     *
      * @return array           Array of the patron's ILL requests
      */
     public function getMyILLRequests($user): array
     {
+        return $this->getSortedIllRequests($user, true);
+    }
+
+    /**
+     * Get Patron history ILL requests
+     *
+     * @param array $user The patron array from patronLogin
+     *
+     * @throws AlephBase\RestfulException
+     *
+     * @return array           Array of the patron's ILL requests
+     */
+    public function getMyILLHistoryRequests($user): array
+    {
+        return $this->getSortedIllRequests($user, false);
+    }
+
+    /**
+     * Get Patron ILL request active or inactive
+     *
+     * This is responsible for retrieving all ILL requests by a specific patron.
+     *
+     * @param array $user               user
+     * @param bool  $sortedActiveStatus value of flag 'active' of requested loans/requests
+     *
+     * @return array
+     *
+     * @throws AlephBase\RestfulException
+     */
+    private function getSortedIllRequests(array $user, bool $sortedActiveStatus): array
+    {
         $userId = $user['id'];
-        $params = ['view' => 'full', 'type' => 'active'];
-        $count = 0;
-        $xml = $this->doRestDLFRequest(
-            ['patron', $userId,
-            'circulationActions', 'requests', 'ill'],
+        $params = ['view' => 'full'];
+        $path_elements = ['patron', $userId,
+            'circulationActions', 'requests', 'ill'];
+
+        $loans = $this->getCachedLoansData(self::LOANS_CACHE_PREFIX, $path_elements, $params);
+
+        if ($loans === null) {
+            $xml = $this->doRestDLFRequest(
+                $path_elements,
+                $params
+            );
+            $loans = [];
+            $formats = $this->config['ILLRequestMapping']['format'] ?? [];
+            $activeLoansIdentifiers = $this->getActiveLoansIdentifiers($user);
+            foreach ($xml->xpath('//ill-request') as $item) {
+                $z13 = $item->z13;
+                $z410 = $item->z410;
+                $create = (string)$z410->{'z410-open-date'};
+                $expire = (string)$z410->{'z410-last-interest-date'};
+                $media = (string)$z410->{'z410-media'};
+                $format = $formats[$media] ?? 'Unknown';
+                $loans[] = [
+                    'format' => $format,
+                    'docno' => (string)$z13->{'z13-doc-number'},
+                    'author' => (string)$z13->{'z13-author'},
+                    'title' => (string)$z13->{'z13-title'},
+                    'imprint' => (string)$z13->{'z13-imprint'},
+                    'article_title' => (string)$item->{'title-of-article'},
+                    'article_author' => (string)$item->{'author-of-article'},
+                    'price' => (string)$item->{'z13u-additional-bib-info-1'},
+                    'pickup_location' => (string)$z410->{'z410-pickup-location'},
+                    'media' => $media,
+                    'create' => $this->parseDate($create),
+                    'expire' => $this->parseDate($expire),
+                    'status' => (string)$z410->{'z410-status'},
+                    'active' => in_array($this->getILLItemIdentificationHash($item), $activeLoansIdentifiers),
+                ];
+            }
+
+            $this->setCachedLoansData(self::LOANS_CACHE_PREFIX, $loans, $path_elements, $params);
+        }
+
+        return array_filter($loans, fn ($loan) => $loan['active'] === $sortedActiveStatus);
+    }
+
+    /**
+     * Get cached data for loans. Depending on prefix patrons full loans list or patrons active loans identifiers.
+     *
+     * @param string $cachePrefix   cache prefix
+     * @param array  $path_elements path elements
+     * @param array  $params        params
+     *
+     * @return array|null
+     */
+    private function getCachedLoansData(string $cachePrefix, array $path_elements, array $params): ?array
+    {
+        $cache = null;
+        $data = null;
+
+        if (null !== $this->cacheManager) {
+            try {
+                $cache = $this->cacheManager->getCache('requests');
+            } catch (\Exception $e) {
+            }
+        }
+
+        if ($cache === null) {
+            return null;
+        }
+
+        $cacheKey = $cachePrefix . $this->getLoansCacheKey($cachePrefix, $path_elements, $params);
+        try {
+            $data = $cache->getItem($cacheKey);
+        } catch (\Laminas\Cache\Exception\ExceptionInterface $e) {
+        }
+
+        return $data;
+    }
+
+    /**
+     * Store loans data into cache
+     *
+     * @param string $prefix        prefix
+     * @param array  $data          data
+     * @param array  $path_elements path elements
+     * @param array  $params        params
+     *
+     * @return void
+     */
+    private function setCachedLoansData(string $prefix, array $data, array $path_elements, array $params): void
+    {
+        $cache = null;
+
+        if (null !== $this->cacheManager) {
+            try {
+                $cache = $this->cacheManager->getCache('requests');
+            } catch (\Exception $e) {
+            }
+        }
+
+        if ($cache !== null) {
+            $cacheKey = $this->getLoansCacheKey($prefix, $path_elements, $params);
+            try {
+                $cache->setItem($cacheKey, $data);
+            } catch (\Laminas\Cache\Exception\ExceptionInterface $e) {
+            }
+        }
+    }
+
+    /**
+     * Get cache key
+     *
+     * @param string $prefix        prefix
+     * @param array  $path_elements path_elements
+     * @param array  $params        params
+     *
+     * @return string
+     */
+    private function getLoansCacheKey(string $prefix, array $path_elements, array $params): string
+    {
+        return $prefix . md5(implode('', $path_elements) . serialize($params));
+    }
+
+    /**
+     * Get active loans IdentifiersIdentifiers
+     *
+     * @param array $user The patron array from patronLogin
+     *
+     * @return array
+     * @throws AlephBase\RestfulException
+     */
+    private function getActiveLoansIdentifiers(array $user): array
+    {
+        $userId = $user['id'];
+        $params = ['view' => 'active'];
+        $path_elements = ['patron', $userId,
+            'circulationActions', 'requests', 'ill'];
+
+        $activeLoansIdentifiers = $this->getCachedLoansData(
+            self::ACTIVE_LOANS_IDS_CACHE_PREFIX,
+            $path_elements,
             $params
         );
-        $loans = [];
-        $formats = $this->config['ILLRequestMapping']['format'] ?? [];
-        foreach ($xml->xpath('//ill-request') as $item) {
-            $z13 = $item->z13;
-            $z410 = $item->z410;
-            $create = (string)$z410->{'z410-open-date'};
-            $expire = (string)$z410->{'z410-last-interest-date'};
-            $media = (string)$z410->{'z410-media'};
-            $format = $formats[$media] ?? 'Unknown';
-            $loans[] = [
-                'format' => $format,
-                'docno' => (string)$z13->{'z13-doc-number'},
-                'author' => (string)$z13->{'z13-author'},
-                'title' => (string)$z13->{'z13-title'},
-                'imprint' => (string)$z13->{'z13-imprint'},
-                'article_title' => (string)$item->{'title-of-article'},
-                'article_author' => (string)$item->{'author-of-article'},
-                'price' => (string)$item->{'z13u-additional-bib-info-1'},
-                'pickup_location' => (string)$z410->{'z410-pickup-location'},
-                'media' => $media,
-                'create' => $this->parseDate($create),
-                'expire' => $this->parseDate($expire),
-                'status' => (string)$z410->{'z410-status'},
-            ];
+
+        if ($activeLoansIdentifiers === null) {
+            $xml = $this->doRestDLFRequest(
+                ['patron', $userId,
+                    'circulationActions', 'requests', 'ill'],
+                $params
+            );
+
+            $activeLoansIdentifiers = [];
+
+            foreach ($xml->xpath('//ill-request') as $item) {
+                if (isset($item->z13)) {
+                    $activeLoansIdentifiers[] = $this->getILLItemIdentificationHash($item);
+                }
+            }
+
+            $this->setCachedLoansData(
+                self::ACTIVE_LOANS_IDS_CACHE_PREFIX,
+                $activeLoansIdentifiers,
+                $path_elements,
+                $params
+            );
         }
-        return $loans;
+
+        return $activeLoansIdentifiers;
+    }
+
+    /**
+     * Get item unique (hopefully) identificator
+     *
+     * @param \SimpleXMLElement $item ILL item
+     *
+     * @return string
+     */
+    private function getILLItemIdentificationHash(\SimpleXMLElement $item): string
+    {
+        $z410 = $item->z410;
+
+        $stringToHash = is_array($z410->{'translate-change-active-library'}) ?
+            $z410->{'translate-change-active-library'}[0] : $z410->{'translate-change-active-library'};
+        $stringToHash .= $z410->{'z410-doc-number'};
+
+        return md5($stringToHash);
     }
 
     /**
