@@ -504,7 +504,6 @@ class RecordController extends \VuFind\Controller\RecordController implements Ht
             [
                 'driver' => $driver,
                 'source' => $source,
-                'errors' => $errors,
                 'email' => $email,
                 'maxCheckouts' => $palmknihyApiService->getPalmknihyMaxCheckouts($source),
                 'maxPrice' => $palmknihyApiService->getPalmknihyMaxPrice($source),
@@ -540,6 +539,7 @@ class RecordController extends \VuFind\Controller\RecordController implements Ht
             $palmknihyService->persistEntity($palmknihyCheckout);
             $view->setVariable('confirmed', 1);
         }
+        $view->setVariable('errors', $errors);
         return $view;
     }
 }
