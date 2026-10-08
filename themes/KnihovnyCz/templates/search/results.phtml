@@ -116,6 +116,7 @@
         <?=$this->recommend($current, 'noresults', $index)?>
       <?php endif; ?>
     <?php endforeach; ?>
+    <?= $this->slot('tips-for-purchase')->set(''); ?>
   <?php else: ?>
     <?php if ($this->results->getOptions()->getTopPaginatorStyle() === 'full'): ?>
       <?=$this->paginationControl($this->results->getPaginator(), 'Sliding', 'Helpers/pagination-top.phtml', ['params' => ['results' => $this->results], 'options' => $this->paginationOptions ?? []])?>

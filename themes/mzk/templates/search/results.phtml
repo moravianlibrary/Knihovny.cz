@@ -1,0 +1,8 @@
+<?php $this->slot('tips-for-purchase')->start(); ?>
+  <div class="alert alert-info">
+    <?php $url = $this->layout()->userLang === 'cs' ? 'https://www.mzk.cz/paticka/pruvodce-knihovnou/tipy-na-nakup' : 'https://www.mzk.cz/en/paticka/pruvodce-knihovnou/tips-purchase'; ?>
+    <?=$this->translate('tips_for_purchase_text', ['%%url%%' => $url])?>
+  </div>
+<?php $this->slot('tips-for-purchase')->end(); ?>
+
+<?php include $this->parentTemplate('search/results.phtml');?><?php
