@@ -52,7 +52,7 @@ class DictionaryRecord extends AbstractBase
             ->setLine('source_term', 'getSource')
             ->setLine('term_author', 'getTermAuthors')
             ->setLine('Format', 'getFormats', 'RecordHelper', ['helperMethod' => 'getFormatList'])
-            ->setTemplateLine('wiki_link', 'getWikidataLinks', 'wikidata_tdkiv_link.phtml')
+            ->setTemplateLine('wiki_link_rel', 'getWikidataLinks', 'wikidata_tdkiv_link.phtml')
             ->getArray();
     }
 }
