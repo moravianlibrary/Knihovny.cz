@@ -1,4 +1,5 @@
-FROM docker.io/php:8.4.8-fpm-bookworm
+ARG PHP_BASE_IMAGE=docker.io/php:8.4.26-fpm-bookworm
+FROM ${PHP_BASE_IMAGE}
 ARG ADD_EXTRA_PACKAGES=""
 
 LABEL maintainer="mzk.cz"
