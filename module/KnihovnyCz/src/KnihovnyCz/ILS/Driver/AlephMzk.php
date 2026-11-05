@@ -191,6 +191,19 @@ class AlephMzk extends AlephBase
     }
 
     /**
+     * Get sublibrary information form item element if we want it.
+     *
+     * @param \SimpleXMLElement $item item
+     *
+     * @return string
+     */
+    protected function getItemSublibrary(\SimpleXMLElement $item)
+    {
+        $z30 = $item->z30;
+        return (string)$z30->{'z30-sub-library'};
+    }
+
+    /**
      * Get Patron Holds
      *
      * This is responsible for retrieving all holds by a specific patron.
