@@ -140,6 +140,12 @@
                 <br>
               <?php endif; ?>
 
+                <?php if (!empty($ilsDetails['sublibrary'])): ?>
+                  <strong><?=$this->translate('Department')?>:</strong>
+                  <?=$ilsDetails['sublibrary']?>
+                  <br>
+                <?php endif; ?>
+
               <?php if (!empty($ilsDetails['borrowingLocation'])): ?>
                 <strong><?=$this->transEsc('Borrowing Location')?>:</strong> <?=$this->transEscWithPrefix('location_', $ilsDetails['borrowingLocation'])?>
                 <br>

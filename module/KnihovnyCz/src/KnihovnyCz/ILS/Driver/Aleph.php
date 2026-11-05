@@ -417,6 +417,7 @@ class Aleph extends AlephBase
                 'checkoutDate'  => $this->parseDate($checkoutDate),
                 'base' => $base,
                 'fine' => $fine,
+                'sublibrary' => $this->getItemSublibrary($item),
             ];
             if ($this->showAccruingFines) {
                 $transaction['fine'] = $fine;
@@ -447,6 +448,18 @@ class Aleph extends AlephBase
             'count' => $totalCount,
             $key => $transList,
         ];
+    }
+
+    /**
+     * Get sublibrary information form item element if we want it.
+     *
+     * @param \SimpleXMLElement $item item
+     *
+     * @return string
+     */
+    protected function getItemSublibrary(\SimpleXMLElement $item)
+    {
+        return '';
     }
 
     /**
@@ -532,6 +545,7 @@ class Aleph extends AlephBase
                 'position' => $position,
                 'z37_status' => $z37_status,
                 'base' => $base,
+                'sublibrary' => $this->getItemSublibrary($item),
             ];
         }
         return $holdList;

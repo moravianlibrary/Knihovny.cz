@@ -126,6 +126,12 @@
               <br>
             <?php endif; ?>
 
+            <?php if (!empty($ilsDetails['sublibrary'])): ?>
+              <strong><?=$this->translate('Department')?>:</strong>
+              <?=$ilsDetails['sublibrary']?>
+              <br>
+            <?php endif; ?>
+
             <?php if (!empty($ilsDetails['create'])): ?>
               <strong><?=$this->transEsc('Created') ?>:</strong> <?=$this->escapeHtml($ilsDetails['create']) ?>
               <?php if (!empty($ilsDetails['expire'])): ?>|<?php endif; ?>
