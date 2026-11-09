@@ -48,9 +48,15 @@ RUN apt-get update && apt-get install -y \
     && apt-get clean \
     && apt-get autoremove -y
 
+# Make piped RUN commands (curl | gpg, curl | php) fail when curl fails
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
+
+# Configure global defaults for curl (retries, timeouts, fail on HTTP errors)
+COPY ./conf/curl/curlrc /root/.curlrc
+
 # Install NodeJS
 RUN mkdir -p /etc/apt/keyrings \
-    && curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg \
+    && curl "https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key" | gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg \
     && NODE_MAJOR=20 \
     && echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_$NODE_MAJOR.x nodistro main" | tee /etc/apt/sources.list.d/nodesource.list \
     && apt-get update \
@@ -74,10 +80,10 @@ RUN a2enmod \
         proxy_http \
         xml2enc
 
-ADD https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions /usr/local/bin/
-
-RUN chmod +x /usr/local/bin/install-php-extensions && \
-    install-php-extensions apcu gd intl ldap mysqli opcache pdo_mysql soap xdebug xsl zip parle
+RUN curl "https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions" \
+    -o /usr/local/bin/install-php-extensions \
+    && chmod +x /usr/local/bin/install-php-extensions \
+    && install-php-extensions apcu gd intl ldap mysqli opcache pdo_mysql soap xdebug xsl zip parle
 
 COPY ./conf/php/php.ini /usr/local/etc/php/php.ini
 
@@ -89,8 +95,9 @@ RUN apt-get purge -y \
 
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
+RUN curl "https://github.com/a8m/envsubst/releases/download/v1.4.3/envsubst-Linux-x86_64" \
+    -o /usr/bin/envsubst.a8m \
+    && chmod +x /usr/bin/envsubst.a8m
+
 # Update mlocate's files database
 RUN updatedb
-
-ADD https://github.com/a8m/envsubst/releases/download/v1.4.3/envsubst-Linux-x86_64 /usr/bin/envsubst.a8m
-RUN chmod a+x /usr/bin/envsubst.a8m
