@@ -97,7 +97,11 @@ class PreferredInstitutionsService
         $filters = [];
         foreach ($this->mappings as $source => $filter) {
             if (in_array($source, $prefixes)) {
-                $filters[] = $filter;
+                // use only first filter when there are multiple mappings for
+                // institution - the rest is considered as children, eg.:
+                // nkp[]       = "2/Library/PR/NKP/"
+                // nkp[]       = "3/Library/PR/NKP/SLK/"
+                $filters[] = is_array($filter) ? $filter[0] : $filter;
             }
         }
         return $filters;
@@ -151,17 +155,22 @@ class PreferredInstitutionsService
             return $this->reverseMappings = [];
         }
         $mappings = [];
-        foreach ($this->mappings as $source => $filter) {
-            $index = 0;
-            $path = '';
-            $elements = array_slice(explode('/', $filter), 1);
-            foreach ($elements as $element) {
-                if (empty($element)) {
-                    break;
+        foreach ($this->mappings as $source => $filters) {
+            if (!is_array($filters)) {
+                $filters = [$filters];
+            }
+            foreach ($filters as $filter) {
+                $index = 0;
+                $path = '';
+                $elements = array_slice(explode('/', $filter), 1);
+                foreach ($elements as $element) {
+                    if (empty($element)) {
+                        break;
+                    }
+                    $path .= '/' . $element;
+                    $mappings[$index . $path . '/'][] = $source;
+                    $index++;
                 }
-                $path .= '/' . $element;
-                $mappings[$index . $path . '/'][] = $source;
-                $index++;
             }
         }
         return $this->reverseMappings = $mappings;
@@ -184,6 +193,6 @@ class PreferredInstitutionsService
                 array_push($sources, ...$prefixes);
             }
         }
-        return $sources;
+        return array_unique($sources);
     }
 }
