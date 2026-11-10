@@ -24,9 +24,9 @@ use VuFindSearch\ParamBag;
  */
 class DeduplicationListener extends ParentDeduplicationListener
 {
-    public const UNDEF_PRIORITY = 99999;
+    public const UNDEF_PRIORITY = 99_999;
 
-    public const MIN_PRIORITY = 999999;
+    public const MIN_PRIORITY = 999_999;
 
     /**
      * Institution mappings service
@@ -120,7 +120,7 @@ class DeduplicationListener extends ParentDeduplicationListener
                 $localPriority = $order = $sourcePriority[$source] ?? null;
                 if ($localPriority === null) {
                     $localPriority = ++$undefPriority;
-                    $order = PHP_INT_MAX;
+                    $order = self::UNDEF_PRIORITY;
                 }
                 $dedupData[$source] = [
                     'id' => $localId,

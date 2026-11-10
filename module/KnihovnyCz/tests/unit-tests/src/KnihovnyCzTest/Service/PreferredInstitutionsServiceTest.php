@@ -26,7 +26,10 @@ class PreferredInstitutionsServiceTest extends \PHPUnit\Framework\TestCase
     protected const FACET_CONFIG = [
         'mzk' => '2/Library/JM/MZK/',
         'kjm' => '2/Library/JM/KJM/',
-        'nkp' => '2/Library/PR/NKP/',
+        'nkp' => [
+            '2/Library/PR/NKP/',
+            '3/Library/PR/NKP/SLK/',
+        ],
         'anl' => '1/Others/ANL/',
     ];
 
@@ -170,6 +173,18 @@ class PreferredInstitutionsServiceTest extends \PHPUnit\Framework\TestCase
         $service = $this->createService();
         $params = $this->makeParams(['2/Library/JM/MZK/', '2/Library/PR/NKP/']);
         $this->assertSame(['mzk', 'nkp'], $service->getSourcesFromParameters($params));
+    }
+
+    /**
+     * Test: multiple values in one OR facet return combined sources without duplicates.
+     *
+     * @return void
+     */
+    public function testGetSourcesForSublibrary(): void
+    {
+        $service = $this->createService();
+        $params = $this->makeParams(['3/Library/PR/NKP/SLK/']);
+        $this->assertSame(['nkp'], $service->getSourcesFromParameters($params));
     }
 
     /**

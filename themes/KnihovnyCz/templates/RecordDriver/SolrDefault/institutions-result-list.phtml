@@ -25,7 +25,7 @@
         $itemClass = ($i === 1) ? 'currentSource' : 'otherSource';
       ?>
       <li class="list-group-item px-0 <?=$itemClass?>">
-        <a href="<?=$this->escapeHtmlAttr($recordLinker->getUrl($this->driver))?>">
+        <a href="<?=$this->escapeHtmlAttr($recordLinker->getUrl($current['id']))?>">
           <?=$current['text']?>
         </a>
       </li>
