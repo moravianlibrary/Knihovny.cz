@@ -602,13 +602,20 @@ class MyResearchController extends MyResearchControllerBase
         $user = $this->getUser();
         $tables = $this->serviceLocator->get(TableManager::class);
         $category = $this->params()->fromPost('category', false);
+        $titleEn = $this->params()->fromPost('title_en');
         $listId = $this->params()->fromRoute('id');
-        if ($category && $user && $user->couldManageInspirationLists()) {
-            $listTable = $tables->get(UserList::class);
-            $listTable->update(
-                ['category' => $category],
-                ['id' => $listId]
-            );
+        if ($listId && $user && $user->couldManageInspirationLists()) {
+            $update = [];
+            if ($category) {
+                $update['category'] = $category;
+            }
+            if ($titleEn !== null) {
+                $update['title_en'] = $titleEn;
+            }
+            if ($update) {
+                $listTable = $tables->get(UserList::class);
+                $listTable->update($update, ['id' => $listId]);
+            }
         }
         $parentView = parent::mylistAction();
         if ($parentView instanceof ViewModel) {

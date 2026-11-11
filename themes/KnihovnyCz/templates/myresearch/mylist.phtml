@@ -51,6 +51,8 @@
           <option value="<?=$category->category?>"<?=($list->category === $category->category) ? ' selected="selected"' : ''?>><?=$category->description?></option>
         <?php endforeach; ?>
       </select>
+      <label for="list-title-en"><?=$this->translate('list_title_en')?></label>:
+      <input type="text" id="list-title-en" name="title_en" value="<?=$this->escapeHtmlAttr($list->title_en ?? '')?>">
     </form>
   <?php endif; ?>
 
@@ -160,6 +162,9 @@
 <?php
 $script = <<<JS
                 $('#list-category-selector').change(function changeCategory() {
+                  $('#category-selector-form').submit();
+                });
+                $('#list-title-en').change(function changeTitleEn() {
                   $('#category-selector-form').submit();
                 });
               JS;

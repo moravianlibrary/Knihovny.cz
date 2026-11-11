@@ -21,9 +21,9 @@ $this->layout()->searchbox = false;
             <?php
             foreach ($list as $widget):
               $listUrl = $widget['listUrl'];
-              $title = $widget['list']->title_cs ?? $widget['list']->title ?? '';
+              $title = $widget['list']->getInspirationTitle();
             ?>
-              <a class="list-group-item list-group-item-action" href="<?=$listUrl?>" title="<?=$title?>"><?=$title?></a>
+              <a class="list-group-item list-group-item-action" href="<?=$listUrl?>" title="<?=$this->escapeHtmlAttr($title)?>"><?=$this->escapeHtml($title)?></a>
             <?php endforeach; ?>
           </div>
         </div>
