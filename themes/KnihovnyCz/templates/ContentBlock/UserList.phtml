@@ -7,7 +7,7 @@
   <div class="col-md-4 widget">
     <div class="header">
       <a href="<?=$listUrl?>" title="<?= $this->translate('Show all') ?>">
-        <h2><?=$this->list->title ?? '' ?></h2>
+        <h2><?=$this->escapeHtml($this->list->getInspirationTitle())?></h2>
       </a>
     </div>
     <div class="list-group">

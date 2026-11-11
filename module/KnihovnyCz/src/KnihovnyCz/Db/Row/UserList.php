@@ -29,6 +29,20 @@ class UserList extends \VuFind\Db\Row\UserList implements TranslatorAwareInterfa
     protected array $usedLists = [];
 
     /**
+     * Get the list title localized for the current language. English uses the
+     * title_en column when it is filled in; otherwise the default title is used.
+     *
+     * @return string
+     */
+    public function getInspirationTitle(): string
+    {
+        if (str_starts_with($this->getTranslatorLocale(), 'en')) {
+            return $this['title_en'] ?? $this['title'] ?? '';
+        }
+        return $this['title'] ?? '';
+    }
+
+    /**
      * Create slug identifier
      *
      * @return string

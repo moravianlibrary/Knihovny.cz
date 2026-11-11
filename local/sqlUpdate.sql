@@ -687,3 +687,10 @@ INSERT INTO `inst_configs` (`source_id`, `key_id`, `value`) VALUES
 
 UPDATE `system` SET `value` = '131' WHERE `key`='DB_VERSION';
 
+-- #396
+--
+-- Add English title for inspiration lists
+--
+ALTER TABLE `user_list` ADD COLUMN `title_en` varchar(200) DEFAULT NULL AFTER `title`;
+
+UPDATE `system` SET `value` = '132' WHERE `key`='DB_VERSION';
