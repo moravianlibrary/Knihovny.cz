@@ -1,14 +1,11 @@
 <?php $this->slot('record-go-to-knihovny-cz')->start(); ?>
 <?php $mainPortalLink = $this->recordLinker()->getLinkToMainPortal($this->driver); ?>
 <?php if ($mainPortalLink != null) : ?>
-  <div class="card custom-banner record-go-to-knihovny-cz-banner">
-    <a class="banner-image" href="<?= $mainPortalLink ?>#dedupedrecord" target="_blank">
-      <img class="inline-icon" src="<?=$this->imageLink('knihovnycz-icon.png') ?>" alt="Logo Knihovny.cz">
-    </a>
-    <div class="banner-content">
-      <h3><?=$this->transEsc('record_go_to_knihovny_cz_heading') ?></h3>
-      <p><?=$this->translate('record_go_to_knihovny_cz_text', ['%%url%%' => $mainPortalLink . '#dedupedrecord']) ?></p>
-    </div>
-  </div>
+  <?php $cardUrl = $mainPortalLink . '#dedupedrecord'; ?>
+  <?=$this->render('knihovnycz-card.phtml', [
+    'heading' => $this->translate('knihovnycz_card_record_heading'),
+    'text' => $this->translate('knihovnycz_card_record_text', ['%%url%%' => $this->escapeHtmlAttr($cardUrl)]),
+    'url' => $this->escapeHtmlAttr($cardUrl),
+  ])?>
 <?php endif; ?>
 <?php $this->slot('record-go-to-knihovny-cz')->end(); ?>

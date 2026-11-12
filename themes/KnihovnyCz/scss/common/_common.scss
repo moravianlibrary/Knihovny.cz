@@ -1558,3 +1558,71 @@ html, body {
 #record-tab-details {
   margin-left: auto!important;
 }
+
+// knihovnycz card
+.card-knihovnycz {
+  border-top: 4px solid #e0004e !important;
+
+  h2 {
+    margin-top: 0;
+  }
+
+  .logo-knihovnycz {
+    max-width: 130px;
+    max-height: 50px;
+  }
+
+  a {
+    color: #e0004e;
+  }
+
+  a.btn-knihovnycz {
+    color: #fff;
+    --bs-btn-color: #fff;
+    --bs-btn-bg: #e5004b;
+    --bs-btn-border-color: #e5004b;
+    --bs-btn-hover-color: #fff;
+    --bs-btn-hover-bg: #ac0038;
+    --bs-btn-hover-border-color: #b7003c;
+    --bs-btn-focus-shadow-rgb: 233, 38, 102;
+    --bs-btn-active-color: #fff;
+    --bs-btn-active-bg: #b7003c;
+    --bs-btn-active-border-color: #ac0038;
+    --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+    --bs-btn-disabled-color: #fff;
+    --bs-btn-disabled-bg: #e5004b;
+    --bs-btn-disabled-border-color: #e5004b;
+  }
+}
+
+// Home: fill remaining viewport height and pin the promo card to the bottom
+body.template-dir-search.template-name-home {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+
+  > .main {
+    display: flex;
+    flex: 1 0 auto;
+    flex-direction: column;
+  }
+
+  // Footer extends .container; auto margins shrink it inside a flex body
+  > footer {
+    align-self: stretch;
+    width: 100%;
+    max-width: none;
+    margin-left: 0;
+    margin-right: 0;
+  }
+
+  #content {
+    display: flex;
+    flex: 1 0 auto;
+    flex-direction: column;
+
+    > .card-knihovnycz {
+      margin-top: auto;
+    }
+  }
+}
