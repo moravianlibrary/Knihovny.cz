@@ -2,4 +2,12 @@
   <h1 class="text-center"><?=$this->translate('catalogue_title');?></h1>
 <?php $this->slot('search-home-title')->end(); ?>
 <?php $this->slot('homepage-survey-cta')->set(''); ?>
+
+<?php $this->slot('knihovnycz-card-home')->start(); ?>
+  <?=$this->render('knihovnycz-card.phtml', [
+    'heading' => $this->translate('knihovnycz_card_home_heading'),
+    'text' => $this->translate('knihovnycz_card_home_text', ['%%url%%' => 'https://www.knihovny.cz/']),
+  ])?>
+<?php $this->slot('knihovnycz-card-home')->end(); ?>
+
 <?php include $this->parentTemplate('search/home.phtml');?><?php

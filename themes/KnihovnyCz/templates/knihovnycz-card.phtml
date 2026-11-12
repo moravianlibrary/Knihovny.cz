@@ -1,0 +1,33 @@
+<?php
+/**
+ * Promo card linking to the Knihovny.cz portal.
+ *
+ * Expected variables:
+ * - heading (string): Main heading text (escaped)
+ * - text (string): Body HTML (not escaped; may contain markup)
+ * - url (string, optional): Button target URL (default: https://www.knihovny.cz/)
+ */
+$url = $this->url ?: 'https://www.knihovny.cz/';
+?>
+<div class="card card-knihovnycz">
+  <div class="card-body">
+    <div class="row">
+      <div class="col-12 col-md-8 col-lg-9">
+        <div class="logo-knihovnycz">
+          <img class="logo card-title" src="<?=$this->imageLink('logos/logo-knihovny.cz.svg') ?>" alt="Logo Knihovny.cz" width="130" height="50">
+        </div>
+        <h2>
+          <?=$this->escapeHtml($this->heading)?>
+        </h2>
+        <div>
+          <?=$this->text?>
+        </div>
+      </div>
+      <div class="col-12 col-md-4 col-lg-3 d-flex align-items-center justify-content-center">
+        <a class="btn btn-knihovnycz" href="<?=$url?>" title="<?=$this->transEscAttr('knihovnycz_card_button_title')?>">
+          <?=$this->transEsc('knihovnycz_card_button_text')?> <i class="fa fa-arrow-alt-circle-right"></i>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>

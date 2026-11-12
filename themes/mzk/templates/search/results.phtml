@@ -5,4 +5,17 @@
   </div>
 <?php $this->slot('tips-for-purchase')->end(); ?>
 
+<?php $this->slot('knihovnycz-card-search')->start(); ?>
+  <?php $baseUrl = $this->config()->get('searches')->OtherPortals->main ?>
+  <?php if ($baseUrl != null) : ?>
+    <?php $lookfor = $this->results->getUrlQuery()->getParamArray()['lookfor'] ?? ''; ?>
+    <?php $cardUrl = rtrim($baseUrl, '/') . '/Search/Results?lookfor=' . urlencode($lookfor); ?>
+    <?=$this->render('knihovnycz-card.phtml', [
+      'heading' => $this->translate('knihovnycz_card_search_heading'),
+      'text' => $this->translate('knihovnycz_card_search_text', ['%%url%%' => $cardUrl]),
+      'url' => $cardUrl,
+    ])?>
+  <?php endif; ?>
+<?php $this->slot('knihovnycz-card-search')->end(); ?>
+
 <?php include $this->parentTemplate('search/results.phtml');?><?php
