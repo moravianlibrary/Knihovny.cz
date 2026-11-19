@@ -509,21 +509,23 @@ class RecordController extends \VuFind\Controller\RecordController implements Ht
                 'maxPrice' => $palmknihyApiService->getPalmknihyMaxPrice($source),
                 'lendingInterval' => $palmknihyApiService->getPalmknihyLendingInterval($source),
                 'infoUrl' => $palmknihyApiService->getPalmknihyInfoUrl($source) ?? '',
+                'currentCheckoutsCount' => $activeCheckoutsCount,
                 'confirmed' => 0,
             ]
         );
 
-        if (!$confirmed) {
-            $view->setVariables(
-                [
-                    'currentCheckoutsCount' => $activeCheckoutsCount,
-                ]
-            );
+        if ($confirmed) {
+            $csrfValidator = $this->serviceLocator->get(CsrfInterface::class);
+            if (!$csrfValidator->isValid($this->params()->fromQuery('csrf'), true)) {
+                $errors[] = 'csrf_validation_error';
+            }
         }
 
         if (empty($errors) && $confirmed) {
             [$errors, $debug] = $palmknihyApiService->lendEbook($driver, $email, $source);
+            $view->setVariable('confirmed', 1);
         }
+
         if ($confirmed) {
             $palmknihyCheckout = $palmknihyService->createEntity();
             $palmknihyCheckout->setUser($user)
@@ -537,7 +539,6 @@ class RecordController extends \VuFind\Controller\RecordController implements Ht
                 ->setStatus(count($errors) ? 0 : 1)
                 ->setStatusText(implode(', ', $errors) . ($debug ?? ''));
             $palmknihyService->persistEntity($palmknihyCheckout);
-            $view->setVariable('confirmed', 1);
         }
         $view->setVariable('errors', $errors);
         return $view;
