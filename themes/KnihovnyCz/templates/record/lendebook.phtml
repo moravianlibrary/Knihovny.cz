@@ -46,7 +46,7 @@
     <p><?=$this->transEsc('ebook_lending_current_checkouts_count', ['count' => $this->currentCheckoutsCount, 'maxCount' => $this->maxCheckouts], null, true)?></p>
     <p><strong><?=$this->transEsc('ebbok_lending_confirm_checkout')?></strong></p>
   </div>
-  <?php $url = $recordLinker->getActionUrl($this->driver, 'lendebook', ['source' => $this->source, 'confirmed' => 1]); ?>
+  <?php $url = $recordLinker->getActionUrl($this->driver, 'lendebook', ['source' => $this->source, 'confirmed' => 1, 'csrf' => $this->escapeHtmlAttr($this->auth()->getManager()->getCsrfHash())]); ?>
   <a class="btn btn-primary" href="<?=$url?>"><?=$this->transEsc('ebook_lending_confirm_button_title')?></a>
 <?php endif; ?>
 
